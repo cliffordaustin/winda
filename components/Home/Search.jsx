@@ -37,6 +37,7 @@ function Search({
   removeFromChildren,
   removeFromInfants,
   clearGuests,
+  showSearchModal,
 }) {
   // const [state, setState] = useState({
   //   selectedSearchItem: 0,
@@ -96,7 +97,11 @@ function Search({
           >
             <SearchButtonClose onClick={clearCheckInDate}></SearchButtonClose>
           </div>
-          <div className="mt-4 absolute w-96">
+          <div
+            className={
+              "mt-4 absolute w-96 " + (showSearchModal ? "hidden" : "")
+            }
+          >
             <DatePicker
               setDate={(date, modifiers = {}) => {
                 if (!modifiers.disabled) {
@@ -131,7 +136,11 @@ function Search({
           >
             <SearchButtonClose onClick={clearCheckOutDate}></SearchButtonClose>
           </div>
-          <div className="mt-4 absolute w-96">
+          <div
+            className={
+              "mt-4 absolute w-96 " + (showSearchModal ? "hidden" : "")
+            }
+          >
             <DatePicker
               setDate={(date, modifiers = {}) => {
                 if (!modifiers.disabled) {
@@ -167,7 +176,12 @@ function Search({
         >
           <SearchButtonClose onClick={clearGuests}></SearchButtonClose>
         </div>
-        <div className="mt-4 absolute !top-12 md:!top-14 md:!-left-16 w-72 z-30">
+        <div
+          className={
+            "mt-4 absolute !top-12 md:!top-14 md:!-left-16 w-72 z-30 " +
+            (showSearchModal ? "hidden" : "")
+          }
+        >
           <Popup
             showPopup={showPopup}
             className="bg-white px-4 pb-4 pt-4 !border !border-gray-200 !rounded-2xl shadow-xl"

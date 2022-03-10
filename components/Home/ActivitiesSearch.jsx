@@ -26,6 +26,7 @@ function ActivitiesSearch({
   changeSelectedActivitiesSearchItem,
   addTraveler,
   removeTraveler,
+  showSearchModal,
 }) {
   return (
     <div className="flex flex-col md:flex-row rounded-2xl py-4 px-2 md:py-0 md:px-0 md:rounded-full bg-white w-full shadow-md">
@@ -82,7 +83,9 @@ function ActivitiesSearch({
         >
           <SearchButtonClose onClick={clearActivityDate}></SearchButtonClose>
         </div>
-        <div className="mt-4 absolute w-96">
+        <div
+          className={"mt-4 absolute w-96 " + (showSearchModal ? "hidden" : "")}
+        >
           <DatePicker
             setDate={(date, modifiers = {}) => {
               if (!modifiers.disabled) {
@@ -115,7 +118,12 @@ function ActivitiesSearch({
         >
           <SearchButtonClose onClick={clearTravelers}></SearchButtonClose>
         </div>
-        <div className="mt-4 absolute !top-12 md:!top-14 md:!-left-16 w-72 z-30">
+        <div
+          className={
+            "mt-4 absolute !top-12 md:!top-14 md:!-left-16 w-72 z-30 " +
+            (showSearchModal ? "hidden" : "")
+          }
+        >
           <Popup
             showPopup={showTravelersPopup}
             className="bg-white px-4 py-4 !rounded-2xl shadow-xl border border-gray-200"

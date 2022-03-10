@@ -31,6 +31,7 @@ function TransportSearch({
   removePassenger,
   needADriver,
   changeNeedADriver,
+  showSearchModal,
 }) {
   const options = [
     { value: "Car 1", label: "Car 1" },
@@ -79,7 +80,11 @@ function TransportSearch({
           >
             <SearchButtonClose onClick={clearTransportDate}></SearchButtonClose>
           </div>
-          <div className="mt-4 absolute w-96">
+          <div
+            className={
+              "mt-4 absolute w-96 " + (showSearchModal ? "hidden" : "")
+            }
+          >
             <DatePicker
               setDate={(date, modifiers = {}) => {
                 if (!modifiers.disabled) {
@@ -112,7 +117,12 @@ function TransportSearch({
           >
             <SearchButtonClose onClick={clearPassengers}></SearchButtonClose>
           </div>
-          <div className="mt-4 absolute !top-10 md:!top-14 !-left-32 sm:!-left-2 md:!-left-16 w-72 z-30">
+          <div
+            className={
+              "mt-4 absolute !top-10 md:!top-14 !-left-32 sm:!-left-2 md:!-left-16 w-72 z-30 " +
+              (showSearchModal ? "hidden" : "")
+            }
+          >
             <Popup
               showPopup={showPassengerPopup}
               className="bg-white px-4 py-4 !rounded-2xl shadow-xl border border-gray-200"
@@ -148,7 +158,12 @@ function TransportSearch({
         >
           <SearchButtonClose onClick={clearNeedADriver}></SearchButtonClose>
         </div>
-        <div className="mt-4 absolute !top-10 md:!top-14 md:!-left-2 w-72 z-30">
+        <div
+          className={
+            "mt-4 absolute !top-10 md:!top-14 md:!-left-2 w-72 z-30 " +
+            (showSearchModal ? "hidden" : "")
+          }
+        >
           <Popup
             showPopup={showNeedADriver}
             className="bg-white px-4 py-4 !rounded-2xl shadow-xl border border-gray-200"
