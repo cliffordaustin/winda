@@ -373,7 +373,7 @@ export default function Home() {
           )}
         </div>
       </div>
-      <div className="px-6 mb-12 select-none">
+      <div className="px-3 sm:px-6 mb-12 select-none">
         <div className="w-full h-600 relative mt-12 before:absolute before:h-full before:w-full before:bg-black before:z-20 before:rounded-3xl before:opacity-30">
           <Image
             className={"rounded-3xl sm:w-full md:w-full"}

@@ -147,7 +147,7 @@ function Main() {
           className="!w-full"
         >
           {experienceImages.map((experienceImage, index) => (
-            <SwiperSlide key={index} className="!w-72 sm:!mr-8 !mr-6">
+            <SwiperSlide key={index} className="!w-72">
               <Card
                 imagePaths={[experienceImage.image]}
                 header={experienceImage.header}
