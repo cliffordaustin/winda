@@ -1,0 +1,10 @@
+.tooltip::after {
+  content: " ";
+  position: absolute;
+  top: 100%;
+  left: 6%;
+  margin-left: -5px;
+  border-width: 7px;
+  border-style: solid;
+  @apply border-t-gray-200 border-r-transparent border-b-transparent border-l-transparent;
+}

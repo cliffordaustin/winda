@@ -1,0 +1,3 @@
+.card {
+  @apply border border-gray-100 hover:border-gray-200 transition-all duration-300 ease-linear cursor-pointer;
+}

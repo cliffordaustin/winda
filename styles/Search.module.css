@@ -1,0 +1,11 @@
+.searchInput {
+  @apply flex flex-col justify-around gap-1 px-6 hover:bg-gray-100 hover:rounded-full transition-all duration-300 ease-in-out;
+}
+
+.searchDate {
+  @apply flex flex-col gap-2 px-6 hover:bg-gray-100 hover:rounded-full transition-all duration-300 ease-in-out;
+}
+
+.input {
+  @apply !border-none !px-0 !py-0 !bg-inherit;
+}

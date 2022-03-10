@@ -1,0 +1,31 @@
+.rippleButton {
+  @apply relative overflow-hidden transition-colors ease-in-out duration-500 py-2 px-4 text-white hover:!bg-red-700 bg-red-600 text-sm rounded-md flex items-center justify-center;
+}
+
+.rippleButton > .ripple {
+  width: 20px;
+  height: 20px;
+  animation: ripple-effect 600ms linear;
+  @apply !rounded-full absolute bg-red-100 !overflow-hidden;
+}
+
+@keyframes ripple-effect {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(10);
+    opacity: 0.375;
+  }
+  100% {
+    transform: scale(35);
+    opacity: 0;
+  }
+}
+
+.rippleButton > .content {
+  position: relative;
+  z-index: 2;
+  @apply !rounded-full;
+}
