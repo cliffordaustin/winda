@@ -1,14 +1,17 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import PropTypes from "prop-types";
-import styles from "../styles/Modal.module.css";
+import styles from "../../styles/Modal.module.css";
 
 function Modal({
   showModal,
   closeModal,
+  containerHeight,
+  title,
   className = "",
   children,
   backdropClassName = "",
+  closeAllPopups = () => {},
 }) {
   const backdrop = {
     show: {
@@ -29,7 +32,7 @@ function Modal({
 
   const container = {
     show: {
-      top: "calc(100vh - 80%)",
+      top: `calc(100vh - ${(containerHeight || "80") + "%"})`,
       opacity: 1,
       transition: {
         type: "linear",
@@ -60,25 +63,32 @@ function Modal({
           }
         >
           <motion.div
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => {
+              e.stopPropagation();
+              closeAllPopups();
+            }}
             variants={container}
             animate="show"
             initial="hidden"
             exit="hidden"
+            style={{ height: (containerHeight || "80") + "%" }}
             className={
-              "py-4 h-4/5 bg-white shadow-lg mx-auto sm:rounded-xl rounded-t-xl z-20 overflow-y-scroll relative " +
+              "py-4 bg-white shadow-lg mx-auto sm:rounded-xl rounded-t-xl z-30 overflow-y-scroll relative " +
               className
             }
           >
             <div className="relative text-center font-Merriweather border-b border-gray-100 mb-4">
-              <h1 className="text-lg font-bold">Title</h1>
+              <h1 className="text-lg font-bold">{title}</h1>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="absolute top-1 left-4 cursor-pointer lg:hidden w-5 h-5 z-20"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
-                onClick={closeModal}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  closeModal();
+                }}
               >
                 <path
                   strokeLinecap="round"
@@ -88,7 +98,7 @@ function Modal({
                 />
               </svg>
             </div>
-            <div className="px-4">{children}</div>
+            <div className="">{children}</div>
           </motion.div>
         </motion.div>
       ) : (
@@ -102,8 +112,11 @@ Modal.propTypes = {
   showModal: PropTypes.bool,
   closeModal: PropTypes.func,
   className: PropTypes.string,
+  title: PropTypes.string,
   children: PropTypes.any.isRequired,
   backdropClassName: PropTypes.string,
+  containerHeight: PropTypes.number,
+  closeAllPopups: PropTypes.func,
 };
 
 export default Modal;

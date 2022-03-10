@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { motion, AnimatePresence } from "framer-motion";
-import styles from "../styles/BottomTooltip.module.css";
+import styles from "../../styles/BottomTooltip.module.css";
 
 function BottomTooltip({ changeTooltipState, showTooltip, children }) {
   const variants = {

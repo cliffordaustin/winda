@@ -27,7 +27,6 @@ function Search({
   clearInput,
   clearCheckInDate,
   clearCheckOutDate,
-  clearShowPopup,
   numOfAdults,
   numOfChildren,
   numOfInfants,
@@ -168,7 +167,7 @@ function Search({
         >
           <SearchButtonClose onClick={clearGuests}></SearchButtonClose>
         </div>
-        <div className="mt-4 absolute !top-12 md:!top-14 md:!-left-16 w-72 z-50">
+        <div className="mt-4 absolute !top-12 md:!top-14 md:!-left-16 w-72 z-30">
           <Popup
             showPopup={showPopup}
             className="bg-white px-4 pb-4 pt-4 !border !border-gray-200 !rounded-2xl shadow-xl"

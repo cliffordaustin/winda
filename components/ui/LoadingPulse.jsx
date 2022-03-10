@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../styles/Loading.module.css";
+import styles from "../../styles/Loading.module.css";
 import PropTypes from "prop-types";
 
 function LoadingPulse({ width = 90, height = 90, className = "" }) {

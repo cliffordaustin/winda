@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { motion, AnimatePresence } from "framer-motion";
-import styles from "../styles/TopTooltip.module.css";
+import styles from "../../styles/TopTooltip.module.css";
 
 function TopTooltip({ changeTooltipState, showTooltip, children }) {
   const variants = {

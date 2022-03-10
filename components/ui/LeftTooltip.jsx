@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { motion, AnimatePresence } from "framer-motion";
-import styles from "../styles/LeftTooltip.module.css";
+import styles from "../../styles/LeftTooltip.module.css";
 
 function LeftTooltip({ changeTooltipState, showTooltip, children }) {
   const variants = {

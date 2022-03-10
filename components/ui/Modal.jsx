@@ -1,7 +1,7 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import PropTypes from "prop-types";
-import styles from "../styles/Modal.module.css";
+import styles from "../../styles/Modal.module.css";
 
 function Modal({
   showModal,

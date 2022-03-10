@@ -38,7 +38,7 @@ export default function DatePicker({
           animate="show"
           initial="hide"
           exit="exit"
-          className={"absolute top-0 left-0 w-full z-50 " + className}
+          className={"absolute top-0 left-0 w-full z-30 " + className}
           onClick={(e) => e.stopPropagation()}
         >
           <DayPicker

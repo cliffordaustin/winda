@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import styles from "../styles/LoadingSpinnerChase.module.css";
+import styles from "../../styles/LoadingSpinnerChase.module.css";
 import PropTypes from "prop-types";
 
 function LoadingSpinerChase({ width = 90, height = 90, color = "#fff" }) {

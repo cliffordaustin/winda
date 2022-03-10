@@ -115,7 +115,7 @@ function ActivitiesSearch({
         >
           <SearchButtonClose onClick={clearTravelers}></SearchButtonClose>
         </div>
-        <div className="mt-4 absolute !top-12 md:!top-14 md:!-left-16 w-72 z-50">
+        <div className="mt-4 absolute !top-12 md:!top-14 md:!-left-16 w-72 z-30">
           <Popup
             showPopup={showTravelersPopup}
             className="bg-white px-4 py-4 !rounded-2xl shadow-xl border border-gray-200"
