@@ -131,6 +131,7 @@ function Main() {
       <div className="px-0 pl-4 select-none md:pl-16 mb-10 mt-5 !relative w-full">
         <Swiper
           {...settings}
+          cssMode={true}
           onSwiper={(swiper) => {
             setState({
               ...state,
