@@ -11,7 +11,7 @@ function SearchSelect({ setCurrentNavState, currentNavState }) {
           setCurrentNavState(1);
         }}
         className={
-          "cursor-pointer " +
+          "cursor-pointer md:!text-base " +
           (currentNavState === 1 ? styles.showLinkLine : styles.link)
         }
       >
@@ -23,7 +23,7 @@ function SearchSelect({ setCurrentNavState, currentNavState }) {
           setCurrentNavState(2);
         }}
         className={
-          "cursor-pointer " +
+          "cursor-pointer md:!text-base " +
           (currentNavState === 2 ? styles.showLinkLine : styles.link)
         }
       >
@@ -35,7 +35,7 @@ function SearchSelect({ setCurrentNavState, currentNavState }) {
           setCurrentNavState(3);
         }}
         className={
-          "cursor-pointer " +
+          "cursor-pointer md:!text-base " +
           (currentNavState === 3 ? styles.showLinkLine : styles.link)
         }
       >

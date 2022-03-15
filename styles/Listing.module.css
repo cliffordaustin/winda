@@ -1,0 +1,5 @@
+.card {
+  @apply shadow-md hover:shadow-lg transition-all duration-300 ease-linear cursor-pointer;
+}
+
+/* border border-gray-100 hover:border-gray-200 */

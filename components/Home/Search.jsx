@@ -85,7 +85,7 @@ function Search({
             "relative w-2/4 !py-2 !justify-between " + styles.searchInput
           }
         >
-          <div className="font-bold text-sm">Chek in</div>
+          <div className="font-bold text-sm">Check-in</div>
           <div className="text-sm text-gray-400">
             {checkin ? moment(checkin).format("MMM Do") : "Add date"}
           </div>
@@ -124,7 +124,7 @@ function Search({
             "relative w-2/4 !py-2 !justify-between " + styles.searchInput
           }
         >
-          <div className="font-bold text-sm">Chek out</div>
+          <div className="font-bold text-sm">Check out</div>
           <div className="text-sm text-gray-400">
             {checkout ? moment(checkout).format("MMM Do") : "Add date"}
           </div>

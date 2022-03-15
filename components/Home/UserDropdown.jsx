@@ -46,7 +46,7 @@ function UserDropdown({ changeShowDropdown, showDropdown }) {
         </div>
         <hr className="" />
         <div className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2">
-          Host an activity
+          Add a listing
         </div>
         <div className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2">
           Help

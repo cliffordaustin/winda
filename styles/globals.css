@@ -7,6 +7,27 @@ body {
   color: #002333;
 }
 
+.stars {
+  --percent: calc(var(--rating) / 5 * 100%);
+
+  display: inline;
+  font-size: var(--font-size);
+  -webkit-font-smoothing: subpixel-antialiased;
+  font-family: Times;
+  line-height: 1;
+}
+
+.stars::before {
+  content: "★★★★★";
+  background: linear-gradient(
+    90deg,
+    #fca311 var(--percent),
+    #d8d8d8 var(--percent)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 .DayPicker-Day {
   @apply w-10 h-10 sm:!w-12 sm:!h-12 rounded-full outline-none transition-colors ease-linear duration-200;
 }

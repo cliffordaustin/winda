@@ -31,6 +31,13 @@ function StickyHeader({ children, className = "" }) {
       y: -15,
       transition: {},
     },
+    exit: {
+      opacity: 0,
+      y: -15,
+      transition: {
+        duration: 0.4,
+      },
+    },
     show: {
       y: 0,
       opacity: 1,
@@ -43,7 +50,7 @@ function StickyHeader({ children, className = "" }) {
       variants={variants}
       animate={isSticky ? "show" : ""}
       initial="hide"
-      exit="hide"
+      exit="exit"
       id="myHeader"
       className={isSticky ? ` ${className} ${styles.stick}` : " invisible"}
       ref={ref}

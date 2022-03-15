@@ -7,7 +7,8 @@ const SelectInput = ({
   options,
   selectedOption,
   setSelectedOption,
-  className,
+  className = "",
+  placeholder,
 }) => {
   return (
     <div>
@@ -17,6 +18,7 @@ const SelectInput = ({
         onChange={setSelectedOption}
         className={"text-sm outline-none " + className}
         instanceId={instanceId}
+        placeholder={placeholder}
         options={options}
       />
     </div>
@@ -26,6 +28,8 @@ const SelectInput = ({
 SelectInput.propTypes = {
   instanceId: PropTypes.string.isRequired,
   options: PropTypes.array.isRequired,
+  className: PropTypes.string,
+  placeholder: PropTypes.string,
 };
 
 export default SelectInput;

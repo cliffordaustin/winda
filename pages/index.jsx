@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import Head from "next/head";
 
 import Navbar from "../components/Home/Navbar";
 import Search from "../components/Home/Search";
@@ -110,6 +111,17 @@ export default function Home() {
       }}
     >
       <div className="">
+        <Head>
+          <title>Winda.guide | online travel booking in Kenya</title>
+          <meta
+            name="description"
+            content="Search, discover, and book your travel needs in Kenya, all in one place. Try it now."
+          ></meta>
+          <meta
+            name="viewport"
+            content="initial-scale=1.0, width=device-width"
+          />
+        </Head>
         <Navbar
           showDropdown={state.showDropdown}
           currentNavState={state.currentNavState}
@@ -147,10 +159,14 @@ export default function Home() {
           ref={searchRef}
           className="mt-1 w-full flex md:justify-center md:px-0 px-4"
         >
-          {state.currentNavState === 1 && (
+          {state.currentNavState === 1 && !state.showSearchModal && (
             <motion.div
               variants={variants}
-              animate={state.currentNavState === 1 ? "show" : ""}
+              animate={
+                state.currentNavState === 1 && !state.showSearchModal
+                  ? "show"
+                  : ""
+              }
               initial="hide"
               className="lg:w-4/6 md:w-11/12 w-full"
             >
@@ -258,10 +274,14 @@ export default function Home() {
               ></Search>
             </motion.div>
           )}
-          {state.currentNavState === 2 && (
+          {state.currentNavState === 2 && !state.showSearchModal && (
             <motion.div
               variants={variants}
-              animate={state.currentNavState === 2 ? "show" : ""}
+              animate={
+                state.currentNavState === 2 && !state.showSearchModal
+                  ? "show"
+                  : ""
+              }
               initial="hide"
               className="lg:w-4/6 md:w-11/12 w-full"
             >
@@ -332,10 +352,14 @@ export default function Home() {
               ></TransportSearch>
             </motion.div>
           )}
-          {state.currentNavState === 3 && (
+          {state.currentNavState === 3 && !state.showSearchModal && (
             <motion.div
               variants={variants}
-              animate={state.currentNavState === 3 ? "show" : ""}
+              animate={
+                state.currentNavState === 3 && !state.showSearchModal
+                  ? "show"
+                  : ""
+              }
               initial="hide"
               className="lg:w-4/6 md:w-11/12 w-full"
             >
@@ -759,7 +783,7 @@ export default function Home() {
         </div>
       </MobileModal>
       <div className="px-3 sm:px-6 mb-12 select-none">
-        <div className="w-full h-600 relative mt-12 before:absolute before:h-full before:w-full before:bg-black before:z-20 before:rounded-3xl before:opacity-30">
+        <div className="w-full h-600 relative before:absolute before:h-full before:w-full before:bg-black before:z-20 before:rounded-3xl before:opacity-40">
           <Image
             className={"rounded-3xl sm:w-full md:w-full"}
             layout="fill"
@@ -769,12 +793,12 @@ export default function Home() {
             alt="Image Gallery"
             priority
           />
-          <div className="absolute flex flex-col items-center justify-center bottom-28 left-2/4 -translate-x-2/4 z-20 w-fit px-6 md:px-0">
+          <div className="absolute flex flex-col items-center justify-center top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 z-20 w-fit px-6 md:px-0">
             <div>
-              <h1 className="font-black font-Merriweather mb-2 text-2xl sm:text-4xl text-white">
+              <h1 className="font-black font-Merriweather mb-2 text-2xl sm:text-4xl md:text-5xl text-white uppercase text-center">
                 Travel in Kenya made easy
               </h1>
-              <h1 className="font-bold font-OpenSans mb-8 text-base sm:text-2xl text-white">
+              <h1 className="font-bold font-OpenSans mb-8 text-base sm:text-xl text-white text-center">
                 Winda finds you happiness in unexpected places
               </h1>
             </div>
