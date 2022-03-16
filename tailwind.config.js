@@ -9,6 +9,7 @@ module.exports = {
         Merriweather: ["Merriweather", "sans-serif"],
         lobster: ["Lobster", "sans-serif"],
         OpenSans: ["Open Sans", "sans-serif"],
+        SourceSans: ["Source Sans Pro", "sans-serif"],
       },
 
       screens: {

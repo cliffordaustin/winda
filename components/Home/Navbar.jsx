@@ -29,7 +29,7 @@ function Navbar({
         </a>
       </Link>
       {showSearchOptions && (
-        <div className="hidden sm:block">
+        <div className="hidden md:block">
           <SearchSelect
             setCurrentNavState={setCurrentNavState}
             currentNavState={currentNavState}

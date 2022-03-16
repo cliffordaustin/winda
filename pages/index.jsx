@@ -11,6 +11,7 @@ import ActivitiesSearch from "../components/Home/ActivitiesSearch";
 import Main from "../components/Home/Main";
 import Footer from "../components/Home/Footer";
 import Button from "../components/ui/Button";
+import MobileSearchSelect from "../components/Home/MobileSearchSelect";
 import SearchSelect from "../components/Home/SearchSelect";
 import StickyHeader from "../components/Home/StickyHeader";
 import Input from "../components/ui/Input";
@@ -141,7 +142,7 @@ export default function Home() {
             })
           }
         ></Navbar>
-        <div className="sm:hidden flex justify-center">
+        {/* <div className="hidden lg:flex justify-center">
           <SearchSelect
             currentNavState={state.currentNavState}
             setCurrentNavState={(currentNavState) => {
@@ -154,10 +155,10 @@ export default function Home() {
               });
             }}
           ></SearchSelect>
-        </div>
+        </div> */}
         <div
           ref={searchRef}
-          className="mt-1 w-full flex md:justify-center md:px-0 px-4"
+          className="mt-1 w-full md:flex md:justify-center md:px-0 px-4 hidden"
         >
           {state.currentNavState === 1 && !state.showSearchModal && (
             <motion.div
@@ -421,52 +422,14 @@ export default function Home() {
             </motion.div>
           )}
         </div>
-        <StickyHeader className="py-3 px-2 rounded-bl-2xl rounded-br-2xl bg-white z-30 shadow-md flex items-center justify-center">
-          <div
-            onClick={(e) => {
-              e.stopPropagation();
-              setState({ ...state, showSearchModal: true });
-            }}
-            className="w-5/6 sm:hidden cursor-pointer"
-          >
-            <div className="flex items-center justify-center gap-2 !px-2 !py-1.5 !bg-gray-100 w-full rounded-full text-center ml-1 font-bold">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 text-red-600"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path d="M9 9a2 2 0 114 0 2 2 0 01-4 0z" />
-                <path
-                  fillRule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a4 4 0 00-3.446 6.032l-2.261 2.26a1 1 0 101.414 1.415l2.261-2.261A4 4 0 1011 5z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <div>Where to?</div>
-            </div>
-          </div>
-
-          <div className="sm:flex justify-between gap-4 items-center hidden w-90p">
-            <Link href="/">
-              <a className="font-lobster text-xl relative w-24 h-7 cursor-pointer">
-                <Image
-                  layout="fill"
-                  alt="Logo"
-                  src="/images/winda_logo/horizontal-blue-font.png"
-                  priority
-                ></Image>
-              </a>
-            </Link>
-
+        <div className="hidden md:block">
+          <StickyHeader className="py-3 px-2 rounded-bl-2xl rounded-br-2xl bg-white z-30 shadow-md flex items-center justify-center">
             <div
-              onClick={() =>
-                searchRef.current.scrollIntoView({
-                  behavior: "smooth",
-                  block: "center",
-                })
-              }
-              className="w-4/5 lg:w-3/5 cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                setState({ ...state, showSearchModal: true });
+              }}
+              className="w-5/6 sm:hidden cursor-pointer"
             >
               <div className="flex items-center justify-center gap-2 !px-2 !py-1.5 !bg-gray-100 w-full rounded-full text-center ml-1 font-bold">
                 <svg
@@ -486,17 +449,57 @@ export default function Home() {
               </div>
             </div>
 
-            <UserDropdown
-              showDropdown={state.showDropdown}
-              changeShowDropdown={() =>
-                setState({
-                  ...state,
-                  showDropdown: !state.showDropdown,
-                })
-              }
-            ></UserDropdown>
-          </div>
-        </StickyHeader>
+            <div className="sm:flex justify-between gap-4 items-center hidden w-90p">
+              <Link href="/">
+                <a className="font-lobster text-xl relative w-24 h-7 cursor-pointer">
+                  <Image
+                    layout="fill"
+                    alt="Logo"
+                    src="/images/winda_logo/horizontal-blue-font.png"
+                    priority
+                  ></Image>
+                </a>
+              </Link>
+
+              <div
+                onClick={() =>
+                  searchRef.current.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
+                  })
+                }
+                className="w-4/5 lg:w-3/5 cursor-pointer"
+              >
+                <div className="flex items-center justify-center gap-2 !px-2 !py-1.5 !bg-gray-100 w-full rounded-full text-center ml-1 font-bold">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 text-red-600"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path d="M9 9a2 2 0 114 0 2 2 0 01-4 0z" />
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a4 4 0 00-3.446 6.032l-2.261 2.26a1 1 0 101.414 1.415l2.261-2.261A4 4 0 1011 5z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  <div>Where to?</div>
+                </div>
+              </div>
+
+              <UserDropdown
+                showDropdown={state.showDropdown}
+                changeShowDropdown={() =>
+                  setState({
+                    ...state,
+                    showDropdown: !state.showDropdown,
+                  })
+                }
+              ></UserDropdown>
+            </div>
+          </StickyHeader>
+        </div>
       </div>
       <div className="sm:hidden"></div>
       <MobileModal
@@ -782,8 +785,8 @@ export default function Home() {
           )}
         </div>
       </MobileModal>
-      <div className="px-3 sm:px-6 mb-12 select-none">
-        <div className="w-full h-600 relative before:absolute before:h-full before:w-full before:bg-black before:z-20 before:rounded-3xl before:opacity-40">
+      <div className="px-3 sm:px-6 mb-12 select-none relative">
+        <div className="w-full h-600 relative before:absolute before:h-full before:w-full before:bg-black before:z-20 before:rounded-3xl before:opacity-50">
           <Image
             className={"rounded-3xl sm:w-full md:w-full"}
             layout="fill"
@@ -795,7 +798,7 @@ export default function Home() {
           />
           <div className="absolute flex flex-col items-center justify-center top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 z-20 w-fit px-6 md:px-0">
             <div>
-              <h1 className="font-black font-Merriweather mb-2 text-2xl sm:text-4xl md:text-5xl text-white uppercase text-center">
+              <h1 className="font-black font-SourceSans mb-2 text-3xl sm:text-4xl md:text-5xl xl:text-7xl text-white uppercase text-center">
                 Travel in Kenya made easy
               </h1>
               <h1 className="font-bold font-OpenSans mb-8 text-base sm:text-xl text-white text-center">
@@ -819,8 +822,292 @@ export default function Home() {
             </Button>
           </div>
         </div>
+        <div
+          className={
+            "absolute bottom-20 z-20 right-2/4 left-2/4 -translate-x-2/4 md:hidden flex justify-center " +
+            (state.currentNavState === 2 && !state.showSearchModal
+              ? "mb-4"
+              : "")
+          }
+        >
+          <MobileSearchSelect
+            currentNavState={state.currentNavState}
+            setCurrentNavState={(currentNavState) => {
+              setState({
+                ...state,
+                currentNavState: currentNavState,
+                showCheckOutDate: false,
+                showCheckInDate: false,
+                showPopup: false,
+              });
+            }}
+          ></MobileSearchSelect>
+        </div>
+        <div className="mt-1 w-full flex md:justify-center md:px-0 px-4 absolute -bottom-52 z-20 right-2/4 left-2/4 -translate-x-2/4 md:hidden">
+          {state.currentNavState === 1 && !state.showSearchModal && (
+            <motion.div
+              variants={variants}
+              animate={
+                state.currentNavState === 1 && !state.showSearchModal
+                  ? "show"
+                  : ""
+              }
+              initial="hide"
+              className="sm:w-4/5 w-full mx-auto"
+            >
+              <Search
+                location={state.location}
+                checkin={state.checkin}
+                selectedSearchItem={state.selectedSearchItem}
+                showSearchModal={state.showSearchModal}
+                clearInput={() => {
+                  setState({ ...state, location: "" });
+                }}
+                clearCheckInDate={() => {
+                  setState({ ...state, checkin: "" });
+                }}
+                clearCheckOutDate={() => {
+                  setState({ ...state, checkout: "" });
+                }}
+                changeShowCheckInDate={() => {
+                  setState({
+                    ...state,
+                    ...turnOffAllPopup,
+                    showCheckInDate: !state.showCheckInDate,
+                    selectedSearchItem: state.selectedSearchItem === 2 ? 0 : 2,
+                  });
+                }}
+                setCheckInDate={(date) => {
+                  state.checkout > date
+                    ? setState({ ...state, checkin: date })
+                    : setState({ ...state, checkout: "", checkin: date });
+                }}
+                showCheckInDate={state.showCheckInDate}
+                checkout={state.checkout}
+                changeShowCheckOutDate={() => {
+                  setState({
+                    ...state,
+                    ...turnOffAllPopup,
+                    showCheckOutDate: !state.showCheckOutDate,
+                    selectedSearchItem: state.selectedSearchItem === 3 ? 0 : 3,
+                  });
+                }}
+                changeSelectedSearchItem={(num) => {
+                  setState({ ...state, selectedSearchItem: num });
+                }}
+                setCheckOutDate={(date) => {
+                  setState({ ...state, checkout: date });
+                }}
+                showCheckOutDate={state.showCheckOutDate}
+                showPopup={state.showPopup}
+                changeShowPopup={() => {
+                  setState({
+                    ...state,
+                    ...turnOffAllPopup,
+                    showPopup: !state.showPopup,
+                    selectedSearchItem: state.selectedSearchItem === 4 ? 0 : 4,
+                  });
+                }}
+                onChange={(event) => {
+                  setState({ ...state, location: event.target.value });
+                }}
+                numOfAdults={state.numOfAdults}
+                numOfChildren={state.numOfChildren}
+                numOfInfants={state.numOfInfants}
+                addToAdults={() => {
+                  console.log("add");
+                  setState({ ...state, numOfAdults: state.numOfAdults + 1 });
+                }}
+                addToChildren={() => {
+                  setState({
+                    ...state,
+                    numOfChildren: state.numOfChildren + 1,
+                  });
+                }}
+                addToInfants={() => {
+                  setState({ ...state, numOfInfants: state.numOfInfants + 1 });
+                }}
+                removeFromAdults={() => {
+                  state.numOfAdults > 0
+                    ? setState({ ...state, numOfAdults: state.numOfAdults - 1 })
+                    : null;
+                }}
+                removeFromChildren={() => {
+                  state.numOfChildren > 0
+                    ? setState({
+                        ...state,
+                        numOfChildren: state.numOfChildren - 1,
+                      })
+                    : null;
+                }}
+                removeFromInfants={() => {
+                  state.numOfInfants > 0
+                    ? setState({
+                        ...state,
+                        numOfInfants: state.numOfInfants - 1,
+                      })
+                    : null;
+                }}
+                clearGuests={() => {
+                  setState({
+                    ...state,
+                    numOfChildren: 0,
+                    numOfInfants: 0,
+                    numOfAdults: 0,
+                  });
+                }}
+              ></Search>
+            </motion.div>
+          )}
+          {state.currentNavState === 2 && !state.showSearchModal && (
+            <motion.div
+              variants={variants}
+              animate={
+                state.currentNavState === 2 && !state.showSearchModal
+                  ? "show"
+                  : ""
+              }
+              initial="hide"
+              className="sm:w-4/5 w-full mx-auto"
+            >
+              <TransportSearch
+                typeOfCar={typeOfCar}
+                setTypeOfCar={setTypeOfCar}
+                transportDate={state.transportDate}
+                showSearchModal={state.showSearchModal}
+                changeShowTransportDate={() => {
+                  setState({
+                    ...state,
+                    ...turnOffAllPopup,
+                    showTransportDate: !state.showTransportDate,
+                    selectedTransportSearchItem:
+                      state.selectedTransportSearchItem === 1 ? 0 : 1,
+                  });
+                }}
+                setTransportDate={(date) => {
+                  setState({ ...state, transportDate: date });
+                }}
+                showTransportDate={state.showTransportDate}
+                showPassengerPopup={state.showPassengerPopup}
+                changeShowPassengerPopup={() => {
+                  setState({
+                    ...state,
+                    ...turnOffAllPopup,
+                    showPassengerPopup: !state.showPassengerPopup,
+                    selectedTransportSearchItem:
+                      state.selectedTransportSearchItem === 2 ? 0 : 2,
+                  });
+                }}
+                showNeedADriver={state.showNeedADriver}
+                changeShowNeedADriver={() => {
+                  setState({
+                    ...state,
+                    ...turnOffAllPopup,
+                    showNeedADriver: !state.showNeedADriver,
+                    selectedTransportSearchItem:
+                      state.selectedTransportSearchItem === 3 ? 0 : 3,
+                  });
+                }}
+                selectedTransportSearchItem={state.selectedTransportSearchItem}
+                clearTransportDate={() => {
+                  setState({ ...state, transportDate: "" });
+                }}
+                clearPassengers={() => {
+                  setState({ ...state, passengers: 0 });
+                }}
+                clearNeedADriver={() => {
+                  setState({ ...state, needADriver: false });
+                }}
+                needADriver={state.needADriver}
+                changeNeedADriver={() => {
+                  setState({
+                    ...state,
+                    needADriver: !state.needADriver,
+                  });
+                }}
+                passengers={state.passengers}
+                addPassenger={() => {
+                  setState({ ...state, passengers: state.passengers + 1 });
+                }}
+                removePassenger={() => {
+                  state.passengers > 0
+                    ? setState({ ...state, passengers: state.passengers - 1 })
+                    : null;
+                }}
+              ></TransportSearch>
+            </motion.div>
+          )}
+          {state.currentNavState === 3 && !state.showSearchModal && (
+            <motion.div
+              variants={variants}
+              animate={
+                state.currentNavState === 3 && !state.showSearchModal
+                  ? "show"
+                  : ""
+              }
+              initial="hide"
+              className="sm:w-4/5 w-full mx-auto"
+            >
+              <ActivitiesSearch
+                activityLocation={state.activityLocation}
+                travelers={state.travelers}
+                activityDate={state.activityDate}
+                showSearchModal={state.showSearchModal}
+                onChange={(event) => {
+                  setState({ ...state, activityLocation: event.target.value });
+                }}
+                changeSelectedActivitiesSearchItem={(num) => {
+                  setState({ ...state, selectedActivitiesSearchItem: num });
+                }}
+                changeActivityDate={() => {
+                  setState({
+                    ...state,
+                    ...turnOffAllPopup,
+                    showActivityDate: !state.showActivityDate,
+                    selectedActivitiesSearchItem:
+                      state.selectedActivitiesSearchItem === 2 ? 0 : 2,
+                  });
+                }}
+                setActivityDate={(date) => {
+                  setState({ ...state, activityDate: date });
+                }}
+                showActivityDate={state.showActivityDate}
+                showTravelersPopup={state.showTravelersPopup}
+                changeShowTravelersPopup={() => {
+                  setState({
+                    ...state,
+                    ...turnOffAllPopup,
+                    showTravelersPopup: !state.showTravelersPopup,
+                    selectedActivitiesSearchItem:
+                      state.selectedActivitiesSearchItem === 3 ? 0 : 3,
+                  });
+                }}
+                selectedActivitiesSearchItem={
+                  state.selectedActivitiesSearchItem
+                }
+                clearLocationInput={() => {
+                  setState({ ...state, activityLocation: "" });
+                }}
+                clearActivityDate={() => {
+                  setState({ ...state, activityDate: "" });
+                }}
+                clearTravelers={() => {
+                  setState({ ...state, travelers: 0 });
+                }}
+                addTraveler={() => {
+                  setState({ ...state, travelers: state.travelers + 1 });
+                }}
+                removeTraveler={() => {
+                  state.travelers > 0
+                    ? setState({ ...state, travelers: state.travelers - 1 })
+                    : null;
+                }}
+              ></ActivitiesSearch>
+            </motion.div>
+          )}
+        </div>
       </div>
-      <div className="mt-14 mb-8">
+      <div className="md:mt-14 mb-8 mt-60">
         <Main></Main>
       </div>
       <div className="mt-14">
