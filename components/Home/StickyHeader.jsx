@@ -46,17 +46,21 @@ function StickyHeader({ children, className = "" }) {
   };
 
   return (
-    <motion.header
-      variants={variants}
-      animate={isSticky ? "show" : ""}
-      initial="hide"
-      exit="exit"
-      id="myHeader"
-      className={isSticky ? ` ${className} ${styles.stick}` : " invisible"}
-      ref={ref}
-    >
-      {children}
-    </motion.header>
+    <div>
+      <motion.header
+        variants={variants}
+        animate={isSticky ? "show" : ""}
+        initial="hide"
+        exit="exit"
+        id="myHeader"
+        className={
+          isSticky ? ` ${className} ${styles.stick}` : " invisible fixed"
+        }
+        ref={ref}
+      >
+        {children}
+      </motion.header>
+    </div>
   );
 }
 

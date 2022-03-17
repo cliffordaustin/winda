@@ -116,7 +116,7 @@ function Main() {
   ];
 
   return (
-    <div className="">
+    <div className="w-full">
       <div className="flex gap-4 justify-between items-center px-4 sm:px-8 md:px-12">
         <h1 className="font-bold text-2xl md:text-3xl font-OpenSans">
           Explore Categories
@@ -148,12 +148,12 @@ function Main() {
           className="!w-full"
         >
           {experienceImages.map((experienceImage, index) => (
-            <SwiperSlide key={index} className="!w-72">
+            <SwiperSlide key={index} className="!w-72 lgDesktop:!w-500">
               <Card
                 imagePaths={[experienceImage.image]}
                 header={experienceImage.header}
                 className={styles.card}
-                carouselClassName="h-56"
+                carouselClassName="h-56 lgDesktop:h-96"
               ></Card>
             </SwiperSlide>
           ))}
@@ -191,12 +191,12 @@ function Main() {
           className="!w-full"
         >
           {exploreLocationImages.map((explorelocationImage, index) => (
-            <SwiperSlide key={index} className="!w-72">
+            <SwiperSlide key={index} className="!w-72 lgDesktop:!w-500">
               <Card
                 imagePaths={[explorelocationImage.image]}
                 header={explorelocationImage.header}
                 className={styles.card}
-                carouselClassName="h-56"
+                carouselClassName="h-56 lgDesktop:h-96"
               ></Card>
             </SwiperSlide>
           ))}
@@ -234,12 +234,12 @@ function Main() {
           className="!w-full"
         >
           {travelImages.map((travelImage, index) => (
-            <SwiperSlide key={index} className="!w-72">
+            <SwiperSlide key={index} className="!w-72 lgDesktop:!w-500">
               <Card
                 imagePaths={[travelImage.image]}
                 header={travelImage.header}
                 className={styles.card}
-                carouselClassName="h-56"
+                carouselClassName="h-56 lgDesktop:h-96"
               ></Card>
             </SwiperSlide>
           ))}

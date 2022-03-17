@@ -99,7 +99,8 @@ function Search({
           </div>
           <div
             className={
-              "mt-4 absolute w-96 " + (showSearchModal ? "hidden" : "")
+              "mt-4 absolute !w-full smMobile:!w-96 " +
+              (showSearchModal ? "hidden" : "")
             }
           >
             <DatePicker
@@ -138,7 +139,8 @@ function Search({
           </div>
           <div
             className={
-              "mt-4 absolute w-96 " + (showSearchModal ? "hidden" : "")
+              "mt-4 absolute !w-full smMobile:!w-96 " +
+              (showSearchModal ? "hidden" : "")
             }
           >
             <DatePicker
@@ -178,7 +180,7 @@ function Search({
         </div>
         <div
           className={
-            "mt-4 absolute !top-12 md:!top-14 md:!-left-16 w-72 z-30 " +
+            "mt-4 absolute !top-12 md:!top-14 md:!-left-16 !w-full smMobile:!w-72 z-30 " +
             (showSearchModal ? "hidden" : "")
           }
         >

@@ -13,12 +13,14 @@ module.exports = {
       },
 
       screens: {
+        smMobile: "360px",
         mobile: "380px",
         tablet: "640px",
 
         laptop: "1024px",
 
         desktop: "1280px",
+        lgDesktop: "2000px",
       },
 
       width: {
