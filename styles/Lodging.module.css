@@ -1,3 +1,15 @@
 .listItem {
   @apply px-4 py-2 hover:bg-gray-100 transition-all duration-300 ease-linear;
 }
+
+.ratingItem {
+  @apply flex items-center px-4 py-2 hover:bg-gray-100 transition-all duration-300 ease-linear gap-5;
+}
+
+.tag {
+  @apply py-2 px-2 border border-gray-200 rounded-xl w-auto hover:bg-gray-100 transition-all duration-300 ease-linear;
+}
+
+.amenitiesItem {
+  @apply w-47p flex justify-between items-center border-b border-b-gray-200 py-1 mt-4;
+}

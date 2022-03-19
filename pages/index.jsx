@@ -17,6 +17,7 @@ import StickyHeader from "../components/Home/StickyHeader";
 import Input from "../components/ui/Input";
 import MobileModal from "../components/ui/MobileModal";
 import UserDropdown from "../components/Home/UserDropdown";
+import TeamExperience from "../components/Home/TeamExperience";
 
 export default function Home() {
   const [state, setState] = useState({
@@ -1232,6 +1233,9 @@ export default function Home() {
       )}
       <div className="md:mt-16 mb-8 mt-64 2xl:w-4/6 2xl:mx-auto">
         <Main></Main>
+      </div>
+      <div className="mt-14 px-3 sm:px-6">
+        <TeamExperience></TeamExperience>
       </div>
       <div className="mt-14">
         <Footer></Footer>

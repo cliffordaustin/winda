@@ -35,13 +35,13 @@ export default function Footer() {
         </div>
         <div className="tablet:w-45p laptop:w-23p">
           <h1 className="font-bold md:mb-8 mb-2">Community</h1>
-          <h3>Newsroom</h3>
-          <h3>Developers</h3>
-          <h3>Careers</h3>
+          <h3>Guidelines</h3>
+          <h3>Terms & Conditions</h3>
+          <h3>Privacy Policy</h3>
         </div>
         <div className="tablet:w-45p laptop:w-23p">
           <h1 className="font-bold md:mb-8 mb-2">About</h1>
-          <h3>Advertisers</h3>
+          <h3>Newsroom</h3>
           <h3>Developers</h3>
           <h3>Careers</h3>
         </div>

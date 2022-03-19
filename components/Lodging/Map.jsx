@@ -11,7 +11,7 @@ function MapBox() {
         zoom: 14,
       }}
       mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_API_KEY}
-      style={{ width: "100vw", height: "100vh" }}
+      style={{ width: "100vw", height: "100%" }}
       mapStyle="mapbox://styles/cliffaustin/cl0psgnss008714n29bmcpx68"
     >
       {/* <Marker longitude={36.8172449} latitude={-1.2832533} anchor="bottom">

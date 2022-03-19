@@ -101,6 +101,17 @@ body {
   @apply !py-0;
 }
 
+/* .mapboxgl-map {
+  position: absolute !important;
+  top: 0;
+  bottom: 0;
+  width: 100% !important;
+} */
+
+.mapboxgl-ctrl-attrib-inner {
+  display: none !important;
+}
+
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
   select,
   textarea,
