@@ -326,7 +326,7 @@ function Lodging() {
             ></Search>
           </div>
         </div>
-        <div className="flex gap-4 mt-4 ml-10">
+        <div className="flex gap-4 mt-4 ml-4 sm:ml-10">
           <div
             onClick={(event) => {
               event.stopPropagation();
@@ -1633,6 +1633,8 @@ function Lodging() {
                   <div
                     onClick={(e) => {
                       e.preventDefault();
+                      e.stopPropagation();
+                      e.stopPropagation();
                       setState({
                         ...state,
                         lodge: !state.lodge,
@@ -1646,6 +1648,7 @@ function Lodging() {
                   <div
                     onClick={(e) => {
                       e.preventDefault();
+                      e.stopPropagation();
                       setState({
                         ...state,
                         cottage: !state.cottage,
@@ -1659,6 +1662,7 @@ function Lodging() {
                   <div
                     onClick={(e) => {
                       e.preventDefault();
+                      e.stopPropagation();
                       setState({
                         ...state,
                         house: !state.house,
@@ -1672,6 +1676,7 @@ function Lodging() {
                   <div
                     onClick={(e) => {
                       e.preventDefault();
+                      e.stopPropagation();
                       setState({
                         ...state,
                         campsite: !state.campsite,
@@ -1693,6 +1698,7 @@ function Lodging() {
                   <div
                     onClick={(e) => {
                       e.preventDefault();
+                      e.stopPropagation();
                       setState({
                         ...state,
                         exellentRating: state.veryGoodRating
@@ -1715,6 +1721,7 @@ function Lodging() {
                   <div
                     onClick={(e) => {
                       e.preventDefault();
+                      e.stopPropagation();
                       setState({
                         ...state,
                         veryGoodRating: state.goodRating
@@ -1737,6 +1744,7 @@ function Lodging() {
                   <div
                     onClick={(e) => {
                       e.preventDefault();
+                      e.stopPropagation();
                       setState({
                         ...state,
                         goodRating: state.fairRating ? true : !state.goodRating,
@@ -1757,6 +1765,7 @@ function Lodging() {
                   <div
                     onClick={(e) => {
                       e.preventDefault();
+                      e.stopPropagation();
                       setState({
                         ...state,
                         fairRating: state.okayRating ? true : !state.fairRating,
@@ -1777,6 +1786,7 @@ function Lodging() {
                   <div
                     onClick={(e) => {
                       e.preventDefault();
+                      e.stopPropagation();
                       setState({
                         ...state,
                         okayRating: !state.okayRating,
@@ -1801,7 +1811,8 @@ function Lodging() {
             <div className="text-lg font-bold mb-2 mt-2">Travel themes</div>
             <div className="flex gap-2 flex-wrap">
               <div
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setState({
                     ...state,
                     coworkingSpots: !state.coworkingSpots,
@@ -1817,7 +1828,8 @@ function Lodging() {
                 Coworking Spots
               </div>
               <div
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setState({ ...state, campsites: !state.campsites });
                 }}
                 className={
@@ -1830,7 +1842,8 @@ function Lodging() {
                 Campsites
               </div>
               <div
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setState({
                     ...state,
                     weekendGetaways: !state.weekendGetaways,
@@ -1846,7 +1859,8 @@ function Lodging() {
                 Weekend Getaways
               </div>
               <div
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setState({
                     ...state,
                     romanticGetaways: !state.romanticGetaways,
@@ -1862,7 +1876,8 @@ function Lodging() {
                 Romantic Getaways
               </div>
               <div
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setState({ ...state, groupRetreats: !state.groupRetreats });
                 }}
                 className={
@@ -1875,7 +1890,8 @@ function Lodging() {
                 Group Retreats
               </div>
               <div
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setState({ ...state, conservancies: !state.conservancies });
                 }}
                 className={
@@ -1888,7 +1904,8 @@ function Lodging() {
                 Conservancies
               </div>
               <div
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setState({ ...state, nationalParks: !state.nationalParks });
                 }}
                 className={
@@ -1901,7 +1918,8 @@ function Lodging() {
                 National Parks
               </div>
               <div
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setState({ ...state, lakeHouse: !state.lakeHouse });
                 }}
                 className={
@@ -1918,7 +1936,8 @@ function Lodging() {
             <div className="text-lg font-bold mb-2 mt-8">Activities</div>
             <div className="flex gap-2 flex-wrap">
               <div
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setState({
                     ...state,
                     gameDrives: !state.gameDrives,
@@ -1934,7 +1953,8 @@ function Lodging() {
                 Game Drives
               </div>
               <div
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setState({
                     ...state,
                     walkingSafaris: !state.walkingSafaris,
@@ -1950,7 +1970,8 @@ function Lodging() {
                 Walking Safaris
               </div>
               <div
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setState({
                     ...state,
                     horseBackRiding: !state.horseBackRiding,
@@ -1966,7 +1987,8 @@ function Lodging() {
                 Horseback Riding
               </div>
               <div
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setState({
                     ...state,
                     waterSports: !state.waterSports,
@@ -1982,7 +2004,8 @@ function Lodging() {
                 Watersports
               </div>
               <div
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setState({ ...state, cultural: !state.cultural });
                 }}
                 className={
@@ -1995,7 +2018,8 @@ function Lodging() {
                 Cultural
               </div>
               <div
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setState({ ...state, bushMeals: !state.bushMeals });
                 }}
                 className={
@@ -2008,7 +2032,8 @@ function Lodging() {
                 Bush Meals
               </div>
               <div
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setState({ ...state, sundowners: !state.sundowners });
                 }}
                 className={
@@ -2021,7 +2046,8 @@ function Lodging() {
                 Sundowners
               </div>
               <div
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setState({ ...state, ecoTours: !state.ecoTours });
                 }}
                 className={
@@ -2034,7 +2060,8 @@ function Lodging() {
                 Eco Tours
               </div>
               <div
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setState({ ...state, spa: !state.spa });
                 }}
                 className={
@@ -2053,6 +2080,7 @@ function Lodging() {
               <div
                 onClick={(e) => {
                   e.preventDefault();
+                  e.stopPropagation();
                   setState({
                     ...state,
                     freeWifi: !state.freeWifi,
@@ -2080,6 +2108,7 @@ function Lodging() {
               <div
                 onClick={(e) => {
                   e.preventDefault();
+                  e.stopPropagation();
                   setState({
                     ...state,
                     kitchen: !state.kitchen,
@@ -2093,6 +2122,7 @@ function Lodging() {
               <div
                 onClick={(e) => {
                   e.preventDefault();
+                  e.stopPropagation();
                   setState({
                     ...state,
                     selfCheckin: !state.selfCheckin,
@@ -2106,6 +2136,7 @@ function Lodging() {
               <div
                 onClick={(e) => {
                   e.preventDefault();
+                  e.stopPropagation();
                   setState({
                     ...state,
                     pool: !state.pool,
@@ -2119,6 +2150,7 @@ function Lodging() {
               <div
                 onClick={(e) => {
                   e.preventDefault();
+                  e.stopPropagation();
                   setState({
                     ...state,
                     dryer: !state.dryer,
@@ -2132,6 +2164,7 @@ function Lodging() {
               <div
                 onClick={(e) => {
                   e.preventDefault();
+                  e.stopPropagation();
                   setState({
                     ...state,
                     heating: !state.heating,
@@ -2145,6 +2178,7 @@ function Lodging() {
               <div
                 onClick={(e) => {
                   e.preventDefault();
+                  e.stopPropagation();
                   setState({
                     ...state,
                     aircondition: !state.aircondition,
@@ -2158,6 +2192,7 @@ function Lodging() {
               <div
                 onClick={(e) => {
                   e.preventDefault();
+                  e.stopPropagation();
                   setState({
                     ...state,
                     dedicatedWorkspace: !state.dedicatedWorkspace,
@@ -2171,6 +2206,7 @@ function Lodging() {
               <div
                 onClick={(e) => {
                   e.preventDefault();
+                  e.stopPropagation();
                   setState({
                     ...state,
                     fullboard: !state.fullboard,
@@ -2184,6 +2220,7 @@ function Lodging() {
               <div
                 onClick={(e) => {
                   e.preventDefault();
+                  e.stopPropagation();
                   setState({
                     ...state,
                     allInclusive: !state.allInclusive,
@@ -2199,6 +2236,7 @@ function Lodging() {
               <div
                 onClick={(e) => {
                   e.preventDefault();
+                  e.stopPropagation();
                   setState({
                     ...state,
                     freeParking: !state.freeParking,
@@ -2212,6 +2250,7 @@ function Lodging() {
               <div
                 onClick={(e) => {
                   e.preventDefault();
+                  e.stopPropagation();
                   setState({
                     ...state,
                     waterfront: !state.waterfront,
@@ -2225,6 +2264,7 @@ function Lodging() {
               <div
                 onClick={(e) => {
                   e.preventDefault();
+                  e.stopPropagation();
                   setState({
                     ...state,
                     laundry: !state.laundry,
@@ -2238,6 +2278,7 @@ function Lodging() {
               <div
                 onClick={(e) => {
                   e.preventDefault();
+                  e.stopPropagation();
                   setState({
                     ...state,
                     gym: !state.gym,
