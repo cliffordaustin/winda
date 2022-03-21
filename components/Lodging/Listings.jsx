@@ -1,4 +1,6 @@
 import React from "react";
+import PropTypes from "prop-types";
+
 import Listing from "./Listing";
 
 function Listings() {
@@ -89,7 +91,7 @@ function Listings() {
     },
   ];
   return (
-    <div className="w-full flex justify-between flex-wrap gap-8">
+    <div className="w-full flex justify-between flex-wrap gap-4">
       {infos.map((info, index) => (
         <Listing key={index} listing={info}></Listing>
       ))}

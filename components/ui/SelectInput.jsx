@@ -11,7 +11,7 @@ const SelectInput = ({
   placeholder,
 }) => {
   return (
-    <div>
+    <div className="w-full">
       <Select
         isClearable
         defaultValue={selectedOption}

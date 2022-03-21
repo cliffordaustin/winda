@@ -21,6 +21,12 @@ module.exports = {
 
         desktop: "1280px",
         lgDesktop: "2000px",
+        lgMax: { max: "1023px" },
+        mdMax: { max: "767px" },
+        smMax: { max: "639px" },
+        xsMax: { max: "475px" },
+        xssMax: { max: "385px" },
+        xsmall: { max: "350px" },
       },
 
       width: {

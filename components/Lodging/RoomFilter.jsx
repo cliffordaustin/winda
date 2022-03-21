@@ -37,13 +37,14 @@ function PriceFilter({
     ],
   });
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center justify-between gap-2">
+      {/* xsmall:w-32 xssMax:w-36 w-40 sm:w-72 md:w-48 */}
       <SelectInput
         options={state.minRoomOptions}
         selectedOption={minRoomSelected}
         instanceId={minRoomInstanceId}
         setSelectedOption={setMinRoomSelected}
-        className={styles.input + " w-48"}
+        className={styles.input + " !w-full"}
         placeholder="Min Rooms"
       ></SelectInput>
       <div> - </div>
@@ -52,7 +53,7 @@ function PriceFilter({
         selectedOption={maxRoomSelected}
         instanceId={maxRoomInstanceId}
         setSelectedOption={setMaxRoomSelected}
-        className={styles.input + " w-48"}
+        className={styles.input + " !w-full"}
         placeholder="Max Rooms"
       ></SelectInput>
     </div>

@@ -37,13 +37,13 @@ function PriceFilter({
     ],
   });
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center justify-between gap-2">
       <SelectInput
         options={state.minPriceOptions}
         selectedOption={minPriceSelected}
         instanceId={minPriceInstanceId}
         setSelectedOption={setMinPriceSelected}
-        className={styles.input + " w-48"}
+        className={styles.input + " !w-full"}
         placeholder="Min price"
       ></SelectInput>
       <div> - </div>
@@ -52,7 +52,7 @@ function PriceFilter({
         selectedOption={maxPriceSelected}
         instanceId={maxPriceInstanceId}
         setSelectedOption={setMaxPriceSelected}
-        className={styles.input + " w-48"}
+        className={styles.input + " !w-full"}
         placeholder="Max price"
       ></SelectInput>
     </div>
