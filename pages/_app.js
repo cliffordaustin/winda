@@ -4,8 +4,12 @@ import ReactGA from "react-ga4";
 
 function MyApp({ Component, pageProps }) {
   useEffect(() => {
-    ReactGA.initialize("G-38KB7MCMLH");
-    ReactGA.send(window.location.pathname + window.location.search);
+    const env = process.env.NODE_ENV;
+    if (env == "development") {
+      console.log("Development");
+    } else if (env == "production") {
+      console.log("Production");
+    }
   }, []);
   return <Component {...pageProps} />;
 }
