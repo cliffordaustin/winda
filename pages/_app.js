@@ -1,15 +1,10 @@
 import { useEffect } from "react";
 import "../styles/globals.css";
-import ReactGA from "react-ga4";
+import { Mixpanel } from "../lib/mixpanelconfig";
 
 function MyApp({ Component, pageProps }) {
   useEffect(() => {
-    const env = process.env.NODE_ENV;
-    if (env == "development") {
-      console.log("Development");
-    } else if (env == "production") {
-      console.log("Production");
-    }
+    Mixpanel.register_once({ "First Login Date": new Date().toISOString() });
   }, []);
   return <Component {...pageProps} />;
 }
