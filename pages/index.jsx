@@ -3,7 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import Head from "next/head";
-import ReactGA from "react-ga4";
 
 import Navbar from "../components/Home/Navbar";
 import Search from "../components/Home/Search";
@@ -95,11 +94,6 @@ export default function Home() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.windowSize]);
-
-  useEffect(() => {
-    ReactGA.initialize("G-38KB7MCMLH");
-    ReactGA.send("/");
-  }, []);
 
   const variants = {
     hide: {
