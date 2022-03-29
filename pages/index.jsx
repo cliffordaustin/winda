@@ -3,6 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import Head from "next/head";
+// import { Mixpanel } from "../lib/mixpanelconfig";
+// import mixpanel from "mixpanel-browser";
 
 import Navbar from "../components/Home/Navbar";
 import Search from "../components/Home/Search";
@@ -94,6 +96,17 @@ export default function Home() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.windowSize]);
+
+  // useEffect(() => {
+  //   // NB: CHANGE DEBUG TO FALSE IN PRODUCTION
+  //   mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL_TOKEN, {
+  //     debug: true,
+  //     ignore_dnt: true,
+  //   });
+  //   mixpanel.register_once("Register Once", {
+  //     "First Login Date": new Date().toISOString(),
+  //   });
+  // }, []);
 
   const variants = {
     hide: {
