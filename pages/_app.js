@@ -6,7 +6,8 @@ import mixpanel from "mixpanel-browser";
 
 function MyApp({ Component, pageProps }) {
   useEffect(() => {
-    Mixpanel.register_once({ "First Login Date": new Date().toISOString() });
+    // Mixpanel.register_once({ "First Login Date": new Date().toISOString() });
+    Mixpanel.track("Sign ups");
   }, []);
   return <Component {...pageProps} />;
 }
