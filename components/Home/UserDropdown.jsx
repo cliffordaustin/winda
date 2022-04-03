@@ -1,7 +1,10 @@
 import React from "react";
 import Dropdown from "../ui/Dropdown";
+import Image from "next/image";
+import Link from "next/link";
 
-function UserDropdown({ changeShowDropdown, showDropdown }) {
+function UserDropdown({ changeShowDropdown, showDropdown, userProfile }) {
+  let fullName = userProfile.first_name + " " + userProfile.last_name;
   return (
     <div
       onClick={(e) => {
@@ -10,18 +13,42 @@ function UserDropdown({ changeShowDropdown, showDropdown }) {
       }}
       className="relative flex items-center gap-1 px-1 py-1 bg-gray-100 rounded-3xl cursor-pointer"
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="h-7 w-7"
-        viewBox="0 0 20 20"
-        fill="currentColor"
-      >
-        <path
-          fillRule="evenodd"
-          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
-          clipRule="evenodd"
-        />
-      </svg>
+      {!userProfile && (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-7 w-7"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fillRule="evenodd"
+            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
+            clipRule="evenodd"
+          />
+        </svg>
+      )}
+      {userProfile.profile_pic && (
+        <div className="relative w-7 h-7 rounded-full">
+          <Image
+            layout="fill"
+            alt="profile image of a user"
+            className="object-cover rounded-full"
+            src={userProfile.profile_pic}
+            priority
+          ></Image>
+        </div>
+      )}
+
+      {!userProfile.profile_pic && userProfile && (
+        <div className="relative w-7 h-7 rounded-full bg-[#303960] text-white font-bold flex items-center text-sm justify-center">
+          {fullName
+            .split(" ")
+            .map((name) => name[0])
+            .join("")
+            .toUpperCase()}
+        </div>
+      )}
+
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className="h-7 w-7"
@@ -38,19 +65,41 @@ function UserDropdown({ changeShowDropdown, showDropdown }) {
         showDropdown={showDropdown}
         className="absolute -left-40 top-full mt-2 w-56"
       >
-        <div className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2">
-          Signup
-        </div>
-        <div className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2 mb-2">
-          Login
-        </div>
-        <hr className="" />
+        {!userProfile && (
+          <div>
+            <Link href="/signup">
+              <a>
+                <div className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2">
+                  Signup
+                </div>
+              </a>
+            </Link>
+            <Link href="/login">
+              <a>
+                <div className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2 mb-2">
+                  Login
+                </div>
+              </a>
+            </Link>
+          </div>
+        )}
+        {!userProfile && <hr className="" />}
         <div className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2">
           Add a listing
         </div>
         <div className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2">
           Help
         </div>
+        {userProfile && <hr className="" />}
+        {userProfile && (
+          <Link href="/logout">
+            <a>
+              <div className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2 mb-2">
+                Logout
+              </div>
+            </a>
+          </Link>
+        )}
       </Dropdown>
     </div>
   );

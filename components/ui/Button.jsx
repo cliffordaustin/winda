@@ -2,7 +2,13 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import styles from "../../styles/Button.module.css";
 
-const Button = ({ children, onClick, type = null, className = "" }) => {
+const Button = ({
+  children,
+  onClick,
+  disabled,
+  type = null,
+  className = "",
+}) => {
   const [coords, setCoords] = useState({ x: -1, y: -1 });
   const [isRippling, setIsRippling] = useState(false);
 
@@ -19,6 +25,8 @@ const Button = ({ children, onClick, type = null, className = "" }) => {
 
   return (
     <button
+      disabled={disabled}
+      type={type}
       className={styles.rippleButton + " " + className}
       onClick={(e) => {
         const rect = e.target.getBoundingClientRect();
@@ -47,6 +55,7 @@ Button.propTypes = {
   onClick: PropTypes.func,
   type: PropTypes.string,
   children: PropTypes.any.isRequired,
+  disabled: PropTypes.bool,
 };
 
 export default Button;

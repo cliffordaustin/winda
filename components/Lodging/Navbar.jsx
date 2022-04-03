@@ -12,6 +12,7 @@ function Navbar({
   currentNavState,
   setCurrentNavState,
   showSearchOptions = true,
+  userProfile,
 }) {
   return (
     <div className="flex items-center justify-between sm:px-12 px-6 md:px-24 py-4">
@@ -38,6 +39,7 @@ function Navbar({
       <UserDropdown
         changeShowDropdown={changeShowDropdown}
         showDropdown={showDropdown}
+        userProfile={userProfile}
       ></UserDropdown>
     </div>
   );

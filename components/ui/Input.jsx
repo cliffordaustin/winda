@@ -33,7 +33,7 @@ export default function Input({
           placeholder={placeholder}
           autoComplete={autoComplete}
           className={
-            "appearance-none leading-tight border rounded-md focus:outline-none py-3 px-4 w-full text-sm " +
+            "appearance-none leading-tight font-bold border rounded-md focus:outline-none py-3 px-4 w-full text-sm " +
             (errorStyle ? "!border-red-300 " : "border-gray-300 ") +
             className
           }

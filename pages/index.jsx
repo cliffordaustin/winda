@@ -3,8 +3,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import Head from "next/head";
-// import { Mixpanel } from "../lib/mixpanelconfig";
-// import mixpanel from "mixpanel-browser";
+import Cookies from "js-cookie";
+import axios from "axios";
+import getToken from "../lib/getToken";
 
 import Navbar from "../components/Home/Navbar";
 import Search from "../components/Home/Search";
@@ -21,7 +22,7 @@ import MobileModal from "../components/ui/MobileModal";
 import UserDropdown from "../components/Home/UserDropdown";
 import TeamExperience from "../components/Home/TeamExperience";
 
-export default function Home() {
+export default function Home({ userProfile }) {
   const [state, setState] = useState({
     showDropdown: false,
     location: "",
@@ -50,6 +51,7 @@ export default function Home() {
     selectedActivitiesSearchItem: 0,
     showSearchModal: false,
     windowSize: 0,
+    topBanner: true,
   });
 
   const searchRef = useRef(null);
@@ -68,6 +70,8 @@ export default function Home() {
     selectedActivitiesSearchItem: 0,
     showNeedADriver: false,
   };
+
+  useEffect(() => {}, []);
 
   useEffect(() => {
     if (process.browser) {
@@ -156,25 +160,38 @@ export default function Home() {
             content="initial-scale=1.0, width=device-width"
           />
         </Head>
-        <div className="bg-red-600 py-2 px-2 flex items-center justify-between ">
-          <h1 className="font-bold text-white w-[90%] flex justify-center">
-            Get 20% off your first payment
-          </h1>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5 flex-grow"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fillRule="evenodd"
-              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </div>
+        {state.topBanner === true && (
+          <div className="bg-red-600 py-2 px-2 relative">
+            <h1 className="font-bold text-white text-center block">
+              Get 20% off your first payment
+            </h1>
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                setState({ ...state, topBanner: false });
+                // Cookies.set("top-banner", false);
+              }}
+              className="w-6 h-6 rounded-full cursor-pointer shadow-lg bg-black bg-opacity-20 flex items-center justify-center absolute top-2/4 right-6 -translate-y-2/4"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4 z-30"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
+          </div>
+        )}
+
         <Navbar
           showDropdown={state.showDropdown}
+          userProfile={userProfile}
           currentNavState={state.currentNavState}
           setCurrentNavState={(currentNavState) => {
             setState({
@@ -541,6 +558,7 @@ export default function Home() {
 
                 <UserDropdown
                   showDropdown={state.showDropdown}
+                  userProfile={userProfile}
                   changeShowDropdown={() =>
                     setState({
                       ...state,
@@ -1250,6 +1268,7 @@ export default function Home() {
 
               <UserDropdown
                 showDropdown={state.showDropdown}
+                userProfile={userProfile}
                 changeShowDropdown={() =>
                   setState({
                     ...state,
@@ -1272,4 +1291,50 @@ export default function Home() {
       </div>
     </div>
   );
+}
+
+export async function getServerSideProps(context) {
+  try {
+    const token = getToken(context);
+
+    if (token) {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_baseURL}/user/`,
+        {
+          headers: {
+            Authorization: "Token " + token,
+          },
+        }
+      );
+
+      return {
+        props: {
+          userProfile: response.data[0],
+        },
+      };
+    }
+
+    return {
+      props: {
+        userProfile: "",
+      },
+      // statusCode: error.response.statusCode,
+    };
+  } catch (error) {
+    if (error.response.status === 401) {
+      return {
+        redirect: {
+          permanent: false,
+          destination: "logout",
+        },
+      };
+    } else {
+      return {
+        props: {
+          userProfile: "",
+        },
+        // statusCode: error.response.statusCode,
+      };
+    }
+  }
 }

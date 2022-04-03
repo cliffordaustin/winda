@@ -16,8 +16,9 @@ import Footer from "../components/Home/Footer";
 import RemoveFixed from "../components/Lodging/RemoveFixed";
 import MobileModal from "../components/ui/MobileModal";
 import Button from "../components/ui/Button";
+import { getServerSideProps } from "./index";
 
-function Lodging() {
+function Lodging({ userProfile }) {
   const [state, setState] = useState({
     showDropdown: false,
     location: "",
@@ -163,6 +164,7 @@ function Lodging() {
         <Navbar
           showDropdown={state.showDropdown}
           currentNavState={state.currentNavState}
+          userProfile={userProfile}
           setCurrentNavState={(currentNavState) => {
             setState({
               ...state,
@@ -2491,5 +2493,7 @@ function Lodging() {
     </div>
   );
 }
+
+export { getServerSideProps };
 
 export default Lodging;
