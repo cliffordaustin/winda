@@ -84,7 +84,7 @@ export default function Signup(props) {
       <div className="py-4 rounded-xl flex w-full flex-col mt-8">
         <form onSubmit={formik.handleSubmit}>
           <div className="flex items-center gap-4 w-full">
-            <div className="w-full">
+            <div className="w-full relative">
               <Input
                 name="first_name"
                 type="text"
@@ -94,33 +94,23 @@ export default function Signup(props) {
                     ? true
                     : false
                 }
-                className={
-                  "w-full " +
-                  (formik.touched.last_name && formik.errors.last_name
-                    ? "mb-3"
-                    : "")
-                }
+                className={"w-full "}
                 label="First name"
                 {...formik.getFieldProps("first_name")}
               ></Input>
               {formik.touched.first_name && formik.errors.first_name ? (
-                <span className="text-sm mt-3 font-bold text-red-400">
+                <span className="text-sm absolute -bottom-6 font-bold text-red-400">
                   {formik.errors.first_name}
                 </span>
               ) : null}
             </div>
-            <div className="w-full">
+            <div className="w-full relative">
               <Input
                 name="last_name"
                 type="text"
                 placeholder="Last name"
                 label="Last name"
-                className={
-                  "w-full " +
-                  (formik.touched.first_name && formik.errors.first_name
-                    ? "mb-3"
-                    : "")
-                }
+                className={"w-full "}
                 errorStyle={
                   formik.touched.last_name && formik.errors.last_name
                     ? true
@@ -129,13 +119,20 @@ export default function Signup(props) {
                 {...formik.getFieldProps("last_name")}
               ></Input>
               {formik.touched.last_name && formik.errors.last_name ? (
-                <span className="text-sm mt-3 font-bold text-red-400">
+                <span className="text-sm absolute -bottom-6 font-bold text-red-400">
                   {formik.errors.last_name}
                 </span>
               ) : null}
             </div>
           </div>
-          <div className="mb-4"></div>
+          <div
+            className={
+              "mb-4 " +
+              (formik.errors.last_name || formik.errors.first_name
+                ? "mb-[32px]"
+                : "")
+            }
+          ></div>
           <Input
             name="email"
             type="email"

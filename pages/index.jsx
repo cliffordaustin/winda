@@ -21,6 +21,7 @@ import Input from "../components/ui/Input";
 import MobileModal from "../components/ui/MobileModal";
 import UserDropdown from "../components/Home/UserDropdown";
 import TeamExperience from "../components/Home/TeamExperience";
+import TopBanner from "../components/Home/TopBanner";
 
 export default function Home({ userProfile }) {
   const [state, setState] = useState({
@@ -51,7 +52,6 @@ export default function Home({ userProfile }) {
     selectedActivitiesSearchItem: 0,
     showSearchModal: false,
     windowSize: 0,
-    topBanner: true,
   });
 
   const searchRef = useRef(null);
@@ -128,7 +128,7 @@ export default function Home({ userProfile }) {
   const [typeOfCar, setTypeOfCar] = useState(null);
   return (
     <div
-      className="overflow-x-hidden"
+      className="overflow-x-hidden relative"
       onClick={() => {
         setState({
           ...state,
@@ -148,6 +148,17 @@ export default function Home({ userProfile }) {
         });
       }}
     >
+      {/* {store.getState().home.showTopBanner ? (
+        <div className="bg-blue-500 py-2 px-2 sticky top-0 left-0 right-0">
+          <span>This is it</span>
+        </div>
+      ) : (
+        <div></div>
+      )} */}
+
+      {/* <div className="bg-blue-500 py-2 px-2 sticky top-0 left-0 right-0">
+        This is it
+      </div> */}
       <div className="">
         <Head>
           <title>Winda.guide | online travel booking in Kenya</title>
@@ -160,34 +171,7 @@ export default function Home({ userProfile }) {
             content="initial-scale=1.0, width=device-width"
           />
         </Head>
-        {state.topBanner === true && (
-          <div className="bg-red-600 py-2 px-2 relative">
-            <h1 className="font-bold text-white text-center block">
-              Get 20% off your first payment
-            </h1>
-            <div
-              onClick={(e) => {
-                e.stopPropagation();
-                setState({ ...state, topBanner: false });
-                // Cookies.set("top-banner", false);
-              }}
-              className="w-6 h-6 rounded-full cursor-pointer shadow-lg bg-black bg-opacity-20 flex items-center justify-center absolute top-2/4 right-6 -translate-y-2/4"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4 z-30"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </div>
-          </div>
-        )}
+        <TopBanner></TopBanner>
 
         <Navbar
           showDropdown={state.showDropdown}
@@ -209,20 +193,6 @@ export default function Home({ userProfile }) {
             })
           }
         ></Navbar>
-        {/* <div className="hidden lg:flex justify-center">
-          <SearchSelect
-            currentNavState={state.currentNavState}
-            setCurrentNavState={(currentNavState) => {
-              setState({
-                ...state,
-                currentNavState: currentNavState,
-                showCheckOutDate: false,
-                showCheckInDate: false,
-                showPopup: false,
-              });
-            }}
-          ></SearchSelect>
-        </div> */}
         <div
           ref={searchRef}
           className="mt-1 w-full md:flex md:justify-center md:px-0 px-4 hidden mb-8"
@@ -308,11 +278,17 @@ export default function Home({ userProfile }) {
                   });
                 }}
                 addToInfants={() => {
-                  setState({ ...state, numOfInfants: state.numOfInfants + 1 });
+                  setState({
+                    ...state,
+                    numOfInfants: state.numOfInfants + 1,
+                  });
                 }}
                 removeFromAdults={() => {
                   state.numOfAdults > 0
-                    ? setState({ ...state, numOfAdults: state.numOfAdults - 1 })
+                    ? setState({
+                        ...state,
+                        numOfAdults: state.numOfAdults - 1,
+                      })
                     : null;
                 }}
                 removeFromChildren={() => {
@@ -437,7 +413,10 @@ export default function Home({ userProfile }) {
                 activityDate={state.activityDate}
                 showSearchModal={state.showSearchModal}
                 onChange={(event) => {
-                  setState({ ...state, activityLocation: event.target.value });
+                  setState({
+                    ...state,
+                    activityLocation: event.target.value,
+                  });
                 }}
                 changeSelectedActivitiesSearchItem={(num) => {
                   setState({ ...state, selectedActivitiesSearchItem: num });

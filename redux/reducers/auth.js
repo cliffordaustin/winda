@@ -1,3 +1,7 @@
+import { persistReducer } from "redux-persist";
+import createFilter from "redux-persist-transform-filter";
+import storage from "redux-persist/lib/storage";
+
 const signupState = {
   token: "",
   loginError: false,
@@ -32,4 +36,13 @@ const authenticationReducer = (state = signupState, action) => {
   }
 };
 
-export default authenticationReducer;
+const authSubsetFilter = createFilter("auth", ["token"]);
+
+const persistConfig = {
+  key: "token",
+  storage: storage,
+  whitelist: ["token"],
+  transforms: [authSubsetFilter],
+};
+
+export default persistReducer(persistConfig, authenticationReducer);
