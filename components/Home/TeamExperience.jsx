@@ -13,7 +13,7 @@ function TeamExperience() {
           className={"rounded-3xl sm:w-full md:w-full"}
           layout="fill"
           objectFit="cover"
-          src="/images/team_experiences.jpg"
+          src="/images/team-experience.JPG"
           sizes="380"
           alt="Image Gallery"
           priority
