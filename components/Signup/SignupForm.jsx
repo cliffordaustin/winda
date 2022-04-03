@@ -235,7 +235,7 @@ export default function Signup(props) {
               query: { redirect: `${router.query.redirect || "/"}` },
             }}
           >
-            <a className="text-blue-500">Sign in</a>
+            <a className="text-blue-500">Login</a>
           </Link>
         </h3>
       </div>
