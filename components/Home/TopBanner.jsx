@@ -19,7 +19,8 @@ function TopBanner() {
         <div>
           <div
             className={
-              "bg-red-600 py-3 px-2 relative " + (!topBanner ? "hidden" : "")
+              "bg-red-600 py-3 px-12 md:px-2 relative " +
+              (!topBanner ? "hidden" : "")
             }
           >
             <div className="text-center font-medium text-white">
@@ -31,7 +32,7 @@ function TopBanner() {
                 e.stopPropagation();
                 dispatch(hideTopBanner());
               }}
-              className="w-6 h-6 rounded-full cursor-pointer shadow-lg bg-black bg-opacity-20 flex items-center justify-center absolute top-2/4 right-6 -translate-y-2/4"
+              className="w-6 h-6 rounded-full cursor-pointer shadow-lg bg-black bg-opacity-20 flex items-center justify-center absolute top-2/4 right-3 md:right-6 -translate-y-2/4"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
