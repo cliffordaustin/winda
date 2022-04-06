@@ -12,7 +12,7 @@ function SigninLayout({
   mainClassName = "",
 }) {
   return (
-    <div className={"flex overflow-y-scroll " + mainClassName}>
+    <div className={"flex " + mainClassName}>
       <div
         className={
           `py-6 lg:px-4 min-h-screen relative w-[50%] hidden md:block ` +
