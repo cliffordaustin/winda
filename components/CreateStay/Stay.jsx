@@ -17,6 +17,10 @@ import "swiper/css";
 import Location from "./Location";
 import Details from "./Details";
 import Amenities from "./Amenities";
+import UniqueAboutPlace from "./UniqueAboutPlace";
+import DescriptioneAboutPlace from "./DescriptionAboutPlace";
+import Pricing from "./Pricing";
+import ImageUpload from "./ImageUpload";
 
 SwiperCore.use([Navigation]);
 
@@ -75,7 +79,7 @@ const Stay = (props) => {
         <SwiperSlide className="overflow-y-scroll">
           <div className="flex justify-end">
             <div className="font-bold inline mr-6 mb-3 mt-2 rounded-full text-sm px-2 py-1 bg-white shadow-lg">
-              Step: {currentSwiperIndex} of 5
+              Step: {currentSwiperIndex} of 9
             </div>
           </div>
           <TypeOfStay></TypeOfStay>
@@ -83,7 +87,7 @@ const Stay = (props) => {
         <SwiperSlide className="overflow-y-scroll">
           <div className="flex justify-end">
             <div className="font-bold inline mr-6 mb-3 mt-2 rounded-full text-sm px-2 py-1 bg-white shadow-lg">
-              Step: {currentSwiperIndex} of 5
+              Step: {currentSwiperIndex} of 9
             </div>
           </div>
 
@@ -97,13 +101,13 @@ const Stay = (props) => {
               styles.stepWebkitSetting
             }
           >
-            Step: {currentSwiperIndex} of 5
+            Step: {currentSwiperIndex} of 9
           </div>
         </SwiperSlide>
         <SwiperSlide className="overflow-y-scroll">
           <div className="flex justify-end">
             <div className="font-bold inline mr-6 mb-3 mt-2 rounded-full text-sm px-2 py-1 bg-white shadow-lg">
-              Step: {currentSwiperIndex} of 5
+              Step: {currentSwiperIndex} of 9
             </div>
           </div>
           <Details></Details>
@@ -111,14 +115,46 @@ const Stay = (props) => {
         <SwiperSlide className="overflow-y-scroll">
           <div className="flex justify-end">
             <div className="font-bold inline mr-6 mb-3 mt-2 rounded-full text-sm px-2 py-1 bg-white shadow-lg">
-              Step: {currentSwiperIndex} of 5
+              Step: {currentSwiperIndex} of 9
             </div>
           </div>
           <Amenities></Amenities>
         </SwiperSlide>
+        <SwiperSlide className="overflow-y-scroll">
+          <div className="flex justify-end">
+            <div className="font-bold inline mr-6 mb-3 mt-2 rounded-full text-sm px-2 py-1 bg-white shadow-lg">
+              Step: {currentSwiperIndex} of 9
+            </div>
+          </div>
+          <UniqueAboutPlace></UniqueAboutPlace>
+        </SwiperSlide>
+        <SwiperSlide className="overflow-y-scroll">
+          <div className="flex justify-end">
+            <div className="font-bold inline mr-6 mb-3 mt-2 rounded-full text-sm px-2 py-1 bg-white shadow-lg">
+              Step: {currentSwiperIndex} of 9
+            </div>
+          </div>
+          <DescriptioneAboutPlace></DescriptioneAboutPlace>
+        </SwiperSlide>
+        <SwiperSlide className="overflow-y-scroll">
+          <div className="flex justify-end">
+            <div className="font-bold inline mr-6 mb-3 mt-2 rounded-full text-sm px-2 py-1 bg-white shadow-lg">
+              Step: {currentSwiperIndex} of 9
+            </div>
+          </div>
+          <Pricing></Pricing>
+        </SwiperSlide>
+        <SwiperSlide className="overflow-y-scroll">
+          <div className="flex justify-end">
+            <div className="font-bold inline mr-6 mb-3 mt-2 rounded-full text-sm px-2 py-1 bg-white shadow-lg">
+              Step: {currentSwiperIndex} of 9
+            </div>
+          </div>
+          <ImageUpload></ImageUpload>
+        </SwiperSlide>
       </Swiper>
 
-      <div className="w-full z-20 md:!w-[50%] lg:!w-[45%] h-[7%] fixed bg-white rounded-tl-2xl rounded-tr-2xl flex bottom-0 right-0 justify-between items-center px-6">
+      <div className="w-full z-20 md:!w-[50%] lg:!w-[45%] h-[7%] fixed bg-white flex bottom-0 right-0 justify-between items-start px-6">
         <div className="swiper-pagination swiper-button-prev rounded-full border border-gray-200 cursor-pointer pl-2 pr-4 py-1 flex gap-1 items-center justify-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"

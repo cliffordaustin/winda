@@ -11,6 +11,22 @@
   -webkit-mask-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC);
 }
 
+.ql-container.ql-snow {
+  @apply rounded-bl-md rounded-br-md !border-gray-300;
+}
+
+.ql-toolbar.ql-snow {
+  @apply rounded-tl-md rounded-tr-md !border-gray-300;
+}
+
+.ql-editor.ql-blank::before {
+  @apply text-base !not-italic;
+}
+
+.ql-editor {
+  @apply text-base;
+}
+
 #map {
   position: absolute;
   top: 0;
@@ -43,6 +59,47 @@ body {
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+.box-dashed {
+  background-image: repeating-linear-gradient(
+      -26deg,
+      #7c3aed,
+      #7c3aed 22px,
+      transparent 22px,
+      transparent 35px,
+      #7c3aed 35px
+    ),
+    repeating-linear-gradient(
+      64deg,
+      #7c3aed,
+      #7c3aed 22px,
+      transparent 22px,
+      transparent 35px,
+      #7c3aed 35px
+    ),
+    repeating-linear-gradient(
+      154deg,
+      #7c3aed,
+      #7c3aed 22px,
+      transparent 22px,
+      transparent 35px,
+      #7c3aed 35px
+    ),
+    repeating-linear-gradient(
+      244deg,
+      #7c3aed,
+      #7c3aed 22px,
+      transparent 22px,
+      transparent 35px,
+      #7c3aed 35px
+    );
+  background-size: 2px calc(100% + 38.94px), calc(100% + 38.94px) 2px,
+    2px calc(100% + 38.94px), calc(100% + 38.94px) 2px;
+  background-position: 0 0, 0 0, 100% 0, 0 100%;
+  background-repeat: no-repeat;
+  animation: borderAnimation 2s infinite linear;
+  border-radius: 10px;
 }
 
 .DayPicker-Day {
