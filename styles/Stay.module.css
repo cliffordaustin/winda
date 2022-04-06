@@ -1,0 +1,29 @@
+.typeOfStay {
+  @apply px-4 py-3 font-bold w-full border border-gray-300 rounded-xl cursor-pointer transition-all duration-500;
+}
+
+.typeOfStayHeader {
+  @apply text-xl font-semibold font-['Source_Sans_Pro'];
+}
+
+.typeOfStaySubText {
+  @apply text-sm font-medium text-gray-500 mt-2;
+}
+
+.describesHeader {
+  @apply text-2xl font-OpenSans font-medium;
+}
+
+.describeSubHeader {
+  background: #121fcf;
+  background: -webkit-linear-gradient(to right, #121fcf 0%, #cf1512 100%);
+  background: -moz-linear-gradient(to right, #121fcf 0%, #cf1512 100%);
+  background: linear-gradient(to right, #121fcf 0%, #cf1512 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  @apply relative font-bold;
+}
+
+.stepWebkitSetting {
+  -webkit-transform: translate3d(0, 0, 0);
+}

@@ -1,23 +1,56 @@
 import React from "react";
-import Map, { Marker } from "react-map-gl";
+import Map, { Source, Layer } from "react-map-gl";
 import Image from "next/image";
 
 function MapBox() {
+  const [viewState, setViewState] = React.useState({
+    longitude: 36.8172449,
+    latitude: -1.2832533,
+    zoom: 14,
+  });
+
+  const geojson = {
+    type: "FeatureCollection",
+    features: [
+      {
+        type: "Feature",
+        geometry: { type: "Point", coordinates: [36.8172449, -1.2832533] },
+      },
+    ],
+  };
+
+  const layerStyle = {
+    id: "point",
+    type: "circle",
+    paint: {
+      "circle-radius": 10,
+      "circle-color": "#007cbf",
+    },
+  };
+
+  // const markers = useMemo(() => vehicles.map(vehicle => (
+  //   <Marker key={vehicle.id}
+  //     longitude={vehicle.coordinates[0]}
+  //     latitude={vehicle.coordinates[1]}>
+  //     <svg>
+  //       // vehicle icon
+  //     </svg>
+  //   </Marker>)
+  // )}, [vehicles]);
+
   return (
     <Map
-      initialViewState={{
-        longitude: 36.8172449,
-        latitude: -1.2832533,
-        zoom: 14,
-      }}
+      reuseMaps
       mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_API_KEY}
-      style={{ width: "100vw", height: "100%" }}
-      mapStyle="mapbox://styles/cliffaustin/cl0psgnss008714n29bmcpx68"
+      style={{ width: "100vw", height: "100vh" }}
+      {...viewState}
+      onMove={(evt) => setViewState(evt.viewState)}
+      mapStyle="mapbox://styles/mapbox/streets-v9"
+      // mapStyle="mapbox://styles/cliffaustin/cl0psgnss008714n29bmcpx68"
     >
-      {/* <Marker longitude={36.8172449} latitude={-1.2832533} anchor="bottom">
-        <div className="relative w-16 h-16"></div>
-        <Image layout="fill" src="/img.png" alt="" />
-      </Marker> */}
+      <Source id="my-data" type="geojson" data={geojson}>
+        <Layer {...layerStyle} />
+      </Source>
     </Map>
   );
 }

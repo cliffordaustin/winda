@@ -8,6 +8,8 @@ import Router from "next/router";
 import { createWrapper } from "next-redux-wrapper";
 import "nprogress/nprogress.css";
 
+import "mapbox-gl/dist/mapbox-gl.css";
+
 NProgress.configure({
   minimum: 0.3,
   easing: "ease",

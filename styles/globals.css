@@ -6,6 +6,18 @@
   @apply !bg-red-500;
 }
 
+.mapboxgl-map {
+  @apply !rounded-tl-3xl !rounded-bl-3xl;
+  -webkit-mask-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC);
+}
+
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
+
 body {
   font-family: "Lato", sans-serif;
   color: #002333;

@@ -8,9 +8,11 @@ function SigninLayout({
   childrenClassName,
   children,
   text = "Start your journey right from here.",
+  imagePath = "/images/signin-image3.jpg",
+  mainClassName = "",
 }) {
   return (
-    <div className="flex overflow-y-scroll">
+    <div className={"flex overflow-y-scroll " + mainClassName}>
       <div
         className={
           `py-6 lg:px-4 min-h-screen relative w-[50%] hidden md:block ` +
@@ -25,6 +27,7 @@ function SigninLayout({
                 alt="Logo"
                 className="z-30"
                 src="/images/winda_logo/horizontal-white-font.png"
+                quality={10}
                 priority
               ></Image>
             </a>
@@ -37,7 +40,7 @@ function SigninLayout({
           <Image
             layout="fill"
             alt="Image of a car and a lion"
-            src="/images/signin-image3.jpg"
+            src={imagePath}
             className="object-cover rounded-tr-3xl rounded-br-3xl lg:rounded-3xl -z-10"
             priority
           ></Image>
@@ -53,6 +56,8 @@ SigninLayout.propTypes = {
   childrenClassName: PropTypes.string,
   text: PropTypes.string,
   children: PropTypes.any.isRequired,
+  mainClassName: PropTypes.string,
+  imagePath: PropTypes.string,
 };
 
 export default SigninLayout;
