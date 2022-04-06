@@ -118,7 +118,7 @@ const Stay = (props) => {
         </SwiperSlide>
       </Swiper>
 
-      <div className="md:!w-[50%] lg:!w-[45%] h-[8%] fixed bg-white rounded-tl-2xl rounded-tr-2xl flex bottom-0 right-0 justify-between items-center px-6">
+      <div className="w-full md:!w-[50%] lg:!w-[45%] h-[8%] fixed bg-white rounded-tl-2xl rounded-tr-2xl flex bottom-0 right-0 justify-between items-center px-6">
         <div className="swiper-pagination swiper-button-prev rounded-full border border-gray-200 cursor-pointer pl-2 pr-4 py-1 flex gap-1 items-center justify-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
