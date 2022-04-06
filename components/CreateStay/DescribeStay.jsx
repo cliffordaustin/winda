@@ -12,7 +12,7 @@ import BoutiqueHotelOption from "./BoutiqueHotelOptions";
 const DescribeStay = (props) => {
   const stay = useSelector((state) => state.stay.typeOfStay);
   return (
-    <div className="mt-10 px-6 relative overflow-y-scroll">
+    <div className="mt-5 px-6 relative overflow-y-scroll">
       {stay === "lodge" && (
         <div className={styles.describesHeader}>
           What best describes your{" "}
