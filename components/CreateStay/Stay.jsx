@@ -70,11 +70,11 @@ const Stay = (props) => {
             swiperIndex: swiper.realIndex,
           });
         }}
-        className="!w-full h-[92%]"
+        className="!w-full h-[93%]"
       >
         <SwiperSlide className="overflow-y-scroll">
           <div className="flex justify-end">
-            <div className="font-bold inline mr-6 mb-3 rounded-full text-sm px-2 py-1 bg-white shadow-lg">
+            <div className="font-bold inline mr-6 mb-3 mt-2 rounded-full text-sm px-2 py-1 bg-white shadow-lg">
               Step: {currentSwiperIndex} of 5
             </div>
           </div>
@@ -82,7 +82,7 @@ const Stay = (props) => {
         </SwiperSlide>
         <SwiperSlide className="overflow-y-scroll">
           <div className="flex justify-end">
-            <div className="font-bold inline mr-6 mb-3 rounded-full text-sm px-2 py-1 bg-white shadow-lg">
+            <div className="font-bold inline mr-6 mb-3 mt-2 rounded-full text-sm px-2 py-1 bg-white shadow-lg">
               Step: {currentSwiperIndex} of 5
             </div>
           </div>
@@ -93,7 +93,7 @@ const Stay = (props) => {
           <Location></Location>
           <div
             className={
-              "font-bold absolute top-4 right-6 !z-30 rounded-full text-sm px-2 py-1 bg-white shadow-lg " +
+              "font-bold absolute top-4 right-6 !z-30 mt-2 rounded-full text-sm px-2 py-1 bg-white shadow-lg " +
               styles.stepWebkitSetting
             }
           >
@@ -102,7 +102,7 @@ const Stay = (props) => {
         </SwiperSlide>
         <SwiperSlide className="overflow-y-scroll">
           <div className="flex justify-end">
-            <div className="font-bold inline mr-6 mb-3 rounded-full text-sm px-2 py-1 bg-white shadow-lg">
+            <div className="font-bold inline mr-6 mb-3 mt-2 rounded-full text-sm px-2 py-1 bg-white shadow-lg">
               Step: {currentSwiperIndex} of 5
             </div>
           </div>
@@ -110,7 +110,7 @@ const Stay = (props) => {
         </SwiperSlide>
         <SwiperSlide className="overflow-y-scroll">
           <div className="flex justify-end">
-            <div className="font-bold inline mr-6 mb-3 rounded-full text-sm px-2 py-1 bg-white shadow-lg">
+            <div className="font-bold inline mr-6 mb-3 mt-2 rounded-full text-sm px-2 py-1 bg-white shadow-lg">
               Step: {currentSwiperIndex} of 5
             </div>
           </div>
@@ -118,7 +118,7 @@ const Stay = (props) => {
         </SwiperSlide>
       </Swiper>
 
-      <div className="w-full z-20 md:!w-[50%] lg:!w-[45%] h-[8%] fixed bg-white rounded-tl-2xl rounded-tr-2xl flex bottom-0 right-0 justify-between items-center px-6">
+      <div className="w-full z-20 md:!w-[50%] lg:!w-[45%] h-[7%] fixed bg-gray-100 rounded-tl-2xl rounded-tr-2xl flex bottom-0 right-0 justify-between items-center px-6">
         <div className="swiper-pagination swiper-button-prev rounded-full border border-gray-200 cursor-pointer pl-2 pr-4 py-1 flex gap-1 items-center justify-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"

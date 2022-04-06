@@ -3,7 +3,7 @@ import CreateStay from "../../components/CreateStay/CreateStay";
 
 function CreateStayPage() {
   return (
-    <div className="overflow-y-hidden">
+    <div className="">
       <CreateStay></CreateStay>
     </div>
   );

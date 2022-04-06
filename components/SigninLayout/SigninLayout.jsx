@@ -46,7 +46,7 @@ function SigninLayout({
           ></Image>
         </div>
       </div>
-      <div className={"py-6 w-full " + childrenClassName}>{children}</div>
+      <div className={"w-full " + childrenClassName}>{children}</div>
     </div>
   );
 }

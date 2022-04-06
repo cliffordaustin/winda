@@ -10,7 +10,7 @@ function CreateStay() {
     <SigninLayout
       text="What is your type of stay?"
       className="md:!w-[50%] lg:!w-[60%]"
-      childrenClassName="md:!w-[50%] lg:w-[40%] overflow-y-scroll"
+      childrenClassName="md:!w-[50%] lg:w-[40%] overflow-y-scroll md:!py-6"
       mainClassName="h-screen overflow-y-scroll"
       imagePath={stayImage}
     >

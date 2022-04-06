@@ -7,7 +7,7 @@ function Login() {
     <div>
       <SigninLayout
         className="md:!w-[50%] lg:!w-[60%]"
-        childrenClassName="md:!w-[50%] lg:w-[40%]"
+        childrenClassName="md:!w-[50%] lg:w-[40%] !py-6"
       >
         <LoginForm></LoginForm>
       </SigninLayout>
