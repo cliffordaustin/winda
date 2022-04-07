@@ -17,13 +17,13 @@ const UniqueAboutPlace = (props) => {
   });
 
   return (
-    <div className="px-6">
+    <div className="lg:px-6 md:px-3 px-2">
       <div
         className={styles.describesHeader + " !text-xl font-medium md:hidden"}
       >
         Tell your guest what makes your place unique
       </div>
-      <div className="!h-[400px] mt-12">
+      <div className="!h-[250px] md:!h-[400px] mt-12">
         <ReactQuill
           theme="snow"
           name="uniqueAboutPlace"

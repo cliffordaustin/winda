@@ -64,35 +64,35 @@ body {
 .box-dashed {
   background-image: repeating-linear-gradient(
       -26deg,
-      #7c3aed,
-      #7c3aed 22px,
+      #ff2626,
+      #ff2626 22px,
       transparent 22px,
       transparent 35px,
-      #7c3aed 35px
+      #ff2626 35px
     ),
     repeating-linear-gradient(
       64deg,
-      #7c3aed,
-      #7c3aed 22px,
+      #ff2626,
+      #ff2626 22px,
       transparent 22px,
       transparent 35px,
-      #7c3aed 35px
+      #ff2626 35px
     ),
     repeating-linear-gradient(
       154deg,
-      #7c3aed,
-      #7c3aed 22px,
+      #ff2626,
+      #ff2626 22px,
       transparent 22px,
       transparent 35px,
-      #7c3aed 35px
+      #ff2626 35px
     ),
     repeating-linear-gradient(
       244deg,
-      #7c3aed,
-      #7c3aed 22px,
+      #ff2626,
+      #ff2626 22px,
       transparent 22px,
       transparent 35px,
-      #7c3aed 35px
+      #ff2626 35px
     );
   background-size: 2px calc(100% + 38.94px), calc(100% + 38.94px) 2px,
     2px calc(100% + 38.94px), calc(100% + 38.94px) 2px;

@@ -4,7 +4,7 @@ import Image from "next/image";
 function ImageThumb({ file, filterFile }) {
   return (
     <div className="w-full">
-      <div className={"w-full bg-gray-50 py-2 rounded-md "}>
+      <div className={"w-full bg-gray-50 rounded-md "}>
         <div className="rounded-lg flex items-center gap-4 justify-between px-6 py-1">
           <Image
             src={file.preview}
@@ -34,7 +34,7 @@ function ImageThumb({ file, filterFile }) {
         {file.completedPercent > 0 ? (
           <div className="border relative border-gray-200 rounded-full w-11/12 mx-auto mt-2 h-8 overflow-hidden">
             <div
-              className={"bg-purple-500 h-full"}
+              className={"bg-red-500 h-full"}
               style={{ width: file.completedPercent + "%" }}
             ></div>
             <div className="absolute right-5 top-2/4 font-bold z-20 -translate-y-2/4">

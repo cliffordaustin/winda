@@ -6,7 +6,11 @@ import AmenitiesOptions from "./AmenitiesOptions";
 const Amenities = (props) => {
   return (
     <div className="px-6">
-      <h1 className={styles.describesHeader}>What amenities do you have?</h1>
+      <h1
+        className={styles.describesHeader + " !text-xl font-medium md:hidden"}
+      >
+        What amenities do you have?
+      </h1>
       <AmenitiesOptions></AmenitiesOptions>
     </div>
   );
