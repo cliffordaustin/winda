@@ -20,14 +20,14 @@ const Details = (props) => {
     setGuests(event.target.value);
   };
   return (
-    <div className="mt-20">
-      <div className="px-6 mt-4">
+    <div className="mt-4">
+      <div className="px-6">
         <div
           className={styles.describesHeader + " !text-xl font-medium md:hidden"}
         >
           Give a detail about your stay
         </div>
-        <div className="flex gap-4">
+        <div className="flex gap-4 mt-12">
           <div
             className={
               styles.typeOfStay +
