@@ -19,14 +19,14 @@ const Pricing = (props) => {
     setState({ ...state, [event.target.name]: event.target.value });
   };
   return (
-    <div className="px-6 mt-10">
+    <div className="px-6 mt-4">
       <div
         className={styles.describesHeader + " !text-xl font-medium md:hidden"}
       >
         Select a pricing option
       </div>
 
-      <div className="mt-4 flex flex-col gap-6">
+      <div className="mt-10 flex flex-col gap-6">
         <div className="flex gap-2 items-center">
           <Switch
             switchButton={state.pricingPerPersonType}
