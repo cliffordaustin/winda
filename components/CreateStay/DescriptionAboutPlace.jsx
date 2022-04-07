@@ -17,7 +17,7 @@ const DescriptioneAboutPlace = (props) => {
   });
 
   return (
-    <div className="lg:px-6 md:px-3 px-2">
+    <div className="lg:px-6 px-4">
       <div
         className={styles.describesHeader + " !text-xl font-medium md:hidden"}
       >
