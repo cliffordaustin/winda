@@ -9,6 +9,11 @@ const stayState = {
   describesHouse: [],
   currentSwiperIndex: 1,
   amenities: [],
+  viewState: {
+    longitude: 36.8172449,
+    latitude: -1.2832533,
+    zoom: 14,
+  },
 };
 
 const stayReducer = (state = stayState, action) => {
@@ -39,6 +44,9 @@ const stayReducer = (state = stayState, action) => {
 
     case "UPDATE_AMENITIES":
       return { ...state, amenities: action.payload };
+
+    case "UPDATE_VIEW_STATE":
+      return { ...state, viewState: action.payload };
 
     default:
       return state;

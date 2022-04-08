@@ -1,13 +1,13 @@
 import React from "react";
 import Map, { Source, Layer, GeolocateControl, Marker } from "react-map-gl";
 import Image from "next/image";
+import { useDispatch, useSelector } from "react-redux";
+
+import { updateViewState } from "../../redux/actions/stay";
 
 function MapBox() {
-  const [viewState, setViewState] = React.useState({
-    longitude: 36.8172449,
-    latitude: -1.2832533,
-    zoom: 14,
-  });
+  const dispatch = useDispatch();
+  const viewState = useSelector((state) => state.stay.viewState);
 
   const [moving, setMoving] = React.useState(false);
 
@@ -26,7 +26,7 @@ function MapBox() {
       mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_API_KEY}
       {...viewState}
       onMove={(evt) => {
-        setViewState(evt.viewState);
+        dispatch(updateViewState(evt.viewState));
         setMoving(true);
       }}
       onMoveEnd={(evt) => {

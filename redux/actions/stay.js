@@ -33,3 +33,7 @@ export const updateCurrentSwiperState = (payload) => (dispatch) => {
 export const updateAmenities = (payload) => (dispatch) => {
   dispatch({ type: "UPDATE_AMENITIES", payload: payload });
 };
+
+export const updateViewState = (payload) => (dispatch) => {
+  dispatch({ type: "UPDATE_VIEW_STATE", payload: payload });
+};
