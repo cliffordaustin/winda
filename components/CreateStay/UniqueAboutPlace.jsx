@@ -5,16 +5,24 @@ import { useFormik } from "formik";
 import dynamic from "next/dynamic";
 import styles from "../../styles/Stay.module.css";
 
+import { useDispatch, useSelector } from "react-redux";
+
+import { updateUniqueAboutPlace } from "../../redux/actions/stay";
+
 const ReactQuill = dynamic(import("react-quill"), {
   ssr: false,
 });
 
 const UniqueAboutPlace = (props) => {
-  const formik = useFormik({
-    initialValues: {
-      uniqueAboutPlace: "",
-    },
-  });
+  const dispatch = useDispatch();
+
+  const uniqueAboutPlace = useSelector((state) => state.stay.uniqueAboutPlace);
+
+  //   const formik = useFormik({
+  //     initialValues: {
+  //       uniqueAboutPlace: "",
+  //     },
+  //   });
 
   return (
     <div className="lg:px-6 px-4">
@@ -28,9 +36,9 @@ const UniqueAboutPlace = (props) => {
           theme="snow"
           name="uniqueAboutPlace"
           placeholder="Unique about place"
-          value={formik.values.uniqueAboutPlace}
+          value={uniqueAboutPlace}
           className="h-full"
-          onChange={(value) => formik.setFieldValue("uniqueAboutPlace", value)}
+          onChange={(value) => dispatch(updateUniqueAboutPlace(value))}
         ></ReactQuill>
       </div>
     </div>

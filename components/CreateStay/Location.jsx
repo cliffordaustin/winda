@@ -23,7 +23,7 @@ function Location() {
 
     axios
       .get(
-        `https://api.mapbox.com/geocoding/v5/mapbox.places/${event.target.value}.json?access_token=${process.env.NEXT_PUBLIC_MAPBOX_API_KEY}&autocomplete=true&country=gh&types=locality,neighborhood,address`
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${event.target.value}.json?access_token=${process.env.NEXT_PUBLIC_MAPBOX_API_KEY}&autocomplete=true&country=gh`
       )
       .then((response) => {
         setAutoComplete(response.data.features);
@@ -46,7 +46,7 @@ function Location() {
     <div className="h-[98%] relative">
       <div
         className={
-          "w-[80%] absolute top-32 left-2/4 right-2/4 -translate-x-2/4 z-20 "
+          "w-[90%] sm:w-[80%] absolute top-32 left-2/4 right-2/4 -translate-x-2/4 z-20 "
         }
       >
         <div
@@ -67,7 +67,7 @@ function Location() {
             className={
               styles.input +
               " ml-6 truncate " +
-              (autoComplete.length > 0 && "!ml-3")
+              (autoComplete.length > 0 && "!ml-3 truncate")
             }
             autoComplete="off"
             onChange={(event) => {

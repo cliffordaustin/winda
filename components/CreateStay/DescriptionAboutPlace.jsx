@@ -5,16 +5,26 @@ import { useFormik } from "formik";
 import dynamic from "next/dynamic";
 import styles from "../../styles/Stay.module.css";
 
+import { useDispatch, useSelector } from "react-redux";
+
+import { updateDescriptionAboutPlace } from "../../redux/actions/stay";
+
 const ReactQuill = dynamic(import("react-quill"), {
   ssr: false,
 });
 
 const DescriptioneAboutPlace = (props) => {
-  const formik = useFormik({
-    initialValues: {
-      descriptionAboutPlace: "",
-    },
-  });
+  const dispatch = useDispatch();
+
+  const descriptionAboutPlace = useSelector(
+    (state) => state.stay.descriptionAboutPlace
+  );
+
+  // const formik = useFormik({
+  //   initialValues: {
+  //     descriptionAboutPlace: "",
+  //   },
+  // });
 
   return (
     <div className="lg:px-6 px-4">
@@ -28,11 +38,9 @@ const DescriptioneAboutPlace = (props) => {
           theme="snow"
           name="descriptionAboutPlace"
           placeholder="Description about place"
-          value={formik.values.descriptionAboutPlace}
+          value={descriptionAboutPlace}
           className="h-full"
-          onChange={(value) =>
-            formik.setFieldValue("descriptionAboutPlace", value)
-          }
+          onChange={(value) => dispatch(updateDescriptionAboutPlace(value))}
         ></ReactQuill>
       </div>
     </div>

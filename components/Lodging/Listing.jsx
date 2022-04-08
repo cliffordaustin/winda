@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import { useDispatch, useSelector } from "react-redux";
+
+import { setActiveStay } from "../../redux/actions/stay";
 
 import Card from "../ui/Card";
 import SecondCard from "../ui/SecondCard";
@@ -8,6 +11,8 @@ import Rating from "../ui/Rating";
 import Badge from "../ui/Badge";
 
 function Listing({ listing }) {
+  const dispatch = useDispatch();
+
   const [isSafari, setIsSafari] = useState(false);
 
   const [liked, setLiked] = useState(false);
@@ -21,7 +26,15 @@ function Listing({ listing }) {
     }
   }, []);
   return (
-    <div className="w-full xsMax:!w-full mdMax:!w-47p lgMax:!w-[31.5%] xl:!w-47p !relative select-none">
+    <div
+      onMouseEnter={() => {
+        dispatch(setActiveStay(listing));
+      }}
+      onMouseLeave={() => {
+        dispatch(setActiveStay(null));
+      }}
+      className="w-full xsMax:!w-full mdMax:!w-47p lgMax:!w-[31.5%] xl:!w-47p !relative select-none"
+    >
       <div className="lgMax:block lg:hidden xl:block relative">
         <Card
           imagePaths={listing.imagePaths}

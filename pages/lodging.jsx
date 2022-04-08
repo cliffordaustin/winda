@@ -105,6 +105,8 @@ function Lodging({ userProfile }) {
   const [minRoom, setminRoomSelected] = useState(null);
   const [maxRoom, setmaxRoomSelected] = useState(null);
 
+  const [mobileMap, setMobileMap] = useState(false);
+
   const [isFixed, setIsFixed] = useState(true);
 
   const searchRef = useRef(null);
@@ -1532,12 +1534,8 @@ function Lodging({ userProfile }) {
           </div>
         </div>
       </div>
-      <div>
-        <div className="mt-56 flex relative">
-          <div className="px-4 h-full w-2/4 lgMax:w-full">
-            <Listings></Listings>
-          </div>
-          {/* {!isFixed && (
+      <div className="mt-48 lg:mt-56 flex relative h-full overflow-y-scroll">
+        {/* {!isFixed && (
             <div>
               <Map></Map>
             </div>
@@ -1547,19 +1545,15 @@ function Lodging({ userProfile }) {
               <Map></Map>
             </div>
           )} */}
-          <div className={isFixed ? "invisible" : "hidden lg:block w-2/4"}>
-            <Map></Map>
+        <div className={"hidden lg:block w-2/4 px-4 h-[70vh] relative"}>
+          <Map></Map>
+        </div>
+        {!mobileMap && (
+          <div className="px-4 md:mt-10 lg:mt-0 lg:h-[70vh] w-2/4 lgMax:w-full lg:overflow-y-scroll">
+            <Listings></Listings>
           </div>
-          <div
-            className={
-              isFixed
-                ? "w-2/4 bottom-0 right-0 top-56 hidden lg:block fixed"
-                : "invisible"
-            }
-          >
-            <Map></Map>
-          </div>
-          {/* <div
+        )}
+        {/* <div
             className={
               "w-47p px-2 bottom-0 right-0 left-0 top-56 bg-red-400 " +
               (isFixed ? "fixed" : "sticky ")
@@ -1568,12 +1562,12 @@ function Lodging({ userProfile }) {
             <div className="bg-red-400 w-full h-full">the name</div>
             <Map></Map>
           </div> */}
-          {/* <div className="absolute right-0 top-54 w-2/4 h-full px-4">
+        {/* <div className="absolute right-0 top-54 w-2/4 h-full px-4">
             <div className={"w-full h-full fixed bg-red-400 "}>
               <Map></Map>
             </div>
           </div> */}
-          {/* <div
+        {/* <div
             className={
               "w-2/4 px-4 bottom-0 right-0 top-56 " +
               (isFixed ? "fixed" : "sticky ")
@@ -1581,8 +1575,6 @@ function Lodging({ userProfile }) {
           >
             <Map></Map>
           </div> */}
-        </div>
-        <RemoveFixed isFixed={isFixed} setIsFixed={setIsFixed}></RemoveFixed>
       </div>
       {state.windowSize < 768 && (
         <MobileModal
@@ -2467,7 +2459,16 @@ function Lodging({ userProfile }) {
         </div>
       </MobileModal>
 
-      <div className="w-40 fixed bottom-2 left-2/4 right-2/4 -translate-x-2/4 -translate-y-2/4 z-20">
+      {state.windowSize < 768 && mobileMap && (
+        <div className={"h-[80vh]"}>
+          <Map></Map>
+        </div>
+      )}
+
+      <div
+        onClick={() => setMobileMap(!mobileMap)}
+        className="w-40 lg:hidden fixed bottom-2 left-2/4 right-2/4 -translate-x-2/4 -translate-y-2/4 z-20"
+      >
         <Button className="flex items-center justify-center gap-2 !bg-[#303960] !py-2.5 !w-full !rounded-full">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -2487,9 +2488,35 @@ function Lodging({ userProfile }) {
           <span className="text-sm">Map</span>
         </Button>
       </div>
-      <div className="mt-14">
-        <Footer></Footer>
-      </div>
+      {mobileMap && (
+        <div
+          onClick={() => setMobileMap(false)}
+          className="w-40 lg:hidden fixed bottom-2 left-2/4 right-2/4 -translate-x-2/4 -translate-y-2/4 z-20"
+        >
+          <Button className="flex items-center justify-center gap-2 !bg-[#303960] !py-2.5 !w-full !rounded-full">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M9 7H7V9H9V7Z" fill="currentColor" />
+              <path d="M7 13V11H9V13H7Z" fill="currentColor" />
+              <path d="M7 15V17H9V15H7Z" fill="currentColor" />
+              <path d="M11 15V17H17V15H11Z" fill="currentColor" />
+              <path d="M17 13V11H11V13H17Z" fill="currentColor" />
+              <path d="M17 7V9H11V7H17Z" fill="currentColor" />
+            </svg>
+            <span className="text-sm">List</span>
+          </Button>
+        </div>
+      )}
+      {!mobileMap && (
+        <div className="mt-14">
+          <Footer></Footer>
+        </div>
+      )}
     </div>
   );
 }

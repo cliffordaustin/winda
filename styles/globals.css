@@ -6,11 +6,6 @@
   @apply !bg-red-500;
 }
 
-.mapboxgl-map {
-  @apply md:!rounded-tl-3xl md:!rounded-bl-3xl;
-  -webkit-mask-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC);
-}
-
 .ql-container.ql-snow {
   @apply rounded-bl-md rounded-br-md !border-gray-300;
 }

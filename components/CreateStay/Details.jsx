@@ -6,18 +6,17 @@ import Guest from "../Home/Guest";
 import Rooms from "./Rooms";
 import Switch from "../ui/Switch";
 
-const Details = (props) => {
-  const [guests, setGuests] = useState("");
+import { useDispatch, useSelector } from "react-redux";
 
-  const [state, setState] = useState({
-    rooms: 0,
-    bathrooms: 0,
-    beds: 0,
-    isEnsuite: false,
-  });
+import { updateStayDetails } from "../../redux/actions/stay";
+
+const Details = (props) => {
+  const dispatch = useDispatch();
+
+  const stayDetails = useSelector((state) => state.stay.stayDetails);
 
   const onChange = (event) => {
-    setGuests(event.target.value);
+    dispatch(updateStayDetails({ ...stayDetails, guests: event.target.value }));
   };
   return (
     <div className="mt-4">
@@ -44,7 +43,7 @@ const Details = (props) => {
               placeholder="Guests"
               type="number"
               name="guests"
-              value={guests}
+              value={stayDetails.guests}
               className={"w-full !py-2"}
               autoComplete="off"
               onChange={(event) => {
@@ -62,13 +61,23 @@ const Details = (props) => {
               Rooms
             </h1>
             <Rooms
-              rooms={state.rooms}
+              rooms={stayDetails.rooms}
               add={() => {
-                setState({ ...state, rooms: state.rooms + 1 });
+                dispatch(
+                  updateStayDetails({
+                    ...stayDetails,
+                    rooms: stayDetails.rooms + 1,
+                  })
+                );
               }}
               remove={() => {
-                state.rooms > 0
-                  ? setState({ ...state, rooms: state.rooms - 1 })
+                stayDetails.rooms > 0
+                  ? dispatch(
+                      updateStayDetails({
+                        ...stayDetails,
+                        rooms: stayDetails.rooms - 1,
+                      })
+                    )
                   : null;
               }}
             ></Rooms>
@@ -86,13 +95,23 @@ const Details = (props) => {
               Bathrooms
             </h1>
             <Rooms
-              rooms={state.bathrooms}
+              rooms={stayDetails.bathrooms}
               add={() => {
-                setState({ ...state, bathrooms: state.bathrooms + 1 });
+                dispatch(
+                  updateStayDetails({
+                    ...stayDetails,
+                    bathrooms: stayDetails.bathrooms + 1,
+                  })
+                );
               }}
               remove={() => {
-                state.bathrooms > 0
-                  ? setState({ ...state, bathrooms: state.bathrooms - 1 })
+                stayDetails.bathrooms > 0
+                  ? dispatch(
+                      updateStayDetails({
+                        ...stayDetails,
+                        bathrooms: stayDetails.bathrooms - 1,
+                      })
+                    )
                   : null;
               }}
             ></Rooms>
@@ -108,13 +127,23 @@ const Details = (props) => {
               Beds
             </h1>
             <Rooms
-              rooms={state.beds}
+              rooms={stayDetails.beds}
               add={() => {
-                setState({ ...state, beds: state.beds + 1 });
+                dispatch(
+                  updateStayDetails({
+                    ...stayDetails,
+                    beds: stayDetails.beds + 1,
+                  })
+                );
               }}
               remove={() => {
-                state.beds > 0
-                  ? setState({ ...state, beds: state.beds - 1 })
+                stayDetails.beds > 0
+                  ? dispatch(
+                      updateStayDetails({
+                        ...stayDetails,
+                        beds: stayDetails.beds - 1,
+                      })
+                    )
                   : null;
               }}
             ></Rooms>
@@ -130,12 +159,17 @@ const Details = (props) => {
               Is ensuite
             </h1>
             <Switch
-              switchButton={state.isEnsuite}
+              switchButton={stayDetails.isEnsuite}
               switchButtonContainer="!w-12 !h-7"
               switchButtonCircle="!w-6 !h-6"
               xVal={18}
               changeSwitchButtonState={() =>
-                setState({ ...state, isEnsuite: !state.isEnsuite })
+                dispatch(
+                  updateStayDetails({
+                    ...stayDetails,
+                    isEnsuite: !stayDetails.isEnsuite,
+                  })
+                )
               }
             ></Switch>
           </div>
