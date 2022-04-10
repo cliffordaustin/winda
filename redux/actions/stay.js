@@ -53,3 +53,7 @@ export const updateDescriptionAboutPlace = (payload) => (dispatch) => {
 export const setActiveStay = (payload) => (dispatch) => {
   dispatch({ type: "SET_ACTIVE_STAY", payload: payload });
 };
+
+export const setStays = (payload) => (dispatch) => {
+  dispatch({ type: "SET_STAYS", payload: payload });
+};

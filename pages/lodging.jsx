@@ -1,6 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 
+import { getServerSideProps } from "../lib/getServerSideProps";
 import styles from "../styles/Lodging.module.css";
 import Navbar from "../components/Lodging/Navbar";
 import Listings from "../components/Lodging/Listings";
@@ -16,7 +19,7 @@ import Footer from "../components/Home/Footer";
 import RemoveFixed from "../components/Lodging/RemoveFixed";
 import MobileModal from "../components/ui/MobileModal";
 import Button from "../components/ui/Button";
-import { getServerSideProps } from "./index";
+// import { getServerSideProps } from "./index";
 
 function Lodging({ userProfile }) {
   const [state, setState] = useState({
@@ -110,6 +113,8 @@ function Lodging({ userProfile }) {
   const [isFixed, setIsFixed] = useState(true);
 
   const searchRef = useRef(null);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (process.browser) {
@@ -1548,6 +1553,7 @@ function Lodging({ userProfile }) {
         <div className={"hidden lg:block w-2/4 px-4 h-[70vh] relative"}>
           <Map></Map>
         </div>
+
         {!mobileMap && (
           <div className="px-4 md:mt-10 lg:mt-0 lg:h-[70vh] w-2/4 lgMax:w-full lg:overflow-y-scroll">
             <Listings></Listings>

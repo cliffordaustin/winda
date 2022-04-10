@@ -16,22 +16,37 @@ const MapMakerPopup = ({ stay }) => {
       setIsSafari(isSafari);
     }
   }, []);
+
+  const sortedImages = stay.stay_images.sort((x, y) => y.main - x.main);
+
+  const images = sortedImages.map((image) => {
+    return image.image;
+  });
+
+  const price = () => {
+    return (
+      stay.pricing_per_room ||
+      stay.pricing_per_person ||
+      stay.pricing_per_whole_place ||
+      null
+    );
+  };
   return (
     <div>
       <Card
-        imagePaths={stay.imagePaths}
+        imagePaths={images}
         carouselClassName="h-28"
         subCarouselClassName="hidden"
-        className={styles.card}
+        className={styles.card + " !shadow-sm"}
       >
-        <div className="flex items-end">
-          <h1 className="font-bold text-xl font-OpenSans">
-            KES{stay.price.toLocaleString()}
+        <div className="flex flex-col gap-1">
+          <h1 className="text-gray-500 text-sm truncate">{stay.name}</h1>
+          <h1 className="font-bold font-OpenSans">
+            {price() ? "KES" + price().toLocaleString() : "No data"}
           </h1>
-          <p className="mb-0.5 inline-block">/night</p>
         </div>
-        <div className="font-bold text-sm truncate mt-1">{stay.address}</div>
-        <div className="flex items-center gap-1 mt-2">
+        <div className="font-bold text-sm truncate mt-1">{stay.location}</div>
+        {/* <div className="flex items-center gap-1 mt-2">
           <div className={!isSafari ? "-mb-0.5" : "-mb-1"}>
             <Badge
               className={
@@ -51,7 +66,7 @@ const MapMakerPopup = ({ stay }) => {
           </div>
           <Rating rating={stay.rating} fontSize={!isSafari ? 25 : 16}></Rating>
           <div className="font-medium text-sm">({stay.numRating})</div>
-        </div>
+        </div> */}
       </Card>
     </div>
   );

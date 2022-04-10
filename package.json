@@ -15,6 +15,7 @@
     "formik": "^2.2.9",
     "framer-motion": "^6.2.8",
     "js-cookie": "^3.0.1",
+    "jsondiffpatch": "^0.4.1",
     "mapbox-gl": "^2.7.1",
     "mixpanel-browser": "^2.45.0",
     "moment": "^2.29.1",

@@ -110,7 +110,7 @@ function Carousel({ imageClass = "", className = "", images }) {
         initial="hide"
         exit="exit"
         className={
-          "absolute cursor-pointer flex items-center justify-center top-2/4 z-10 right-3 -translate-y-2/4 swiper-pagination swiper-button-next w-8 h-8 -mt-4 rounded-full bg-white shadow-lg " +
+          "absolute cursor-pointer flex items-center justify-center top-2/4 z-10 right-3 -translate-y-2/4 swiper-pagination swiper-button-next w-8 h-8  rounded-full bg-white shadow-lg " +
           (state.endOfSlide || !state.showNavigation || images.length === 1
             ? "invisible"
             : "")

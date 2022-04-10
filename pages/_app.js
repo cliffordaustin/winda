@@ -2,10 +2,9 @@ import "../styles/globals.css";
 import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Provider } from "react-redux";
-import store from "../redux/store";
+import store, { wrapper } from "../redux/store";
 import NProgress from "nprogress";
 import Router from "next/router";
-import { createWrapper } from "next-redux-wrapper";
 import "nprogress/nprogress.css";
 
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -34,9 +33,5 @@ function MyApp({ Component, pageProps, router }) {
     </Provider>
   );
 }
-
-const makeStore = () => store.store;
-
-const wrapper = createWrapper(makeStore);
 
 export default wrapper.withRedux(MyApp);

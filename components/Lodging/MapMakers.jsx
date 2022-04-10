@@ -29,6 +29,15 @@ const MapMakers = ({ stay }) => {
     },
   };
 
+  const price = () => {
+    return (
+      stay.pricing_per_room ||
+      stay.pricing_per_person ||
+      stay.pricing_per_whole_place ||
+      null
+    );
+  };
+
   return (
     <div>
       <Marker longitude={stay.longitude} latitude={stay.latitude}>
@@ -42,7 +51,7 @@ const MapMakers = ({ stay }) => {
           onClick={() => setShowPopup(!showPopup)}
         >
           <h1 className="font-medium text-xs text-white">
-            KES{stay.price.toLocaleString()}
+            {price() ? "KES" + price().toLocaleString() : "No data"}
           </h1>
           <AnimatePresence exitBeforeEnter>
             {showPopup && (
@@ -75,7 +84,7 @@ const MapMakers = ({ stay }) => {
             }
           >
             <h1 className="font-medium text-xs text-white">
-              KES{activeStay.price.toLocaleString()}
+              {price() ? "KES" + price().toLocaleString() : "No data"}
             </h1>
             <AnimatePresence exitBeforeEnter>
               <Popup
