@@ -21,7 +21,7 @@ import MobileModal from "../components/ui/MobileModal";
 import Button from "../components/ui/Button";
 // import { getServerSideProps } from "./index";
 
-function Lodging({ userProfile }) {
+function Lodging({ userProfile, longitude, latitude }) {
   const [state, setState] = useState({
     showDropdown: false,
     location: "",
@@ -110,10 +110,10 @@ function Lodging({ userProfile }) {
 
   const [mobileMap, setMobileMap] = useState(false);
 
-  const [userLatLng, setUserLatLng] = useState({
-    latitude: null,
-    longitude: null,
-  });
+  const userLatLng = {
+    latitude: latitude,
+    longitude: longitude,
+  };
 
   const [isFixed, setIsFixed] = useState(true);
 
@@ -138,19 +138,6 @@ function Lodging({ userProfile }) {
       };
     }
   });
-
-  useEffect(() => {
-    axios.get("https://api.ipify.org").then((res) => {
-      // console.log(res.data);
-      axios.get(`https://ipapi.co/${res.data}/json`).then((res) => {
-        setUserLatLng({
-          ...userLatLng,
-          longitude: res.data.longitude,
-          latitude: res.data.latitude,
-        });
-      });
-    });
-  }, []);
 
   function deg2rad(deg) {
     return deg * (Math.PI / 180);

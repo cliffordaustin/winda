@@ -1,5 +1,3 @@
-import { HYDRATE } from "next-redux-wrapper";
-
 const stayState = {
   stays: [
     // {
@@ -129,13 +127,11 @@ const stayState = {
   },
   uniqueAboutPlace: "",
   descriptionAboutPlace: "",
+  page: "",
 };
 
 const stayReducer = (state = stayState, action) => {
   switch (action.type) {
-    case HYDRATE:
-      state.stays = action.payload.stay.stays;
-
     case "SET_STAYS":
       return { ...state, stays: action.payload };
 

@@ -12,7 +12,7 @@ function MapBox() {
     zoom: 14,
   });
 
-  const stays = useSelector((state) => state.stay.stays.stay.stays);
+  const stays = useSelector((state) => state.stay.stays);
   const activeStay = useSelector((state) => state.stay.activeStay);
 
   const GlobalStyle = createGlobalStyle`
