@@ -115,6 +115,8 @@ function Lodging({ userProfile, longitude, latitude }) {
     longitude: longitude,
   };
 
+  console.log(userLatLng);
+
   const [isFixed, setIsFixed] = useState(true);
 
   const searchRef = useRef(null);
