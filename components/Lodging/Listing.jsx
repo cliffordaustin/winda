@@ -163,7 +163,7 @@ function Listing({ listing, getDistance, userLatLng }) {
                 listing.longitude,
                 userLatLng.latitude,
                 userLatLng.longitude
-              ).toFixed(2)}
+              ).toLocaleString()}
               KM Away
             </div>
           )}
@@ -362,7 +362,7 @@ function Listing({ listing, getDistance, userLatLng }) {
                   listing.longitude,
                   userLatLng.latitude,
                   userLatLng.longitude
-                ).toFixed(2)}
+                ).toLocaleString()}
                 KM Away
               </div>
             )}
