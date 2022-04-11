@@ -110,12 +110,10 @@ function Lodging({ userProfile, longitude, latitude }) {
 
   const [mobileMap, setMobileMap] = useState(false);
 
-  const userLatLng = {
-    latitude: latitude,
-    longitude: longitude,
-  };
-
-  console.log(userLatLng);
+  // const userLatLng = {
+  //   latitude: latitude,
+  //   longitude: longitude,
+  // };
 
   const [isFixed, setIsFixed] = useState(true);
 
@@ -133,6 +131,11 @@ function Lodging({ userProfile, longitude, latitude }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const [userLatLng, setUserLatLng] = useState({
+    latitude: null,
+    longitude: null,
+  });
+
   useEffect(() => {
     if (process.browser) {
       window.onresize = function () {
@@ -140,6 +143,20 @@ function Lodging({ userProfile, longitude, latitude }) {
       };
     }
   });
+
+  useEffect(() => {
+    const getLatLng = async () => {
+      const ip = await axios.get("https://api.ipify.org");
+      const latlng = await axios.get(`https://ipapi.co/${ip.data}/json`);
+
+      setUserLatLng({
+        ...userLatLng,
+        longitude: latlng.data.longitude,
+        latitude: latlng.data.latitude,
+      });
+    };
+    getLatLng();
+  }, []);
 
   function deg2rad(deg) {
     return deg * (Math.PI / 180);
