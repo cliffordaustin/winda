@@ -110,6 +110,11 @@ function Lodging({ userProfile }) {
 
   const [mobileMap, setMobileMap] = useState(false);
 
+  const [userLatLng, setUserLatLng] = useState({
+    latitude: null,
+    longitude: null,
+  });
+
   const [isFixed, setIsFixed] = useState(true);
 
   const searchRef = useRef(null);
@@ -136,9 +141,35 @@ function Lodging({ userProfile }) {
 
   useEffect(() => {
     axios.get("https://api.ipify.org").then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
+      axios.get(`https://ipapi.co/${res.data}/json`).then((res) => {
+        setUserLatLng({
+          ...userLatLng,
+          longitude: res.data.longitude,
+          latitude: res.data.latitude,
+        });
+      });
     });
   }, []);
+
+  function deg2rad(deg) {
+    return deg * (Math.PI / 180);
+  }
+
+  function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+    let R = 6371; // Radius of the earth in km
+    let dLat = deg2rad(lat2 - lat1); // deg2rad below
+    let dLon = deg2rad(lon2 - lon1);
+    let a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(deg2rad(lat1)) *
+        Math.cos(deg2rad(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    let d = R * c; // Distance in km
+    return d;
+  }
 
   useEffect(() => {
     if (state.windowSize >= 768) {
@@ -1562,7 +1593,10 @@ function Lodging({ userProfile }) {
 
         {!mobileMap && (
           <div className="px-4 md:mt-10 lg:mt-0 lg:h-[70vh] w-2/4 lgMax:w-full lg:overflow-y-scroll">
-            <Listings></Listings>
+            <Listings
+              getDistance={getDistanceFromLatLonInKm}
+              userLatLng={userLatLng}
+            ></Listings>
           </div>
         )}
         {/* <div

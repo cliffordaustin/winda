@@ -10,7 +10,7 @@ import styles from "../../styles/Listing.module.css";
 import Rating from "../ui/Rating";
 import Badge from "../ui/Badge";
 
-function Listing({ listing }) {
+function Listing({ listing, getDistance, userLatLng }) {
   const dispatch = useDispatch();
 
   const [isSafari, setIsSafari] = useState(false);
@@ -156,9 +156,17 @@ function Listing({ listing }) {
           <div className="font-bold text-sm truncate mt-1">
             {listing.location}
           </div>
-          <div className="text-gray-500 text-sm truncate mt-1">
-            {listing.user_distance}KM Away
-          </div>
+          {userLatLng.latitude && userLatLng.longitude && (
+            <div className="text-gray-500 text-sm truncate mt-1">
+              {getDistance(
+                listing.latitude,
+                listing.longitude,
+                userLatLng.latitude,
+                userLatLng.longitude
+              ).toFixed(2)}
+              KM Away
+            </div>
+          )}
           {/* <div className="flex items-center gap-1 mt-2">
             <div className={!isSafari ? "-mb-0.5" : "-mb-1"}>
               <Badge
@@ -346,9 +354,18 @@ function Listing({ listing }) {
             <div className="font-bold text-sm truncate mt-1">
               {listing.location}
             </div>
-            {/* <div className="text-gray-500 text-sm truncate mt-1">
-              {listing.user_distance.toFixed(2)}KM Away
-            </div> */}
+
+            {userLatLng.latitude && userLatLng.longitude && (
+              <div className="text-gray-500 text-sm truncate mt-1">
+                {getDistance(
+                  listing.latitude,
+                  listing.longitude,
+                  userLatLng.latitude,
+                  userLatLng.longitude
+                ).toFixed(2)}
+                KM Away
+              </div>
+            )}
             {/* <div className="flex items-center gap-1 mt-2">
               <div className={!isSafari ? "-mb-0.5" : "-mb-1"}>
                 <Badge
