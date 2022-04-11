@@ -50,9 +50,9 @@ const MapMakers = ({ stay }) => {
           onMouseLeave={() => setShowPopup(false)}
           onClick={() => setShowPopup(!showPopup)}
         >
-          <h1 className="font-medium text-xs text-white">
+          {/* <h1 className="font-medium text-xs text-white">
             {price() ? "KES" + price().toLocaleString() : "No data"}
-          </h1>
+          </h1> */}
           <AnimatePresence exitBeforeEnter>
             {showPopup && (
               <Popup
@@ -66,7 +66,10 @@ const MapMakers = ({ stay }) => {
                   animate="show"
                   initial="hide"
                   exit="exit"
-                  className="w-60 absolute -ml-[120px] left-2/4 mt-7 top-full mb-1"
+                  className="w-60 absolute -ml-[120px] left-2/4 mt-4 top-full mb-1"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
                 >
                   <MapMakerPopup stay={stay}></MapMakerPopup>
                 </motion.div>
@@ -83,9 +86,9 @@ const MapMakers = ({ stay }) => {
               styles.tooltip
             }
           >
-            <h1 className="font-medium text-xs text-white">
+            {/* <h1 className="font-medium text-xs text-white">
               {price() ? "KES" + price().toLocaleString() : "No data"}
-            </h1>
+            </h1> */}
             <AnimatePresence exitBeforeEnter>
               <Popup
                 closeButton={false}
@@ -98,7 +101,7 @@ const MapMakers = ({ stay }) => {
                   animate="show"
                   initial="hide"
                   exit="exit"
-                  className="w-60 absolute -ml-[120px] left-2/4 mt-7 top-full mb-1"
+                  className="w-60 absolute -ml-[120px] left-2/4 mt-4 top-full mb-1"
                 >
                   <MapMakerPopup stay={activeStay}></MapMakerPopup>
                 </motion.div>
