@@ -135,7 +135,7 @@ function Lodging({ userProfile }) {
   });
 
   useEffect(() => {
-    axios.get("http://ip-api.com/json").then((res) => {
+    axios.get("https://api.ipify.org").then((res) => {
       console.log(res.data);
     });
   }, []);
