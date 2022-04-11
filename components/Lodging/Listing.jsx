@@ -156,9 +156,9 @@ function Listing({ listing }) {
           <div className="font-bold text-sm truncate mt-1">
             {listing.location}
           </div>
-          {/* <div className="text-gray-500 text-sm truncate mt-1">
+          <div className="text-gray-500 text-sm truncate mt-1">
             {listing.user_distance.toFixed(2)}KM Away
-          </div> */}
+          </div>
           {/* <div className="flex items-center gap-1 mt-2">
             <div className={!isSafari ? "-mb-0.5" : "-mb-1"}>
               <Badge
@@ -347,8 +347,8 @@ function Listing({ listing }) {
               {listing.location}
             </div>
             {/* <div className="text-gray-500 text-sm truncate mt-1">
-            {listing.user_distance.toFixed(2)}KM Away
-          </div> */}
+              {listing.user_distance.toFixed(2)}KM Away
+            </div> */}
             {/* <div className="flex items-center gap-1 mt-2">
               <div className={!isSafari ? "-mb-0.5" : "-mb-1"}>
                 <Badge
