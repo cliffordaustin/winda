@@ -135,6 +135,12 @@ function Lodging({ userProfile }) {
   });
 
   useEffect(() => {
+    axios.get("http://ip-api.com/json").then((res) => {
+      console.log(res.data);
+    });
+  }, []);
+
+  useEffect(() => {
     if (state.windowSize >= 768) {
       setState({
         ...state,
