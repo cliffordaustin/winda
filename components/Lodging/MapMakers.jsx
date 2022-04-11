@@ -50,9 +50,9 @@ const MapMakers = ({ stay }) => {
           onMouseLeave={() => setShowPopup(false)}
           onClick={() => setShowPopup(!showPopup)}
         >
-          {/* <h1 className="font-medium text-xs text-white">
+          <h1 className="font-medium text-xs text-white">
             {price() ? "KES" + price().toLocaleString() : "No data"}
-          </h1> */}
+          </h1>
           <AnimatePresence exitBeforeEnter>
             {showPopup && (
               <Popup
@@ -86,9 +86,9 @@ const MapMakers = ({ stay }) => {
               styles.tooltip
             }
           >
-            {/* <h1 className="font-medium text-xs text-white">
+            <h1 className="font-medium text-xs text-white">
               {price() ? "KES" + price().toLocaleString() : "No data"}
-            </h1> */}
+            </h1>
             <AnimatePresence exitBeforeEnter>
               <Popup
                 closeButton={false}
