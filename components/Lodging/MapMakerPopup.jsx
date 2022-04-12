@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import { useDispatch, useSelector } from "react-redux";
+
 import Card from "../ui/Card";
 import styles from "../../styles/Listing.module.css";
 import Rating from "../ui/Rating";
@@ -7,6 +9,12 @@ import Badge from "../ui/Badge";
 
 const MapMakerPopup = ({ stay }) => {
   const [isSafari, setIsSafari] = useState(false);
+
+  const currencyToDollar = useSelector((state) => state.home.currencyToDollar);
+
+  const priceConversionRate = useSelector(
+    (state) => state.stay.priceConversionRate
+  );
 
   useEffect(() => {
     if (process.browser) {
@@ -23,6 +31,8 @@ const MapMakerPopup = ({ stay }) => {
     return image.image;
   });
 
+  const [newPrice, setNewPrice] = useState();
+
   const price = () => {
     return (
       stay.pricing_per_room ||
@@ -31,6 +41,23 @@ const MapMakerPopup = ({ stay }) => {
       null
     );
   };
+
+  const priceConversion = async (price) => {
+    if (price) {
+      if (currencyToDollar && priceConversionRate) {
+        setNewPrice(priceConversionRate * price);
+      } else {
+        setNewPrice(price);
+      }
+    } else {
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    priceConversion(price());
+  });
+
   return (
     <div>
       <Card
@@ -41,9 +68,18 @@ const MapMakerPopup = ({ stay }) => {
       >
         <div className="flex flex-col gap-1">
           <h1 className="text-gray-500 text-sm truncate">{stay.name}</h1>
-          <h1 className="font-bold font-OpenSans">
-            {price() ? "KES" + price().toLocaleString() : "No data"}
-          </h1>
+          {currencyToDollar && (
+            <h1 className="font-bold text-xl font-OpenSans">
+              {price() ? "$" + Math.ceil(newPrice).toLocaleString() : "No data"}
+            </h1>
+          )}
+          {!currencyToDollar && (
+            <h1 className="font-bold text-xl font-OpenSans">
+              {price()
+                ? "KES" + Math.ceil(price()).toLocaleString()
+                : "No data"}
+            </h1>
+          )}
         </div>
         <div className="font-bold text-sm truncate mt-1">{stay.location}</div>
         {/* <div className="flex items-center gap-1 mt-2">

@@ -127,13 +127,16 @@ const stayState = {
   },
   uniqueAboutPlace: "",
   descriptionAboutPlace: "",
-  page: "",
+  priceConversionRate: null,
 };
 
 const stayReducer = (state = stayState, action) => {
   switch (action.type) {
     case "SET_STAYS":
       return { ...state, stays: action.payload };
+
+    case "SET_PRICE_CONVERSION":
+      return { ...state, priceConversionRate: action.payload };
 
     case "SET_ACTIVE_STAY":
       return { ...state, activeStay: action.payload };

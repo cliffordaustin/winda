@@ -11,6 +11,7 @@
   "dependencies": {
     "@react-google-maps/api": "^2.7.0",
     "axios": "^0.26.1",
+    "cashify": "^3.0.1",
     "chroma-js": "^2.4.2",
     "formik": "^2.2.9",
     "framer-motion": "^6.2.8",
@@ -19,6 +20,7 @@
     "mapbox-gl": "^2.7.1",
     "mixpanel-browser": "^2.45.0",
     "moment": "^2.29.1",
+    "money-js": "^1.0.2",
     "next": "12.1.0",
     "next-redux-wrapper": "^7.0.5",
     "nprogress": "^0.2.0",

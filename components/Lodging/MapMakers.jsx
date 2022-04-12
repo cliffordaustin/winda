@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Map, { Source, Layer, Marker, Popup } from "react-map-gl";
 import styles from "../../styles/BottomTooltip.module.css";
@@ -10,6 +10,12 @@ const MapMakers = ({ stay }) => {
   const [showPopup, setShowPopup] = useState(false);
 
   const activeStay = useSelector((state) => state.stay.activeStay);
+
+  const currencyToDollar = useSelector((state) => state.home.currencyToDollar);
+
+  const priceConversionRate = useSelector(
+    (state) => state.stay.priceConversionRate
+  );
 
   const variants = {
     hide: {
@@ -29,6 +35,8 @@ const MapMakers = ({ stay }) => {
     },
   };
 
+  const [newPrice, setNewPrice] = useState();
+
   const price = () => {
     return (
       stay.pricing_per_room ||
@@ -37,6 +45,22 @@ const MapMakers = ({ stay }) => {
       null
     );
   };
+
+  const priceConversion = async (price) => {
+    if (price) {
+      if (currencyToDollar && priceConversionRate) {
+        setNewPrice(priceConversionRate * price);
+      } else {
+        setNewPrice(price);
+      }
+    } else {
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    priceConversion(price());
+  });
 
   return (
     <div>
@@ -50,9 +74,18 @@ const MapMakers = ({ stay }) => {
           onMouseLeave={() => setShowPopup(false)}
           onClick={() => setShowPopup(!showPopup)}
         >
-          <h1 className="font-medium text-xs text-white">
-            {price() ? "KES" + price().toLocaleString() : "No data"}
-          </h1>
+          {currencyToDollar && (
+            <h1 className="font-medium text-xs text-white">
+              {price() ? "$" + Math.ceil(newPrice).toLocaleString() : "No data"}
+            </h1>
+          )}
+          {!currencyToDollar && (
+            <h1 className="font-medium text-xs text-white">
+              {price()
+                ? "KES" + Math.ceil(price()).toLocaleString()
+                : "No data"}
+            </h1>
+          )}
           <AnimatePresence exitBeforeEnter>
             {showPopup && (
               <Popup

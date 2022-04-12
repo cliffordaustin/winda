@@ -19,6 +19,7 @@ import Footer from "../components/Home/Footer";
 import RemoveFixed from "../components/Lodging/RemoveFixed";
 import MobileModal from "../components/ui/MobileModal";
 import Button from "../components/ui/Button";
+import ClientOnly from "../components/ClientOnly";
 // import { getServerSideProps } from "./index";
 
 function Lodging({ userProfile, longitude, latitude }) {
@@ -120,6 +121,31 @@ function Lodging({ userProfile, longitude, latitude }) {
   const searchRef = useRef(null);
 
   const dispatch = useDispatch();
+
+  const currencyToDollar = useSelector((state) => state.home.currencyToDollar);
+
+  const priceConversionRate = async () => {
+    try {
+      const response = await fetch(
+        "https://api.exchangerate-api.com/v4/latest/kes",
+        {
+          method: "GET",
+        }
+      );
+
+      const data = await response.json();
+      dispatch({
+        type: "SET_PRICE_CONVERSION",
+        payload: data.rates.USD,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    priceConversionRate();
+  });
 
   useEffect(() => {
     if (process.browser) {
@@ -378,6 +404,33 @@ function Lodging({ userProfile, longitude, latitude }) {
             ></Search>
           </div>
         </div>
+        <ClientOnly>
+          {currencyToDollar && (
+            <div
+              className="absolute right-12 font-bold text-gray-700 hover:text-gray-900 cursor-pointer transition-all duration-300 ease-linear"
+              onClick={() => {
+                dispatch({
+                  type: "CHANGE_CURRENCY_TO_DOLLAR_FALSE",
+                });
+              }}
+            >
+              KES
+            </div>
+          )}
+          {!currencyToDollar && (
+            <div
+              className="absolute right-12 font-bold text-gray-700 hover:text-gray-900 cursor-pointer transition-all duration-300 ease-linear"
+              onClick={() => {
+                dispatch({
+                  type: "CHANGE_CURRENCY_TO_DOLLAR_TRUE",
+                });
+              }}
+            >
+              USD
+            </div>
+          )}
+        </ClientOnly>
+
         <div className="flex gap-4 mt-4 ml-4 sm:ml-10">
           <div
             onClick={(event) => {

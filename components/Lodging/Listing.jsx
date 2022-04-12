@@ -9,11 +9,18 @@ import SecondCard from "../ui/SecondCard";
 import styles from "../../styles/Listing.module.css";
 import Rating from "../ui/Rating";
 import Badge from "../ui/Badge";
+import axios from "axios";
 
 function Listing({ listing, getDistance, userLatLng }) {
   const dispatch = useDispatch();
 
   const [isSafari, setIsSafari] = useState(false);
+
+  const currencyToDollar = useSelector((state) => state.home.currencyToDollar);
+
+  const priceConversionRate = useSelector(
+    (state) => state.stay.priceConversionRate
+  );
 
   const [liked, setLiked] = useState(false);
 
@@ -32,6 +39,8 @@ function Listing({ listing, getDistance, userLatLng }) {
     return image.image;
   });
 
+  const [newPrice, setNewPrice] = useState(3);
+
   const price = () => {
     return (
       listing.pricing_per_room ||
@@ -40,6 +49,22 @@ function Listing({ listing, getDistance, userLatLng }) {
       null
     );
   };
+
+  const priceConversion = async (price) => {
+    if (price) {
+      if (currencyToDollar && priceConversionRate) {
+        setNewPrice(priceConversionRate * price);
+      } else {
+        setNewPrice(price);
+      }
+    } else {
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    priceConversion(price());
+  });
 
   return (
     <div
@@ -60,9 +85,20 @@ function Listing({ listing, getDistance, userLatLng }) {
         >
           <div className="flex flex-col gap-1">
             <h1 className="text-gray-500 truncate">{listing.name}</h1>
-            <h1 className="font-bold text-xl font-OpenSans">
-              {price() ? "KES" + price().toLocaleString() : "No data"}
-            </h1>
+            {currencyToDollar && (
+              <h1 className="font-bold text-xl font-OpenSans">
+                {price()
+                  ? "$" + Math.ceil(newPrice).toLocaleString()
+                  : "No data"}
+              </h1>
+            )}
+            {!currencyToDollar && (
+              <h1 className="font-bold text-xl font-OpenSans">
+                {price()
+                  ? "KES" + Math.ceil(price()).toLocaleString()
+                  : "No data"}
+              </h1>
+            )}
           </div>
           <div className="text-gray-500 flex gap-1 text-sm truncate mt-1 flex-wrap">
             {listing.capacity && (
