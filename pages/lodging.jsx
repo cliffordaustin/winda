@@ -433,7 +433,7 @@ function Lodging({ userProfile, longitude, latitude }) {
           )}
           {!currencyToDollar && (
             <div
-              className="absolute right-12 font-bold text-gray-700 hover:text-gray-900 cursor-pointer transition-all duration-300 ease-linear"
+              className="absolute right-12 bottom-7 font-bold text-gray-700 hover:text-gray-900 cursor-pointer transition-all duration-300 ease-linear"
               onClick={() => {
                 dispatch({
                   type: "CHANGE_CURRENCY_TO_DOLLAR_TRUE",
