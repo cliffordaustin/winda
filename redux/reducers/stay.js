@@ -128,12 +128,23 @@ const stayState = {
   uniqueAboutPlace: "",
   descriptionAboutPlace: "",
   priceConversionRate: null,
+  filteredStays: null,
+  filterStayLoading: false,
 };
 
 const stayReducer = (state = stayState, action) => {
   switch (action.type) {
     case "SET_STAYS":
       return { ...state, stays: action.payload };
+
+    case "SET_FILTERED_STAYS_LOADING_FALSE":
+      return { ...state, filterStayLoading: false };
+
+    case "SET_FILTERED_STAYS_LOADING_TRUE":
+      return { ...state, filterStayLoading: true };
+
+    case "SET_FILTERED_STAYS":
+      return { ...state, filteredStays: action.payload };
 
     case "SET_PRICE_CONVERSION":
       return { ...state, priceConversionRate: action.payload };

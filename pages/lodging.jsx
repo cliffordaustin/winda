@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/router";
+import LoadingSpinerChase from "../components/ui/LoadingSpinerChase";
 
 import { getServerSideProps } from "../lib/getServerSideProps";
 import styles from "../styles/Lodging.module.css";
@@ -20,6 +22,7 @@ import RemoveFixed from "../components/Lodging/RemoveFixed";
 import MobileModal from "../components/ui/MobileModal";
 import Button from "../components/ui/Button";
 import ClientOnly from "../components/ClientOnly";
+import { setFilteredStays } from "../redux/actions/stay";
 // import { getServerSideProps } from "./index";
 
 function Lodging({ userProfile, longitude, latitude }) {
@@ -110,6 +113,11 @@ function Lodging({ userProfile, longitude, latitude }) {
   const [maxRoom, setmaxRoomSelected] = useState(null);
 
   const [mobileMap, setMobileMap] = useState(false);
+  const filterStayLoading = useSelector(
+    (state) => state.stay.filterStayLoading
+  );
+
+  const router = useRouter();
 
   // const userLatLng = {
   //   latitude: latitude,
@@ -123,6 +131,12 @@ function Lodging({ userProfile, longitude, latitude }) {
   const dispatch = useDispatch();
 
   const currencyToDollar = useSelector((state) => state.home.currencyToDollar);
+
+  useEffect(() => {
+    if (router.query.ordering) {
+      dispatch(setFilteredStays(router));
+    }
+  }, [router.query]);
 
   const priceConversionRate = async () => {
     try {
@@ -407,7 +421,7 @@ function Lodging({ userProfile, longitude, latitude }) {
         <ClientOnly>
           {currencyToDollar && (
             <div
-              className="absolute right-12 font-bold text-gray-700 hover:text-gray-900 cursor-pointer transition-all duration-300 ease-linear"
+              className="absolute right-12 bottom-7 font-bold text-gray-700 hover:text-gray-900 cursor-pointer transition-all duration-300 ease-linear"
               onClick={() => {
                 dispatch({
                   type: "CHANGE_CURRENCY_TO_DOLLAR_FALSE",
@@ -460,11 +474,30 @@ function Lodging({ userProfile, longitude, latitude }) {
               className="absolute top-full mt-2 w-60 left-0"
               showPopup={state.showSortPopup}
             >
-              <div className={styles.listItem}>Just for you</div>
-              <div className={styles.listItem}>Newest</div>
-              <div className={styles.listItem}>Ratings(High to Low)</div>
-              <div className={styles.listItem}>Price(min to max)</div>
-              <div className={styles.listItem}>Price(max to min)</div>
+              <div
+                className={styles.listItem}
+                onClick={() => {
+                  router.push({ query: { ordering: "-date_posted" } });
+                }}
+              >
+                Newest
+              </div>
+              <div
+                className={styles.listItem}
+                onClick={() => {
+                  router.push({ query: { ordering: "+price" } });
+                }}
+              >
+                Price(min to max)
+              </div>
+              <div
+                className={styles.listItem}
+                onClick={() => {
+                  router.push({ query: { ordering: "-price" } });
+                }}
+              >
+                Price(max to min)
+              </div>
             </Popup>
           </div>
 
@@ -1650,12 +1683,21 @@ function Lodging({ userProfile, longitude, latitude }) {
           <Map></Map>
         </div>
 
-        {!mobileMap && (
+        {!mobileMap && !filterStayLoading && (
           <div className="px-4 md:mt-10 lg:mt-0 lg:h-[70vh] w-2/4 lgMax:w-full lg:overflow-y-scroll">
             <Listings
               getDistance={getDistanceFromLatLonInKm}
               userLatLng={userLatLng}
             ></Listings>
+          </div>
+        )}
+        {filterStayLoading && (
+          <div className="px-4 md:mt-10 lg:mt-0 lg:h-[70vh] w-2/4 lgMax:w-full lg:overflow-y-scroll flex items-center justify-center">
+            <LoadingSpinerChase
+              width={40}
+              height={40}
+              color="#000"
+            ></LoadingSpinerChase>
           </div>
         )}
         {/* <div

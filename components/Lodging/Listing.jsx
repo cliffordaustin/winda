@@ -42,12 +42,7 @@ function Listing({ listing, getDistance, userLatLng }) {
   const [newPrice, setNewPrice] = useState(3);
 
   const price = () => {
-    return (
-      listing.pricing_per_room ||
-      listing.pricing_per_person ||
-      listing.pricing_per_whole_place ||
-      null
-    );
+    return listing.price;
   };
 
   const priceConversion = async (price) => {

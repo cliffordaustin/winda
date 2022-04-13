@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export const typeOfStay = (payload) => (dispatch) => {
   dispatch({ type: "TYPE_OF_STAY", payload: payload });
 };
@@ -56,4 +58,21 @@ export const setActiveStay = (payload) => (dispatch) => {
 
 export const setStays = (payload) => (dispatch) => {
   dispatch({ type: "SET_STAYS", payload: payload });
+};
+
+export const setFilteredStays = (router) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "SET_FILTERED_STAYS_LOADING_TRUE",
+    });
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_baseURL}/stays/?ordering=${router.query.ordering}`
+    );
+    dispatch({ type: "SET_FILTERED_STAYS", payload: response.data.results });
+    dispatch({
+      type: "SET_FILTERED_STAYS_LOADING_FALSE",
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };

@@ -38,12 +38,7 @@ const MapMakers = ({ stay }) => {
   const [newPrice, setNewPrice] = useState();
 
   const price = () => {
-    return (
-      stay.pricing_per_room ||
-      stay.pricing_per_person ||
-      stay.pricing_per_whole_place ||
-      null
-    );
+    return stay.price;
   };
 
   const priceConversion = async (price) => {
