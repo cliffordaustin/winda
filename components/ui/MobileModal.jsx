@@ -73,7 +73,7 @@ function Modal({
             exit="hidden"
             style={{ height: (containerHeight || "80") + "%" }}
             className={
-              "py-4 bg-white shadow-lg mx-auto sm:rounded-xl rounded-t-xl z-30 overflow-y-scroll relative " +
+              "py-4 bg-white shadow-lg mx-auto sm:rounded-xl rounded-t-[2rem] z-30 overflow-y-scroll relative " +
               className
             }
           >

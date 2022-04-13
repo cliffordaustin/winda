@@ -4,6 +4,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import LoadingSpinerChase from "../components/ui/LoadingSpinerChase";
+import LoadingPulse from "../components/ui/LoadingPulse";
 
 import { getServerSideProps } from "../lib/getServerSideProps";
 import styles from "../styles/Lodging.module.css";
@@ -421,7 +422,7 @@ function Lodging({ userProfile, longitude, latitude }) {
         <ClientOnly>
           {currencyToDollar && (
             <div
-              className="absolute right-12 bottom-7 font-bold text-gray-700 hover:text-gray-900 cursor-pointer transition-all duration-300 ease-linear"
+              className="absolute md:right-12 right-6 bottom-7 font-bold text-gray-700 hover:text-gray-900 cursor-pointer transition-all duration-300 ease-linear"
               onClick={() => {
                 dispatch({
                   type: "CHANGE_CURRENCY_TO_DOLLAR_FALSE",
@@ -433,7 +434,7 @@ function Lodging({ userProfile, longitude, latitude }) {
           )}
           {!currencyToDollar && (
             <div
-              className="absolute right-12 bottom-7 font-bold text-gray-700 hover:text-gray-900 cursor-pointer transition-all duration-300 ease-linear"
+              className="absolute md:right-12 right-6 bottom-7 font-bold text-gray-700 hover:text-gray-900 cursor-pointer transition-all duration-300 ease-linear"
               onClick={() => {
                 dispatch({
                   type: "CHANGE_CURRENCY_TO_DOLLAR_TRUE",
@@ -475,28 +476,118 @@ function Lodging({ userProfile, longitude, latitude }) {
               showPopup={state.showSortPopup}
             >
               <div
-                className={styles.listItem}
-                onClick={() => {
+                className={
+                  styles.listItem +
+                  (router.query.ordering === "-date_posted"
+                    ? " !bg-red-500 !text-white"
+                    : "")
+                }
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setState({
+                    ...state,
+                    ...turnOffAllPopup,
+                    showSortPopup: false,
+                  });
                   router.push({ query: { ordering: "-date_posted" } });
                 }}
               >
                 Newest
               </div>
               <div
-                className={styles.listItem}
-                onClick={() => {
+                className={
+                  styles.listItem +
+                  (router.query.ordering === "+price"
+                    ? " !bg-red-500 !text-white"
+                    : "")
+                }
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setState({
+                    ...state,
+                    ...turnOffAllPopup,
+                    showSortPopup: false,
+                  });
                   router.push({ query: { ordering: "+price" } });
                 }}
               >
                 Price(min to max)
               </div>
               <div
-                className={styles.listItem}
-                onClick={() => {
+                className={
+                  styles.listItem +
+                  (router.query.ordering === "-price"
+                    ? " !bg-red-500 !text-white"
+                    : "")
+                }
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setState({
+                    ...state,
+                    ...turnOffAllPopup,
+                    showSortPopup: false,
+                  });
                   router.push({ query: { ordering: "-price" } });
                 }}
               >
                 Price(max to min)
+              </div>
+              <div
+                className={
+                  styles.listItem +
+                  (router.query.ordering === "-rooms"
+                    ? " !bg-red-500 !text-white"
+                    : "")
+                }
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setState({
+                    ...state,
+                    ...turnOffAllPopup,
+                    showSortPopup: false,
+                  });
+                  router.push({ query: { ordering: "-rooms" } });
+                }}
+              >
+                Rooms(max to min)
+              </div>
+              <div
+                className={
+                  styles.listItem +
+                  (router.query.ordering === "-beds"
+                    ? " !bg-red-500 !text-white"
+                    : "")
+                }
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setState({
+                    ...state,
+                    ...turnOffAllPopup,
+                    showSortPopup: false,
+                  });
+                  router.push({ query: { ordering: "-beds" } });
+                }}
+              >
+                Beds(max to min)
+              </div>
+              <div
+                className={
+                  styles.listItem +
+                  (router.query.ordering === "-bathrooms"
+                    ? " !bg-red-500 !text-white"
+                    : "")
+                }
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setState({
+                    ...state,
+                    ...turnOffAllPopup,
+                    showSortPopup: false,
+                  });
+                  router.push({ query: { ordering: "-bathrooms" } });
+                }}
+              >
+                Bathrooms(max to min)
               </div>
             </Popup>
           </div>
@@ -1683,21 +1774,28 @@ function Lodging({ userProfile, longitude, latitude }) {
           <Map></Map>
         </div>
 
-        {!mobileMap && !filterStayLoading && (
-          <div className="px-4 md:mt-10 lg:mt-0 lg:h-[70vh] w-2/4 lgMax:w-full lg:overflow-y-scroll">
+        {!mobileMap && (
+          <div
+            className={
+              "px-4 md:mt-10 lg:mt-0 relative lg:h-[70vh] w-2/4 lgMax:w-full lg:overflow-y-scroll " +
+              (filterStayLoading ? "!overflow-y-hidden !h-[70vh]" : "")
+            }
+          >
             <Listings
               getDistance={getDistanceFromLatLonInKm}
               userLatLng={userLatLng}
             ></Listings>
-          </div>
-        )}
-        {filterStayLoading && (
-          <div className="px-4 md:mt-10 lg:mt-0 lg:h-[70vh] w-2/4 lgMax:w-full lg:overflow-y-scroll flex items-center justify-center">
-            <LoadingSpinerChase
-              width={40}
-              height={40}
-              color="#000"
-            ></LoadingSpinerChase>
+            {filterStayLoading && (
+              <div className="bg-white bg-opacity-50 lg:h-[70vh] lg:overflow-y-scroll absolute w-full top-0 bottom-0 right-0 left-0 z-10">
+                <div className="flex items-center justify-center h-full">
+                  <LoadingSpinerChase
+                    width={30}
+                    height={30}
+                    color="#000"
+                  ></LoadingSpinerChase>
+                </div>
+              </div>
+            )}
           </div>
         )}
         {/* <div

@@ -18,7 +18,7 @@ function Listings({ getDistance, userLatLng }) {
   return (
     <ClientOnly>
       {!filteredStays && (
-        <div className="w-full flex justify-between flex-wrap gap-4">
+        <div className="w-full flex flex-wrap gap-4">
           {stays.map((stay, index) => (
             <Listing
               key={index}
@@ -30,7 +30,7 @@ function Listings({ getDistance, userLatLng }) {
         </div>
       )}
       {filteredStays && (
-        <div className="w-full flex justify-between flex-wrap gap-4">
+        <div className="w-full flex flex-wrap gap-4">
           {filteredStays.map((stay, index) => (
             <Listing
               key={index}

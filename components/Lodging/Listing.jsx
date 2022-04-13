@@ -267,8 +267,34 @@ function Listing({ listing, getDistance, userLatLng }) {
             </svg>
           )}
         </div>
+
+        {listing.type_of_stay === "LODGE" && (
+          <div className="absolute top-2 left-2 z-10 px-2 rounded-md bg-green-600 text-white">
+            Lodge
+          </div>
+        )}
+        {listing.type_of_stay === "HOUSE" && (
+          <div className="absolute top-2 left-2 z-10 px-2 rounded-md bg-green-600 text-white">
+            House
+          </div>
+        )}
+        {listing.type_of_stay === "UNIQUE SPACE" && (
+          <div className="absolute top-2 left-2 z-10 px-2 rounded-md bg-green-600 text-white">
+            Unique space
+          </div>
+        )}
+        {listing.type_of_stay === "CAMPSITE" && (
+          <div className="absolute top-2 left-2 z-10 px-2 rounded-md bg-green-600 text-white">
+            Campsite
+          </div>
+        )}
+        {listing.type_of_stay === "BOUTIQUE HOTEL" && (
+          <div className="absolute top-2 left-2 z-10 px-2 rounded-md bg-green-600 text-white">
+            Boutique hotel
+          </div>
+        )}
       </div>
-      <div className="lgMax:hidden lg:block xl:hidden">
+      <div className="lgMax:hidden lg:block xl:hidden relative">
         <SecondCard
           imagePaths={images}
           carouselClassName="h-44 !w-[45%]"
@@ -467,6 +493,31 @@ function Listing({ listing, getDistance, userLatLng }) {
             </div>
           </div>
         </SecondCard>
+        {listing.type_of_stay === "LODGE" && (
+          <div className="absolute top-2 left-2 z-10 px-2 rounded-md bg-green-600 text-white">
+            Lodge
+          </div>
+        )}
+        {listing.type_of_stay === "HOUSE" && (
+          <div className="absolute top-2 left-2 z-10 px-2 rounded-md bg-green-600 text-white">
+            House
+          </div>
+        )}
+        {listing.type_of_stay === "UNIQUE SPACE" && (
+          <div className="absolute top-2 left-2 z-10 px-2 rounded-md bg-green-600 text-white">
+            Unique space
+          </div>
+        )}
+        {listing.type_of_stay === "CAMPSITE" && (
+          <div className="absolute top-2 left-2 z-10 px-2 rounded-md bg-green-600 text-white">
+            Campsite
+          </div>
+        )}
+        {listing.type_of_stay === "BOUTIQUE HOTEL" && (
+          <div className="absolute top-2 left-2 z-10 px-2 rounded-md bg-green-600 text-white">
+            Boutique hotel
+          </div>
+        )}
       </div>
     </div>
   );
