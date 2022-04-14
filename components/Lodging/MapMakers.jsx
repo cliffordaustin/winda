@@ -114,9 +114,20 @@ const MapMakers = ({ stay }) => {
               styles.tooltip
             }
           >
-            <h1 className="font-medium text-xs text-white">
-              {price() ? "KES" + price().toLocaleString() : "No data"}
-            </h1>
+            {currencyToDollar && (
+              <h1 className="font-medium text-xs text-white">
+                {price()
+                  ? "$" + Math.ceil(newPrice).toLocaleString()
+                  : "No data"}
+              </h1>
+            )}
+            {!currencyToDollar && (
+              <h1 className="font-medium text-xs text-white">
+                {price()
+                  ? "KES" + Math.ceil(price()).toLocaleString()
+                  : "No data"}
+              </h1>
+            )}
             <AnimatePresence exitBeforeEnter>
               <Popup
                 closeButton={false}

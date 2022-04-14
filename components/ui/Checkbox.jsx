@@ -11,6 +11,7 @@ function Checkbox({ checked, value, onChange }) {
           value={value}
           onChange={onChange}
           checked={checked}
+          id="checkbox"
           readOnly
         />
         <span className={styles.checkboxCustom}></span>

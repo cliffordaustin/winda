@@ -24,6 +24,7 @@ import MobileModal from "../components/ui/MobileModal";
 import Button from "../components/ui/Button";
 import ClientOnly from "../components/ClientOnly";
 import { setFilteredStays } from "../redux/actions/stay";
+import StayTypes from "../components/Lodging/StayTypes";
 // import { getServerSideProps } from "./index";
 
 function Lodging({ userProfile, longitude, latitude }) {
@@ -46,7 +47,7 @@ function Lodging({ userProfile, longitude, latitude }) {
     showRoomPopup: false,
     showMobileFilter: false,
     showRatingsPopup: false,
-    showHomeTypesPopup: false,
+    showStayTypesPopup: false,
     showFilterPopup: false,
     exellentRating: false,
     veryGoodRating: false,
@@ -107,18 +108,56 @@ function Lodging({ userProfile, longitude, latitude }) {
     showRatingsPopup: false,
     showFilterPopup: false,
   };
-  const [minPrice, setMinSelected] = useState(null);
-  const [maxPrice, setMaxSelected] = useState(null);
+  const router = useRouter();
 
-  const [minRoom, setminRoomSelected] = useState(null);
-  const [maxRoom, setmaxRoomSelected] = useState(null);
+  const minPriceFilterFormat =
+    "KES" + router.query.min_price.replace("000", "k");
+
+  const minPriceFilterFormatObject = router.query.min_price
+    ? {
+        value: minPriceFilterFormat,
+        label: minPriceFilterFormat,
+      }
+    : null;
+
+  const maxPriceFilterFormat =
+    "KES" + router.query.max_price.replace("000", "k");
+
+  const maxPriceFilterFormatObject = router.query.min_price
+    ? {
+        value: maxPriceFilterFormat,
+        label: maxPriceFilterFormat,
+      }
+    : null;
+
+  const minRoomFilterFormat = "KES" + router.query.min_rooms;
+
+  const minRoomFilterFormatObject = router.query.min_price
+    ? {
+        value: minRoomFilterFormat,
+        label: minRoomFilterFormat,
+      }
+    : null;
+
+  const maxRoomFilterFormat = "KES" + router.query.max_rooms;
+
+  const maxRoomFilterFormatObject = router.query.min_price
+    ? {
+        value: maxRoomFilterFormat,
+        label: maxRoomFilterFormat,
+      }
+    : null;
+
+  const [minPrice, setMinSelected] = useState(minPriceFilterFormatObject);
+  const [maxPrice, setMaxSelected] = useState(maxPriceFilterFormatObject);
+
+  const [minRoom, setminRoomSelected] = useState(minRoomFilterFormatObject);
+  const [maxRoom, setmaxRoomSelected] = useState(maxRoomFilterFormatObject);
 
   const [mobileMap, setMobileMap] = useState(false);
   const filterStayLoading = useSelector(
     (state) => state.stay.filterStayLoading
   );
-
-  const router = useRouter();
 
   // const userLatLng = {
   //   latitude: latitude,
@@ -134,7 +173,27 @@ function Lodging({ userProfile, longitude, latitude }) {
   const currencyToDollar = useSelector((state) => state.home.currencyToDollar);
 
   useEffect(() => {
-    if (router.query.ordering) {
+    const maxPriceSelect =
+      maxPrice && maxPrice.value.replace("KES", "").replace("k", "000");
+    const minPriceSelect =
+      minPrice && minPrice.value.replace("KES", "").replace("k", "000");
+    const maxRoomSelect =
+      maxRoom && maxRoom.value.replace("KES", "").replace("k", "000");
+    const minRoomSelect =
+      minRoom && minRoom.value.replace("KES", "").replace("k", "000");
+    router.push({
+      query: {
+        ...router.query,
+        min_price: minPriceSelect,
+        max_price: maxPriceSelect,
+        min_rooms: minRoomSelect,
+        max_rooms: maxRoomSelect,
+      },
+    });
+  }, [minPrice, maxPrice, minRoom, maxRoom]);
+
+  useEffect(() => {
+    if (router.query) {
       dispatch(setFilteredStays(router));
     }
   }, [router.query]);
@@ -813,88 +872,18 @@ function Lodging({ userProfile, longitude, latitude }) {
               ></RoomFilter>
             </Popup>
           </div>
-          <div
-            onClick={(event) => {
-              event.stopPropagation();
+
+          <StayTypes
+            handlePopup={() => {
               setState({
                 ...state,
                 ...turnOffAllPopup,
-                showHomeTypesPopup: !state.showHomeTypesPopup,
+                showStayTypesPopup: !state.showStayTypesPopup,
               });
             }}
-            className="bg-gray-100 hidden relative cursor-pointer rounded-md border border-gray-200 py-2 px-2 lg:flex gap-1 items-center justify-center"
-          >
-            <span className="block">All home types</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 mt-1"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                clipRule="evenodd"
-              />
-            </svg>
-            <Popup
-              className="absolute top-full mt-2 w-60 left-0"
-              showPopup={state.showHomeTypesPopup}
-            >
-              <div
-                onClick={(e) => {
-                  e.preventDefault();
-                  setState({
-                    ...state,
-                    lodge: !state.lodge,
-                  });
-                }}
-                className={styles.ratingItem}
-              >
-                <Checkbox checked={state.lodge}></Checkbox>
-                <div>Lodge</div>
-              </div>
-              <div
-                onClick={(e) => {
-                  e.preventDefault();
-                  setState({
-                    ...state,
-                    cottage: !state.cottage,
-                  });
-                }}
-                className={styles.ratingItem}
-              >
-                <Checkbox checked={state.cottage}></Checkbox>
-                <div>Cottage</div>
-              </div>
-              <div
-                onClick={(e) => {
-                  e.preventDefault();
-                  setState({
-                    ...state,
-                    house: !state.house,
-                  });
-                }}
-                className={styles.ratingItem}
-              >
-                <Checkbox checked={state.house}></Checkbox>
-                <div>House</div>
-              </div>
-              <div
-                onClick={(e) => {
-                  e.preventDefault();
-                  setState({
-                    ...state,
-                    campsite: !state.campsite,
-                  });
-                }}
-                className={styles.ratingItem}
-              >
-                <Checkbox checked={state.campsite}></Checkbox>
-                <div>Campsite</div>
-              </div>
-            </Popup>
-          </div>
+            showStayTypesPopup={state.showStayTypesPopup}
+          ></StayTypes>
+
           <div
             onClick={(event) => {
               event.stopPropagation();
@@ -1760,16 +1749,6 @@ function Lodging({ userProfile, longitude, latitude }) {
         </div>
       </div>
       <div className="mt-48 lg:mt-56 flex relative h-full overflow-y-scroll">
-        {/* {!isFixed && (
-            <div>
-              <Map></Map>
-            </div>
-          )}
-          {isFixed && (
-            <div className="w-2/4 bottom-0 right-0 top-56 fixed">
-              <Map></Map>
-            </div>
-          )} */}
         <div className={"hidden lg:block w-2/4 px-4 h-[70vh] relative"}>
           <Map></Map>
         </div>
@@ -1798,28 +1777,6 @@ function Lodging({ userProfile, longitude, latitude }) {
             )}
           </div>
         )}
-        {/* <div
-            className={
-              "w-47p px-2 bottom-0 right-0 left-0 top-56 bg-red-400 " +
-              (isFixed ? "fixed" : "sticky ")
-            }
-          >
-            <div className="bg-red-400 w-full h-full">the name</div>
-            <Map></Map>
-          </div> */}
-        {/* <div className="absolute right-0 top-54 w-2/4 h-full px-4">
-            <div className={"w-full h-full fixed bg-red-400 "}>
-              <Map></Map>
-            </div>
-          </div> */}
-        {/* <div
-            className={
-              "w-2/4 px-4 bottom-0 right-0 top-56 " +
-              (isFixed ? "fixed" : "sticky ")
-            }
-          >
-            <Map></Map>
-          </div> */}
       </div>
       {state.windowSize < 768 && (
         <MobileModal
