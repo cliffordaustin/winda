@@ -110,25 +110,27 @@ function Lodging({ userProfile, longitude, latitude }) {
   };
   const router = useRouter();
 
-  const minPriceFilterFormat =
-    "KES" + router.query.min_price.replace("000", "k");
+  const minPriceFilterFormat = router.query.min_price
+    ? "KES" + router.query.min_price.replace("000", "k")
+    : "";
 
   const minPriceFilterFormatObject = router.query.min_price
     ? {
         value: minPriceFilterFormat,
         label: minPriceFilterFormat,
       }
-    : null;
+    : "";
 
-  const maxPriceFilterFormat =
-    "KES" + router.query.max_price.replace("000", "k");
+  const maxPriceFilterFormat = router.query.max_price
+    ? "KES" + router.query.max_price.replace("000", "k")
+    : "";
 
   const maxPriceFilterFormatObject = router.query.min_price
     ? {
         value: maxPriceFilterFormat,
         label: maxPriceFilterFormat,
       }
-    : null;
+    : "";
 
   const minRoomFilterFormat = "KES" + router.query.min_rooms;
 
@@ -137,7 +139,7 @@ function Lodging({ userProfile, longitude, latitude }) {
         value: minRoomFilterFormat,
         label: minRoomFilterFormat,
       }
-    : null;
+    : "";
 
   const maxRoomFilterFormat = "KES" + router.query.max_rooms;
 
@@ -146,7 +148,7 @@ function Lodging({ userProfile, longitude, latitude }) {
         value: maxRoomFilterFormat,
         label: maxRoomFilterFormat,
       }
-    : null;
+    : "";
 
   const [minPrice, setMinSelected] = useState(minPriceFilterFormatObject);
   const [maxPrice, setMaxSelected] = useState(maxPriceFilterFormatObject);
@@ -173,14 +175,18 @@ function Lodging({ userProfile, longitude, latitude }) {
   const currencyToDollar = useSelector((state) => state.home.currencyToDollar);
 
   useEffect(() => {
-    const maxPriceSelect =
-      maxPrice && maxPrice.value.replace("KES", "").replace("k", "000");
-    const minPriceSelect =
-      minPrice && minPrice.value.replace("KES", "").replace("k", "000");
-    const maxRoomSelect =
-      maxRoom && maxRoom.value.replace("KES", "").replace("k", "000");
-    const minRoomSelect =
-      minRoom && minRoom.value.replace("KES", "").replace("k", "000");
+    const maxPriceSelect = maxPrice
+      ? maxPrice.value.replace("KES", "").replace("k", "000")
+      : "";
+    const minPriceSelect = minPrice
+      ? minPrice.value.replace("KES", "").replace("k", "000")
+      : "";
+    const maxRoomSelect = maxRoom
+      ? maxRoom.value.replace("KES", "").replace("k", "000")
+      : "";
+    const minRoomSelect = minRoom
+      ? minRoom.value.replace("KES", "").replace("k", "000")
+      : "";
     router.push({
       query: {
         ...router.query,
