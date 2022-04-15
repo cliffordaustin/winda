@@ -26,7 +26,6 @@ import ClientOnly from "../components/ClientOnly";
 import { setFilteredStays } from "../redux/actions/stay";
 import StayTypes from "../components/Lodging/StayTypes";
 import MobileStayTypes from "../components/Lodging/MobileStayTypes";
-// import { getServerSideProps } from "./index";
 
 function Lodging({ userProfile, longitude, latitude }) {
   const [state, setState] = useState({
@@ -555,7 +554,13 @@ function Lodging({ userProfile, longitude, latitude }) {
                     ...turnOffAllPopup,
                     showSortPopup: false,
                   });
-                  router.push({ query: { ordering: "-date_posted" } });
+                  if (router.query.ordering) {
+                    router.push({ query: { ...router.query, ordering: "" } });
+                  } else {
+                    router.push({
+                      query: { ...router.query, ordering: "-date_posted" },
+                    });
+                  }
                 }}
               >
                 Newest
@@ -574,7 +579,13 @@ function Lodging({ userProfile, longitude, latitude }) {
                     ...turnOffAllPopup,
                     showSortPopup: false,
                   });
-                  router.push({ query: { ordering: "+price" } });
+                  if (router.query.ordering) {
+                    router.push({ query: { ...router.query, ordering: "" } });
+                  } else {
+                    router.push({
+                      query: { ...router.query, ordering: "+price" },
+                    });
+                  }
                 }}
               >
                 Price(min to max)
@@ -593,7 +604,13 @@ function Lodging({ userProfile, longitude, latitude }) {
                     ...turnOffAllPopup,
                     showSortPopup: false,
                   });
-                  router.push({ query: { ordering: "-price" } });
+                  if (router.query.ordering) {
+                    router.push({ query: { ...router.query, ordering: "" } });
+                  } else {
+                    router.push({
+                      query: { ...router.query, ordering: "-price" },
+                    });
+                  }
                 }}
               >
                 Price(max to min)
@@ -612,7 +629,13 @@ function Lodging({ userProfile, longitude, latitude }) {
                     ...turnOffAllPopup,
                     showSortPopup: false,
                   });
-                  router.push({ query: { ordering: "-rooms" } });
+                  if (router.query.ordering) {
+                    router.push({ query: { ...router.query, ordering: "" } });
+                  } else {
+                    router.push({
+                      query: { ...router.query, ordering: "-rooms" },
+                    });
+                  }
                 }}
               >
                 Rooms(max to min)
@@ -631,7 +654,13 @@ function Lodging({ userProfile, longitude, latitude }) {
                     ...turnOffAllPopup,
                     showSortPopup: false,
                   });
-                  router.push({ query: { ordering: "-beds" } });
+                  if (router.query.ordering) {
+                    router.push({ query: { ...router.query, ordering: "" } });
+                  } else {
+                    router.push({
+                      query: { ...router.query, ordering: "-beds" },
+                    });
+                  }
                 }}
               >
                 Beds(max to min)
@@ -650,7 +679,13 @@ function Lodging({ userProfile, longitude, latitude }) {
                     ...turnOffAllPopup,
                     showSortPopup: false,
                   });
-                  router.push({ query: { ordering: "-bathrooms" } });
+                  if (router.query.ordering) {
+                    router.push({ query: { ...router.query, ordering: "" } });
+                  } else {
+                    router.push({
+                      query: { ...router.query, ordering: "-bathrooms" },
+                    });
+                  }
                 }}
               >
                 Bathrooms(max to min)
@@ -893,7 +928,7 @@ function Lodging({ userProfile, longitude, latitude }) {
             ></StayTypes>
           </div>
 
-          <div
+          {/* <div
             onClick={(event) => {
               event.stopPropagation();
               setState({
@@ -1026,7 +1061,7 @@ function Lodging({ userProfile, longitude, latitude }) {
                 <div>Okay</div>
               </div>
             </Popup>
-          </div>
+          </div> */}
           <div
             onClick={(event) => {
               event.stopPropagation();
@@ -1098,65 +1133,21 @@ function Lodging({ userProfile, longitude, latitude }) {
 
                 <div className="mt-2 mb-4">
                   <span className="block font-bold text-base mb-2">
-                    All home types
+                    All stay types
                   </span>
-                  <div className="flex justify-between flex-wrap">
-                    <div
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setState({
-                          ...state,
-                          lodge: !state.lodge,
-                        });
-                      }}
-                      className={styles.ratingItem + " !w-[48%]"}
-                    >
-                      <Checkbox checked={state.lodge}></Checkbox>
-                      <div>Lodge</div>
-                    </div>
-                    <div
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setState({
-                          ...state,
-                          cottage: !state.cottage,
-                        });
-                      }}
-                      className={styles.ratingItem + " !w-[48%]"}
-                    >
-                      <Checkbox checked={state.cottage}></Checkbox>
-                      <div>Cottage</div>
-                    </div>
-                    <div
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setState({
-                          ...state,
-                          house: !state.house,
-                        });
-                      }}
-                      className={styles.ratingItem + " !w-[48%]"}
-                    >
-                      <Checkbox checked={state.house}></Checkbox>
-                      <div>House</div>
-                    </div>
-                    <div
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setState({
-                          ...state,
-                          campsite: !state.campsite,
-                        });
-                      }}
-                      className={styles.ratingItem + " !w-[48%]"}
-                    >
-                      <Checkbox checked={state.campsite}></Checkbox>
-                      <div>Campsite</div>
-                    </div>
-                  </div>
+                  <MobileStayTypes
+                    handlePopup={() => {
+                      setState({
+                        ...state,
+                        ...turnOffAllPopup,
+                        showStayTypesPopup: !state.showStayTypesPopup,
+                      });
+                    }}
+                    showStayTypesPopup={state.showStayTypesPopup}
+                  ></MobileStayTypes>
                 </div>
 
-                <div>
+                {/* <div>
                   <span className="block font-bold text-base mb-2">
                     Guest ratings
                   </span>
@@ -1270,7 +1261,7 @@ function Lodging({ userProfile, longitude, latitude }) {
                       <div>Okay</div>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
 
               <div className="text-lg font-bold mb-2 mt-2">Travel themes</div>
@@ -1390,7 +1381,7 @@ function Lodging({ userProfile, longitude, latitude }) {
                 </div>
               </div>
 
-              <div className="text-lg font-bold mb-2 mt-8">Activities</div>
+              {/* <div className="text-lg font-bold mb-2 mt-8">Activities</div>
               <div className="flex gap-2 flex-wrap">
                 <div
                   onClick={() => {
@@ -1521,7 +1512,7 @@ function Lodging({ userProfile, longitude, latitude }) {
                 >
                   Spa
                 </div>
-              </div>
+              </div> */}
 
               <div className="text-lg font-bold mb-2 mt-8">Amenities</div>
               <div className="flex justify-between flex-wrap mb-4">
@@ -1834,7 +1825,7 @@ function Lodging({ userProfile, longitude, latitude }) {
                 <span className="block font-bold text-base mb-2">
                   All stay types
                 </span>
-                <StayTypes
+                <MobileStayTypes
                   handlePopup={() => {
                     setState({
                       ...state,
@@ -1843,69 +1834,10 @@ function Lodging({ userProfile, longitude, latitude }) {
                     });
                   }}
                   showStayTypesPopup={state.showStayTypesPopup}
-                ></StayTypes>
-                {/* <div className="flex justify-between flex-wrap">
-                  <div
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      e.stopPropagation();
-                      setState({
-                        ...state,
-                        lodge: !state.lodge,
-                      });
-                    }}
-                    className={styles.ratingItem + " sm:!w-[48%]"}
-                  >
-                    <Checkbox checked={state.lodge}></Checkbox>
-                    <div>Lodge</div>
-                  </div>
-                  <div
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      setState({
-                        ...state,
-                        cottage: !state.cottage,
-                      });
-                    }}
-                    className={styles.ratingItem + " sm:!w-[48%]"}
-                  >
-                    <Checkbox checked={state.cottage}></Checkbox>
-                    <div>Cottage</div>
-                  </div>
-                  <div
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      setState({
-                        ...state,
-                        house: !state.house,
-                      });
-                    }}
-                    className={styles.ratingItem + " sm:!w-[48%]"}
-                  >
-                    <Checkbox checked={state.house}></Checkbox>
-                    <div>House</div>
-                  </div>
-                  <div
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      setState({
-                        ...state,
-                        campsite: !state.campsite,
-                      });
-                    }}
-                    className={styles.ratingItem + " sm:!w-[48%]"}
-                  >
-                    <Checkbox checked={state.campsite}></Checkbox>
-                    <div>Campsite</div>
-                  </div>
-                </div> */}
+                ></MobileStayTypes>
               </div>
 
-              <div>
+              {/* <div>
                 <span className="block font-bold text-base mb-2">
                   Guest ratings
                 </span>
@@ -2020,7 +1952,7 @@ function Lodging({ userProfile, longitude, latitude }) {
                     <div>Okay</div>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
 
             <div className="text-lg font-bold mb-2 mt-2">Travel themes</div>
@@ -2148,7 +2080,7 @@ function Lodging({ userProfile, longitude, latitude }) {
               </div>
             </div>
 
-            <div className="text-lg font-bold mb-2 mt-8">Activities</div>
+            {/* <div className="text-lg font-bold mb-2 mt-8">Activities</div>
             <div className="flex gap-2 flex-wrap">
               <div
                 onClick={(e) => {
@@ -2288,7 +2220,7 @@ function Lodging({ userProfile, longitude, latitude }) {
               >
                 Spa
               </div>
-            </div>
+            </div> */}
 
             <div className="text-lg font-bold mb-2 mt-8">Amenities</div>
             <div className="flex justify-between flex-wrap mb-4">

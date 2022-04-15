@@ -46,6 +46,7 @@ function PriceFilter({
         setSelectedOption={setMinRoomSelected}
         className={styles.input + " !w-full"}
         placeholder="Min Rooms"
+        isSearchable={false}
       ></SelectInput>
       <div> - </div>
       <SelectInput
@@ -55,6 +56,7 @@ function PriceFilter({
         setSelectedOption={setMaxRoomSelected}
         className={styles.input + " !w-full"}
         placeholder="Max Rooms"
+        isSearchable={false}
       ></SelectInput>
     </div>
   );

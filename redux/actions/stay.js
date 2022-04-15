@@ -80,6 +80,10 @@ export const setFilteredStays = (router) => async (dispatch) => {
     );
     dispatch({ type: "SET_FILTERED_STAYS", payload: response.data.results });
     dispatch({
+      type: "SET_STAYS",
+      payload: response.data.results,
+    });
+    dispatch({
       type: "SET_FILTERED_STAYS_LOADING_FALSE",
     });
   } catch (error) {

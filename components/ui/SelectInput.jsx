@@ -9,6 +9,7 @@ const SelectInput = ({
   setSelectedOption,
   className = "",
   placeholder,
+  isSearchable,
 }) => {
   return (
     <div className="w-full">
@@ -20,6 +21,7 @@ const SelectInput = ({
         instanceId={instanceId}
         placeholder={placeholder}
         options={options}
+        isSearchable={isSearchable}
       />
     </div>
   );
@@ -30,6 +32,7 @@ SelectInput.propTypes = {
   options: PropTypes.array.isRequired,
   className: PropTypes.string,
   placeholder: PropTypes.string,
+  isSearchable: PropTypes.bool,
 };
 
 export default SelectInput;
