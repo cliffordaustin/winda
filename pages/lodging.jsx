@@ -25,6 +25,7 @@ import Button from "../components/ui/Button";
 import ClientOnly from "../components/ClientOnly";
 import { setFilteredStays } from "../redux/actions/stay";
 import StayTypes from "../components/Lodging/StayTypes";
+import MobileStayTypes from "../components/Lodging/MobileStayTypes";
 // import { getServerSideProps } from "./index";
 
 function Lodging({ userProfile, longitude, latitude }) {
@@ -879,16 +880,18 @@ function Lodging({ userProfile, longitude, latitude }) {
             </Popup>
           </div>
 
-          <StayTypes
-            handlePopup={() => {
-              setState({
-                ...state,
-                ...turnOffAllPopup,
-                showStayTypesPopup: !state.showStayTypesPopup,
-              });
-            }}
-            showStayTypesPopup={state.showStayTypesPopup}
-          ></StayTypes>
+          <div className="hidden lg:block">
+            <StayTypes
+              handlePopup={() => {
+                setState({
+                  ...state,
+                  ...turnOffAllPopup,
+                  showStayTypesPopup: !state.showStayTypesPopup,
+                });
+              }}
+              showStayTypesPopup={state.showStayTypesPopup}
+            ></StayTypes>
+          </div>
 
           <div
             onClick={(event) => {
@@ -1829,9 +1832,19 @@ function Lodging({ userProfile, longitude, latitude }) {
 
               <div className="mt-2 mb-4">
                 <span className="block font-bold text-base mb-2">
-                  All home types
+                  All stay types
                 </span>
-                <div className="flex justify-between flex-wrap">
+                <StayTypes
+                  handlePopup={() => {
+                    setState({
+                      ...state,
+                      ...turnOffAllPopup,
+                      showStayTypesPopup: !state.showStayTypesPopup,
+                    });
+                  }}
+                  showStayTypesPopup={state.showStayTypesPopup}
+                ></StayTypes>
+                {/* <div className="flex justify-between flex-wrap">
                   <div
                     onClick={(e) => {
                       e.preventDefault();
@@ -1889,7 +1902,7 @@ function Lodging({ userProfile, longitude, latitude }) {
                     <Checkbox checked={state.campsite}></Checkbox>
                     <div>Campsite</div>
                   </div>
-                </div>
+                </div> */}
               </div>
 
               <div>
