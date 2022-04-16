@@ -7,7 +7,7 @@
 }
 
 .tag {
-  @apply py-2 px-2 border border-gray-200 rounded-xl w-auto hover:bg-gray-100 transition-all duration-300 ease-linear;
+  @apply py-2 px-2 border cursor-pointer border-gray-200 rounded-xl w-auto hover:bg-gray-100 transition-all duration-300 ease-linear;
 }
 
 .amenitiesItem {

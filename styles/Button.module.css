@@ -6,7 +6,7 @@
   width: 20px;
   height: 20px;
   animation: ripple-effect 600ms linear;
-  @apply !rounded-full absolute bg-red-100 !overflow-hidden;
+  @apply !rounded-full absolute bg-gray-100 !overflow-hidden;
 }
 
 @keyframes ripple-effect {

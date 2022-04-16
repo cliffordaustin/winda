@@ -3,31 +3,33 @@ import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import LoadingSpinerChase from "../components/ui/LoadingSpinerChase";
-import LoadingPulse from "../components/ui/LoadingPulse";
+import LoadingSpinerChase from "../../components/ui/LoadingSpinerChase";
+import LoadingPulse from "../../components/ui/LoadingPulse";
 
-import { getServerSideProps } from "../lib/getServerSideProps";
-import styles from "../styles/Lodging.module.css";
-import Navbar from "../components/Lodging/Navbar";
-import Listings from "../components/Lodging/Listings";
-import Map from "../components/Lodging/Map";
-import SearchSelect from "../components/Home/SearchSelect";
-import Search from "../components/Home/Search";
-import Popup from "../components/ui/Popup";
-import PriceFilter from "../components/Lodging/PriceFilter";
-import RoomFilter from "../components/Lodging/RoomFilter";
-import Badge from "../components/ui/Badge";
-import Checkbox from "../components/ui/Checkbox";
-import Footer from "../components/Home/Footer";
-import RemoveFixed from "../components/Lodging/RemoveFixed";
-import MobileModal from "../components/ui/MobileModal";
-import Button from "../components/ui/Button";
-import ClientOnly from "../components/ClientOnly";
-import { setFilteredStays } from "../redux/actions/stay";
-import StayTypes from "../components/Lodging/StayTypes";
-import MobileStayTypes from "../components/Lodging/MobileStayTypes";
+import { getServerSideProps } from "../../lib/getServerSideProps";
+import styles from "../../styles/Lodging.module.css";
+import Navbar from "../../components/Lodging/Navbar";
+import Listings from "../../components/Lodging/Listings";
+import Map from "../../components/Lodging/Map";
+import SearchSelect from "../../components/Home/SearchSelect";
+import Search from "../../components/Home/Search";
+import Popup from "../../components/ui/Popup";
+import PriceFilter from "../../components/Lodging/PriceFilter";
+import RoomFilter from "../../components/Lodging/RoomFilter";
+import Badge from "../../components/ui/Badge";
+import Checkbox from "../../components/ui/Checkbox";
+import Footer from "../../components/Home/Footer";
+import RemoveFixed from "../../components/Lodging/RemoveFixed";
+import MobileModal from "../../components/ui/MobileModal";
+import Button from "../../components/ui/Button";
+import ClientOnly from "../../components/ClientOnly";
+import { setFilteredStays } from "../../redux/actions/stay";
+import StayTypes from "../../components/Lodging/StayTypes";
+import MobileStayTypes from "../../components/Lodging/MobileStayTypes";
+import Amenities from "../../components/Lodging/Amenities";
+import ThemeFilter from "../../components/Lodging/ThemeFilter";
 
-function Lodging({ userProfile, longitude, latitude }) {
+function Stays({ userProfile, longitude, latitude }) {
   const [state, setState] = useState({
     showDropdown: false,
     location: "",
@@ -54,46 +56,6 @@ function Lodging({ userProfile, longitude, latitude }) {
     goodRating: false,
     fairRating: false,
     okayRating: false,
-    house: false,
-    lodge: false,
-    campsite: false,
-    cottage: false,
-
-    freeWifi: false,
-    kitchen: false,
-    selfCheckin: false,
-    pool: false,
-    dryer: false,
-    heating: false,
-    gym: false,
-    dedicatedWorkspace: false,
-    fullboard: false,
-    allInclusive: false,
-    freeParking: false,
-    waterfront: false,
-    laundry: false,
-    aircondition: false,
-
-    coworkingSpots: false,
-    campsites: false,
-    weekendGetaways: false,
-    romanticGetaways: false,
-    groupRetreats: false,
-    conservancies: false,
-    nationalParks: false,
-    lakeHouse: false,
-
-    gameDrives: false,
-    walkingSafaris: false,
-    horseBackRiding: false,
-    waterSports: false,
-    cultural: false,
-    bushMeals: false,
-    bushWalks: false,
-    sundowners: false,
-    ecoTours: false,
-    spa: false,
-
     windowSize: 0,
   });
   const turnOffAllPopup = {
@@ -109,6 +71,10 @@ function Lodging({ userProfile, longitude, latitude }) {
     showFilterPopup: false,
   };
   const router = useRouter();
+
+  const isMounted = useRef(false);
+
+  const isFirstRender = useRef(true);
 
   const minPriceFilterFormat = router.query.min_price
     ? "KES" + router.query.min_price.replace("000", "k")
@@ -175,6 +141,14 @@ function Lodging({ userProfile, longitude, latitude }) {
   const currencyToDollar = useSelector((state) => state.home.currencyToDollar);
 
   useEffect(() => {
+    if (!isFirstRender.current || process.browser) {
+      if (router.query) {
+        dispatch(setFilteredStays(router));
+      }
+    }
+  }, [router.query]);
+
+  useEffect(() => {
     const maxPriceSelect = maxPrice
       ? maxPrice.value.replace("KES", "").replace("k", "000")
       : "";
@@ -187,22 +161,21 @@ function Lodging({ userProfile, longitude, latitude }) {
     const minRoomSelect = minRoom
       ? minRoom.value.replace("KES", "").replace("k", "000")
       : "";
-    router.push({
-      query: {
-        ...router.query,
-        min_price: minPriceSelect,
-        max_price: maxPriceSelect,
-        min_rooms: minRoomSelect,
-        max_rooms: maxRoomSelect,
-      },
-    });
-  }, [minPrice, maxPrice, minRoom, maxRoom]);
-
-  useEffect(() => {
-    if (router.query) {
-      dispatch(setFilteredStays(router));
+    console.log("From outside");
+    if (isFirstRender.current) {
+      isMounted.current = false;
+    } else {
+      router.push({
+        query: {
+          ...router.query,
+          min_price: minPriceSelect,
+          max_price: maxPriceSelect,
+          min_rooms: minRoomSelect,
+          max_rooms: maxRoomSelect,
+        },
+      });
     }
-  }, [router.query]);
+  }, [minPrice, maxPrice, minRoom, maxRoom]);
 
   const priceConversionRate = async () => {
     try {
@@ -487,26 +460,56 @@ function Lodging({ userProfile, longitude, latitude }) {
         <ClientOnly>
           {currencyToDollar && (
             <div
-              className="absolute md:right-12 right-6 bottom-7 font-bold text-gray-700 hover:text-gray-900 cursor-pointer transition-all duration-300 ease-linear"
+              className="text-xs md:text-base absolute md:right-12 right-6 bottom-7 font-bold text-gray-700 hover:text-gray-900 cursor-pointer transition-all duration-300 ease-linear flex items-center"
               onClick={() => {
                 dispatch({
                   type: "CHANGE_CURRENCY_TO_DOLLAR_FALSE",
                 });
               }}
             >
-              KES
+              <div>USD</div>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-3 w-3 md:h-4 md:w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
+                />
+              </svg>
+              <div>KES</div>
             </div>
           )}
           {!currencyToDollar && (
             <div
-              className="absolute md:right-12 right-6 bottom-7 font-bold text-gray-700 hover:text-gray-900 cursor-pointer transition-all duration-300 ease-linear"
+              className="text-xs md:text-base absolute md:right-12 right-6 bottom-7 font-bold text-gray-700 hover:text-gray-900 cursor-pointer transition-all duration-300 ease-linear flex md:gap-1 items-center"
               onClick={() => {
                 dispatch({
                   type: "CHANGE_CURRENCY_TO_DOLLAR_TRUE",
                 });
               }}
             >
-              USD
+              <div>KES</div>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-3 w-3 md:h-4 md:w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
+                />
+              </svg>
+              <div>USD</div>
             </div>
           )}
         </ClientOnly>
@@ -1265,121 +1268,7 @@ function Lodging({ userProfile, longitude, latitude }) {
               </div>
 
               <div className="text-lg font-bold mb-2 mt-2">Travel themes</div>
-              <div className="flex gap-2 flex-wrap">
-                <div
-                  onClick={() => {
-                    setState({
-                      ...state,
-                      coworkingSpots: !state.coworkingSpots,
-                    });
-                  }}
-                  className={
-                    styles.tag +
-                    (state.coworkingSpots
-                      ? " bg-blue-500 hover:!bg-blue-500 text-white"
-                      : "")
-                  }
-                >
-                  Coworking Spots
-                </div>
-                <div
-                  onClick={() => {
-                    setState({ ...state, campsites: !state.campsites });
-                  }}
-                  className={
-                    styles.tag +
-                    (state.campsites
-                      ? " bg-blue-500 hover:!bg-blue-500 text-white"
-                      : "")
-                  }
-                >
-                  Campsites
-                </div>
-                <div
-                  onClick={() => {
-                    setState({
-                      ...state,
-                      weekendGetaways: !state.weekendGetaways,
-                    });
-                  }}
-                  className={
-                    styles.tag +
-                    (state.weekendGetaways
-                      ? " bg-blue-500 hover:!bg-blue-500 text-white"
-                      : "")
-                  }
-                >
-                  Weekend Getaways
-                </div>
-                <div
-                  onClick={() => {
-                    setState({
-                      ...state,
-                      romanticGetaways: !state.romanticGetaways,
-                    });
-                  }}
-                  className={
-                    styles.tag +
-                    (state.romanticGetaways
-                      ? " bg-blue-500 hover:!bg-blue-500 text-white"
-                      : "")
-                  }
-                >
-                  Romantic Getaways
-                </div>
-                <div
-                  onClick={() => {
-                    setState({ ...state, groupRetreats: !state.groupRetreats });
-                  }}
-                  className={
-                    styles.tag +
-                    (state.groupRetreats
-                      ? " bg-blue-500 hover:!bg-blue-500 text-white"
-                      : "")
-                  }
-                >
-                  Group Retreats
-                </div>
-                <div
-                  onClick={() => {
-                    setState({ ...state, conservancies: !state.conservancies });
-                  }}
-                  className={
-                    styles.tag +
-                    (state.conservancies
-                      ? " bg-blue-500 hover:!bg-blue-500 text-white"
-                      : "")
-                  }
-                >
-                  Conservancies
-                </div>
-                <div
-                  onClick={() => {
-                    setState({ ...state, nationalParks: !state.nationalParks });
-                  }}
-                  className={
-                    styles.tag +
-                    (state.nationalParks
-                      ? " bg-blue-500 hover:!bg-blue-500 text-white"
-                      : "")
-                  }
-                >
-                  National Parks
-                </div>
-                <div
-                  onClick={() => {
-                    setState({ ...state, lakeHouse: !state.lakeHouse });
-                  }}
-                  className={
-                    styles.tag +
-                    (state.lakeHouse
-                      ? " bg-blue-500 hover:!bg-blue-500 text-white"
-                      : "")
-                  }
-                >
-                  Lake House
-                </div>
-              </div>
+              <ThemeFilter></ThemeFilter>
 
               {/* <div className="text-lg font-bold mb-2 mt-8">Activities</div>
               <div className="flex gap-2 flex-wrap">
@@ -1515,235 +1404,7 @@ function Lodging({ userProfile, longitude, latitude }) {
               </div> */}
 
               <div className="text-lg font-bold mb-2 mt-8">Amenities</div>
-              <div className="flex justify-between flex-wrap mb-4">
-                <div
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setState({
-                      ...state,
-                      freeWifi: !state.freeWifi,
-                    });
-                  }}
-                  className={styles.amenitiesItem}
-                >
-                  <div className="flex gap-2 items-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M17.778 8.222c-4.296-4.296-11.26-4.296-15.556 0A1 1 0 01.808 6.808c5.076-5.077 13.308-5.077 18.384 0a1 1 0 01-1.414 1.414zM14.95 11.05a7 7 0 00-9.9 0 1 1 0 01-1.414-1.414 9 9 0 0112.728 0 1 1 0 01-1.414 1.414zM12.12 13.88a3 3 0 00-4.242 0 1 1 0 01-1.415-1.415 5 5 0 017.072 0 1 1 0 01-1.415 1.415zM9 16a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    Free Wifi
-                  </div>
-                  <Checkbox checked={state.freeWifi}></Checkbox>
-                </div>
-                <div
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setState({
-                      ...state,
-                      kitchen: !state.kitchen,
-                    });
-                  }}
-                  className={styles.amenitiesItem}
-                >
-                  <div>Kitchen</div>
-                  <Checkbox checked={state.kitchen}></Checkbox>
-                </div>
-                <div
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setState({
-                      ...state,
-                      selfCheckin: !state.selfCheckin,
-                    });
-                  }}
-                  className={styles.amenitiesItem}
-                >
-                  <div>Self Check-in</div>
-                  <Checkbox checked={state.selfCheckin}></Checkbox>
-                </div>
-                <div
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setState({
-                      ...state,
-                      pool: !state.pool,
-                    });
-                  }}
-                  className={styles.amenitiesItem}
-                >
-                  <div>Pool</div>
-                  <Checkbox checked={state.pool}></Checkbox>
-                </div>
-                <div
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setState({
-                      ...state,
-                      dryer: !state.dryer,
-                    });
-                  }}
-                  className={styles.amenitiesItem}
-                >
-                  <div>Dryer</div>
-                  <Checkbox checked={state.dryer}></Checkbox>
-                </div>
-                <div
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setState({
-                      ...state,
-                      heating: !state.heating,
-                    });
-                  }}
-                  className={styles.amenitiesItem}
-                >
-                  <div>Heating</div>
-                  <Checkbox checked={state.heating}></Checkbox>
-                </div>
-                <div
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setState({
-                      ...state,
-                      aircondition: !state.aircondition,
-                    });
-                  }}
-                  className={styles.amenitiesItem}
-                >
-                  <div>Air Condition</div>
-                  <Checkbox checked={state.aircondition}></Checkbox>
-                </div>
-                <div
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setState({
-                      ...state,
-                      dedicatedWorkspace: !state.dedicatedWorkspace,
-                    });
-                  }}
-                  className={styles.amenitiesItem}
-                >
-                  <div>Dedicated Workspace</div>
-                  <Checkbox checked={state.dedicatedWorkspace}></Checkbox>
-                </div>
-                <div
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setState({
-                      ...state,
-                      fullboard: !state.fullboard,
-                    });
-                  }}
-                  className={styles.amenitiesItem}
-                >
-                  <div>Fullboard(meals & stay only)</div>
-                  <Checkbox checked={state.fullboard}></Checkbox>
-                </div>
-                <div
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setState({
-                      ...state,
-                      allInclusive: !state.allInclusive,
-                    });
-                  }}
-                  className={styles.amenitiesItem}
-                >
-                  <div className="pr-2">
-                    All Inclusive (meals, drinks, stay, shared game drives)
-                  </div>
-                  <Checkbox checked={state.allInclusive}></Checkbox>
-                </div>
-                <div
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setState({
-                      ...state,
-                      freeParking: !state.freeParking,
-                    });
-                  }}
-                  className={styles.amenitiesItem}
-                >
-                  <div>Free Parking</div>
-                  <Checkbox checked={state.freeParking}></Checkbox>
-                </div>
-                <div
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setState({
-                      ...state,
-                      waterfront: !state.waterfront,
-                    });
-                  }}
-                  className={styles.amenitiesItem}
-                >
-                  <div>Waterfront</div>
-                  <Checkbox checked={state.waterfront}></Checkbox>
-                </div>
-                <div
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setState({
-                      ...state,
-                      laundry: !state.laundry,
-                    });
-                  }}
-                  className={styles.amenitiesItem}
-                >
-                  <div>Laundry</div>
-                  <Checkbox checked={state.laundry}></Checkbox>
-                </div>
-                <div
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setState({
-                      ...state,
-                      gym: !state.gym,
-                    });
-                  }}
-                  className={styles.amenitiesItem}
-                >
-                  <div className="flex gap-2 items-center">
-                    <svg
-                      className="h-5 w-5"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M20.2739 9.86883L16.8325 4.95392L18.4708 3.80676L21.9122 8.72167L20.2739 9.86883Z"
-                        fill="currentColor"
-                      />
-                      <path
-                        d="M18.3901 12.4086L16.6694 9.95121L8.47783 15.687L10.1985 18.1444L8.56023 19.2916L3.97162 12.7383L5.60992 11.5912L7.33068 14.0487L15.5222 8.31291L13.8015 5.8554L15.4398 4.70825L20.0284 11.2615L18.3901 12.4086Z"
-                        fill="currentColor"
-                      />
-                      <path
-                        d="M20.7651 7.08331L22.4034 5.93616L21.2562 4.29785L19.6179 5.445L20.7651 7.08331Z"
-                        fill="currentColor"
-                      />
-                      <path
-                        d="M7.16753 19.046L3.72607 14.131L2.08777 15.2782L5.52923 20.1931L7.16753 19.046Z"
-                        fill="currentColor"
-                      />
-                      <path
-                        d="M4.38208 18.5549L2.74377 19.702L1.59662 18.0637L3.23492 16.9166L4.38208 18.5549Z"
-                        fill="currentColor"
-                      />
-                    </svg>
-                    Gym
-                  </div>
-                  <Checkbox checked={state.gym}></Checkbox>
-                </div>
-              </div>
+              <Amenities></Amenities>
             </Popup>
           </div>
         </div>
@@ -1956,129 +1617,7 @@ function Lodging({ userProfile, longitude, latitude }) {
             </div>
 
             <div className="text-lg font-bold mb-2 mt-2">Travel themes</div>
-            <div className="flex gap-2 flex-wrap">
-              <div
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setState({
-                    ...state,
-                    coworkingSpots: !state.coworkingSpots,
-                  });
-                }}
-                className={
-                  styles.tag +
-                  (state.coworkingSpots
-                    ? " bg-blue-500 hover:!bg-blue-500 text-white"
-                    : "")
-                }
-              >
-                Coworking Spots
-              </div>
-              <div
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setState({ ...state, campsites: !state.campsites });
-                }}
-                className={
-                  styles.tag +
-                  (state.campsites
-                    ? " bg-blue-500 hover:!bg-blue-500 text-white"
-                    : "")
-                }
-              >
-                Campsites
-              </div>
-              <div
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setState({
-                    ...state,
-                    weekendGetaways: !state.weekendGetaways,
-                  });
-                }}
-                className={
-                  styles.tag +
-                  (state.weekendGetaways
-                    ? " bg-blue-500 hover:!bg-blue-500 text-white"
-                    : "")
-                }
-              >
-                Weekend Getaways
-              </div>
-              <div
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setState({
-                    ...state,
-                    romanticGetaways: !state.romanticGetaways,
-                  });
-                }}
-                className={
-                  styles.tag +
-                  (state.romanticGetaways
-                    ? " bg-blue-500 hover:!bg-blue-500 text-white"
-                    : "")
-                }
-              >
-                Romantic Getaways
-              </div>
-              <div
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setState({ ...state, groupRetreats: !state.groupRetreats });
-                }}
-                className={
-                  styles.tag +
-                  (state.groupRetreats
-                    ? " bg-blue-500 hover:!bg-blue-500 text-white"
-                    : "")
-                }
-              >
-                Group Retreats
-              </div>
-              <div
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setState({ ...state, conservancies: !state.conservancies });
-                }}
-                className={
-                  styles.tag +
-                  (state.conservancies
-                    ? " bg-blue-500 hover:!bg-blue-500 text-white"
-                    : "")
-                }
-              >
-                Conservancies
-              </div>
-              <div
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setState({ ...state, nationalParks: !state.nationalParks });
-                }}
-                className={
-                  styles.tag +
-                  (state.nationalParks
-                    ? " bg-blue-500 hover:!bg-blue-500 text-white"
-                    : "")
-                }
-              >
-                National Parks
-              </div>
-              <div
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setState({ ...state, lakeHouse: !state.lakeHouse });
-                }}
-                className={
-                  styles.tag +
-                  (state.lakeHouse
-                    ? " bg-blue-500 hover:!bg-blue-500 text-white"
-                    : "")
-                }
-              >
-                Lake House
-              </div>
-            </div>
+            <ThemeFilter></ThemeFilter>
 
             {/* <div className="text-lg font-bold mb-2 mt-8">Activities</div>
             <div className="flex gap-2 flex-wrap">
@@ -2223,249 +1762,7 @@ function Lodging({ userProfile, longitude, latitude }) {
             </div> */}
 
             <div className="text-lg font-bold mb-2 mt-8">Amenities</div>
-            <div className="flex justify-between flex-wrap mb-4">
-              <div
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setState({
-                    ...state,
-                    freeWifi: !state.freeWifi,
-                  });
-                }}
-                className={styles.amenitiesItem}
-              >
-                <div className="flex gap-2 items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M17.778 8.222c-4.296-4.296-11.26-4.296-15.556 0A1 1 0 01.808 6.808c5.076-5.077 13.308-5.077 18.384 0a1 1 0 01-1.414 1.414zM14.95 11.05a7 7 0 00-9.9 0 1 1 0 01-1.414-1.414 9 9 0 0112.728 0 1 1 0 01-1.414 1.414zM12.12 13.88a3 3 0 00-4.242 0 1 1 0 01-1.415-1.415 5 5 0 017.072 0 1 1 0 01-1.415 1.415zM9 16a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  Free Wifi
-                </div>
-                <Checkbox checked={state.freeWifi}></Checkbox>
-              </div>
-              <div
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setState({
-                    ...state,
-                    kitchen: !state.kitchen,
-                  });
-                }}
-                className={styles.amenitiesItem}
-              >
-                <div>Kitchen</div>
-                <Checkbox checked={state.kitchen}></Checkbox>
-              </div>
-              <div
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setState({
-                    ...state,
-                    selfCheckin: !state.selfCheckin,
-                  });
-                }}
-                className={styles.amenitiesItem}
-              >
-                <div>Self Check-in</div>
-                <Checkbox checked={state.selfCheckin}></Checkbox>
-              </div>
-              <div
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setState({
-                    ...state,
-                    pool: !state.pool,
-                  });
-                }}
-                className={styles.amenitiesItem}
-              >
-                <div>Pool</div>
-                <Checkbox checked={state.pool}></Checkbox>
-              </div>
-              <div
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setState({
-                    ...state,
-                    dryer: !state.dryer,
-                  });
-                }}
-                className={styles.amenitiesItem}
-              >
-                <div>Dryer</div>
-                <Checkbox checked={state.dryer}></Checkbox>
-              </div>
-              <div
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setState({
-                    ...state,
-                    heating: !state.heating,
-                  });
-                }}
-                className={styles.amenitiesItem}
-              >
-                <div>Heating</div>
-                <Checkbox checked={state.heating}></Checkbox>
-              </div>
-              <div
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setState({
-                    ...state,
-                    aircondition: !state.aircondition,
-                  });
-                }}
-                className={styles.amenitiesItem}
-              >
-                <div>Air Condition</div>
-                <Checkbox checked={state.aircondition}></Checkbox>
-              </div>
-              <div
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setState({
-                    ...state,
-                    dedicatedWorkspace: !state.dedicatedWorkspace,
-                  });
-                }}
-                className={styles.amenitiesItem}
-              >
-                <div>Dedicated Workspace</div>
-                <Checkbox checked={state.dedicatedWorkspace}></Checkbox>
-              </div>
-              <div
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setState({
-                    ...state,
-                    fullboard: !state.fullboard,
-                  });
-                }}
-                className={styles.amenitiesItem}
-              >
-                <div>Fullboard(meals & stay only)</div>
-                <Checkbox checked={state.fullboard}></Checkbox>
-              </div>
-              <div
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setState({
-                    ...state,
-                    allInclusive: !state.allInclusive,
-                  });
-                }}
-                className={styles.amenitiesItem}
-              >
-                <div className="pr-2">
-                  All Inclusive (meals, drinks, stay, shared game drives)
-                </div>
-                <Checkbox checked={state.allInclusive}></Checkbox>
-              </div>
-              <div
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setState({
-                    ...state,
-                    freeParking: !state.freeParking,
-                  });
-                }}
-                className={styles.amenitiesItem}
-              >
-                <div>Free Parking</div>
-                <Checkbox checked={state.freeParking}></Checkbox>
-              </div>
-              <div
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setState({
-                    ...state,
-                    waterfront: !state.waterfront,
-                  });
-                }}
-                className={styles.amenitiesItem}
-              >
-                <div>Waterfront</div>
-                <Checkbox checked={state.waterfront}></Checkbox>
-              </div>
-              <div
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setState({
-                    ...state,
-                    laundry: !state.laundry,
-                  });
-                }}
-                className={styles.amenitiesItem}
-              >
-                <div>Laundry</div>
-                <Checkbox checked={state.laundry}></Checkbox>
-              </div>
-              <div
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setState({
-                    ...state,
-                    gym: !state.gym,
-                  });
-                }}
-                className={styles.amenitiesItem}
-              >
-                <div className="flex gap-2 items-center">
-                  <svg
-                    className="h-5 w-5"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M20.2739 9.86883L16.8325 4.95392L18.4708 3.80676L21.9122 8.72167L20.2739 9.86883Z"
-                      fill="currentColor"
-                    />
-                    <path
-                      d="M18.3901 12.4086L16.6694 9.95121L8.47783 15.687L10.1985 18.1444L8.56023 19.2916L3.97162 12.7383L5.60992 11.5912L7.33068 14.0487L15.5222 8.31291L13.8015 5.8554L15.4398 4.70825L20.0284 11.2615L18.3901 12.4086Z"
-                      fill="currentColor"
-                    />
-                    <path
-                      d="M20.7651 7.08331L22.4034 5.93616L21.2562 4.29785L19.6179 5.445L20.7651 7.08331Z"
-                      fill="currentColor"
-                    />
-                    <path
-                      d="M7.16753 19.046L3.72607 14.131L2.08777 15.2782L5.52923 20.1931L7.16753 19.046Z"
-                      fill="currentColor"
-                    />
-                    <path
-                      d="M4.38208 18.5549L2.74377 19.702L1.59662 18.0637L3.23492 16.9166L4.38208 18.5549Z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                  Gym
-                </div>
-                <Checkbox checked={state.gym}></Checkbox>
-              </div>
-            </div>
+            <Amenities></Amenities>
           </div>
         </MobileModal>
       )}
@@ -2676,4 +1973,4 @@ function Lodging({ userProfile, longitude, latitude }) {
 
 export { getServerSideProps };
 
-export default Lodging;
+export default Stays;

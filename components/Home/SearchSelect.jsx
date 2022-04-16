@@ -15,7 +15,7 @@ function SearchSelect({ setCurrentNavState, currentNavState }) {
           (currentNavState === 1 ? styles.showLinkLine : styles.link)
         }
       >
-        Lodging
+        Stays
       </div>
       <div
         onClick={(event) => {
