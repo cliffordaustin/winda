@@ -141,10 +141,8 @@ function Stays({ userProfile, longitude, latitude }) {
   const currencyToDollar = useSelector((state) => state.home.currencyToDollar);
 
   useEffect(() => {
-    if (!isFirstRender.current || process.browser) {
-      if (router.query) {
-        dispatch(setFilteredStays(router));
-      }
+    if (router.query) {
+      dispatch(setFilteredStays(router));
     }
   }, [router.query]);
 
@@ -162,19 +160,15 @@ function Stays({ userProfile, longitude, latitude }) {
       ? minRoom.value.replace("KES", "").replace("k", "000")
       : "";
     console.log("From outside");
-    if (isFirstRender.current) {
-      isMounted.current = false;
-    } else {
-      router.push({
-        query: {
-          ...router.query,
-          min_price: minPriceSelect,
-          max_price: maxPriceSelect,
-          min_rooms: minRoomSelect,
-          max_rooms: maxRoomSelect,
-        },
-      });
-    }
+    router.push({
+      query: {
+        ...router.query,
+        min_price: minPriceSelect,
+        max_price: maxPriceSelect,
+        min_rooms: minRoomSelect,
+        max_rooms: maxRoomSelect,
+      },
+    });
   }, [minPrice, maxPrice, minRoom, maxRoom]);
 
   const priceConversionRate = async () => {
