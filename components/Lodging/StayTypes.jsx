@@ -17,6 +17,8 @@ function StayTypes({ handlePopup, showStayTypesPopup, screenWidth }) {
     "LODGE",
   ];
 
+  const [deselectAll, setDeselectAll] = useState(false);
+
   //   const [activeOptions, setActiveOptions] = useState([]);
 
   const [currentOptions, setCurrentOptions] = useState([]);
@@ -46,6 +48,20 @@ function StayTypes({ handlePopup, showStayTypesPopup, screenWidth }) {
     setCurrentOptions(updatedList);
   };
 
+  const handleDeselectAll = (e) => {
+    if (e.target.checked) {
+      const allOptions = options
+        .toString()
+        .replace("[", "") // remove [
+        .replace("]", "") // remove ]
+        .trim();
+      router.push({ query: { ...router.query, type_of_stay: allOptions } });
+    } else {
+      setCurrentOptions([]);
+      router.push({ query: { ...router.query, type_of_stay: "" } });
+    }
+  };
+
   useEffect(() => {
     if (router.query.type_of_stay) {
       setCurrentOptions(router.query.type_of_stay.split(","));
@@ -54,6 +70,10 @@ function StayTypes({ handlePopup, showStayTypesPopup, screenWidth }) {
 
   const containsOption = (option) => {
     return currentOptions.includes(option);
+  };
+
+  const allItemsSelected = () => {
+    return currentOptions.length === options.length;
   };
 
   return (
@@ -84,6 +104,16 @@ function StayTypes({ handlePopup, showStayTypesPopup, screenWidth }) {
           className="absolute top-full mt-2 w-60 left-0"
           showPopup={showStayTypesPopup}
         >
+          <label className={styles.ratingItem}>
+            <Checkbox
+              checked={allItemsSelected()}
+              onChange={handleDeselectAll}
+            ></Checkbox>
+            {!allItemsSelected() && <div className="lowercase">select all</div>}
+            {allItemsSelected() && (
+              <div className="lowercase">deselect all</div>
+            )}
+          </label>
           {options.map((option, index) => (
             <label key={index} className={styles.ratingItem}>
               <Checkbox

@@ -159,7 +159,6 @@ function Stays({ userProfile, longitude, latitude }) {
     const minRoomSelect = minRoom
       ? minRoom.value.replace("KES", "").replace("k", "000")
       : "";
-    console.log("From outside");
     router.push({
       query: {
         ...router.query,
