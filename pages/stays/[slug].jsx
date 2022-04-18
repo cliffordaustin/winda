@@ -10,6 +10,9 @@ import ImageGallery from "../../components/Stay/ImageGallery";
 import Price from "../../components/Stay/Price";
 import Button from "../../components/ui/Button";
 import getToken from "../../lib/getToken";
+import Map from "../../components/Stay/Map";
+import ListItem from "../../components/ui/ListItem";
+import DescribesStay from "../../components/Stay/DescribesStay";
 
 const StaysDetail = ({ userProfile, stay }) => {
   const [state, setState] = useState({
@@ -22,6 +25,9 @@ const StaysDetail = ({ userProfile, stay }) => {
   });
 
   const dispatch = useDispatch();
+
+  const [showAllDescription, setShowAllDescription] = useState(false);
+  const [showAllUniqueFeature, setShowAllUniqueFeature] = useState(false);
 
   const priceConversionRate = async () => {
     try {
@@ -78,7 +84,7 @@ const StaysDetail = ({ userProfile, stay }) => {
         }}
         className={"w-5/6 mx-auto lg:hidden cursor-pointer "}
       >
-        <div className="flex items-center justify-center gap-2 !px-2 !py-2 !bg-gray-100 w-full rounded-full text-center ml-1 font-bold">
+        <div className="flex items-center mt-4 justify-center gap-2 !px-2 !py-2 !bg-gray-100 w-full rounded-full text-center ml-1 font-bold">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5 text-red-600"
@@ -95,15 +101,18 @@ const StaysDetail = ({ userProfile, stay }) => {
           <div>Nairobi</div>
         </div>
       </div>
-      <div className="w-[85%] mx-auto">
+      <div className="md:w-[85%] px-8 md:px-0 mx-auto">
         <ImageGallery
           images={stay.stay_images}
           stayType={stay.type_of_stay}
         ></ImageGallery>
-        <div className="flex px-10 mt-4">
-          <div className="flex flex-col w-[70%]">
+        <div className="flex  mt-4">
+          <div className="flex flex-col w-full">
             <div className="text-2xl font-bold">{stay.name}</div>
             <div className="text-lg font-medium">{stay.location}</div>
+            <div className="my-2 md:hidden">
+              <Price stayPrice={stay.price}></Price>
+            </div>
             <div className="text-gray-500 flex gap-2 text-sm truncate mt-3 flex-wrap">
               {stay.capacity && (
                 <div className="flex items-center gap-0.5">
@@ -199,10 +208,28 @@ const StaysDetail = ({ userProfile, stay }) => {
               )}
             </div>
           </div>
-          <div className="w-[30%]">
+          <div className="w-full z-10 px-4 md:hidden fixed bottom-0 left-0 right-0 bg-white py-2">
+            <div className="flex justify-between items-center gap-2">
+              <Button className="!bg-blue-800 !w-[50%] !border-2 border-blue-800">
+                Book
+              </Button>
+              <Button className="!bg-transparent !w-[50%] !text-black !border-2 border-blue-800">
+                Add to cart
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
+                </svg>
+              </Button>
+            </div>
+          </div>
+          <div className="w-fit px-4 hidden md:block">
             <div className="flex flex-col items-end">
               <Price stayPrice={stay.price}></Price>
-              <div className="flex items-center mt-2 justify-between self-start w-full">
+              <div className="flex items-center mt-2 gap-2 justify-between self-start w-full">
                 <Button className="!bg-blue-800 !w-[80px] !border-2 border-blue-800">
                   Book
                 </Button>
@@ -220,6 +247,135 @@ const StaysDetail = ({ userProfile, stay }) => {
               </div>
             </div>
           </div>
+        </div>
+        <div className="flex flex-col md:flex-row justify-between my-10 md:px-10">
+          <div className="w-full md:w-[38%] order-2 md:order-1 mt-4 md:mt-0">
+            <h1 className="font-bold text-2xl mb-5">Amenities</h1>
+            <div className="flex flex-col gap-2">
+              {stay.amenities.map((amenity, index) => (
+                <ListItem key={index}>{amenity}</ListItem>
+              ))}
+            </div>
+          </div>
+          <div className="w-full h-[350px] md:w-[60%] md:h-[450px] order-1 md:order-2">
+            <Map longitude={stay.longitude} latitude={stay.latitude}></Map>
+          </div>
+        </div>
+
+        <div className="md:px-10 mb-10">
+          <DescribesStay stay={stay}></DescribesStay>
+        </div>
+
+        <div className="md:px-10 mb-6">
+          <h1 className="font-bold text-2xl mb-5">Description</h1>
+          {!showAllDescription && (
+            <p className="ml-2 font-medium">{stay.description.slice(0, 500)}</p>
+          )}
+          {showAllDescription && (
+            <p className="ml-2 font-medium">{stay.description}</p>
+          )}
+          {!showAllDescription && (
+            <div
+              onClick={() => {
+                setShowAllDescription(true);
+              }}
+              className="font-bold text-blue-700 flex items-center gap-0.5 cursor-pointer ml-2"
+            >
+              <span>Read more</span>{" "}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 mt-1"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
+          )}
+          {showAllDescription && (
+            <div
+              onClick={() => {
+                setShowAllDescription(false);
+              }}
+              className="font-bold text-blue-700 flex items-center gap-0.5 cursor-pointer ml-2"
+            >
+              <span>Read less</span>{" "}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 mt-1"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
+          )}
+        </div>
+
+        <div className="md:px-10 mb-16 mt-10">
+          <h1 className="font-bold text-2xl mb-5">
+            What makes this place unique
+          </h1>
+          {!showAllUniqueFeature && (
+            <p className="ml-2 font-medium">
+              {stay.unique_about_place.slice(0, 500)}
+            </p>
+          )}
+          {showAllUniqueFeature && (
+            <p className="ml-2 font-medium">{stay.unique_about_place}</p>
+          )}
+          {!showAllUniqueFeature && (
+            <div
+              onClick={() => {
+                setShowAllUniqueFeature(true);
+              }}
+              className="font-bold text-blue-700 flex items-center gap-0.5 cursor-pointer ml-2"
+            >
+              <span>Read more</span>{" "}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 mt-1"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
+          )}
+          {showAllUniqueFeature && (
+            <div
+              onClick={() => {
+                setShowAllUniqueFeature(false);
+              }}
+              className="font-bold text-blue-700 flex items-center gap-0.5 cursor-pointer ml-2"
+            >
+              <span>Read less</span>{" "}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 mt-1"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -21,17 +21,17 @@ const ImageGallery = ({ images, stayType }) => {
       onMouseLeave={() => {
         setScaleImages(false);
       }}
-      className="px-20 mt-8 relative flex w-full h-[550px] overflow-hidden mx-auto rounded-3xl"
+      className="px-20 mt-8 relative flex w-full h-[420px] md:h-[550px] overflow-hidden stepWebkitSetting mx-auto rounded-3xl"
     >
       <div
         className={
-          "absolute w-[70%] left-0 h-full transition-all duration-200 ease-linear " +
+          "absolute w-full md:w-[70%] left-0 h-full transition-all duration-200 ease-linear " +
           (scaleImages ? "scale-105" : "")
         }
       >
         <Image layout="fill" alt="Logo" src={mainImage.image} priority></Image>
       </div>
-      <div className="w-[30%] h-full absolute right-0 flex flex-col rounded-tr-3xl rounded-br-3xl justify-between">
+      <div className="w-[30%] hidden h-full absolute right-0 md:flex flex-col rounded-tr-3xl rounded-br-3xl justify-between">
         {cleanedImages.map((image, index) => (
           <div
             key={index}
