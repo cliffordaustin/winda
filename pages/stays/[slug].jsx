@@ -101,12 +101,12 @@ const StaysDetail = ({ userProfile, stay }) => {
           <div>Nairobi</div>
         </div>
       </div>
-      <div className="md:w-[85%] px-8 md:px-0 mx-auto">
+      <div className="md:w-[85%] px-4 sm:px-8 md:px-0 mx-auto">
         <ImageGallery
           images={stay.stay_images}
           stayType={stay.type_of_stay}
         ></ImageGallery>
-        <div className="flex  mt-4">
+        <div className="flex mt-4">
           <div className="flex flex-col w-full">
             <div className="text-2xl font-bold">{stay.name}</div>
             <div className="text-lg font-medium">{stay.location}</div>
