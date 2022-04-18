@@ -109,10 +109,7 @@ function StayTypes({ handlePopup, showStayTypesPopup, screenWidth }) {
               checked={allItemsSelected()}
               onChange={handleDeselectAll}
             ></Checkbox>
-            {!allItemsSelected() && <div className="lowercase">select all</div>}
-            {allItemsSelected() && (
-              <div className="lowercase">deselect all</div>
-            )}
+            <div className="lowercase">select all</div>
           </label>
           {options.map((option, index) => (
             <label key={index} className={styles.ratingItem}>

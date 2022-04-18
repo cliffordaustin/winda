@@ -79,7 +79,7 @@ const StaysDetail = ({ userProfile, stay }) => {
           })
         }
       ></Navbar>
-      <div
+      {/* <div
         onClick={(e) => {
           e.stopPropagation();
           setState({ ...state, showSearchModal: true });
@@ -102,7 +102,7 @@ const StaysDetail = ({ userProfile, stay }) => {
           </svg>
           <div>Nairobi</div>
         </div>
-      </div>
+      </div> */}
       <div className="md:w-[85%] px-4 sm:px-8 md:px-0 mx-auto">
         <ImageGallery
           images={stay.stay_images}
