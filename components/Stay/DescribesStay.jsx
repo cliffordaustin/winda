@@ -366,7 +366,7 @@ function DescribesStay({ stay }) {
 }
 
 DescribesStay.propTypes = {
-  stay: PropTypes.array.isRequired,
+  stay: PropTypes.object,
 };
 
 export default DescribesStay;

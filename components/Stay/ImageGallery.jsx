@@ -21,7 +21,7 @@ const ImageGallery = ({ images, stayType }) => {
       onMouseLeave={() => {
         setScaleImages(false);
       }}
-      className="px-20 mt-8 relative flex w-full h-[420px] md:h-[550px] overflow-hidden stepWebkitSetting mx-auto rounded-3xl"
+      className="px-20 mt-8 relative flex w-full h-[350px] md:h-[550px] overflow-hidden stepWebkitSetting mx-auto rounded-3xl"
     >
       <div
         className={
