@@ -13,6 +13,8 @@ import getToken from "../../lib/getToken";
 import Map from "../../components/Stay/Map";
 import ListItem from "../../components/ui/ListItem";
 import DescribesStay from "../../components/Stay/DescribesStay";
+import ReviewOverview from "../../components/Stay/ReviewOverview";
+import Reviews from "../../components/Stay/Reviews";
 
 const StaysDetail = ({ userProfile, stay }) => {
   const [state, setState] = useState({
@@ -381,7 +383,7 @@ const StaysDetail = ({ userProfile, stay }) => {
           )}
         </div>
 
-        <div className="lg:px-10 mb-16 mt-10">
+        <div className="lg:px-10 mb-10 mt-10">
           <h1 className="font-bold text-2xl mb-5">
             What makes this place unique
           </h1>
@@ -437,6 +439,32 @@ const StaysDetail = ({ userProfile, stay }) => {
               </svg>
             </div>
           )}
+        </div>
+
+        <div className="max-w-[750px] mb-10 lg:px-10">
+          <h1 className="font-bold text-2xl mb-5">Reviews</h1>
+          <ReviewOverview></ReviewOverview>
+          <div className="flex gap-1 border border-gray-200 cursor-pointer rounded-md px-2 py-2 w-fit mt-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+              />
+            </svg>
+            <div>Add Review</div>
+          </div>
+        </div>
+
+        <div className="mb-16 lg:px-10">
+          <Reviews slug={stay.slug}></Reviews>
         </div>
       </div>
     </div>
