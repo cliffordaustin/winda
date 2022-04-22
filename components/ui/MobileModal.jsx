@@ -81,7 +81,7 @@ function Modal({
               <h1 className="text-lg font-bold">{title}</h1>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="absolute top-1 left-4 cursor-pointer lg:hidden w-5 h-5 z-20"
+                className="absolute top-1 left-4 cursor-pointer w-5 h-5 z-20"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"

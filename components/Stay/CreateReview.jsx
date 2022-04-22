@@ -82,6 +82,7 @@ const CreateReview = ({ show, setShowCreateReview }) => {
       }}
       containerHeight={90}
       title="Add a Review"
+      className="md:w-[650px]"
     >
       <div className="mt-6 flex flex-col items-center">
         <h1 className="text-gray-500 text-center">

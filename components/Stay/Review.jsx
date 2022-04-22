@@ -43,7 +43,7 @@ const Review = ({ isSafari, review }) => {
               fontSize={!isSafari ? 20 : 15}
               rating={review.rate}
             ></Rating>
-            <div className="font-bold text-xs ml-1">{review.rate}</div>
+            <div className="font-bold text-xs ml-1 mt-1">{review.rate}</div>
           </div>
         </div>
       </div>
