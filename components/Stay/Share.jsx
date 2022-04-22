@@ -31,6 +31,8 @@ const Share = ({ setShowShare, showShare, type_of_stay }) => {
     }
   };
 
+  console.log(location.href);
+
   useEffect(() => {
     const postUrl = encodeURI(location.href);
     const postTitle = `Check out this ${
@@ -45,19 +47,21 @@ const Share = ({ setShowShare, showShare, type_of_stay }) => {
         : "lodge"
     } at ${postUrl}`;
 
+    console.log(postTitle);
+
     facebookBtn.current.setAttribute(
       "href",
-      `https://www.facebook.com/sharer.php?u=${postUrl}
+      `https://www.facebook.com/sharer.php?u=${postTitle}
       `
     );
     twitterBtn.current.setAttribute(
       "href",
-      `https://twitter.com/share?url=${postUrl}&text=${postTitle}
+      `https://twitter.com/share?text=${postTitle}
       `
     );
     whatsappBtn.current.setAttribute(
       "href",
-      `https://api.whatsapp.com/send?text=${postTitle} ${postUrl}
+      `https://api.whatsapp.com/send?text=${postTitle}
       `
     );
   }, []);
@@ -87,6 +91,7 @@ const Share = ({ setShowShare, showShare, type_of_stay }) => {
           <div className="flex gap-6 justify-center items-center mt-4">
             <a
               ref={facebookBtn}
+              target="_blank"
               className="w-12 h-12 rounded-full shadow-xl bg-white flex justify-center items-center cursor-pointer"
             >
               <svg
@@ -106,6 +111,7 @@ const Share = ({ setShowShare, showShare, type_of_stay }) => {
             </a>
             <a
               ref={twitterBtn}
+              target="_blank"
               className="w-12 h-12 rounded-full shadow-xl bg-white flex justify-center items-center cursor-pointer"
             >
               <svg
@@ -125,6 +131,7 @@ const Share = ({ setShowShare, showShare, type_of_stay }) => {
 
             <a
               ref={whatsappBtn}
+              target="_blank"
               className="w-12 h-12 rounded-full shadow-xl bg-white flex justify-center items-center cursor-pointer"
             >
               <svg
