@@ -448,7 +448,11 @@ const StaysDetail = ({ userProfile, stay }) => {
           )}
         </div>
 
-        <div className="lg:px-10 mb-10 mt-10">
+        <div
+          className={
+            "lg:px-10 mt-10 " + (reviews.length > 0 ? "mb-10" : "mb-16")
+          }
+        >
           <h1 className="font-bold text-2xl mb-5">
             What makes this place unique
           </h1>
@@ -506,7 +510,7 @@ const StaysDetail = ({ userProfile, stay }) => {
           )}
         </div>
 
-        {!reviewLoading && (
+        {!reviewLoading && reviews.length > 0 && (
           <div>
             <div className="max-w-[750px] mb-10 lg:px-10">
               <h1 className="font-bold text-2xl mb-5">Reviews</h1>
@@ -515,7 +519,7 @@ const StaysDetail = ({ userProfile, stay }) => {
                 filterReview={filterReview}
               ></ReviewOverview>
               <div className="flex gap-2">
-                {!stay.has_user_reviewed && (
+                {!stay.has_user_reviewed && !stay.is_user_stay && (
                   <div
                     onClick={() => {
                       const token = Cookies.get("token");
@@ -618,6 +622,15 @@ export async function getServerSideProps(context) {
     if (token) {
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_baseURL}/user/`,
+        {
+          headers: {
+            Authorization: "Token " + token,
+          },
+        }
+      );
+
+      const stay = await axios.get(
+        `${process.env.NEXT_PUBLIC_baseURL}/stays/${context.query.slug}/`,
         {
           headers: {
             Authorization: "Token " + token,

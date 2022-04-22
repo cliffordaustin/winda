@@ -38,6 +38,11 @@ const Reviews = ({ reviews, spinner, filteredReviews }) => {
             ))}
         </div>
       )}
+      {filteredReviews && filteredReviews.length === 0 && (
+        <div className="text-center text-gray-500">
+          <p className="text-base">No reviews found for this filter</p>
+        </div>
+      )}
       {spinner && (
         <div className="flex justify-center items-center">
           <LoadingSpinerChase
