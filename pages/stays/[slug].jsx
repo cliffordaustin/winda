@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
+import Cookies from "js-cookie";
 
 // import { getServerSideProps } from "../../lib/getServerSideProps";
 import Navbar from "../../components/Stay/Navbar";
@@ -15,6 +16,8 @@ import ListItem from "../../components/ui/ListItem";
 import DescribesStay from "../../components/Stay/DescribesStay";
 import ReviewOverview from "../../components/Stay/ReviewOverview";
 import Reviews from "../../components/Stay/Reviews";
+import CreateReview from "../../components/Stay/CreateReview";
+import LoadingSpinerChase from "../../components/ui/LoadingSpinerChase";
 
 const StaysDetail = ({ userProfile, stay }) => {
   const [state, setState] = useState({
@@ -28,10 +31,22 @@ const StaysDetail = ({ userProfile, stay }) => {
 
   const dispatch = useDispatch();
 
+  const router = useRouter();
+
   const [showMoreAmenities, setShowMoreAmenities] = useState(false);
 
   const [showAllDescription, setShowAllDescription] = useState(false);
   const [showAllUniqueFeature, setShowAllUniqueFeature] = useState(false);
+
+  const [spinner, setSpinner] = useState(false);
+
+  const [reviews, setReviews] = useState([]);
+
+  const [filteredReviews, setFilteredReviews] = useState(null);
+
+  const [showCreateReview, setShowCreateReview] = useState(false);
+
+  const [reviewLoading, setReviewLoading] = useState(false);
 
   const priceConversionRate = async () => {
     try {
@@ -55,6 +70,44 @@ const StaysDetail = ({ userProfile, stay }) => {
   useEffect(() => {
     priceConversionRate();
   });
+
+  const getReview = async () => {
+    setReviewLoading(true);
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_baseURL}/stays/${stay.slug}/reviews/`
+      );
+
+      setReviews(response.data);
+      setReviewLoading(false);
+    } catch (error) {
+      setReviewLoading(false);
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    try {
+      axios.post(
+        `${process.env.NEXT_PUBLIC_baseURL}/stays/${stay.slug}/add-view/`
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  useEffect(() => {
+    getReview();
+  }, []);
+
+  const filterReview = async (rate) => {
+    setSpinner(true);
+    const { data } = await axios.get(
+      `${process.env.NEXT_PUBLIC_baseURL}/stays/${stay.slug}/reviews/?rate=${rate}`
+    );
+    setFilteredReviews(data);
+    setSpinner(false);
+  };
 
   return (
     <div>
@@ -212,6 +265,7 @@ const StaysDetail = ({ userProfile, stay }) => {
               )}
             </div>
           </div>
+
           <div className="w-full z-10 px-4 md:hidden fixed bottom-0 left-0 right-0 bg-white py-2">
             <div className="flex justify-between items-center gap-2">
               <Button className="!bg-blue-800 !w-[50%] !border-2 border-blue-800">
@@ -252,6 +306,17 @@ const StaysDetail = ({ userProfile, stay }) => {
             </div>
           </div>
         </div>
+
+        {stay.views > 0 && stay.views === 1 && (
+          <div className="mt-2 text-gray-600">
+            {stay.views} person has viewed this listing
+          </div>
+        )}
+        {stay.views > 0 && stay.views > 1 && (
+          <div className="mt-2 text-gray-600">
+            {stay.views} people has viewed this listing
+          </div>
+        )}
 
         <div className="flex flex-col md:flex-row justify-between my-10 lg:px-10">
           <div className="border h-fit border-gray-200 rounded-xl overflow-hidden w-full md:w-[48%] order-2 md:order-1 mt-4 md:mt-0">
@@ -441,31 +506,100 @@ const StaysDetail = ({ userProfile, stay }) => {
           )}
         </div>
 
-        <div className="max-w-[750px] mb-10 lg:px-10">
-          <h1 className="font-bold text-2xl mb-5">Reviews</h1>
-          <ReviewOverview></ReviewOverview>
-          <div className="flex gap-1 border border-gray-200 cursor-pointer rounded-md px-2 py-2 w-fit mt-4">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-              />
-            </svg>
-            <div>Add Review</div>
-          </div>
-        </div>
+        {!reviewLoading && (
+          <div>
+            <div className="max-w-[750px] mb-10 lg:px-10">
+              <h1 className="font-bold text-2xl mb-5">Reviews</h1>
+              <ReviewOverview
+                reviews={reviews}
+                filterReview={filterReview}
+              ></ReviewOverview>
+              <div className="flex gap-2">
+                {!stay.has_user_reviewed && (
+                  <div
+                    onClick={() => {
+                      const token = Cookies.get("token");
+                      if (token) {
+                        setShowCreateReview(true);
+                      } else {
+                        router.push({
+                          pathname: "/login",
+                          query: { redirect: `${router.asPath}` },
+                        });
+                      }
+                    }}
+                    className="flex gap-1 border border-gray-200 cursor-pointer rounded-md px-2 py-2 w-fit mt-4"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                      />
+                    </svg>
+                    <div>Add Review</div>
+                  </div>
+                )}
+                {filteredReviews && (
+                  <div
+                    onClick={() => {
+                      getReview();
+                      setFilteredReviews(null);
+                    }}
+                    className="flex gap-1 border border-gray-200 cursor-pointer rounded-md px-2 py-2 w-fit mt-4"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                    <div>Clear Filter</div>
+                  </div>
+                )}
+              </div>
+            </div>
 
-        <div className="mb-16 lg:px-10">
-          <Reviews slug={stay.slug}></Reviews>
-        </div>
+            <div>
+              <CreateReview
+                show={showCreateReview}
+                setShowCreateReview={setShowCreateReview}
+              ></CreateReview>
+            </div>
+
+            <div className="mb-16 lg:px-10">
+              <Reviews
+                reviews={reviews}
+                spinner={spinner}
+                filteredReviews={filteredReviews}
+              ></Reviews>
+            </div>
+          </div>
+        )}
+        {reviewLoading && (
+          <div className="flex items-center justify-center mb-16">
+            <LoadingSpinerChase
+              width={35}
+              height={35}
+              color="#000"
+            ></LoadingSpinerChase>
+          </div>
+        )}
       </div>
     </div>
   );

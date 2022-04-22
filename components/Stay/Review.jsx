@@ -47,6 +47,7 @@ const Review = ({ isSafari, review }) => {
           </div>
         </div>
       </div>
+      <div className="font-bold mt-2">{'"' + review.title + '"'}</div>
       {review.message.length > 250 && (
         <div className="mt-4 md:hidden">
           {!showText && <span>{review.message.slice(0, 250)}</span>}

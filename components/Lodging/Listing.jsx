@@ -60,7 +60,7 @@ function Listing({ listing, getDistance, userLatLng }) {
 
   useEffect(() => {
     priceConversion(price());
-  });
+  }, [price(), currencyToDollar, priceConversionRate]);
 
   return (
     <div

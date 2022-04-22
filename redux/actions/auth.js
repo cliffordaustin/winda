@@ -22,7 +22,7 @@ export const signup = (payload) => async (dispatch) => {
         token: response.data.key,
       },
     });
-    payload.router.push("/");
+    payload.router.push(payload.router.query.redirect || "/");
   } catch (error) {
     console.log(error.response.data);
 
@@ -49,7 +49,7 @@ export const login = (payload) => async (dispatch) => {
         token: response.data.key,
       },
     });
-    payload.router.push("/");
+    payload.router.push(payload.router.query.redirect || "/");
     dispatch({
       type: "CHANGE_LOGIN_ERROR_FALSE",
     });

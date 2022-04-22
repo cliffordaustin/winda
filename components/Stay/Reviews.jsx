@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Review from "./Review";
 import axios from "axios";
+import LoadingSpinerChase from "../ui/LoadingSpinerChase";
 
-const Reviews = ({ slug }) => {
+const Reviews = ({ reviews, spinner, filteredReviews }) => {
   const [isSafari, setIsSafari] = useState(false);
-
-  const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
     if (process.browser) {
@@ -17,27 +16,38 @@ const Reviews = ({ slug }) => {
     }
   }, []);
 
-  useEffect(() => {
-    const getReview = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_baseURL}/stays/${slug}/reviews/`
-        );
-
-        setReviews(response.data.results);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    getReview();
-  });
   return (
-    <div className="flex flex-col gap-4">
-      {reviews.map((review) => (
-        <Review isSafari={isSafari} key={review.id} review={review}></Review>
-      ))}
-    </div>
+    <>
+      {!spinner && (
+        <div className="flex flex-col gap-4">
+          {!filteredReviews &&
+            reviews.map((review) => (
+              <Review
+                isSafari={isSafari}
+                key={review.id}
+                review={review}
+              ></Review>
+            ))}
+          {filteredReviews &&
+            filteredReviews.map((review) => (
+              <Review
+                isSafari={isSafari}
+                key={review.id}
+                review={review}
+              ></Review>
+            ))}
+        </div>
+      )}
+      {spinner && (
+        <div className="flex justify-center items-center">
+          <LoadingSpinerChase
+            width={35}
+            height={35}
+            color="#000"
+          ></LoadingSpinerChase>
+        </div>
+      )}
+    </>
   );
 };
 
