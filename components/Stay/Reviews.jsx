@@ -4,7 +4,14 @@ import Review from "./Review";
 import axios from "axios";
 import LoadingSpinerChase from "../ui/LoadingSpinerChase";
 
-const Reviews = ({ reviews, spinner, filteredReviews }) => {
+const Reviews = ({
+  reviews,
+  spinner,
+  filteredReviews,
+  setShowAllReviews,
+  count,
+  reviewLoading,
+}) => {
   const [isSafari, setIsSafari] = useState(false);
 
   useEffect(() => {
@@ -50,6 +57,27 @@ const Reviews = ({ reviews, spinner, filteredReviews }) => {
             height={35}
             color="#000"
           ></LoadingSpinerChase>
+        </div>
+      )}
+      {!filteredReviews && !spinner && count > reviews.length && (
+        <div
+          onClick={() => {
+            setShowAllReviews(true);
+          }}
+          className="border border-gray-300 rounded-xl mt-4 py-3 cursor-pointer text-center font-bold"
+        >
+          Show all reviews
+        </div>
+      )}
+
+      {filteredReviews && !spinner && count > filteredReviews.length && (
+        <div
+          onClick={() => {
+            setShowAllReviews(true);
+          }}
+          className="border border-gray-300 rounded-xl mt-4 py-3 cursor-pointer text-center font-bold"
+        >
+          Show all reviews
         </div>
       )}
     </>

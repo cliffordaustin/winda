@@ -19,6 +19,7 @@ import Reviews from "../../components/Stay/Reviews";
 import CreateReview from "../../components/Stay/CreateReview";
 import LoadingSpinerChase from "../../components/ui/LoadingSpinerChase";
 import Share from "../../components/Stay/Share";
+import AllReviews from "../../components/Stay/AllReviews";
 
 const StaysDetail = ({ userProfile, stay }) => {
   const [state, setState] = useState({
@@ -39,6 +40,8 @@ const StaysDetail = ({ userProfile, stay }) => {
   const [showAllDescription, setShowAllDescription] = useState(false);
   const [showAllUniqueFeature, setShowAllUniqueFeature] = useState(false);
 
+  const [showAllReviews, setShowAllReviews] = useState(false);
+
   const [spinner, setSpinner] = useState(false);
 
   const [reviews, setReviews] = useState([]);
@@ -52,6 +55,16 @@ const StaysDetail = ({ userProfile, stay }) => {
   const [liked, setLiked] = useState(false);
 
   const [showShare, setShowShare] = useState(false);
+
+  const [reviewCount, setReviewCount] = useState(0);
+
+  const [nextReview, setNextReview] = useState(null);
+
+  const [prevReview, setPrevReview] = useState(null);
+
+  const [reviewPageSize, setReviewPageSize] = useState(0);
+
+  const [filterRateVal, setFilterRateVal] = useState(0);
 
   const priceConversionRate = async () => {
     try {
@@ -83,7 +96,11 @@ const StaysDetail = ({ userProfile, stay }) => {
         `${process.env.NEXT_PUBLIC_baseURL}/stays/${stay.slug}/reviews/`
       );
 
-      setReviews(response.data);
+      setReviews(response.data.results);
+      setReviewCount(response.data.count);
+      setReviewPageSize(response.data.page_size);
+      setNextReview(response.data.next);
+      setPrevReview(response.data.previous);
       setReviewLoading(false);
     } catch (error) {
       setReviewLoading(false);
@@ -110,7 +127,10 @@ const StaysDetail = ({ userProfile, stay }) => {
     const { data } = await axios.get(
       `${process.env.NEXT_PUBLIC_baseURL}/stays/${stay.slug}/reviews/?rate=${rate}`
     );
-    setFilteredReviews(data);
+    setFilteredReviews(data.results);
+    setReviewCount(data.count);
+    setNextReview(data.next);
+    setPrevReview(data.previous);
     setSpinner(false);
   };
 
@@ -590,6 +610,8 @@ const StaysDetail = ({ userProfile, stay }) => {
               <ReviewOverview
                 reviews={reviews}
                 filterReview={filterReview}
+                stay={stay}
+                setFilterRateVal={setFilterRateVal}
               ></ReviewOverview>
               <div className="flex gap-2">
                 {!stay.has_user_reviewed && !stay.is_user_stay && (
@@ -667,11 +689,27 @@ const StaysDetail = ({ userProfile, stay }) => {
               ></Share>
             </div>
 
+            {showAllReviews && (
+              <div>
+                <AllReviews
+                  showAllReviews={showAllReviews}
+                  setShowAllReviews={setShowAllReviews}
+                  next={nextReview}
+                  filterRateVal={filterRateVal}
+                  filteredReviews={filteredReviews}
+                  reviewPageSize={reviewPageSize}
+                  reviewCount={reviewCount}
+                ></AllReviews>
+              </div>
+            )}
+
             <div className="mb-16 lg:px-10">
               <Reviews
                 reviews={reviews}
                 spinner={spinner}
                 filteredReviews={filteredReviews}
+                setShowAllReviews={setShowAllReviews}
+                count={reviewCount}
               ></Reviews>
             </div>
           </div>

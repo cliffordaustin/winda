@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import Rating from "../ui/Rating";
 import axios from "axios";
 
-const ReviewOverview = ({ reviews, filterReview }) => {
+const ReviewOverview = ({ reviews, filterReview, stay, setFilterRateVal }) => {
   const [isSafari, setIsSafari] = useState(false);
 
   useEffect(() => {
@@ -16,25 +16,49 @@ const ReviewOverview = ({ reviews, filterReview }) => {
   }, []);
 
   const averageRating = () => {
-    let totalRating = 0;
-    reviews.forEach((review) => {
-      totalRating += review.rate;
-    });
-    return totalRating / reviews.length;
+    return stay.count_total_review_rates / stay.total_num_of_reviews;
   };
 
   const rates = [5, 4, 3, 2, 1];
 
   const starPercentage = (star) => {
-    let numberOfReviewers = 0;
-    reviews.forEach((review) => {
-      if (Math.floor(review.rate) === star) {
-        numberOfReviewers++;
-      }
-    });
-    return Math.floor(
-      100 - ((reviews.length - numberOfReviewers) / reviews.length) * 100
-    );
+    if (star === 1) {
+      return Math.floor(
+        100 -
+          ((stay.total_num_of_reviews - stay.num_of_one_stars) /
+            stay.total_num_of_reviews) *
+            100
+      );
+    } else if (star === 2) {
+      return Math.floor(
+        100 -
+          ((stay.total_num_of_reviews - stay.num_of_two_stars) /
+            stay.total_num_of_reviews) *
+            100
+      );
+    } else if (star === 3) {
+      return Math.floor(
+        100 -
+          ((stay.total_num_of_reviews - stay.num_of_three_stars) /
+            stay.total_num_of_reviews) *
+            100
+      );
+    } else if (star === 4) {
+      return Math.floor(
+        100 -
+          ((stay.total_num_of_reviews - stay.num_of_four_stars) /
+            stay.total_num_of_reviews) *
+            100
+      );
+    }
+    if (star === 5) {
+      return Math.floor(
+        100 -
+          ((stay.total_num_of_reviews - stay.num_of_five_stars) /
+            stay.total_num_of_reviews) *
+            100
+      );
+    }
   };
 
   return (
@@ -46,7 +70,7 @@ const ReviewOverview = ({ reviews, filterReview }) => {
             <p className="text-base self-end">/5</p>
           </div>
           <div className="text-gray-500 mt-1 text-sm md:text-base sm:whitespace-nowrap">
-            Based on {reviews.length} reviews
+            Based on {stay.total_num_of_reviews} reviews
           </div>
           <div className="mt-1 sm:mt-3 hidden md:block">
             <Rating
@@ -66,6 +90,7 @@ const ReviewOverview = ({ reviews, filterReview }) => {
             <div
               onClick={() => {
                 filterReview(rate);
+                setFilterRateVal(rate);
               }}
               key={index}
               className={"flex items-center gap-2 w-full cursor-pointer"}

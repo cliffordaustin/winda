@@ -31,8 +31,6 @@ const Share = ({ setShowShare, showShare, type_of_stay }) => {
     }
   };
 
-  console.log(location.href);
-
   useEffect(() => {
     const postUrl = encodeURI(location.href);
     const postTitle = `Check out this ${
@@ -46,8 +44,6 @@ const Share = ({ setShowShare, showShare, type_of_stay }) => {
         ? "campsite"
         : "lodge"
     } at ${postUrl}`;
-
-    console.log(postTitle);
 
     facebookBtn.current.setAttribute(
       "href",

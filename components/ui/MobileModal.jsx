@@ -11,6 +11,7 @@ function Modal({
   className = "",
   children,
   backdropClassName = "",
+  myref,
   closeAllPopups = () => {},
 }) {
   const backdrop = {
@@ -72,6 +73,7 @@ function Modal({
             initial="hidden"
             exit="hidden"
             style={{ height: (containerHeight || "80") + "%" }}
+            ref={myref}
             className={
               "py-4 bg-white shadow-lg mx-auto sm:rounded-xl rounded-t-[2rem] z-30 overflow-y-scroll relative " +
               className
