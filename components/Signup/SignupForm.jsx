@@ -31,10 +31,10 @@ export default function Signup(props) {
     },
     validationSchema: Yup.object({
       first_name: Yup.string()
-        .max(120, "This field has a max lenght of 120")
+        .max(120, "This field has a max length of 120")
         .required("This field is required"),
       last_name: Yup.string()
-        .max(120, "This field has a max lenght of 120")
+        .max(120, "This field has a max length of 120")
         .required("This field is required"),
       email: Yup.string()
         .email("Invalid email")

@@ -4,13 +4,7 @@ import "react-day-picker/dist/style.css";
 import { motion, AnimatePresence } from "framer-motion";
 import PropTypes from "prop-types";
 
-export default function DatePicker({
-  setDate,
-  date,
-  showDate,
-  disableDate,
-  className = "",
-}) {
+export default function DatePicker({ setDate, date, className = "" }) {
   const variants = {
     hide: {
       scale: 0.9,
@@ -30,24 +24,9 @@ export default function DatePicker({
   };
 
   return (
-    <AnimatePresence exitBeforeEnter>
-      {showDate && (
-        <motion.div
-          variants={variants}
-          animate="show"
-          initial="hide"
-          exit="exit"
-          className={"absolute top-0 left-0 w-full z-30 " + className}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <DayPicker
-            disabled={{ before: disableDate }}
-            selected={date}
-            onSelect={setDate}
-          />
-        </motion.div>
-      )}
-    </AnimatePresence>
+    <div className={"w-full " + className} onClick={(e) => e.stopPropagation()}>
+      <DayPicker mode="range" selected={date} onSelect={setDate} />
+    </div>
   );
 }
 

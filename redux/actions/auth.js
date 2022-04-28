@@ -22,6 +22,27 @@ export const signup = (payload) => async (dispatch) => {
         token: response.data.key,
       },
     });
+    if (Cookies.get("cart")) {
+      let cart = Cookies.get("cart");
+      cart = JSON.parse(decodeURIComponent(cart));
+
+      for (const item of cart) {
+        await axios
+          .post(
+            `${process.env.NEXT_PUBLIC_baseURL}/stays/${item.slug}/add-to-cart/`,
+            {},
+            {
+              headers: {
+                Authorization: "Token " + response.data.key,
+              },
+            }
+          )
+          .catch((err) => {
+            console.log(err.response);
+          });
+      }
+      Cookies.remove("cart");
+    }
     payload.router.push(payload.router.query.redirect || "/");
   } catch (error) {
     console.log(error.response.data);
@@ -49,6 +70,29 @@ export const login = (payload) => async (dispatch) => {
         token: response.data.key,
       },
     });
+
+    if (Cookies.get("cart")) {
+      let cart = Cookies.get("cart");
+      cart = JSON.parse(decodeURIComponent(cart));
+
+      for (const item of cart) {
+        await axios
+          .post(
+            `${process.env.NEXT_PUBLIC_baseURL}/stays/${item.slug}/add-to-cart/`,
+            {},
+            {
+              headers: {
+                Authorization: "Token " + response.data.key,
+              },
+            }
+          )
+          .catch((err) => {
+            console.log(err.response);
+          });
+      }
+      Cookies.remove("cart");
+    }
+
     payload.router.push(payload.router.query.redirect || "/");
     dispatch({
       type: "CHANGE_LOGIN_ERROR_FALSE",

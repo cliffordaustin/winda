@@ -20,8 +20,9 @@ import CreateReview from "../../components/Stay/CreateReview";
 import LoadingSpinerChase from "../../components/ui/LoadingSpinerChase";
 import Share from "../../components/Stay/Share";
 import AllReviews from "../../components/Stay/AllReviews";
+import getCart from "../../lib/getCart";
 
-const StaysDetail = ({ userProfile, stay }) => {
+const StaysDetail = ({ userProfile, stay, inCart }) => {
   const [state, setState] = useState({
     showDropdown: false,
     currentNavState: 1,
@@ -88,6 +89,43 @@ const StaysDetail = ({ userProfile, stay }) => {
   useEffect(() => {
     priceConversionRate();
   });
+
+  const addToBasket = async () => {
+    const token = Cookies.get("token");
+
+    if (token) {
+      axios
+        .post(
+          `${process.env.NEXT_PUBLIC_baseURL}/stays/${stay.slug}/add-to-cart/`,
+          {},
+          {
+            headers: {
+              Authorization: "Token " + token,
+            },
+          }
+        )
+        .then(() => location.reload())
+        .catch((err) => {
+          console.log(err.response);
+        });
+    } else if (!token) {
+      let cookieVal = Cookies.get("cart");
+
+      if (cookieVal !== undefined) {
+        cookieVal = JSON.parse(cookieVal);
+      }
+
+      const data = [...(cookieVal || [])];
+      const exist = data.some((val) => {
+        return val.slug === stay.slug;
+      });
+      if (!exist) {
+        data.push({ slug: stay.slug });
+        Cookies.set("cart", JSON.stringify(data));
+        location.reload();
+      }
+    }
+  };
 
   const getReview = async () => {
     setReviewLoading(true);
@@ -364,17 +402,130 @@ const StaysDetail = ({ userProfile, stay }) => {
               <Button className="!bg-blue-800 !w-[50%] !border-2 border-blue-800">
                 Book
               </Button>
-              <Button className="!bg-transparent !w-[50%] !text-black !border-2 border-blue-800">
-                Add to cart
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
+              {!inCart && (
+                <Button
+                  onClick={addToBasket}
+                  className="!bg-transparent !w-[50%] !text-black !border-2 border-blue-800"
                 >
-                  <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
-                </svg>
-              </Button>
+                  Add to basket
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    viewBox="0 0 24 24"
+                    version="1.1"
+                  >
+                    <title>bag</title>
+                    <desc>Created with Sketch.</desc>
+                    <defs />
+                    <g
+                      id="Page-1"
+                      stroke="none"
+                      strokeWidth="1"
+                      fill="none"
+                      fillRule="evenodd"
+                    >
+                      <g
+                        id="Artboard-4"
+                        transform="translate(-620.000000, -291.000000)"
+                      >
+                        <g
+                          id="94"
+                          transform="translate(620.000000, 291.000000)"
+                        >
+                          <rect
+                            id="Rectangle-40"
+                            stroke="#333333"
+                            strokeWidth="2"
+                            x="4"
+                            y="7"
+                            width="16"
+                            height="16"
+                            rx="1"
+                          />
+                          <path
+                            d="M16,10 L16,5 C16,2.790861 14.209139,1 12,1 C9.790861,1 8,2.790861 8,5 L8,10"
+                            id="Oval-21"
+                            stroke="#333333"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                          />
+                          <rect
+                            id="Rectangle-41"
+                            fill="#333333"
+                            x="5"
+                            y="18"
+                            width="14"
+                            height="2"
+                          />
+                        </g>
+                      </g>
+                    </g>
+                  </svg>
+                </Button>
+              )}
+              {inCart && (
+                <Button
+                  onClick={() => {
+                    router.push({ pathname: "/cart" });
+                  }}
+                  className="!bg-transparent !w-[185px] !text-black !border-2 border-blue-800"
+                >
+                  View in basket
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    viewBox="0 0 24 24"
+                    version="1.1"
+                  >
+                    <title>bag</title>
+                    <desc>Created with Sketch.</desc>
+                    <defs />
+                    <g
+                      id="Page-1"
+                      stroke="none"
+                      strokeWidth="1"
+                      fill="none"
+                      fillRule="evenodd"
+                    >
+                      <g
+                        id="Artboard-4"
+                        transform="translate(-620.000000, -291.000000)"
+                      >
+                        <g
+                          id="94"
+                          transform="translate(620.000000, 291.000000)"
+                        >
+                          <rect
+                            id="Rectangle-40"
+                            stroke="#333333"
+                            strokeWidth="2"
+                            x="4"
+                            y="7"
+                            width="16"
+                            height="16"
+                            rx="1"
+                          />
+                          <path
+                            d="M16,10 L16,5 C16,2.790861 14.209139,1 12,1 C9.790861,1 8,2.790861 8,5 L8,10"
+                            id="Oval-21"
+                            stroke="#333333"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                          />
+                          <rect
+                            id="Rectangle-41"
+                            fill="#333333"
+                            x="5"
+                            y="18"
+                            width="14"
+                            height="2"
+                          />
+                        </g>
+                      </g>
+                    </g>
+                  </svg>
+                </Button>
+              )}
             </div>
           </div>
           <div className="w-fit px-4 hidden md:block">
@@ -384,17 +535,130 @@ const StaysDetail = ({ userProfile, stay }) => {
                 <Button className="!bg-blue-800 !w-[80px] !border-2 border-blue-800">
                   Book
                 </Button>
-                <Button className="!bg-transparent !w-[185px] !text-black !border-2 border-blue-800">
-                  Add to cart
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
+                {!inCart && (
+                  <Button
+                    onClick={addToBasket}
+                    className="!bg-transparent !w-[185px] !text-black !border-2 border-blue-800"
                   >
-                    <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
-                  </svg>
-                </Button>
+                    Add to basket
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      viewBox="0 0 24 24"
+                      version="1.1"
+                    >
+                      <title>bag</title>
+                      <desc>Created with Sketch.</desc>
+                      <defs />
+                      <g
+                        id="Page-1"
+                        stroke="none"
+                        strokeWidth="1"
+                        fill="none"
+                        fillRule="evenodd"
+                      >
+                        <g
+                          id="Artboard-4"
+                          transform="translate(-620.000000, -291.000000)"
+                        >
+                          <g
+                            id="94"
+                            transform="translate(620.000000, 291.000000)"
+                          >
+                            <rect
+                              id="Rectangle-40"
+                              stroke="#333333"
+                              strokeWidth="2"
+                              x="4"
+                              y="7"
+                              width="16"
+                              height="16"
+                              rx="1"
+                            />
+                            <path
+                              d="M16,10 L16,5 C16,2.790861 14.209139,1 12,1 C9.790861,1 8,2.790861 8,5 L8,10"
+                              id="Oval-21"
+                              stroke="#333333"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                            />
+                            <rect
+                              id="Rectangle-41"
+                              fill="#333333"
+                              x="5"
+                              y="18"
+                              width="14"
+                              height="2"
+                            />
+                          </g>
+                        </g>
+                      </g>
+                    </svg>
+                  </Button>
+                )}
+                {inCart && (
+                  <Button
+                    onClick={() => {
+                      router.push({ pathname: "/cart" });
+                    }}
+                    className="!bg-transparent !w-[185px] !text-black !border-2 border-blue-800"
+                  >
+                    View in basket
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      viewBox="0 0 24 24"
+                      version="1.1"
+                    >
+                      <title>bag</title>
+                      <desc>Created with Sketch.</desc>
+                      <defs />
+                      <g
+                        id="Page-1"
+                        stroke="none"
+                        strokeWidth="1"
+                        fill="none"
+                        fillRule="evenodd"
+                      >
+                        <g
+                          id="Artboard-4"
+                          transform="translate(-620.000000, -291.000000)"
+                        >
+                          <g
+                            id="94"
+                            transform="translate(620.000000, 291.000000)"
+                          >
+                            <rect
+                              id="Rectangle-40"
+                              stroke="#333333"
+                              strokeWidth="2"
+                              x="4"
+                              y="7"
+                              width="16"
+                              height="16"
+                              rx="1"
+                            />
+                            <path
+                              d="M16,10 L16,5 C16,2.790861 14.209139,1 12,1 C9.790861,1 8,2.790861 8,5 L8,10"
+                              id="Oval-21"
+                              stroke="#333333"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                            />
+                            <rect
+                              id="Rectangle-41"
+                              fill="#333333"
+                              x="5"
+                              y="18"
+                              width="14"
+                              height="2"
+                            />
+                          </g>
+                        </g>
+                      </g>
+                    </svg>
+                  </Button>
+                )}
               </div>
             </div>
           </div>
@@ -731,8 +995,10 @@ const StaysDetail = ({ userProfile, stay }) => {
 StaysDetail.propTypes = {};
 
 export async function getServerSideProps(context) {
+  let exist = false;
   try {
     const token = getToken(context);
+    let cart = getCart(context);
 
     const stay = await axios.get(
       `${process.env.NEXT_PUBLIC_baseURL}/stays/${context.query.slug}/`
@@ -748,6 +1014,19 @@ export async function getServerSideProps(context) {
         }
       );
 
+      const { data } = await axios.get(
+        `${process.env.NEXT_PUBLIC_baseURL}/user-cart/`,
+        {
+          headers: {
+            Authorization: "Token " + token,
+          },
+        }
+      );
+
+      exist = data.results.some((val) => {
+        return val.slug === context.query.slug;
+      });
+
       const stay = await axios.get(
         `${process.env.NEXT_PUBLIC_baseURL}/stays/${context.query.slug}/`,
         {
@@ -761,6 +1040,21 @@ export async function getServerSideProps(context) {
         props: {
           userProfile: response.data[0],
           stay: stay.data,
+          inCart: exist,
+        },
+      };
+    } else if (cart) {
+      cart = JSON.parse(decodeURIComponent(cart));
+
+      exist = cart.some((val) => {
+        return val.slug === context.query.slug;
+      });
+
+      return {
+        props: {
+          userProfile: "",
+          stay: stay.data,
+          inCart: exist,
         },
       };
     }
@@ -769,6 +1063,7 @@ export async function getServerSideProps(context) {
       props: {
         userProfile: "",
         stay: stay.data,
+        inCart: exist,
       },
     };
   } catch (error) {
@@ -784,6 +1079,7 @@ export async function getServerSideProps(context) {
         props: {
           userProfile: "",
           stay: "",
+          inCart: exist,
         },
       };
     }

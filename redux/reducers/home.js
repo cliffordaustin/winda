@@ -5,12 +5,20 @@ import storage from "redux-persist/lib/storage";
 const homePageState = {
   topBanner: true,
   currencyToDollar: false,
+  currentCartItemId: 0,
+  currentCartItemName: "",
 };
 
 const homePageReducer = (state = homePageState, action) => {
   switch (action.type) {
     case "HIDE_TOP_BANNER":
       return { ...state, topBanner: false };
+
+    case "SET_CURRENT_CART_ITEM_NAME":
+      return { ...state, currentCartItemName: action.payload };
+
+    case "SET_CURRENT_CART_ITEM_ID":
+      return { ...state, currentCartItemId: action.payload };
 
     case "SHOW_TOP_BANNER":
       return { ...state, topBanner: true };

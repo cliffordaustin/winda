@@ -101,28 +101,48 @@ body {
   -webkit-transform: translate3d(0, 0, 0);
 }
 
-.DayPicker-Day {
+/* .rdp-month {
+  @apply !w-full;
+} */
+
+.rdp-table {
+  @apply !w-full !max-w-none;
+}
+
+.rdp-cell {
   @apply w-10 h-10 sm:!w-12 sm:!h-12 rounded-full outline-none transition-colors ease-linear duration-200;
 }
 
-.DayPicker:not(.DayPicker--interactionDisabled)
-  .DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover {
-  @apply !bg-red-100;
+.rdp-day {
+  @apply !w-full !h-full !max-w-none;
 }
 
-.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside):hover {
-  @apply !bg-red-500;
+.rdp-button:focus:not([disabled]),
+.rdp-button:active:not([disabled]) {
+  @apply outline-none !bg-red-400 !border-none;
+}
+
+.rdp:not(.rdp--interactionDisabled)
+  .rdp-day:not(.rdp-day--disabled):not(.rdp-day--selected):not(.rdp-day--outside):hover {
+  @apply !bg-red-400;
 }
 
 .DayPicker-wrapper {
   @apply !outline-none bg-white p-0 py-2 rounded-2xl shadow-xl border border-gray-200;
 }
 
-.DayPicker-NavButton {
+.rdp-day_selected:not([disabled]),
+.rdp-day_selected:focus:not([disabled]),
+.rdp-day_selected:active:not([disabled]),
+.rdp-day_selected:hover:not([disabled]) {
+  @apply !bg-red-400;
+}
+
+.rdp-button {
   @apply !outline-none;
 }
 
-.DayPicker-Day--selected {
+.rdp-cell--selected {
   @apply !bg-red-600 !rounded-full w-10 h-10 sm:!w-12 sm:!h-12 outline-none transition-colors ease-linear duration-200;
 }
 

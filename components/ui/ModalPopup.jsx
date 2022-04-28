@@ -11,6 +11,7 @@ function Modal({
   className = "",
   children,
   backdropClassName = "",
+  heightVal = "px",
   closeAllPopups = () => {},
 }) {
   const backdrop = {
@@ -32,7 +33,7 @@ function Modal({
 
   const container = {
     show: {
-      top: `calc(98vh - ${(containerHeight || "500") + "px"})`,
+      top: `calc(98vh - ${(containerHeight || "500") + heightVal})`,
       opacity: 1,
       transition: {
         type: "linear",
@@ -74,7 +75,7 @@ function Modal({
           animate={showModal ? "show" : ""}
           initial="hidden"
           exit={!showModal ? "hidden" : ""}
-          style={{ height: (containerHeight || "500") + "px" }}
+          style={{ height: (containerHeight || "500") + heightVal }}
           className={
             "py-4 bg-white shadow-lg mx-auto sm:rounded-xl rounded-[2rem] z-30 overflow-y-scroll relative " +
             className

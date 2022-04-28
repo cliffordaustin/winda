@@ -130,12 +130,16 @@ const stayState = {
   priceConversionRate: null,
   filteredStays: null,
   filterStayLoading: false,
+  currentCartItems: [],
 };
 
 const stayReducer = (state = stayState, action) => {
   switch (action.type) {
     case "SET_STAYS":
       return { ...state, stays: action.payload };
+
+    case "SET_CURRENT_CART_ITEMS":
+      return { ...state, currentCartItems: action.payload };
 
     case "SET_FILTERED_STAYS_LOADING_FALSE":
       return { ...state, filterStayLoading: false };

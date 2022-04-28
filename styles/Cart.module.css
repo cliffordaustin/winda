@@ -1,0 +1,4 @@
+.priceTotal,
+.subTotal {
+  @apply flex justify-between px-2 py-1.5 bg-gray-100 rounded-lg;
+}
