@@ -98,7 +98,9 @@ const ReviewOverview = ({ reviews, filterReview, stay, setFilterRateVal }) => {
               <div className="whitespace-nowrap">{rate} stars</div>
               <div className="bg-gray-300 rounded-3xl overflow-hidden py-2 w-full relative">
                 <div
-                  className={"bg-orange-400 absolute top-0 py-2 left-0"}
+                  className={
+                    "bg-[#303960] absolute rounded-tr-3xl rounded-br-3xl top-0 py-2 left-0"
+                  }
                   style={{ width: `${starPercentage(rate)}%` }}
                 ></div>
               </div>

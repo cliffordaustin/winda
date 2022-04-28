@@ -78,7 +78,7 @@ const AllReviews = ({
         closeModal={() => {
           setShowAllReviews(false);
         }}
-        containerHeight={50}
+        containerHeight={70}
         title="All Reviews"
         className="md:w-[650px]"
         myref={container}
