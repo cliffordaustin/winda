@@ -64,7 +64,7 @@ const Cart = ({ cart, userProfile, allItemsInCart }) => {
       for (const item of allItemsInCart) {
         await axios
           .post(
-            `${process.env.NEXT_PUBLIC_baseURL}/stays/${item.stay.slug}/add-to-orde2/`,
+            `${process.env.NEXT_PUBLIC_baseURL}/stays/${item.stay.slug}/add-to-order/`,
             {
               first_name: userProfile.first_name || "",
               last_name: userProfile.last_name || "",
