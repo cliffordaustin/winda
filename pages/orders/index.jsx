@@ -86,7 +86,9 @@ function Orders({ userProfile, allOrders }) {
 
   const price = () => {
     return parseInt(
-      (Math.floor(totalPrice() * 100) / 100).toFixed(2).replace(".", ""),
+      (Math.floor(priceConversionRate * totalPrice() * 100) / 100)
+        .toFixed(2)
+        .replace(".", ""),
       10
     );
   };
@@ -106,7 +108,7 @@ function Orders({ userProfile, allOrders }) {
   useEffect(() => {
     dispatch({
       type: "SET_CURRENT_CART_ITEM_NAME",
-      payload: allOrders[0].stay.name,
+      payload: allOrders.length > 0 ? allOrders[0].stay.name : "",
     });
   }, []);
 
@@ -223,7 +225,7 @@ function Orders({ userProfile, allOrders }) {
                 onClick={() => {
                   initializePayment(onSuccess, onClose);
                 }}
-                className="w-full !py-3 text-lg bg-primary-yellow !text-primary-blue-200"
+                className="w-full !py-3 text-lg !bg-blue-900 !text-primary-blue-200"
               >
                 <span className="font-bold mr-2">Pay</span>
                 <div className={" " + (!loading ? "hidden" : "")}>

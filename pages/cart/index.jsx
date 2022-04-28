@@ -62,7 +62,6 @@ const Cart = ({ cart, userProfile, allItemsInCart }) => {
     if (Cookies.get("token")) {
       setLoading(true);
       for (const item of allItemsInCart) {
-        console.log("Checking...");
         axios
           .post(
             `${process.env.NEXT_PUBLIC_baseURL}/stays/${item.stay.slug}/add-to-order/`,
@@ -133,68 +132,80 @@ const Cart = ({ cart, userProfile, allItemsInCart }) => {
               })
             }
           ></Navbar>
-          <div className="mb-4 mt-2 ml-4 text-xl font-bold">
-            Your Basket({cart.length})
-          </div>
-          <div className="flex flex-col mb-5 md:w-[60%] mx-auto">
-            {cart.map((item) => (
-              <CartItem key={item.id} stay={item}></CartItem>
-            ))}
-          </div>
-
-          <div className="px-4 mt-6 mb-12 md:w-[60%] mx-auto">
-            <div className={styles.priceTotal}>
-              <div className="font-bold">Price Total</div>
-              {currencyToDollar && (
-                <h1 className="font-bold text-lg font-OpenSans">
-                  {totalPrice()
-                    ? "$" + Math.ceil(newPrice).toLocaleString()
-                    : "No data"}
-                </h1>
-              )}
-              {!currencyToDollar && (
-                <h1 className="font-bold text-lg font-OpenSans">
-                  {totalPrice()
-                    ? "KES" + Math.ceil(totalPrice()).toLocaleString()
-                    : "No data"}
-                </h1>
-              )}
+          <div className="px-4 xl:w-[1100px] mx-auto sm:px-16 md:px-12 lg:px-16">
+            <div className="mb-4 mt-2 ml-4 text-xl font-bold">
+              Your Basket({cart.length})
+            </div>
+            <div className="flex flex-wrap mb-5 justify-between">
+              {cart.map((item, index) => (
+                <div key={index} className="md:w-[50%] w-full">
+                  <CartItem
+                    cartId={
+                      Cookies.get("token") ? allItemsInCart[index].id : null
+                    }
+                    stay={item}
+                  ></CartItem>
+                </div>
+              ))}
             </div>
 
-            <ClientOnly>
-              {!Cookies.get("token") && (
-                <div className="mt-2 mb-2">
-                  You are currently not signed in. To checkout or save these
-                  items or see your previously saved items,
-                  <Link
-                    href={{
-                      pathname: "/login",
-                      query: { redirect: `${router.asPath}` },
-                    }}
-                  >
-                    <a className="text-blue-500 font-bold">sign in</a>
-                  </Link>
+            <div className="px-4 mt-6 mb-12 ml-auto md:w-[50%]">
+              <ClientOnly>
+                <div className={styles.priceTotal}>
+                  <div className="font-bold">Price Total</div>
+                  {currencyToDollar && (
+                    <h1 className="font-bold text-lg font-OpenSans">
+                      {totalPrice()
+                        ? "$" + Math.ceil(newPrice).toLocaleString()
+                        : "No data"}
+                    </h1>
+                  )}
+                  {!currencyToDollar && (
+                    <h1 className="font-bold text-lg font-OpenSans">
+                      {totalPrice()
+                        ? "KES" + Math.ceil(totalPrice()).toLocaleString()
+                        : "No data"}
+                    </h1>
+                  )}
                 </div>
-              )}
-            </ClientOnly>
+              </ClientOnly>
 
-            <div className="flex mt-2 justify-center">
-              <Button
-                onClick={() => {
-                  addToOrders();
-                }}
-                className="w-full !py-3 flex items-center gap-2 text-lg bg-primary-yellow !text-primary-blue-200"
-              >
-                <span>Continue to Check Out</span>
-                <div className={" " + (!loading ? "hidden" : "")}>
-                  <LoadingSpinerChase
-                    width={20}
-                    height={20}
-                  ></LoadingSpinerChase>
-                </div>
-              </Button>
+              <ClientOnly>
+                {!Cookies.get("token") && (
+                  <div className="mt-2 mb-2">
+                    You are currently not signed in. To checkout or save these
+                    items or see your previously saved items,
+                    <Link
+                      href={{
+                        pathname: "/login",
+                        query: { redirect: `${router.asPath}` },
+                      }}
+                    >
+                      <a className="text-blue-500 font-bold">sign in</a>
+                    </Link>
+                  </div>
+                )}
+              </ClientOnly>
+
+              <div className="flex mt-2 justify-center">
+                <Button
+                  onClick={() => {
+                    addToOrders();
+                  }}
+                  className="w-full !py-3 flex items-center gap-2 text-lg !bg-blue-900 !text-primary-blue-200"
+                >
+                  <span>Continue to Check Out</span>
+                  <div className={" " + (!loading ? "hidden" : "")}>
+                    <LoadingSpinerChase
+                      width={20}
+                      height={20}
+                    ></LoadingSpinerChase>
+                  </div>
+                </Button>
+              </div>
             </div>
           </div>
+
           <Footer></Footer>
         </div>
       )}
@@ -224,12 +235,12 @@ const Cart = ({ cart, userProfile, allItemsInCart }) => {
               })
             }
           ></Navbar>
-          <div className="h-screen flex flex-col justify-between overflow-y-scroll">
+          <div className="px-4 xl:w-[1100px] mx-auto sm:px-16 md:px-12 lg:px-16">
             <div className="mb-8 mt-4 ml-4 text-xl font-bold">
               Shopping Basket
             </div>
             <div className="flex flex-col items-center mb-12">
-              <div className="w-[90%] h-[20rem] relative">
+              <div className="w-[90%] sm:w-[80%] md:w-[480px] h-[20rem] relative">
                 <Image
                   className="w-full h-full rounded-xl"
                   layout="fill"
@@ -246,8 +257,8 @@ const Cart = ({ cart, userProfile, allItemsInCart }) => {
                 </a>
               </Link>
             </div>
-            <Footer></Footer>
           </div>
+          <Footer></Footer>
         </div>
       )}
     </div>

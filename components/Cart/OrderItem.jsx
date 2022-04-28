@@ -62,7 +62,6 @@ const OrderItem = ({ cartIndex, userProfile, order, setShowInfo }) => {
         },
       }
     );
-    setLoading(false);
     setShowInfo(false);
     location.reload();
   };
@@ -119,7 +118,7 @@ const OrderItem = ({ cartIndex, userProfile, order, setShowInfo }) => {
           onClick={() => {
             updateInfo();
           }}
-          className="w-full !py-2 text-lg bg-primary-yellow !text-primary-blue-200"
+          className="w-full !py-3 text-lg !bg-blue-900 !text-primary-blue-200"
         >
           <span className="font-bold mr-2">Update</span>
           <div className={" " + (!loading ? "hidden" : "")}>

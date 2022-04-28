@@ -2,10 +2,13 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import Cookies from "js-cookie";
 import ClientOnly from "../ClientOnly";
+import LoadingSpinerChase from "../ui/LoadingSpinerChase";
+import { priceConversionRateFunc } from "../../lib/PriceRate";
 
 const CartItem = ({
   stay,
@@ -14,7 +17,9 @@ const CartItem = ({
   setShowInfo,
   orderDays,
   orderId,
+  cartId,
   orderSuccessfull,
+  userProfile,
 }) => {
   const currencyToDollar = useSelector((state) => state.home.currencyToDollar);
   const priceConversionRate = useSelector(
@@ -23,23 +28,115 @@ const CartItem = ({
 
   const dispatch = useDispatch();
 
+  const router = useRouter();
+
   const [newPrice, setNewPrice] = useState(null);
+
+  const [cartLoading, setCartLoading] = useState(false);
+
+  const [cartAdded, setCartAdded] = useState(false);
+
+  const [listingIsInCart, setListingIsInCart] = useState(false);
+
+  const [removeButtonLoading, setRemoveButtonLoading] = useState(false);
+
+  const [orderAgainLoading, setOrderAgainLoading] = useState(false);
 
   const price = () => {
     return stay.price;
   };
 
-  const orderAgain = (e) => {
+  const orderAgain = async (e) => {
     e.stopPropagation();
     e.preventDefault();
-    console.log("Order again");
+
+    setOrderAgainLoading(true);
+
+    await axios
+      .post(
+        `${process.env.NEXT_PUBLIC_baseURL}/stays/${stay.slug}/add-to-order/`,
+        {
+          first_name: userProfile.first_name || "",
+          last_name: userProfile.last_name || "",
+        },
+        {
+          headers: {
+            Authorization: `Token ${Cookies.get("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        router.push({
+          pathname: "/orders",
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        setOrderAgainLoading(false);
+      });
   };
 
-  const addToCart = (e) => {
+  const addToCart = async (e) => {
     e.stopPropagation();
     e.preventDefault();
-    console.log("Add to cart");
+
+    const token = Cookies.get("token");
+
+    if (!listingIsInCart) {
+      setCartLoading(true);
+
+      await axios
+        .post(
+          `${process.env.NEXT_PUBLIC_baseURL}/stays/${stay.slug}/add-to-cart/`,
+          {},
+          {
+            headers: {
+              Authorization: "Token " + token,
+            },
+          }
+        )
+        .then(() => {
+          setCartLoading(false);
+          setCartAdded(true);
+        })
+        .catch((err) => {
+          console.log(err.response);
+        });
+      location.reload();
+    } else if (listingIsInCart) {
+      router.push({
+        pathname: "/cart",
+      });
+    }
   };
+
+  const itemIsInCart = async () => {
+    let exist = false;
+    const cart = await axios.get(
+      `${process.env.NEXT_PUBLIC_baseURL}/user-cart/`,
+      {
+        headers: {
+          Authorization: "Token " + Cookies.get("token"),
+        },
+      }
+    );
+
+    exist = cart.data.results.some((val) => {
+      return val.stay.slug === stay.slug;
+    });
+
+    setListingIsInCart(exist);
+  };
+
+  useEffect(() => {
+    priceConversionRateFunc(dispatch);
+  });
+
+  useEffect(() => {
+    if (orderSuccessfull) {
+      itemIsInCart();
+    }
+  }, []);
 
   const setCartId = (e) => {
     e.stopPropagation();
@@ -58,13 +155,18 @@ const CartItem = ({
     setShowInfo(true);
   };
 
-  const removeCart = async () => {
+  const removeCart = async (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+
     const token = Cookies.get("token");
+
+    setRemoveButtonLoading(true);
 
     if (!checkoutInfo) {
       if (token) {
         await axios
-          .delete(`${process.env.NEXT_PUBLIC_baseURL}/user-cart/${stay.id}/`, {
+          .delete(`${process.env.NEXT_PUBLIC_baseURL}/user-cart/${cartId}/`, {
             headers: {
               Authorization: "Token " + token,
             },
@@ -74,6 +176,7 @@ const CartItem = ({
           })
           .catch((err) => {
             console.log(err.response.data);
+            setRemoveButtonLoading(false);
           });
       } else if (Cookies.get("cart")) {
         const cart = JSON.parse(decodeURIComponent(Cookies.get("cart")));
@@ -230,20 +333,36 @@ const CartItem = ({
                 )}
                 {!orderSuccessfull && (
                   <div
-                    className="text-sm w-fit bg-red-400 bg-opacity-30 px-2 py-1 text-red-500 bg-primary-red-100 font-bold p-3 rounded-md mt-2
+                    className="text-sm w-fit flex items-center bg-red-400 bg-opacity-30 px-2 py-1 text-red-500 bg-primary-red-100 font-bold p-3 rounded-md mt-2
           "
                     onClick={removeCart}
                   >
-                    Remove
+                    <span className="mr-1">Remove</span>
+                    <div
+                      className={" " + (!removeButtonLoading ? "hidden" : "")}
+                    >
+                      <LoadingSpinerChase
+                        width={13}
+                        height={13}
+                        color="red"
+                      ></LoadingSpinerChase>
+                    </div>
                   </div>
                 )}
                 {orderSuccessfull && (
                   <div
-                    className="text-sm w-fit bg-green-500 bg-opacity-30 px-2 py-1 text-green-700 bg-primary-red-100 font-bold p-3 rounded-md mt-2
+                    className="text-sm w-fit flex items-center bg-green-500 bg-opacity-30 px-2 py-1 text-green-700 bg-primary-red-100 font-bold p-3 rounded-md mt-2
           "
                     onClick={orderAgain}
                   >
-                    Order again
+                    <span className="mr-1">Order again</span>
+                    <div className={" " + (!orderAgainLoading ? "hidden" : "")}>
+                      <LoadingSpinerChase
+                        width={13}
+                        height={13}
+                        color="green"
+                      ></LoadingSpinerChase>
+                    </div>
                   </div>
                 )}
               </div>
@@ -278,34 +397,76 @@ const CartItem = ({
       )}
       <div onClick={addToCart}>
         {orderSuccessfull && (
-          <div className="p-2 bg-blue-100 absolute top-1 right-1 flex items-center justify-center rounded-full">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-              />
-            </svg>
+          <div className="p-2 bg-blue-100 cursor-pointer absolute top-1 right-1 flex items-center justify-center rounded-full">
+            {!cartLoading && !cartAdded && (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 cursor-pointer"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+                />
+              </svg>
+            )}
+            {!cartLoading && cartAdded && (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 cursor-pointer"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            )}
+            {cartLoading && (
+              <LoadingSpinerChase
+                width={15}
+                height={15}
+                color="#000"
+              ></LoadingSpinerChase>
+            )}
           </div>
         )}
-        {orderSuccessfull && (
+
+        {orderSuccessfull && !listingIsInCart && !cartLoading && !cartAdded && (
           <div className="absolute top-1.5 right-1.5 cursor-pointer">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4"
+              className="h-4 w-4 cursor-pointer"
               viewBox="0 0 20 20"
               fill="currentColor"
             >
               <path
                 fillRule="evenodd"
                 d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </div>
+        )}
+
+        {orderSuccessfull && listingIsInCart && !cartLoading && !cartAdded && (
+          <div className="absolute top-1.5 right-1.5 cursor-pointer">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4 cursor-pointer text-blue-900"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+              <path
+                fillRule="evenodd"
+                d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
                 clipRule="evenodd"
               />
             </svg>

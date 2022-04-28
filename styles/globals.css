@@ -119,12 +119,12 @@ body {
 
 .rdp-button:focus:not([disabled]),
 .rdp-button:active:not([disabled]) {
-  @apply outline-none !bg-red-400 !border-none;
+  @apply outline-none !bg-blue-400 !border-none;
 }
 
 .rdp:not(.rdp--interactionDisabled)
   .rdp-day:not(.rdp-day--disabled):not(.rdp-day--selected):not(.rdp-day--outside):hover {
-  @apply !bg-red-400;
+  @apply !bg-blue-200;
 }
 
 .DayPicker-wrapper {
@@ -135,7 +135,7 @@ body {
 .rdp-day_selected:focus:not([disabled]),
 .rdp-day_selected:active:not([disabled]),
 .rdp-day_selected:hover:not([disabled]) {
-  @apply !bg-red-400;
+  @apply !bg-blue-400;
 }
 
 .rdp-button {
@@ -143,7 +143,7 @@ body {
 }
 
 .rdp-cell--selected {
-  @apply !bg-red-600 !rounded-full w-10 h-10 sm:!w-12 sm:!h-12 outline-none transition-colors ease-linear duration-200;
+  @apply !bg-blue-400 !rounded-full w-10 h-10 sm:!w-12 sm:!h-12 outline-none transition-colors ease-linear duration-200;
 }
 
 .swiper-pagination > .swiper-pagination-bullet {

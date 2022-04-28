@@ -67,6 +67,7 @@ function OrderSuccessfull({ userProfile, allOrders }) {
                       setShowInfo={setShowInfo}
                       orderDays={item.days}
                       orderSuccessfull={true}
+                      userProfile={userProfile}
                     ></CartItem>
                   </div>
                 ))}

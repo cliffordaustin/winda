@@ -67,6 +67,8 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
   const [filterRateVal, setFilterRateVal] = useState(0);
 
+  const [addToBasketLoading, setAddToBasketLoading] = useState(false);
+
   const priceConversionRate = async () => {
     try {
       const response = await fetch(
@@ -92,6 +94,8 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
   const addToBasket = async () => {
     const token = Cookies.get("token");
+
+    setAddToBasketLoading(true);
 
     if (token) {
       axios
@@ -399,13 +403,10 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
           <div className="w-full z-10 px-4 md:hidden fixed bottom-0 left-0 right-0 bg-white py-2">
             <div className="flex justify-between items-center gap-2">
-              <Button className="!bg-blue-800 !w-[50%] !border-2 border-blue-800">
-                Book
-              </Button>
               {!inCart && (
                 <Button
                   onClick={addToBasket}
-                  className="!bg-transparent !w-[50%] !text-black !border-2 border-blue-800"
+                  className="!bg-transparent !w-full !text-black !border-2 border-blue-800"
                 >
                   Add to basket
                   <svg
@@ -461,6 +462,15 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       </g>
                     </g>
                   </svg>
+                  <div
+                    className={" " + (!addToBasketLoading ? "hidden ml-4" : "")}
+                  >
+                    <LoadingSpinerChase
+                      width={16}
+                      height={16}
+                      color="#000"
+                    ></LoadingSpinerChase>
+                  </div>
                 </Button>
               )}
               {inCart && (
@@ -468,7 +478,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                   onClick={() => {
                     router.push({ pathname: "/cart" });
                   }}
-                  className="!bg-transparent !w-[185px] !text-black !border-2 border-blue-800"
+                  className="!bg-transparent !w-full !text-black !border-2 border-blue-800"
                 >
                   View in basket
                   <svg
@@ -532,9 +542,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
             <div className="flex flex-col items-end">
               <Price stayPrice={stay.price}></Price>
               <div className="flex items-center mt-2 gap-2 justify-between self-start w-full">
-                <Button className="!bg-blue-800 !w-[80px] !border-2 border-blue-800">
-                  Book
-                </Button>
                 {!inCart && (
                   <Button
                     onClick={addToBasket}
@@ -594,6 +601,17 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                         </g>
                       </g>
                     </svg>
+                    <div
+                      className={
+                        " " + (!addToBasketLoading ? "hidden ml-3" : "")
+                      }
+                    >
+                      <LoadingSpinerChase
+                        width={16}
+                        height={16}
+                        color="#000"
+                      ></LoadingSpinerChase>
+                    </div>
                   </Button>
                 )}
                 {inCart && (
@@ -1024,7 +1042,7 @@ export async function getServerSideProps(context) {
       );
 
       exist = data.results.some((val) => {
-        return val.slug === context.query.slug;
+        return val.stay.slug === context.query.slug;
       });
 
       const stay = await axios.get(
