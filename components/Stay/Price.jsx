@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
+import ClientOnly from "../ClientOnly";
 
 const Price = ({ stayPrice }) => {
   const [newPrice, setNewPrice] = useState(null);
@@ -32,7 +33,7 @@ const Price = ({ stayPrice }) => {
   }, [priceConversionRate, currencyToDollar]);
 
   return (
-    <div>
+    <ClientOnly>
       {currencyToDollar && (
         <h1 className="font-bold text-xl font-OpenSans">
           {stayPrice ? "$" + Math.ceil(newPrice).toLocaleString() : "No data"}
@@ -45,7 +46,7 @@ const Price = ({ stayPrice }) => {
             : "No data"}
         </h1>
       )}
-    </div>
+    </ClientOnly>
   );
 };
 

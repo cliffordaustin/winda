@@ -21,6 +21,7 @@ import LoadingSpinerChase from "../../components/ui/LoadingSpinerChase";
 import Share from "../../components/Stay/Share";
 import AllReviews from "../../components/Stay/AllReviews";
 import getCart from "../../lib/getCart";
+import ClientOnly from "../../components/ClientOnly";
 
 const StaysDetail = ({ userProfile, stay, inCart }) => {
   const [state, setState] = useState({
@@ -463,7 +464,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     </g>
                   </svg>
                   <div
-                    className={" " + (!addToBasketLoading ? "hidden ml-4" : "")}
+                    className={" " + (!addToBasketLoading ? "hidden" : "ml-2")}
                   >
                     <LoadingSpinerChase
                       width={16}
@@ -603,7 +604,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     </svg>
                     <div
                       className={
-                        " " + (!addToBasketLoading ? "hidden ml-3" : "")
+                        " " + (!addToBasketLoading ? "hidden" : "ml-2")
                       }
                     >
                       <LoadingSpinerChase

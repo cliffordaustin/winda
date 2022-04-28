@@ -181,7 +181,7 @@ function Orders({ userProfile, allOrders }) {
           })
         }
       ></Navbar>
-      <div className="px-4 xl:w-[1100px] mx-auto sm:px-16 md:px-12 lg:px-16">
+      <div className="px-2 xl:w-[1100px] mx-auto sm:px-16 md:px-12 lg:px-16">
         <div className="md:flex md:gap-6 lg:gap-12">
           <div className="md:w-[60%] lg:w-[50%]">
             <div className="mb-4 mt-2 ml-4 text-xl font-bold">Your Basket</div>
@@ -199,7 +199,7 @@ function Orders({ userProfile, allOrders }) {
               ))}
             </div>
 
-            <div className="px-4 mt-6 mb-12">
+            <div className="px-2 mt-6 mb-12">
               <ClientOnly>
                 <div className={styles.priceTotal}>
                   <div className="font-bold">Price Total</div>
