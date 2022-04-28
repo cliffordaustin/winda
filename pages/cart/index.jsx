@@ -132,7 +132,7 @@ const Cart = ({ cart, userProfile, allItemsInCart }) => {
               })
             }
           ></Navbar>
-          <div className="px-4 xl:w-[1100px] mx-auto sm:px-16 md:px-12 lg:px-16">
+          <div className="px-2 xl:w-[1100px] mx-auto sm:px-16 md:px-12 lg:px-16">
             <div className="mb-4 mt-2 ml-4 text-xl font-bold">
               Your Basket({cart.length})
             </div>
@@ -149,7 +149,7 @@ const Cart = ({ cart, userProfile, allItemsInCart }) => {
               ))}
             </div>
 
-            <div className="px-4 mt-6 mb-12 ml-auto md:w-[50%]">
+            <div className="px-2 mt-6 mb-12 ml-auto md:w-[50%]">
               <ClientOnly>
                 <div className={styles.priceTotal}>
                   <div className="font-bold">Price Total</div>
