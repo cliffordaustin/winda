@@ -51,7 +51,7 @@ function OrderSuccessfull({ userProfile, allOrders }) {
           })
         }
       ></Navbar>
-      <div className="px-4 xl:w-[1100px] mx-auto sm:px-16 md:px-12 lg:px-16">
+      <div className="px-2 xl:w-[1100px] mx-auto sm:px-16 md:px-12 lg:px-16">
         <div className="mt-6">
           <h1 className="font-bold text-2xl">Order successful for</h1>
 

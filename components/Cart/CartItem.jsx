@@ -220,7 +220,7 @@ const CartItem = ({
   const sortedImages = stay.stay_images.sort((x, y) => y.main - x.main);
   let mainImage = sortedImages.find((image) => image.main);
   return (
-    <div className="relative px-4">
+    <div className="relative px-2">
       <Link href={`/stays/${stay.slug}/`}>
         <a className="px-4">
           <div className="flex w-full shadow-md">
