@@ -3,10 +3,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import getToken from "../../lib/getToken";
+
 import LoadingSpinerChase from "../../components/ui/LoadingSpinerChase";
 import LoadingPulse from "../../components/ui/LoadingPulse";
-
-import { getServerSideProps } from "../../lib/getServerSideProps";
+import { wrapper } from "../../redux/store";
 import styles from "../../styles/Lodging.module.css";
 import Navbar from "../../components/Lodging/Navbar";
 import Listings from "../../components/Lodging/Listings";
@@ -214,7 +215,7 @@ function Stays({ userProfile, longitude, latitude }) {
         setState({ ...state, windowSize: window.innerWidth });
       };
     }
-  });
+  }, []);
 
   useEffect(() => {
     const getLatLng = async () => {
@@ -1964,6 +1965,66 @@ function Stays({ userProfile, longitude, latitude }) {
   );
 }
 
-export { getServerSideProps };
+export const getServerSideProps = wrapper.getServerSideProps(
+  (context) =>
+    async ({ req, res, query, resolvedUrl }) => {
+      try {
+        const token = getToken(context);
+
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_baseURL}/stays/?type_of_stay=${
+            query.type_of_stay ? query.type_of_stay : ""
+          }&min_price=${query.min_price ? query.min_price : ""}&max_price=${
+            query.max_price ? query.max_price : ""
+          }&min_rooms=${query.min_rooms ? query.min_rooms : ""}&max_rooms=${
+            query.max_rooms ? query.max_rooms : ""
+          }&ordering=${query.ordering ? query.ordering : ""}`
+        );
+
+        await context.dispatch({
+          type: "SET_STAYS",
+          payload: response.data.results,
+        });
+
+        if (token) {
+          const response = await axios.get(
+            `${process.env.NEXT_PUBLIC_baseURL}/user/`,
+            {
+              headers: {
+                Authorization: "Token " + token,
+              },
+            }
+          );
+
+          return {
+            props: {
+              userProfile: response.data[0],
+            },
+          };
+        }
+
+        return {
+          props: {
+            userProfile: "",
+          },
+        };
+      } catch (error) {
+        if (error.response.status === 401) {
+          return {
+            redirect: {
+              permanent: false,
+              destination: "logout",
+            },
+          };
+        } else {
+          return {
+            props: {
+              userProfile: "",
+            },
+          };
+        }
+      }
+    }
+);
 
 export default Stays;

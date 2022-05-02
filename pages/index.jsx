@@ -89,7 +89,7 @@ export default function Home({ userProfile }) {
         setState({ ...state, windowSize: window.innerWidth });
       };
     }
-  });
+  }, []);
 
   useEffect(() => {
     if (state.windowSize >= 768) {

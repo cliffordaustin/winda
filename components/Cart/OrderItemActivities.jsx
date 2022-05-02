@@ -19,7 +19,9 @@ import LoadingSpinerChase from "../ui/LoadingSpinerChase";
 
 const OrderItem = ({ cartIndex, userProfile, order, setShowInfo }) => {
   const cartId = useSelector((state) => state.home.currentCartItemId);
-  const cartItems = useSelector((state) => state.stay.currentCartItems);
+  const cartActivityId = useSelector(
+    (state) => state.home.currentCartItemActivitiesId
+  );
 
   const router = useRouter();
 
@@ -51,7 +53,7 @@ const OrderItem = ({ cartIndex, userProfile, order, setShowInfo }) => {
   const updateInfo = async () => {
     setLoading(true);
     await axios.put(
-      `${process.env.NEXT_PUBLIC_baseURL}/user-orders/${order.id}/`,
+      `${process.env.NEXT_PUBLIC_baseURL}/user-activities-orders/${order.id}/`,
       {
         first_name: formik.values.first_name,
         last_name: formik.values.last_name,
@@ -72,7 +74,7 @@ const OrderItem = ({ cartIndex, userProfile, order, setShowInfo }) => {
     <div
       className={
         "w-full " +
-        (router.query.stays_id === cartIndex.toString() ? "" : "hidden")
+        (router.query.activities_id === cartIndex.toString() ? "" : "hidden")
       }
     >
       <div className="w-full relative">

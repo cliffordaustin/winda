@@ -12,6 +12,7 @@ import { priceConversionRateFunc } from "../../lib/PriceRate";
 
 const CartItem = ({
   stay,
+  activity,
   checkoutInfo,
   cartIndex,
   setShowInfo,
@@ -20,6 +21,9 @@ const CartItem = ({
   cartId,
   orderSuccessfull,
   userProfile,
+  activitiesPage,
+  lengthOfItems,
+  setInfoPopup,
 }) => {
   const currencyToDollar = useSelector((state) => state.home.currencyToDollar);
   const priceConversionRate = useSelector(
@@ -43,7 +47,7 @@ const CartItem = ({
   const [orderAgainLoading, setOrderAgainLoading] = useState(false);
 
   const price = () => {
-    return stay.price;
+    return !activitiesPage ? stay.price : activity.price;
   };
 
   const orderAgain = async (e) => {
@@ -52,28 +56,55 @@ const CartItem = ({
 
     setOrderAgainLoading(true);
 
-    await axios
-      .post(
-        `${process.env.NEXT_PUBLIC_baseURL}/stays/${stay.slug}/add-to-order/`,
-        {
-          first_name: userProfile.first_name || "",
-          last_name: userProfile.last_name || "",
-        },
-        {
-          headers: {
-            Authorization: `Token ${Cookies.get("token")}`,
+    if (!activitiesPage) {
+      await axios
+        .post(
+          `${process.env.NEXT_PUBLIC_baseURL}/stays/${stay.slug}/add-to-order/`,
+          {
+            first_name: userProfile.first_name || "",
+            last_name: userProfile.last_name || "",
           },
-        }
-      )
-      .then((res) => {
-        router.push({
-          pathname: "/orders",
+          {
+            headers: {
+              Authorization: `Token ${Cookies.get("token")}`,
+            },
+          }
+        )
+        .then((res) => {
+          router.push({
+            pathname: "/orders",
+            query: { stays_id: 0, activities_id: null },
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          setOrderAgainLoading(false);
         });
-      })
-      .catch((err) => {
-        console.log(err);
-        setOrderAgainLoading(false);
-      });
+    } else if (activitiesPage) {
+      await axios
+        .post(
+          `${process.env.NEXT_PUBLIC_baseURL}/activities/${activity.slug}/add-to-order/`,
+          {
+            first_name: userProfile.first_name || "",
+            last_name: userProfile.last_name || "",
+          },
+          {
+            headers: {
+              Authorization: `Token ${Cookies.get("token")}`,
+            },
+          }
+        )
+        .then((res) => {
+          router.push({
+            pathname: "/orders",
+            query: { stays_id: null, activities_id: 0 },
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          setOrderAgainLoading(false);
+        });
+    }
   };
 
   const addToCart = async (e) => {
@@ -85,23 +116,44 @@ const CartItem = ({
     if (!listingIsInCart) {
       setCartLoading(true);
 
-      await axios
-        .post(
-          `${process.env.NEXT_PUBLIC_baseURL}/stays/${stay.slug}/add-to-cart/`,
-          {},
-          {
-            headers: {
-              Authorization: "Token " + token,
-            },
-          }
-        )
-        .then(() => {
-          setCartLoading(false);
-          setCartAdded(true);
-        })
-        .catch((err) => {
-          console.log(err.response);
-        });
+      if (!activitiesPage) {
+        await axios
+          .post(
+            `${process.env.NEXT_PUBLIC_baseURL}/stays/${stay.slug}/add-to-cart/`,
+            {},
+            {
+              headers: {
+                Authorization: "Token " + token,
+              },
+            }
+          )
+          .then(() => {
+            setCartLoading(false);
+            setCartAdded(true);
+          })
+          .catch((err) => {
+            console.log(err.response);
+          });
+      } else if (activitiesPage) {
+        await axios
+          .post(
+            `${process.env.NEXT_PUBLIC_baseURL}/activities/${activity.slug}/add-to-cart/`,
+            {},
+            {
+              headers: {
+                Authorization: "Token " + token,
+              },
+            }
+          )
+          .then(() => {
+            setCartLoading(false);
+            setCartAdded(true);
+          })
+          .catch((err) => {
+            console.log(err.response);
+          });
+      }
+
       location.reload();
     } else if (listingIsInCart) {
       router.push({
@@ -112,25 +164,42 @@ const CartItem = ({
 
   const itemIsInCart = async () => {
     let exist = false;
-    const cart = await axios.get(
-      `${process.env.NEXT_PUBLIC_baseURL}/user-cart/`,
-      {
-        headers: {
-          Authorization: "Token " + Cookies.get("token"),
-        },
-      }
-    );
+    let activitiesCartExist = false;
 
-    exist = cart.data.results.some((val) => {
-      return val.stay.slug === stay.slug;
-    });
+    if (!activitiesPage) {
+      const cart = await axios.get(
+        `${process.env.NEXT_PUBLIC_baseURL}/user-cart/`,
+        {
+          headers: {
+            Authorization: "Token " + Cookies.get("token"),
+          },
+        }
+      );
 
-    setListingIsInCart(exist);
+      exist = cart.data.results.some((val) => {
+        return val.stay.slug === stay.slug;
+      });
+    } else if (activitiesPage) {
+      const activitiesCart = await axios.get(
+        `${process.env.NEXT_PUBLIC_baseURL}/user-activities-cart/`,
+        {
+          headers: {
+            Authorization: "Token " + Cookies.get("token"),
+          },
+        }
+      );
+
+      activitiesCartExist = activitiesCart.data.results.some((val) => {
+        return val.activity.slug === activity.slug;
+      });
+    }
+
+    setListingIsInCart(exist || activitiesCartExist);
   };
 
   useEffect(() => {
     priceConversionRateFunc(dispatch);
-  });
+  }, []);
 
   useEffect(() => {
     if (orderSuccessfull) {
@@ -142,15 +211,21 @@ const CartItem = ({
     e.stopPropagation();
     e.preventDefault();
 
-    dispatch({
-      type: "SET_CURRENT_CART_ITEM_ID",
-      payload: cartIndex,
-    });
-
-    dispatch({
-      type: "SET_CURRENT_CART_ITEM_NAME",
-      payload: stay.name,
-    });
+    if (!activitiesPage) {
+      setInfoPopup(false);
+      router
+        .push({ query: { stays_id: cartIndex, activities_id: null } })
+        .then(() => {
+          setInfoPopup(true);
+        });
+    } else if (activitiesPage) {
+      setInfoPopup(false);
+      router
+        .push({ query: { activities_id: cartIndex, stays_id: null } })
+        .then(() => {
+          setInfoPopup(true);
+        });
+    }
 
     setShowInfo(true);
   };
@@ -165,41 +240,103 @@ const CartItem = ({
 
     if (!checkoutInfo) {
       if (token) {
-        await axios
-          .delete(`${process.env.NEXT_PUBLIC_baseURL}/user-cart/${cartId}/`, {
-            headers: {
-              Authorization: "Token " + token,
-            },
-          })
-          .then(() => {
-            location.reload();
-          })
-          .catch((err) => {
-            console.log(err.response.data);
-            setRemoveButtonLoading(false);
-          });
+        if (!activitiesPage) {
+          await axios
+            .delete(`${process.env.NEXT_PUBLIC_baseURL}/user-cart/${cartId}/`, {
+              headers: {
+                Authorization: "Token " + token,
+              },
+            })
+            .then(() => {
+              location.reload();
+            })
+            .catch((err) => {
+              console.log(err.response.data);
+              setRemoveButtonLoading(false);
+            });
+        } else if (activitiesPage) {
+          await axios
+            .delete(
+              `${process.env.NEXT_PUBLIC_baseURL}/user-activities-cart/${cartId}/`,
+              {
+                headers: {
+                  Authorization: "Token " + token,
+                },
+              }
+            )
+            .then(() => {
+              location.reload();
+            })
+            .catch((err) => {
+              console.log(err.response.data);
+              setRemoveButtonLoading(false);
+            });
+        }
       } else if (Cookies.get("cart")) {
         const cart = JSON.parse(decodeURIComponent(Cookies.get("cart")));
 
-        const newCart = cart.filter((el) => el.slug !== stay.slug);
+        const newCart = [];
+
+        if (!activitiesPage) {
+          newCart = cart.filter((el) => el.slug !== stay.slug);
+        } else if (activitiesPage) {
+          newCart = cart.filter((el) => el.slug !== activity.slug);
+        }
 
         Cookies.set("cart", JSON.stringify(newCart));
 
         location.reload();
       }
     } else if (checkoutInfo) {
-      await axios
-        .delete(`${process.env.NEXT_PUBLIC_baseURL}/user-orders/${orderId}/`, {
-          headers: {
-            Authorization: "Token " + token,
-          },
-        })
-        .then(() => {
-          location.reload();
-        })
-        .catch((err) => {
-          console.log(err.response.data);
-        });
+      if (!activitiesPage) {
+        await axios
+          .delete(
+            `${process.env.NEXT_PUBLIC_baseURL}/user-orders/${orderId}/`,
+            {
+              headers: {
+                Authorization: "Token " + token,
+              },
+            }
+          )
+          .then(() => {
+            if (lengthOfItems === 1) {
+              router.push({
+                query: { stays_id: null, activities_id: 0 },
+              });
+            } else {
+              router.push({
+                query: { stays_id: 0, activities_id: null },
+              });
+            }
+          })
+          .catch((err) => {
+            console.log(err.response.data);
+          });
+      } else if (activitiesPage) {
+        await axios
+          .delete(
+            `${process.env.NEXT_PUBLIC_baseURL}/user-activities-orders/${orderId}/`,
+            {
+              headers: {
+                Authorization: "Token " + token,
+              },
+            }
+          )
+          .then(() => {
+            if (lengthOfItems === 1) {
+              router.push({
+                query: { stays_id: 0, activities_id: null },
+              });
+            } else {
+              router.push({
+                query: { stays_id: null, activities_id: 0 },
+              });
+            }
+          })
+          .catch((err) => {
+            console.log(err.response.data);
+          });
+      }
     }
   };
 
@@ -217,11 +354,19 @@ const CartItem = ({
   useEffect(() => {
     priceConversion(price());
   }, [price(), currencyToDollar, priceConversionRate]);
-  const sortedImages = stay.stay_images.sort((x, y) => y.main - x.main);
+  const sortedImages = !activitiesPage
+    ? stay.stay_images.sort((x, y) => y.main - x.main)
+    : activity.activity_images.sort((x, y) => y.main - x.main);
   let mainImage = sortedImages.find((image) => image.main);
   return (
     <div className="relative px-2">
-      <Link href={`/stays/${stay.slug}/`}>
+      <Link
+        href={
+          activitiesPage
+            ? `/experiences/${activity.slug}/`
+            : `/stays/${stay.slug}/`
+        }
+      >
         <a className="px-4">
           <div className="flex w-full shadow-md">
             <div
@@ -239,7 +384,9 @@ const CartItem = ({
             </div>
             <div className="w-2/4 flex-grow-0 flex-shrink-0 px-2 py-2">
               <div className="flex flex-col gap-1">
-                <h1 className="text-gray-500 truncate">{stay.name}</h1>
+                <h1 className="text-gray-500 truncate">
+                  {activitiesPage ? activity.name : stay.name}
+                </h1>
                 <ClientOnly>
                   {currencyToDollar && (
                     <h1 className="font-bold text-lg font-OpenSans">
@@ -258,7 +405,7 @@ const CartItem = ({
                 </ClientOnly>
               </div>
 
-              {!checkoutInfo && (
+              {!checkoutInfo && !activitiesPage && (
                 <div className="text-gray-500 flex gap-1 text-sm truncate flex-wrap">
                   {stay.rooms && (
                     <div className="flex items-center gap-0.5">
@@ -311,8 +458,56 @@ const CartItem = ({
                   )}
                 </div>
               )}
+
+              {!checkoutInfo && activitiesPage && (
+                <div className="text-gray-500 flex gap-1 text-sm truncate flex-wrap">
+                  {activity.capacity && (
+                    <div className="flex items-center gap-0.5">
+                      <svg
+                        className="w-3 h-3"
+                        xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true"
+                        role="img"
+                        width="1em"
+                        height="1em"
+                        preserveAspectRatio="xMidYMid meet"
+                        viewBox="0 0 36 36"
+                      >
+                        <path
+                          fill="currentColor"
+                          d="M12 16.14h-.87a8.67 8.67 0 0 0-6.43 2.52l-.24.28v8.28h4.08v-4.7l.55-.62l.25-.29a11 11 0 0 1 4.71-2.86A6.59 6.59 0 0 1 12 16.14Z"
+                        />
+                        <path
+                          fill="currentColor"
+                          d="M31.34 18.63a8.67 8.67 0 0 0-6.43-2.52a10.47 10.47 0 0 0-1.09.06a6.59 6.59 0 0 1-2 2.45a10.91 10.91 0 0 1 5 3l.25.28l.54.62v4.71h3.94v-8.32Z"
+                        />
+                        <path
+                          fill="currentColor"
+                          d="M11.1 14.19h.31a6.45 6.45 0 0 1 3.11-6.29a4.09 4.09 0 1 0-3.42 6.33Z"
+                        />
+                        <path
+                          fill="currentColor"
+                          d="M24.43 13.44a6.54 6.54 0 0 1 0 .69a4.09 4.09 0 0 0 .58.05h.19A4.09 4.09 0 1 0 21.47 8a6.53 6.53 0 0 1 2.96 5.44Z"
+                        />
+                        <circle
+                          cx="17.87"
+                          cy="13.45"
+                          r="4.47"
+                          fill="currentColor"
+                        />
+                        <path
+                          fill="currentColor"
+                          d="M18.11 20.3A9.69 9.69 0 0 0 11 23l-.25.28v6.33a1.57 1.57 0 0 0 1.6 1.54h11.49a1.57 1.57 0 0 0 1.6-1.54V23.3l-.24-.3a9.58 9.58 0 0 0-7.09-2.7Z"
+                        />
+                        <path fill="none" d="M0 0h36v36H0z" />
+                      </svg>
+                      <span>{activity.capacity} Guests</span>
+                    </div>
+                  )}
+                </div>
+              )}
               <div className="font-bold text-sm truncate mt-1">
-                {stay.location}
+                {activitiesPage ? activity.location : stay.location}
               </div>
 
               {checkoutInfo && (
@@ -370,29 +565,33 @@ const CartItem = ({
           </div>
         </a>
       </Link>
-      {stay.type_of_stay === "LODGE" && (
-        <div className="absolute top-7 left-5 z-10 px-2 rounded-md bg-green-600 text-white">
-          Lodge
-        </div>
-      )}
-      {stay.type_of_stay === "HOUSE" && (
-        <div className="absolute top-7 left-5 z-10 px-2 rounded-md bg-green-600 text-white">
-          House
-        </div>
-      )}
-      {stay.type_of_stay === "UNIQUE SPACE" && (
-        <div className="absolute top-7 left-5 z-10 px-2 rounded-md bg-green-600 text-white">
-          Unique space
-        </div>
-      )}
-      {stay.type_of_stay === "CAMPSITE" && (
-        <div className="absolute top-7 left-5 z-10 px-2 rounded-md bg-green-600 text-white">
-          Campsite
-        </div>
-      )}
-      {stay.type_of_stay === "BOUTIQUE HOTEL" && (
-        <div className="absolute top-7 left-5 z-10 px-2 rounded-md bg-green-600 text-white">
-          Boutique hotel
+      {!activitiesPage && (
+        <div>
+          {stay.type_of_stay === "LODGE" && (
+            <div className="absolute top-7 left-5 z-10 px-2 rounded-md bg-green-600 text-white">
+              Lodge
+            </div>
+          )}
+          {stay.type_of_stay === "HOUSE" && (
+            <div className="absolute top-7 left-5 z-10 px-2 rounded-md bg-green-600 text-white">
+              House
+            </div>
+          )}
+          {stay.type_of_stay === "UNIQUE SPACE" && (
+            <div className="absolute top-7 left-5 z-10 px-2 rounded-md bg-green-600 text-white">
+              Unique space
+            </div>
+          )}
+          {stay.type_of_stay === "CAMPSITE" && (
+            <div className="absolute top-7 left-5 z-10 px-2 rounded-md bg-green-600 text-white">
+              Campsite
+            </div>
+          )}
+          {stay.type_of_stay === "BOUTIQUE HOTEL" && (
+            <div className="absolute top-7 left-5 z-10 px-2 rounded-md bg-green-600 text-white">
+              Boutique hotel
+            </div>
+          )}
         </div>
       )}
       <div onClick={addToCart}>

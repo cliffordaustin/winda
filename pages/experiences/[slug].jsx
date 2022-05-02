@@ -22,11 +22,12 @@ import Share from "../../components/Stay/Share";
 import AllReviews from "../../components/Stay/AllReviews";
 import getCart from "../../lib/getCart";
 import ClientOnly from "../../components/ClientOnly";
+import Footer from "../../components/Home/Footer";
 
-const StaysDetail = ({ userProfile, stay, inCart }) => {
+const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
   const [state, setState] = useState({
     showDropdown: false,
-    currentNavState: 1,
+    currentNavState: 3,
     showCheckOutDate: false,
     showCheckInDate: false,
     showPopup: false,
@@ -37,7 +38,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
   const router = useRouter();
 
-  const [showMoreAmenities, setShowMoreAmenities] = useState(false);
+  const [showMoreActivities, setShowMoreActivities] = useState(false);
 
   const [showAllDescription, setShowAllDescription] = useState(false);
   const [showAllUniqueFeature, setShowAllUniqueFeature] = useState(false);
@@ -101,7 +102,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
     if (token) {
       axios
         .post(
-          `${process.env.NEXT_PUBLIC_baseURL}/stays/${stay.slug}/add-to-cart/`,
+          `${process.env.NEXT_PUBLIC_baseURL}/activities/${activity.slug}/add-to-cart/`,
           {},
           {
             headers: {
@@ -122,10 +123,10 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
       const data = [...(cookieVal || [])];
       const exist = data.some((val) => {
-        return val.slug === stay.slug;
+        return val.slug === activity.slug;
       });
       if (!exist) {
-        data.push({ slug: stay.slug, itemCategory: "stays" });
+        data.push({ slug: activity.slug, itemCategory: "activities" });
         Cookies.set("cart", JSON.stringify(data));
         location.reload();
       }
@@ -136,7 +137,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
     setReviewLoading(true);
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_baseURL}/stays/${stay.slug}/reviews/`
+        `${process.env.NEXT_PUBLIC_baseURL}/activities/${activity.slug}/reviews/`
       );
 
       setReviews(response.data.results);
@@ -154,7 +155,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
   useEffect(() => {
     try {
       axios.post(
-        `${process.env.NEXT_PUBLIC_baseURL}/stays/${stay.slug}/add-view/`
+        `${process.env.NEXT_PUBLIC_baseURL}/activities/${activity.slug}/add-view/`
       );
     } catch (error) {
       console.log(error);
@@ -168,7 +169,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
   const filterReview = async (rate) => {
     setSpinner(true);
     const { data } = await axios.get(
-      `${process.env.NEXT_PUBLIC_baseURL}/stays/${stay.slug}/reviews/?rate=${rate}`
+      `${process.env.NEXT_PUBLIC_baseURL}/activities/${activity.slug}/reviews/?rate=${rate}`
     );
     setFilteredReviews(data.results);
     setReviewCount(data.count);
@@ -202,36 +203,10 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
           })
         }
       ></Navbar>
-      {/* <div
-        onClick={(e) => {
-          e.stopPropagation();
-          setState({ ...state, showSearchModal: true });
-        }}
-        className={"w-5/6 mx-auto lg:hidden cursor-pointer "}
-      >
-        <div className="flex items-center mt-4 justify-center gap-2 !px-2 !py-2 !bg-gray-100 w-full rounded-full text-center ml-1 font-bold">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5 text-red-600"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path d="M9 9a2 2 0 114 0 2 2 0 01-4 0z" />
-            <path
-              fillRule="evenodd"
-              d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a4 4 0 00-3.446 6.032l-2.261 2.26a1 1 0 101.414 1.415l2.261-2.261A4 4 0 1011 5z"
-              clipRule="evenodd"
-            />
-          </svg>
-          <div>Nairobi</div>
-        </div>
-      </div> */}
+
       <div className="md:w-[85%] px-4 sm:px-8 md:px-0 mx-auto">
         <div className="relative">
-          <ImageGallery
-            images={stay.stay_images}
-            stayType={stay.type_of_stay}
-          ></ImageGallery>
+          <ImageGallery images={activity.activity_images}></ImageGallery>
 
           <div className="flex absolute bg-white px-3 rounded-3xl py-1 top-4 right-3 gap-2 items-center">
             <div className="cursor-pointer">
@@ -301,13 +276,13 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
         <div className="flex mt-4">
           <div className="flex flex-col w-full">
-            <div className="text-2xl font-bold">{stay.name}</div>
-            <div className="text-lg font-medium">{stay.location}</div>
+            <div className="text-2xl font-bold">{activity.name}</div>
+            <div className="text-lg font-medium">{activity.location}</div>
             <div className="my-2 md:hidden">
-              <Price stayPrice={stay.price}></Price>
+              <Price stayPrice={activity.price}></Price>
             </div>
             <div className="text-gray-500 flex gap-2 text-sm truncate mt-3 flex-wrap">
-              {stay.capacity && (
+              {activity.capacity && (
                 <div className="flex items-center gap-0.5">
                   <svg
                     className="w-3 h-3"
@@ -347,56 +322,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     />
                     <path fill="none" d="M0 0h36v36H0z" />
                   </svg>
-                  <span>{stay.capacity} Guests</span>
-                </div>
-              )}
-              {stay.rooms && (
-                <div className="flex items-center gap-0.5">
-                  <svg
-                    className="w-3 h-3"
-                    xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden="true"
-                    role="img"
-                    width="1em"
-                    height="1em"
-                    preserveAspectRatio="xMidYMid meet"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      fill="currentColor"
-                      d="M5 5v14a1 1 0 0 0 1 1h3v-2H7V6h2V4H6a1 1 0 0 0-1 1zm14.242-.97l-8-2A1 1 0 0 0 10 3v18a.998.998 0 0 0 1.242.97l8-2A1 1 0 0 0 20 19V5a1 1 0 0 0-.758-.97zM15 12.188a1.001 1.001 0 0 1-2 0v-.377a1 1 0 1 1 2 .001v.376z"
-                    />
-                  </svg>
-
-                  <span>{stay.rooms} rm</span>
-                </div>
-              )}
-
-              {stay.beds && (
-                <div className="flex items-center gap-0.5">
-                  <svg
-                    className="w-3 h-3"
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    width="24"
-                  >
-                    <path d="M20 9.556V3h-2v2H6V3H4v6.557C2.81 10.25 2 11.526 2 13v4a1 1 0 0 0 1 1h1v4h2v-4h12v4h2v-4h1a1 1 0 0 0 1-1v-4c0-1.474-.811-2.75-2-3.444zM11 9H6V7h5v2zm7 0h-5V7h5v2z" />
-                  </svg>
-                  <span>{stay.beds} bd</span>
-                </div>
-              )}
-
-              {stay.bathrooms && (
-                <div className="flex items-center gap-0.5">
-                  <svg
-                    className="w-3 h-3"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 512 512"
-                  >
-                    <path d="M32 384c0 28.32 12.49 53.52 32 71.09V496C64 504.8 71.16 512 80 512h32C120.8 512 128 504.8 128 496v-15.1h256V496c0 8.836 7.164 16 16 16h32c8.836 0 16-7.164 16-16v-40.9c19.51-17.57 32-42.77 32-71.09V352H32V384zM496 256H96V77.25C95.97 66.45 111 60.23 118.6 67.88L132.4 81.66C123.6 108.6 129.4 134.5 144.2 153.2C137.9 159.5 137.8 169.8 144 176l11.31 11.31c6.248 6.248 16.38 6.248 22.63 0l105.4-105.4c6.248-6.248 6.248-16.38 0-22.63l-11.31-11.31c-6.248-6.248-16.38-6.248-22.63 0C230.7 33.26 204.7 27.55 177.7 36.41L163.9 22.64C149.5 8.25 129.6 0 109.3 0C66.66 0 32 34.66 32 77.25v178.8L16 256C7.164 256 0 263.2 0 272v32C0 312.8 7.164 320 16 320h480c8.836 0 16-7.164 16-16v-32C512 263.2 504.8 256 496 256z" />
-                  </svg>{" "}
-                  <span>{stay.bathrooms} ba</span>
+                  <span>{activity.capacity} Maximum number of guests</span>
                 </div>
               )}
             </div>
@@ -541,7 +467,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
           </div>
           <div className="w-fit px-4 hidden md:block">
             <div className="flex flex-col items-end">
-              <Price stayPrice={stay.price}></Price>
+              <Price stayPrice={activity.price}></Price>
               <div className="flex items-center mt-2 gap-2 justify-between self-start w-full">
                 {!inCart && (
                   <Button
@@ -683,42 +609,44 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
           </div>
         </div>
 
-        {stay.views > 0 && stay.views === 1 && (
+        {activity.views > 0 && activity.views === 1 && (
           <div className="mt-2 text-gray-600">
-            {stay.views} person has viewed this listing
+            {activity.views} person has viewed this listing
           </div>
         )}
-        {stay.views > 0 && stay.views > 1 && (
+        {activity.views > 0 && activity.views > 1 && (
           <div className="mt-2 text-gray-600">
-            {stay.views} people has viewed this listing
+            {activity.views} people has viewed this listing
           </div>
         )}
 
         <div className="flex flex-col md:flex-row justify-between my-10 lg:px-10">
           <div className="border h-fit border-gray-200 rounded-xl overflow-hidden w-full md:w-[48%] order-2 md:order-1 mt-4 md:mt-0">
             <div className="py-2 bg-gray-200 mb-2">
-              <span className="font-bold text-xl ml-6">Amenities</span>
+              <span className="font-bold text-xl ml-6">Experiences</span>
             </div>
-            {!showMoreAmenities && (
+            {!showMoreActivities && (
               <div className="flex flex-col gap-2 px-2">
-                {stay.amenities.slice(0, 5).map((amenity, index) => (
+                {activity.type_of_activities
+                  .slice(0, 5)
+                  .map((amenity, index) => (
+                    <ListItem key={index}>{amenity}</ListItem>
+                  ))}
+              </div>
+            )}
+
+            {showMoreActivities && (
+              <div className="flex flex-col gap-2 px-2">
+                {activity.type_of_activities.map((amenity, index) => (
                   <ListItem key={index}>{amenity}</ListItem>
                 ))}
               </div>
             )}
 
-            {showMoreAmenities && (
-              <div className="flex flex-col gap-2 px-2">
-                {stay.amenities.map((amenity, index) => (
-                  <ListItem key={index}>{amenity}</ListItem>
-                ))}
-              </div>
-            )}
-
-            {!showMoreAmenities && stay.amenities.length > 5 && (
+            {!showMoreActivities && activity.type_of_activities.length > 5 && (
               <div
                 onClick={() => {
-                  setShowMoreAmenities(true);
+                  setShowMoreActivities(true);
                 }}
                 className="font-bold text-blue-700 mt-2 flex items-center gap-0.5 cursor-pointer ml-2 mb-1"
               >
@@ -738,10 +666,10 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               </div>
             )}
 
-            {showMoreAmenities && stay.amenities.length > 5 && (
+            {showMoreActivities && activity.type_of_activities.length > 5 && (
               <div
                 onClick={() => {
-                  setShowMoreAmenities(false);
+                  setShowMoreActivities(false);
                 }}
                 className="font-bold text-blue-700 mt-2 flex items-center gap-0.5 cursor-pointer ml-2 mb-1"
               >
@@ -762,21 +690,22 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
             )}
           </div>
           <div className="w-full h-[350px] md:w-[50%] md:h-[450px] order-1 md:order-2">
-            <Map longitude={stay.longitude} latitude={stay.latitude}></Map>
+            <Map
+              longitude={activity.longitude}
+              latitude={activity.latitude}
+            ></Map>
           </div>
-        </div>
-
-        <div className="lg:px-10 mb-10">
-          <DescribesStay stay={stay}></DescribesStay>
         </div>
 
         <div className="lg:px-10 mb-6">
           <h1 className="font-bold text-2xl mb-5">Description</h1>
           {!showAllDescription && (
-            <p className="ml-2 font-medium">{stay.description.slice(0, 500)}</p>
+            <p className="ml-2 font-medium">
+              {activity.description.slice(0, 500)}
+            </p>
           )}
           {showAllDescription && (
-            <p className="ml-2 font-medium">{stay.description}</p>
+            <p className="ml-2 font-medium">{activity.description}</p>
           )}
           {!showAllDescription && (
             <div
@@ -804,68 +733,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
             <div
               onClick={() => {
                 setShowAllDescription(false);
-              }}
-              className="font-bold text-blue-700 flex items-center gap-0.5 cursor-pointer ml-2"
-            >
-              <span>Read less</span>{" "}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 mt-1"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </div>
-          )}
-        </div>
-
-        <div
-          className={
-            "lg:px-10 mt-10 " + (reviews.length > 0 ? "mb-10" : "mb-16")
-          }
-        >
-          <h1 className="font-bold text-2xl mb-5">
-            What makes this place unique
-          </h1>
-          {!showAllUniqueFeature && (
-            <p className="ml-2 font-medium">
-              {stay.unique_about_place.slice(0, 500)}
-            </p>
-          )}
-          {showAllUniqueFeature && (
-            <p className="ml-2 font-medium">{stay.unique_about_place}</p>
-          )}
-          {!showAllUniqueFeature && (
-            <div
-              onClick={() => {
-                setShowAllUniqueFeature(true);
-              }}
-              className="font-bold text-blue-700 flex items-center gap-0.5 cursor-pointer ml-2"
-            >
-              <span>Read more</span>{" "}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 mt-1"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </div>
-          )}
-          {showAllUniqueFeature && (
-            <div
-              onClick={() => {
-                setShowAllUniqueFeature(false);
               }}
               className="font-bold text-blue-700 flex items-center gap-0.5 cursor-pointer ml-2"
             >
@@ -1007,11 +874,12 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
           </div>
         )}
       </div>
+      <Footer></Footer>
     </div>
   );
 };
 
-StaysDetail.propTypes = {};
+ActivitiesDetail.propTypes = {};
 
 export async function getServerSideProps(context) {
   let exist = false;
@@ -1019,8 +887,8 @@ export async function getServerSideProps(context) {
     const token = getToken(context);
     let cart = getCart(context);
 
-    const stay = await axios.get(
-      `${process.env.NEXT_PUBLIC_baseURL}/stays/${context.query.slug}/`
+    const activity = await axios.get(
+      `${process.env.NEXT_PUBLIC_baseURL}/activities/${context.query.slug}/`
     );
 
     if (token) {
@@ -1043,11 +911,11 @@ export async function getServerSideProps(context) {
       );
 
       exist = data.results.some((val) => {
-        return val.stay.slug === context.query.slug;
+        return val.activity.slug === context.query.slug;
       });
 
-      const stay = await axios.get(
-        `${process.env.NEXT_PUBLIC_baseURL}/stays/${context.query.slug}/`,
+      const activity = await axios.get(
+        `${process.env.NEXT_PUBLIC_baseURL}/activities/${context.query.slug}/`,
         {
           headers: {
             Authorization: "Token " + token,
@@ -1058,7 +926,7 @@ export async function getServerSideProps(context) {
       return {
         props: {
           userProfile: response.data[0],
-          stay: stay.data,
+          activity: activity.data,
           inCart: exist,
         },
       };
@@ -1072,7 +940,7 @@ export async function getServerSideProps(context) {
       return {
         props: {
           userProfile: "",
-          stay: stay.data,
+          activity: activity.data,
           inCart: exist,
         },
       };
@@ -1081,7 +949,7 @@ export async function getServerSideProps(context) {
     return {
       props: {
         userProfile: "",
-        stay: stay.data,
+        activity: activity.data,
         inCart: exist,
       },
     };
@@ -1097,7 +965,7 @@ export async function getServerSideProps(context) {
       return {
         props: {
           userProfile: "",
-          stay: "",
+          activity: "",
           inCart: exist,
         },
       };
@@ -1105,4 +973,4 @@ export async function getServerSideProps(context) {
   }
 }
 
-export default StaysDetail;
+export default ActivitiesDetail;

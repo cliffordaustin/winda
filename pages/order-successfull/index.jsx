@@ -8,7 +8,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
 
-function OrderSuccessfull({ userProfile, allOrders }) {
+function OrderSuccessfull({ userProfile, allOrders, activitiesOrders }) {
   const [state, setState] = useState({
     showDropdown: false,
     currentNavState: 1,
@@ -24,7 +24,7 @@ function OrderSuccessfull({ userProfile, allOrders }) {
 
   useEffect(() => {
     priceConversionRateFunc(dispatch);
-  });
+  }, []);
 
   return (
     <div>
@@ -53,7 +53,7 @@ function OrderSuccessfull({ userProfile, allOrders }) {
       ></Navbar>
       <div className="px-2 xl:w-[1100px] mx-auto sm:px-16 md:px-12 lg:px-16">
         <div className="mt-6">
-          <h1 className="font-bold text-2xl">Order successful for</h1>
+          <h1 className="font-bold text-2xl">Recent orders</h1>
 
           <div className="mt-4 ml-2">
             <div>
@@ -67,6 +67,22 @@ function OrderSuccessfull({ userProfile, allOrders }) {
                       setShowInfo={setShowInfo}
                       orderDays={item.days}
                       orderSuccessfull={true}
+                      userProfile={userProfile}
+                      lengthOfItems={allOrders.length}
+                    ></CartItem>
+                  </div>
+                ))}
+                {activitiesOrders.map((item, index) => (
+                  <div key={item.id} className="md:w-[48%] w-full">
+                    <CartItem
+                      activity={item.activity}
+                      lengthOfItems={activitiesOrders.length}
+                      cartIndex={index}
+                      orderId={item.id}
+                      setShowInfo={setShowInfo}
+                      orderDays={item.days}
+                      orderSuccessfull={true}
+                      activitiesPage={true}
                       userProfile={userProfile}
                     ></CartItem>
                   </div>
@@ -108,10 +124,20 @@ export async function getServerSideProps(context) {
       }
     );
 
+    const activitiesOrders = await axios.get(
+      `${process.env.NEXT_PUBLIC_baseURL}/user-activities-orders/paid/`,
+      {
+        headers: {
+          Authorization: "Token " + token,
+        },
+      }
+    );
+
     return {
       props: {
         userProfile: response.data[0],
         allOrders: data.results,
+        activitiesOrders: activitiesOrders.data.results,
       },
     };
   } catch (error) {

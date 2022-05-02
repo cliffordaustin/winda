@@ -91,9 +91,7 @@ function ActivitiesSearch({
         >
           <DatePicker
             setDate={(date, modifiers = {}) => {
-              if (!modifiers.disabled) {
-                setActivityDate(date);
-              }
+              setActivityDate(date);
             }}
             date={activityDate}
             showDate={showActivityDate}

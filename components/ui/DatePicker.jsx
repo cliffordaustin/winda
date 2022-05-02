@@ -10,6 +10,7 @@ export default function DatePicker({
   showDate,
   disableDate,
   className = "",
+  mode = "single",
 }) {
   const variants = {
     hide: {
@@ -29,6 +30,10 @@ export default function DatePicker({
     },
   };
 
+  const disabledDays = [
+    { from: new Date(2022, 4, 18), to: new Date(2022, 4, 29) },
+  ];
+
   return (
     <AnimatePresence exitBeforeEnter>
       {showDate && (
@@ -37,11 +42,15 @@ export default function DatePicker({
           animate="show"
           initial="hide"
           exit="exit"
-          className={"absolute top-0 left-0 w-full z-30 " + className}
+          className={
+            "absolute top-0 left-0 w-full z-30 bg-gray-50 rounded-xl border border-gray-200 " +
+            className
+          }
           onClick={(e) => e.stopPropagation()}
         >
           <DayPicker
             disabled={{ before: disableDate }}
+            mode={mode}
             selected={date}
             onSelect={setDate}
           />

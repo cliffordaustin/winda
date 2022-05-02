@@ -6,6 +6,7 @@ const homePageState = {
   topBanner: true,
   currencyToDollar: false,
   currentCartItemId: 0,
+  currentCartItemActivitiesId: -1,
   currentCartItemName: "",
 };
 
@@ -19,6 +20,9 @@ const homePageReducer = (state = homePageState, action) => {
 
     case "SET_CURRENT_CART_ITEM_ID":
       return { ...state, currentCartItemId: action.payload };
+
+    case "SET_CURRENT_CART_ACTIVITIES_ITEM_ID":
+      return { ...state, currentCartItemActivitiesId: action.payload };
 
     case "SHOW_TOP_BANNER":
       return { ...state, topBanner: true };

@@ -27,19 +27,35 @@ export const signup = (payload) => async (dispatch) => {
       cart = JSON.parse(decodeURIComponent(cart));
 
       for (const item of cart) {
-        await axios
-          .post(
-            `${process.env.NEXT_PUBLIC_baseURL}/stays/${item.slug}/add-to-cart/`,
-            {},
-            {
-              headers: {
-                Authorization: "Token " + response.data.key,
-              },
-            }
-          )
-          .catch((err) => {
-            console.log(err.response);
-          });
+        if (item.itemCategory === "stays") {
+          await axios
+            .post(
+              `${process.env.NEXT_PUBLIC_baseURL}/stays/${item.slug}/add-to-cart/`,
+              {},
+              {
+                headers: {
+                  Authorization: "Token " + response.data.key,
+                },
+              }
+            )
+            .catch((err) => {
+              console.log(err.response);
+            });
+        } else if (item.itemCategory === "activities") {
+          await axios
+            .post(
+              `${process.env.NEXT_PUBLIC_baseURL}/activities/${item.slug}/add-to-cart/`,
+              {},
+              {
+                headers: {
+                  Authorization: "Token " + response.data.key,
+                },
+              }
+            )
+            .catch((err) => {
+              console.log(err.response);
+            });
+        }
       }
       Cookies.remove("cart");
     }

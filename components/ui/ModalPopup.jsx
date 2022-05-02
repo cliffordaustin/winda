@@ -81,11 +81,10 @@ function Modal({
             className
           }
         >
-          <div className="relative text-center font-Merriweather border-b border-gray-100 mb-4">
-            <h1 className="text-lg font-bold">{title}</h1>
+          <div className="text-center flex items-center px-2 font-Merriweather border-b border-gray-100 mb-4">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="absolute top-1 left-4 cursor-pointer w-5 h-5 z-20"
+              className="cursor-pointer w-5 h-5 z-20"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -101,6 +100,7 @@ function Modal({
                 d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
+            <h1 className="text-lg font-bold block w-full">{title}</h1>
           </div>
           <div className="">{children}</div>
         </motion.div>
