@@ -42,6 +42,8 @@ const Share = ({ setShowShare, showShare, type_of_stay }) => {
         ? "unique space"
         : type_of_stay === "CAMPSITE"
         ? "campsite"
+        : type_of_stay === "EXPERIENCE"
+        ? "experience"
         : "lodge"
     } at ${postUrl}`;
 

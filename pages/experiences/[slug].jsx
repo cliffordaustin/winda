@@ -760,11 +760,11 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
               <ReviewOverview
                 reviews={reviews}
                 filterReview={filterReview}
-                stay={stay}
+                stay={activity}
                 setFilterRateVal={setFilterRateVal}
               ></ReviewOverview>
               <div className="flex gap-2">
-                {!stay.has_user_reviewed && !stay.is_user_stay && (
+                {/* {!activity.has_user_reviewed && !activity.is_user_activity && (
                   <div
                     onClick={() => {
                       const token = Cookies.get("token");
@@ -795,7 +795,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                     </svg>
                     <div>Add Review</div>
                   </div>
-                )}
+                )} */}
                 {filteredReviews && (
                   <div
                     onClick={() => {
@@ -834,7 +834,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
             <div>
               <Share
                 showShare={showShare}
-                type_of_stay={stay.type_of_stay}
+                type_of_stay={"EXPERIENCE"}
                 setShowShare={setShowShare}
               ></Share>
             </div>
