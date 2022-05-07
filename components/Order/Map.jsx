@@ -253,10 +253,10 @@ function MapBox({ staysOrders, activitiesOrders }) {
     getLineWidth: 1,
   });
 
-  const onSelectPlace = useCallback((longitude, latitude) => {
+  const onSelectPlace = useCallback((longitude, latitude, zoom = 13) => {
     mapRef.current.flyTo({
       center: [longitude, latitude],
-      zoom: 13,
+      zoom: zoom,
       duration: 2000,
     });
   }, []);
