@@ -902,7 +902,7 @@ export async function getServerSideProps(context) {
       );
 
       const { data } = await axios.get(
-        `${process.env.NEXT_PUBLIC_baseURL}/user-cart/`,
+        `${process.env.NEXT_PUBLIC_baseURL}/user-activities-cart/`,
         {
           headers: {
             Authorization: "Token " + token,
