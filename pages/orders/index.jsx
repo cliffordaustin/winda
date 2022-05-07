@@ -453,6 +453,7 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                     orderDays={item.days}
                     lengthOfItems={allOrders.length}
                     setInfoPopup={setInfoPopup}
+                    itemType="order-mobile"
                   ></CartItem>
                 ))}
               </div>
@@ -475,6 +476,7 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                     activitiesPage={true}
                     lengthOfItems={activitiesOrders.length}
                     setInfoPopup={setInfoPopup}
+                    itemType="order-mobile"
                   ></CartItem>
                 ))}
               </div>

@@ -366,7 +366,7 @@ const CartItem = ({
       <a
         className="px-4 cursor-pointer"
         onClick={() => {
-          if (itemType === "order") {
+          if (itemType === "order" || "order-mobile") {
             if (!activitiesPage) {
               dispatch({
                 type: "SET_ACTIVE_ITEM",
