@@ -9,15 +9,18 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@mapbox/mapbox-gl-directions": "^4.1.0",
     "@react-google-maps/api": "^2.7.0",
     "axios": "^0.26.1",
     "cashify": "^3.0.1",
     "chroma-js": "^2.4.2",
     "date-fns": "^2.28.0",
+    "deck.gl": "^8.7.8",
     "formik": "^2.2.9",
     "framer-motion": "^6.2.8",
     "js-cookie": "^3.0.1",
     "jsondiffpatch": "^0.4.1",
+    "loaders.gl": "^0.3.5",
     "mapbox-gl": "^2.7.1",
     "mixpanel-browser": "^2.45.0",
     "moment": "^2.29.1",

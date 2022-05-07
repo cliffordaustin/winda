@@ -11,6 +11,7 @@ function Card({
   className = "",
   carouselClassName = "",
   subCarouselClassName = "",
+  childrenClass = "",
 }) {
   return (
     <div className={"w-full rounded-2xl overflow-hidden bg-white " + className}>
@@ -26,7 +27,9 @@ function Card({
         )}
         {subText && <p className="mt-2 text-sm">{subText}</p>}
       </div>
-      {children && <div className="mt-4 px-3 mb-2">{children}</div>}
+      {children && (
+        <div className={"mt-4 px-3 mb-2 " + childrenClass}>{children}</div>
+      )}
     </div>
   );
 }

@@ -8,6 +8,7 @@ const homePageState = {
   currentCartItemId: 0,
   currentCartItemActivitiesId: -1,
   currentCartItemName: "",
+  mapRoute: [],
 };
 
 const homePageReducer = (state = homePageState, action) => {
@@ -23,6 +24,9 @@ const homePageReducer = (state = homePageState, action) => {
 
     case "SET_CURRENT_CART_ACTIVITIES_ITEM_ID":
       return { ...state, currentCartItemActivitiesId: action.payload };
+
+    case "SET_MAP_ROUTE":
+      return { ...state, mapRoute: action.payload };
 
     case "SHOW_TOP_BANNER":
       return { ...state, topBanner: true };

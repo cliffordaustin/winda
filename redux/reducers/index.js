@@ -5,12 +5,14 @@ import authenticationReducer from "./auth";
 import homePageReducer from "./home";
 import stayReducer from "./stay";
 import activityReducer from "./activity";
+import orderReducer from "./order";
 
 export const reducers = combineReducers({
   auth: authenticationReducer,
   home: homePageReducer,
   stay: stayReducer,
   activity: activityReducer,
+  order: orderReducer,
 });
 
 export const mainReducer = (state, action) => {

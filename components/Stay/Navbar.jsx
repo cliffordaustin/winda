@@ -68,7 +68,7 @@ function Navbar({
         </div> */}
       </div>
 
-      <div className="flex justify-center items-center gap-4">
+      <div className="flex justify-center items-center gap-4 text-xs lg:text-base">
         <ClientOnly>
           {currencyToDollar && (
             <div

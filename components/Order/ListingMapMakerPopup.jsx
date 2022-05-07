@@ -7,7 +7,7 @@ import styles from "../../styles/Listing.module.css";
 import Rating from "../ui/Rating";
 import Badge from "../ui/Badge";
 
-const MapMakerPopup = ({ stay }) => {
+const ListingMapMakerPopup = ({ order }) => {
   const [isSafari, setIsSafari] = useState(false);
 
   const currencyToDollar = useSelector((state) => state.home.currencyToDollar);
@@ -25,7 +25,9 @@ const MapMakerPopup = ({ stay }) => {
     }
   }, []);
 
-  const sortedImages = stay.stay_images.sort((x, y) => y.main - x.main);
+  const sortedImages = order.stay_images
+    ? order.stay_images.sort((x, y) => y.main - x.main)
+    : order.activity_images.sort((x, y) => y.main - x.main);
 
   const images = sortedImages.map((image) => {
     return image.image;
@@ -34,7 +36,7 @@ const MapMakerPopup = ({ stay }) => {
   const [newPrice, setNewPrice] = useState();
 
   const price = () => {
-    return stay.price;
+    return order.price;
   };
 
   const priceConversion = async (price) => {
@@ -62,7 +64,7 @@ const MapMakerPopup = ({ stay }) => {
         className={styles.card + " !shadow-sm"}
       >
         <div className="flex flex-col gap-1">
-          <h1 className="text-gray-500 text-sm truncate">{stay.name}</h1>
+          <h1 className="text-gray-500 text-sm truncate">{order.name}</h1>
           {currencyToDollar && (
             <h1 className="font-bold text-xl font-OpenSans">
               {price() ? "$" + Math.ceil(newPrice).toLocaleString() : "No data"}
@@ -76,7 +78,7 @@ const MapMakerPopup = ({ stay }) => {
             </h1>
           )}
         </div>
-        <div className="font-bold text-sm truncate mt-1">{stay.location}</div>
+        <div className="font-bold text-sm truncate mt-1">{order.location}</div>
         {/* <div className="flex items-center gap-1 mt-2">
           <div className={!isSafari ? "-mb-0.5" : "-mb-1"}>
             <Badge
@@ -103,6 +105,6 @@ const MapMakerPopup = ({ stay }) => {
   );
 };
 
-MapMakerPopup.propTypes = {};
+ListingMapMakerPopup.propTypes = {};
 
-export default MapMakerPopup;
+export default ListingMapMakerPopup;
