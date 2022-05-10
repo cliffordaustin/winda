@@ -236,14 +236,6 @@ const MapMakers = ({ order, state }) => {
           {showPopup && (
             <Popup
               closeButton={false}
-              // closeOnMove={true}
-              closeOnClick={false}
-              onOpen={() => {
-                setShowPopup(true);
-              }}
-              onClose={() => {
-                setShowPopup(false);
-              }}
               longitude={order.longitude}
               latitude={order.latitude}
             >

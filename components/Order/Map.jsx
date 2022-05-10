@@ -390,8 +390,8 @@ function MapBox({ staysOrders, activitiesOrders }) {
               "line-cap": "round",
             }}
             paint={{
-              "line-color": "#000",
-              "line-width": 2.5,
+              "line-color": "#dd2e01",
+              "line-width": 3.5,
             }}
             filter={["in", "$type", "LineString"]}
           />
@@ -401,8 +401,8 @@ function MapBox({ staysOrders, activitiesOrders }) {
             type="circle"
             source="geojson"
             paint={{
-              "circle-radius": 5,
-              "circle-color": "#000",
+              "circle-radius": 10,
+              "circle-color": "#dd2e01",
             }}
             filter={["in", "$type", "Point"]}
           />
@@ -429,7 +429,7 @@ function MapBox({ staysOrders, activitiesOrders }) {
 
       <div
         id="distance"
-        className="absolute bottom-2 right-4 px-2 py-2 bg-opacity-50 rounded-lg text-center"
+        className="absolute bottom-2 right-4 font-bold px-2 py-2 bg-opacity-50 rounded-lg text-center"
       ></div>
       <div className="absolute top-6 left-5 lg:w-[50%] w-[70%]">
         <Search
