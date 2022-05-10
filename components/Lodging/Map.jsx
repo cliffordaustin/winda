@@ -6,14 +6,14 @@ import { useDispatch, useSelector } from "react-redux";
 import MapMakers from "./MapMakers";
 
 function MapBox() {
-  const [viewState, setViewState] = React.useState({
-    longitude: 36.8172449,
-    latitude: -1.2832533,
-    zoom: 14,
-  });
-
   const stays = useSelector((state) => state.stay.stays);
   const activeStay = useSelector((state) => state.stay.activeStay);
+
+  const [viewState, setViewState] = React.useState({
+    longitude: stays.length > 0 ? stays[0].longitude : 36.8172449,
+    latitude: stays.length > 0 ? stays[0].latitude : -1.2832533,
+    zoom: 14,
+  });
 
   const GlobalStyle = createGlobalStyle`
   .mapboxgl-map {

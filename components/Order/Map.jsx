@@ -15,6 +15,8 @@ import Map, {
 import Image from "next/image";
 import { createGlobalStyle } from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
+import { length } from "@turf/turf";
+
 import MapMakers from "./MapMakers";
 import Search from "../Order/Search";
 import DeckGL from "@deck.gl/react";
@@ -49,6 +51,20 @@ function MapBox({ staysOrders, activitiesOrders }) {
         ? activitiesOrders[0].activity.latitude
         : 0,
   });
+
+  const geojson = {
+    type: "FeatureCollection",
+    features: [],
+  };
+
+  // Used to draw a line between points
+  const linestring = {
+    type: "Feature",
+    geometry: {
+      type: "LineString",
+      coordinates: [],
+    },
+  };
 
   useEffect(() => {
     if (activeItem) {
@@ -150,8 +166,11 @@ function MapBox({ staysOrders, activitiesOrders }) {
     },
   ]);
 
+  const [staysLongAndLat, setStaysLongAndLat] = useState([]);
+
+  const [activitiesLongAndLat, setActivitiesLongAndLat] = useState([]);
+
   const changeDriversState = () => {
-    // console.log(randomNumber(0.0001, 0.0002));
     const allDrivers = drivers.map((driver) => ({
       ...driver,
       lng: driver.lng + 1,
@@ -160,16 +179,6 @@ function MapBox({ staysOrders, activitiesOrders }) {
 
     setDrivers(allDrivers);
   };
-
-  // setInterval(async () => {
-  //   changeDriversState();
-  // }, 5000);
-
-  // useEffect(() => {
-  //   changeDriversState();
-  // }, []);
-
-  // console.log(drivers);
 
   const [viewState, setViewState] = useState({
     longitude: state.toLong,
@@ -180,6 +189,26 @@ function MapBox({ staysOrders, activitiesOrders }) {
   const [routeData, setRouteData] = useState({});
 
   const [showSearchDetails, setShowSearchDetails] = useState(false);
+
+  useEffect(() => {
+    staysOrders.forEach((order) => {
+      setStaysLongAndLat((staysLongAndLat) => [
+        ...staysLongAndLat,
+        order.stay.longitude,
+        order.stay.latitude,
+      ]);
+    });
+  }, [staysOrders]);
+
+  useEffect(() => {
+    activitiesOrders.forEach((order) => {
+      setActivitiesLongAndLat((activitiesLongAndLat) => [
+        ...activitiesLongAndLat,
+        order.activity.longitude,
+        order.activity.latitude,
+      ]);
+    });
+  }, [activitiesOrders]);
 
   //   useEffect(() => {
   //     setViewState({
@@ -220,38 +249,11 @@ function MapBox({ staysOrders, activitiesOrders }) {
         type: "Feature",
         geometry: {
           type: "LineString",
-          coordinates: mapRoute,
+          coordinates: [staysLongAndLat, activitiesLongAndLat],
         },
       },
     ],
   };
-
-  const layers = new GeoJsonLayer({
-    id: "geojson-layer",
-    data: {
-      type: "FeatureCollection",
-      features: [
-        {
-          type: "Feature",
-          geometry: {
-            type: "LineString",
-            coordinates: mapRoute,
-          },
-        },
-      ],
-    },
-    pickable: true,
-    stroked: false,
-    filled: true,
-    extruded: true,
-    pointType: "circle",
-    lineWidthScale: 20,
-    lineWidthMinPixels: 5,
-    getFillColor: [0, 149, 255, 200],
-    getRadius: 100,
-    getLineColor: [0, 149, 255, 200],
-    getLineWidth: 1,
-  });
 
   const onSelectPlace = useCallback((longitude, latitude, zoom = 13) => {
     mapRef.current.flyTo({
@@ -289,6 +291,63 @@ function MapBox({ staysOrders, activitiesOrders }) {
     [drivers]
   );
 
+  const distanceContainer = process.browser
+    ? document.getElementById("distance")
+    : null;
+
+  const pointClick = (evt) => {
+    const features = mapRef.current.queryRenderedFeatures(evt.point, {
+      layers: ["pointLayer"],
+    });
+
+    if (geojson.features.length > 1) {
+      geojson.features.pop();
+    }
+
+    if (features.length) {
+      const id = features[0].properties.id;
+      geojson.features = geojson.features.filter(
+        (point) => point.properties.id !== id
+      );
+    } else {
+      const point = {
+        type: "Feature",
+        geometry: {
+          type: "Point",
+          coordinates: [evt.lngLat.lng, evt.lngLat.lat],
+        },
+        properties: {
+          id: String(new Date().getTime()),
+        },
+      };
+
+      geojson.features.push(point);
+    }
+
+    if (geojson.features.length > 1) {
+      console.log("first here");
+      linestring.geometry.coordinates = geojson.features.map(
+        (point) => point.geometry.coordinates
+      );
+
+      geojson.features.push(linestring);
+
+      if (process.browser) {
+        distanceContainer.innerHTML = `Total distance: ${length(
+          linestring
+        ).toFixed(2)}km`;
+        distanceContainer.classList.add("bg-black");
+      }
+    } else if (geojson.features.length <= 1) {
+      if (process.browser) {
+        distanceContainer.innerHTML = ``;
+        distanceContainer.classList.remove("bg-black");
+      }
+    }
+
+    mapRef.current.getSource("geojson").setData(geojson);
+  };
+
   return (
     <div style={{ position: "relative", height: "100%", width: "100%" }}>
       <GlobalStyle></GlobalStyle>
@@ -299,30 +358,53 @@ function MapBox({ staysOrders, activitiesOrders }) {
         width="100%"
         height="100%"
         mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_API_KEY}
-        {...viewState}
-        onMove={(evt) => setViewState(evt.viewState)}
+        initialViewState={{
+          longitude: 36.8172449,
+          latitude: -1.2832533,
+          zoom: 14,
+        }}
+        // onMove={(evt) => setViewState(evt.viewState)}
+        onMouseMove={(evt) => {
+          const features = mapRef.current.queryRenderedFeatures(evt.point, {
+            layers: ["pointLayer"],
+          });
+          mapRef.current.getCanvas().style.cursor = features.length
+            ? "pointer"
+            : "crosshair";
+        }}
         mapStyle="mapbox://styles/mapbox/streets-v9"
+        onClick={pointClick}
       >
-        {/* {driverMarkers} */}
-
         <NavigationControl />
         {driverMarkers}
         {staysMarkers}
         {activitiesMarkers}
 
-        <Source id="polylineLayer" type="geojson" data={data}>
+        <Source id="geojson" type="geojson" data={geojson}>
           <Layer
             id="lineLayer"
             type="line"
-            source="my-data"
+            source="geojson"
             layout={{
               "line-join": "round",
               "line-cap": "round",
             }}
             paint={{
-              "line-color": "rgba(3, 170, 238, 0.7)",
-              "line-width": 8,
+              "line-color": "#000",
+              "line-width": 2.5,
             }}
+            filter={["in", "$type", "LineString"]}
+          />
+
+          <Layer
+            id="pointLayer"
+            type="circle"
+            source="geojson"
+            paint={{
+              "circle-radius": 5,
+              "circle-color": "#000",
+            }}
+            filter={["in", "$type", "Point"]}
           />
         </Source>
 
@@ -344,6 +426,11 @@ function MapBox({ staysOrders, activitiesOrders }) {
           </Marker>
         )}
       </Map>
+
+      <div
+        id="distance"
+        className="absolute bottom-2 right-4 px-2 py-2 bg-opacity-50 rounded-lg text-center"
+      ></div>
       <div className="absolute top-6 left-5 lg:w-[50%] w-[70%]">
         <Search
           state={state}
@@ -353,6 +440,7 @@ function MapBox({ staysOrders, activitiesOrders }) {
           onSelectPlace={onSelectPlace}
         ></Search>
       </div>
+
       {showSearchDetails && (
         <div className="absolute lg:left-2 left-2/4 lg:-translate-x-0 -translate-x-2/4 bottom-[50%] md:bottom-12">
           <SearchDetails

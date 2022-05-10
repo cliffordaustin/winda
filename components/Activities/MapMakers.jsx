@@ -119,15 +119,18 @@ const MapMakers = ({ activity }) => {
           >
             {currencyToDollar && (
               <h1 className="font-medium text-xs text-white">
-                {price()
-                  ? "$" + Math.ceil(newPrice).toLocaleString()
+                {activeActivity.price
+                  ? "$" +
+                    Math.ceil(
+                      activeActivity.price * priceConversionRate
+                    ).toLocaleString()
                   : "No data"}
               </h1>
             )}
             {!currencyToDollar && (
               <h1 className="font-medium text-xs text-white">
-                {price()
-                  ? "KES" + Math.ceil(price()).toLocaleString()
+                {activeActivity.price
+                  ? "KES" + Math.ceil(activeActivity.price).toLocaleString()
                   : "No data"}
               </h1>
             )}

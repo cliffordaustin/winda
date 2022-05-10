@@ -33,7 +33,6 @@ import ThemeFilter from "../../components/Lodging/ThemeFilter";
 function Stays({ userProfile, longitude, latitude }) {
   const [state, setState] = useState({
     showDropdown: false,
-    location: "",
     checkin: "",
     checkout: "",
     showCheckInDate: false,
@@ -76,6 +75,43 @@ function Stays({ userProfile, longitude, latitude }) {
   const isMounted = useRef(false);
 
   const isFirstRender = useRef(true);
+
+  const [autoCompleteFromSearch, setAutoCompleteFromSearch] = useState([]);
+
+  const [location, setLocation] = useState(router.query.search || "");
+
+  const [showSearchLoader, setShowSearchLoader] = useState(false);
+
+  const onChange = (event) => {
+    setLocation(event.target.value);
+
+    axios
+      .get(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${event.target.value}.json?access_token=${process.env.NEXT_PUBLIC_MAPBOX_API_KEY}&autocomplete=true&country=ke,ug,tz,rw,bi,tz,ug,tz,sa,gh`
+      )
+      .then((response) => {
+        setAutoCompleteFromSearch(response.data.features);
+      });
+  };
+
+  const locationFromSearch = (item) => {
+    setLocation(item.place_name);
+    setAutoCompleteFromSearch([]);
+  };
+
+  const apiSearchResult = () => {
+    if (location !== "") {
+      setShowSearchLoader(true);
+      router
+        .push({
+          pathname: "/stays",
+          query: { search: location },
+        })
+        .then(() => {
+          router.reload();
+        });
+    }
+  };
 
   const minPriceFilterFormat = router.query.min_price
     ? "KES" + router.query.min_price.replace("000", "k")
@@ -348,12 +384,18 @@ function Stays({ userProfile, longitude, latitude }) {
         >
           <div className="lg:w-4/6 md:w-11/12 w-full">
             <Search
-              location={state.location}
+              autoCompleteFromSearch={autoCompleteFromSearch}
+              showSearchLoader={showSearchLoader}
+              locationFromSearch={(item) => {
+                locationFromSearch(item);
+              }}
+              apiSearchResult={apiSearchResult}
+              location={location}
               checkin={state.checkin}
               selectedSearchItem={state.selectedSearchItem}
               showSearchModal={state.showSearchModal}
               clearInput={() => {
-                setState({ ...state, location: "" });
+                setLocation("");
               }}
               clearCheckInDate={() => {
                 setState({ ...state, checkin: "" });
@@ -401,7 +443,7 @@ function Stays({ userProfile, longitude, latitude }) {
                 });
               }}
               onChange={(event) => {
-                setState({ ...state, location: event.target.value });
+                onChange(event);
               }}
               numOfAdults={state.numOfAdults}
               numOfChildren={state.numOfChildren}
@@ -1972,7 +2014,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
         const token = getToken(context);
 
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_baseURL}/stays/?type_of_stay=${
+          `${process.env.NEXT_PUBLIC_baseURL}/stays/?search=${
+            query.search ? query.search : ""
+          }&type_of_stay=${
             query.type_of_stay ? query.type_of_stay : ""
           }&min_price=${query.min_price ? query.min_price : ""}&max_price=${
             query.max_price ? query.max_price : ""

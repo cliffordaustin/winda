@@ -26,7 +26,6 @@ import Link from "next/link";
 function Activities({ userProfile, longitude, latitude }) {
   const [state, setState] = useState({
     showDropdown: false,
-    location: "",
     travelers: 0,
     activityDate: "",
     showActivityDate: false,
@@ -226,6 +225,46 @@ function Activities({ userProfile, longitude, latitude }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.windowSize]);
 
+  const [activityLocation, setActivityLocation] = useState(
+    router.query.search || ""
+  );
+
+  const [autoCompleteFromActivitySearch, setAutoCompleteFromActivitySearch] =
+    useState([]);
+
+  const [showActivityLoader, setShowActivityLoader] = useState(false);
+
+  const onActivityChange = (event) => {
+    setActivityLocation(event.target.value);
+
+    axios
+      .get(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${event.target.value}.json?access_token=${process.env.NEXT_PUBLIC_MAPBOX_API_KEY}&autocomplete=true&country=ke,ug,tz,rw,bi,tz,ug,tz,sa,gh`
+      )
+      .then((response) => {
+        setAutoCompleteFromActivitySearch(response.data.features);
+      });
+  };
+
+  const locationFromActivitySearch = (item) => {
+    setActivityLocation(item.place_name);
+    setAutoCompleteFromActivitySearch([]);
+  };
+
+  const apiActivitySearchResult = () => {
+    if (location !== "") {
+      setShowActivityLoader(true);
+      router
+        .push({
+          pathname: "/experiences",
+          query: { search: activityLocation },
+        })
+        .then(() => {
+          router.reload();
+        });
+    }
+  };
+
   return (
     <div
       className="relativ overflow-x-hidden"
@@ -304,15 +343,18 @@ function Activities({ userProfile, longitude, latitude }) {
         >
           <div className="lg:w-4/6 md:w-11/12 w-full">
             <Search
-              activityLocation={state.location}
+              autoCompleteFromActivitySearch={autoCompleteFromActivitySearch}
+              showActivityLoader={showActivityLoader}
+              locationFromActivitySearch={(item) => {
+                locationFromActivitySearch(item);
+              }}
+              apiActivitySearchResult={apiActivitySearchResult}
+              activityLocation={activityLocation}
               travelers={state.travelers}
               activityDate={state.activityDate}
               showSearchModal={state.showSearchModal}
               onChange={(event) => {
-                setState({
-                  ...state,
-                  location: event.target.value,
-                });
+                onActivityChange(event);
               }}
               changeSelectedActivitiesSearchItem={(num) => {
                 setState({ ...state, selectedActivitiesSearchItem: num });
@@ -342,7 +384,7 @@ function Activities({ userProfile, longitude, latitude }) {
               }}
               selectedActivitiesSearchItem={state.selectedActivitiesSearchItem}
               clearLocationInput={() => {
-                setState({ ...state, location: "" });
+                setActivityLocation("");
               }}
               clearActivityDate={() => {
                 setState({ ...state, activityDate: "" });
@@ -927,7 +969,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
         const token = getToken(context);
 
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_baseURL}/activities/?type_of_activities=${
+          `${process.env.NEXT_PUBLIC_baseURL}/activities/?search=${
+            query.search ? query.search : ""
+          }&type_of_activities=${
             query.type_of_stay ? query.type_of_stay : ""
           }&min_price=${query.min_price ? query.min_price : ""}&max_price=${
             query.max_price ? query.max_price : ""

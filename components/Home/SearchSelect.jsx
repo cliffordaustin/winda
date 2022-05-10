@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import styles from "../../styles/StyledLink.module.css";
 import { useRouter } from "next/router";
 
-function SearchSelect({ setCurrentNavState, currentNavState }) {
+function SearchSelect({ setCurrentNavState, currentNavState, isHomePage }) {
   const router = useRouter();
   return (
     <div className="flex items-center gap-8">
@@ -11,7 +11,9 @@ function SearchSelect({ setCurrentNavState, currentNavState }) {
         onClick={(event) => {
           event.stopPropagation();
           setCurrentNavState(1);
-          router.push("/stays");
+          if (!isHomePage) {
+            router.push("/stays");
+          }
         }}
         className={
           "cursor-pointer md:!text-base " +
@@ -36,7 +38,9 @@ function SearchSelect({ setCurrentNavState, currentNavState }) {
         onClick={(event) => {
           event.stopPropagation();
           setCurrentNavState(3);
-          router.push("/experiences");
+          if (!isHomePage) {
+            router.push("/experiences");
+          }
         }}
         className={
           "cursor-pointer md:!text-base " +

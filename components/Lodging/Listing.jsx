@@ -332,12 +332,6 @@ function Listing({ listing, getDistance, userLatLng }) {
                     </h1>
                   )}
                 </div>
-                <div className="text-gray-500 flex gap-1 text-sm truncate mt-1">
-                  {listing.guest && <span>{listing.guest}</span>}
-                  {listing.rooms && <span>{listing.rooms}</span>}
-                  {listing.beds && <span>{listing.beds}</span>}
-                  {listing.bathroom && <span>{listing.bathroom}</span>}
-                </div>
                 <div className="text-gray-500 flex gap-1 text-sm truncate mt-1 flex-wrap">
                   {listing.capacity && (
                     <div className="flex items-center gap-0.5">

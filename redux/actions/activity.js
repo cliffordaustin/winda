@@ -8,7 +8,9 @@ export const setFilteredActivities = (router) => async (dispatch) => {
       type: "SET_FILTERED_ACTIVITIES_LOADING_TRUE",
     });
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_baseURL}/stays/?type_of_stay=${
+      `${process.env.NEXT_PUBLIC_baseURL}/stays/?search=${
+        router.query.search ? router.query.search : ""
+      }&type_of_stay=${
         router.query.type_of_stay ? router.query.type_of_stay : ""
       }&min_price=${
         router.query.min_price ? router.query.min_price : ""

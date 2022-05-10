@@ -13,6 +13,7 @@ function Navbar({
   setCurrentNavState,
   userProfile,
   showSearchOptions = true,
+  isHomePage,
 }) {
   return (
     <div className="flex items-center justify-between sm:px-12 px-6 md:px-24 py-4">
@@ -31,6 +32,7 @@ function Navbar({
           <SearchSelect
             setCurrentNavState={setCurrentNavState}
             currentNavState={currentNavState}
+            isHomePage={isHomePage}
           ></SearchSelect>
         </div>
       )}

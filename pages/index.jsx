@@ -6,6 +6,7 @@ import Head from "next/head";
 import Cookies from "js-cookie";
 import axios from "axios";
 import getToken from "../lib/getToken";
+import { useRouter } from "next/router";
 
 import Navbar from "../components/Home/Navbar";
 import Search from "../components/Home/Search";
@@ -24,10 +25,10 @@ import TeamExperience from "../components/Home/TeamExperience";
 import TopBanner from "../components/Home/TopBanner";
 
 export default function Home({ userProfile }) {
+  const router = useRouter();
+
   const [state, setState] = useState({
     showDropdown: false,
-    location: "",
-    activityLocation: "",
     activityDate: "",
     travelers: 0,
     passengers: 0,
@@ -125,6 +126,83 @@ export default function Home({ userProfile }) {
     },
   };
 
+  const [autoCompleteFromSearch, setAutoCompleteFromSearch] = useState([]);
+
+  const [location, setLocation] = useState("");
+
+  const [activityLocation, setActivityLocation] = useState("");
+
+  const [showSearchLoader, setShowSearchLoader] = useState(false);
+
+  const [showActivityLoader, setShowActivityLoader] = useState(false);
+
+  const [autoCompleteFromActivitySearch, setAutoCompleteFromActivitySearch] =
+    useState([]);
+
+  const onChange = (event) => {
+    setLocation(event.target.value);
+
+    axios
+      .get(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${event.target.value}.json?access_token=${process.env.NEXT_PUBLIC_MAPBOX_API_KEY}&autocomplete=true&country=ke,ug,tz,rw,bi,tz,ug,tz,sa,gh`
+      )
+      .then((response) => {
+        setAutoCompleteFromSearch(response.data.features);
+      });
+  };
+
+  const onActivityChange = (event) => {
+    setActivityLocation(event.target.value);
+
+    axios
+      .get(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${event.target.value}.json?access_token=${process.env.NEXT_PUBLIC_MAPBOX_API_KEY}&autocomplete=true&country=ke,ug,tz,rw,bi,tz,ug,tz,sa,gh`
+      )
+      .then((response) => {
+        setAutoCompleteFromActivitySearch(response.data.features);
+      });
+  };
+
+  const locationFromSearch = (item) => {
+    setLocation(item.place_name);
+    setAutoCompleteFromSearch([]);
+  };
+
+  const locationFromActivitySearch = (item) => {
+    setActivityLocation(item.place_name);
+    setAutoCompleteFromActivitySearch([]);
+  };
+
+  const apiSearchResult = () => {
+    if (location !== "") {
+      setShowSearchLoader(true);
+      router
+        .push({
+          pathname: "/stays",
+          query: { search: location },
+        })
+        .then(() => {
+          setShowSearchLoader(false);
+          router.reload();
+        });
+    }
+  };
+
+  const apiActivitySearchResult = () => {
+    if (activityLocation !== "") {
+      setShowActivityLoader(true);
+      router
+        .push({
+          pathname: "/experiences",
+          query: { search: activityLocation },
+        })
+        .then(() => {
+          setShowActivityLoader(false);
+          router.reload();
+        });
+    }
+  };
+
   const [typeOfCar, setTypeOfCar] = useState(null);
   return (
     <div
@@ -192,6 +270,7 @@ export default function Home({ userProfile }) {
               showDropdown: !state.showDropdown,
             })
           }
+          isHomePage={true}
         ></Navbar>
         <div
           ref={searchRef}
@@ -209,12 +288,18 @@ export default function Home({ userProfile }) {
               className="lg:w-4/6 md:w-11/12 w-full"
             >
               <Search
-                location={state.location}
+                autoCompleteFromSearch={autoCompleteFromSearch}
+                locationFromSearch={(item) => {
+                  locationFromSearch(item);
+                }}
+                showSearchLoader={showSearchLoader}
+                apiSearchResult={apiSearchResult}
+                location={location}
                 checkin={state.checkin}
                 selectedSearchItem={state.selectedSearchItem}
                 showSearchModal={state.showSearchModal}
                 clearInput={() => {
-                  setState({ ...state, location: "" });
+                  setLocation("");
                 }}
                 clearCheckInDate={() => {
                   setState({ ...state, checkin: "" });
@@ -262,7 +347,7 @@ export default function Home({ userProfile }) {
                   });
                 }}
                 onChange={(event) => {
-                  setState({ ...state, location: event.target.value });
+                  onChange(event);
                 }}
                 numOfAdults={state.numOfAdults}
                 numOfChildren={state.numOfChildren}
@@ -408,15 +493,18 @@ export default function Home({ userProfile }) {
               className="lg:w-4/6 md:w-11/12 w-full"
             >
               <ActivitiesSearch
-                activityLocation={state.activityLocation}
+                autoCompleteFromActivitySearch={autoCompleteFromActivitySearch}
+                showActivityLoader={showActivityLoader}
+                locationFromActivitySearch={(item) => {
+                  locationFromActivitySearch(item);
+                }}
+                apiActivitySearchResult={apiActivitySearchResult}
+                activityLocation={activityLocation}
                 travelers={state.travelers}
                 activityDate={state.activityDate}
                 showSearchModal={state.showSearchModal}
                 onChange={(event) => {
-                  setState({
-                    ...state,
-                    activityLocation: event.target.value,
-                  });
+                  onActivityChange(event);
                 }}
                 changeSelectedActivitiesSearchItem={(num) => {
                   setState({ ...state, selectedActivitiesSearchItem: num });
@@ -448,7 +536,7 @@ export default function Home({ userProfile }) {
                   state.selectedActivitiesSearchItem
                 }
                 clearLocationInput={() => {
-                  setState({ ...state, activityLocation: "" });
+                  setActivityLocation("");
                 }}
                 clearActivityDate={() => {
                   setState({ ...state, activityDate: "" });
@@ -590,11 +678,16 @@ export default function Home({ userProfile }) {
                   className="lg:w-4/6 md:w-11/12 w-full"
                 >
                   <Search
-                    location={state.location}
+                    location={location}
                     checkin={state.checkin}
+                    showSearchLoader={showSearchLoader}
+                    apiSearchResult={apiSearchResult}
+                    locationFromSearch={(item) => {
+                      locationFromSearch(item);
+                    }}
                     selectedSearchItem={state.selectedSearchItem}
                     clearInput={() => {
-                      setState({ ...state, location: "" });
+                      setLocation("");
                     }}
                     clearCheckInDate={() => {
                       setState({ ...state, checkin: "" });
@@ -635,6 +728,7 @@ export default function Home({ userProfile }) {
                     }}
                     showCheckOutDate={state.showCheckOutDate}
                     showPopup={state.showPopup}
+                    autoCompleteFromSearch={autoCompleteFromSearch}
                     changeShowPopup={() => {
                       setState({
                         ...state,
@@ -645,7 +739,7 @@ export default function Home({ userProfile }) {
                       });
                     }}
                     onChange={(event) => {
-                      setState({ ...state, location: event.target.value });
+                      onChange(event);
                     }}
                     numOfAdults={state.numOfAdults}
                     numOfChildren={state.numOfChildren}
@@ -790,14 +884,19 @@ export default function Home({ userProfile }) {
                   className="lg:w-4/6 md:w-11/12 w-full"
                 >
                   <ActivitiesSearch
-                    activityLocation={state.activityLocation}
+                    autoCompleteFromActivitySearch={
+                      autoCompleteFromActivitySearch
+                    }
+                    showActivityLoader={showActivityLoader}
+                    locationFromActivitySearch={(item) => {
+                      locationFromActivitySearch(item);
+                    }}
+                    apiActivitySearchResult={apiActivitySearchResult}
+                    activityLocation={activityLocation}
                     travelers={state.travelers}
                     activityDate={state.activityDate}
                     onChange={(event) => {
-                      setState({
-                        ...state,
-                        activityLocation: event.target.value,
-                      });
+                      onActivityChange(event);
                     }}
                     changeSelectedActivitiesSearchItem={(num) => {
                       setState({ ...state, selectedActivitiesSearchItem: num });
@@ -829,7 +928,7 @@ export default function Home({ userProfile }) {
                       state.selectedActivitiesSearchItem
                     }
                     clearLocationInput={() => {
-                      setState({ ...state, activityLocation: "" });
+                      setActivityLocation("");
                     }}
                     clearActivityDate={() => {
                       setState({ ...state, activityDate: "" });
@@ -927,18 +1026,24 @@ export default function Home({ userProfile }) {
               className="sm:w-4/5 w-full mx-auto"
             >
               <Search
-                location={state.location}
+                autoCompleteFromSearch={autoCompleteFromSearch}
+                location={location}
                 checkin={state.checkin}
+                showSearchLoader={showSearchLoader}
+                apiSearchResult={apiSearchResult}
                 selectedSearchItem={state.selectedSearchItem}
                 showSearchModal={state.showSearchModal}
                 clearInput={() => {
-                  setState({ ...state, location: "" });
+                  setLocation("");
                 }}
                 clearCheckInDate={() => {
                   setState({ ...state, checkin: "" });
                 }}
                 clearCheckOutDate={() => {
                   setState({ ...state, checkout: "" });
+                }}
+                locationFromSearch={(item) => {
+                  locationFromSearch(item);
                 }}
                 changeShowCheckInDate={() => {
                   setState({
@@ -980,7 +1085,7 @@ export default function Home({ userProfile }) {
                   });
                 }}
                 onChange={(event) => {
-                  setState({ ...state, location: event.target.value });
+                  onChange(event);
                 }}
                 numOfAdults={state.numOfAdults}
                 numOfChildren={state.numOfChildren}
@@ -1120,12 +1225,18 @@ export default function Home({ userProfile }) {
               className="sm:w-4/5 w-full mx-auto"
             >
               <ActivitiesSearch
-                activityLocation={state.activityLocation}
+                autoCompleteFromActivitySearch={autoCompleteFromActivitySearch}
+                showActivityLoader={showActivityLoader}
+                locationFromActivitySearch={(item) => {
+                  locationFromActivitySearch(item);
+                }}
+                apiActivitySearchResult={apiActivitySearchResult}
+                activityLocation={activityLocation}
                 travelers={state.travelers}
                 activityDate={state.activityDate}
                 showSearchModal={state.showSearchModal}
                 onChange={(event) => {
-                  setState({ ...state, activityLocation: event.target.value });
+                  onActivityChange(event);
                 }}
                 changeSelectedActivitiesSearchItem={(num) => {
                   setState({ ...state, selectedActivitiesSearchItem: num });
@@ -1157,7 +1268,7 @@ export default function Home({ userProfile }) {
                   state.selectedActivitiesSearchItem
                 }
                 clearLocationInput={() => {
-                  setState({ ...state, activityLocation: "" });
+                  setActivityLocation("");
                 }}
                 clearActivityDate={() => {
                   setState({ ...state, activityDate: "" });
