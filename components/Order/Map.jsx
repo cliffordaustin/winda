@@ -11,11 +11,13 @@ import Map, {
   Marker,
   Source,
   Layer,
+  SymbolLayer,
 } from "react-map-gl";
 import Image from "next/image";
 import { createGlobalStyle } from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { length } from "@turf/turf";
+import { useRouter } from "next/router";
 
 import MapMakers from "./MapMakers";
 import Search from "../Order/Search";
@@ -32,6 +34,7 @@ function MapBox({ staysOrders, activitiesOrders }) {
   const mapRoute = useSelector((state) => state.home.mapRoute);
   const activeItem = useSelector((state) => state.order.activeItem);
   const mapRef = useRef();
+  const router = useRouter();
 
   const [state, setState] = useState({
     from: "",
@@ -190,22 +193,41 @@ function MapBox({ staysOrders, activitiesOrders }) {
 
   const [showSearchDetails, setShowSearchDetails] = useState(false);
 
+  const [data, setData] = useState({
+    type: "Feature",
+    properties: {},
+    geometry: {
+      type: "LineString",
+      coordinates: [],
+    },
+  });
+
   useEffect(() => {
     staysOrders.forEach((order) => {
       setStaysLongAndLat((staysLongAndLat) => [
         ...staysLongAndLat,
-        order.stay.longitude,
-        order.stay.latitude,
+        [order.stay.longitude, order.stay.latitude],
       ]);
+
+      setData({
+        type: "Feature",
+        properties: {},
+        geometry: {
+          type: "LineString",
+          coordinates: [
+            ...data.geometry.coordinates,
+            [order.stay.longitude, order.stay.latitude],
+          ],
+        },
+      });
     });
-  }, [staysOrders]);
+  }, []);
 
   useEffect(() => {
     activitiesOrders.forEach((order) => {
       setActivitiesLongAndLat((activitiesLongAndLat) => [
         ...activitiesLongAndLat,
-        order.activity.longitude,
-        order.activity.latitude,
+        [order.activity.longitude, order.activity.latitude],
       ]);
     });
   }, [activitiesOrders]);
@@ -242,18 +264,28 @@ function MapBox({ staysOrders, activitiesOrders }) {
   }
 `;
 
-  const data = {
-    type: "FeatureCollection",
-    features: [
-      {
-        type: "Feature",
-        geometry: {
-          type: "LineString",
-          coordinates: [staysLongAndLat, activitiesLongAndLat],
-        },
+  useEffect(() => {
+    setData({
+      type: "Feature",
+      properties: {},
+      geometry: {
+        type: "LineString",
+        coordinates: [...staysLongAndLat, ...activitiesLongAndLat],
       },
-    ],
-  };
+    });
+  }, []);
+
+  // const data = {
+  //   type: "Feature",
+  //   properties: {},
+  //   geometry: {
+  //     type: "LineString",
+  //     coordinates: [
+  //       [-122.41510269913951, 37.77909036739809],
+  //       [39.5423, -77.0564],
+  //     ],
+  //   },
+  // };
 
   const onSelectPlace = useCallback((longitude, latitude, zoom = 13) => {
     mapRef.current.flyTo({
@@ -295,57 +327,75 @@ function MapBox({ staysOrders, activitiesOrders }) {
     ? document.getElementById("distance")
     : null;
 
-  const pointClick = (evt) => {
-    const features = mapRef.current.queryRenderedFeatures(evt.point, {
-      layers: ["pointLayer"],
-    });
+  // const pointClick = (evt) => {
+  //   const features = mapRef.current.queryRenderedFeatures(evt.point, {
+  //     layers: ["pointLayer"],
+  //   });
 
-    if (geojson.features.length > 1) {
-      geojson.features.pop();
-    }
+  //   if (geojson.features.length > 1) {
+  //     geojson.features.pop();
+  //   }
 
-    if (features.length) {
-      const id = features[0].properties.id;
-      geojson.features = geojson.features.filter(
-        (point) => point.properties.id !== id
-      );
-    } else {
-      const point = {
-        type: "Feature",
-        geometry: {
-          type: "Point",
-          coordinates: [evt.lngLat.lng, evt.lngLat.lat],
-        },
-        properties: {
-          id: String(new Date().getTime()),
-        },
-      };
+  //   if (features.length) {
+  //     const id = features[0].properties.id;
+  //     geojson.features = geojson.features.filter(
+  //       (point) => point.properties.id !== id
+  //     );
+  //   } else {
+  //     const point = {
+  //       type: "Feature",
+  //       geometry: {
+  //         type: "Point",
+  //         coordinates: [evt.lngLat.lng, evt.lngLat.lat],
+  //       },
+  //       properties: {
+  //         id: String(new Date().getTime()),
+  //       },
+  //     };
 
-      geojson.features.push(point);
-    }
+  //     geojson.features.push(point);
+  //   }
 
-    if (geojson.features.length > 1) {
-      console.log("first here");
-      linestring.geometry.coordinates = geojson.features.map(
-        (point) => point.geometry.coordinates
-      );
+  //   if (geojson.features.length > 1) {
+  //     console.log("first here");
+  //     linestring.geometry.coordinates = geojson.features.map(
+  //       (point) => point.geometry.coordinates
+  //     );
 
-      geojson.features.push(linestring);
+  //     geojson.features.push(linestring);
 
-      if (process.browser) {
-        distanceContainer.innerHTML = `Total distance: ${length(
-          linestring
-        ).toFixed(2)}km`;
-        distanceContainer.classList.add("bg-black");
-      }
-    } else if (geojson.features.length <= 1) {
-      if (process.browser) {
-        distanceContainer.innerHTML = ``;
-        distanceContainer.classList.remove("bg-black");
-      }
-    }
+  //     if (process.browser) {
+  //       distanceContainer.innerHTML = `Total distance: ${length(
+  //         linestring
+  //       ).toFixed(2)}km`;
+  //       distanceContainer.classList.add("bg-black");
+  //     }
+  //   } else if (geojson.features.length <= 1) {
+  //     if (process.browser) {
+  //       distanceContainer.innerHTML = ``;
+  //       distanceContainer.classList.remove("bg-black");
+  //     }
+  //   }
 
-    mapRef.current.getSource("geojson").setData(geojson);
+  //   mapRef.current.getSource("geojson").setData(geojson);
+  // };
+
+  const distanceLayer = {
+    id: "distance-label",
+    type: "symbol",
+    source: "polylineLayer",
+    paint: {
+      "text-color": "#00f",
+    },
+    layout: {
+      "symbol-placement": "point",
+      "text-font": ["Open Sans Regular", "Arial Unicode MS Regular"],
+      "text-field": "Booo!!!",
+      "text-offset": [0, -0.6],
+      "text-anchor": "center",
+      "text-justify": "center",
+      "text-size": 40,
+    },
   };
 
   return (
@@ -364,23 +414,52 @@ function MapBox({ staysOrders, activitiesOrders }) {
           zoom: 14,
         }}
         // onMove={(evt) => setViewState(evt.viewState)}
-        onMouseMove={(evt) => {
-          const features = mapRef.current.queryRenderedFeatures(evt.point, {
-            layers: ["pointLayer"],
-          });
-          mapRef.current.getCanvas().style.cursor = features.length
-            ? "pointer"
-            : "crosshair";
-        }}
+        // onMouseMove={(evt) => {
+        //   const features = mapRef.current.queryRenderedFeatures(evt.point, {
+        //     layers: ["pointLayer"],
+        //   });
+        //   mapRef.current.getCanvas().style.cursor = features.length
+        //     ? "pointer"
+        //     : "crosshair";
+        // }}
         mapStyle="mapbox://styles/mapbox/streets-v9"
-        onClick={pointClick}
       >
         <NavigationControl />
-        {driverMarkers}
+        {/* {driverMarkers} */}
         {staysMarkers}
         {activitiesMarkers}
 
-        <Source id="geojson" type="geojson" data={geojson}>
+        <Source
+          id="polylineLayer"
+          type="geojson"
+          data={{
+            type: "Feature",
+            properties: {
+              title: "aaaaaa",
+            },
+            geometry: {
+              type: "LineString",
+              coordinates: [...staysLongAndLat, ...activitiesLongAndLat],
+            },
+          }}
+        >
+          <Layer
+            id="lineLayer"
+            type="line"
+            source="polylineLaye"
+            layout={{
+              "line-join": "round",
+              "line-cap": "round",
+            }}
+            paint={{
+              "line-color": "#303960",
+              "line-width": 3,
+            }}
+          />
+          {/* <Layer {...distanceLayer}></Layer> */}
+        </Source>
+
+        {/* <Source id="geojson" type="geojson" data={data}>
           <Layer
             id="lineLayer"
             type="line"
@@ -406,7 +485,7 @@ function MapBox({ staysOrders, activitiesOrders }) {
             }}
             filter={["in", "$type", "Point"]}
           />
-        </Source>
+        </Source> */}
 
         {state.fromLat && state.fromLong && (
           <Marker longitude={state.fromLong} latitude={state.fromLat}>
@@ -431,24 +510,6 @@ function MapBox({ staysOrders, activitiesOrders }) {
         id="distance"
         className="absolute bottom-2 right-4 font-bold px-2 py-2 bg-opacity-50 rounded-lg text-center"
       ></div>
-      <div className="absolute top-6 left-5 lg:w-[50%] w-[70%]">
-        <Search
-          state={state}
-          setState={setState}
-          setRouteData={setRouteData}
-          setShowSearchDetails={setShowSearchDetails}
-          onSelectPlace={onSelectPlace}
-        ></Search>
-      </div>
-
-      {showSearchDetails && (
-        <div className="absolute lg:left-2 left-2/4 lg:-translate-x-0 -translate-x-2/4 bottom-[50%] md:bottom-12">
-          <SearchDetails
-            location={state.from}
-            routeData={routeData}
-          ></SearchDetails>
-        </div>
-      )}
     </div>
   );
 }

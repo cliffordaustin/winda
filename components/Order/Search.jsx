@@ -105,7 +105,7 @@ function Search({
             " !rounded-t-xl !rounded-b-none")
         }
       >
-        <div className="h-full w-10 ml-1 flex justify-center items-center z-10cursor-pointer">
+        <div className="h-full w-10 ml-1 flex justify-center items-center z-10 cursor-pointer">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5"
