@@ -14,6 +14,7 @@ export default function Input({
   changeShowPasswordToFalse,
   onBlur,
   changeShowPasswordToTrue,
+  onKeyPress,
   autoComplete = "",
 }) {
   return (
@@ -32,6 +33,7 @@ export default function Input({
           onBlur={onBlur}
           placeholder={placeholder}
           autoComplete={autoComplete}
+          onKeyPress={onKeyPress}
           className={
             "appearance-none leading-tight font-bold border rounded-md focus:outline-none py-3 px-4 w-full text-sm " +
             (errorStyle ? "!border-red-300 " : "border-gray-300 ") +
@@ -102,6 +104,7 @@ Input.propTypes = {
   changeShowPasswordToTrue: PropTypes.func,
   changeShowPasswordToFalse: PropTypes.func,
   onChange: PropTypes.func,
+  onKeyPress: PropTypes.func,
   onBlur: PropTypes.func,
   autoComplete: PropTypes.string,
 };

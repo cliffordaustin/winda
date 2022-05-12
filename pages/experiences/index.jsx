@@ -260,8 +260,32 @@ function Activities({ userProfile, longitude, latitude }) {
           query: { search: activityLocation },
         })
         .then(() => {
+          setShowActivityLoader(false);
           router.reload();
         });
+    }
+  };
+
+  const keyDownActivitySearch = (event) => {
+    if (event.key === "Enter") {
+      if (autoCompleteFromActivitySearch.length > 0) {
+        setActivityLocation(autoCompleteFromActivitySearch[0].place_name);
+
+        setAutoCompleteFromActivitySearch([]);
+
+        if (activityLocation !== "") {
+          setShowActivityLoader(true);
+          router
+            .push({
+              pathname: "/experiences",
+              query: { search: autoCompleteFromActivitySearch[0].place_name },
+            })
+            .then(() => {
+              setShowActivityLoader(false);
+              router.reload();
+            });
+        }
+      }
     }
   };
 
@@ -344,6 +368,7 @@ function Activities({ userProfile, longitude, latitude }) {
           <div className="lg:w-4/6 md:w-11/12 w-full">
             <Search
               autoCompleteFromActivitySearch={autoCompleteFromActivitySearch}
+              onKeyDown={keyDownActivitySearch}
               showActivityLoader={showActivityLoader}
               locationFromActivitySearch={(item) => {
                 locationFromActivitySearch(item);
@@ -773,15 +798,19 @@ function Activities({ userProfile, longitude, latitude }) {
         </div>
         <div className="lg:w-4/6 md:w-11/12 w-full px-4">
           <Search
-            activityLocation={state.location}
+            autoCompleteFromActivitySearch={autoCompleteFromActivitySearch}
+            showActivityLoader={showActivityLoader}
+            locationFromActivitySearch={(item) => {
+              locationFromActivitySearch(item);
+            }}
+            apiActivitySearchResult={apiActivitySearchResult}
+            activityLocation={activityLocation}
+            onKeyDown={keyDownActivitySearch}
             travelers={state.travelers}
             activityDate={state.activityDate}
             showSearchModal={state.showSearchModal}
             onChange={(event) => {
-              setState({
-                ...state,
-                location: event.target.value,
-              });
+              onActivityChange(event);
             }}
             changeSelectedActivitiesSearchItem={(num) => {
               setState({ ...state, selectedActivitiesSearchItem: num });
@@ -811,7 +840,7 @@ function Activities({ userProfile, longitude, latitude }) {
             }}
             selectedActivitiesSearchItem={state.selectedActivitiesSearchItem}
             clearLocationInput={() => {
-              setState({ ...state, location: "" });
+              setActivityLocation("");
             }}
             clearActivityDate={() => {
               setState({ ...state, activityDate: "" });

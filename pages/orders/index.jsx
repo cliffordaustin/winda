@@ -138,11 +138,7 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
       }
     });
 
-    location = location
-      .toString()
-      .replace("[", " ")
-      .replace("]", " ")
-      .replaceAll(",", " ");
+    location = location.toString().replace("[", " ").replace("]", " ");
 
     setUniqueLocation(location);
   }, []);

@@ -16,7 +16,7 @@ import Map, {
 import Image from "next/image";
 import { createGlobalStyle } from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import { length } from "@turf/turf";
+import { length, along } from "@turf/turf";
 import { useRouter } from "next/router";
 
 import MapMakers from "./MapMakers";
@@ -275,18 +275,6 @@ function MapBox({ staysOrders, activitiesOrders }) {
     });
   }, []);
 
-  // const data = {
-  //   type: "Feature",
-  //   properties: {},
-  //   geometry: {
-  //     type: "LineString",
-  //     coordinates: [
-  //       [-122.41510269913951, 37.77909036739809],
-  //       [39.5423, -77.0564],
-  //     ],
-  //   },
-  // };
-
   const onSelectPlace = useCallback((longitude, latitude, zoom = 13) => {
     mapRef.current.flyTo({
       center: [longitude, latitude],
@@ -380,21 +368,20 @@ function MapBox({ staysOrders, activitiesOrders }) {
   //   mapRef.current.getSource("geojson").setData(geojson);
   // };
 
-  const distanceLayer = {
-    id: "distance-label",
-    type: "symbol",
-    source: "polylineLayer",
-    paint: {
-      "text-color": "#00f",
-    },
-    layout: {
-      "symbol-placement": "point",
-      "text-font": ["Open Sans Regular", "Arial Unicode MS Regular"],
-      "text-field": "Booo!!!",
-      "text-offset": [0, -0.6],
-      "text-anchor": "center",
-      "text-justify": "center",
-      "text-size": 40,
+  const distanceLabels = {
+    type: "FeatureCollection",
+    features: [],
+  };
+
+  const distanceBetweenLines = {
+    type: "Feature",
+    geometry: {
+      type: "LineString",
+      coordinates: [
+        [36.8142449, -1.2822533],
+        [36.8183449, -1.2836533],
+        [36.43298030288131, -0.7402770764208345],
+      ],
     },
   };
 
@@ -411,21 +398,11 @@ function MapBox({ staysOrders, activitiesOrders }) {
         initialViewState={{
           longitude: 36.8172449,
           latitude: -1.2832533,
-          zoom: 14,
+          zoom: 8,
         }}
-        // onMove={(evt) => setViewState(evt.viewState)}
-        // onMouseMove={(evt) => {
-        //   const features = mapRef.current.queryRenderedFeatures(evt.point, {
-        //     layers: ["pointLayer"],
-        //   });
-        //   mapRef.current.getCanvas().style.cursor = features.length
-        //     ? "pointer"
-        //     : "crosshair";
-        // }}
         mapStyle="mapbox://styles/mapbox/streets-v9"
       >
         <NavigationControl />
-        {/* {driverMarkers} */}
         {staysMarkers}
         {activitiesMarkers}
 
@@ -456,7 +433,6 @@ function MapBox({ staysOrders, activitiesOrders }) {
               "line-width": 3,
             }}
           />
-          {/* <Layer {...distanceLayer}></Layer> */}
         </Source>
 
         {/* <Source id="geojson" type="geojson" data={data}>

@@ -108,8 +108,32 @@ function Stays({ userProfile, longitude, latitude }) {
           query: { search: location },
         })
         .then(() => {
+          setShowSearchLoader(false);
           router.reload();
         });
+    }
+  };
+
+  const keyDownSearch = (event) => {
+    if (event.key === "Enter") {
+      if (autoCompleteFromSearch.length > 0) {
+        setLocation(autoCompleteFromSearch[0].place_name);
+
+        setAutoCompleteFromSearch([]);
+
+        if (location !== "") {
+          setShowSearchLoader(true);
+          router
+            .push({
+              pathname: "/stays",
+              query: { search: autoCompleteFromSearch[0].place_name },
+            })
+            .then(() => {
+              setShowSearchLoader(false);
+              router.reload();
+            });
+        }
+      }
     }
   };
 
@@ -385,6 +409,7 @@ function Stays({ userProfile, longitude, latitude }) {
           <div className="lg:w-4/6 md:w-11/12 w-full">
             <Search
               autoCompleteFromSearch={autoCompleteFromSearch}
+              onKeyDown={keyDownSearch}
               showSearchLoader={showSearchLoader}
               locationFromSearch={(item) => {
                 locationFromSearch(item);
@@ -1833,11 +1858,19 @@ function Stays({ userProfile, longitude, latitude }) {
         </div>
         <div className="lg:w-4/6 md:w-11/12 w-full px-4">
           <Search
-            location={state.location}
+            autoCompleteFromSearch={autoCompleteFromSearch}
+            onKeyDown={keyDownSearch}
+            showSearchLoader={showSearchLoader}
+            locationFromSearch={(item) => {
+              locationFromSearch(item);
+            }}
+            apiSearchResult={apiSearchResult}
+            location={location}
             checkin={state.checkin}
             selectedSearchItem={state.selectedSearchItem}
+            showSearchModal={state.showSearchModal}
             clearInput={() => {
-              setState({ ...state, location: "" });
+              setLocation("");
             }}
             clearCheckInDate={() => {
               setState({ ...state, checkin: "" });
@@ -1885,17 +1918,14 @@ function Stays({ userProfile, longitude, latitude }) {
               });
             }}
             onChange={(event) => {
-              setState({ ...state, location: event.target.value });
+              onChange(event);
             }}
             numOfAdults={state.numOfAdults}
             numOfChildren={state.numOfChildren}
             numOfInfants={state.numOfInfants}
             addToAdults={() => {
               console.log("add");
-              setState({
-                ...state,
-                numOfAdults: state.numOfAdults + 1,
-              });
+              setState({ ...state, numOfAdults: state.numOfAdults + 1 });
             }}
             addToChildren={() => {
               setState({
@@ -1904,17 +1934,11 @@ function Stays({ userProfile, longitude, latitude }) {
               });
             }}
             addToInfants={() => {
-              setState({
-                ...state,
-                numOfInfants: state.numOfInfants + 1,
-              });
+              setState({ ...state, numOfInfants: state.numOfInfants + 1 });
             }}
             removeFromAdults={() => {
               state.numOfAdults > 0
-                ? setState({
-                    ...state,
-                    numOfAdults: state.numOfAdults - 1,
-                  })
+                ? setState({ ...state, numOfAdults: state.numOfAdults - 1 })
                 : null;
             }}
             removeFromChildren={() => {

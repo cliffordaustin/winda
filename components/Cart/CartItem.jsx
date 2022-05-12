@@ -387,12 +387,12 @@ const CartItem = ({
             (itemType === "order" ? "flex-col" : "")
           }
         >
-          {activeItem && !activitiesPage && activeItem.id !== stay.id && (
+          {/* {activeItem && !activitiesPage && activeItem.id !== stay.id && (
             <div className="absolute top-0 rounded-md left-0 w-full h-full bg-white bg-opacity-40 !z-40"></div>
           )}
           {activeItem && activitiesPage && activeItem.id !== activity.id && (
             <div className="absolute top-0 rounded-md left-0 w-full h-full bg-white bg-opacity-40 !z-40"></div>
-          )}
+          )} */}
           <div
             className={
               "w-full justify-between overflow-hidden rounded-md relative " +

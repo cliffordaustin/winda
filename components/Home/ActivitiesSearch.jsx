@@ -32,6 +32,7 @@ function ActivitiesSearch({
   locationFromActivitySearch,
   apiActivitySearchResult,
   showActivityLoader,
+  onKeyDown,
 }) {
   return (
     <div className="flex flex-col md:flex-row rounded-2xl py-4 px-2 md:py-0 md:px-0 md:rounded-full bg-white w-full shadow-md">
@@ -56,6 +57,7 @@ function ActivitiesSearch({
           onChange={(event) => {
             onChange(event);
           }}
+          onKeyPress={onKeyDown}
         ></Input>
         <div
           className={

@@ -188,6 +188,29 @@ export default function Home({ userProfile }) {
     }
   };
 
+  const keyDownSearch = (event) => {
+    if (event.key === "Enter") {
+      if (autoCompleteFromSearch.length > 0) {
+        setLocation(autoCompleteFromSearch[0].place_name);
+
+        setAutoCompleteFromSearch([]);
+
+        if (location !== "") {
+          setShowSearchLoader(true);
+          router
+            .push({
+              pathname: "/stays",
+              query: { search: autoCompleteFromSearch[0].place_name },
+            })
+            .then(() => {
+              setShowSearchLoader(false);
+              router.reload();
+            });
+        }
+      }
+    }
+  };
+
   const apiActivitySearchResult = () => {
     if (activityLocation !== "") {
       setShowActivityLoader(true);
@@ -200,6 +223,29 @@ export default function Home({ userProfile }) {
           setShowActivityLoader(false);
           router.reload();
         });
+    }
+  };
+
+  const keyDownActivitySearch = (event) => {
+    if (event.key === "Enter") {
+      if (autoCompleteFromActivitySearch.length > 0) {
+        setActivityLocation(autoCompleteFromActivitySearch[0].place_name);
+
+        setAutoCompleteFromActivitySearch([]);
+
+        if (activityLocation !== "") {
+          setShowActivityLoader(true);
+          router
+            .push({
+              pathname: "/experiences",
+              query: { search: autoCompleteFromActivitySearch[0].place_name },
+            })
+            .then(() => {
+              setShowActivityLoader(false);
+              router.reload();
+            });
+        }
+      }
     }
   };
 
@@ -289,6 +335,7 @@ export default function Home({ userProfile }) {
             >
               <Search
                 autoCompleteFromSearch={autoCompleteFromSearch}
+                onKeyDown={keyDownSearch}
                 locationFromSearch={(item) => {
                   locationFromSearch(item);
                 }}
@@ -495,6 +542,7 @@ export default function Home({ userProfile }) {
               <ActivitiesSearch
                 autoCompleteFromActivitySearch={autoCompleteFromActivitySearch}
                 showActivityLoader={showActivityLoader}
+                onKeyDown={keyDownActivitySearch}
                 locationFromActivitySearch={(item) => {
                   locationFromActivitySearch(item);
                 }}
@@ -680,6 +728,7 @@ export default function Home({ userProfile }) {
                   <Search
                     location={location}
                     checkin={state.checkin}
+                    onKeyDown={keyDownSearch}
                     showSearchLoader={showSearchLoader}
                     apiSearchResult={apiSearchResult}
                     locationFromSearch={(item) => {
@@ -887,6 +936,7 @@ export default function Home({ userProfile }) {
                     autoCompleteFromActivitySearch={
                       autoCompleteFromActivitySearch
                     }
+                    onKeyDown={keyDownActivitySearch}
                     showActivityLoader={showActivityLoader}
                     locationFromActivitySearch={(item) => {
                       locationFromActivitySearch(item);
@@ -1027,6 +1077,7 @@ export default function Home({ userProfile }) {
             >
               <Search
                 autoCompleteFromSearch={autoCompleteFromSearch}
+                onKeyDown={keyDownSearch}
                 location={location}
                 checkin={state.checkin}
                 showSearchLoader={showSearchLoader}
@@ -1226,6 +1277,7 @@ export default function Home({ userProfile }) {
             >
               <ActivitiesSearch
                 autoCompleteFromActivitySearch={autoCompleteFromActivitySearch}
+                onKeyDown={keyDownActivitySearch}
                 showActivityLoader={showActivityLoader}
                 locationFromActivitySearch={(item) => {
                   locationFromActivitySearch(item);

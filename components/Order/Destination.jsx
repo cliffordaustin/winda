@@ -26,8 +26,6 @@ const Destination = ({ uniqueLocation, className = "", inPopup = false }) => {
       });
   };
 
-  console.log(uniqueLocation);
-
   const searchApi = () => {
     if (location !== "") {
       if (currentNavState === 1) {
@@ -48,6 +46,38 @@ const Destination = ({ uniqueLocation, className = "", inPopup = false }) => {
           .then(() => {
             router.reload();
           });
+      }
+    }
+  };
+
+  const keyDownSearch = (event) => {
+    if (event.key === "Enter") {
+      if (autoCompleteFromSearch.length > 0) {
+        setLocation(autoCompleteFromSearch[0].place_name);
+
+        setAutoCompleteFromSearch([]);
+
+        if (location !== "") {
+          if (currentNavState === 1) {
+            router
+              .push({
+                pathname: "/stays",
+                query: { search: autoCompleteFromSearch[0].place_name },
+              })
+              .then(() => {
+                router.reload();
+              });
+          } else if (currentNavState === 2) {
+            router
+              .push({
+                pathname: "/experiences",
+                query: { search: autoCompleteFromSearch[0].place_name },
+              })
+              .then(() => {
+                router.reload();
+              });
+          }
+        }
       }
     }
   };
@@ -118,6 +148,9 @@ const Destination = ({ uniqueLocation, className = "", inPopup = false }) => {
             autoComplete="off"
             onChange={(event) => {
               onChange(event);
+            }}
+            onKeyPress={(event) => {
+              keyDownSearch(event);
             }}
           ></Input>
 
