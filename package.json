@@ -32,6 +32,7 @@
     "nprogress": "^0.2.0",
     "prop-types": "^15.8.1",
     "react": "17.0.2",
+    "react-beautiful-dnd": "^13.1.0",
     "react-cookie": "^4.1.1",
     "react-day-picker": "^8.0.4",
     "react-dom": "17.0.2",
@@ -52,8 +53,10 @@
     "redux-persist-transform-filter": "^0.0.20",
     "redux-thunk": "^2.4.1",
     "styled-components": "^5.3.5",
+    "supercluster": "^7.1.5",
     "swiper": "^8.0.6",
     "use-places-autocomplete": "^1.11.0",
+    "use-supercluster": "^0.4.0",
     "yup": "^0.32.11"
   },
   "devDependencies": {

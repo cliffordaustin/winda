@@ -323,12 +323,17 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
               <Destination uniqueLocation={uniqueLocation}></Destination>
             </div>
             <div className="relative hidden md:block h-full top-20 px-4 w-full md:w-[380px]">
+              {(allOrders.length > 0 || activitiesOrders.length > 0) && (
+                <div className="mt-2 mb-4 text-xl font-bold text-center">
+                  Your itinerary
+                </div>
+              )}
               {allOrders.length > 0 && (
-                <div className="mt-2 ml-4 text-xl font-bold">
+                <div className="mt-2 ml-4 text-lg font-bold">
                   Stays - Your Basket
                 </div>
               )}
-              <div className="flex flex-col">
+              <div className="flex flex-col -mt-3">
                 {allOrders.map((item, index) => (
                   <CartItem
                     checkoutInfo={true}
@@ -346,11 +351,11 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
               </div>
 
               {activitiesOrders.length > 0 && (
-                <div className="mt-2 ml-4 text-xl font-bold">
+                <div className="mt-2 ml-4 text-lg font-bold">
                   Experiences - Your Basket
                 </div>
               )}
-              <div className="flex flex-col">
+              <div className="flex flex-col -mt-3">
                 {activitiesOrders.map((item, index) => (
                   <CartItem
                     checkoutInfo={true}
@@ -452,7 +457,7 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                       });
                     }}
                     className={
-                      "flex relative flex-col items-center py-3 px-2 rounded-xl transition-all duration-500 cursor-pointer " +
+                      "flex relative flex-col items-center justify-center py-1 px-2 rounded-xl transition-all duration-500 cursor-pointer " +
                       (router.query.label === "show"
                         ? "bg-blue-400 hover:bg-blue-500"
                         : "hover:bg-gray-300")
@@ -489,7 +494,7 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                       });
                     }}
                     className={
-                      "flex relative flex-col items-center py-3 px-2 rounded-xl transition-all duration-500 cursor-pointer " +
+                      "flex relative flex-col justify-center items-center just py-1 px-2 rounded-xl transition-all duration-500 cursor-pointer " +
                       (router.query.stay === "show"
                         ? "bg-blue-400 hover:bg-blue-500"
                         : "hover:bg-gray-300")
@@ -527,7 +532,7 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                       });
                     }}
                     className={
-                      "flex relative flex-col items-center py-3 px-2 rounded-xl transition-all duration-500 cursor-pointer " +
+                      "flex relative flex-col items-center justify-center py-1 px-2 rounded-xl transition-all duration-500 cursor-pointer " +
                       (router.query.experiences === "show"
                         ? "bg-blue-400 hover:bg-blue-500"
                         : "hover:bg-gray-300")
@@ -537,40 +542,21 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                       xmlns="http://www.w3.org/2000/svg"
                       aria-hidden="true"
                       role="img"
-                      width="1em"
-                      height="1em"
+                      className="w-6 h-6"
                       preserveAspectRatio="xMidYMid meet"
-                      viewBox="0 0 48 48"
+                      viewBox="0 0 24 24"
                     >
-                      <mask id="svgIDa">
-                        <g
-                          fill="none"
-                          stroke="#fff"
-                          strokeLinecap="round"
-                          strokeWidth="4"
-                        >
-                          <path
-                            strokeLinejoin="round"
-                            d="M22 14s-2.7 5.293-4 12c-1.3 6.707-1 16-1 16"
-                          />
-                          <path
-                            fill="#fff"
-                            strokeLinejoin="round"
-                            d="M33.953 23.272c.346.23.893.391 1.428.503c.932.194 1.792-.446 1.768-1.397c-.045-1.774-.737-4.675-4.258-7.014c-3.325-2.207-6.626-2.238-8.708-1.92c-1.187.18-1.66 1.478-.978 2.467c.608.883 1.316 1.774 1.795 1.945c1 .355 2.203-.582 3.08 0c.876.581.615 1.925 1.492 2.507c.876.582 2.013-.18 2.89.402c.875.582.615 1.925 1.491 2.507ZM20 17c.858-.286 1.389-1.226 1.686-1.979c.246-.621.026-1.308-.55-1.648c-1.295-.766-4.06-1.814-8.374-.561c-4.265 1.238-5.39 4.056-5.677 5.715a1.33 1.33 0 0 0 1.178 1.566c.56.062 1.176.034 1.544-.278c.807-.685 1.025-1.582 1.927-1.824c.901-.241 1.679.858 2.58.616c.902-.241 1.026-1.582 1.927-1.824c.902-.241 2.26.717 3.76.217Zm7-11c-2.5 1-5 6-5 8l13-6c-1.38-2.391-5.5-3-8-2Z"
-                          />
-                          <path
-                            fill="#fff"
-                            strokeLinejoin="round"
-                            d="M20 5c4 1.422 3.38 6.609 2 9L10 5.922C11 4 16 3.578 20 5Z"
-                          />
-                          <path d="M26 35c8.284 0 13 1.79 13 4s-6.716 4-15 4c-8.284 0-15-1.79-15-4c0-.54.4-1.053 1.125-1.523" />
-                        </g>
-                      </mask>
-                      <path
-                        fill="currentColor"
-                        d="M0 0h48v48H0z"
-                        mask="url(#svgIDa)"
-                      />
+                      <g
+                        fill="none"
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="1"
+                      >
+                        <path d="m14.571 15.004l.858 1.845s3.857.819 3.857 2.767C19.286 21 17.57 21 17.57 21H13l-2.25-1.25" />
+                        <path d="m9.429 15.004l-.857 1.845s-3.858.819-3.858 2.767C4.714 21 6.43 21 6.43 21H8.5l2.25-1.25L13.5 18" />
+                        <path d="M3 15.926s2.143-.461 3.429-.922C7.714 8.546 11.57 9.007 12 9.007c.429 0 4.286-.461 5.571 5.997c1.286.46 3.429.922 3.429.922M12 7a2 2 0 1 0 0-4a2 2 0 0 0 0 4Z" />
+                      </g>
                     </svg>
                     <span className="font-bold">Experiences</span>
                   </div>
@@ -588,7 +574,7 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                       });
                     }}
                     className={
-                      "flex relative flex-col items-center py-3 px-2 rounded-xl transition-all duration-500 cursor-pointer " +
+                      "flex relative flex-col items-center justify-center py-1 px-2 rounded-xl transition-all duration-500 cursor-pointer " +
                       (router.query.showAll === "show"
                         ? "bg-blue-400 hover:bg-blue-500"
                         : "hover:bg-gray-300")
@@ -653,7 +639,7 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                   });
                 }}
                 className={
-                  "flex relative flex-col text-sm items-center py-3 px-2 rounded-xl transition-all duration-500 cursor-pointer " +
+                  "flex relative flex-col text-sm items-center justify-center py-1 px-2 rounded-xl transition-all duration-500 cursor-pointer " +
                   (router.query.label === "show"
                     ? "bg-blue-400 hover:bg-blue-500"
                     : "hover:bg-gray-300")
@@ -690,7 +676,7 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                   });
                 }}
                 className={
-                  "flex relative flex-col text-sm items-center py-3 px-2 rounded-xl transition-all duration-500 cursor-pointer " +
+                  "flex relative flex-col text-sm items-center justify-center py-1 px-2 rounded-xl transition-all duration-500 cursor-pointer " +
                   (router.query.stay === "show"
                     ? "bg-blue-400 hover:bg-blue-500"
                     : "hover:bg-gray-300")
@@ -728,7 +714,7 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                   });
                 }}
                 className={
-                  "flex relative flex-col text-sm items-center py-3 px-2 rounded-xl transition-all duration-500 cursor-pointer " +
+                  "flex relative flex-col text-sm items-center justify-center py-1 px-2 rounded-xl transition-all duration-500 cursor-pointer " +
                   (router.query.experiences === "show"
                     ? "bg-blue-400 hover:bg-blue-500"
                     : "hover:bg-gray-300")
@@ -738,40 +724,21 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                   xmlns="http://www.w3.org/2000/svg"
                   aria-hidden="true"
                   role="img"
-                  width="1em"
-                  height="1em"
+                  className="w-6 h-6"
                   preserveAspectRatio="xMidYMid meet"
-                  viewBox="0 0 48 48"
+                  viewBox="0 0 24 24"
                 >
-                  <mask id="svgIDa">
-                    <g
-                      fill="none"
-                      stroke="#fff"
-                      strokeLinecap="round"
-                      strokeWidth="4"
-                    >
-                      <path
-                        strokeLinejoin="round"
-                        d="M22 14s-2.7 5.293-4 12c-1.3 6.707-1 16-1 16"
-                      />
-                      <path
-                        fill="#fff"
-                        strokeLinejoin="round"
-                        d="M33.953 23.272c.346.23.893.391 1.428.503c.932.194 1.792-.446 1.768-1.397c-.045-1.774-.737-4.675-4.258-7.014c-3.325-2.207-6.626-2.238-8.708-1.92c-1.187.18-1.66 1.478-.978 2.467c.608.883 1.316 1.774 1.795 1.945c1 .355 2.203-.582 3.08 0c.876.581.615 1.925 1.492 2.507c.876.582 2.013-.18 2.89.402c.875.582.615 1.925 1.491 2.507ZM20 17c.858-.286 1.389-1.226 1.686-1.979c.246-.621.026-1.308-.55-1.648c-1.295-.766-4.06-1.814-8.374-.561c-4.265 1.238-5.39 4.056-5.677 5.715a1.33 1.33 0 0 0 1.178 1.566c.56.062 1.176.034 1.544-.278c.807-.685 1.025-1.582 1.927-1.824c.901-.241 1.679.858 2.58.616c.902-.241 1.026-1.582 1.927-1.824c.902-.241 2.26.717 3.76.217Zm7-11c-2.5 1-5 6-5 8l13-6c-1.38-2.391-5.5-3-8-2Z"
-                      />
-                      <path
-                        fill="#fff"
-                        strokeLinejoin="round"
-                        d="M20 5c4 1.422 3.38 6.609 2 9L10 5.922C11 4 16 3.578 20 5Z"
-                      />
-                      <path d="M26 35c8.284 0 13 1.79 13 4s-6.716 4-15 4c-8.284 0-15-1.79-15-4c0-.54.4-1.053 1.125-1.523" />
-                    </g>
-                  </mask>
-                  <path
-                    fill="currentColor"
-                    d="M0 0h48v48H0z"
-                    mask="url(#svgIDa)"
-                  />
+                  <g
+                    fill="none"
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="1"
+                  >
+                    <path d="m14.571 15.004l.858 1.845s3.857.819 3.857 2.767C19.286 21 17.57 21 17.57 21H13l-2.25-1.25" />
+                    <path d="m9.429 15.004l-.857 1.845s-3.858.819-3.858 2.767C4.714 21 6.43 21 6.43 21H8.5l2.25-1.25L13.5 18" />
+                    <path d="M3 15.926s2.143-.461 3.429-.922C7.714 8.546 11.57 9.007 12 9.007c.429 0 4.286-.461 5.571 5.997c1.286.46 3.429.922 3.429.922M12 7a2 2 0 1 0 0-4a2 2 0 0 0 0 4Z" />
+                  </g>
                 </svg>
                 <span className="font-bold">Experiences</span>
               </div>
@@ -788,7 +755,7 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                   });
                 }}
                 className={
-                  "flex relative flex-col text-sm items-center py-3 px-2 rounded-xl transition-all duration-500 cursor-pointer " +
+                  "flex relative flex-col text-sm items-center justify-center py-1 px-2 rounded-xl transition-all duration-500 cursor-pointer " +
                   (router.query.showAll === "show"
                     ? "bg-blue-400 hover:bg-blue-500"
                     : "hover:bg-gray-300")
@@ -820,11 +787,11 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
               className="px-4 mt-6"
             >
               {allOrders.length > 0 && (
-                <div className="mt-2 ml-4 text-xl font-bold">
+                <div className="mt-2 ml-4 text-lg font-bold">
                   Stays - Your Basket
                 </div>
               )}
-              <div className="flex flex-col">
+              <div className="flex flex-col -mt-3">
                 {allOrders.map((item, index) => (
                   <CartItem
                     checkoutInfo={true}
@@ -842,11 +809,11 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
               </div>
 
               {activitiesOrders.length > 0 && (
-                <div className="mt-2 ml-4 text-xl font-bold">
+                <div className="mt-2 ml-4 text-lg font-bold">
                   Experiences - Your Basket
                 </div>
               )}
-              <div className="flex flex-col">
+              <div className="flex flex-col -mt-3">
                 {activitiesOrders.map((item, index) => (
                   <CartItem
                     checkoutInfo={true}

@@ -70,7 +70,7 @@ const MapMakers = ({ order, state }) => {
               xmlns="http://www.w3.org/2000/svg"
               aria-hidden="true"
               role="img"
-              className="w-7 h-7"
+              className="w-8 h-8"
               preserveAspectRatio="xMidYMid meet"
               viewBox="0 0 24 24"
             >
@@ -79,7 +79,7 @@ const MapMakers = ({ order, state }) => {
                 stroke="currentColor"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth="1.5"
+                strokeWidth="1"
               >
                 <path d="m14.571 15.004l.858 1.845s3.857.819 3.857 2.767C19.286 21 17.57 21 17.57 21H13l-2.25-1.25" />
                 <path d="m9.429 15.004l-.857 1.845s-3.858.819-3.858 2.767C4.714 21 6.43 21 6.43 21H8.5l2.25-1.25L13.5 18" />
@@ -92,7 +92,7 @@ const MapMakers = ({ order, state }) => {
               xmlns="http://www.w3.org/2000/svg"
               aria-hidden="true"
               role="img"
-              className="w-7 h-7"
+              className="w-6 h-6"
               preserveAspectRatio="xMidYMid meet"
               viewBox="0 0 24 24"
             >
@@ -101,7 +101,7 @@ const MapMakers = ({ order, state }) => {
                 stroke="currentColor"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth="2"
+                strokeWidth="1"
                 d="M22 20v-7.826a4 4 0 0 0-1.253-2.908l-7.373-6.968a2 2 0 0 0-2.748 0L3.253 9.266A4 4 0 0 0 2 12.174V20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2Z"
               />
             </svg>

@@ -18,6 +18,7 @@ import { createGlobalStyle } from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { length, along } from "@turf/turf";
 import { useRouter } from "next/router";
+import useSuperCluster from "use-supercluster";
 
 import MapMakers from "./MapMakers";
 import Search from "../Order/Search";
@@ -29,12 +30,33 @@ import { geojsonToBinary } from "@loaders.gl/gis";
 import SearchDetails from "./SearchDetails";
 import DriversMarker from "./DriversMarker";
 import { randomNumber } from "./../../lib/random";
+import {
+  clusterCountLayer,
+  clusterLayer,
+  unclusteredPointLayer,
+} from "./Cluster";
 
 function MapBox({ staysOrders, activitiesOrders }) {
   const mapRoute = useSelector((state) => state.home.mapRoute);
   const activeItem = useSelector((state) => state.order.activeItem);
   const mapRef = useRef();
   const router = useRouter();
+
+  const [viewport, setViewport] = useState({
+    longitude:
+      staysOrders.length > 0
+        ? staysOrders[0].stay.longitude
+        : activitiesOrders.length > 0
+        ? activitiesOrders[0].activity.longitude
+        : 0,
+    latitude:
+      staysOrders.length > 0
+        ? staysOrders[0].stay.latitude
+        : activitiesOrders.length > 0
+        ? activitiesOrders[0].activity.latitude
+        : 0,
+    zoom: 9,
+  });
 
   const [state, setState] = useState({
     from: "",
@@ -46,13 +68,13 @@ function MapBox({ staysOrders, activitiesOrders }) {
         ? staysOrders[0].stay.longitude
         : activitiesOrders.length > 0
         ? activitiesOrders[0].activity.longitude
-        : 0,
+        : 36.8442449,
     toLat:
       staysOrders.length > 0
         ? staysOrders[0].stay.latitude
         : activitiesOrders.length > 0
         ? activitiesOrders[0].activity.latitude
-        : 0,
+        : -1.3924933,
   });
 
   const geojson = {
@@ -203,10 +225,17 @@ function MapBox({ staysOrders, activitiesOrders }) {
   });
 
   useEffect(() => {
+    setStaysLongAndLat([]);
     staysOrders.forEach((order) => {
       setStaysLongAndLat((staysLongAndLat) => [
         ...staysLongAndLat,
-        [order.stay.longitude, order.stay.latitude],
+        {
+          type: "Feature",
+          geometry: {
+            type: "Point",
+            coordinates: [order.stay.longitude, order.stay.latitude],
+          },
+        },
       ]);
 
       setData({
@@ -224,10 +253,17 @@ function MapBox({ staysOrders, activitiesOrders }) {
   }, []);
 
   useEffect(() => {
+    setActivitiesLongAndLat([]);
     activitiesOrders.forEach((order) => {
       setActivitiesLongAndLat((activitiesLongAndLat) => [
         ...activitiesLongAndLat,
-        [order.activity.longitude, order.activity.latitude],
+        {
+          type: "Feature",
+          geometry: {
+            type: "Point",
+            coordinates: [order.activity.longitude, order.activity.latitude],
+          },
+        },
       ]);
     });
   }, [activitiesOrders]);
@@ -385,35 +421,82 @@ function MapBox({ staysOrders, activitiesOrders }) {
     },
   };
 
+  const onClick = (event) => {
+    const feature = event.features[0];
+    const clusterId = feature.properties.cluster_id;
+
+    const mapboxSource = mapRef.current.getSource("polylineLayer");
+
+    mapboxSource.getClusterExpansionZoom(clusterId, (err, zoom) => {
+      if (err) {
+        return;
+      }
+
+      mapRef.current.easeTo({
+        center: feature.geometry.coordinates,
+        zoom,
+        duration: 500,
+      });
+    });
+  };
+
+  const points = [...staysLongAndLat, ...activitiesLongAndLat];
+
+  const bounds = mapRef.current
+    ? mapRef.current.getMap().getBounds().toArray().flat()
+    : null;
+
+  const { clusters, supercluster } = useSuperCluster({
+    points,
+    zoom: viewport.zoom,
+    bounds: bounds,
+    options: {
+      radius: 75,
+      maxZoom: 20,
+    },
+  });
+
   return (
     <div style={{ position: "relative", height: "100%", width: "100%" }}>
       <GlobalStyle></GlobalStyle>
 
       <Map
+        {...viewport}
+        maxZoom={20}
         reuseMaps
         ref={mapRef}
         width="100%"
         height="100%"
         mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_API_KEY}
-        initialViewState={{
-          longitude: 36.8172449,
-          latitude: -1.2832533,
-          zoom: 8,
-        }}
+        onMove={(evt) => setViewport(evt.viewState)}
         mapStyle="mapbox://styles/mapbox/streets-v9"
+        interactiveLayerIds={[clusterLayer.id]}
       >
         <NavigationControl />
         {staysMarkers}
         {activitiesMarkers}
 
-        <Source
+        {/* <Source
+          id="polylineLayer"
+          type="geojson"
+          data={{
+            type: "FeatureCollection",
+            features: [...activitiesLongAndLat, ...staysLongAndLat],
+          }}
+          cluster={true}
+          clusterMaxZoom={14}
+          clusterRadius={50}
+        >
+          <Layer {...clusterLayer} />
+          <Layer {...clusterCountLayer} />
+          <Layer {...unclusteredPointLayer} />
+        </Source> */}
+
+        {/* <Source
           id="polylineLayer"
           type="geojson"
           data={{
             type: "Feature",
-            properties: {
-              title: "aaaaaa",
-            },
             geometry: {
               type: "LineString",
               coordinates: [...staysLongAndLat, ...activitiesLongAndLat],
@@ -433,7 +516,7 @@ function MapBox({ staysOrders, activitiesOrders }) {
               "line-width": 3,
             }}
           />
-        </Source>
+        </Source> */}
 
         {/* <Source id="geojson" type="geojson" data={data}>
           <Layer
@@ -463,7 +546,7 @@ function MapBox({ staysOrders, activitiesOrders }) {
           />
         </Source> */}
 
-        {state.fromLat && state.fromLong && (
+        {/* {state.fromLat && state.fromLong && (
           <Marker longitude={state.fromLong} latitude={state.fromLat}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -479,9 +562,8 @@ function MapBox({ staysOrders, activitiesOrders }) {
               />
             </svg>
           </Marker>
-        )}
+        )} */}
       </Map>
-
       <div
         id="distance"
         className="absolute bottom-2 right-4 font-bold px-2 py-2 bg-opacity-50 rounded-lg text-center"
