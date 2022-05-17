@@ -59,7 +59,7 @@ function Modal({
         initial="hidden"
         exit={!showModal ? "exit" : ""}
         className={
-          "overflow-y-scroll px-4 " +
+          "overflow-y-scroll px-1.5 " +
           backdropClassName +
           " " +
           styles.backdrop +

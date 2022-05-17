@@ -984,8 +984,7 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                       stay: router.query.showAll === "show" ? "" : "show",
                       experiences:
                         router.query.showAll === "show" ? "" : "show",
-                      transport:
-                        router.query.transport === "show" ? "" : "show",
+                      transport: router.query.showAll === "show" ? "" : "show",
                       showAll: router.query.showAll === "show" ? "" : "show",
                     },
                   });
@@ -1283,14 +1282,14 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
         <ClientOnly>
           <Popup
             showPopup={helpReorderPopup}
-            className="fixed md:bottom-8 bottom-4 !z-50 left-4 bg-blue-600 font-bold border-none shadow-lg px-4 py-4"
+            className="fixed md:bottom-8 bottom-4 !z-50 md:left-4 bg-blue-600 font-bold border-none shadow-lg px-2 py-2 md:px-4 md:py-4"
           >
             <div className="flex gap-2 items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 aria-hidden="true"
                 role="img"
-                className="w-7 h-7 text-yellow-500"
+                className="md:w-7 md:h-7 w-6 h-6 text-yellow-500"
                 preserveAspectRatio="xMidYMid meet"
                 viewBox="0 0 24 24"
               >
