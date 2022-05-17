@@ -111,8 +111,8 @@ function MapBox({ staysOrders, activitiesOrders }) {
   const [drivers, setDrivers] = useState([
     {
       name: "John Doe",
-      lat: -1.2828533,
-      lng: 36.8105449,
+      lat: -1.3428533,
+      lng: 36.9405449,
       id: 1,
       status: "available",
       vehicle: "car",
@@ -127,8 +127,8 @@ function MapBox({ staysOrders, activitiesOrders }) {
     },
     {
       name: "Jane Doe",
-      lat: -1.2804533,
-      lng: 36.8142449,
+      lat: -1.1204533,
+      lng: 36.9405449,
       id: 2,
       status: "available",
       vehicle: "car",
@@ -143,8 +143,8 @@ function MapBox({ staysOrders, activitiesOrders }) {
     },
     {
       name: "Jack Doe",
-      lat: -1.2852533,
-      lng: 36.8112449,
+      lat: -1.1004533,
+      lng: 36.6005449,
       id: 3,
       status: "available",
       vehicle: "car",
@@ -159,8 +159,8 @@ function MapBox({ staysOrders, activitiesOrders }) {
     },
     {
       name: "Jill Doe",
-      lat: -1.2888533,
-      lng: 36.8199449,
+      lat: -1.2004533,
+      lng: 35.9405449,
       id: 4,
       status: "available",
       vehicle: "car",
@@ -175,8 +175,8 @@ function MapBox({ staysOrders, activitiesOrders }) {
     },
     {
       name: "Joe Doe",
-      lat: -1.2826533,
-      lng: 36.8191449,
+      lat: -1.1904533,
+      lng: 34.9405449,
       id: 5,
       status: "not available",
       vehicle: "car",
@@ -229,13 +229,7 @@ function MapBox({ staysOrders, activitiesOrders }) {
     staysOrders.forEach((order) => {
       setStaysLongAndLat((staysLongAndLat) => [
         ...staysLongAndLat,
-        {
-          type: "Feature",
-          geometry: {
-            type: "Point",
-            coordinates: [order.stay.longitude, order.stay.latitude],
-          },
-        },
+        [order.stay.longitude, order.stay.latitude],
       ]);
 
       setData({
@@ -250,20 +244,14 @@ function MapBox({ staysOrders, activitiesOrders }) {
         },
       });
     });
-  }, []);
+  }, [staysOrders]);
 
   useEffect(() => {
     setActivitiesLongAndLat([]);
     activitiesOrders.forEach((order) => {
       setActivitiesLongAndLat((activitiesLongAndLat) => [
         ...activitiesLongAndLat,
-        {
-          type: "Feature",
-          geometry: {
-            type: "Point",
-            coordinates: [order.activity.longitude, order.activity.latitude],
-          },
-        },
+        [order.activity.longitude, order.activity.latitude],
       ]);
     });
   }, [activitiesOrders]);
@@ -476,6 +464,8 @@ function MapBox({ staysOrders, activitiesOrders }) {
         {staysMarkers}
         {activitiesMarkers}
 
+        {router.query.transport === "show" && driverMarkers}
+
         {/* <Source
           id="polylineLayer"
           type="geojson"
@@ -506,7 +496,7 @@ function MapBox({ staysOrders, activitiesOrders }) {
           <Layer
             id="lineLayer"
             type="line"
-            source="polylineLaye"
+            source="polylineLayer"
             layout={{
               "line-join": "round",
               "line-cap": "round",

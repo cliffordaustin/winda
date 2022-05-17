@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { motion, AnimatePresence } from "framer-motion";
 
-function Dropdown({ children, showPopup, className = "" }) {
+function Popup({ children, showPopup, className = "" }) {
   const variants = {
     hide: {
       scale: 0.9,
@@ -45,10 +45,10 @@ function Dropdown({ children, showPopup, className = "" }) {
   );
 }
 
-Dropdown.propTypes = {
+Popup.propTypes = {
   children: PropTypes.any.isRequired,
   showPopup: PropTypes.bool.isRequired,
   className: PropTypes.string,
 };
 
-export default Dropdown;
+export default Popup;

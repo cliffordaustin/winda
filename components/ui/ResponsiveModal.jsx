@@ -16,7 +16,7 @@ const ResponsiveModal = ({
     },
 
     hidden: {
-      height: "40vh",
+      height: "20vh",
     },
   };
   return (

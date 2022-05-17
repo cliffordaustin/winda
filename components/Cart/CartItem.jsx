@@ -362,9 +362,9 @@ const CartItem = ({
     : activity.activity_images.sort((x, y) => y.main - x.main);
   let mainImage = sortedImages.find((image) => image.main);
   return (
-    <div className="relative px-2">
-      <a
-        className="px-4 cursor-pointer"
+    <div className="relative px-2 mb-6">
+      <div
+        className="cursor-pointer"
         onClick={() => {
           if (itemType === "order" || "order-mobile") {
             if (!activitiesPage) {
@@ -596,31 +596,31 @@ const CartItem = ({
             </div>
           </div>
         </div>
-      </a>
+      </div>
       {!activitiesPage && (
         <div>
           {stay.type_of_stay === "LODGE" && (
-            <div className="absolute top-7 left-5 z-10 px-2 rounded-md bg-green-600 text-white">
+            <div className="absolute top-1.5 left-5 z-10 px-2 rounded-md bg-green-600 text-white">
               Lodge
             </div>
           )}
           {stay.type_of_stay === "HOUSE" && (
-            <div className="absolute top-7 left-5 z-10 px-2 rounded-md bg-green-600 text-white">
+            <div className="absolute top-1.5 left-5 z-10 px-2 rounded-md bg-green-600 text-white">
               House
             </div>
           )}
           {stay.type_of_stay === "UNIQUE SPACE" && (
-            <div className="absolute top-7 left-5 z-10 px-2 rounded-md bg-green-600 text-white">
+            <div className="absolute top-1.5 left-5 z-10 px-2 rounded-md bg-green-600 text-white">
               Unique space
             </div>
           )}
           {stay.type_of_stay === "CAMPSITE" && (
-            <div className="absolute top-7 left-5 z-10 px-2 rounded-md bg-green-600 text-white">
+            <div className="absolute top-1.5 left-5 z-10 px-2 rounded-md bg-green-600 text-white">
               Campsite
             </div>
           )}
           {stay.type_of_stay === "BOUTIQUE HOTEL" && (
-            <div className="absolute top-7 left-5 z-10 px-2 rounded-md bg-green-600 text-white">
+            <div className="absolute top-1.5 left-5 z-10 px-2 rounded-md bg-green-600 text-white">
               Boutique hotel
             </div>
           )}

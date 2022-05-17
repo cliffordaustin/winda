@@ -31,6 +31,7 @@
     "next-redux-wrapper": "^7.0.5",
     "nprogress": "^0.2.0",
     "prop-types": "^15.8.1",
+    "rc-steps": "^4.1.4",
     "react": "17.0.2",
     "react-beautiful-dnd": "^13.1.0",
     "react-cookie": "^4.1.1",
