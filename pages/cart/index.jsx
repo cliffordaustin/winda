@@ -133,6 +133,8 @@ const Cart = ({
         query: {
           activities_id: allItemsInCart.length === 0 ? 0 : null,
           stays_id: allItemsInCart.length > 0 ? 0 : null,
+          stay: "show",
+          experiences: "show",
         },
       });
     } else if (!Cookies.get("token")) {

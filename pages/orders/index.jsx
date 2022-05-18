@@ -13,6 +13,7 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 import Input from "../../components/ui/Input";
 import getToken from "../../lib/getToken";
+import getTokenFromReq from "../../lib/getTokenFromReq";
 import getCart from "../../lib/getCart";
 import Navbar from "../../components/Stay/Navbar";
 import CartItem from "../../components/Cart/CartItem";
@@ -31,6 +32,7 @@ import { reorder } from "../../lib/random";
 import Modal from "../../components/ui/MobileModal";
 import TripOverview from "../../components/Order/TripOverview";
 import Popup from "../../components/ui/Popup";
+import moment from "moment";
 
 function Orders({ userProfile, allOrders, activitiesOrders }) {
   const router = useRouter();
@@ -133,9 +135,9 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
 
   const helpReorderPopup = useSelector((state) => state.home.helpReorderPopup);
 
-  const [activities, setActivities] = useState(activitiesOrders);
+  const [activities, setActivities] = useState([]);
 
-  const [stays, setStays] = useState(allOrders);
+  const [stays, setStays] = useState([]);
 
   const onDragEnd = (result) => {
     if (!result.destination) {
@@ -289,6 +291,61 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
   let nothingInOrder = "";
   let showItemsInOrder = "";
 
+  const staysOrdersgroups = allOrders.reduce((previousVal, currentValue) => {
+    const date = currentValue.date_posted.split("T")[0];
+    if (!previousVal[date]) {
+      previousVal[date] = [];
+    }
+    previousVal[date].push(currentValue);
+    return previousVal;
+  }, {});
+
+  const staysOrdersGroupArray = Object.keys(staysOrdersgroups).map((date) => {
+    return {
+      date,
+      orders: staysOrdersgroups[date],
+    };
+  });
+
+  const staysOrdersGroupArraySorted = staysOrdersGroupArray.sort((a, b) => {
+    return new Date(b.date) - new Date(a.date);
+  });
+
+  useEffect(() => {
+    setStays(staysOrdersGroupArraySorted);
+  }, []);
+
+  const activitiesOrdersgroups = activitiesOrders.reduce(
+    (previousVal, currentValue) => {
+      const date = currentValue.date_posted.split("T")[0];
+      if (!previousVal[date]) {
+        previousVal[date] = [];
+      }
+      previousVal[date].push(currentValue);
+      return previousVal;
+    },
+    {}
+  );
+
+  const activitiesOrdersGroupArray = Object.keys(activitiesOrdersgroups).map(
+    (date) => {
+      return {
+        date,
+        orders: activitiesOrdersgroups[date],
+      };
+    }
+  );
+
+  const activitiesOrdersGroupArraySorted = activitiesOrdersGroupArray.sort(
+    (a, b) => {
+      return new Date(b.date) - new Date(a.date);
+    }
+  );
+
+  useEffect(() => {
+    setActivities(activitiesOrdersGroupArraySorted);
+  }, []);
+
   if (stays.length === 0 && activities.length === 0) {
     nothingInOrder = (
       <>
@@ -367,18 +424,23 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
         <div className="md:px-4 relative">
           <div className="flex relative h-full w-full">
             <div className="sticky lg:w-[25%] top-24 h-full hidden lg:block">
-              <Destination uniqueLocation={uniqueLocation}></Destination>
+              {/* <Destination uniqueLocation={uniqueLocation}></Destination> */}
+              <TripOverview
+                staysOrder={allOrders}
+                activitiesOrder={activitiesOrders}
+              ></TripOverview>
             </div>
             <div className="relative hidden md:block h-full top-20 px-4 w-full md:w-[380px]">
+              <div>
+                <Destination uniqueLocation={uniqueLocation}></Destination>
+              </div>
               {(stays.length > 0 || activities.length > 0) && (
-                <div className="mt-2 mb-4 text-xl font-bold text-center">
+                <div className="mt-3 mb-4 text-xl font-bold">
                   Your itinerary
                 </div>
               )}
               {stays.length > 0 && (
-                <div className="mt-2 mb-2 ml-4 text-lg font-bold">
-                  Stays - Your Basket
-                </div>
+                <div className="mt-2 mb-2 font-bold">Stays - Your Basket</div>
               )}
               <ClientOnly>
                 <div className="flex flex-col">
@@ -400,43 +462,58 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                             }
                           }
                         >
-                          {stays.map((item, index) => (
-                            <Draggable
-                              key={item.id}
-                              draggableId={item.id.toString()}
-                              index={index}
-                            >
-                              {(provided, snapshot) => {
-                                return (
-                                  <div
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                    style={{
-                                      userSelect: "none",
-                                      backgroundColor: snapshot.isDragging
-                                        ? "#fff"
-                                        : "",
-                                      ...provided.draggableProps.style,
-                                    }}
-                                  >
-                                    <CartItem
-                                      checkoutInfo={true}
+                          {Object.keys(stays).map((key) => {
+                            return (
+                              <div key={key}>
+                                <div className="mb-2 text-sm ml-2 font-bold">
+                                  {moment(stays[key].date).format(
+                                    "MMMM Do YYYY"
+                                  )}
+                                </div>
+                                {stays[key].orders.map((item, index) => {
+                                  return (
+                                    <Draggable
                                       key={item.id}
-                                      stay={item.stay}
-                                      cartIndex={index}
-                                      orderId={item.id}
-                                      setShowInfo={setShowInfo}
-                                      orderDays={item.days}
-                                      lengthOfItems={stays.length}
-                                      setInfoPopup={setInfoPopup}
-                                      itemType="order"
-                                    ></CartItem>
-                                  </div>
-                                );
-                              }}
-                            </Draggable>
-                          ))}
+                                      draggableId={item.id.toString()}
+                                      index={index}
+                                    >
+                                      {(provided, snapshot) => {
+                                        return (
+                                          <div
+                                            ref={provided.innerRef}
+                                            {...provided.draggableProps}
+                                            {...provided.dragHandleProps}
+                                            style={{
+                                              userSelect: "none",
+                                              backgroundColor:
+                                                snapshot.isDragging
+                                                  ? "#fff"
+                                                  : "",
+                                              ...provided.draggableProps.style,
+                                            }}
+                                          >
+                                            <CartItem
+                                              checkoutInfo={true}
+                                              key={item.id}
+                                              stay={item.stay}
+                                              cartIndex={index}
+                                              orderId={item.id}
+                                              setShowInfo={setShowInfo}
+                                              orderDays={item.days}
+                                              lengthOfItems={stays.length}
+                                              setInfoPopup={setInfoPopup}
+                                              itemType="order"
+                                            ></CartItem>
+                                          </div>
+                                        );
+                                      }}
+                                    </Draggable>
+                                  );
+                                })}
+                              </div>
+                            );
+                          })}
+
                           {provided.placeholder}
                         </div>
                       )}
@@ -446,7 +523,7 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
               </ClientOnly>
 
               {activities.length > 0 && (
-                <div className="mt-2 mb-2 ml-4 text-lg font-bold">
+                <div className="mt-2 mb-2 font-bold">
                   Experiences - Your Basket
                 </div>
               )}
@@ -471,44 +548,59 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                             }
                           }
                         >
-                          {activities.map((item, index) => (
-                            <Draggable
-                              key={item.id}
-                              draggableId={item.id.toString()}
-                              index={index}
-                            >
-                              {(provided, snapshot) => {
-                                return (
-                                  <div
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                    style={{
-                                      userSelect: "none",
-                                      backgroundColor: snapshot.isDragging
-                                        ? "#fff"
-                                        : "",
-                                      ...provided.draggableProps.style,
-                                    }}
-                                  >
-                                    <CartItem
-                                      checkoutInfo={true}
+                          {Object.keys(activities).map((key) => {
+                            return (
+                              <div key={key}>
+                                <div className="mb-2 text-sm ml-2 font-bold">
+                                  {moment(activities[key].date).format(
+                                    "MMMM Do YYYY"
+                                  )}
+                                </div>
+                                {activities[key].orders.map((item, index) => {
+                                  return (
+                                    <Draggable
                                       key={item.id}
-                                      activity={item.activity}
-                                      cartIndex={index}
-                                      orderId={item.id}
-                                      setShowInfo={setShowInfo}
-                                      orderDays={item.days}
-                                      activitiesPage={true}
-                                      lengthOfItems={activities.length}
-                                      setInfoPopup={setInfoPopup}
-                                      itemType="order"
-                                    ></CartItem>
-                                  </div>
-                                );
-                              }}
-                            </Draggable>
-                          ))}
+                                      draggableId={item.id.toString()}
+                                      index={index}
+                                    >
+                                      {(provided, snapshot) => {
+                                        return (
+                                          <div
+                                            ref={provided.innerRef}
+                                            {...provided.draggableProps}
+                                            {...provided.dragHandleProps}
+                                            style={{
+                                              userSelect: "none",
+                                              backgroundColor:
+                                                snapshot.isDragging
+                                                  ? "#fff"
+                                                  : "",
+                                              ...provided.draggableProps.style,
+                                            }}
+                                          >
+                                            <CartItem
+                                              checkoutInfo={true}
+                                              key={item.id}
+                                              activity={item.activity}
+                                              cartIndex={index}
+                                              orderId={item.id}
+                                              setShowInfo={setShowInfo}
+                                              orderDays={item.days}
+                                              activitiesPage={true}
+                                              lengthOfItems={activities.length}
+                                              setInfoPopup={setInfoPopup}
+                                              itemType="order"
+                                            ></CartItem>
+                                          </div>
+                                        );
+                                      }}
+                                    </Draggable>
+                                  );
+                                })}
+                              </div>
+                            );
+                          })}
+
                           {provided.placeholder}
                         </div>
                       )}
@@ -574,7 +666,10 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
             </div>
             <div className="sticky lg:w-[calc(80%-380px)] md:w-[70%] h-[90vh] mt-16 md:mt-0 top-20 w-full">
               <div className="mb-2"></div>
-              <Map staysOrders={stays} activitiesOrders={activities}></Map>
+              <Map
+                staysOrders={allOrders}
+                activitiesOrders={activitiesOrders}
+              ></Map>
 
               <div className="absolute top-5 md:hidden left-2 flex gap-2">
                 <div
@@ -599,7 +694,7 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                 onClick={() => {
                   setTripOverviewPopup(true);
                 }}
-                className="absolute text-sm top-5 hidden md:block left-2 font-bold cursor-pointer bg-white px-2 py-2 rounded-xl shadow-lg"
+                className="absolute text-sm top-5 hidden md:block lg:hidden left-2 font-bold cursor-pointer bg-white px-2 py-2 rounded-xl shadow-lg"
               >
                 trip overview
               </div>
@@ -1019,12 +1114,10 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
               changeShowAllModal={() => {
                 setShowMoreModal(!showMoreModal);
               }}
-              className="px-4 mt-6"
+              className="sm:px-8 px-4 max-w-[450px] mt-6"
             >
               {stays.length > 0 && (
-                <div className="mt-2 mb-2 ml-4 text-lg font-bold">
-                  Stays - Your Basket
-                </div>
+                <div className="mt-2 mb-2 font-bold">Stays - Your Basket</div>
               )}
               <ClientOnly>
                 <div className="flex flex-col">
@@ -1046,43 +1139,58 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                             }
                           }
                         >
-                          {stays.map((item, index) => (
-                            <Draggable
-                              key={item.id}
-                              draggableId={item.id.toString()}
-                              index={index}
-                            >
-                              {(provided, snapshot) => {
-                                return (
-                                  <div
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                    style={{
-                                      userSelect: "none",
-                                      backgroundColor: snapshot.isDragging
-                                        ? "#fff"
-                                        : "",
-                                      ...provided.draggableProps.style,
-                                    }}
-                                  >
-                                    <CartItem
-                                      checkoutInfo={true}
+                          {Object.keys(stays).map((key) => {
+                            return (
+                              <div key={key}>
+                                <div className="mb-2 text-sm ml-2 font-bold">
+                                  {moment(stays[key].date).format(
+                                    "MMMM Do YYYY"
+                                  )}
+                                </div>
+                                {stays[key].orders.map((item, index) => {
+                                  return (
+                                    <Draggable
                                       key={item.id}
-                                      stay={item.stay}
-                                      cartIndex={index}
-                                      orderId={item.id}
-                                      setShowInfo={setShowInfo}
-                                      orderDays={item.days}
-                                      lengthOfItems={stays.length}
-                                      setInfoPopup={setInfoPopup}
-                                      itemType="order"
-                                    ></CartItem>
-                                  </div>
-                                );
-                              }}
-                            </Draggable>
-                          ))}
+                                      draggableId={item.id.toString()}
+                                      index={index}
+                                    >
+                                      {(provided, snapshot) => {
+                                        return (
+                                          <div
+                                            ref={provided.innerRef}
+                                            {...provided.draggableProps}
+                                            {...provided.dragHandleProps}
+                                            style={{
+                                              userSelect: "none",
+                                              backgroundColor:
+                                                snapshot.isDragging
+                                                  ? "#fff"
+                                                  : "",
+                                              ...provided.draggableProps.style,
+                                            }}
+                                          >
+                                            <CartItem
+                                              checkoutInfo={true}
+                                              key={item.id}
+                                              stay={item.stay}
+                                              cartIndex={index}
+                                              orderId={item.id}
+                                              setShowInfo={setShowInfo}
+                                              orderDays={item.days}
+                                              lengthOfItems={stays.length}
+                                              setInfoPopup={setInfoPopup}
+                                              itemType="order"
+                                            ></CartItem>
+                                          </div>
+                                        );
+                                      }}
+                                    </Draggable>
+                                  );
+                                })}
+                              </div>
+                            );
+                          })}
+
                           {provided.placeholder}
                         </div>
                       )}
@@ -1092,7 +1200,7 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
               </ClientOnly>
 
               {activities.length > 0 && (
-                <div className="mt-2 mb-2 ml-4 text-lg font-bold">
+                <div className="mt-2 mb-2 font-bold">
                   Experiences - Your Basket
                 </div>
               )}
@@ -1117,44 +1225,58 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                             }
                           }
                         >
-                          {activities.map((item, index) => (
-                            <Draggable
-                              key={item.id}
-                              draggableId={item.id.toString()}
-                              index={index}
-                            >
-                              {(provided, snapshot) => {
-                                return (
-                                  <div
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                    style={{
-                                      userSelect: "none",
-                                      backgroundColor: snapshot.isDragging
-                                        ? "#fff"
-                                        : "",
-                                      ...provided.draggableProps.style,
-                                    }}
-                                  >
-                                    <CartItem
-                                      checkoutInfo={true}
+                          {Object.keys(activities).map((key) => {
+                            return (
+                              <div key={key}>
+                                <div className="mb-2 text-sm ml-2 font-bold">
+                                  {moment(activities[key].date).format(
+                                    "MMMM Do YYYY"
+                                  )}
+                                </div>
+                                {activities[key].orders.map((item, index) => {
+                                  return (
+                                    <Draggable
                                       key={item.id}
-                                      activity={item.activity}
-                                      cartIndex={index}
-                                      orderId={item.id}
-                                      setShowInfo={setShowInfo}
-                                      orderDays={item.days}
-                                      activitiesPage={true}
-                                      lengthOfItems={activities.length}
-                                      setInfoPopup={setInfoPopup}
-                                      itemType="order"
-                                    ></CartItem>
-                                  </div>
-                                );
-                              }}
-                            </Draggable>
-                          ))}
+                                      draggableId={item.id.toString()}
+                                      index={index}
+                                    >
+                                      {(provided, snapshot) => {
+                                        return (
+                                          <div
+                                            ref={provided.innerRef}
+                                            {...provided.draggableProps}
+                                            {...provided.dragHandleProps}
+                                            style={{
+                                              userSelect: "none",
+                                              backgroundColor:
+                                                snapshot.isDragging
+                                                  ? "#fff"
+                                                  : "",
+                                              ...provided.draggableProps.style,
+                                            }}
+                                          >
+                                            <CartItem
+                                              checkoutInfo={true}
+                                              key={item.id}
+                                              activity={item.activity}
+                                              cartIndex={index}
+                                              orderId={item.id}
+                                              setShowInfo={setShowInfo}
+                                              orderDays={item.days}
+                                              activitiesPage={true}
+                                              lengthOfItems={activities.length}
+                                              setInfoPopup={setInfoPopup}
+                                              itemType="order"
+                                            ></CartItem>
+                                          </div>
+                                        );
+                                      }}
+                                    </Draggable>
+                                  );
+                                })}
+                              </div>
+                            );
+                          })}
                           {provided.placeholder}
                         </div>
                       )}
@@ -1227,8 +1349,8 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
               className="md:w-[650px] px-4"
             >
               <TripOverview
-                staysOrder={stays}
-                activitiesOrder={activities}
+                staysOrder={allOrders}
+                activitiesOrder={activitiesOrders}
               ></TripOverview>
             </ModalPopup>
           </div>
@@ -1323,6 +1445,8 @@ Orders.propTypes = {};
 export async function getServerSideProps(context) {
   try {
     const token = getToken(context);
+
+    console.log("token", token);
 
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_baseURL}/user/`,

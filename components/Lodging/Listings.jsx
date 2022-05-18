@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import Listing from "./Listing";
 import ClientOnly from "../ClientOnly";
 
-function Listings({ getDistance, userLatLng }) {
+function Listings({ getDistance, userLatLng, itemsInCart }) {
   const stays = useSelector((state) => state.stay.stays);
   // const filteredStays = useSelector((state) => state.stay.filteredStays);
 
@@ -20,6 +20,7 @@ function Listings({ getDistance, userLatLng }) {
             listing={stay}
             getDistance={getDistance}
             userLatLng={userLatLng}
+            itemsInCart={itemsInCart}
           ></Listing>
         ))}
       </div>

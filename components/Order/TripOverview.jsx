@@ -41,31 +41,33 @@ const TripOverview = ({ staysOrder, activitiesOrder }) => {
   }, [activitiesOrder]);
 
   useEffect(() => {
-    let addStaysAndActivitiesLongAndLat = [
-      ...staysLongAndLat,
-      ...activitiesLongAndLat,
-    ]
-      .slice(0, 24)
-      .map((item) => {
-        return item.toString() + ";";
-      });
-    addStaysAndActivitiesLongAndLat = addStaysAndActivitiesLongAndLat
-      .toString()
-      .replace("[", "")
-      .replace("]", "")
-      .replaceAll(";,", ";")
-      .slice(0, -1);
-    if (addStaysAndActivitiesLongAndLat) {
-      axios
-        .get(
-          `https://api.mapbox.com/directions/v5/mapbox/driving/${addStaysAndActivitiesLongAndLat}?geometries=geojson&steps=true&access_token=${process.env.NEXT_PUBLIC_MAPBOX_API_KEY}`
-        )
-        .then((res) => {
-          setStaysAndActivitiesLongAndLat({
-            distance: res.data.routes[0].distance,
-            duration: res.data.routes[0].duration,
-          });
+    if (staysLongAndLat.length > 0 && activitiesLongAndLat.length > 0) {
+      let addStaysAndActivitiesLongAndLat = [
+        ...staysLongAndLat,
+        ...activitiesLongAndLat,
+      ]
+        .slice(0, 24)
+        .map((item) => {
+          return item.toString() + ";";
         });
+      addStaysAndActivitiesLongAndLat = addStaysAndActivitiesLongAndLat
+        .toString()
+        .replace("[", "")
+        .replace("]", "")
+        .replaceAll(";,", ";")
+        .slice(0, -1);
+      if (addStaysAndActivitiesLongAndLat) {
+        axios
+          .get(
+            `https://api.mapbox.com/directions/v5/mapbox/driving/${addStaysAndActivitiesLongAndLat}?geometries=geojson&steps=true&access_token=${process.env.NEXT_PUBLIC_MAPBOX_API_KEY}`
+          )
+          .then((res) => {
+            setStaysAndActivitiesLongAndLat({
+              distance: res.data.routes[0].distance,
+              duration: res.data.routes[0].duration,
+            });
+          });
+      }
     }
   }, [staysLongAndLat, activitiesLongAndLat]);
 
@@ -251,23 +253,63 @@ const TripOverview = ({ staysOrder, activitiesOrder }) => {
           .humanize()}
       </div> */}
 
-      <div className="mt-4">
-        <div className="py-2 px-2 bg-gray-100 flex justify-between rounded-t-lg">
-          <h1 className="font-bold text-sm">Total estimated distance</h1>
-          <span className="font-bold text-sm">
-            {" "}
-            {(staysAndActivitiesLongAndLat.distance * 0.001).toFixed(1)} km
-          </span>
+      {activities.length === 1 && stays.length === 1 && (
+        <>
+          <div className="mt-2 mb-2 ml-4 text-lg font-bold">Trip Overview</div>
+
+          <Steps direction="vertical">
+            {[...stays, ...activities].map((item, index) => {
+              return (
+                <Steps.Step
+                  key={index}
+                  title={
+                    <h1 className="text-sm inline">
+                      {item.stay ? item.stay.name : item.activity.name}
+                    </h1>
+                  }
+                  subTitle={
+                    item.stay ? (
+                      <StayType stay={item.stay || null}></StayType>
+                    ) : (
+                      ""
+                    )
+                  }
+                  status="process"
+                />
+              );
+            })}
+          </Steps>
+        </>
+      )}
+
+      {(activities.length === 0 || stays.length === 0) && (
+        <>
+          <div className="mt-2 mb-2 ml-4 text-lg font-bold">Trip Overview</div>
+          <div className="mt-2 mb-2 ml-4 text-base font-medium">
+            Add one more item to your trip to display location overview
+          </div>
+        </>
+      )}
+
+      {activitiesLongAndLat.length > 0 && staysLongAndLat.length > 0 && (
+        <div className="mt-4">
+          <div className="py-2 px-2 bg-gray-100 flex justify-between rounded-t-lg">
+            <h1 className="font-bold text-sm">Total estimated distance</h1>
+            <span className="font-bold text-sm">
+              {" "}
+              {(staysAndActivitiesLongAndLat.distance * 0.001).toFixed(1)} km
+            </span>
+          </div>
+          <div className="py-2 px-2 bg-gray-100 flex justify-between rounded-b-lg">
+            <h1 className="font-bold text-sm">Total estimated duration</h1>
+            <span className="font-bold text-sm">
+              {moment
+                .duration(staysAndActivitiesLongAndLat.duration, "seconds")
+                .humanize()}
+            </span>
+          </div>
         </div>
-        <div className="py-2 px-2 bg-gray-100 flex justify-between rounded-b-lg">
-          <h1 className="font-bold text-sm">Total estimated duration</h1>
-          <span className="font-bold text-sm">
-            {moment
-              .duration(staysAndActivitiesLongAndLat.duration, "seconds")
-              .humanize()}
-          </span>
-        </div>
-      </div>
+      )}
     </>
   );
 };

@@ -3,8 +3,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import getToken from "../../lib/getToken";
 
+import getToken from "../../lib/getToken";
+import getTokenFromReq from "../../lib/getTokenFromReq";
 import LoadingSpinerChase from "../../components/ui/LoadingSpinerChase";
 import LoadingPulse from "../../components/ui/LoadingPulse";
 import { wrapper } from "../../redux/store";
@@ -29,6 +30,7 @@ import StayTypes from "../../components/Lodging/StayTypes";
 import MobileStayTypes from "../../components/Lodging/MobileStayTypes";
 import Amenities from "../../components/Lodging/Amenities";
 import ThemeFilter from "../../components/Lodging/ThemeFilter";
+import Cookies from "js-cookie";
 
 function Stays({ userProfile, longitude, latitude }) {
   const [state, setState] = useState({
@@ -82,6 +84,8 @@ function Stays({ userProfile, longitude, latitude }) {
 
   const [showSearchLoader, setShowSearchLoader] = useState(false);
 
+  const [itemsInCart, setItemsInCart] = useState([]);
+
   const onChange = (event) => {
     setLocation(event.target.value);
 
@@ -93,6 +97,29 @@ function Stays({ userProfile, longitude, latitude }) {
         setAutoCompleteFromSearch(response.data.features);
       });
   };
+
+  const getItemsInCart = async () => {
+    let cart = Cookies.get("cart");
+    if (Cookies.get("token")) {
+      const staysCart = await axios.get(
+        `${process.env.NEXT_PUBLIC_baseURL}/user-cart/`,
+        {
+          headers: {
+            Authorization: "Token " + Cookies.get("token"),
+          },
+        }
+      );
+      setItemsInCart(staysCart.data.results);
+    } else if (!Cookies.get("token") && cart) {
+      cart = JSON.parse(decodeURIComponent(cart));
+
+      setItemsInCart(cart);
+    }
+  };
+
+  useEffect(() => {
+    getItemsInCart();
+  }, []);
 
   const locationFromSearch = (item) => {
     setLocation(item.place_name);
@@ -1485,6 +1512,7 @@ function Stays({ userProfile, longitude, latitude }) {
             <Listings
               getDistance={getDistanceFromLatLonInKm}
               userLatLng={userLatLng}
+              itemsInCart={itemsInCart}
             ></Listings>
             {filterStayLoading && (
               <div className="bg-white bg-opacity-50 lg:h-[70vh] lg:overflow-y-scroll absolute w-full top-0 bottom-0 right-0 left-0 z-10">
@@ -2035,7 +2063,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
   (context) =>
     async ({ req, res, query, resolvedUrl }) => {
       try {
-        const token = getToken(context);
+        const token = getTokenFromReq(req);
 
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_baseURL}/stays/?search=${

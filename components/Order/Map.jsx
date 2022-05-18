@@ -55,7 +55,7 @@ function MapBox({ staysOrders, activitiesOrders }) {
         : activitiesOrders.length > 0
         ? activitiesOrders[0].activity.latitude
         : 0,
-    zoom: 9,
+    zoom: 5,
   });
 
   const [state, setState] = useState({

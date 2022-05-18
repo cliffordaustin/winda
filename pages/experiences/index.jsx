@@ -3,9 +3,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import Cookies from "js-cookie";
 
 import LoadingSpinerChase from "../../components/ui/LoadingSpinerChase";
 import getToken from "../../lib/getToken";
+import getTokenFromReq from "../../lib/getTokenFromReq";
 import { wrapper } from "../../redux/store";
 import styles from "../../styles/Lodging.module.css";
 import Navbar from "../../components/Lodging/Navbar";
@@ -288,6 +290,31 @@ function Activities({ userProfile, longitude, latitude }) {
       }
     }
   };
+
+  const [itemsInCart, setItemsInCart] = useState([]);
+
+  const getItemsInCart = async () => {
+    let cart = Cookies.get("cart");
+    if (Cookies.get("token")) {
+      const staysCart = await axios.get(
+        `${process.env.NEXT_PUBLIC_baseURL}/user-activities-cart/`,
+        {
+          headers: {
+            Authorization: "Token " + Cookies.get("token"),
+          },
+        }
+      );
+      setItemsInCart(staysCart.data.results);
+    } else if (!Cookies.get("token") && cart) {
+      cart = JSON.parse(decodeURIComponent(cart));
+
+      setItemsInCart(cart);
+    }
+  };
+
+  useEffect(() => {
+    getItemsInCart();
+  }, []);
 
   return (
     <div
@@ -912,6 +939,7 @@ function Activities({ userProfile, longitude, latitude }) {
             <Listings
               getDistance={getDistanceFromLatLonInKm}
               userLatLng={userLatLng}
+              itemsInCart={itemsInCart}
             ></Listings>
             {filterStayLoading && (
               <div className="bg-white bg-opacity-50 lg:h-[70vh] lg:overflow-y-scroll absolute w-full top-0 bottom-0 right-0 left-0 z-10">
@@ -995,7 +1023,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
   (context) =>
     async ({ req, res, query, resolvedUrl }) => {
       try {
-        const token = getToken(context);
+        const token = getTokenFromReq(req);
 
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_baseURL}/activities/?search=${

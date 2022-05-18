@@ -35,7 +35,7 @@ function Popup({ children, showPopup, className = "" }) {
           initial="hide"
           exit="exit"
           className={
-            "bg-white border-gray-200 border py-1 rounded-md !z-30 " + className
+            "bg-white border-gray-200 border py-1 rounded-md z-30 " + className
           }
         >
           {children}

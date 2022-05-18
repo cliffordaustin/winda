@@ -104,9 +104,9 @@ const Destination = ({ uniqueLocation, className = "", inPopup = false }) => {
       });
   };
   return (
-    <div className={"px-3 py-2 bg-white shadow-lg rounded-lg " + className}>
+    <div className={"px-3 py-2 " + className}>
       {!inPopup && (
-        <h1 className="text-xl mb-4 font-bold m">New Destination</h1>
+        <h1 className="text-lg mb-4 font-bold m">New Destination</h1>
       )}
 
       <div className="flex items-center gap-4 justify-center mb-4">
@@ -196,13 +196,13 @@ const Destination = ({ uniqueLocation, className = "", inPopup = false }) => {
         </div>
       </div>
 
-      <div className="mt-5 flex gap-4 items-center">
+      <div className="flex md:hidden mt-5 gap-4 items-center">
         <div className="flex-grow h-px bg-gray-300"></div>
         <div className="text-sm font-bold text-center">Or jump right to</div>
         <div className="flex-grow h-px bg-gray-300"></div>
       </div>
 
-      <div className="mt-4">
+      <div className="mt-4 md:hidden">
         <div
           onClick={staysSearch}
           className="py-4 w-full border border-gray-300 pl-3 cursor-pointer rounded-lg"
