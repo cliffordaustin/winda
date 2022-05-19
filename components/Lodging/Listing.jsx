@@ -15,7 +15,14 @@ import Rating from "../ui/Rating";
 import Badge from "../ui/Badge";
 import LoadingSpinerChase from "../ui/LoadingSpinerChase";
 
-function Listing({ listing, getDistance, userLatLng, itemsInCart }) {
+function Listing({
+  listing,
+  getDistance,
+  userLatLng,
+  itemsInCart,
+  userProfile,
+  itemsInOrders,
+}) {
   const dispatch = useDispatch();
 
   const [isSafari, setIsSafari] = useState(false);
@@ -71,6 +78,8 @@ function Listing({ listing, getDistance, userLatLng, itemsInCart }) {
 
   const [listingIsInCart, setListingIsInCart] = useState(false);
 
+  const [listingIsInOrder, setListingIsInOrder] = useState(false);
+
   const addToCart = async (e) => {
     e.stopPropagation();
     e.preventDefault();
@@ -124,16 +133,16 @@ function Listing({ listing, getDistance, userLatLng, itemsInCart }) {
 
   const itemIsInCart = async () => {
     let exist = false;
-    let activitiesCartExist = false;
+    let stayCartExist = false;
     const token = Cookies.get("token");
     const cart = Cookies.get("cart");
 
     if (token) {
-      activitiesCartExist = itemsInCart.some((val) => {
+      stayCartExist = itemsInCart.some((val) => {
         return val.stay.slug === listing.slug;
       });
 
-      setListingIsInCart(exist || activitiesCartExist);
+      setListingIsInCart(exist || stayCartExist);
     } else if (!token && cart) {
       exist = itemsInCart.some((val) => {
         return val.slug === listing.slug;
@@ -146,6 +155,55 @@ function Listing({ listing, getDistance, userLatLng, itemsInCart }) {
   useEffect(() => {
     itemIsInCart();
   }, [itemsInCart]);
+
+  const itemIsInOrder = async () => {
+    let exist = false;
+    let stayOrderExist = false;
+    const token = Cookies.get("token");
+
+    if (token) {
+      stayOrderExist = itemsInOrders.some((val) => {
+        return val.stay.slug === listing.slug;
+      });
+
+      setListingIsInOrder(exist || stayOrderExist);
+    }
+  };
+
+  useEffect(() => {
+    itemIsInOrder();
+  }, [itemsInOrders]);
+
+  const [addToTripLoading, setAddToTripLoading] = useState(false);
+
+  const addToTrip = async (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    setAddToTripLoading(true);
+
+    if (Cookies.get("token")) {
+      await axios
+        .post(
+          `${process.env.NEXT_PUBLIC_baseURL}/stays/${listing.slug}/add-to-order/`,
+          {
+            first_name: userProfile.first_name || "",
+            last_name: userProfile.last_name || "",
+          },
+          {
+            headers: {
+              Authorization: `Token ${Cookies.get("token")}`,
+            },
+          }
+        )
+        .then((res) => {
+          location.reload();
+        })
+        .catch((err) => {
+          setAddToTripLoading(false);
+        });
+    }
+  };
 
   return (
     <div
@@ -289,6 +347,38 @@ function Listing({ listing, getDistance, userLatLng, itemsInCart }) {
                 userLatLng.longitude
               ).toLocaleString()}
               KM Away
+            </div>
+          )}
+          {Cookies.get("token") && router.query.fromOrder === "true" && (
+            <div
+              className="text-sm w-fit flex items-center bg-green-500 bg-opacity-30 px-2 py-1 text-green-700 bg-primary-red-100 font-bold p-3 rounded-md mt-2
+          "
+              onClick={(e) => {
+                if (!listingIsInOrder) {
+                  addToTrip(e);
+                } else if (listingIsInOrder) {
+                  e.stopPropagation();
+                  router.push({
+                    pathname: "/orders",
+                    query: {
+                      stay: "show",
+                      experiences: "show",
+                    },
+                  });
+                }
+              }}
+            >
+              {!listingIsInOrder && <span className="mr-1">Add to trip</span>}
+              {listingIsInOrder && (
+                <span className="mr-1">View in your trip</span>
+              )}
+              <div className={" " + (!addToTripLoading ? "hidden" : "")}>
+                <LoadingSpinerChase
+                  width={13}
+                  height={13}
+                  color="green"
+                ></LoadingSpinerChase>
+              </div>
             </div>
           )}
           {/* <div className="flex items-center gap-1 mt-2">
@@ -597,6 +687,38 @@ function Listing({ listing, getDistance, userLatLng, itemsInCart }) {
                   userLatLng.longitude
                 ).toLocaleString()}
                 KM Away
+              </div>
+            )}
+            {Cookies.get("token") && router.query.fromOrder === "true" && (
+              <div
+                className="text-sm w-fit flex items-center bg-green-500 bg-opacity-30 px-2 py-1 text-green-700 bg-primary-red-100 font-bold p-3 rounded-md mt-2
+          "
+                onClick={(e) => {
+                  if (!listingIsInOrder) {
+                    addToTrip(e);
+                  } else if (listingIsInOrder) {
+                    e.stopPropagation();
+                    router.push({
+                      pathname: "/orders",
+                      query: {
+                        stay: "show",
+                        experiences: "show",
+                      },
+                    });
+                  }
+                }}
+              >
+                {!listingIsInOrder && <span className="mr-1">Add to trip</span>}
+                {listingIsInOrder && (
+                  <span className="mr-1">View in your trip</span>
+                )}
+                <div className={" " + (!addToTripLoading ? "hidden" : "")}>
+                  <LoadingSpinerChase
+                    width={13}
+                    height={13}
+                    color="green"
+                  ></LoadingSpinerChase>
+                </div>
               </div>
             )}
             {/* <div className="flex items-center gap-1 mt-2">

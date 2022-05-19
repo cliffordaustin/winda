@@ -7,7 +7,13 @@ import { useRouter } from "next/router";
 import Listing from "./Listing";
 import ClientOnly from "../ClientOnly";
 
-function Listings({ getDistance, userLatLng, itemsInCart }) {
+function Listings({
+  getDistance,
+  userLatLng,
+  itemsInCart,
+  userProfile,
+  itemsInOrders,
+}) {
   const activities = useSelector((state) => state.activity.activities);
 
   return (
@@ -20,6 +26,8 @@ function Listings({ getDistance, userLatLng, itemsInCart }) {
             getDistance={getDistance}
             userLatLng={userLatLng}
             itemsInCart={itemsInCart}
+            userProfile={userProfile}
+            itemsInOrders={itemsInOrders}
           ></Listing>
         ))}
       </div>

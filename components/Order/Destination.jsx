@@ -8,7 +8,7 @@ import Button from "../ui/Button";
 import axios from "axios";
 import { useRouter } from "next/router";
 
-const Destination = ({ uniqueLocation, className = "", inPopup = false }) => {
+const Destination = ({ className = "", data }) => {
   const [location, setLocation] = useState("");
   const [currentNavState, setCurrentNavState] = useState(1);
   const [autoCompleteFromSearch, setAutoCompleteFromSearch] = useState([]);
@@ -32,7 +32,7 @@ const Destination = ({ uniqueLocation, className = "", inPopup = false }) => {
         router
           .push({
             pathname: "/stays",
-            query: { search: location },
+            query: { search: location, fromOrder: "true" },
           })
           .then(() => {
             router.reload();
@@ -41,7 +41,7 @@ const Destination = ({ uniqueLocation, className = "", inPopup = false }) => {
         router
           .push({
             pathname: "/experiences",
-            query: { search: location },
+            query: { search: location, fromOrder: "true" },
           })
           .then(() => {
             router.reload();
@@ -62,7 +62,10 @@ const Destination = ({ uniqueLocation, className = "", inPopup = false }) => {
             router
               .push({
                 pathname: "/stays",
-                query: { search: autoCompleteFromSearch[0].place_name },
+                query: {
+                  search: autoCompleteFromSearch[0].place_name,
+                  fromOrder: "true",
+                },
               })
               .then(() => {
                 router.reload();
@@ -71,7 +74,10 @@ const Destination = ({ uniqueLocation, className = "", inPopup = false }) => {
             router
               .push({
                 pathname: "/experiences",
-                query: { search: autoCompleteFromSearch[0].place_name },
+                query: {
+                  search: autoCompleteFromSearch[0].place_name,
+                  fromOrder: "true",
+                },
               })
               .then(() => {
                 router.reload();
@@ -86,7 +92,7 @@ const Destination = ({ uniqueLocation, className = "", inPopup = false }) => {
     router
       .push({
         pathname: "/stays",
-        query: { search: uniqueLocation },
+        query: { search: data.location, fromOrder: "true" },
       })
       .then(() => {
         router.reload();
@@ -97,7 +103,7 @@ const Destination = ({ uniqueLocation, className = "", inPopup = false }) => {
     router
       .push({
         pathname: "/experiences",
-        query: { search: uniqueLocation },
+        query: { search: data.location, fromOrder: "true" },
       })
       .then(() => {
         router.reload();
@@ -105,10 +111,6 @@ const Destination = ({ uniqueLocation, className = "", inPopup = false }) => {
   };
   return (
     <div className={"px-3 py-2 " + className}>
-      {!inPopup && (
-        <h1 className="text-lg mb-4 font-bold m">New Destination</h1>
-      )}
-
       <div className="flex items-center gap-4 justify-center mb-4">
         <div
           onClick={(event) => {
@@ -155,7 +157,7 @@ const Destination = ({ uniqueLocation, className = "", inPopup = false }) => {
           ></Input>
 
           {autoCompleteFromSearch.length > 0 && (
-            <div className="absolute top-full left-0 z-30 rounded-b-xl w-full md:w-[350px] py-2 bg-white">
+            <div className="absolute top-full left-0 z-30 rounded-b-xl shadow-md w-full md:w-[350px] py-2 bg-white">
               {autoCompleteFromSearch.map((item, index) => (
                 <div
                   key={index}
@@ -196,13 +198,13 @@ const Destination = ({ uniqueLocation, className = "", inPopup = false }) => {
         </div>
       </div>
 
-      <div className="flex md:hidden mt-5 gap-4 items-center">
+      <div className="flex mt-5 gap-4 items-center">
         <div className="flex-grow h-px bg-gray-300"></div>
         <div className="text-sm font-bold text-center">Or jump right to</div>
         <div className="flex-grow h-px bg-gray-300"></div>
       </div>
 
-      <div className="mt-4 md:hidden">
+      <div className="mt-4">
         <div
           onClick={staysSearch}
           className="py-4 w-full border border-gray-300 pl-3 cursor-pointer rounded-lg"

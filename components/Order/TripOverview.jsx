@@ -172,7 +172,11 @@ const TripOverview = ({ staysOrder, activitiesOrder }) => {
                 <Steps.Step
                   key={index}
                   title={<h1 className="text-sm inline">{stay.stay.name}</h1>}
-                  subTitle={<StayType stay={stay.stay}></StayType>}
+                  subTitle={
+                    <div className="px-1 rounded-md bg-blue-600 text-white">
+                      {stay.stay.location}
+                    </div>
+                  }
                   description={
                     index > 0 && stay.distance && stay.duration ? (
                       <p className="text-xs">
@@ -203,7 +207,7 @@ const TripOverview = ({ staysOrder, activitiesOrder }) => {
       {activities.length > 1 && (
         <>
           <div className="mt-2 mb-2 ml-4 text-lg font-bold">
-            Activities - Trip Overview
+            Experiences - Trip Overview
           </div>
 
           <Steps direction="vertical">
@@ -213,6 +217,11 @@ const TripOverview = ({ staysOrder, activitiesOrder }) => {
                   key={index}
                   title={
                     <h1 className="text-sm inline">{activity.activity.name}</h1>
+                  }
+                  subTitle={
+                    <div className="px-1 rounded-md bg-blue-600 text-white">
+                      {activity.activity.location}
+                    </div>
                   }
                   description={
                     index > 0 && activity.distance && activity.duration ? (
@@ -269,7 +278,13 @@ const TripOverview = ({ staysOrder, activitiesOrder }) => {
                   }
                   subTitle={
                     item.stay ? (
-                      <StayType stay={item.stay || null}></StayType>
+                      <div className="px-1 rounded-md bg-blue-600 text-white">
+                        {item.stay.location}
+                      </div>
+                    ) : item.activity ? (
+                      <div className="px-1 rounded-md bg-blue-600 text-white">
+                        {item.activity.location}
+                      </div>
                     ) : (
                       ""
                     )

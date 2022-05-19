@@ -86,6 +86,8 @@ function Stays({ userProfile, longitude, latitude }) {
 
   const [itemsInCart, setItemsInCart] = useState([]);
 
+  const [itemsInOrders, setItemsInOrders] = useState([]);
+
   const onChange = (event) => {
     setLocation(event.target.value);
 
@@ -117,8 +119,26 @@ function Stays({ userProfile, longitude, latitude }) {
     }
   };
 
+  const getItemsInOrder = async () => {
+    if (Cookies.get("token")) {
+      const staysCart = await axios.get(
+        `${process.env.NEXT_PUBLIC_baseURL}/user-orders/`,
+        {
+          headers: {
+            Authorization: "Token " + Cookies.get("token"),
+          },
+        }
+      );
+      setItemsInOrders(staysCart.data.results);
+    }
+  };
+
   useEffect(() => {
     getItemsInCart();
+  }, []);
+
+  useEffect(() => {
+    getItemsInOrder();
   }, []);
 
   const locationFromSearch = (item) => {
@@ -1513,6 +1533,8 @@ function Stays({ userProfile, longitude, latitude }) {
               getDistance={getDistanceFromLatLonInKm}
               userLatLng={userLatLng}
               itemsInCart={itemsInCart}
+              itemsInOrders={itemsInOrders}
+              userProfile={userProfile}
             ></Listings>
             {filterStayLoading && (
               <div className="bg-white bg-opacity-50 lg:h-[70vh] lg:overflow-y-scroll absolute w-full top-0 bottom-0 right-0 left-0 z-10">

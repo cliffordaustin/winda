@@ -301,15 +301,7 @@ const CartItem = ({
             }
           )
           .then(() => {
-            if (lengthOfItems === 1) {
-              router.push({
-                query: { stays_id: null, activities_id: 0 },
-              });
-            } else {
-              router.push({
-                query: { stays_id: 0, activities_id: null },
-              });
-            }
+            router.reload();
           })
           .catch((err) => {
             console.log(err.response.data);
@@ -325,15 +317,7 @@ const CartItem = ({
             }
           )
           .then(() => {
-            if (lengthOfItems === 1) {
-              router.push({
-                query: { stays_id: 0, activities_id: null },
-              });
-            } else {
-              router.push({
-                query: { stays_id: null, activities_id: 0 },
-              });
-            }
+            router.reload();
           })
           .catch((err) => {
             console.log(err.response.data);

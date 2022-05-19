@@ -139,6 +139,16 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
 
   const [stays, setStays] = useState([]);
 
+  const [groupedStays, setGroupedStays] = useState([]);
+
+  const [groupedActivities, setGroupedActivities] = useState([]);
+
+  const [groupedActivitiesAndStays, setGroupActivitiesAndStays] = useState([]);
+
+  const [destinationData, setDestinationData] = useState({
+    location: "Nairobi, Kenya",
+  });
+
   const onDragEnd = (result) => {
     if (!result.destination) {
       return;
@@ -315,6 +325,102 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
     setStays(staysOrdersGroupArraySorted);
   }, []);
 
+  const getStayOrdersLocationSort = async () => {
+    const grouped = {};
+    for (const order of allOrders) {
+      await axios
+        .get(
+          `https://api.mapbox.com/geocoding/v5/mapbox.places/${order.stay.city}, ${order.stay.country}.json?access_token=${process.env.NEXT_PUBLIC_MAPBOX_API_KEY}&types=region&country=ke,ug,tz,rw,bi,tz,ug,tz,gh`
+        )
+        .then((res) => {
+          grouped[res.data.features[0].place_name] =
+            grouped[res.data.features[0].place_name] || [];
+          grouped[res.data.features[0].place_name].push({ ...order });
+        });
+    }
+
+    const groupArray = Object.keys(grouped).map((location) => {
+      return {
+        location,
+        orders: grouped[location],
+      };
+    });
+
+    setGroupedStays(groupArray);
+  };
+
+  const getActivityOrdersLocationSort = async () => {
+    const grouped = {};
+    for (const order of activitiesOrders) {
+      await axios
+        .get(
+          `https://api.mapbox.com/geocoding/v5/mapbox.places/${order.activity.city}, ${order.activity.country}.json?access_token=${process.env.NEXT_PUBLIC_MAPBOX_API_KEY}&types=region&country=ke,ug,tz,rw,bi,tz,ug,tz,gh`
+        )
+        .then((res) => {
+          grouped[res.data.features[0].place_name] =
+            grouped[res.data.features[0].place_name] || [];
+          grouped[res.data.features[0].place_name].push({ ...order });
+        });
+    }
+
+    const groupArray = Object.keys(grouped).map((location) => {
+      return {
+        location,
+        orders: grouped[location],
+      };
+    });
+
+    setGroupedActivities(groupArray);
+  };
+
+  const getActivityAndStayOrdersLocationSort = async () => {
+    const grouped = {};
+    for (const order of [...allOrders, ...activitiesOrders]) {
+      if (order.stay) {
+        await axios
+          .get(
+            `https://api.mapbox.com/geocoding/v5/mapbox.places/${order.stay.city},${order.stay.country}.json?access_token=${process.env.NEXT_PUBLIC_MAPBOX_API_KEY}&types=region&country=ke,ug,tz,rw,bi,tz,ug,tz,gh`
+          )
+          .then((res) => {
+            grouped[res.data.features[0].place_name] =
+              grouped[res.data.features[0].place_name] || [];
+            grouped[res.data.features[0].place_name].push({ ...order });
+          });
+      } else if (order.activity) {
+        await axios
+          .get(
+            `https://api.mapbox.com/geocoding/v5/mapbox.places/${order.activity.city},${order.activity.country}.json?access_token=${process.env.NEXT_PUBLIC_MAPBOX_API_KEY}&types=region&country=ke,ug,tz,rw,bi,tz,ug,tz,gh`
+          )
+          .then((res) => {
+            grouped[res.data.features[0].place_name] =
+              grouped[res.data.features[0].place_name] || [];
+            grouped[res.data.features[0].place_name].push({ ...order });
+          });
+      }
+    }
+
+    const groupArray = Object.keys(grouped).map((location) => {
+      return {
+        location,
+        orders: grouped[location],
+      };
+    });
+
+    setGroupActivitiesAndStays(groupArray);
+  };
+
+  useEffect(() => {
+    getActivityAndStayOrdersLocationSort();
+  }, []);
+
+  useEffect(() => {
+    getStayOrdersLocationSort();
+  }, []);
+
+  useEffect(() => {
+    getActivityOrdersLocationSort();
+  }, []);
+
   const activitiesOrdersgroups = activitiesOrders.reduce(
     (previousVal, currentValue) => {
       const date = currentValue.date_posted.split("T")[0];
@@ -431,17 +537,17 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
               ></TripOverview>
             </div>
             <div className="relative hidden md:block h-full top-20 px-4 w-full md:w-[380px]">
-              <div>
+              {/* <div>
                 <Destination uniqueLocation={uniqueLocation}></Destination>
-              </div>
+              </div> */}
               {(stays.length > 0 || activities.length > 0) && (
-                <div className="mt-3 mb-4 text-xl font-bold">
+                <div className="mt-3 mb-4 text-xl text-center font-bold">
                   Your itinerary
                 </div>
               )}
-              {stays.length > 0 && (
-                <div className="mt-2 mb-2 font-bold">Stays - Your Basket</div>
-              )}
+              {/* {stays.length > 0 && (
+                <div className="mt-2 mb-2 font-bold">Stays</div>
+              )} */}
               <ClientOnly>
                 <div className="flex flex-col">
                   <DragDropContext
@@ -462,15 +568,166 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                             }
                           }
                         >
-                          {Object.keys(stays).map((key) => {
+                          {Object.keys(groupedActivitiesAndStays).map((key) => {
+                            return (
+                              <div key={key}>
+                                <div className="mb-2">
+                                  <div className="py-3 flex items-center px-2 rounded-md text-gray-700">
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      aria-hidden="true"
+                                      role="img"
+                                      className="w-6 h-6 mr-2"
+                                      preserveAspectRatio="xMidYMid meet"
+                                      viewBox="0 0 24 24"
+                                    >
+                                      <path
+                                        fill="currentColor"
+                                        d="M2.002 9.538c-.023.411.207.794.581.966l7.504 3.442l3.442 7.503c.164.356.52.583.909.583l.057-.002a1 1 0 0 0 .894-.686l5.595-17.032c.117-.358.023-.753-.243-1.02s-.66-.358-1.02-.243L2.688 8.645a.997.997 0 0 0-.686.893z"
+                                      />
+                                    </svg>
+                                    <span className="font-bold">
+                                      {groupedActivitiesAndStays[key].location}
+                                    </span>
+                                  </div>
+                                </div>
+                                {groupedActivitiesAndStays[key].orders.map(
+                                  (item, index) => {
+                                    return (
+                                      <Draggable
+                                        key={index}
+                                        draggableId={index.toString()}
+                                        index={index}
+                                      >
+                                        {(provided, snapshot) => {
+                                          return (
+                                            <div
+                                              ref={provided.innerRef}
+                                              {...provided.draggableProps}
+                                              {...provided.dragHandleProps}
+                                              style={{
+                                                userSelect: "none",
+                                                backgroundColor:
+                                                  snapshot.isDragging
+                                                    ? "#fff"
+                                                    : "",
+                                                ...provided.draggableProps
+                                                  .style,
+                                              }}
+                                            >
+                                              {item.stay && (
+                                                <CartItem
+                                                  checkoutInfo={true}
+                                                  key={item.id}
+                                                  stay={item.stay}
+                                                  cartIndex={index}
+                                                  orderId={item.id}
+                                                  setShowInfo={setShowInfo}
+                                                  orderDays={item.days}
+                                                  lengthOfItems={
+                                                    allOrders.length
+                                                  }
+                                                  setInfoPopup={setInfoPopup}
+                                                  itemType="order"
+                                                ></CartItem>
+                                              )}
+                                              {item.activity && (
+                                                <CartItem
+                                                  checkoutInfo={true}
+                                                  key={item.id}
+                                                  activity={item.activity}
+                                                  cartIndex={index}
+                                                  orderId={item.id}
+                                                  setShowInfo={setShowInfo}
+                                                  orderDays={item.days}
+                                                  activitiesPage={true}
+                                                  lengthOfItems={
+                                                    activities.length
+                                                  }
+                                                  setInfoPopup={setInfoPopup}
+                                                  itemType="order"
+                                                ></CartItem>
+                                              )}
+                                            </div>
+                                          );
+                                        }}
+                                      </Draggable>
+                                    );
+                                  }
+                                )}
+
+                                <div className="px-2 md:mb-6 mb-2">
+                                  <div
+                                    onClick={() => {
+                                      setDestinationData({
+                                        ...destinationData,
+                                        location:
+                                          groupedStays[key].location.split(
+                                            ","
+                                          )[0],
+                                      });
+                                      setDestinationPopup(true);
+                                    }}
+                                    className="py-3 bg-blue-600 bg-opacity-10 gap-1 flex cursor-pointer font-bold items-center justify-center text-blue-800 mb-3"
+                                  >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      aria-hidden="true"
+                                      role="img"
+                                      className="w-5 h-5"
+                                      preserveAspectRatio="xMidYMid meet"
+                                      viewBox="0 0 24 24"
+                                    >
+                                      <path
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeLinecap="round"
+                                        strokeWidth="2"
+                                        d="M12 20v-8m0 0V4m0 8h8m-8 0H4"
+                                      />
+                                    </svg>
+                                    <span>Add a destination</span>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+
+                          {provided.placeholder}
+                        </div>
+                      )}
+                    </Droppable>
+                  </DragDropContext>
+                </div>
+              </ClientOnly>
+
+              <ClientOnly>
+                {/* <div className="flex flex-col">
+                  <DragDropContext
+                    onDragEnd={(result) => {
+                      onDragEnd(result);
+                    }}
+                  >
+                    <Droppable droppableId="1">
+                      {(provided, snapshot) => (
+                        <div
+                          {...provided.droppableProps}
+                          ref={provided.innerRef}
+                          style={
+                            {
+                              // background: snapshot.isDraggingOver
+                              //   ? "lightblue"
+                              //   : "",
+                            }
+                          }
+                        >
+                          {Object.keys(groupedStays).map((key) => {
                             return (
                               <div key={key}>
                                 <div className="mb-2 text-sm ml-2 font-bold">
-                                  {moment(stays[key].date).format(
-                                    "MMMM Do YYYY"
-                                  )}
+                                  {groupedStays[key].location}
                                 </div>
-                                {stays[key].orders.map((item, index) => {
+                                {groupedStays[key].orders.map((item, index) => {
                                   return (
                                     <Draggable
                                       key={item.id}
@@ -500,7 +757,7 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                                               orderId={item.id}
                                               setShowInfo={setShowInfo}
                                               orderDays={item.days}
-                                              lengthOfItems={stays.length}
+                                              lengthOfItems={allOrders.length}
                                               setInfoPopup={setInfoPopup}
                                               itemType="order"
                                             ></CartItem>
@@ -510,6 +767,40 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                                     </Draggable>
                                   );
                                 })}
+
+                                <div className="px-2">
+                                  <div
+                                    onClick={() => {
+                                      setDestinationData({
+                                        ...destinationData,
+                                        location:
+                                          groupedStays[key].location.split(
+                                            ","
+                                          )[0],
+                                      });
+                                      setDestinationPopup(true);
+                                    }}
+                                    className="py-3 bg-blue-600 bg-opacity-10 gap-1 flex cursor-pointer font-bold items-center justify-center text-blue-800 mb-3"
+                                  >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      aria-hidden="true"
+                                      role="img"
+                                      className="w-5 h-5"
+                                      preserveAspectRatio="xMidYMid meet"
+                                      viewBox="0 0 24 24"
+                                    >
+                                      <path
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeLinecap="round"
+                                        strokeWidth="2"
+                                        d="M12 20v-8m0 0V4m0 8h8m-8 0H4"
+                                      />
+                                    </svg>
+                                    <span>Add a destination</span>
+                                  </div>
+                                </div>
                               </div>
                             );
                           })}
@@ -519,17 +810,15 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                       )}
                     </Droppable>
                   </DragDropContext>
-                </div>
+                </div> */}
               </ClientOnly>
 
-              {activities.length > 0 && (
-                <div className="mt-2 mb-2 font-bold">
-                  Experiences - Your Basket
-                </div>
-              )}
+              {/* {activities.length > 0 && (
+                <div className="mt-2 mb-2 font-bold">Experiences</div>
+              )} */}
 
               <ClientOnly>
-                <div className="flex flex-col">
+                {/* <div className="flex flex-col">
                   <DragDropContext
                     onDragEnd={(result) => {
                       onDragEndActivities(result);
@@ -548,55 +837,91 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                             }
                           }
                         >
-                          {Object.keys(activities).map((key) => {
+                          {Object.keys(groupedActivities).map((key) => {
                             return (
                               <div key={key}>
                                 <div className="mb-2 text-sm ml-2 font-bold">
-                                  {moment(activities[key].date).format(
-                                    "MMMM Do YYYY"
-                                  )}
+                                  {groupedActivities[key].location}
                                 </div>
-                                {activities[key].orders.map((item, index) => {
-                                  return (
-                                    <Draggable
-                                      key={item.id}
-                                      draggableId={item.id.toString()}
-                                      index={index}
+                                {groupedActivities[key].orders.map(
+                                  (item, index) => {
+                                    return (
+                                      <Draggable
+                                        key={item.id}
+                                        draggableId={item.id.toString()}
+                                        index={index}
+                                      >
+                                        {(provided, snapshot) => {
+                                          return (
+                                            <div
+                                              ref={provided.innerRef}
+                                              {...provided.draggableProps}
+                                              {...provided.dragHandleProps}
+                                              style={{
+                                                userSelect: "none",
+                                                backgroundColor:
+                                                  snapshot.isDragging
+                                                    ? "#fff"
+                                                    : "",
+                                                ...provided.draggableProps
+                                                  .style,
+                                              }}
+                                            >
+                                              <CartItem
+                                                checkoutInfo={true}
+                                                key={item.id}
+                                                activity={item.activity}
+                                                cartIndex={index}
+                                                orderId={item.id}
+                                                setShowInfo={setShowInfo}
+                                                orderDays={item.days}
+                                                activitiesPage={true}
+                                                lengthOfItems={
+                                                  activities.length
+                                                }
+                                                setInfoPopup={setInfoPopup}
+                                                itemType="order"
+                                              ></CartItem>
+                                            </div>
+                                          );
+                                        }}
+                                      </Draggable>
+                                    );
+                                  }
+                                )}
+                                <div className="px-2">
+                                  <div
+                                    onClick={() => {
+                                      setDestinationData({
+                                        ...destinationData,
+                                        location:
+                                          groupedStays[key].location.split(
+                                            ","
+                                          )[0],
+                                      });
+                                      setDestinationPopup(true);
+                                    }}
+                                    className="py-3 bg-blue-600 bg-opacity-10 gap-1 flex cursor-pointer font-bold items-center justify-center text-blue-800 mb-3"
+                                  >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      aria-hidden="true"
+                                      role="img"
+                                      className="w-5 h-5"
+                                      preserveAspectRatio="xMidYMid meet"
+                                      viewBox="0 0 24 24"
                                     >
-                                      {(provided, snapshot) => {
-                                        return (
-                                          <div
-                                            ref={provided.innerRef}
-                                            {...provided.draggableProps}
-                                            {...provided.dragHandleProps}
-                                            style={{
-                                              userSelect: "none",
-                                              backgroundColor:
-                                                snapshot.isDragging
-                                                  ? "#fff"
-                                                  : "",
-                                              ...provided.draggableProps.style,
-                                            }}
-                                          >
-                                            <CartItem
-                                              checkoutInfo={true}
-                                              key={item.id}
-                                              activity={item.activity}
-                                              cartIndex={index}
-                                              orderId={item.id}
-                                              setShowInfo={setShowInfo}
-                                              orderDays={item.days}
-                                              activitiesPage={true}
-                                              lengthOfItems={activities.length}
-                                              setInfoPopup={setInfoPopup}
-                                              itemType="order"
-                                            ></CartItem>
-                                          </div>
-                                        );
-                                      }}
-                                    </Draggable>
-                                  );
-                                })}
+                                      <path
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeLinecap="round"
+                                        strokeWidth="2"
+                                        d="M12 20v-8m0 0V4m0 8h8m-8 0H4"
+                                      />
+                                    </svg>
+                                    <span>Add a destination</span>
+                                  </div>
+                                </div>
                               </div>
                             );
                           })}
@@ -606,7 +931,7 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                       )}
                     </Droppable>
                   </DragDropContext>
-                </div>
+                </div> */}
               </ClientOnly>
               <div className="sticky bottom-0 bg-white py-2 w-full z-40 max-w-[inherit]">
                 {/* <div className="px-2 mt-6 mb-12">
@@ -672,14 +997,14 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
               ></Map>
 
               <div className="absolute top-5 md:hidden left-2 flex gap-2">
-                <div
+                {/* <div
                   onClick={() => {
                     setDestinationPopup(true);
                   }}
                   className="text-sm font-bold cursor-pointer bg-white px-2 py-2 rounded-xl shadow-lg"
                 >
                   add new destination
-                </div>
+                </div> */}
                 <div
                   onClick={() => {
                     setTripOverviewPopup(true);
@@ -1116,8 +1441,10 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
               }}
               className="sm:px-8 px-4 max-w-[450px] mt-6"
             >
-              {stays.length > 0 && (
-                <div className="mt-2 mb-2 font-bold">Stays - Your Basket</div>
+              {(stays.length > 0 || activities.length > 0) && (
+                <div className="mt-1 mb-2 text-xl text-center font-bold">
+                  Your itinerary
+                </div>
               )}
               <ClientOnly>
                 <div className="flex flex-col">
@@ -1139,15 +1466,169 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                             }
                           }
                         >
-                          {Object.keys(stays).map((key) => {
+                          {Object.keys(groupedActivitiesAndStays).map((key) => {
+                            return (
+                              <div key={key}>
+                                <div className="mb-2">
+                                  <div className="py-3 flex items-center px-2 rounded-md text-gray-700">
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      aria-hidden="true"
+                                      role="img"
+                                      className="w-6 h-6 mr-2"
+                                      preserveAspectRatio="xMidYMid meet"
+                                      viewBox="0 0 24 24"
+                                    >
+                                      <path
+                                        fill="currentColor"
+                                        d="M2.002 9.538c-.023.411.207.794.581.966l7.504 3.442l3.442 7.503c.164.356.52.583.909.583l.057-.002a1 1 0 0 0 .894-.686l5.595-17.032c.117-.358.023-.753-.243-1.02s-.66-.358-1.02-.243L2.688 8.645a.997.997 0 0 0-.686.893z"
+                                      />
+                                    </svg>
+                                    <span className="font-bold">
+                                      {groupedActivitiesAndStays[key].location}
+                                    </span>
+                                  </div>
+                                </div>
+                                {groupedActivitiesAndStays[key].orders.map(
+                                  (item, index) => {
+                                    return (
+                                      <Draggable
+                                        key={index}
+                                        draggableId={index.toString()}
+                                        index={index}
+                                      >
+                                        {(provided, snapshot) => {
+                                          return (
+                                            <div
+                                              ref={provided.innerRef}
+                                              {...provided.draggableProps}
+                                              {...provided.dragHandleProps}
+                                              style={{
+                                                userSelect: "none",
+                                                backgroundColor:
+                                                  snapshot.isDragging
+                                                    ? "#fff"
+                                                    : "",
+                                                ...provided.draggableProps
+                                                  .style,
+                                              }}
+                                            >
+                                              {item.stay && (
+                                                <CartItem
+                                                  checkoutInfo={true}
+                                                  key={item.id}
+                                                  stay={item.stay}
+                                                  cartIndex={index}
+                                                  orderId={item.id}
+                                                  setShowInfo={setShowInfo}
+                                                  orderDays={item.days}
+                                                  lengthOfItems={
+                                                    allOrders.length
+                                                  }
+                                                  setInfoPopup={setInfoPopup}
+                                                  itemType="order"
+                                                ></CartItem>
+                                              )}
+                                              {item.activity && (
+                                                <CartItem
+                                                  checkoutInfo={true}
+                                                  key={item.id}
+                                                  activity={item.activity}
+                                                  cartIndex={index}
+                                                  orderId={item.id}
+                                                  setShowInfo={setShowInfo}
+                                                  orderDays={item.days}
+                                                  activitiesPage={true}
+                                                  lengthOfItems={
+                                                    activities.length
+                                                  }
+                                                  setInfoPopup={setInfoPopup}
+                                                  itemType="order"
+                                                ></CartItem>
+                                              )}
+                                            </div>
+                                          );
+                                        }}
+                                      </Draggable>
+                                    );
+                                  }
+                                )}
+
+                                <div className="px-2">
+                                  <div
+                                    onClick={() => {
+                                      setDestinationData({
+                                        ...destinationData,
+                                        location:
+                                          groupedStays[key].location.split(
+                                            ","
+                                          )[0],
+                                      });
+                                      setDestinationPopup(true);
+                                    }}
+                                    className="py-3 bg-blue-600 bg-opacity-10 gap-1 flex cursor-pointer font-bold items-center justify-center text-blue-800 mb-3"
+                                  >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      aria-hidden="true"
+                                      role="img"
+                                      className="w-5 h-5"
+                                      preserveAspectRatio="xMidYMid meet"
+                                      viewBox="0 0 24 24"
+                                    >
+                                      <path
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeLinecap="round"
+                                        strokeWidth="2"
+                                        d="M12 20v-8m0 0V4m0 8h8m-8 0H4"
+                                      />
+                                    </svg>
+                                    <span>Add a destination</span>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+
+                          {provided.placeholder}
+                        </div>
+                      )}
+                    </Droppable>
+                  </DragDropContext>
+                </div>
+              </ClientOnly>
+
+              {/* {stays.length > 0 && (
+                <div className="mt-2 mb-2 font-bold">Stays</div>
+              )} */}
+              <ClientOnly>
+                {/* <div className="flex flex-col">
+                  <DragDropContext
+                    onDragEnd={(result) => {
+                      onDragEnd(result);
+                    }}
+                  >
+                    <Droppable droppableId="1">
+                      {(provided, snapshot) => (
+                        <div
+                          {...provided.droppableProps}
+                          ref={provided.innerRef}
+                          style={
+                            {
+                              // background: snapshot.isDraggingOver
+                              //   ? "lightblue"
+                              //   : "",
+                            }
+                          }
+                        >
+                          {Object.keys(groupedStays).map((key) => {
                             return (
                               <div key={key}>
                                 <div className="mb-2 text-sm ml-2 font-bold">
-                                  {moment(stays[key].date).format(
-                                    "MMMM Do YYYY"
-                                  )}
+                                  {groupedStays[key].location}
                                 </div>
-                                {stays[key].orders.map((item, index) => {
+                                {groupedStays[key].orders.map((item, index) => {
                                   return (
                                     <Draggable
                                       key={item.id}
@@ -1177,7 +1658,7 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                                               orderId={item.id}
                                               setShowInfo={setShowInfo}
                                               orderDays={item.days}
-                                              lengthOfItems={stays.length}
+                                              lengthOfItems={allOrders.length}
                                               setInfoPopup={setInfoPopup}
                                               itemType="order"
                                             ></CartItem>
@@ -1187,6 +1668,39 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                                     </Draggable>
                                   );
                                 })}
+                                <div className="px-2">
+                                  <div
+                                    onClick={() => {
+                                      setDestinationData({
+                                        ...destinationData,
+                                        location:
+                                          groupedStays[key].location.split(
+                                            ","
+                                          )[0],
+                                      });
+                                      setDestinationPopup(true);
+                                    }}
+                                    className="py-3 bg-blue-600 bg-opacity-10 gap-1 flex cursor-pointer font-bold items-center justify-center text-blue-800 mb-3"
+                                  >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      aria-hidden="true"
+                                      role="img"
+                                      className="w-5 h-5"
+                                      preserveAspectRatio="xMidYMid meet"
+                                      viewBox="0 0 24 24"
+                                    >
+                                      <path
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeLinecap="round"
+                                        strokeWidth="2"
+                                        d="M12 20v-8m0 0V4m0 8h8m-8 0H4"
+                                      />
+                                    </svg>
+                                    <span>Add a destination</span>
+                                  </div>
+                                </div>
                               </div>
                             );
                           })}
@@ -1196,17 +1710,15 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                       )}
                     </Droppable>
                   </DragDropContext>
-                </div>
+                </div> */}
               </ClientOnly>
 
-              {activities.length > 0 && (
-                <div className="mt-2 mb-2 font-bold">
-                  Experiences - Your Basket
-                </div>
-              )}
+              {/* {activities.length > 0 && (
+                <div className="mt-2 mb-2 font-bold">Experiences</div>
+              )} */}
 
               <ClientOnly>
-                <div className="flex flex-col">
+                {/* <div className="flex flex-col">
                   <DragDropContext
                     onDragEnd={(result) => {
                       onDragEndActivities(result);
@@ -1225,55 +1737,91 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                             }
                           }
                         >
-                          {Object.keys(activities).map((key) => {
+                          {Object.keys(groupedActivities).map((key) => {
                             return (
                               <div key={key}>
                                 <div className="mb-2 text-sm ml-2 font-bold">
-                                  {moment(activities[key].date).format(
-                                    "MMMM Do YYYY"
-                                  )}
+                                  {groupedActivities[key].location}
                                 </div>
-                                {activities[key].orders.map((item, index) => {
-                                  return (
-                                    <Draggable
-                                      key={item.id}
-                                      draggableId={item.id.toString()}
-                                      index={index}
+                                {groupedActivities[key].orders.map(
+                                  (item, index) => {
+                                    return (
+                                      <Draggable
+                                        key={item.id}
+                                        draggableId={item.id.toString()}
+                                        index={index}
+                                      >
+                                        {(provided, snapshot) => {
+                                          return (
+                                            <div
+                                              ref={provided.innerRef}
+                                              {...provided.draggableProps}
+                                              {...provided.dragHandleProps}
+                                              style={{
+                                                userSelect: "none",
+                                                backgroundColor:
+                                                  snapshot.isDragging
+                                                    ? "#fff"
+                                                    : "",
+                                                ...provided.draggableProps
+                                                  .style,
+                                              }}
+                                            >
+                                              <CartItem
+                                                checkoutInfo={true}
+                                                key={item.id}
+                                                activity={item.activity}
+                                                cartIndex={index}
+                                                orderId={item.id}
+                                                setShowInfo={setShowInfo}
+                                                orderDays={item.days}
+                                                activitiesPage={true}
+                                                lengthOfItems={
+                                                  activities.length
+                                                }
+                                                setInfoPopup={setInfoPopup}
+                                                itemType="order"
+                                              ></CartItem>
+                                            </div>
+                                          );
+                                        }}
+                                      </Draggable>
+                                    );
+                                  }
+                                )}
+                                <div className="px-2">
+                                  <div
+                                    onClick={() => {
+                                      setDestinationData({
+                                        ...destinationData,
+                                        location:
+                                          groupedStays[key].location.split(
+                                            ","
+                                          )[0],
+                                      });
+                                      setDestinationPopup(true);
+                                    }}
+                                    className="py-3 bg-blue-600 bg-opacity-10 gap-1 flex cursor-pointer font-bold items-center justify-center text-blue-800 mb-3"
+                                  >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      aria-hidden="true"
+                                      role="img"
+                                      className="w-5 h-5"
+                                      preserveAspectRatio="xMidYMid meet"
+                                      viewBox="0 0 24 24"
                                     >
-                                      {(provided, snapshot) => {
-                                        return (
-                                          <div
-                                            ref={provided.innerRef}
-                                            {...provided.draggableProps}
-                                            {...provided.dragHandleProps}
-                                            style={{
-                                              userSelect: "none",
-                                              backgroundColor:
-                                                snapshot.isDragging
-                                                  ? "#fff"
-                                                  : "",
-                                              ...provided.draggableProps.style,
-                                            }}
-                                          >
-                                            <CartItem
-                                              checkoutInfo={true}
-                                              key={item.id}
-                                              activity={item.activity}
-                                              cartIndex={index}
-                                              orderId={item.id}
-                                              setShowInfo={setShowInfo}
-                                              orderDays={item.days}
-                                              activitiesPage={true}
-                                              lengthOfItems={activities.length}
-                                              setInfoPopup={setInfoPopup}
-                                              itemType="order"
-                                            ></CartItem>
-                                          </div>
-                                        );
-                                      }}
-                                    </Draggable>
-                                  );
-                                })}
+                                      <path
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeLinecap="round"
+                                        strokeWidth="2"
+                                        d="M12 20v-8m0 0V4m0 8h8m-8 0H4"
+                                      />
+                                    </svg>
+                                    <span>Add a destination</span>
+                                  </div>
+                                </div>
                               </div>
                             );
                           })}
@@ -1282,7 +1830,7 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                       )}
                     </Droppable>
                   </DragDropContext>
-                </div>
+                </div> */}
               </ClientOnly>
 
               <div className="sticky -bottom-4 bg-white pt-4 w-full z-40 max-w-[inherit]">
@@ -1331,9 +1879,12 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
               containerHeight={60}
               heightVal="%"
               title="New Destination"
-              className="px-4"
+              className="px-4 md:w-[650px]"
             >
-              <Destination className="shadow-none" inPopup={true}></Destination>
+              <Destination
+                className="shadow-none"
+                data={destinationData}
+              ></Destination>
             </ModalPopup>
           </div>
 
@@ -1445,8 +1996,6 @@ Orders.propTypes = {};
 export async function getServerSideProps(context) {
   try {
     const token = getToken(context);
-
-    console.log("token", token);
 
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_baseURL}/user/`,
