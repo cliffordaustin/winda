@@ -9,7 +9,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePaystackPayment } from "react-paystack";
 import * as Yup from "yup";
+import Steps from "rc-steps";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import "rc-steps/assets/index.css";
 
 import Input from "../../components/ui/Input";
 import getToken from "../../lib/getToken";
@@ -33,6 +35,8 @@ import Modal from "../../components/ui/MobileModal";
 import TripOverview from "../../components/Order/TripOverview";
 import Popup from "../../components/ui/Popup";
 import moment from "moment";
+import OrderCard from "../../components/Order/OrderCard";
+import Trip from "../../components/Order/Trip";
 
 function Orders({ userProfile, allOrders, activitiesOrders }) {
   const router = useRouter();
@@ -225,25 +229,6 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
   }, []);
 
   useEffect(() => {
-    const stays_id = router.query.stays_id
-      ? Number(router.query.stays_id)
-      : null;
-    const activities_id = router.query.activities_id
-      ? Number(router.query.activities_id)
-      : null;
-
-    dispatch({
-      type: "SET_CURRENT_CART_ITEM_NAME",
-      payload:
-        router.query.stays_id && allOrders[stays_id]
-          ? allOrders[stays_id].stay.name
-          : router.query.activities_id && activitiesOrders[activities_id]
-          ? activitiesOrders[activities_id].activity.name
-          : "",
-    });
-  }, [router.query.stays_id, router.query.activities_id]);
-
-  useEffect(() => {
     priceConversion(totalPrice());
   }, [totalPrice(), currencyToDollar, priceConversionRate]);
 
@@ -322,7 +307,7 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
   });
 
   useEffect(() => {
-    setStays(staysOrdersGroupArraySorted);
+    setStays(allOrders);
   }, []);
 
   const getStayOrdersLocationSort = async () => {
@@ -409,17 +394,17 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
     setGroupActivitiesAndStays(groupArray);
   };
 
-  useEffect(() => {
-    getActivityAndStayOrdersLocationSort();
-  }, []);
+  // useEffect(() => {
+  //   getActivityAndStayOrdersLocationSort();
+  // }, []);
 
-  useEffect(() => {
-    getStayOrdersLocationSort();
-  }, []);
+  // useEffect(() => {
+  //   getStayOrdersLocationSort();
+  // }, []);
 
-  useEffect(() => {
-    getActivityOrdersLocationSort();
-  }, []);
+  // useEffect(() => {
+  //   getActivityOrdersLocationSort();
+  // }, []);
 
   const activitiesOrdersgroups = activitiesOrders.reduce(
     (previousVal, currentValue) => {
@@ -448,11 +433,47 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
     }
   );
 
+  // useEffect(() => {
+  //   setActivities(activitiesOrdersGroupArraySorted);
+  // }, []);
+
+  //********* */
+
+  const [order, setOrder] = useState([]);
+
+  const activitiesStaysOrder = () => {
+    const order = [...allOrders, ...activitiesOrders];
+
+    const orderFormatted = order.sort((a, b) => {
+      return new Date(a.from_date) - new Date(b.from_date);
+    });
+
+    setOrder(orderFormatted);
+  };
+
   useEffect(() => {
-    setActivities(activitiesOrdersGroupArraySorted);
+    activitiesStaysOrder();
   }, []);
 
-  if (stays.length === 0 && activities.length === 0) {
+  // useEffect(() => {
+  //   if (order.length > 0) {
+  //     const order_id = router.query.order_id
+  //       ? Number(router.query.order_id)
+  //       : null;
+
+  //     dispatch({
+  //       type: "SET_CURRENT_CART_ITEM_NAME",
+  //       payload:
+  //         router.query.order_id && order[order_id].stay
+  //           ? order[order_id].stay.name
+  //           : router.query.order_id && order[order_id].activity
+  //           ? order[order_id].activity.name
+  //           : "",
+  //     });
+  //   }
+  // }, [router.query.order_id]);
+
+  if (order.length === 0) {
     nothingInOrder = (
       <>
         <Navbar
@@ -499,7 +520,7 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
     );
   }
 
-  if (stays.length > 0 || activities.length > 0) {
+  if (order.length > 0) {
     showItemsInOrder = (
       <div className="relative">
         <div className="fixed top-0 w-full bg-white z-20">
@@ -529,410 +550,188 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
         </div>
         <div className="md:px-4 relative">
           <div className="flex relative h-full w-full">
-            <div className="sticky lg:w-[25%] top-24 h-full hidden lg:block">
+            <div className="sticky lg:w-[25%] top-32 h-full hidden lg:block">
               {/* <Destination uniqueLocation={uniqueLocation}></Destination> */}
-              <TripOverview
+              {/* <TripOverview
                 staysOrder={allOrders}
                 activitiesOrder={activitiesOrders}
-              ></TripOverview>
+              ></TripOverview> */}
+
+              <ClientOnly>
+                {currencyToDollar && (
+                  <h1 className="font-bold text-xl font-OpenSans">
+                    {totalPrice()
+                      ? "$" + Math.ceil(newPrice).toLocaleString()
+                      : "No data"}
+                  </h1>
+                )}
+                {!currencyToDollar && (
+                  <h1 className="font-bold text-xl font-OpenSans">
+                    {totalPrice()
+                      ? "KES" + Math.ceil(totalPrice()).toLocaleString()
+                      : "No data"}
+                  </h1>
+                )}
+              </ClientOnly>
+
+              <div className="px-2 mt-6 mb-6">
+                <ClientOnly>
+                  <div className="flex justify-center">
+                    <Button
+                      onClick={() => {
+                        initializePayment(onSuccess, onClose);
+                      }}
+                      className="w-full !py-3 flex text-lg !bg-blue-900 !text-primary-blue-200"
+                    >
+                      <span className="font-bold mr-1">Pay</span>
+
+                      <div className={" " + (!loading ? "hidden" : "")}>
+                        <LoadingSpinerChase
+                          width={20}
+                          height={20}
+                        ></LoadingSpinerChase>
+                      </div>
+                    </Button>
+                  </div>
+                </ClientOnly>
+              </div>
+
+              <hr />
+
+              <h1 className="text-xl font-bold mt-2">Chat with an expert</h1>
+              <p className="mt-2 text-base">
+                Chat with an expert to get advice or enquire on this trip
+              </p>
+
+              <Button
+                onClick={() => {}}
+                className="w-full !py-3 mt-5 flex text-lg !bg-blue-600 !text-primary-blue-200"
+              >
+                <span className="font-bold mr-1">Enquire</span>
+              </Button>
             </div>
-            <div className="relative hidden md:block h-full top-20 px-4 w-full md:w-[380px]">
+            <div className="relative hidden md:block h-full top-20 px-4 w-full md:w-[420px]">
               {/* <div>
                 <Destination uniqueLocation={uniqueLocation}></Destination>
               </div> */}
               {(stays.length > 0 || activities.length > 0) && (
-                <div className="mt-3 mb-4 text-xl text-center font-bold">
+                <div className="mt-3 mb-4 text-lg font-bold">
                   Your itinerary
                 </div>
               )}
-              {/* {stays.length > 0 && (
-                <div className="mt-2 mb-2 font-bold">Stays</div>
-              )} */}
-              <ClientOnly>
-                <div className="flex flex-col">
-                  <DragDropContext
-                    onDragEnd={(result) => {
-                      onDragEnd(result);
-                    }}
+              <div className="px-2 relative bg-gray-100 py-1 rounded-lg flex gap-2">
+                <div className="w-12 h-12 my-auto bg-gray-200 rounded-lg flex items-center justify-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                    role="img"
+                    className="w-6 h-6 fill-current text-gray-500"
+                    preserveAspectRatio="xMidYMid meet"
+                    viewBox="0 0 16 16"
                   >
-                    <Droppable droppableId="1">
-                      {(provided, snapshot) => (
-                        <div
-                          {...provided.droppableProps}
-                          ref={provided.innerRef}
-                          style={
-                            {
-                              // background: snapshot.isDraggingOver
-                              //   ? "lightblue"
-                              //   : "",
-                            }
-                          }
-                        >
-                          {Object.keys(groupedActivitiesAndStays).map((key) => {
-                            return (
-                              <div key={key}>
-                                <div className="mb-2">
-                                  <div className="py-3 flex items-center px-2 rounded-md text-gray-700">
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      aria-hidden="true"
-                                      role="img"
-                                      className="w-6 h-6 mr-2"
-                                      preserveAspectRatio="xMidYMid meet"
-                                      viewBox="0 0 24 24"
-                                    >
-                                      <path
-                                        fill="currentColor"
-                                        d="M2.002 9.538c-.023.411.207.794.581.966l7.504 3.442l3.442 7.503c.164.356.52.583.909.583l.057-.002a1 1 0 0 0 .894-.686l5.595-17.032c.117-.358.023-.753-.243-1.02s-.66-.358-1.02-.243L2.688 8.645a.997.997 0 0 0-.686.893z"
-                                      />
-                                    </svg>
-                                    <span className="font-bold">
-                                      {groupedActivitiesAndStays[key].location}
-                                    </span>
-                                  </div>
-                                </div>
-                                {groupedActivitiesAndStays[key].orders.map(
-                                  (item, index) => {
-                                    return (
-                                      <Draggable
-                                        key={index}
-                                        draggableId={index.toString()}
-                                        index={index}
-                                      >
-                                        {(provided, snapshot) => {
-                                          return (
-                                            <div
-                                              ref={provided.innerRef}
-                                              {...provided.draggableProps}
-                                              {...provided.dragHandleProps}
-                                              style={{
-                                                userSelect: "none",
-                                                backgroundColor:
-                                                  snapshot.isDragging
-                                                    ? "#fff"
-                                                    : "",
-                                                ...provided.draggableProps
-                                                  .style,
-                                              }}
-                                            >
-                                              {item.stay && (
-                                                <CartItem
-                                                  checkoutInfo={true}
-                                                  key={item.id}
-                                                  stay={item.stay}
-                                                  cartIndex={index}
-                                                  orderId={item.id}
-                                                  setShowInfo={setShowInfo}
-                                                  orderDays={item.days}
-                                                  lengthOfItems={
-                                                    allOrders.length
-                                                  }
-                                                  setInfoPopup={setInfoPopup}
-                                                  itemType="order"
-                                                ></CartItem>
-                                              )}
-                                              {item.activity && (
-                                                <CartItem
-                                                  checkoutInfo={true}
-                                                  key={item.id}
-                                                  activity={item.activity}
-                                                  cartIndex={index}
-                                                  orderId={item.id}
-                                                  setShowInfo={setShowInfo}
-                                                  orderDays={item.days}
-                                                  activitiesPage={true}
-                                                  lengthOfItems={
-                                                    activities.length
-                                                  }
-                                                  setInfoPopup={setInfoPopup}
-                                                  itemType="order"
-                                                ></CartItem>
-                                              )}
-                                            </div>
-                                          );
-                                        }}
-                                      </Draggable>
-                                    );
-                                  }
-                                )}
-
-                                <div className="px-2 md:mb-6 mb-2">
-                                  <div
-                                    onClick={() => {
-                                      setDestinationData({
-                                        ...destinationData,
-                                        location:
-                                          groupedStays[key].location.split(
-                                            ","
-                                          )[0],
-                                      });
-                                      setDestinationPopup(true);
-                                    }}
-                                    className="py-3 bg-blue-600 bg-opacity-10 gap-1 flex cursor-pointer font-bold items-center justify-center text-blue-800 mb-3"
-                                  >
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      aria-hidden="true"
-                                      role="img"
-                                      className="w-5 h-5"
-                                      preserveAspectRatio="xMidYMid meet"
-                                      viewBox="0 0 24 24"
-                                    >
-                                      <path
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeLinecap="round"
-                                        strokeWidth="2"
-                                        d="M12 20v-8m0 0V4m0 8h8m-8 0H4"
-                                      />
-                                    </svg>
-                                    <span>Add a destination</span>
-                                  </div>
-                                </div>
-                              </div>
-                            );
-                          })}
-
-                          {provided.placeholder}
-                        </div>
-                      )}
-                    </Droppable>
-                  </DragDropContext>
+                    <path
+                      fill="currentColor"
+                      d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464l-.003.001l-.006.003l-.023.009a12.435 12.435 0 0 1-.397.15c-.264.095-.631.223-1.047.35c-.816.252-1.879.523-2.71.523c-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A19.626 19.626 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a19.587 19.587 0 0 0 1.349-.476l.019-.007l.004-.002h.001"
+                    />
+                  </svg>
                 </div>
-              </ClientOnly>
+                <div>
+                  <p className="text-sm font-medium">Day 1</p>
+                  <h1 className="font-bold">Start in Nairobi</h1>
+                  <h1 className="font-medium mt-2 text-sm">Nairobi, Kenya</h1>
+                </div>
 
-              <ClientOnly>
-                {/* <div className="flex flex-col">
-                  <DragDropContext
-                    onDragEnd={(result) => {
-                      onDragEnd(result);
-                    }}
+                <div className="w-8 h-8 shadow-md cursor-pointer bg-white flex items-center justify-center rounded-full absolute top-1 right-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                    role="img"
+                    className="w-6 h-6"
+                    preserveAspectRatio="xMidYMid meet"
+                    viewBox="0 0 24 24"
                   >
-                    <Droppable droppableId="1">
-                      {(provided, snapshot) => (
-                        <div
-                          {...provided.droppableProps}
-                          ref={provided.innerRef}
-                          style={
-                            {
-                              // background: snapshot.isDraggingOver
-                              //   ? "lightblue"
-                              //   : "",
-                            }
-                          }
-                        >
-                          {Object.keys(groupedStays).map((key) => {
-                            return (
-                              <div key={key}>
-                                <div className="mb-2 text-sm ml-2 font-bold">
-                                  {groupedStays[key].location}
-                                </div>
-                                {groupedStays[key].orders.map((item, index) => {
-                                  return (
-                                    <Draggable
-                                      key={item.id}
-                                      draggableId={item.id.toString()}
-                                      index={index}
-                                    >
-                                      {(provided, snapshot) => {
-                                        return (
-                                          <div
-                                            ref={provided.innerRef}
-                                            {...provided.draggableProps}
-                                            {...provided.dragHandleProps}
-                                            style={{
-                                              userSelect: "none",
-                                              backgroundColor:
-                                                snapshot.isDragging
-                                                  ? "#fff"
-                                                  : "",
-                                              ...provided.draggableProps.style,
-                                            }}
-                                          >
-                                            <CartItem
-                                              checkoutInfo={true}
-                                              key={item.id}
-                                              stay={item.stay}
-                                              cartIndex={index}
-                                              orderId={item.id}
-                                              setShowInfo={setShowInfo}
-                                              orderDays={item.days}
-                                              lengthOfItems={allOrders.length}
-                                              setInfoPopup={setInfoPopup}
-                                              itemType="order"
-                                            ></CartItem>
-                                          </div>
-                                        );
-                                      }}
-                                    </Draggable>
-                                  );
-                                })}
+                    <path
+                      fill="currentColor"
+                      d="M19.4 7.34L16.66 4.6A2 2 0 0 0 14 4.53l-9 9a2 2 0 0 0-.57 1.21L4 18.91a1 1 0 0 0 .29.8A1 1 0 0 0 5 20h.09l4.17-.38a2 2 0 0 0 1.21-.57l9-9a1.92 1.92 0 0 0-.07-2.71ZM9.08 17.62l-3 .28l.27-3L12 9.32l2.7 2.7ZM16 10.68L13.32 8l1.95-2L18 8.73Z"
+                    />
+                  </svg>
+                </div>
+              </div>
 
-                                <div className="px-2">
-                                  <div
-                                    onClick={() => {
-                                      setDestinationData({
-                                        ...destinationData,
-                                        location:
-                                          groupedStays[key].location.split(
-                                            ","
-                                          )[0],
-                                      });
-                                      setDestinationPopup(true);
-                                    }}
-                                    className="py-3 bg-blue-600 bg-opacity-10 gap-1 flex cursor-pointer font-bold items-center justify-center text-blue-800 mb-3"
-                                  >
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      aria-hidden="true"
-                                      role="img"
-                                      className="w-5 h-5"
-                                      preserveAspectRatio="xMidYMid meet"
-                                      viewBox="0 0 24 24"
-                                    >
-                                      <path
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeLinecap="round"
-                                        strokeWidth="2"
-                                        d="M12 20v-8m0 0V4m0 8h8m-8 0H4"
-                                      />
-                                    </svg>
-                                    <span>Add a destination</span>
-                                  </div>
-                                </div>
-                              </div>
-                            );
-                          })}
+              <div className="w-2/4 h-12 mt-1 border-r border-gray-400"></div>
+              {order.map((item, index) => {
+                return (
+                  <div key={index}>
+                    {item.stay && (
+                      <Trip
+                        transportDay="1"
+                        stayOrders={item}
+                        nights={3}
+                        index={index}
+                        order={order}
+                        setInfoPopup={setInfoPopup}
+                        setShowInfo={setShowInfo}
+                      ></Trip>
+                    )}
+                    {item.activity && (
+                      <Trip
+                        transportDay="1"
+                        activitiesOrders={item}
+                        nights={3}
+                        day="1 - 4"
+                        index={index}
+                        order={order}
+                        activitiesTrip={true}
+                        setInfoPopup={setInfoPopup}
+                        setShowInfo={setShowInfo}
+                        set
+                      ></Trip>
+                    )}
+                    {order.length - 1 !== index && (
+                      <div className="mt-1 flex items-center">
+                        <div className="w-2/4 h-12 border-r border-gray-400"></div>
 
-                          {provided.placeholder}
+                        <div className="w-fit text-sm ml-1 bg-red-700 bg-opacity-10 px-1.5 font-bold rounded-md">
+                          {moment(item.from_date).format("Do")} -{" "}
+                          {moment(item.to_date).format("Do MMM")}
                         </div>
-                      )}
-                    </Droppable>
-                  </DragDropContext>
-                </div> */}
-              </ClientOnly>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
 
-              {/* {activities.length > 0 && (
-                <div className="mt-2 mb-2 font-bold">Experiences</div>
-              )} */}
-
-              <ClientOnly>
-                {/* <div className="flex flex-col">
-                  <DragDropContext
-                    onDragEnd={(result) => {
-                      onDragEndActivities(result);
-                    }}
+              <div className=" mt-4">
+                <div
+                  onClick={() => {
+                    setDestinationData({
+                      ...destinationData,
+                      location: "Nairobi",
+                    });
+                    setDestinationPopup(true);
+                  }}
+                  className="py-3 bg-blue-600 bg-opacity-10 gap-1 flex cursor-pointer font-bold items-center justify-center text-blue-800 mb-3"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                    role="img"
+                    className="w-5 h-5"
+                    preserveAspectRatio="xMidYMid meet"
+                    viewBox="0 0 24 24"
                   >
-                    <Droppable droppableId="1">
-                      {(provided, snapshot) => (
-                        <div
-                          {...provided.droppableProps}
-                          ref={provided.innerRef}
-                          style={
-                            {
-                              // background: snapshot.isDraggingOver
-                              //   ? "lightblue"
-                              //   : "",
-                            }
-                          }
-                        >
-                          {Object.keys(groupedActivities).map((key) => {
-                            return (
-                              <div key={key}>
-                                <div className="mb-2 text-sm ml-2 font-bold">
-                                  {groupedActivities[key].location}
-                                </div>
-                                {groupedActivities[key].orders.map(
-                                  (item, index) => {
-                                    return (
-                                      <Draggable
-                                        key={item.id}
-                                        draggableId={item.id.toString()}
-                                        index={index}
-                                      >
-                                        {(provided, snapshot) => {
-                                          return (
-                                            <div
-                                              ref={provided.innerRef}
-                                              {...provided.draggableProps}
-                                              {...provided.dragHandleProps}
-                                              style={{
-                                                userSelect: "none",
-                                                backgroundColor:
-                                                  snapshot.isDragging
-                                                    ? "#fff"
-                                                    : "",
-                                                ...provided.draggableProps
-                                                  .style,
-                                              }}
-                                            >
-                                              <CartItem
-                                                checkoutInfo={true}
-                                                key={item.id}
-                                                activity={item.activity}
-                                                cartIndex={index}
-                                                orderId={item.id}
-                                                setShowInfo={setShowInfo}
-                                                orderDays={item.days}
-                                                activitiesPage={true}
-                                                lengthOfItems={
-                                                  activities.length
-                                                }
-                                                setInfoPopup={setInfoPopup}
-                                                itemType="order"
-                                              ></CartItem>
-                                            </div>
-                                          );
-                                        }}
-                                      </Draggable>
-                                    );
-                                  }
-                                )}
-                                <div className="px-2">
-                                  <div
-                                    onClick={() => {
-                                      setDestinationData({
-                                        ...destinationData,
-                                        location:
-                                          groupedStays[key].location.split(
-                                            ","
-                                          )[0],
-                                      });
-                                      setDestinationPopup(true);
-                                    }}
-                                    className="py-3 bg-blue-600 bg-opacity-10 gap-1 flex cursor-pointer font-bold items-center justify-center text-blue-800 mb-3"
-                                  >
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      aria-hidden="true"
-                                      role="img"
-                                      className="w-5 h-5"
-                                      preserveAspectRatio="xMidYMid meet"
-                                      viewBox="0 0 24 24"
-                                    >
-                                      <path
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeLinecap="round"
-                                        strokeWidth="2"
-                                        d="M12 20v-8m0 0V4m0 8h8m-8 0H4"
-                                      />
-                                    </svg>
-                                    <span>Add a destination</span>
-                                  </div>
-                                </div>
-                              </div>
-                            );
-                          })}
+                    <path
+                      fill="none"
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeWidth="2"
+                      d="M12 20v-8m0 0V4m0 8h8m-8 0H4"
+                    />
+                  </svg>
+                  <span>Add a destination</span>
+                </div>
+              </div>
 
-                          {provided.placeholder}
-                        </div>
-                      )}
-                    </Droppable>
-                  </DragDropContext>
-                </div> */}
-              </ClientOnly>
               <div className="sticky bottom-0 bg-white py-2 w-full z-40 max-w-[inherit]">
                 {/* <div className="px-2 mt-6 mb-12">
                   <ClientOnly>
@@ -955,7 +754,7 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                     </div>
                   </ClientOnly>
                 </div> */}
-                <div className="flex justify-center">
+                {/* <div className="flex justify-center">
                   <Button
                     onClick={() => {
                       initializePayment(onSuccess, onClose);
@@ -986,10 +785,10 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                       ></LoadingSpinerChase>
                     </div>
                   </Button>
-                </div>
+                </div> */}
               </div>
             </div>
-            <div className="sticky lg:w-[calc(80%-380px)] md:w-[70%] h-[90vh] mt-16 md:mt-0 top-20 w-full">
+            <div className="sticky lg:w-[calc(80%-420px)] md:w-[70%] h-[90vh] mt-16 md:mt-0 top-20 w-full">
               <div className="mb-2"></div>
               <Map
                 staysOrders={allOrders}
@@ -1906,7 +1705,7 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
             </ModalPopup>
           </div>
 
-          {/* <div className="md:hidden">
+          <div className="">
             <ModalPopup
               showModal={showInfo}
               closeModal={() => {
@@ -1915,11 +1714,11 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
               containerHeight={80}
               heightVal="%"
               title={infoPopup ? "Information for " + currentCartItemName : ""}
-              className="px-4"
+              className="px-4 md:w-[650px]"
             >
               {infoPopup && (
                 <div>
-                  {stays.map((item, index) => (
+                  {order.map((item, index) => (
                     <OrderItem
                       key={index}
                       order={item}
@@ -1927,15 +1726,6 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                       cartIndex={index}
                       setShowInfo={setShowInfo}
                     ></OrderItem>
-                  ))}
-                  {activities.map((item, index) => (
-                    <OrderItemActivities
-                      key={index}
-                      order={item}
-                      userProfile={userProfile}
-                      cartIndex={index}
-                      setShowInfo={setShowInfo}
-                    ></OrderItemActivities>
                   ))}
                 </div>
               )}
@@ -1949,7 +1739,7 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                 </div>
               )}
             </ModalPopup>
-          </div> */}
+          </div>
         </div>
 
         <ClientOnly>

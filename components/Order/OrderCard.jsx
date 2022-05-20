@@ -10,7 +10,7 @@ import ClientOnly from "../ClientOnly";
 import LoadingSpinerChase from "../ui/LoadingSpinerChase";
 import { priceConversionRateFunc } from "../../lib/PriceRate";
 
-const CartItem = ({
+const OrderCard = ({
   stay,
   activity,
   checkoutInfo,
@@ -209,29 +209,6 @@ const CartItem = ({
     }
   }, []);
 
-  const setCartId = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-
-    if (!activitiesPage) {
-      setInfoPopup(false);
-      router
-        .push({ query: { stays_id: cartIndex, activities_id: null } })
-        .then(() => {
-          setInfoPopup(true);
-        });
-    } else if (activitiesPage) {
-      setInfoPopup(false);
-      router
-        .push({ query: { activities_id: cartIndex, stays_id: null } })
-        .then(() => {
-          setInfoPopup(true);
-        });
-    }
-
-    setShowInfo(true);
-  };
-
   const removeCart = async (e) => {
     e.stopPropagation();
     e.preventDefault();
@@ -346,41 +323,31 @@ const CartItem = ({
     : activity.activity_images.sort((x, y) => y.main - x.main);
   let mainImage = sortedImages.find((image) => image.main);
   return (
-    <div className="relative px-2 mb-6">
+    <div className="relative mb-6">
       <div
         className="cursor-pointer"
         onClick={() => {
-          if (itemType === "order" || "order-mobile") {
-            if (!activitiesPage) {
-              dispatch({
-                type: "SET_ACTIVE_ITEM",
-                payload: stay,
-              });
-            } else if (activitiesPage) {
-              dispatch({
-                type: "SET_ACTIVE_ITEM",
-                payload: activity,
-              });
-            }
+          if (!activitiesPage) {
+            dispatch({
+              type: "SET_ACTIVE_ITEM",
+              payload: stay,
+            });
+          } else if (activitiesPage) {
+            dispatch({
+              type: "SET_ACTIVE_ITEM",
+              payload: activity,
+            });
           }
         }}
       >
         <div
           className={
-            "flex w-full shadow-md relative " +
-            (itemType === "order" ? "flex-col" : "")
+            "flex w-full shadow-md relative bg-white rounded-lg py-1 px-1 "
           }
         >
-          {/* {activeItem && !activitiesPage && activeItem.id !== stay.id && (
-            <div className="absolute top-0 rounded-md left-0 w-full h-full bg-white bg-opacity-40 !z-40"></div>
-          )}
-          {activeItem && activitiesPage && activeItem.id !== activity.id && (
-            <div className="absolute top-0 rounded-md left-0 w-full h-full bg-white bg-opacity-40 !z-40"></div>
-          )} */}
           <div
             className={
-              "w-full justify-between overflow-hidden rounded-md relative " +
-              (itemType === "order" ? "h-[11rem]" : "min-h-[11rem]")
+              "w-2/4 justify-between overflow-hidden rounded-md relative "
             }
           >
             <div className="h-full w-full relative flex-shrink-0 flex-grow-0">
@@ -392,21 +359,21 @@ const CartItem = ({
               />
             </div>
           </div>
-          <div className={"flex-grow-0 flex-shrink-0 px-2 py-2 "}>
-            <div className="flex flex-col gap-1">
+          <div className={"flex-grow-0 flex-shrink-0 px-2 py-2 w-2/4 "}>
+            <div className="flex flex-col gap-1 mb-2">
               <h1 className="text-gray-500 truncate">
                 {activitiesPage ? activity.name : stay.name}
               </h1>
               <ClientOnly>
                 {currencyToDollar && (
-                  <h1 className="font-bold text-lg font-OpenSans">
+                  <h1 className="font-bold font-OpenSans">
                     {price()
                       ? "$" + Math.ceil(newPrice).toLocaleString()
                       : "No data"}
                   </h1>
                 )}
                 {!currencyToDollar && (
-                  <h1 className="font-bold text-lg font-OpenSans">
+                  <h1 className="font-bold font-OpenSans">
                     {price()
                       ? "KES" + Math.ceil(price()).toLocaleString()
                       : "No data"}
@@ -415,17 +382,15 @@ const CartItem = ({
               </ClientOnly>
             </div>
 
-            {!checkoutInfo && !activitiesPage && (
+            {!activitiesPage && (
               <div className="text-gray-500 flex gap-1 text-sm truncate flex-wrap">
                 {stay.rooms && (
                   <div className="flex items-center gap-0.5">
                     <svg
-                      className="w-3 h-3"
+                      className="w-3 h-3 fill-current text-gray-500"
                       xmlns="http://www.w3.org/2000/svg"
                       aria-hidden="true"
                       role="img"
-                      width="1em"
-                      height="1em"
                       preserveAspectRatio="xMidYMid meet"
                       viewBox="0 0 24 24"
                     >
@@ -442,7 +407,7 @@ const CartItem = ({
                 {stay.beds && (
                   <div className="flex items-center gap-0.5">
                     <svg
-                      className="w-3 h-3"
+                      className="w-3 h-3 fill-current text-gray-500"
                       xmlns="http://www.w3.org/2000/svg"
                       height="24"
                       viewBox="0 0 24 24"
@@ -457,7 +422,7 @@ const CartItem = ({
                 {stay.bathrooms && (
                   <div className="flex items-center gap-0.5">
                     <svg
-                      className="w-3 h-3"
+                      className="w-3 h-3 fill-current text-gray-500"
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 512 512"
                     >
@@ -469,7 +434,7 @@ const CartItem = ({
               </div>
             )}
 
-            {!checkoutInfo && activitiesPage && (
+            {activitiesPage && (
               <div className="text-gray-500 flex gap-1 text-sm truncate flex-wrap">
                 {activity.capacity && (
                   <div className="flex items-center gap-0.5">
@@ -516,62 +481,20 @@ const CartItem = ({
                 )}
               </div>
             )}
-            <div className="font-bold text-sm truncate mt-1">
-              {activitiesPage ? activity.location : stay.location}
-            </div>
-
-            {checkoutInfo && (
-              <div className="font-bold text-sm truncate mt-1">
-                Order for {orderDays} days
-              </div>
-            )}
 
             <div
-              className={
-                "flex " + (itemType === "order" ? "gap-2" : "flex-col")
-              }
+              className="text-sm w-fit flex items-center bg-red-400 bg-opacity-30 px-2 py-1 text-red-500 font-bold p-3 rounded-md mt-2
+          "
+              onClick={removeCart}
             >
-              {checkoutInfo && (
-                <div
-                  className="text-sm w-fit bg-blue-400 bg-opacity-30 px-2 py-1 text-blue-500 font-bold p-3 rounded-md mt-2
-          "
-                  onClick={setCartId}
-                >
-                  Edit detail
-                </div>
-              )}
-              {!orderSuccessfull && (
-                <div
-                  className="text-sm w-fit flex items-center bg-red-400 bg-opacity-30 px-2 py-1 text-red-500 font-bold p-3 rounded-md mt-2
-          "
-                  onClick={removeCart}
-                >
-                  <span className="mr-1">Remove</span>
-                  <div className={" " + (!removeButtonLoading ? "hidden" : "")}>
-                    <LoadingSpinerChase
-                      width={13}
-                      height={13}
-                      color="red"
-                    ></LoadingSpinerChase>
-                  </div>
-                </div>
-              )}
-              {orderSuccessfull && (
-                <div
-                  className="text-sm w-fit flex items-center bg-green-500 bg-opacity-30 px-2 py-1 text-green-700 bg-primary-red-100 font-bold p-3 rounded-md mt-2
-          "
-                  onClick={orderAgain}
-                >
-                  <span className="mr-1">Order again</span>
-                  <div className={" " + (!orderAgainLoading ? "hidden" : "")}>
-                    <LoadingSpinerChase
-                      width={13}
-                      height={13}
-                      color="green"
-                    ></LoadingSpinerChase>
-                  </div>
-                </div>
-              )}
+              <span className="mr-1">Remove</span>
+              <div className={" " + (!removeButtonLoading ? "hidden" : "")}>
+                <LoadingSpinerChase
+                  width={13}
+                  height={13}
+                  color="red"
+                ></LoadingSpinerChase>
+              </div>
             </div>
           </div>
         </div>
@@ -579,116 +502,38 @@ const CartItem = ({
       {!activitiesPage && (
         <div>
           {stay.type_of_stay === "LODGE" && (
-            <div className="absolute top-1.5 left-5 z-10 px-2 rounded-md bg-green-600 text-white">
+            <div className="absolute top-1.5 left-2 z-10 px-1 rounded-md bg-green-600 text-white">
               Lodge
             </div>
           )}
           {stay.type_of_stay === "HOUSE" && (
-            <div className="absolute top-1.5 left-5 z-10 px-2 rounded-md bg-green-600 text-white">
+            <div className="absolute top-1.5 left-2 z-10 px-1 rounded-md bg-green-600 text-white">
               House
             </div>
           )}
           {stay.type_of_stay === "UNIQUE SPACE" && (
-            <div className="absolute top-1.5 left-5 z-10 px-2 rounded-md bg-green-600 text-white">
+            <div className="absolute top-1.5 left-2 z-10 px-1 rounded-md bg-green-600 text-white">
               Unique space
             </div>
           )}
           {stay.type_of_stay === "CAMPSITE" && (
-            <div className="absolute top-1.5 left-5 z-10 px-2 rounded-md bg-green-600 text-white">
+            <div className="absolute top-1.5 left-2 z-10 px-1 rounded-md bg-green-600 text-white">
               Campsite
             </div>
           )}
           {stay.type_of_stay === "BOUTIQUE HOTEL" && (
-            <div className="absolute top-1.5 left-5 z-10 px-2 rounded-md bg-green-600 text-white">
+            <div className="absolute top-1.5 left-2 z-10 px-1 rounded-md bg-green-600 text-white">
               Boutique hotel
             </div>
           )}
         </div>
       )}
-      <div onClick={addToCart}>
-        {orderSuccessfull && (
-          <div className="p-2 bg-blue-100 cursor-pointer absolute top-1 right-1 flex items-center justify-center rounded-full">
-            {!cartLoading && !cartAdded && (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 cursor-pointer"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                />
-              </svg>
-            )}
-            {!cartLoading && cartAdded && (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 cursor-pointer"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            )}
-            {cartLoading && (
-              <LoadingSpinerChase
-                width={15}
-                height={15}
-                color="#000"
-              ></LoadingSpinerChase>
-            )}
-          </div>
-        )}
-
-        {orderSuccessfull && !listingIsInCart && !cartLoading && !cartAdded && (
-          <div className="absolute top-1.5 right-1.5 cursor-pointer">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 cursor-pointer"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </div>
-        )}
-
-        {orderSuccessfull && listingIsInCart && !cartLoading && !cartAdded && (
-          <div className="absolute top-1.5 right-1.5 cursor-pointer">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 cursor-pointer text-blue-900"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-              <path
-                fillRule="evenodd"
-                d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </div>
-        )}
-      </div>
     </div>
   );
 };
 
-CartItem.propTypes = {
+OrderCard.propTypes = {
   checkoutInfo: PropTypes.bool,
 };
 
-export default CartItem;
+export default OrderCard;

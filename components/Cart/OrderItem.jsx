@@ -50,29 +50,37 @@ const OrderItem = ({ cartIndex, userProfile, order, setShowInfo }) => {
 
   const updateInfo = async () => {
     setLoading(true);
-    await axios.put(
-      `${process.env.NEXT_PUBLIC_baseURL}/user-orders/${order.id}/`,
-      {
-        first_name: formik.values.first_name,
-        last_name: formik.values.last_name,
-        from_date: moment(new Date(date.from)).format("YYYY-MM-DD"),
-        to_date: moment(new Date(date.to)).format("YYYY-MM-DD"),
-      },
-      {
-        headers: {
-          Authorization: "Token " + Cookies.get("token"),
+    await axios
+      .put(
+        `${process.env.NEXT_PUBLIC_baseURL}/${
+          order.stay ? "user-orders" : "user-activities-orders"
+        }/${order.id}/`,
+        {
+          first_name: formik.values.first_name,
+          last_name: formik.values.last_name,
+          from_date: new Date(date.from),
+          to_date: new Date(date.to),
         },
-      }
-    );
+        {
+          headers: {
+            Authorization: "Token " + Cookies.get("token"),
+          },
+        }
+      )
+      .then((res) => {
+        location.reload();
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
     setShowInfo(false);
-    location.reload();
   };
 
   return (
     <div
       className={
         "w-full " +
-        (router.query.stays_id === cartIndex.toString() ? "" : "hidden")
+        (router.query.order_id === cartIndex.toString() ? "" : "hidden")
       }
     >
       <div className="w-full relative">
