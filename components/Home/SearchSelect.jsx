@@ -26,6 +26,9 @@ function SearchSelect({ setCurrentNavState, currentNavState, isHomePage }) {
         onClick={(event) => {
           event.stopPropagation();
           setCurrentNavState(2);
+          if (!isHomePage) {
+            router.push("/transport");
+          }
         }}
         className={
           "cursor-pointer md:!text-base " +

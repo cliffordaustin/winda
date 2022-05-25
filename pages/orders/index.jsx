@@ -37,8 +37,9 @@ import Popup from "../../components/ui/Popup";
 import moment from "moment";
 import OrderCard from "../../components/Order/OrderCard";
 import Trip from "../../components/Order/Trip";
+import TransportTrip from "../../components/Order/TransportTrip";
 
-function Orders({ userProfile, allOrders, activitiesOrders }) {
+function Orders({ userProfile, allOrders, activitiesOrders, transportOrders }) {
   const router = useRouter();
 
   const [state, setState] = useState({
@@ -83,6 +84,9 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
     });
     activitiesOrders.forEach((item) => {
       price += item.total_order_price;
+    });
+    transportOrders.forEach((item) => {
+      price += ((item.distance * 0.001).toFixed(1) / 10) * item.transport.price;
     });
     return parseFloat(price);
   };
@@ -142,6 +146,8 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
   const [activities, setActivities] = useState([]);
 
   const [stays, setStays] = useState([]);
+
+  const [transport, setTransport] = useState([]);
 
   const [groupedStays, setGroupedStays] = useState([]);
 
@@ -451,8 +457,22 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
     setOrder(orderFormatted);
   };
 
+  const upDateTransportOrders = () => {
+    const newTransportOrders = [];
+
+    transportOrders.forEach((result) => {
+      newTransportOrders.push(result.transport);
+    });
+
+    setTransport(newTransportOrders);
+  };
+
   useEffect(() => {
     activitiesStaysOrder();
+  }, []);
+
+  useEffect(() => {
+    upDateTransportOrders();
   }, []);
 
   // useEffect(() => {
@@ -473,7 +493,7 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
   //   }
   // }, [router.query.order_id]);
 
-  if (order.length === 0) {
+  if (order.length === 0 && transportOrders.length === 0) {
     nothingInOrder = (
       <>
         <Navbar
@@ -520,7 +540,7 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
     );
   }
 
-  if (order.length > 0) {
+  if (order.length > 0 || transportOrders.length > 0) {
     showItemsInOrder = (
       <div className="relative">
         <div className="fixed top-0 w-full bg-white z-20">
@@ -619,46 +639,52 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                   Your itinerary
                 </div>
               )}
-              <div className="px-2 relative bg-gray-100 py-1 rounded-lg flex gap-2">
-                <div className="w-12 h-12 my-auto bg-gray-200 rounded-lg flex items-center justify-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden="true"
-                    role="img"
-                    className="w-6 h-6 fill-current text-gray-500"
-                    preserveAspectRatio="xMidYMid meet"
-                    viewBox="0 0 16 16"
-                  >
-                    <path
-                      fill="currentColor"
-                      d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464l-.003.001l-.006.003l-.023.009a12.435 12.435 0 0 1-.397.15c-.264.095-.631.223-1.047.35c-.816.252-1.879.523-2.71.523c-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A19.626 19.626 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a19.587 19.587 0 0 0 1.349-.476l.019-.007l.004-.002h.001"
-                    />
-                  </svg>
-                </div>
-                <div>
-                  <p className="text-sm font-medium">Day 1</p>
-                  <h1 className="font-bold">Start in Nairobi</h1>
-                  <h1 className="font-medium mt-2 text-sm">Nairobi, Kenya</h1>
-                </div>
+              {order.length > 0 && (
+                <>
+                  <div className="px-2 relative bg-gray-100 py-1 rounded-lg flex gap-2">
+                    <div className="w-12 h-12 my-auto bg-gray-200 rounded-lg flex items-center justify-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true"
+                        role="img"
+                        className="w-6 h-6 fill-current text-gray-500"
+                        preserveAspectRatio="xMidYMid meet"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          fill="currentColor"
+                          d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464l-.003.001l-.006.003l-.023.009a12.435 12.435 0 0 1-.397.15c-.264.095-.631.223-1.047.35c-.816.252-1.879.523-2.71.523c-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A19.626 19.626 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a19.587 19.587 0 0 0 1.349-.476l.019-.007l.004-.002h.001"
+                        />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium">Day 1</p>
+                      <h1 className="font-bold">Start in Nairobi</h1>
+                      <h1 className="font-medium mt-2 text-sm">
+                        Nairobi, Kenya
+                      </h1>
+                    </div>
 
-                <div className="w-8 h-8 shadow-md cursor-pointer bg-white flex items-center justify-center rounded-full absolute top-1 right-2">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden="true"
-                    role="img"
-                    className="w-6 h-6"
-                    preserveAspectRatio="xMidYMid meet"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      fill="currentColor"
-                      d="M19.4 7.34L16.66 4.6A2 2 0 0 0 14 4.53l-9 9a2 2 0 0 0-.57 1.21L4 18.91a1 1 0 0 0 .29.8A1 1 0 0 0 5 20h.09l4.17-.38a2 2 0 0 0 1.21-.57l9-9a1.92 1.92 0 0 0-.07-2.71ZM9.08 17.62l-3 .28l.27-3L12 9.32l2.7 2.7ZM16 10.68L13.32 8l1.95-2L18 8.73Z"
-                    />
-                  </svg>
-                </div>
-              </div>
+                    <div className="w-8 h-8 shadow-md cursor-pointer bg-white flex items-center justify-center rounded-full absolute top-1 right-2">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true"
+                        role="img"
+                        className="w-6 h-6"
+                        preserveAspectRatio="xMidYMid meet"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          fill="currentColor"
+                          d="M19.4 7.34L16.66 4.6A2 2 0 0 0 14 4.53l-9 9a2 2 0 0 0-.57 1.21L4 18.91a1 1 0 0 0 .29.8A1 1 0 0 0 5 20h.09l4.17-.38a2 2 0 0 0 1.21-.57l9-9a1.92 1.92 0 0 0-.07-2.71ZM9.08 17.62l-3 .28l.27-3L12 9.32l2.7 2.7ZM16 10.68L13.32 8l1.95-2L18 8.73Z"
+                        />
+                      </svg>
+                    </div>
+                  </div>
 
-              <div className="w-2/4 h-12 mt-1 border-r border-gray-400"></div>
+                  <div className="w-2/4 h-12 mt-1 border-r border-gray-400"></div>
+                </>
+              )}
               {order.map((item, index) => {
                 return (
                   <div key={index}>
@@ -670,6 +696,7 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                         index={index}
                         order={order}
                         setInfoPopup={setInfoPopup}
+                        stayPage={true}
                         setShowInfo={setShowInfo}
                       ></Trip>
                     )}
@@ -681,6 +708,7 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                         day="1 - 4"
                         index={index}
                         order={order}
+                        activityPage={true}
                         activitiesTrip={true}
                         setInfoPopup={setInfoPopup}
                         setShowInfo={setShowInfo}
@@ -700,6 +728,26 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                   </div>
                 );
               })}
+
+              <div className="mt-4">
+                {transport.map((item, index) => (
+                  <TransportTrip
+                    key={index}
+                    transport={item}
+                    orderId={transportOrders[index].id}
+                    transportDistance={transportOrders[index].distance}
+                    transportDestination={transportOrders[index].destination}
+                    transportStartingPoint={
+                      transportOrders[index].starting_point
+                    }
+                    transportPrice={
+                      ((transportOrders[index].distance * 0.001).toFixed(1) /
+                        10) *
+                      item.price
+                    }
+                  ></TransportTrip>
+                ))}
+              </div>
 
               <div className=" mt-4">
                 <div
@@ -788,7 +836,7 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                 </div> */}
               </div>
             </div>
-            <div className="sticky lg:w-[calc(80%-420px)] md:w-[70%] h-[90vh] mt-16 md:mt-0 top-20 w-full">
+            <div className="fixed lg:w-[calc(75%-450px)] md:w-[70%] h-[90vh] md:mt-0 top-20 right-4 w-full">
               <div className="mb-2"></div>
               <Map
                 staysOrders={allOrders}
@@ -1324,6 +1372,7 @@ function Orders({ userProfile, allOrders, activitiesOrders }) {
                                                   lengthOfItems={
                                                     allOrders.length
                                                   }
+                                                  stayPage={true}
                                                   setInfoPopup={setInfoPopup}
                                                   itemType="order"
                                                 ></CartItem>
@@ -1814,11 +1863,21 @@ export async function getServerSideProps(context) {
       }
     );
 
+    const transportOrders = await axios.get(
+      `${process.env.NEXT_PUBLIC_baseURL}/user-transport-orders/`,
+      {
+        headers: {
+          Authorization: "Token " + token,
+        },
+      }
+    );
+
     return {
       props: {
         userProfile: response.data[0],
         allOrders: data.results,
         activitiesOrders: activitiesOrders.data.results,
+        transportOrders: transportOrders.data.results,
       },
     };
   } catch (error) {
@@ -1833,7 +1892,9 @@ export async function getServerSideProps(context) {
       return {
         props: {
           userProfile: "",
-          cart: [],
+          allOrders: [],
+          activitiesOrders: [],
+          transportOrders: [],
         },
       };
     }

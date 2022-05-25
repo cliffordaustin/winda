@@ -8,7 +8,7 @@ import axios from "axios";
 import getToken from "../lib/getToken";
 import { useRouter } from "next/router";
 
-import Navbar from "../components/Home/Navbar";
+import Navbar from "../components/Home/InHeaderNavbar";
 import Search from "../components/Home/Search";
 import TransportSearch from "../components/Home/TransportSearch";
 import ActivitiesSearch from "../components/Home/ActivitiesSearch";
@@ -297,28 +297,8 @@ export default function Home({ userProfile }) {
         </Head>
         <TopBanner></TopBanner>
 
-        <Navbar
-          showDropdown={state.showDropdown}
-          userProfile={userProfile}
-          currentNavState={state.currentNavState}
-          setCurrentNavState={(currentNavState) => {
-            setState({
-              ...state,
-              currentNavState: currentNavState,
-              showCheckOutDate: false,
-              showCheckInDate: false,
-              showPopup: false,
-            });
-          }}
-          changeShowDropdown={() =>
-            setState({
-              ...state,
-              showDropdown: !state.showDropdown,
-            })
-          }
-          isHomePage={true}
-        ></Navbar>
-        <div
+        <div>
+          {/* <div
           ref={searchRef}
           className="mt-1 w-full md:flex md:justify-center md:px-0 px-4 hidden mb-8"
         >
@@ -603,8 +583,10 @@ export default function Home({ userProfile }) {
               ></ActivitiesSearch>
             </motion.div>
           )}
+        </div> */}
         </div>
-        {state.windowSize >= 768 && (
+        <div>
+          {/* {state.windowSize >= 768 && (
           <div className="hidden md:block">
             <StickyHeader className="py-3 px-2 rounded-bl-2xl rounded-br-2xl bg-white z-30 shadow-md flex items-center justify-center">
               <div
@@ -684,7 +666,8 @@ export default function Home({ userProfile }) {
               </div>
             </StickyHeader>
           </div>
-        )}
+        )} */}
+        </div>
       </div>
       {state.windowSize < 768 && (
         <div>
@@ -1001,10 +984,10 @@ export default function Home({ userProfile }) {
           </MobileModal>
         </div>
       )}
-      <div className="px-3 sm:px-6 mb-12 select-none relative">
-        <div className="w-full h-600 relative before:absolute before:h-full before:w-full before:bg-black before:z-20 before:rounded-3xl before:opacity-60">
+      <div className="px-2 mb-12 select-none relative">
+        <div className="w-full h-600 relative before:absolute before:h-full before:w-full before:bg-black before:z-20 before:rounded-b-3xl before:opacity-60">
           <Image
-            className={"rounded-3xl sm:w-full md:w-full"}
+            className={"rounded-b-3xl sm:w-full md:w-full"}
             layout="fill"
             objectFit="cover"
             src="/images/header-image.jpeg"
@@ -1038,7 +1021,31 @@ export default function Home({ userProfile }) {
             </Button>
           </div>
         </div>
-        <div
+        <div className="absolute top-4 w-full z-50">
+          <Navbar
+            showDropdown={state.showDropdown}
+            userProfile={userProfile}
+            currentNavState={state.currentNavState}
+            setCurrentNavState={(currentNavState) => {
+              setState({
+                ...state,
+                currentNavState: currentNavState,
+                showCheckOutDate: false,
+                showCheckInDate: false,
+                showPopup: false,
+              });
+            }}
+            changeShowDropdown={() =>
+              setState({
+                ...state,
+                showDropdown: !state.showDropdown,
+              })
+            }
+            isHomePage={true}
+          ></Navbar>
+        </div>
+        <div>
+          {/* <div
           className={
             "absolute bottom-20 z-20 right-2/4 left-2/4 -translate-x-2/4 md:hidden flex justify-center "
           }
@@ -1055,8 +1062,10 @@ export default function Home({ userProfile }) {
               });
             }}
           ></MobileSearchSelect>
+        </div> */}
         </div>
-        <div
+        <div>
+          {/* <div
           className={
             "mt-1 w-full flex md:justify-center md:px-0 px-4 absolute -bottom-52 z-20 right-2/4 left-2/4 -translate-x-2/4 md:hidden " +
             (state.currentNavState === 2 && !state.showSearchModal
@@ -1339,56 +1348,19 @@ export default function Home({ userProfile }) {
               ></ActivitiesSearch>
             </motion.div>
           )}
+        </div> */}
         </div>
       </div>
-      {state.windowSize < 768 && (
-        <div className="block md:hidden">
-          <StickyHeader className="py-3 px-2 rounded-bl-2xl rounded-br-2xl bg-white z-30 shadow-md flex items-center justify-center">
-            <div
-              onClick={(e) => {
-                e.stopPropagation();
-                setState({ ...state, showSearchModal: true });
-              }}
-              className="w-5/6 md:hidden cursor-pointer"
-            >
-              <div className="flex items-center justify-center gap-2 !px-2 !py-1.5 !bg-gray-100 w-full rounded-full text-center ml-1 font-bold">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 text-red-600"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path d="M9 9a2 2 0 114 0 2 2 0 01-4 0z" />
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a4 4 0 00-3.446 6.032l-2.261 2.26a1 1 0 101.414 1.415l2.261-2.261A4 4 0 1011 5z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <div>Where to?</div>
-              </div>
-            </div>
-
-            <div className="md:flex justify-between gap-4 items-center hidden w-90p">
-              <Link href="/">
-                <a className="font-lobster text-xl relative w-24 h-7 cursor-pointer">
-                  <Image
-                    layout="fill"
-                    alt="Logo"
-                    src="/images/winda_logo/horizontal-blue-font.png"
-                    priority
-                  ></Image>
-                </a>
-              </Link>
-
+      <div>
+        {/* {state.windowSize < 768 && (
+          <div className="block md:hidden">
+            <StickyHeader className="py-3 px-2 rounded-bl-2xl rounded-br-2xl bg-white z-30 shadow-md flex items-center justify-center">
               <div
-                onClick={() =>
-                  searchRef.current.scrollIntoView({
-                    behavior: "smooth",
-                    block: "center",
-                  })
-                }
-                className="w-4/5 lg:w-3/5 cursor-pointer"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setState({ ...state, showSearchModal: true });
+                }}
+                className="w-5/6 md:hidden cursor-pointer"
               >
                 <div className="flex items-center justify-center gap-2 !px-2 !py-1.5 !bg-gray-100 w-full rounded-full text-center ml-1 font-bold">
                   <svg
@@ -1408,20 +1380,60 @@ export default function Home({ userProfile }) {
                 </div>
               </div>
 
-              <UserDropdown
-                showDropdown={state.showDropdown}
-                userProfile={userProfile}
-                changeShowDropdown={() =>
-                  setState({
-                    ...state,
-                    showDropdown: !state.showDropdown,
-                  })
-                }
-              ></UserDropdown>
-            </div>
-          </StickyHeader>
-        </div>
-      )}
+              <div className="md:flex justify-between gap-4 items-center hidden w-90p">
+                <Link href="/">
+                  <a className="font-lobster text-xl relative w-24 h-7 cursor-pointer">
+                    <Image
+                      layout="fill"
+                      alt="Logo"
+                      src="/images/winda_logo/horizontal-blue-font.png"
+                      priority
+                    ></Image>
+                  </a>
+                </Link>
+
+                <div
+                  onClick={() =>
+                    searchRef.current.scrollIntoView({
+                      behavior: "smooth",
+                      block: "center",
+                    })
+                  }
+                  className="w-4/5 lg:w-3/5 cursor-pointer"
+                >
+                  <div className="flex items-center justify-center gap-2 !px-2 !py-1.5 !bg-gray-100 w-full rounded-full text-center ml-1 font-bold">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 text-red-600"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path d="M9 9a2 2 0 114 0 2 2 0 01-4 0z" />
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a4 4 0 00-3.446 6.032l-2.261 2.26a1 1 0 101.414 1.415l2.261-2.261A4 4 0 1011 5z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <div>Where to?</div>
+                  </div>
+                </div>
+
+                <UserDropdown
+                  showDropdown={state.showDropdown}
+                  userProfile={userProfile}
+                  changeShowDropdown={() =>
+                    setState({
+                      ...state,
+                      showDropdown: !state.showDropdown,
+                    })
+                  }
+                ></UserDropdown>
+              </div>
+            </StickyHeader>
+          </div>
+        )} */}
+      </div>
       <div className="md:mt-16 mb-8 mt-64 2xl:w-4/6 2xl:mx-auto">
         <Main></Main>
       </div>

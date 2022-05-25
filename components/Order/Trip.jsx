@@ -27,6 +27,8 @@ const Trip = ({
   order,
   setInfoPopup,
   setShowInfo,
+  stayPage,
+  activityPage,
 }) => {
   const [days, setDays] = useState();
 
@@ -505,6 +507,7 @@ const Trip = ({
               orderId={stayOrders.id}
               orderDays={stayOrders.days}
               itemType="order"
+              stayPage={true}
             ></OrderCard>
           )}
           {activitiesTrip && (

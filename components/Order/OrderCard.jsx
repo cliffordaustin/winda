@@ -25,6 +25,13 @@ const OrderCard = ({
   lengthOfItems,
   setInfoPopup,
   itemType,
+  stayPage,
+  transport,
+  transportPage,
+  transportStartingPoint,
+  transportDestination,
+  transportDistance,
+  transportPrice,
 }) => {
   const currencyToDollar = useSelector((state) => state.home.currencyToDollar);
   const activeItem = useSelector((state) => state.order.activeItem);
@@ -38,137 +45,21 @@ const OrderCard = ({
 
   const [newPrice, setNewPrice] = useState(null);
 
-  const [cartLoading, setCartLoading] = useState(false);
-
-  const [cartAdded, setCartAdded] = useState(false);
-
-  const [listingIsInCart, setListingIsInCart] = useState(false);
-
   const [removeButtonLoading, setRemoveButtonLoading] = useState(false);
 
-  const [orderAgainLoading, setOrderAgainLoading] = useState(false);
-
   const price = () => {
-    return !activitiesPage ? stay.price : activity.price;
-  };
-
-  const orderAgain = async (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-
-    setOrderAgainLoading(true);
-
-    if (!activitiesPage) {
-      await axios
-        .post(
-          `${process.env.NEXT_PUBLIC_baseURL}/stays/${stay.slug}/add-to-order/`,
-          {
-            first_name: userProfile.first_name || "",
-            last_name: userProfile.last_name || "",
-          },
-          {
-            headers: {
-              Authorization: `Token ${Cookies.get("token")}`,
-            },
-          }
-        )
-        .then((res) => {
-          router.push({
-            pathname: "/orders",
-            query: { stays_id: 0, activities_id: null },
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-          setOrderAgainLoading(false);
-        });
-    } else if (activitiesPage) {
-      await axios
-        .post(
-          `${process.env.NEXT_PUBLIC_baseURL}/activities/${activity.slug}/add-to-order/`,
-          {
-            first_name: userProfile.first_name || "",
-            last_name: userProfile.last_name || "",
-          },
-          {
-            headers: {
-              Authorization: `Token ${Cookies.get("token")}`,
-            },
-          }
-        )
-        .then((res) => {
-          router.push({
-            pathname: "/orders",
-            query: { stays_id: null, activities_id: 0 },
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-          setOrderAgainLoading(false);
-        });
-    }
-  };
-
-  const addToCart = async (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-
-    const token = Cookies.get("token");
-
-    if (!listingIsInCart) {
-      setCartLoading(true);
-
-      if (!activitiesPage) {
-        await axios
-          .post(
-            `${process.env.NEXT_PUBLIC_baseURL}/stays/${stay.slug}/add-to-cart/`,
-            {},
-            {
-              headers: {
-                Authorization: "Token " + token,
-              },
-            }
-          )
-          .then(() => {
-            setCartLoading(false);
-            setCartAdded(true);
-          })
-          .catch((err) => {
-            console.log(err.response);
-          });
-      } else if (activitiesPage) {
-        await axios
-          .post(
-            `${process.env.NEXT_PUBLIC_baseURL}/activities/${activity.slug}/add-to-cart/`,
-            {},
-            {
-              headers: {
-                Authorization: "Token " + token,
-              },
-            }
-          )
-          .then(() => {
-            setCartLoading(false);
-            setCartAdded(true);
-          })
-          .catch((err) => {
-            console.log(err.response);
-          });
-      }
-
-      location.reload();
-    } else if (listingIsInCart) {
-      router.push({
-        pathname: "/cart",
-      });
-    }
+    return stayPage
+      ? stay.price
+      : transportPage
+      ? transportPrice
+      : activity.price;
   };
 
   const itemIsInCart = async () => {
     let exist = false;
     let activitiesCartExist = false;
 
-    if (!activitiesPage) {
+    if (stayPage) {
       const cart = await axios.get(
         `${process.env.NEXT_PUBLIC_baseURL}/user-cart/`,
         {
@@ -217,57 +108,8 @@ const OrderCard = ({
 
     setRemoveButtonLoading(true);
 
-    if (!checkoutInfo) {
-      if (token) {
-        if (!activitiesPage) {
-          await axios
-            .delete(`${process.env.NEXT_PUBLIC_baseURL}/user-cart/${cartId}/`, {
-              headers: {
-                Authorization: "Token " + token,
-              },
-            })
-            .then(() => {
-              location.reload();
-            })
-            .catch((err) => {
-              console.log(err.response.data);
-              setRemoveButtonLoading(false);
-            });
-        } else if (activitiesPage) {
-          await axios
-            .delete(
-              `${process.env.NEXT_PUBLIC_baseURL}/user-activities-cart/${cartId}/`,
-              {
-                headers: {
-                  Authorization: "Token " + token,
-                },
-              }
-            )
-            .then(() => {
-              location.reload();
-            })
-            .catch((err) => {
-              console.log(err.response.data);
-              setRemoveButtonLoading(false);
-            });
-        }
-      } else if (Cookies.get("cart")) {
-        const cart = JSON.parse(decodeURIComponent(Cookies.get("cart")));
-
-        const newCart = [];
-
-        if (!activitiesPage) {
-          newCart = cart.filter((el) => el.slug !== stay.slug);
-        } else if (activitiesPage) {
-          newCart = cart.filter((el) => el.slug !== activity.slug);
-        }
-
-        Cookies.set("cart", JSON.stringify(newCart));
-
-        location.reload();
-      }
-    } else if (checkoutInfo) {
-      if (!activitiesPage) {
+    if (checkoutInfo) {
+      if (stayPage) {
         await axios
           .delete(
             `${process.env.NEXT_PUBLIC_baseURL}/user-orders/${orderId}/`,
@@ -299,6 +141,22 @@ const OrderCard = ({
           .catch((err) => {
             console.log(err.response.data);
           });
+      } else if (transportPage) {
+        await axios
+          .delete(
+            `${process.env.NEXT_PUBLIC_baseURL}/user-transport-orders/${orderId}/`,
+            {
+              headers: {
+                Authorization: "Token " + token,
+              },
+            }
+          )
+          .then(() => {
+            router.reload();
+          })
+          .catch((err) => {
+            console.log(err.response.data);
+          });
       }
     }
   };
@@ -318,16 +176,20 @@ const OrderCard = ({
   useEffect(() => {
     priceConversion(price());
   }, [price(), currencyToDollar, priceConversionRate]);
-  const sortedImages = !activitiesPage
+  const sortedImages = stayPage
     ? stay.stay_images.sort((x, y) => y.main - x.main)
-    : activity.activity_images.sort((x, y) => y.main - x.main);
+    : activitiesPage
+    ? activity.activity_images.sort((x, y) => y.main - x.main)
+    : transportPage
+    ? transport.transportation_images.sort((x, y) => y.main - x.main)
+    : [];
   let mainImage = sortedImages.find((image) => image.main);
   return (
     <div className="relative mb-6">
       <div
         className="cursor-pointer"
         onClick={() => {
-          if (!activitiesPage) {
+          if (stayPage) {
             dispatch({
               type: "SET_ACTIVE_ITEM",
               payload: stay,
@@ -362,27 +224,101 @@ const OrderCard = ({
           <div className={"flex-grow-0 flex-shrink-0 px-2 py-2 w-2/4 "}>
             <div className="flex flex-col gap-1 mb-2">
               <h1 className="text-gray-500 truncate">
-                {activitiesPage ? activity.name : stay.name}
+                {activitiesPage ? activity.name : stayPage ? stay.name : ""}
+
+                {transportPage && (
+                  <div className="flex items-center gap-2">
+                    <div
+                      className="w-2 h-2 rounded-full"
+                      style={{ backgroundColor: transport.vehicle_color }}
+                    ></div>
+                    <div className="text-gray-500 flex gap-[3px] lowercase">
+                      <h1>{transport.vehicle_make}</h1>
+                      <span className="-mt-[5px] font-bold text-lg text-black">
+                        .
+                      </span>
+                      <h1>{transport.type_of_car}</h1>
+                    </div>
+                  </div>
+                )}
               </h1>
               <ClientOnly>
-                {currencyToDollar && (
-                  <h1 className="font-bold font-OpenSans">
-                    {price()
-                      ? "$" + Math.ceil(newPrice).toLocaleString()
-                      : "No data"}
-                  </h1>
-                )}
-                {!currencyToDollar && (
-                  <h1 className="font-bold font-OpenSans">
-                    {price()
-                      ? "KES" + Math.ceil(price()).toLocaleString()
-                      : "No data"}
-                  </h1>
-                )}
+                <div className="flex">
+                  {currencyToDollar && (
+                    <h1 className="font-bold font-OpenSans">
+                      {price()
+                        ? "$" + Math.ceil(newPrice).toLocaleString()
+                        : "No data"}
+                    </h1>
+                  )}
+                  {!currencyToDollar && (
+                    <h1 className="font-bold font-OpenSans">
+                      {price()
+                        ? "KES" + Math.ceil(price()).toLocaleString()
+                        : "No data"}
+                    </h1>
+                  )}
+
+                  {transportPage && (
+                    <span className="inline text-xs mt-2 font-semibold ml-0.5">
+                      /for {(transportDistance * 0.001).toFixed(1)}km
+                    </span>
+                  )}
+                </div>
               </ClientOnly>
             </div>
 
-            {!activitiesPage && (
+            {transportPage && (
+              <div className="flex mt-1">
+                <div className="w-5 h-full flex flex-col justify-center self-center">
+                  <div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      aria-hidden="true"
+                      role="img"
+                      className="w-4 h-4"
+                      preserveAspectRatio="xMidYMid meet"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      />
+                    </svg>
+                  </div>
+                  <div className="w-[45%] h-[15px] border-r border-gray-400"></div>
+                  <div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      aria-hidden="true"
+                      role="img"
+                      className="w-4 h-4"
+                      preserveAspectRatio="xMidYMid meet"
+                      viewBox="0 0 32 32"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M16 18a5 5 0 1 1 5-5a5.006 5.006 0 0 1-5 5Zm0-8a3 3 0 1 0 3 3a3.003 3.003 0 0 0-3-3Z"
+                      />
+                      <path
+                        fill="currentColor"
+                        d="m16 30l-8.436-9.949a35.076 35.076 0 0 1-.348-.451A10.889 10.889 0 0 1 5 13a11 11 0 0 1 22 0a10.884 10.884 0 0 1-2.215 6.597l-.001.003s-.3.394-.345.447ZM8.812 18.395c.002 0 .234.308.287.374L16 26.908l6.91-8.15c.044-.055.278-.365.279-.366A8.901 8.901 0 0 0 25 13a9 9 0 1 0-18 0a8.905 8.905 0 0 0 1.813 5.395Z"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2 overflow-hidden">
+                  <div className="truncate">{transportStartingPoint}</div>
+                  <div className="truncate">{transportDestination}</div>
+                </div>
+              </div>
+            )}
+
+            {stayPage && (
               <div className="text-gray-500 flex gap-1 text-sm truncate flex-wrap">
                 {stay.rooms && (
                   <div className="flex items-center gap-0.5">
@@ -499,7 +435,7 @@ const OrderCard = ({
           </div>
         </div>
       </div>
-      {!activitiesPage && (
+      {stayPage && (
         <div>
           {stay.type_of_stay === "LODGE" && (
             <div className="absolute top-1.5 left-2 z-10 px-1 rounded-md bg-green-600 text-white">

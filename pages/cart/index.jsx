@@ -23,6 +23,8 @@ const Cart = ({
   allItemsInCart,
   activitiesCart,
   allItemsInActivityCart,
+  transportCart,
+  allItemsInTransportCart,
 }) => {
   const router = useRouter();
 
@@ -51,6 +53,9 @@ const Cart = ({
     });
     activitiesCart.forEach((item) => {
       price += item.price;
+    });
+    allItemsInTransportCart.forEach((item) => {
+      price += ((item.distance * 0.001).toFixed(1) / 10) * item.transport.price;
     });
     return parseFloat(price);
   };
@@ -95,7 +100,7 @@ const Cart = ({
             );
           })
           .catch((err) => {
-            console.log(err);
+            console.log(err.response);
             setLoading(false);
           });
       }
@@ -128,11 +133,41 @@ const Cart = ({
             setLoading(false);
           });
       }
+      for (const item of allItemsInTransportCart) {
+        await axios
+          .post(
+            `${process.env.NEXT_PUBLIC_baseURL}/transport/${item.transport.slug}/add-to-order/`,
+            {
+              first_name: userProfile.first_name || "",
+              last_name: userProfile.last_name || "",
+              starting_point: item.starting_point,
+              destination: item.destination,
+              distance: item.distance,
+            },
+            {
+              headers: {
+                Authorization: `Token ${Cookies.get("token")}`,
+              },
+            }
+          )
+          .then((res) => {
+            axios.delete(
+              `${process.env.NEXT_PUBLIC_baseURL}/user-transport-cart/${item.id}/`,
+              {
+                headers: {
+                  Authorization: `Token ${Cookies.get("token")}`,
+                },
+              }
+            );
+          })
+          .catch((err) => {
+            console.log(err);
+            setLoading(false);
+          });
+      }
       router.push({
         pathname: "/orders",
         query: {
-          activities_id: allItemsInCart.length === 0 ? 0 : null,
-          stays_id: allItemsInCart.length > 0 ? 0 : null,
           stay: "show",
           experiences: "show",
         },
@@ -148,7 +183,11 @@ const Cart = ({
   let showCartItems = "";
   let nothingInCart = "";
 
-  if (cart.length === 0 && activitiesCart.length === 0) {
+  if (
+    cart.length === 0 &&
+    activitiesCart.length === 0 &&
+    transportCart.length === 0
+  ) {
     nothingInCart = (
       <div>
         <Navbar
@@ -202,7 +241,11 @@ const Cart = ({
     );
   }
 
-  if (cart.length > 0 || activitiesCart.length > 0) {
+  if (
+    cart.length > 0 ||
+    activitiesCart.length > 0 ||
+    transportCart.length > 0
+  ) {
     showCartItems = (
       <div>
         <Navbar
@@ -242,6 +285,7 @@ const Cart = ({
                     Cookies.get("token") ? allItemsInCart[index].id : null
                   }
                   stay={item}
+                  stayPage={true}
                 ></CartItem>
               </div>
             ))}
@@ -263,6 +307,41 @@ const Cart = ({
                   }
                   activity={item}
                   activitiesPage={true}
+                ></CartItem>
+              </div>
+            ))}
+          </div>
+
+          {transportCart.length > 0 && (
+            <div className="mb-4 mt-2 ml-4 text-lg font-bold">
+              Transport - Your Basket({transportCart.length})
+            </div>
+          )}
+          <div className="flex flex-wrap mb-5 justify-between">
+            {transportCart.map((item, index) => (
+              <div key={index} className="md:w-[50%] w-full">
+                <CartItem
+                  cartId={
+                    Cookies.get("token")
+                      ? allItemsInTransportCart[index].id
+                      : null
+                  }
+                  transport={item}
+                  transportPage={true}
+                  transportDistance={allItemsInTransportCart[index].distance}
+                  transportDestination={
+                    allItemsInTransportCart[index].destination
+                  }
+                  transportStartingPoint={
+                    allItemsInTransportCart[index].starting_point
+                  }
+                  transportPrice={
+                    ((allItemsInTransportCart[index].distance * 0.001).toFixed(
+                      1
+                    ) /
+                      10) *
+                    item.price
+                  }
                 ></CartItem>
               </div>
             ))}
@@ -378,6 +457,15 @@ export async function getServerSideProps(context) {
         }
       );
 
+      const transportCart = await axios.get(
+        `${process.env.NEXT_PUBLIC_baseURL}/user-transport-cart/`,
+        {
+          headers: {
+            Authorization: "Token " + token,
+          },
+        }
+      );
+
       const newCart = [];
 
       data.results.forEach((result) => {
@@ -390,6 +478,12 @@ export async function getServerSideProps(context) {
         newActivitiesCart.push(result.activity);
       });
 
+      const newTransportCart = [];
+
+      transportCart.data.results.forEach((result) => {
+        newTransportCart.push(result.transport);
+      });
+
       return {
         props: {
           userProfile: response.data[0],
@@ -397,11 +491,14 @@ export async function getServerSideProps(context) {
           activitiesCart: newActivitiesCart,
           allItemsInActivityCart: activitiesCart.data.results,
           allItemsInCart: data.results,
+          transportCart: newTransportCart,
+          allItemsInTransportCart: transportCart.data.results,
         },
       };
     } else if (cart) {
       const cartItems = [];
       const activitiesCart = [];
+      const transportCart = [];
 
       cart = JSON.parse(decodeURIComponent(cart));
 
@@ -424,6 +521,15 @@ export async function getServerSideProps(context) {
             .catch((err) => {
               console.log(err.response);
             });
+        } else if (item.itemCategory === "transport") {
+          await axios
+            .get(`${process.env.NEXT_PUBLIC_baseURL}/transport/${item.slug}/`)
+            .then((res) => {
+              transportCart.push(res.data);
+            })
+            .catch((err) => {
+              console.log(err.response);
+            });
         }
       }
 
@@ -432,6 +538,7 @@ export async function getServerSideProps(context) {
           cart: cartItems,
           userProfile: "",
           activitiesCart: activitiesCart,
+          transportCart: transportCart,
         },
       };
     }
@@ -441,6 +548,7 @@ export async function getServerSideProps(context) {
         userProfile: "",
         cart: [],
         activitiesCart: [],
+        transportCart: [],
       },
     };
   } catch (error) {
@@ -457,6 +565,7 @@ export async function getServerSideProps(context) {
           userProfile: "",
           cart: [],
           activitiesCart: [],
+          transportCart: [],
         },
       };
     }

@@ -6,6 +6,7 @@ import homePageReducer from "./home";
 import stayReducer from "./stay";
 import activityReducer from "./activity";
 import orderReducer from "./order";
+import transportReducer from "./transport";
 
 export const reducers = combineReducers({
   auth: authenticationReducer,
@@ -13,6 +14,7 @@ export const reducers = combineReducers({
   stay: stayReducer,
   activity: activityReducer,
   order: orderReducer,
+  transport: transportReducer,
 });
 
 export const mainReducer = (state, action) => {
@@ -28,7 +30,16 @@ export const mainReducer = (state, action) => {
       stay: {
         stays: [...action.payload.stay.stays, ...state.stay.stays],
       },
+      transport: {
+        transports: [
+          ...action.payload.transport.transports,
+          ...state.transport.transports,
+        ],
+      },
     };
+    if (state.transport.transports.length > 0) {
+      nextState.transport.transports = state.transport.transports;
+    }
     if (state.stay.stays.length > 0) {
       nextState.stay.stays = state.stay.stays;
     }

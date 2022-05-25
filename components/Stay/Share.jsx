@@ -44,7 +44,9 @@ const Share = ({ setShowShare, showShare, type_of_stay }) => {
         ? "campsite"
         : type_of_stay === "EXPERIENCE"
         ? "experience"
-        : "lodge"
+        : type_of_stay === "LODGE"
+        ? "lodge"
+        : type_of_stay
     } at ${postUrl}`;
 
     facebookBtn.current.setAttribute(

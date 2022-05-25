@@ -4,6 +4,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
+import Link from "next/link";
 
 import LoadingSpinerChase from "../../components/ui/LoadingSpinerChase";
 import getToken from "../../lib/getToken";
@@ -23,7 +24,6 @@ import Button from "../../components/ui/Button";
 import ClientOnly from "../../components/ClientOnly";
 import { setFilteredActivities } from "../../redux/actions/activity";
 import TypeOfActivities from "../../components/Activities/ActivitiesFilterItems";
-import Link from "next/link";
 
 function Activities({ userProfile, longitude, latitude }) {
   const [state, setState] = useState({
@@ -54,6 +54,7 @@ function Activities({ userProfile, longitude, latitude }) {
     okayRating: false,
     windowSize: 0,
   });
+
   const turnOffAllPopup = {
     showDropdown: false,
     showCheckInDate: false,
@@ -338,7 +339,7 @@ function Activities({ userProfile, longitude, latitude }) {
 
   return (
     <div
-      className="relativ overflow-x-hidden"
+      className="overflow-x-hidden"
       onClick={() => {
         setState({
           ...state,

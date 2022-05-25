@@ -68,6 +68,7 @@ function OrderSuccessfull({ userProfile, allOrders, activitiesOrders }) {
                       orderDays={item.days}
                       orderSuccessfull={true}
                       userProfile={userProfile}
+                      stayPage={true}
                       lengthOfItems={allOrders.length}
                     ></CartItem>
                   </div>

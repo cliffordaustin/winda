@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import ClientOnly from "../ClientOnly";
 
-const Price = ({ stayPrice }) => {
+const Price = ({ stayPrice, className = "" }) => {
   const [newPrice, setNewPrice] = useState(null);
 
   const priceConversionRate = useSelector(
@@ -35,12 +35,12 @@ const Price = ({ stayPrice }) => {
   return (
     <ClientOnly>
       {currencyToDollar && (
-        <h1 className="font-bold text-xl font-OpenSans">
+        <h1 className={"font-bold text-xl font-OpenSans " + className}>
           {stayPrice ? "$" + Math.ceil(newPrice).toLocaleString() : "No data"}
         </h1>
       )}
       {!currencyToDollar && (
-        <h1 className="font-bold text-xl font-OpenSans">
+        <h1 className={"font-bold text-xl font-OpenSans " + className}>
           {stayPrice
             ? "KES" + Math.ceil(stayPrice).toLocaleString()
             : "No data"}

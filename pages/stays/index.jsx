@@ -1493,7 +1493,7 @@ function Stays({ userProfile, longitude, latitude }) {
                       ? " bg-blue-500 hover:!bg-blue-500 text-white"
                       : "")
                   }
-                >
+                > 
                   Eco Tours
                 </div>
                 <div
