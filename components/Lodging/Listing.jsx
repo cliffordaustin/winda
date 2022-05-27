@@ -161,13 +161,15 @@ function Listing({
     let stayOrderExist = false;
     const token = Cookies.get("token");
 
-    if (token) {
-      stayOrderExist = itemsInOrders.some((val) => {
-        return val.stay.slug === listing.slug;
-      });
+    // console.log(itemsInOrders);
 
-      setListingIsInOrder(exist || stayOrderExist);
-    }
+    // if (token) {
+    //   stayOrderExist = itemsInOrders.some((val) => {
+    //     return val.stay.slug === listing.slug;
+    //   });
+
+    //   setListingIsInOrder(exist || stayOrderExist);
+    // }
   };
 
   useEffect(() => {

@@ -160,13 +160,13 @@ function Listing({
     let activityOrderExist = false;
     const token = Cookies.get("token");
 
-    if (token) {
-      activityOrderExist = itemsInOrders.some((val) => {
-        return val.activity.slug === listing.slug;
-      });
+    // if (token) {
+    //   activityOrderExist = itemsInOrders.some((val) => {
+    //     return val.activity.slug === listing.slug;
+    //   });
 
-      setListingIsInOrder(exist || activityOrderExist);
-    }
+    //   setListingIsInOrder(exist || activityOrderExist);
+    // }
   };
 
   useEffect(() => {

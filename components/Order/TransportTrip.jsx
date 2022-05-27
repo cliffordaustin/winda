@@ -14,7 +14,7 @@ const TransportTrip = ({
     showEdit: false,
   });
   return (
-    <div>
+    <div className="border border-gray-200 px-2 py-2 rounded-lg">
       <OrderCard
         orderId={orderId}
         transport={transport}
@@ -25,8 +25,6 @@ const TransportTrip = ({
         transportPrice={transportPrice}
         checkoutInfo={true}
       ></OrderCard>
-
-      <div className="w-2/4 h-12 border-r -mt-4 border-gray-400"></div>
 
       <div className="relative mt-1">
         <div className="flex gap-2 px-2 relative bg-gray-100 py-1 rounded-lg">

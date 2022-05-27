@@ -111,8 +111,11 @@ const OrderCard = ({
     if (checkoutInfo) {
       if (stayPage) {
         await axios
-          .delete(
+          .put(
             `${process.env.NEXT_PUBLIC_baseURL}/user-orders/${orderId}/`,
+            {
+              stay_id: null,
+            },
             {
               headers: {
                 Authorization: "Token " + token,
@@ -127,8 +130,11 @@ const OrderCard = ({
           });
       } else if (activitiesPage) {
         await axios
-          .delete(
-            `${process.env.NEXT_PUBLIC_baseURL}/user-activities-orders/${orderId}/`,
+          .put(
+            `${process.env.NEXT_PUBLIC_baseURL}/user-orders/${orderId}/`,
+            {
+              activities_id: null,
+            },
             {
               headers: {
                 Authorization: "Token " + token,
@@ -143,8 +149,11 @@ const OrderCard = ({
           });
       } else if (transportPage) {
         await axios
-          .delete(
-            `${process.env.NEXT_PUBLIC_baseURL}/user-transport-orders/${orderId}/`,
+          .put(
+            `${process.env.NEXT_PUBLIC_baseURL}/user-orders/${orderId}/`,
+            {
+              transport_id: null,
+            },
             {
               headers: {
                 Authorization: "Token " + token,
@@ -260,7 +269,7 @@ const OrderCard = ({
                   )}
 
                   {transportPage && (
-                    <span className="inline text-xs mt-2 font-semibold ml-0.5">
+                    <span className="inline text-xs mt-1 font-semibold ml-0.5">
                       /for {(transportDistance * 0.001).toFixed(1)}km
                     </span>
                   )}

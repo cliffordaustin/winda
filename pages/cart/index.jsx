@@ -78,10 +78,13 @@ const Cart = ({
       for (const item of allItemsInCart) {
         await axios
           .post(
-            `${process.env.NEXT_PUBLIC_baseURL}/stays/${item.stay.slug}/add-to-order/`,
+            `${process.env.NEXT_PUBLIC_baseURL}/add-to-order/`,
             {
               first_name: userProfile.first_name || "",
               last_name: userProfile.last_name || "",
+              stay_id: item.stay.id,
+              activity_id: null,
+              transport_id: null,
             },
             {
               headers: {
@@ -107,10 +110,13 @@ const Cart = ({
       for (const item of allItemsInActivityCart) {
         await axios
           .post(
-            `${process.env.NEXT_PUBLIC_baseURL}/activities/${item.activity.slug}/add-to-order/`,
+            `${process.env.NEXT_PUBLIC_baseURL}/add-to-order/`,
             {
               first_name: userProfile.first_name || "",
               last_name: userProfile.last_name || "",
+              activity_id: item.activity.id,
+              stay_id: null,
+              transport_id: null,
             },
             {
               headers: {
@@ -136,13 +142,16 @@ const Cart = ({
       for (const item of allItemsInTransportCart) {
         await axios
           .post(
-            `${process.env.NEXT_PUBLIC_baseURL}/transport/${item.transport.slug}/add-to-order/`,
+            `${process.env.NEXT_PUBLIC_baseURL}/add-to-order/`,
             {
               first_name: userProfile.first_name || "",
               last_name: userProfile.last_name || "",
               starting_point: item.starting_point,
               destination: item.destination,
               distance: item.distance,
+              transport_id: item.transport.id,
+              stay_id: null,
+              activity_id: null,
             },
             {
               headers: {
@@ -166,7 +175,7 @@ const Cart = ({
           });
       }
       router.push({
-        pathname: "/orders",
+        pathname: "/trip/plan",
         query: {
           stay: "show",
           experiences: "show",
@@ -566,6 +575,8 @@ export async function getServerSideProps(context) {
           cart: [],
           activitiesCart: [],
           transportCart: [],
+          allItemsInActivityCart: [],
+          allItemsInTransportCart: [],
         },
       };
     }

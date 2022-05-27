@@ -36,25 +36,23 @@ import {
   unclusteredPointLayer,
 } from "./Cluster";
 
-function MapBox({ staysOrders, activitiesOrders }) {
+function MapBox({ staysOrders, activitiesOrders, trips }) {
   const mapRoute = useSelector((state) => state.home.mapRoute);
   const activeItem = useSelector((state) => state.order.activeItem);
   const mapRef = useRef();
   const router = useRouter();
 
   const [viewport, setViewport] = useState({
-    longitude:
-      staysOrders.length > 0
-        ? staysOrders[0].stay.longitude
-        : activitiesOrders.length > 0
-        ? activitiesOrders[0].activity.longitude
-        : 0,
-    latitude:
-      staysOrders.length > 0
-        ? staysOrders[0].stay.latitude
-        : activitiesOrders.length > 0
-        ? activitiesOrders[0].activity.latitude
-        : 0,
+    longitude: trips[0].stay
+      ? trips[0].stay.longitude
+      : trips[0].activity
+      ? trips[0].activity.longitude
+      : 0,
+    latitude: trips[0].stay
+      ? trips[0].stay.latitude
+      : trips[0].activity
+      ? trips[0].activity.latitude
+      : 0,
     zoom: 5,
   });
 
@@ -63,18 +61,16 @@ function MapBox({ staysOrders, activitiesOrders }) {
     to: "",
     fromLong: 0,
     fromLat: 0,
-    toLong:
-      staysOrders.length > 0
-        ? staysOrders[0].stay.longitude
-        : activitiesOrders.length > 0
-        ? activitiesOrders[0].activity.longitude
-        : 36.8442449,
-    toLat:
-      staysOrders.length > 0
-        ? staysOrders[0].stay.latitude
-        : activitiesOrders.length > 0
-        ? activitiesOrders[0].activity.latitude
-        : -1.3924933,
+    toLong: trips[0].stay
+      ? trips[0].stay.longitude
+      : trips[0].activity
+      ? trips[0].activity.longitude
+      : 36.8442449,
+    toLat: trips[0].stay
+      ? trips[0].stay.latitude
+      : trips[0].activity
+      ? trips[0].activity.latitude
+      : -1.3924933,
   });
 
   const geojson = {
@@ -226,35 +222,39 @@ function MapBox({ staysOrders, activitiesOrders }) {
 
   useEffect(() => {
     setStaysLongAndLat([]);
-    staysOrders.forEach((order) => {
-      setStaysLongAndLat((staysLongAndLat) => [
-        ...staysLongAndLat,
-        [order.stay.longitude, order.stay.latitude],
-      ]);
+    trips.forEach((trip) => {
+      if (trip.stay) {
+        setStaysLongAndLat((staysLongAndLat) => [
+          ...staysLongAndLat,
+          [trip.stay.longitude, trip.stay.latitude],
+        ]);
 
-      setData({
-        type: "Feature",
-        properties: {},
-        geometry: {
-          type: "LineString",
-          coordinates: [
-            ...data.geometry.coordinates,
-            [order.stay.longitude, order.stay.latitude],
-          ],
-        },
-      });
+        setData({
+          type: "Feature",
+          properties: {},
+          geometry: {
+            type: "LineString",
+            coordinates: [
+              ...data.geometry.coordinates,
+              [trip.stay.longitude, trip.stay.latitude],
+            ],
+          },
+        });
+      }
     });
-  }, [staysOrders]);
+  }, [trips]);
 
   useEffect(() => {
     setActivitiesLongAndLat([]);
-    activitiesOrders.forEach((order) => {
-      setActivitiesLongAndLat((activitiesLongAndLat) => [
-        ...activitiesLongAndLat,
-        [order.activity.longitude, order.activity.latitude],
-      ]);
+    trips.forEach((trip) => {
+      if (trip.activity) {
+        setActivitiesLongAndLat((activitiesLongAndLat) => [
+          ...activitiesLongAndLat,
+          [trip.activity.longitude, trip.activity.latitude],
+        ]);
+      }
     });
-  }, [activitiesOrders]);
+  }, [trips]);
 
   //   useEffect(() => {
   //     setViewState({
@@ -309,22 +309,24 @@ function MapBox({ staysOrders, activitiesOrders }) {
 
   const staysMarkers = useMemo(
     () =>
-      staysOrders.map((order, index) => (
-        <MapMakers order={order.stay} key={index} state="stay"></MapMakers>
+      trips.map((trip, index) => (
+        <div key={index}>
+          {trip.stay && <MapMakers order={trip.stay} state="stay"></MapMakers>}
+        </div>
       )),
-    [staysOrders]
+    [trips]
   );
 
   const activitiesMarkers = useMemo(
     () =>
-      activitiesOrders.map((order, index) => (
-        <MapMakers
-          order={order.activity}
-          key={index}
-          state="activity"
-        ></MapMakers>
+      trips.map((trip, index) => (
+        <div key={index}>
+          {trip.activity && (
+            <MapMakers order={trip.activity} state="activity"></MapMakers>
+          )}
+        </div>
       )),
-    [activitiesOrders]
+    [trips]
   );
 
   const driverMarkers = useMemo(
