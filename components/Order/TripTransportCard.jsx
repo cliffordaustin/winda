@@ -8,7 +8,14 @@ import Card from "../ui/Card";
 import styles from "../../styles/Listing.module.css";
 import LoadingSpinerChase from "../ui/LoadingSpinerChase";
 
-const TripTransportCard = ({ images, transport, tripId }) => {
+const TripTransportCard = ({
+  images,
+  transport,
+  tripId,
+  tripSlug,
+  groupTripSlug,
+  isGroupTripTransport = false,
+}) => {
   const [newPrice, setNewPrice] = useState(null);
 
   const currencyToDollar = useSelector((state) => state.home.currencyToDollar);
@@ -37,24 +44,47 @@ const TripTransportCard = ({ images, transport, tripId }) => {
 
   const addToTrip = async () => {
     setShowLoader(true);
-    await axios
-      .put(
-        `${process.env.NEXT_PUBLIC_baseURL}/user-orders/${tripId}/`,
-        {
-          transport_id: transport.id,
-        },
-        {
-          headers: {
-            Authorization: "Token " + Cookies.get("token"),
+    if (!isGroupTripTransport) {
+      await axios
+        .put(
+          `${process.env.NEXT_PUBLIC_baseURL}/trip/${tripSlug}/`,
+          {
+            transport_id: transport.id,
           },
-        }
-      )
-      .then(() => {
-        location.reload();
-      })
-      .catch((err) => {
-        console.log(err.response);
-      });
+          {
+            headers: {
+              Authorization: "Token " + Cookies.get("token"),
+            },
+          }
+        )
+        .then(() => {
+          location.reload();
+        })
+        .catch((err) => {
+          console.log(err.response);
+          setShowLoader(false);
+        });
+    } else if (isGroupTripTransport) {
+      await axios
+        .put(
+          `${process.env.NEXT_PUBLIC_baseURL}/trips/${groupTripSlug}/`,
+          {
+            transport_id: transport.id,
+          },
+          {
+            headers: {
+              Authorization: "Token " + Cookies.get("token"),
+            },
+          }
+        )
+        .then(() => {
+          location.reload();
+        })
+        .catch((err) => {
+          console.log(err);
+          setShowLoader(false);
+        });
+    }
   };
 
   useEffect(() => {

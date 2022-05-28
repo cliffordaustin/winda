@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import OrderCard from "./OrderCard";
 import moment from "moment";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper";
@@ -20,6 +21,7 @@ import TripTransportCard from "./TripTransportCard";
 import TransportTrip from "./TransportTrip";
 import TripStayCard from "./TripStayCard";
 import TripActivityCard from "./TripActivityCard";
+import LoadingSpinerChase from "../ui/LoadingSpinerChase";
 
 const Trip = ({
   nights,
@@ -29,6 +31,8 @@ const Trip = ({
   setShowInfo,
   trip,
   tripId,
+  tripSlug,
+  startingDestination,
 }) => {
   const [days, setDays] = useState();
 
@@ -66,7 +70,7 @@ const Trip = ({
 
   useEffect(() => {
     axios
-      .get(`${process.env.NEXT_PUBLIC_baseURL}/transport/?search=nairobi`)
+      .get(`${process.env.NEXT_PUBLIC_baseURL}/transport/`)
       .then((res) => {
         setTransport(res.data.results);
       })
@@ -75,7 +79,7 @@ const Trip = ({
 
   useEffect(() => {
     axios
-      .get(`${process.env.NEXT_PUBLIC_baseURL}/activities/?search=nairobi`)
+      .get(`${process.env.NEXT_PUBLIC_baseURL}/activities/`)
       .then((res) => {
         setActivities(res.data.results.slice(0, 5));
       })
@@ -84,7 +88,7 @@ const Trip = ({
 
   useEffect(() => {
     axios
-      .get(`${process.env.NEXT_PUBLIC_baseURL}/stays/?search=nairobi`)
+      .get(`${process.env.NEXT_PUBLIC_baseURL}/stays/`)
       .then((res) => {
         setStays(res.data.results.slice(0, 5));
       })
@@ -99,7 +103,6 @@ const Trip = ({
     showEdit: false,
     showStaysEdit: false,
     showActivitiesEdit: false,
-    showNavigation: false,
   });
 
   const settings = {
@@ -141,6 +144,62 @@ const Trip = ({
     },
   };
 
+  const [numOfNight, setNumOfNight] = useState(trip.nights);
+
+  const [numOfNightLoading, setNumOfNightLoading] = useState(false);
+
+  const [numOfPeople, setNumOfPeople] = useState(trip.number_of_people);
+
+  const [numOfPeopleLoading, setNumOfPeopleLoading] = useState(false);
+
+  const updateStayNights = async () => {
+    const token = Cookies.get("token");
+    setNumOfNightLoading(true);
+    await axios
+      .put(
+        `${process.env.NEXT_PUBLIC_baseURL}/trip/${trip.slug}/`,
+        {
+          nights: numOfNight,
+        },
+        {
+          headers: {
+            Authorization: "Token " + token,
+          },
+        }
+      )
+      .then(() => {
+        router.reload();
+      })
+      .catch((err) => {
+        setNumOfNightLoading(false);
+        console.log(err.response.data);
+      });
+  };
+
+  const updateStayPeople = async () => {
+    const token = Cookies.get("token");
+    setNumOfPeopleLoading(true);
+    await axios
+      .put(
+        `${process.env.NEXT_PUBLIC_baseURL}/trip/${trip.slug}/`,
+        {
+          number_of_people: numOfPeople,
+        },
+        {
+          headers: {
+            Authorization: "Token " + token,
+          },
+        }
+      )
+      .then(() => {
+        router.reload();
+      })
+      .catch((err) => {
+        setNumOfNightLoading(false);
+        console.log(err.response.data);
+      });
+  };
+
   return (
     <div className="border border-gray-200 px-2 py-2 rounded-lg">
       {!trip.transport && (
@@ -163,7 +222,9 @@ const Trip = ({
             </div>
             <div>
               {index === 0 && (
-                <p className="text-sm font-medium">From Nairobi</p>
+                <p className="text-sm font-medium">
+                  From {startingDestination}
+                </p>
               )}
               {index > 0 && (
                 <p className="text-sm font-medium">
@@ -264,6 +325,7 @@ const Trip = ({
                         tripId={tripId}
                         images={images}
                         transport={item}
+                        tripSlug={tripSlug}
                       ></TripTransportCard>
                     </SwiperSlide>
                   );
@@ -361,6 +423,7 @@ const Trip = ({
           <div className="mt-2">
             <OrderCard
               orderId={trip.id}
+              orderSlug={trip.slug}
               transport={trip.transport}
               transportPage={true}
               transportDistance={34009}
@@ -493,6 +556,7 @@ const Trip = ({
                     <SwiperSlide key={index} className="!w-[240px]">
                       <TripStayCard
                         tripId={tripId}
+                        tripSlug={tripSlug}
                         images={images}
                         stay={item}
                       ></TripStayCard>
@@ -561,7 +625,7 @@ const Trip = ({
           <div className="flex gap-2">
             <div className="w-12 h-12 my-auto bg-gray-200 rounded-lg flex items-center flex-col justify-center">
               <span className="text-gray-500 font-extrabold text-lg">
-                {nights}
+                {trip.nights}
               </span>
               <span className="text-gray-500 -mt-1.5 font-extrabold text-xs">
                 nights
@@ -581,6 +645,7 @@ const Trip = ({
           <div className="mt-2">
             <OrderCard
               checkoutInfo={true}
+              orderSlug={trip.slug}
               stay={trip.stay}
               orderId={trip.id}
               orderDays={trip.days}
@@ -589,7 +654,48 @@ const Trip = ({
             ></OrderCard>
           </div>
 
-          <div
+          {/* white plus and minus round button to add and remove */}
+          <div className="flex mt-4 mb-1 items-center gap-4">
+            <div className="flex gap-3 items-center">
+              <div
+                onClick={() => {
+                  if (numOfNight > 1) {
+                    setNumOfNight(numOfNight - 1);
+                  }
+                }}
+                className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg font-bold"
+              >
+                -
+              </div>
+
+              <div className="font-bold">{numOfNight} nights</div>
+              <div
+                onClick={() => {
+                  setNumOfNight(numOfNight + 1);
+                }}
+                className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg font-bold"
+              >
+                +
+              </div>
+            </div>
+            <div
+              onClick={() => {
+                updateStayNights();
+              }}
+              className="font-bold flex items-center bg-blue-200 cursor-pointer px-2 py-0.5 rounded-md"
+            >
+              <span className="text-blue-600 font-bold mr-1">update</span>
+              <div className={" " + (!numOfNightLoading ? "hidden" : "")}>
+                <LoadingSpinerChase
+                  width={13}
+                  height={13}
+                  color="blue"
+                ></LoadingSpinerChase>
+              </div>
+            </div>
+          </div>
+
+          {/* <div
             onClick={(e) => {
               setCartId(e);
 
@@ -617,7 +723,7 @@ const Trip = ({
                 d="M19.4 7.34L16.66 4.6A2 2 0 0 0 14 4.53l-9 9a2 2 0 0 0-.57 1.21L4 18.91a1 1 0 0 0 .29.8A1 1 0 0 0 5 20h.09l4.17-.38a2 2 0 0 0 1.21-.57l9-9a1.92 1.92 0 0 0-.07-2.71ZM9.08 17.62l-3 .28l.27-3L12 9.32l2.7 2.7ZM16 10.68L13.32 8l1.95-2L18 8.73Z"
               />
             </svg>
-          </div>
+          </div> */}
         </div>
       )}
 
@@ -750,6 +856,7 @@ const Trip = ({
                         tripId={tripId}
                         images={images}
                         activity={item}
+                        tripSlug={tripSlug}
                       ></TripActivityCard>
                     </SwiperSlide>
                   );
@@ -834,12 +941,55 @@ const Trip = ({
           <div className="mt-2">
             <OrderCard
               checkoutInfo={true}
+              orderSlug={trip.slug}
               activity={trip.activity}
               orderId={trip.id}
               orderDays={trip.days}
               itemType="order"
               activitiesPage={true}
             ></OrderCard>
+          </div>
+
+          <div className="flex mt-4 mb-1 items-center gap-4">
+            <div className="flex gap-3 items-center">
+              <div
+                onClick={() => {
+                  if (numOfPeople > 1) {
+                    setNumOfPeople(numOfPeople - 1);
+                  }
+                }}
+                className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg font-bold"
+              >
+                -
+              </div>
+
+              <div className="font-bold">
+                {numOfPeople} {numOfPeople > 1 ? "People" : "Person"}
+              </div>
+              <div
+                onClick={() => {
+                  setNumOfPeople(numOfPeople + 1);
+                }}
+                className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg font-bold"
+              >
+                +
+              </div>
+            </div>
+            <div
+              onClick={() => {
+                updateStayPeople();
+              }}
+              className="font-bold bg-blue-200 flex items-center cursor-pointer px-2 py-0.5 rounded-md"
+            >
+              <span className="text-blue-600 font-bold">update</span>
+              <div className={" " + (!numOfPeopleLoading ? "hidden" : "")}>
+                <LoadingSpinerChase
+                  width={13}
+                  height={13}
+                  color="blue"
+                ></LoadingSpinerChase>
+              </div>
+            </div>
           </div>
         </div>
       )}

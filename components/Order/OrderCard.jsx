@@ -18,6 +18,7 @@ const OrderCard = ({
   setShowInfo,
   orderDays,
   orderId,
+  orderSlug,
   cartId,
   orderSuccessfull,
   userProfile,
@@ -32,6 +33,8 @@ const OrderCard = ({
   transportDestination,
   transportDistance,
   transportPrice,
+  groupTripSlug,
+  groupTripTransport,
 }) => {
   const currencyToDollar = useSelector((state) => state.home.currencyToDollar);
   const activeItem = useSelector((state) => state.order.activeItem);
@@ -52,7 +55,11 @@ const OrderCard = ({
       ? stay.price
       : transportPage
       ? transportPrice
-      : activity.price;
+      : activitiesPage
+      ? activity.price
+      : groupTripTransport
+      ? transportPrice
+      : null;
   };
 
   const itemIsInCart = async () => {
@@ -112,7 +119,7 @@ const OrderCard = ({
       if (stayPage) {
         await axios
           .put(
-            `${process.env.NEXT_PUBLIC_baseURL}/user-orders/${orderId}/`,
+            `${process.env.NEXT_PUBLIC_baseURL}/trip/${orderSlug}/`,
             {
               stay_id: null,
             },
@@ -127,13 +134,14 @@ const OrderCard = ({
           })
           .catch((err) => {
             console.log(err.response.data);
+            setRemoveButtonLoading(false);
           });
       } else if (activitiesPage) {
         await axios
           .put(
-            `${process.env.NEXT_PUBLIC_baseURL}/user-orders/${orderId}/`,
+            `${process.env.NEXT_PUBLIC_baseURL}/trip/${orderSlug}/`,
             {
-              activities_id: null,
+              activity_id: null,
             },
             {
               headers: {
@@ -146,11 +154,32 @@ const OrderCard = ({
           })
           .catch((err) => {
             console.log(err.response.data);
+            setRemoveButtonLoading(false);
           });
-      } else if (transportPage) {
+      } else if (transportPage && !groupTripTransport) {
         await axios
           .put(
-            `${process.env.NEXT_PUBLIC_baseURL}/user-orders/${orderId}/`,
+            `${process.env.NEXT_PUBLIC_baseURL}/trip/${orderSlug}/`,
+            {
+              transport_id: null,
+            },
+            {
+              headers: {
+                Authorization: "Token " + token,
+              },
+            }
+          )
+          .then(() => {
+            router.reload();
+          })
+          .catch((err) => {
+            console.log(err.response.data);
+            setRemoveButtonLoading(false);
+          });
+      } else if (groupTripTransport && groupTripTransport) {
+        await axios
+          .put(
+            `${process.env.NEXT_PUBLIC_baseURL}/trips/${groupTripSlug}/`,
             {
               transport_id: null,
             },

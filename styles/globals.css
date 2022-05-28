@@ -174,15 +174,15 @@ body {
 }
 
 .css-26l3qy-menu {
-  @apply !w-full smMobile:!w-72 !rounded-lg !shadow-xl !border-gray-200 !border !overflow-hidden;
+  @apply !w-full smMobile:!w-72 !rounded-lg !overflow-hidden !shadow-xl !border-gray-200 !border;
 }
 
 .css-1n7v3ny-option {
-  @apply !bg-red-100 transition-all duration-300 ease-linear !py-2.5 !px-2;
+  @apply !bg-blue-100 transition-all duration-300 ease-linear !py-2.5 !px-2;
 }
 
 .css-9gakcf-option {
-  @apply !bg-red-500 transition-all duration-300 ease-linear !py-2.5 !px-2;
+  @apply !bg-blue-500 transition-all duration-300 ease-linear !py-2.5 !px-2;
 }
 
 .css-yt9ioa-option {

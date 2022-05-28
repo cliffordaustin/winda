@@ -8,7 +8,9 @@ import Image from "next/image";
 import { usePaystackPayment } from "react-paystack";
 import * as Yup from "yup";
 import Steps from "rc-steps";
+import { motion, AnimatePresence } from "framer-motion";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 import Input from "../../../components/ui/Input";
 import getToken from "../../../lib/getToken";
@@ -29,6 +31,7 @@ import ResponsiveModal from "../../../components/ui/ResponsiveModal";
 import Destination from "../../../components/Order/Destination";
 import { reorder } from "../../../lib/random";
 import Modal from "../../../components/ui/MobileModal";
+import OpenModal from "../../../components/ui/Modal";
 import TripOverview from "../../../components/Order/TripOverview";
 import Popup from "../../../components/ui/Popup";
 import moment from "moment";
@@ -36,6 +39,11 @@ import OrderCard from "../../../components/Order/OrderCard";
 import Trip from "../../../components/Order/Trip";
 import TransportTrip from "../../../components/Order/TransportTrip";
 import { console } from "jsondiffpatch";
+import SelectInput from "../../../components/ui/SelectInput";
+
+import "swiper/css/effect-creative";
+import "swiper/css";
+import TripTransportCard from "../../../components/Order/TripTransportCard";
 
 function Orders({
   userProfile,
@@ -54,6 +62,10 @@ function Orders({
     showPopup: false,
     showSearchModal: false,
     windowSize: 0,
+    swiperIndex: 0,
+    allowSlideNext: false,
+    endOfSlide: false,
+    showNavigation: false,
   });
 
   const [checkoutButtonClicked, setCheckoutButtonClicked] = useState(false);
@@ -82,14 +94,16 @@ function Orders({
   // work on this later
   const totalPrice = () => {
     let price = 0;
-    userTrips.forEach((item) => {
-      const calcPrice =
-        (item.stay ? item.total_order_price_stay : 0) +
-        (item.transport ? item.transport.price : 0) +
-        (item.activity ? item.activity.price : 0);
+    if (userTrips.trip) {
+      userTrips.trip.forEach((item) => {
+        const calcPrice =
+          (item.stay ? item.stay.price : 0) +
+          (item.transport ? item.transport.price : 0) +
+          (item.activity ? item.activity.price : 0);
 
-      price += calcPrice;
-    });
+        price += calcPrice;
+      });
+    }
     return parseFloat(price);
   };
 
@@ -129,12 +143,6 @@ function Orders({
 
   const helpReorderPopup = useSelector((state) => state.home.helpReorderPopup);
 
-  const [activities, setActivities] = useState([]);
-
-  const [stays, setStays] = useState([]);
-
-  const [transport, setTransport] = useState([]);
-
   const [groupedStays, setGroupedStays] = useState([]);
 
   const [groupedActivitiesAndStays, setGroupActivitiesAndStays] = useState([]);
@@ -142,19 +150,6 @@ function Orders({
   const [destinationData, setDestinationData] = useState({
     location: "Nairobi, Kenya",
   });
-
-  const onDragEnd = (result) => {
-    if (!result.destination) {
-      return;
-    }
-
-    const staysContent = reorder(
-      stays,
-      result.source.index,
-      result.destination.index
-    );
-    setStays(staysContent);
-  };
 
   useEffect(() => {
     setTimeout(() => {
@@ -189,6 +184,20 @@ function Orders({
   useEffect(() => {
     priceConversion(totalPrice());
   }, [totalPrice(), currencyToDollar, priceConversionRate]);
+
+  const [transport, setTransport] = useState([]);
+
+  const [showTransportOptionsPopup, setShowTransportOptionsPopup] =
+    useState(false);
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.NEXT_PUBLIC_baseURL}/transport/`)
+      .then((res) => {
+        setTransport(res.data.results);
+      })
+      .catch((err) => console.log(err.response));
+  }, []);
 
   const config = {
     reference: reference(),
@@ -244,18 +253,16 @@ function Orders({
   let nothingInOrder = "";
   let showItemsInOrder = "";
 
-  useEffect(() => {
-    setStays(allOrders);
-  }, []);
-
   //********* */
 
   const [order, setOrder] = useState([]);
 
-  const activitiesStaysOrder = () => {
-    const orderFormatted = userTrips.sort((a, b) => {
-      return new Date(a.from_date) - new Date(b.from_date);
-    });
+  const setAllOrders = () => {
+    if (userTrips.trip) {
+      const orderFormatted = userTrips.trip.sort((a, b) => {
+        return new Date(a.from_date) - new Date(b.from_date);
+      });
+    }
 
     setOrder(orderFormatted);
   };
@@ -263,10 +270,80 @@ function Orders({
   const [showMap, setShowMap] = useState(false);
 
   useEffect(() => {
-    activitiesStaysOrder();
+    setAllOrders();
   }, []);
 
-  if (userTrips.length === 0) {
+  const [showStartLocation, setShowStartLocation] = useState(null);
+  const [showStartLocationLoading, setShowStartLocationLoading] =
+    useState(false);
+
+  const [startingLocationSelected, setStartingLocationSelected] = useState({
+    value: "Nairobi Internation Airport",
+    label: "Nairobi Internation Airport",
+  });
+
+  const locations = [
+    {
+      value: "Nairobi Internation Airport",
+      label: "Nairobi Internation Airport",
+    },
+    { value: "Naivasha Airport", label: "Naivasha Airport" },
+  ];
+
+  const updateStartingLocation = async () => {
+    const token = Cookies.get("token");
+
+    setShowStartLocationLoading(true);
+
+    await axios
+      .put(
+        `${process.env.NEXT_PUBLIC_baseURL}/trips/${userTrips.slug}/`,
+        {
+          starting_point: startingLocationSelected.value,
+        },
+        {
+          headers: {
+            Authorization: "Token " + token,
+          },
+        }
+      )
+      .then(() => {
+        router.reload();
+      })
+      .catch((err) => {
+        console.log(err.response.data);
+      });
+  };
+
+  const settings = {
+    spaceBetween: 10,
+    slidesPerView: "auto",
+
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+  };
+
+  const variants = {
+    hide: {
+      scale: 0.5,
+      x: -20,
+    },
+    show: {
+      x: 0,
+      scale: 1,
+    },
+    exit: {
+      scale: 0.8,
+      x: -5,
+      transition: {
+        duration: 0.2,
+      },
+    },
+  };
+
+  if (!userTrips.trip || userTrips.trip.length === 0) {
     nothingInOrder = (
       <>
         <Navbar
@@ -313,7 +390,7 @@ function Orders({
     );
   }
 
-  if (userTrips.length > 0) {
+  if (userTrips.trip && userTrips.trip.length > 0) {
     showItemsInOrder = (
       <div className="relative">
         <div className="fixed top-0 w-full bg-white z-20">
@@ -398,7 +475,7 @@ function Orders({
               </Button>
             </div>
             <div className="relative hidden md:block h-full top-20 px-4 w-full md:w-[380px] lg:w-[420px]">
-              {(stays.length > 0 || activities.length > 0) && (
+              {order.length > 0 && (
                 <div className="mt-3 mb-4 text-lg font-bold">
                   Your itinerary
                 </div>
@@ -423,13 +500,19 @@ function Orders({
                     </div>
                     <div>
                       <p className="text-sm font-medium">Day 1</p>
-                      <h1 className="font-bold">Start in Nairobi</h1>
+                      <h1 className="font-bold">Starting point</h1>
                       <h1 className="font-medium mt-2 text-sm">
-                        Nairobi, Kenya
+                        {userTrips.starting_point ||
+                          startingLocationSelected.value}
                       </h1>
                     </div>
 
-                    <div className="w-8 h-8 shadow-md cursor-pointer bg-white flex items-center justify-center rounded-full absolute top-1 right-2">
+                    <div
+                      onClick={() => {
+                        setShowStartLocation(true);
+                      }}
+                      className="w-8 h-8 shadow-md cursor-pointer bg-white flex items-center justify-center rounded-full absolute top-1 right-2"
+                    >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         aria-hidden="true"
@@ -458,8 +541,14 @@ function Orders({
                       index={index}
                       order={order}
                       tripId={item.id}
+                      startingDestination={
+                        userTrips.starting_point ||
+                        startingLocationSelected.value
+                      }
+                      tripSlug={item.slug}
                       setInfoPopup={setInfoPopup}
                       setShowInfo={setShowInfo}
+                      stay
                     ></Trip>
                     {order.length - 1 !== index && (
                       <div className="flex items-center">
@@ -475,50 +564,231 @@ function Orders({
                 );
               })}
 
-              {order.length > 0 && (
-                <>
+              {order.length > 0 && !userTrips.transport_back && (
+                <div>
                   <div className="w-2/4 h-12 mt-1 border-r border-gray-400"></div>
-                  <div className="px-2 relative bg-gray-100 py-1 rounded-lg flex gap-2">
-                    <div className="w-12 h-12 my-auto bg-gray-200 rounded-lg flex items-center justify-center">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        aria-hidden="true"
-                        role="img"
-                        className="w-6 h-6 fill-current text-gray-500"
-                        preserveAspectRatio="xMidYMid meet"
-                        viewBox="0 0 16 16"
-                      >
-                        <path
-                          fill="currentColor"
-                          d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464l-.003.001l-.006.003l-.023.009a12.435 12.435 0 0 1-.397.15c-.264.095-.631.223-1.047.35c-.816.252-1.879.523-2.71.523c-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A19.626 19.626 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a19.587 19.587 0 0 0 1.349-.476l.019-.007l.004-.002h.001"
-                        />
-                      </svg>
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium">Day 1</p>
-                      <h1 className="font-bold">Start in Nairobi</h1>
-                      <h1 className="font-medium mt-2 text-sm">
-                        Nairobi, Kenya
-                      </h1>
-                    </div>
+                  <div className="px-2 relative bg-gray-100 py-1 rounded-lg">
+                    <div className="flex gap-2">
+                      <div className="w-12 h-12 my-auto bg-gray-200 rounded-lg flex items-center justify-center">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          aria-hidden="true"
+                          role="img"
+                          className="w-6 h-6 fill-current text-gray-500"
+                          preserveAspectRatio="xMidYMid meet"
+                          viewBox="0 0 32 32"
+                        >
+                          <path
+                            fill="currentColor"
+                            d="M5 4v24h2v-8h20V4H5zm2 2h3v3h3V6h3v3h3V6h3v3h3v3h-3v3h3v3h-3v-3h-3v3h-3v-3h-3v3h-3v-3H7v-3h3V9H7V6zm3 6v3h3v-3h-3zm3 0h3V9h-3v3zm3 0v3h3v-3h-3zm3 0h3V9h-3v3z"
+                          />
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium">Finished</p>
+                        <h1 className="font-bold">Back to starting point</h1>
+                        <h1 className="font-medium mt-2 text-sm">
+                          {userTrips.starting_point ||
+                            startingLocationSelected.value}
+                        </h1>
+                        <h1 className="font-medium mt-2 text-sm text-red-600">
+                          No transportation added
+                        </h1>
+                      </div>
 
-                    <div className="w-8 h-8 shadow-md cursor-pointer bg-white flex items-center justify-center rounded-full absolute top-1 right-2">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        aria-hidden="true"
-                        role="img"
-                        className="w-6 h-6"
-                        preserveAspectRatio="xMidYMid meet"
-                        viewBox="0 0 24 24"
+                      {!showTransportOptionsPopup && (
+                        <div
+                          onClick={() => {
+                            setShowTransportOptionsPopup(true);
+                          }}
+                          className="w-8 h-8 cursor-pointer shadow-md bg-white flex items-center justify-center rounded-full absolute top-1 right-2"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            aria-hidden="true"
+                            role="img"
+                            className="w-6 h-6"
+                            preserveAspectRatio="xMidYMid meet"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              fill="currentColor"
+                              d="M19.4 7.34L16.66 4.6A2 2 0 0 0 14 4.53l-9 9a2 2 0 0 0-.57 1.21L4 18.91a1 1 0 0 0 .29.8A1 1 0 0 0 5 20h.09l4.17-.38a2 2 0 0 0 1.21-.57l9-9a1.92 1.92 0 0 0-.07-2.71ZM9.08 17.62l-3 .28l.27-3L12 9.32l2.7 2.7ZM16 10.68L13.32 8l1.95-2L18 8.73Z"
+                            />
+                          </svg>
+                        </div>
+                      )}
+
+                      {showTransportOptionsPopup && (
+                        <div
+                          onClick={() => {
+                            setShowTransportOptionsPopup(false);
+                          }}
+                          className="w-8 h-8 cursor-pointer shadow-md bg-white flex items-center justify-center rounded-full absolute top-1 right-2"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="w-6 h-6"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </div>
+                      )}
+                    </div>
+                    <div
+                      onMouseLeave={() =>
+                        setState({ ...state, showNavigation: false })
+                      }
+                      onMouseEnter={() =>
+                        setState({ ...state, showNavigation: true })
+                      }
+                    >
+                      <Swiper
+                        {...settings}
+                        onSwiper={(swiper) => {
+                          setState({
+                            ...state,
+                            allowSlideNext: swiper.allowSlideNext,
+                          });
+                        }}
+                        onSlideChange={(swiper) => {
+                          setState({
+                            ...state,
+                            swiperIndex: swiper.realIndex,
+                            endOfSlide: swiper.isEnd,
+                          });
+                        }}
+                        className={
+                          "!w-full mt-4 relative " +
+                          (!showTransportOptionsPopup ? "hidden" : "")
+                        }
                       >
-                        <path
-                          fill="currentColor"
-                          d="M19.4 7.34L16.66 4.6A2 2 0 0 0 14 4.53l-9 9a2 2 0 0 0-.57 1.21L4 18.91a1 1 0 0 0 .29.8A1 1 0 0 0 5 20h.09l4.17-.38a2 2 0 0 0 1.21-.57l9-9a1.92 1.92 0 0 0-.07-2.71ZM9.08 17.62l-3 .28l.27-3L12 9.32l2.7 2.7ZM16 10.68L13.32 8l1.95-2L18 8.73Z"
-                        />
-                      </svg>
+                        {transport.map((item, index) => {
+                          const sortedImages = item.transportation_images.sort(
+                            (x, y) => y.main - x.main
+                          );
+
+                          const images = sortedImages.map((image) => {
+                            return image.image;
+                          });
+                          return (
+                            <SwiperSlide key={index} className="!w-[240px]">
+                              <TripTransportCard
+                                groupTripSlug={userTrips.slug}
+                                isGroupTripTransport={true}
+                                images={images}
+                                transport={item}
+                              ></TripTransportCard>
+                            </SwiperSlide>
+                          );
+                        })}
+
+                        <motion.div
+                          variants={variants}
+                          animate={state.showNavigation ? "show" : ""}
+                          initial="hide"
+                          exit="exit"
+                          className={
+                            "absolute flex cursor-pointer items-center justify-center top-2/4 z-10 left-3 -translate-y-2/4 swiper-pagination swiper-button-prev w-8 -mt-4 h-8 rounded-full bg-white shadow-lg " +
+                            (state.swiperIndex === 0 || !state.showNavigation
+                              ? "invisible"
+                              : "")
+                          }
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </motion.div>
+                        <motion.div
+                          variants={variants}
+                          animate={state.showNavigation ? "show" : ""}
+                          initial="hide"
+                          exit="exit"
+                          className={
+                            "absolute cursor-pointer flex items-center justify-center top-[40%] z-10 right-3 -translate-y-2/4 swiper-pagination swiper-button-next w-8 h-8 mb-4 rounded-full bg-white shadow-lg " +
+                            (state.endOfSlide || !state.showNavigation
+                              ? "invisible"
+                              : "")
+                          }
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </motion.div>
+                      </Swiper>
                     </div>
                   </div>
-                </>
+                </div>
+              )}
+
+              {order.length > 0 && userTrips.transport_back && (
+                <div>
+                  <div className="w-2/4 h-12 mt-1 border-r border-gray-400"></div>
+                  <div className="px-2 mt-1 relative bg-gray-100 py-1 rounded-lg">
+                    <div className="flex gap-2">
+                      <div className="w-12 h-12 my-auto bg-gray-200 rounded-lg flex items-center justify-center">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          aria-hidden="true"
+                          role="img"
+                          className="w-6 h-6 fill-current text-gray-500"
+                          preserveAspectRatio="xMidYMid meet"
+                          viewBox="0 0 512 512"
+                        >
+                          <path
+                            fill="currentColor"
+                            d="M39.61 196.8L74.8 96.29C88.27 57.78 124.6 32 165.4 32h181.2c40.8 0 77.1 25.78 90.6 64.29l35.2 100.51c23.2 9.6 39.6 32.5 39.6 59.2v192c0 17.7-14.3 32-32 32h-32c-17.7 0-32-14.3-32-32v-48H96v48c0 17.7-14.33 32-32 32H32c-17.67 0-32-14.3-32-32V256c0-26.7 16.36-49.6 39.61-59.2zm69.49-4.8h293.8l-26.1-74.6c-4.5-12.8-16.6-21.4-30.2-21.4H165.4c-13.6 0-25.7 8.6-30.2 21.4L109.1 192zM96 256c-17.67 0-32 14.3-32 32s14.33 32 32 32c17.7 0 32-14.3 32-32s-14.3-32-32-32zm320 64c17.7 0 32-14.3 32-32s-14.3-32-32-32s-32 14.3-32 32s14.3 32 32 32z"
+                          />
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium">Finished</p>
+                        <h1 className="font-bold">Back to starting point</h1>
+                        <h1 className="font-medium mt-2 text-sm">
+                          {userTrips.starting_point ||
+                            startingLocationSelected.value}
+                        </h1>
+                      </div>
+                    </div>
+                    <div className="mt-2">
+                      <OrderCard
+                        groupTripSlug={userTrips.slug}
+                        transport={userTrips.transport_back}
+                        transportPage={true}
+                        groupTripTransport={true}
+                        transportDistance={34009}
+                        transportDestination={"Naivasha"}
+                        transportStartingPoint={"Nairobi"}
+                        transportPrice={1200}
+                        checkoutInfo={true}
+                      ></OrderCard>
+                    </div>
+                  </div>
+                </div>
               )}
 
               <div className=" mt-4">
@@ -554,7 +824,7 @@ function Orders({
             </div>
             <div className="fixed lg:w-[calc(78%-450px)] md:w-[calc(100%-420px)] h-[90vh] md:mt-0 top-20 right-4 w-full">
               <div className="mb-2"></div>
-              <Map trips={userTrips}></Map>
+              <Map trips={userTrips.trip}></Map>
 
               <div className="absolute hidden md:flex bottom-5 left-2/4 w-full justify-center -translate-x-2/4">
                 <div className="bg-white flex gap-0.5 w-fit rounded-2xl py-1">
@@ -752,451 +1022,6 @@ function Orders({
               </div>
             </div>
           </div>
-
-          <div className="sm:px-12 -mb-2 absolute md:hidden bottom-0 right-0 w-full">
-            <div className="bg-white flex gap-1 md:gap-5 w-fit mx-auto px-1 sm:px-2 rounded-2xl py-1">
-              <div
-                onClick={() => {
-                  router.push({
-                    query: {
-                      ...router.query,
-                      label: router.query.label === "show" ? "" : "show",
-                      showAll: router.query.showAll === "",
-                    },
-                  });
-                }}
-                className={
-                  "flex relative flex-col items-center justify-center py-1 px-1 sm:px-2 rounded-xl transition-all duration-500 cursor-pointer " +
-                  (router.query.label === "show"
-                    ? "bg-blue-400 hover:bg-blue-500"
-                    : "hover:bg-gray-300")
-                }
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden="true"
-                  role="img"
-                  width="1em"
-                  height="1em"
-                  preserveAspectRatio="xMidYMid meet"
-                  viewBox="0 0 32 32"
-                >
-                  <path
-                    fill="currentColor"
-                    d="M16 18a5 5 0 1 1 5-5a5.006 5.006 0 0 1-5 5Zm0-8a3 3 0 1 0 3 3a3.003 3.003 0 0 0-3-3Z"
-                  />
-                  <path
-                    fill="currentColor"
-                    d="m16 30l-8.436-9.949a35.076 35.076 0 0 1-.348-.451A10.889 10.889 0 0 1 5 13a11 11 0 0 1 22 0a10.884 10.884 0 0 1-2.215 6.597l-.001.003s-.3.394-.345.447ZM8.812 18.395c.002 0 .234.308.287.374L16 26.908l6.91-8.15c.044-.055.278-.365.279-.366A8.901 8.901 0 0 0 25 13a9 9 0 1 0-18 0a8.905 8.905 0 0 0 1.813 5.395Z"
-                  />
-                </svg>
-                <span className="font-bold text-sm truncate">Labels</span>
-              </div>
-              <div
-                onClick={() => {
-                  router.push({
-                    query: {
-                      ...router.query,
-                      stay: router.query.stay === "show" ? "" : "show",
-                      showAll: router.query.showAll === "",
-                    },
-                  });
-                }}
-                className={
-                  "flex relative flex-col justify-center items-center just py-1 px-1 sm:px-2 rounded-xl transition-all duration-500 cursor-pointer " +
-                  (router.query.stay === "show"
-                    ? "bg-blue-400 hover:bg-blue-500"
-                    : "hover:bg-gray-300")
-                }
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden="true"
-                  role="img"
-                  width="1em"
-                  height="1em"
-                  preserveAspectRatio="xMidYMid meet"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    fill="none"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M22 20v-7.826a4 4 0 0 0-1.253-2.908l-7.373-6.968a2 2 0 0 0-2.748 0L3.253 9.266A4 4 0 0 0 2 12.174V20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2Z"
-                  />
-                </svg>
-                <span className="font-bold text-sm truncate">Stays</span>
-              </div>
-              <div
-                onClick={() => {
-                  router.push({
-                    query: {
-                      ...router.query,
-                      experiences:
-                        router.query.experiences === "show" ? "" : "show",
-                      showAll: router.query.showAll === "",
-                    },
-                  });
-                }}
-                className={
-                  "flex relative flex-col items-center justify-center py-1 px-1 sm:px-2 rounded-xl transition-all duration-500 cursor-pointer " +
-                  (router.query.experiences === "show"
-                    ? "bg-blue-400 hover:bg-blue-500"
-                    : "hover:bg-gray-300")
-                }
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden="true"
-                  role="img"
-                  className="w-6 h-6"
-                  preserveAspectRatio="xMidYMid meet"
-                  viewBox="0 0 24 24"
-                >
-                  <g
-                    fill="none"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="1"
-                  >
-                    <path d="m14.571 15.004l.858 1.845s3.857.819 3.857 2.767C19.286 21 17.57 21 17.57 21H13l-2.25-1.25" />
-                    <path d="m9.429 15.004l-.857 1.845s-3.858.819-3.858 2.767C4.714 21 6.43 21 6.43 21H8.5l2.25-1.25L13.5 18" />
-                    <path d="M3 15.926s2.143-.461 3.429-.922C7.714 8.546 11.57 9.007 12 9.007c.429 0 4.286-.461 5.571 5.997c1.286.46 3.429.922 3.429.922M12 7a2 2 0 1 0 0-4a2 2 0 0 0 0 4Z" />
-                  </g>
-                </svg>
-                <span className="font-bold text-sm truncate">Experiences</span>
-              </div>
-              <div
-                onClick={() => {
-                  router.push({
-                    query: {
-                      ...router.query,
-                      transport:
-                        router.query.transport === "show" ? "" : "show",
-                      showAll: router.query.showAll === "",
-                    },
-                  });
-                }}
-                className={
-                  "flex relative flex-col items-center justify-center py-1 px-1 sm:px-2 rounded-xl transition-all duration-500 cursor-pointer " +
-                  (router.query.transport === "show"
-                    ? "bg-blue-400 hover:bg-blue-500"
-                    : "hover:bg-gray-300")
-                }
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden="true"
-                  role="img"
-                  width="1em"
-                  height="1em"
-                  preserveAspectRatio="xMidYMid meet"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    fill="currentColor"
-                    d="m20.772 10.155l-1.368-4.104A2.995 2.995 0 0 0 16.559 4H7.441a2.995 2.995 0 0 0-2.845 2.051l-1.368 4.104A2 2 0 0 0 2 12v5c0 .738.404 1.376 1 1.723V21a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-2h12v2a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-2.277A1.99 1.99 0 0 0 22 17v-5a2 2 0 0 0-1.228-1.845zM7.441 6h9.117c.431 0 .813.274.949.684L18.613 10H5.387l1.105-3.316A1 1 0 0 1 7.441 6zM5.5 16a1.5 1.5 0 1 1 .001-3.001A1.5 1.5 0 0 1 5.5 16zm13 0a1.5 1.5 0 1 1 .001-3.001A1.5 1.5 0 0 1 18.5 16z"
-                  />
-                </svg>
-                <span className="font-bold text-sm truncate">Transport</span>
-              </div>
-              <div
-                onClick={() => {
-                  router.push({
-                    query: {
-                      label: router.query.showAll === "show" ? "" : "show",
-                      stay: router.query.showAll === "show" ? "" : "show",
-                      experiences:
-                        router.query.showAll === "show" ? "" : "show",
-                      transport: router.query.showAll === "show" ? "" : "show",
-                      showAll: router.query.showAll === "show" ? "" : "show",
-                    },
-                  });
-                }}
-                className={
-                  "flex relative flex-col items-center justify-center py-1 px-1 sm:px-2 rounded-xl transition-all duration-500 cursor-pointer " +
-                  (router.query.showAll === "show"
-                    ? "bg-blue-400 hover:bg-blue-500"
-                    : "hover:bg-gray-300")
-                }
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden="true"
-                  role="img"
-                  width="1em"
-                  height="1em"
-                  preserveAspectRatio="xMidYMid meet"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    fill="currentColor"
-                    d="M8.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L2.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093L8.95 4.992a.252.252 0 0 1 .02-.022zm-.92 5.14l.92.92a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 1 0-1.091-1.028L9.477 9.417l-.485-.486l-.943 1.179z"
-                  />
-                </svg>
-                <span className="font-bold text-sm truncate">Show all</span>
-              </div>
-            </div>
-
-            <ResponsiveModal
-              showAllModal={showMoreModal}
-              changeShowAllModal={() => {
-                setShowMoreModal(!showMoreModal);
-              }}
-              className="sm:px-8 px-4 max-w-[450px] mt-6"
-            >
-              {(stays.length > 0 || activities.length > 0) && (
-                <div className="mt-1 mb-2 text-xl text-center font-bold">
-                  Your itinerary
-                </div>
-              )}
-              <ClientOnly>
-                <div className="flex flex-col">
-                  <DragDropContext
-                    onDragEnd={(result) => {
-                      onDragEnd(result);
-                    }}
-                  >
-                    <Droppable droppableId="1">
-                      {(provided, snapshot) => (
-                        <div
-                          {...provided.droppableProps}
-                          ref={provided.innerRef}
-                          style={
-                            {
-                              // background: snapshot.isDraggingOver
-                              //   ? "lightblue"
-                              //   : "",
-                            }
-                          }
-                        >
-                          {Object.keys(groupedActivitiesAndStays).map((key) => {
-                            return (
-                              <div key={key}>
-                                <div className="mb-2">
-                                  <div className="py-3 flex items-center px-2 rounded-md text-gray-700">
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      aria-hidden="true"
-                                      role="img"
-                                      className="w-6 h-6 mr-2"
-                                      preserveAspectRatio="xMidYMid meet"
-                                      viewBox="0 0 24 24"
-                                    >
-                                      <path
-                                        fill="currentColor"
-                                        d="M2.002 9.538c-.023.411.207.794.581.966l7.504 3.442l3.442 7.503c.164.356.52.583.909.583l.057-.002a1 1 0 0 0 .894-.686l5.595-17.032c.117-.358.023-.753-.243-1.02s-.66-.358-1.02-.243L2.688 8.645a.997.997 0 0 0-.686.893z"
-                                      />
-                                    </svg>
-                                    <span className="font-bold">
-                                      {groupedActivitiesAndStays[key].location}
-                                    </span>
-                                  </div>
-                                </div>
-                                {groupedActivitiesAndStays[key].orders.map(
-                                  (item, index) => {
-                                    return (
-                                      <Draggable
-                                        key={index}
-                                        draggableId={index.toString()}
-                                        index={index}
-                                      >
-                                        {(provided, snapshot) => {
-                                          return (
-                                            <div
-                                              ref={provided.innerRef}
-                                              {...provided.draggableProps}
-                                              {...provided.dragHandleProps}
-                                              style={{
-                                                userSelect: "none",
-                                                backgroundColor:
-                                                  snapshot.isDragging
-                                                    ? "#fff"
-                                                    : "",
-                                                ...provided.draggableProps
-                                                  .style,
-                                              }}
-                                            >
-                                              {item.stay && (
-                                                <CartItem
-                                                  checkoutInfo={true}
-                                                  key={item.id}
-                                                  stay={item.stay}
-                                                  cartIndex={index}
-                                                  orderId={item.id}
-                                                  setShowInfo={setShowInfo}
-                                                  orderDays={item.days}
-                                                  lengthOfItems={
-                                                    allOrders.length
-                                                  }
-                                                  stayPage={true}
-                                                  setInfoPopup={setInfoPopup}
-                                                  itemType="order"
-                                                ></CartItem>
-                                              )}
-                                              {item.activity && (
-                                                <CartItem
-                                                  checkoutInfo={true}
-                                                  key={item.id}
-                                                  activity={item.activity}
-                                                  cartIndex={index}
-                                                  orderId={item.id}
-                                                  setShowInfo={setShowInfo}
-                                                  orderDays={item.days}
-                                                  activitiesPage={true}
-                                                  lengthOfItems={
-                                                    activities.length
-                                                  }
-                                                  setInfoPopup={setInfoPopup}
-                                                  itemType="order"
-                                                ></CartItem>
-                                              )}
-                                            </div>
-                                          );
-                                        }}
-                                      </Draggable>
-                                    );
-                                  }
-                                )}
-
-                                <div className="px-2">
-                                  <div
-                                    onClick={() => {
-                                      setDestinationData({
-                                        ...destinationData,
-                                        location:
-                                          groupedStays[key].location.split(
-                                            ","
-                                          )[0],
-                                      });
-                                      setDestinationPopup(true);
-                                    }}
-                                    className="py-3 bg-blue-600 bg-opacity-10 gap-1 flex cursor-pointer font-bold items-center justify-center text-blue-800 mb-3"
-                                  >
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      aria-hidden="true"
-                                      role="img"
-                                      className="w-5 h-5"
-                                      preserveAspectRatio="xMidYMid meet"
-                                      viewBox="0 0 24 24"
-                                    >
-                                      <path
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeLinecap="round"
-                                        strokeWidth="2"
-                                        d="M12 20v-8m0 0V4m0 8h8m-8 0H4"
-                                      />
-                                    </svg>
-                                    <span>Add a destination</span>
-                                  </div>
-                                </div>
-                              </div>
-                            );
-                          })}
-
-                          {provided.placeholder}
-                        </div>
-                      )}
-                    </Droppable>
-                  </DragDropContext>
-                </div>
-              </ClientOnly>
-
-              <div className="sticky -bottom-4 bg-white pt-4 w-full z-40 max-w-[inherit]">
-                <div className="flex justify-center">
-                  <Button
-                    onClick={() => {
-                      initializePayment(onSuccess, onClose);
-                    }}
-                    className="w-full !py-3 flex text-lg !bg-blue-900 !text-primary-blue-200"
-                  >
-                    <span className="font-bold mr-1">Pay</span>
-                    <ClientOnly>
-                      {currencyToDollar && (
-                        <h1 className="font-bold font-OpenSans">
-                          {totalPrice()
-                            ? "$" + Math.ceil(newPrice).toLocaleString()
-                            : "No data"}
-                        </h1>
-                      )}
-                      {!currencyToDollar && (
-                        <h1 className="font-bold font-OpenSans">
-                          {totalPrice()
-                            ? "KES" + Math.ceil(totalPrice()).toLocaleString()
-                            : "No data"}
-                        </h1>
-                      )}
-                    </ClientOnly>
-                    <div className={" " + (!loading ? "hidden" : "")}>
-                      <LoadingSpinerChase
-                        width={20}
-                        height={20}
-                      ></LoadingSpinerChase>
-                    </div>
-                  </Button>
-                </div>
-              </div>
-            </ResponsiveModal>
-          </div>
-
-          <div>
-            <ModalPopup
-              showModal={destinationPopup}
-              closeModal={() => {
-                setDestinationPopup(false);
-              }}
-              containerHeight={60}
-              heightVal="%"
-              title="New Destination"
-              className="px-4 md:w-[650px]"
-            >
-              <Destination
-                className="shadow-none"
-                data={destinationData}
-              ></Destination>
-            </ModalPopup>
-          </div>
-
-          <div className="">
-            <ModalPopup
-              showModal={showInfo}
-              closeModal={() => {
-                setShowInfo(false);
-              }}
-              containerHeight={80}
-              heightVal="%"
-              title={infoPopup ? "Information for " + currentCartItemName : ""}
-              className="px-4 md:w-[650px]"
-            >
-              {infoPopup && (
-                <div>
-                  {order.map((item, index) => (
-                    <OrderItem
-                      key={index}
-                      order={item}
-                      userProfile={userProfile}
-                      cartIndex={index}
-                      setShowInfo={setShowInfo}
-                    ></OrderItem>
-                  ))}
-                </div>
-              )}
-              {!infoPopup && (
-                <div className="flex justify-center items-center mt-16">
-                  <LoadingSpinerChase
-                    color="#000"
-                    width={30}
-                    height={30}
-                  ></LoadingSpinerChase>
-                </div>
-              )}
-            </ModalPopup>
-          </div>
         </div>
 
         <div className="w-full md:hidden sm:flex gap-2 top-20 relative">
@@ -1256,7 +1081,7 @@ function Orders({
               </Button>
             </div>
             <div className="absolute right-0 h-full xsMax:w-full px-4 w-[62%]">
-              {(stays.length > 0 || activities.length > 0) && (
+              {order.length > 0 && (
                 <div className="mt-3 mb-4 text-lg font-bold">
                   Your itinerary
                 </div>
@@ -1281,13 +1106,18 @@ function Orders({
                     </div>
                     <div>
                       <p className="text-sm font-medium">Day 1</p>
-                      <h1 className="font-bold">Start in Nairobi</h1>
+                      <h1 className="font-bold">Starting point</h1>
                       <h1 className="font-medium mt-2 text-sm">
                         Nairobi, Kenya
                       </h1>
                     </div>
 
-                    <div className="w-8 h-8 shadow-md cursor-pointer bg-white flex items-center justify-center rounded-full absolute top-1 right-2">
+                    <div
+                      onClick={() => {
+                        setShowStartLocation(true);
+                      }}
+                      className="w-8 h-8 shadow-md cursor-pointer bg-white flex items-center justify-center rounded-full absolute top-1 right-2"
+                    >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         aria-hidden="true"
@@ -1315,7 +1145,12 @@ function Orders({
                       nights={3}
                       index={index}
                       order={order}
+                      startingDestination={
+                        userTrips.starting_point ||
+                        startingLocationSelected.value
+                      }
                       tripId={item.id}
+                      tripSlug={item.slug}
                       setInfoPopup={setInfoPopup}
                       setShowInfo={setShowInfo}
                     ></Trip>
@@ -1353,9 +1188,10 @@ function Orders({
                     </div>
                     <div>
                       <p className="text-sm font-medium">Finished</p>
-                      <h1 className="font-bold">Back to Nairobi</h1>
+                      <h1 className="font-bold">Back to starting point</h1>
                       <h1 className="font-medium mt-2 text-sm">
-                        Nairobi, Kenya
+                        {userTrips.starting_point ||
+                          startingLocationSelected.value}
                       </h1>
                       <h1 className="font-medium mt-2 text-sm text-red-600">
                         No transportation added
@@ -1483,7 +1319,7 @@ function Orders({
 
         {showMap && (
           <div className="w-full md:hidden h-[93vh] top-16 sm:flex gap-2 absolute xsMax:mb-3">
-            <Map trips={userTrips}></Map>
+            <Map trips={userTrips.trip}></Map>
 
             <div className="absolute flex bottom-5 z-40 w-full justify-center">
               <div className="bg-white flex gap-0.5 w-fit rounded-2xl py-1">
@@ -1678,6 +1514,101 @@ function Orders({
             </div>
           </div>
         )}
+
+        <div>
+          <ModalPopup
+            showModal={destinationPopup}
+            closeModal={() => {
+              setDestinationPopup(false);
+            }}
+            containerHeight={60}
+            heightVal="%"
+            title="New Destination"
+            className="px-4 md:w-[650px]"
+          >
+            <Destination
+              className="shadow-none"
+              data={destinationData}
+            ></Destination>
+          </ModalPopup>
+        </div>
+
+        <div className="">
+          <OpenModal
+            showModal={showStartLocation}
+            closeModal={() => {
+              setShowStartLocation(false);
+            }}
+            containerHeight={80}
+            className="px-4 md:w-[500px] w-[95%] h-fit"
+          >
+            <h1 className="font-bold text-xl">Starting Location</h1>
+
+            <div className="mt-6">
+              <SelectInput
+                selectedOption={startingLocationSelected}
+                setSelectedOption={setStartingLocationSelected}
+                className="border border-gray-100"
+                instanceId="location"
+                options={locations}
+                placeholder="Nairobi International Airport"
+                isSearchable={true}
+              ></SelectInput>
+            </div>
+
+            <Button
+              onClick={() => {
+                updateStartingLocation();
+              }}
+              className="flex text-lg !bg-blue-600 mt-8 !text-primary-blue-200"
+            >
+              <span className="mr-2">Done</span>
+
+              {showStartLocationLoading && (
+                <div>
+                  <LoadingSpinerChase
+                    width={18}
+                    height={18}
+                  ></LoadingSpinerChase>
+                </div>
+              )}
+            </Button>
+          </OpenModal>
+        </div>
+
+        <div className="">
+          <OpenModal
+            showModal={showInfo}
+            closeModal={() => {
+              setShowInfo(false);
+            }}
+            containerHeight={80}
+            className="px-4 md:w-[450px]"
+          >
+            {infoPopup && (
+              <div>
+                {order.map((item, index) => (
+                  <OrderItem
+                    key={index}
+                    order={item}
+                    userProfile={userProfile}
+                    cartIndex={index}
+                    setShowInfo={setShowInfo}
+                  ></OrderItem>
+                ))}
+              </div>
+            )}
+            {!infoPopup && (
+              <div className="flex justify-center items-center">
+                <LoadingSpinerChase
+                  color="#000"
+                  width={30}
+                  height={30}
+                ></LoadingSpinerChase>
+              </div>
+            )}
+          </OpenModal>
+        </div>
       </div>
     );
   }
@@ -1707,7 +1638,7 @@ export async function getServerSideProps(context) {
       }
     );
 
-    const { data } = await axios.get(
+    const stay = await axios.get(
       `${process.env.NEXT_PUBLIC_baseURL}/user-orders/`,
       {
         headers: {
@@ -1734,11 +1665,20 @@ export async function getServerSideProps(context) {
       }
     );
 
+    const { data } = await axios.get(
+      `${process.env.NEXT_PUBLIC_baseURL}/trips/`,
+      {
+        headers: {
+          Authorization: "Token " + token,
+        },
+      }
+    );
+
     return {
       props: {
         userProfile: response.data[0],
-        allOrders: data.results,
-        userTrips: data.results,
+        allOrders: stay.data.results,
+        userTrips: data[0] || [],
         activitiesOrders: activitiesOrders.data.results,
         transportOrders: transportOrders.data.results,
       },

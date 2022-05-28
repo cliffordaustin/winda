@@ -8,7 +8,7 @@ import Card from "../ui/Card";
 import styles from "../../styles/Listing.module.css";
 import LoadingSpinerChase from "../ui/LoadingSpinerChase";
 
-const TripActivityCard = ({ images, activity, tripId }) => {
+const TripActivityCard = ({ images, activity, tripId, tripSlug }) => {
   const [newPrice, setNewPrice] = useState(null);
 
   const currencyToDollar = useSelector((state) => state.home.currencyToDollar);
@@ -39,7 +39,7 @@ const TripActivityCard = ({ images, activity, tripId }) => {
     setShowLoader(true);
     await axios
       .put(
-        `${process.env.NEXT_PUBLIC_baseURL}/user-orders/${tripId}/`,
+        `${process.env.NEXT_PUBLIC_baseURL}/trip/${tripSlug}/`,
         {
           activity_id: activity.id,
         },
