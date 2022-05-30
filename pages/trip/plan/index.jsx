@@ -1108,7 +1108,8 @@ function PlanTrip({
                       <p className="text-sm font-medium">Day 1</p>
                       <h1 className="font-bold">Starting point</h1>
                       <h1 className="font-medium mt-2 text-sm">
-                        Nairobi, Kenya
+                        {userTrips.starting_point ||
+                          startingLocationSelected.value}
                       </h1>
                     </div>
 

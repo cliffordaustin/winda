@@ -246,14 +246,19 @@ const Trip = ({
                   From {startingDestination}
                 </p>
               )}
+
               {index > 0 && (
                 <p className="text-sm font-medium">
                   From{" "}
-                  {order[index - 1].stay
+                  {order[index - 1].stay && order[index - 1].stay.location
                     ? order[index - 1].stay.location
-                    : order[index - 1].activity.location}
+                    : order[index - 1].activity &&
+                      order[index - 1].activity.location
+                    ? order[index - 1].activity.location
+                    : ""}
                 </p>
               )}
+
               <h1 className="font-bold">Transportation</h1>
 
               <h1 className="font-medium mt-2 text-sm text-red-600">
@@ -481,9 +486,12 @@ const Trip = ({
               {index > 0 && (
                 <p className="text-sm font-medium">
                   From{" "}
-                  {order[index - 1].stay
+                  {order[index - 1].stay && order[index - 1].stay.location
                     ? order[index - 1].stay.location
-                    : order[index - 1].activity.location}
+                    : order[index - 1].activity &&
+                      order[index - 1].activity.location
+                    ? order[index - 1].activity.location
+                    : ""}
                 </p>
               )}
               <h1 className="font-bold">Stay</h1>
@@ -779,9 +787,12 @@ const Trip = ({
               {index > 0 && (
                 <p className="text-sm font-medium">
                   From{" "}
-                  {order[index - 1].stay
+                  {order[index - 1].stay && order[index - 1].stay.location
                     ? order[index - 1].stay.location
-                    : order[index - 1].activity.location}
+                    : order[index - 1].activity &&
+                      order[index - 1].activity.location
+                    ? order[index - 1].activity.location
+                    : ""}
                 </p>
               )}
               <h1 className="font-bold">Activity</h1>
