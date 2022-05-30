@@ -351,7 +351,7 @@ function Listing({
               KM Away
             </div>
           )}
-          {Cookies.get("token") && router.query.fromOrder === "true" && (
+          {/* {Cookies.get("token") && router.query.fromOrder === "true" && (
             <div
               className="text-sm w-fit flex items-center bg-green-500 bg-opacity-30 px-2 py-1 text-green-700 bg-primary-red-100 font-bold p-3 rounded-md mt-2
           "
@@ -382,7 +382,7 @@ function Listing({
                 ></LoadingSpinerChase>
               </div>
             </div>
-          )}
+          )} */}
           {/* <div className="flex items-center gap-1 mt-2">
             <div className={!isSafari ? "-mb-0.5" : "-mb-1"}>
               <Badge
@@ -691,7 +691,7 @@ function Listing({
                 KM Away
               </div>
             )}
-            {Cookies.get("token") && router.query.fromOrder === "true" && (
+            {/* {Cookies.get("token") && router.query.fromOrder === "true" && (
               <div
                 className="text-sm w-fit flex items-center bg-green-500 bg-opacity-30 px-2 py-1 text-green-700 bg-primary-red-100 font-bold p-3 rounded-md mt-2
           "
@@ -722,7 +722,7 @@ function Listing({
                   ></LoadingSpinerChase>
                 </div>
               </div>
-            )}
+            )} */}
             {/* <div className="flex items-center gap-1 mt-2">
               <div className={!isSafari ? "-mb-0.5" : "-mb-1"}>
                 <Badge

@@ -45,7 +45,7 @@ import "swiper/css/effect-creative";
 import "swiper/css";
 import TripTransportCard from "../../../components/Order/TripTransportCard";
 
-function Orders({
+function PlanTrip({
   userProfile,
   allOrders,
   activitiesOrders,
@@ -1167,54 +1167,231 @@ function Orders({
                   </div>
                 );
               })}
-              {order.length > 0 && (
-                <>
+              {order.length > 0 && !userTrips.transport_back && (
+                <div>
                   <div className="w-2/4 h-12 mt-1 border-r border-gray-400"></div>
-                  <div className="px-2 relative bg-gray-100 py-1 rounded-lg flex gap-2">
-                    <div className="w-12 h-12 my-auto bg-gray-200 rounded-lg flex items-center justify-center">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        aria-hidden="true"
-                        role="img"
-                        className="w-6 h-6 fill-current text-gray-500"
-                        preserveAspectRatio="xMidYMid meet"
-                        viewBox="0 0 32 32"
-                      >
-                        <path
-                          fill="currentColor"
-                          d="M5 4v24h2v-8h20V4H5zm2 2h3v3h3V6h3v3h3V6h3v3h3v3h-3v3h3v3h-3v-3h-3v3h-3v-3h-3v3h-3v-3H7v-3h3V9H7V6zm3 6v3h3v-3h-3zm3 0h3V9h-3v3zm3 0v3h3v-3h-3zm3 0h3V9h-3v3z"
-                        />
-                      </svg>
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium">Finished</p>
-                      <h1 className="font-bold">Back to starting point</h1>
-                      <h1 className="font-medium mt-2 text-sm">
-                        {userTrips.starting_point ||
-                          startingLocationSelected.value}
-                      </h1>
-                      <h1 className="font-medium mt-2 text-sm text-red-600">
-                        No transportation added
-                      </h1>
-                    </div>
+                  <div className="px-2 relative bg-gray-100 py-1 rounded-lg">
+                    <div className="flex gap-2">
+                      <div className="w-12 h-12 my-auto bg-gray-200 rounded-lg flex items-center justify-center">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          aria-hidden="true"
+                          role="img"
+                          className="w-6 h-6 fill-current text-gray-500"
+                          preserveAspectRatio="xMidYMid meet"
+                          viewBox="0 0 32 32"
+                        >
+                          <path
+                            fill="currentColor"
+                            d="M5 4v24h2v-8h20V4H5zm2 2h3v3h3V6h3v3h3V6h3v3h3v3h-3v3h3v3h-3v-3h-3v3h-3v-3h-3v3h-3v-3H7v-3h3V9H7V6zm3 6v3h3v-3h-3zm3 0h3V9h-3v3zm3 0v3h3v-3h-3zm3 0h3V9h-3v3z"
+                          />
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium">Finished</p>
+                        <h1 className="font-bold">Back to starting point</h1>
+                        <h1 className="font-medium mt-2 text-sm">
+                          {userTrips.starting_point ||
+                            startingLocationSelected.value}
+                        </h1>
+                        <h1 className="font-medium mt-2 text-sm text-red-600">
+                          No transportation added
+                        </h1>
+                      </div>
 
-                    <div className="w-8 h-8 shadow-md cursor-pointer bg-white flex items-center justify-center rounded-full absolute top-1 right-2">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        aria-hidden="true"
-                        role="img"
-                        className="w-6 h-6"
-                        preserveAspectRatio="xMidYMid meet"
-                        viewBox="0 0 24 24"
+                      {!showTransportOptionsPopup && (
+                        <div
+                          onClick={() => {
+                            setShowTransportOptionsPopup(true);
+                          }}
+                          className="w-8 h-8 cursor-pointer shadow-md bg-white flex items-center justify-center rounded-full absolute top-1 right-2"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            aria-hidden="true"
+                            role="img"
+                            className="w-6 h-6"
+                            preserveAspectRatio="xMidYMid meet"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              fill="currentColor"
+                              d="M19.4 7.34L16.66 4.6A2 2 0 0 0 14 4.53l-9 9a2 2 0 0 0-.57 1.21L4 18.91a1 1 0 0 0 .29.8A1 1 0 0 0 5 20h.09l4.17-.38a2 2 0 0 0 1.21-.57l9-9a1.92 1.92 0 0 0-.07-2.71ZM9.08 17.62l-3 .28l.27-3L12 9.32l2.7 2.7ZM16 10.68L13.32 8l1.95-2L18 8.73Z"
+                            />
+                          </svg>
+                        </div>
+                      )}
+
+                      {showTransportOptionsPopup && (
+                        <div
+                          onClick={() => {
+                            setShowTransportOptionsPopup(false);
+                          }}
+                          className="w-8 h-8 cursor-pointer shadow-md bg-white flex items-center justify-center rounded-full absolute top-1 right-2"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="w-6 h-6"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </div>
+                      )}
+                    </div>
+                    <div
+                      onMouseLeave={() =>
+                        setState({ ...state, showNavigation: false })
+                      }
+                      onMouseEnter={() =>
+                        setState({ ...state, showNavigation: true })
+                      }
+                    >
+                      <Swiper
+                        {...settings}
+                        onSwiper={(swiper) => {
+                          setState({
+                            ...state,
+                            allowSlideNext: swiper.allowSlideNext,
+                          });
+                        }}
+                        onSlideChange={(swiper) => {
+                          setState({
+                            ...state,
+                            swiperIndex: swiper.realIndex,
+                            endOfSlide: swiper.isEnd,
+                          });
+                        }}
+                        className={
+                          "!w-full mt-4 relative " +
+                          (!showTransportOptionsPopup ? "hidden" : "")
+                        }
                       >
-                        <path
-                          fill="currentColor"
-                          d="M19.4 7.34L16.66 4.6A2 2 0 0 0 14 4.53l-9 9a2 2 0 0 0-.57 1.21L4 18.91a1 1 0 0 0 .29.8A1 1 0 0 0 5 20h.09l4.17-.38a2 2 0 0 0 1.21-.57l9-9a1.92 1.92 0 0 0-.07-2.71ZM9.08 17.62l-3 .28l.27-3L12 9.32l2.7 2.7ZM16 10.68L13.32 8l1.95-2L18 8.73Z"
-                        />
-                      </svg>
+                        {transport.map((item, index) => {
+                          const sortedImages = item.transportation_images.sort(
+                            (x, y) => y.main - x.main
+                          );
+
+                          const images = sortedImages.map((image) => {
+                            return image.image;
+                          });
+                          return (
+                            <SwiperSlide key={index} className="!w-[240px]">
+                              <TripTransportCard
+                                groupTripSlug={userTrips.slug}
+                                isGroupTripTransport={true}
+                                images={images}
+                                transport={item}
+                              ></TripTransportCard>
+                            </SwiperSlide>
+                          );
+                        })}
+
+                        <motion.div
+                          variants={variants}
+                          animate={state.showNavigation ? "show" : ""}
+                          initial="hide"
+                          exit="exit"
+                          className={
+                            "absolute flex cursor-pointer items-center justify-center top-2/4 z-10 left-3 -translate-y-2/4 swiper-pagination swiper-button-prev w-8 -mt-4 h-8 rounded-full bg-white shadow-lg " +
+                            (state.swiperIndex === 0 || !state.showNavigation
+                              ? "invisible"
+                              : "")
+                          }
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </motion.div>
+                        <motion.div
+                          variants={variants}
+                          animate={state.showNavigation ? "show" : ""}
+                          initial="hide"
+                          exit="exit"
+                          className={
+                            "absolute cursor-pointer flex items-center justify-center top-[40%] z-10 right-3 -translate-y-2/4 swiper-pagination swiper-button-next w-8 h-8 mb-4 rounded-full bg-white shadow-lg " +
+                            (state.endOfSlide || !state.showNavigation
+                              ? "invisible"
+                              : "")
+                          }
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </motion.div>
+                      </Swiper>
                     </div>
                   </div>
-                </>
+                </div>
+              )}
+
+              {order.length > 0 && userTrips.transport_back && (
+                <div>
+                  <div className="w-2/4 h-12 mt-1 border-r border-gray-400"></div>
+                  <div className="px-2 mt-1 relative bg-gray-100 py-1 rounded-lg">
+                    <div className="flex gap-2">
+                      <div className="w-12 h-12 my-auto bg-gray-200 rounded-lg flex items-center justify-center">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          aria-hidden="true"
+                          role="img"
+                          className="w-6 h-6 fill-current text-gray-500"
+                          preserveAspectRatio="xMidYMid meet"
+                          viewBox="0 0 512 512"
+                        >
+                          <path
+                            fill="currentColor"
+                            d="M39.61 196.8L74.8 96.29C88.27 57.78 124.6 32 165.4 32h181.2c40.8 0 77.1 25.78 90.6 64.29l35.2 100.51c23.2 9.6 39.6 32.5 39.6 59.2v192c0 17.7-14.3 32-32 32h-32c-17.7 0-32-14.3-32-32v-48H96v48c0 17.7-14.33 32-32 32H32c-17.67 0-32-14.3-32-32V256c0-26.7 16.36-49.6 39.61-59.2zm69.49-4.8h293.8l-26.1-74.6c-4.5-12.8-16.6-21.4-30.2-21.4H165.4c-13.6 0-25.7 8.6-30.2 21.4L109.1 192zM96 256c-17.67 0-32 14.3-32 32s14.33 32 32 32c17.7 0 32-14.3 32-32s-14.3-32-32-32zm320 64c17.7 0 32-14.3 32-32s-14.3-32-32-32s-32 14.3-32 32s14.3 32 32 32z"
+                          />
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium">Finished</p>
+                        <h1 className="font-bold">Back to starting point</h1>
+                        <h1 className="font-medium mt-2 text-sm">
+                          {userTrips.starting_point ||
+                            startingLocationSelected.value}
+                        </h1>
+                      </div>
+                    </div>
+                    <div className="mt-2">
+                      <OrderCard
+                        groupTripSlug={userTrips.slug}
+                        transport={userTrips.transport_back}
+                        transportPage={true}
+                        groupTripTransport={true}
+                        transportDistance={34009}
+                        transportDestination={"Naivasha"}
+                        transportStartingPoint={"Nairobi"}
+                        transportPrice={1200}
+                        checkoutInfo={true}
+                      ></OrderCard>
+                    </div>
+                  </div>
+                </div>
               )}
 
               <div className=" mt-4">
@@ -1623,7 +1800,7 @@ function Orders({
   );
 }
 
-Orders.propTypes = {};
+PlanTrip.propTypes = {};
 
 export async function getServerSideProps(context) {
   try {
@@ -1705,4 +1882,4 @@ export async function getServerSideProps(context) {
   }
 }
 
-export default Orders;
+export default PlanTrip;

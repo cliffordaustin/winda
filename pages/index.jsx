@@ -23,6 +23,8 @@ import MobileModal from "../components/ui/MobileModal";
 import UserDropdown from "../components/Home/UserDropdown";
 import TeamExperience from "../components/Home/TeamExperience";
 import TopBanner from "../components/Home/TopBanner";
+import Popup from "../components/ui/Popup";
+import Dropdown from "../components/ui/Dropdown";
 
 export default function Home({ userProfile }) {
   const router = useRouter();
@@ -250,6 +252,8 @@ export default function Home({ userProfile }) {
   };
 
   const [typeOfCar, setTypeOfCar] = useState(null);
+
+  const [showBookServiceDropdown, setShowBookServiceDropdown] = useState(false);
   return (
     <div
       className="overflow-x-hidden relative"
@@ -984,10 +988,10 @@ export default function Home({ userProfile }) {
           </MobileModal>
         </div>
       )}
-      <div className="px-2 mb-12 select-none relative">
-        <div className="w-full h-600 relative before:absolute before:h-full before:w-full before:bg-black before:z-20 before:rounded-b-3xl before:opacity-60">
+      <div className="mb-12 select-none relative">
+        <div className="w-full h-600 relative before:absolute before:h-full before:w-full before:bg-black before:z-20 before:opacity-60">
           <Image
-            className={"rounded-b-3xl sm:w-full md:w-full"}
+            className={"w-full"}
             layout="fill"
             objectFit="cover"
             src="/images/header-image.jpeg"
@@ -995,6 +999,7 @@ export default function Home({ userProfile }) {
             alt="Image Gallery"
             priority
           />
+
           <div className="absolute flex flex-col items-center justify-center top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 z-20 w-fit px-6 md:px-0">
             <div>
               <h1 className="font-black font-SourceSans mb-2 text-3xl sm:text-4xl md:text-5xl xl:text-7xl text-white uppercase text-center">
@@ -1004,21 +1009,67 @@ export default function Home({ userProfile }) {
                 Winda finds you happiness in unexpected places
               </h1>
             </div>
-            <Button className="flex items-center gap-4 w-36 !py-3 !rounded-full">
-              <span className="font-bold">Explore</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                viewBox="0 0 20 20"
-                fill="currentColor"
+            <div className="flex gap-2">
+              <Button
+                onClick={() => {
+                  router.push("/trip/stays");
+                }}
+                className="flex items-center gap-4 w-36 !py-3 !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500"
               >
-                <path
-                  fillRule="evenodd"
-                  d="M12 1.586l-4 4v12.828l4-4V1.586zM3.707 3.293A1 1 0 002 4v10a1 1 0 00.293.707L6 18.414V5.586L3.707 3.293zM17.707 5.293L14 1.586v12.828l2.293 2.293A1 1 0 0018 16V6a1 1 0 00-.293-.707z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </Button>
+                <span className="font-bold">Plan a trip</span>
+              </Button>
+              <Button
+                onClick={() => {
+                  setShowBookServiceDropdown(!showBookServiceDropdown);
+                }}
+                className="flex relative items-center gap-2 w-fit !py-3 !bg-white"
+              >
+                <span className="font-bold text-black">Book a service</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 text-black"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </Button>
+              <div className="flex items-center">
+                <Dropdown
+                  showDropdown={showBookServiceDropdown}
+                  className="absolute left-[35%] md:left-2/4 !border-white top-full mt-2 w-56"
+                >
+                  <div
+                    onClick={() => {
+                      router.push("/stays");
+                    }}
+                    className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2"
+                  >
+                    Stays
+                  </div>
+                  <div
+                    onClick={() => {
+                      router.push("/experiences");
+                    }}
+                    className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2"
+                  >
+                    Experiences
+                  </div>
+                  <div
+                    onClick={() => {
+                      router.push("/transport");
+                    }}
+                    className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2"
+                  >
+                    Transport
+                  </div>
+                </Dropdown>
+              </div>
+            </div>
           </div>
         </div>
         <div className="absolute top-4 w-full z-50">
@@ -1434,7 +1485,7 @@ export default function Home({ userProfile }) {
           </div>
         )} */}
       </div>
-      <div className="md:mt-16 mb-8 mt-64 2xl:w-4/6 2xl:mx-auto">
+      <div className="md:mt-16 mb-8 2xl:w-4/6 2xl:mx-auto">
         <Main></Main>
       </div>
       <div className="mt-14 px-3 sm:px-6">

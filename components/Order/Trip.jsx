@@ -200,6 +200,26 @@ const Trip = ({
       });
   };
 
+  const [deleteButtonLoading, setDeleteButtonLoading] = useState(false);
+
+  const deleteTrip = async () => {
+    setDeleteButtonLoading(true);
+    const token = Cookies.get("token");
+    await axios
+      .delete(`${process.env.NEXT_PUBLIC_baseURL}/trip/${trip.slug}/`, {
+        headers: {
+          Authorization: "Token " + token,
+        },
+      })
+      .then(() => {
+        router.reload();
+      })
+      .catch((err) => {
+        setDeleteButtonLoading(false);
+        console.log(err.response.data);
+      });
+  };
+
   return (
     <div className="border border-gray-200 px-2 py-2 rounded-lg">
       {!trip.transport && (
@@ -993,6 +1013,24 @@ const Trip = ({
           </div>
         </div>
       )}
+
+      <div className="mt-4">
+        <Button
+          onClick={() => {
+            deleteTrip();
+          }}
+          className="!w-full !bg-red-500 hover:!bg-red-600 py-2 flex items-center gap-1"
+        >
+          <span className="font-bold">Delete</span>
+          <div className={" " + (!deleteButtonLoading ? "hidden" : "")}>
+            <LoadingSpinerChase
+              width={16}
+              height={16}
+              color="white"
+            ></LoadingSpinerChase>
+          </div>
+        </Button>
+      </div>
 
       {/* <div className="px-2 mt-6 relative bg-gray-100 py-1 rounded-lg flex flex-col">
         <div className="flex gap-2">

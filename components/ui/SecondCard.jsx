@@ -11,6 +11,7 @@ function SecondCard({
   className = "",
   carouselClassName = "",
   subCarouselClassName = "",
+  childrenClassName = "",
 }) {
   return (
     <div
@@ -31,7 +32,11 @@ function SecondCard({
           )}
           {subText && <p className="mt-2 text-sm">{subText}</p>}
         </div>
-        {children && <div className="mt-4 px-3 mb-2">{children}</div>}
+        {children && (
+          <div className={"mt-4 px-3 mb-2 " + childrenClassName}>
+            {children}
+          </div>
+        )}
       </div>
     </div>
   );

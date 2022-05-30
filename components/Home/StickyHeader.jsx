@@ -2,7 +2,11 @@ import React, { useRef, useState, useEffect } from "react";
 import styles from "../../styles/StickyHeader.module.css";
 import { motion, AnimatePresence } from "framer-motion";
 
-function StickyHeader({ children, className = "" }) {
+function StickyHeader({
+  children,
+  setIsStickyBody = () => {},
+  className = "",
+}) {
   const [isSticky, setIsSticky] = useState(false);
   const ref = useRef();
 
@@ -18,8 +22,10 @@ function StickyHeader({ children, className = "" }) {
       const scroll = () => {
         if (window.pageYOffset > sticky) {
           setIsSticky(true);
+          setIsStickyBody(true);
         } else {
           setIsSticky(false);
+          setIsStickyBody(false);
         }
       };
     }
