@@ -31,8 +31,8 @@ const Destination = ({ className = "", data }) => {
       if (currentNavState === 1) {
         router
           .push({
-            pathname: "/stays",
-            query: { search: location, fromOrder: "true" },
+            pathname: "/trip/stays",
+            // query: { search: location, fromOrder: "true" },
           })
           .then(() => {
             router.reload();
@@ -40,8 +40,8 @@ const Destination = ({ className = "", data }) => {
       } else if (currentNavState === 2) {
         router
           .push({
-            pathname: "/experiences",
-            query: { search: location, fromOrder: "true" },
+            pathname: "/trip/experiences",
+            // query: { search: location, fromOrder: "true" },
           })
           .then(() => {
             router.reload();
@@ -61,11 +61,11 @@ const Destination = ({ className = "", data }) => {
           if (currentNavState === 1) {
             router
               .push({
-                pathname: "/stays",
-                query: {
-                  search: autoCompleteFromSearch[0].place_name,
-                  fromOrder: "true",
-                },
+                pathname: "/trip/stays",
+                // query: {
+                //   search: autoCompleteFromSearch[0].place_name,
+                //   fromOrder: "true",
+                // },
               })
               .then(() => {
                 router.reload();
@@ -73,11 +73,11 @@ const Destination = ({ className = "", data }) => {
           } else if (currentNavState === 2) {
             router
               .push({
-                pathname: "/experiences",
-                query: {
-                  search: autoCompleteFromSearch[0].place_name,
-                  fromOrder: "true",
-                },
+                pathname: "/trip/experiences",
+                // query: {
+                //   search: autoCompleteFromSearch[0].place_name,
+                //   fromOrder: "true",
+                // },
               })
               .then(() => {
                 router.reload();
@@ -91,8 +91,8 @@ const Destination = ({ className = "", data }) => {
   const staysSearch = () => {
     router
       .push({
-        pathname: "/stays",
-        query: { search: data.location, fromOrder: "true" },
+        pathname: "/trip/stays",
+        // query: { search: data.location, fromOrder: "true" },
       })
       .then(() => {
         router.reload();
@@ -102,8 +102,8 @@ const Destination = ({ className = "", data }) => {
   const experiencesSearch = () => {
     router
       .push({
-        pathname: "/experiences",
-        query: { search: data.location, fromOrder: "true" },
+        pathname: "/trip/experiences",
+        // query: { search: data.location, fromOrder: "true" },
       })
       .then(() => {
         router.reload();
