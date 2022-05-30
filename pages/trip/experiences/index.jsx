@@ -199,9 +199,11 @@ const ExperiencesTrips = ({ userProfile }) => {
             ></UserDropdown>
           </div>
 
-          <div className="bg-white shadow-md absolute text-sm font-bold top-[15%] right-[95px] sm:right-[126px] w-5 h-5 rounded-full flex items-center justify-center">
-            {trips.trip && trips.trip.length}
-          </div>
+          {Cookies.get("token") && (
+            <div className="bg-white shadow-md absolute text-sm font-bold top-[15%] right-[95px] sm:right-[126px] w-5 h-5 rounded-full flex items-center justify-center">
+              {trips.trip && trips.trip.length}
+            </div>
+          )}
         </div>
       </div>
 

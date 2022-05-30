@@ -129,7 +129,7 @@ const Trips = ({ userProfile }) => {
   return (
     <div>
       <div className="fixed top-0 w-full bg-white z-50">
-        <div className="bg-white px-12 py-4 flex items-center justify-between">
+        <div className="bg-white sm:px-12 px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-8">
             <Link href="/">
               <a className="relative w-28 h-9 cursor-pointer">
@@ -142,7 +142,7 @@ const Trips = ({ userProfile }) => {
               </a>
             </Link>
 
-            <div className="flex items-center gap-8">
+            <div className="sm:flex items-center gap-8 hidden">
               <div
                 onClick={(event) => {
                   event.stopPropagation();
@@ -191,15 +191,18 @@ const Trips = ({ userProfile }) => {
             >
               my trip
             </Button>
-            <div className="bg-white shadow-md absolute text-sm font-bold top-[15%] right-[126px] w-5 h-5 rounded-full flex items-center justify-center">
-              {trips.trip && trips.trip.length}
-            </div>
+
             <UserDropdown
               userProfile={userProfile}
               changeShowDropdown={changeShowDropdown}
               showDropdown={showDropdown}
             ></UserDropdown>
           </div>
+          {Cookies.get("token") && (
+            <div className="bg-white shadow-md absolute text-sm font-bold top-[15%] right-[95px] sm:right-[126px] w-5 h-5 rounded-full flex items-center justify-center">
+              {trips.trip && trips.trip.length}
+            </div>
+          )}
         </div>
       </div>
 
@@ -233,7 +236,7 @@ const Trips = ({ userProfile }) => {
         <div className="flex justify-between relative h-full w-full">
           <div
             className={
-              "sticky w-[35%] overflow-y-scroll top-[74px] h-screen border-r border-gray-200 px-4 "
+              "sticky w-[35%] hidden md:block overflow-y-scroll top-[74px] h-screen border-r border-gray-200 px-4 "
             }
           >
             <h1 className="mb-2 font-bold text-lg">Filter based on</h1>
