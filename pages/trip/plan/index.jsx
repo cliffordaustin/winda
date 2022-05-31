@@ -44,6 +44,7 @@ import SelectInput from "../../../components/ui/SelectInput";
 import "swiper/css/effect-creative";
 import "swiper/css";
 import TripTransportCard from "../../../components/Order/TripTransportCard";
+import Search from "../../../components/Trip/Search";
 
 function PlanTrip({
   userProfile,
@@ -292,6 +293,8 @@ function PlanTrip({
     { value: "Naivasha Airport", label: "Naivasha Airport" },
   ];
 
+  const [location, setLocation] = useState("");
+
   const updateStartingLocation = async () => {
     const token = Cookies.get("token");
 
@@ -301,7 +304,7 @@ function PlanTrip({
       .put(
         `${process.env.NEXT_PUBLIC_baseURL}/trips/${userTrips.slug}/`,
         {
-          starting_point: startingLocationSelected.value,
+          starting_point: location ? location : startingLocationSelected.value,
         },
         {
           headers: {
@@ -1746,15 +1749,20 @@ function PlanTrip({
               ></SelectInput>
             </div>
 
+            <div className="mt-8">
+              <h1 className="font-bold mb-1">Custom search</h1>
+              <Search location={location} setLocation={setLocation}></Search>
+            </div>
+
             <Button
               onClick={() => {
-                if (startingLocationSelected) {
+                if (startingLocationSelected || location) {
                   updateStartingLocation();
                 } else {
                   setShowStartLocation(false);
                 }
               }}
-              className="flex text-lg !bg-blue-600 mt-12 !text-primary-blue-200"
+              className="flex text-lg !bg-blue-600 mt-16 !text-primary-blue-200"
             >
               <span className="mr-2">Done</span>
 
