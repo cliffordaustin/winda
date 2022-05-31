@@ -774,7 +774,7 @@ const Trip = ({
 
           <div
             className={
-              "absolute !z-40 py-1 !bg-white border border-gray-100 shadow-md rounded-xl !top-4 !-right-2 mt-4 !w-96 " +
+              "absolute !z-40 py-1 !bg-white border border-gray-100 shadow-md rounded-xl !top-4 right-0 sm:!-right-2 mt-4 !w-full sm:!w-96 " +
               (!showCheckInDate ? "hidden" : "")
             }
           >
@@ -1133,7 +1133,7 @@ const Trip = ({
 
           <div
             className={
-              "absolute !z-40 py-1 !bg-white border border-gray-100 shadow-md rounded-xl !top-4 !-right-2 mt-4 !w-96 " +
+              "absolute !z-40 py-1 !bg-white border border-gray-100 shadow-md rounded-xl !top-4 right-0 sm:!-right-2 mt-4 !w-full sm:!w-96 " +
               (!showCheckInDate ? "hidden" : "")
             }
           >
