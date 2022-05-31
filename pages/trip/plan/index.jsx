@@ -827,7 +827,7 @@ function PlanTrip({
             <div className="fixed lg:w-[calc(78%-450px)] md:w-[calc(100%-420px)] h-[90vh] md:mt-0 top-20 right-4 w-full">
               <div className="mb-2"></div>
               <Map
-                trips={userTrips.trip}
+                trips={order}
                 startingPoint={
                   userTrips.starting_point || startingLocationSelected.value
                 }
@@ -1504,7 +1504,12 @@ function PlanTrip({
 
         {showMap && (
           <div className="w-full md:hidden h-[93vh] top-16 sm:flex gap-2 absolute xsMax:mb-3">
-            <Map trips={userTrips.trip}></Map>
+            <Map
+              trips={order}
+              startingPoint={
+                userTrips.starting_point || startingLocationSelected.value
+              }
+            ></Map>
 
             <div className="absolute flex bottom-5 z-40 w-full justify-center">
               <div className="bg-white flex gap-0.5 w-fit rounded-2xl py-1">
@@ -1736,16 +1741,20 @@ function PlanTrip({
                 className="border border-gray-100"
                 instanceId="location"
                 options={locations}
-                placeholder="Nairobi International Airport"
+                placeholder="Your Location"
                 isSearchable={true}
               ></SelectInput>
             </div>
 
             <Button
               onClick={() => {
-                updateStartingLocation();
+                if (startingLocationSelected) {
+                  updateStartingLocation();
+                } else {
+                  setShowStartLocation(false);
+                }
               }}
-              className="flex text-lg !bg-blue-600 mt-8 !text-primary-blue-200"
+              className="flex text-lg !bg-blue-600 mt-12 !text-primary-blue-200"
             >
               <span className="mr-2">Done</span>
 

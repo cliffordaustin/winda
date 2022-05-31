@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import ListingMapMakerPopup from "./ListingMapMakerPopup";
 import { useRouter } from "next/router";
 
-const MapMakers = ({ order, state }) => {
+const MapMakers = ({ order, state, index }) => {
   const [showPopup, setShowPopup] = useState(false);
 
   const currencyToDollar = useSelector((state) => state.home.currencyToDollar);
@@ -111,16 +111,19 @@ const MapMakers = ({ order, state }) => {
             xmlns="http://www.w3.org/2000/svg"
             aria-hidden="true"
             role="img"
-            className="w-8 h-8 text-red-500"
+            className="w-10 h-10 text-red-500"
             preserveAspectRatio="xMidYMid meet"
             viewBox="0 0 16 16"
           >
             <path
-              fill="currentColor"
-              fillRule="evenodd"
-              d="M10.832 2.688A4.056 4.056 0 0 0 8.02 1.5h-.04a4.056 4.056 0 0 0-4 4c-.013.75.198 1.487.606 2.117L7.734 14h.533l3.147-6.383c.409-.63.62-1.367.606-2.117a4.056 4.056 0 0 0-1.188-2.812zM7.925 2.5l.082.01l.074-.01a3.075 3.075 0 0 1 2.941 3.037a2.74 2.74 0 0 1-.467 1.568l-.02.034l-.017.035L8 12.279l-2.517-5.1l-.017-.039l-.02-.034a2.74 2.74 0 0 1-.467-1.568A3.074 3.074 0 0 1 7.924 2.5zm.612 2.169a1 1 0 1 0-1.112 1.663a1 1 0 0 0 1.112-1.663zM6.87 3.837a2 2 0 1 1 2.22 3.326a2 2 0 0 1-2.22-3.326z"
-              clipRule="evenodd"
-            />
+              fill="white"
+              stroke="black"
+              strokeWidth="0.7px"
+              d="M10.832 2.688A4.056 4.056 0 0 0 8.02 1.5h-.04a4.056 4.056 0 0 0-4 4c-.013.75.198 1.487.606 2.117L7.734 14h.533l3.147-6.383c.409-.63.62-1.367.606-2.117a4.056 4.056 0 0 0-1.188-2.812z"
+            ></path>
+            <text x="6.5" y="9" fill="black" style={{ fontSize: "6px" }}>
+              {index + 1}
+            </text>
           </svg>
         </div>
 

@@ -43,16 +43,18 @@ function MapBox({ staysOrders, activitiesOrders, trips, startingPoint }) {
   const router = useRouter();
 
   const [viewport, setViewport] = useState({
-    longitude: trips[0].stay
-      ? trips[0].stay.longitude
-      : trips[0].activity
-      ? trips[0].activity.longitude
-      : 36.8442449,
-    latitude: trips[0].stay
-      ? trips[0].stay.latitude
-      : trips[0].activity
-      ? trips[0].activity.latitude
-      : -1.3924933,
+    longitude:
+      trips.length > 0 && trips[0].stay
+        ? trips[0].stay.longitude
+        : trips.length > 0 && trips[0].activity
+        ? trips[0].activity.longitude
+        : 36.8442449,
+    latitude:
+      trips.length > 0 && trips[0].stay
+        ? trips[0].stay.latitude
+        : trips.length > 0 && trips[0].activity
+        ? trips[0].activity.latitude
+        : -1.3924933,
     zoom: 5,
   });
 
@@ -61,16 +63,18 @@ function MapBox({ staysOrders, activitiesOrders, trips, startingPoint }) {
     to: "",
     fromLong: 0,
     fromLat: 0,
-    toLong: trips[0].stay
-      ? trips[0].stay.longitude
-      : trips[0].activity
-      ? trips[0].activity.longitude
-      : 36.8442449,
-    toLat: trips[0].stay
-      ? trips[0].stay.latitude
-      : trips[0].activity
-      ? trips[0].activity.latitude
-      : -1.3924933,
+    toLong:
+      trips.length > 0 && trips[0].stay
+        ? trips[0].stay.longitude
+        : trips.length > 0 && trips[0].activity
+        ? trips[0].activity.longitude
+        : 36.8442449,
+    toLat:
+      trips.length > 0 && trips[0].stay
+        ? trips[0].stay.latitude
+        : trips.length > 0 && trips[0].activity
+        ? trips[0].activity.latitude
+        : -1.3924933,
   });
 
   const geojson = {
@@ -311,7 +315,9 @@ function MapBox({ staysOrders, activitiesOrders, trips, startingPoint }) {
     () =>
       trips.map((trip, index) => (
         <div key={index}>
-          {trip.stay && <MapMakers order={trip.stay} state="stay"></MapMakers>}
+          {trip.stay && (
+            <MapMakers order={trip.stay} index={index} state="stay"></MapMakers>
+          )}
         </div>
       )),
     [trips]
@@ -322,7 +328,11 @@ function MapBox({ staysOrders, activitiesOrders, trips, startingPoint }) {
       trips.map((trip, index) => (
         <div key={index}>
           {trip.activity && (
-            <MapMakers order={trip.activity} state="activity"></MapMakers>
+            <MapMakers
+              order={trip.activity}
+              index={index}
+              state="activity"
+            ></MapMakers>
           )}
         </div>
       )),
@@ -334,7 +344,20 @@ function MapBox({ staysOrders, activitiesOrders, trips, startingPoint }) {
       trips.map((trip, index) => {
         if (trip.transport) {
           return (
-            <DriversMarker key={index} driver={trip.transport}></DriversMarker>
+            <DriversMarker
+              key={index}
+              driver={trip.transport}
+              startingPoint={
+                index === 0
+                  ? startingPoint
+                  : trips[index - 1].stay && trips[index - 1].stay.location
+                  ? trips[index - 1].stay.location
+                  : trips[index - 1].activity &&
+                    trips[index - 1].activity.location
+                  ? trips[index - 1].activity.location
+                  : "Nairobi"
+              }
+            ></DriversMarker>
           );
         }
       }),
@@ -375,7 +398,7 @@ function MapBox({ staysOrders, activitiesOrders, trips, startingPoint }) {
   //   }
 
   //   if (geojson.features.length > 1) {
-  //     console.log("first here");
+  //   .log("first here");
   //     linestring.geometry.coordinates = geojson.features.map(
   //       (point) => point.geometry.coordinates
   //     );

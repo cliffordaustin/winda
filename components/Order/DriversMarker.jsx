@@ -3,9 +3,37 @@ import PropTypes from "prop-types";
 import Map, { Source, Layer, Marker, Popup } from "react-map-gl";
 import { motion, AnimatePresence } from "framer-motion";
 import MapMakerPopup from "./MapMakerPopup";
+import { useEffect } from "react";
+import axios from "axios";
+import { random } from "chroma-js";
+import { randomNumber } from "../../lib/random";
 
-function DriversMarker({ driver }) {
+function DriversMarker({ driver, startingPoint }) {
   const [showPopup, setShowPopup] = useState(false);
+
+  const [state, setState] = useState({
+    latitude: 0,
+    longitude: 0,
+  });
+
+  useEffect(() => {
+    const addToMapCoordinates = parseFloat(randomNumber(0.0008, 0.0015));
+
+    axios
+      .get(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${startingPoint}.json?access_token=${process.env.NEXT_PUBLIC_MAPBOX_API_KEY}&autocomplete=true&country=ke,ug,tz,rw,bi,tz,ug,tz,gh`
+      )
+      .then((response) => {
+        if (response.data.features[0]) {
+          setState({
+            ...state,
+            longitude:
+              response.data.features[0].center[0] + addToMapCoordinates,
+            latitude: response.data.features[0].center[1] + addToMapCoordinates,
+          });
+        }
+      });
+  }, []);
 
   const variants = {
     hide: {
@@ -26,7 +54,7 @@ function DriversMarker({ driver }) {
   };
 
   return (
-    <Marker longitude={36.9405449} latitude={-1.1204533}>
+    <Marker longitude={state.longitude} latitude={state.latitude}>
       <div className="relative">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -58,8 +86,8 @@ function DriversMarker({ driver }) {
               onClose={() => {
                 setShowPopup(false);
               }}
-              longitude={36.9405449}
-              latitude={-1.1204533}
+              longitude={state.longitude}
+              latitude={state.latitude}
             >
               <motion.div
                 variants={variants}

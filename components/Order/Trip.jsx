@@ -455,8 +455,23 @@ const Trip = ({
               transport={trip.transport}
               transportPage={true}
               transportDistance={34009}
-              transportDestination={"Naivasha"}
-              transportStartingPoint={"Nairobi"}
+              transportDestination={
+                order[index].stay && order[index].stay.location
+                  ? order[index].stay.location
+                  : order[index].activity && order[index].activity.location
+                  ? order[index].activity.location
+                  : "Nairobi"
+              }
+              transportStartingPoint={
+                index === 0
+                  ? startingDestination
+                  : order[index - 1].stay && order[index - 1].stay.location
+                  ? order[index - 1].stay.location
+                  : order[index - 1].activity &&
+                    order[index - 1].activity.location
+                  ? order[index - 1].activity.location
+                  : "Nairobi"
+              }
               transportPrice={1200}
               checkoutInfo={true}
             ></OrderCard>

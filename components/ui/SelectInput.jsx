@@ -10,6 +10,7 @@ const SelectInput = ({
   className = "",
   placeholder,
   isSearchable,
+  clearable = true,
 }) => {
   return (
     <div className="w-full">
