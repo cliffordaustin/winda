@@ -36,7 +36,7 @@ import {
   unclusteredPointLayer,
 } from "./Cluster";
 
-function MapBox({ staysOrders, activitiesOrders, trips }) {
+function MapBox({ staysOrders, activitiesOrders, trips, startingPoint }) {
   const mapRoute = useSelector((state) => state.home.mapRoute);
   const activeItem = useSelector((state) => state.order.activeItem);
   const mapRef = useRef();
@@ -47,12 +47,12 @@ function MapBox({ staysOrders, activitiesOrders, trips }) {
       ? trips[0].stay.longitude
       : trips[0].activity
       ? trips[0].activity.longitude
-      : 0,
+      : 36.8442449,
     latitude: trips[0].stay
       ? trips[0].stay.latitude
       : trips[0].activity
       ? trips[0].activity.latitude
-      : 0,
+      : -1.3924933,
     zoom: 5,
   });
 
@@ -331,10 +331,14 @@ function MapBox({ staysOrders, activitiesOrders, trips }) {
 
   const driverMarkers = useMemo(
     () =>
-      drivers.map((driver, index) => (
-        <DriversMarker key={index} driver={driver}></DriversMarker>
-      )),
-    [drivers]
+      trips.map((trip, index) => {
+        if (trip.transport) {
+          return (
+            <DriversMarker key={index} driver={trip.transport}></DriversMarker>
+          );
+        }
+      }),
+    [trips]
   );
 
   const distanceContainer = process.browser

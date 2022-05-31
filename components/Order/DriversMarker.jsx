@@ -24,24 +24,25 @@ function DriversMarker({ driver }) {
       },
     },
   };
+
   return (
-    <Marker longitude={driver.lng} latitude={driver.lat}>
+    <Marker longitude={36.9405449} latitude={-1.1204533}>
       <div className="relative">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           aria-hidden="true"
           role="img"
-          className={"w-6 h-6"}
-          preserveAspectRatio="xMidYMid meet"
-          style={{ color: driver.vehicle_color }}
+          className={"w-10 h-10"}
+          style={{ color: "#333" }}
           onClick={() => {
             setShowPopup(!showPopup);
           }}
+          preserveAspectRatio="xMidYMid meet"
           viewBox="0 0 24 24"
         >
           <path
             fill="currentColor"
-            d="m20.772 10.155l-1.368-4.104A2.995 2.995 0 0 0 16.559 4H7.441a2.995 2.995 0 0 0-2.845 2.051l-1.368 4.104A2 2 0 0 0 2 12v5c0 .738.404 1.376 1 1.723V21a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-2h12v2a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-2.277A1.99 1.99 0 0 0 22 17v-5a2 2 0 0 0-1.228-1.845zM7.441 6h9.117c.431 0 .813.274.949.684L18.613 10H5.387l1.105-3.316A1 1 0 0 1 7.441 6zM5.5 16a1.5 1.5 0 1 1 .001-3.001A1.5 1.5 0 0 1 5.5 16zm13 0a1.5 1.5 0 1 1 .001-3.001A1.5 1.5 0 0 1 18.5 16z"
+            d="M16 6h-5.5v4H1v5h2a3 3 0 0 0 3 3a3 3 0 0 0 3-3h6a3 3 0 0 0 3 3a3 3 0 0 0 3-3h2v-3c0-1.11-.89-2-2-2h-2l-3-4m-4 1.5h3.5l1.96 2.5H12V7.5m-6 6A1.5 1.5 0 0 1 7.5 15A1.5 1.5 0 0 1 6 16.5A1.5 1.5 0 0 1 4.5 15A1.5 1.5 0 0 1 6 13.5m12 0a1.5 1.5 0 0 1 1.5 1.5a1.5 1.5 0 0 1-1.5 1.5a1.5 1.5 0 0 1-1.5-1.5a1.5 1.5 0 0 1 1.5-1.5Z"
           />
         </svg>
 
@@ -57,8 +58,8 @@ function DriversMarker({ driver }) {
               onClose={() => {
                 setShowPopup(false);
               }}
-              longitude={driver.lng}
-              latitude={driver.lat}
+              longitude={36.9405449}
+              latitude={-1.1204533}
             >
               <motion.div
                 variants={variants}

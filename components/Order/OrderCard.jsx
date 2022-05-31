@@ -261,7 +261,7 @@ const OrderCard = ({
           </div>
           <div className={"flex-grow-0 flex-shrink-0 px-2 py-2 w-2/4 "}>
             <div className="flex flex-col gap-1 mb-2">
-              <h1 className="text-gray-500 truncate">
+              <div className="text-gray-500 truncate">
                 {activitiesPage ? activity.name : stayPage ? stay.name : ""}
 
                 {transportPage && (
@@ -279,7 +279,7 @@ const OrderCard = ({
                     </div>
                   </div>
                 )}
-              </h1>
+              </div>
               <ClientOnly>
                 <div className="flex">
                   {currencyToDollar && (

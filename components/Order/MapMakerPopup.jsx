@@ -7,6 +7,7 @@ import styles from "../../styles/Listing.module.css";
 import Rating from "../ui/Rating";
 import Badge from "../ui/Badge";
 import Button from "../ui/Button";
+import ClientOnly from "../ClientOnly";
 
 const MapMakerPopup = ({ driver }) => {
   const [isSafari, setIsSafari] = useState(false);
@@ -17,6 +18,28 @@ const MapMakerPopup = ({ driver }) => {
     (state) => state.stay.priceConversionRate
   );
 
+  const [newPrice, setNewPrice] = useState(null);
+
+  const price = () => {
+    return driver.price;
+  };
+
+  const priceConversion = async (price) => {
+    if (price) {
+      if (currencyToDollar && priceConversionRate) {
+        setNewPrice(priceConversionRate * price);
+      } else {
+        setNewPrice(price);
+      }
+    } else {
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    priceConversion(price());
+  }, [price(), currencyToDollar, priceConversionRate]);
+
   useEffect(() => {
     if (process.browser) {
       const isSafari = /^((?!chrome|android).)*safari/i.test(
@@ -26,84 +49,106 @@ const MapMakerPopup = ({ driver }) => {
     }
   }, []);
 
+  const sortedImages = driver.transportation_images.sort(
+    (x, y) => y.main - x.main
+  );
+
+  const images = sortedImages.map((image) => {
+    return image.image;
+  });
+
   return (
     <div>
       <Card
-        imagePaths={[driver.vehicle_image]}
+        imagePaths={images}
         carouselClassName="h-[150px]"
         subCarouselClassName="hidden"
         className={styles.card + " !shadow-sm"}
         childrenClass="!mt-1"
       >
-        {driver.status === "available" && (
-          <div className="flex items-center gap-2 mb-1">
-            <span className="flex h-3 w-3 relative">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-            </span>
-            <span className="font-bold">Available</span>
-          </div>
-        )}
-
-        {driver.status === "not available" && (
-          <div className="flex items-center gap-2 mb-1">
-            <span className="flex h-3 w-3 relative">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
-            </span>
-            <span className="font-bold">Not available</span>
-          </div>
-        )}
-
-        <div className="flex flex-col gap-1">
-          <h1 className="text-gray-800 text-sm truncate font-medium">
-            {driver.name}
-          </h1>
-        </div>
-
-        <div className="font-bold text-sm truncate mt-1">
-          <span className="text-sm font-medium text-gray-500">Plate #: </span>
-          {driver.vehicle_plate}
-        </div>
-
-        <div className="flex gap-2 items-center">
+        <div className="flex items-center gap-2">
           <div
-            className="w-3 h-3 rounded-full"
+            className="w-2 h-2 rounded-full"
             style={{ backgroundColor: driver.vehicle_color }}
           ></div>
-          <div className="font-bold">
-            {driver.vehicle_year} {driver.vehicle_make}
+          <div className="text-gray-500 flex gap-[3px] lowercase">
+            <h1>{driver.vehicle_make}</h1>
+            <span className="-mt-[5px] font-bold text-lg text-black">.</span>
+            <h1>{driver.type_of_car}</h1>
           </div>
         </div>
 
-        <div className="flex gap-2 w-full mt-1">
-          <Button className="w-[70%] !py-1 !bg-blue-500 !font-bold">
-            Order
-          </Button>
-          <Button className="w-2/4 !py-1 !bg-green-600 !font-bold">Call</Button>
+        <ClientOnly>
+          <div className="flex">
+            {currencyToDollar && (
+              <h1 className="font-bold font-OpenSans">
+                {price()
+                  ? "$" + Math.ceil(newPrice).toLocaleString()
+                  : "No data"}
+              </h1>
+            )}
+            {!currencyToDollar && (
+              <h1 className="font-bold font-OpenSans">
+                {price()
+                  ? "KES" + Math.ceil(price()).toLocaleString()
+                  : "No data"}
+              </h1>
+            )}
+
+            <span className="inline text-xs mt-1 font-semibold ml-0.5">
+              /for {10}km
+            </span>
+          </div>
+        </ClientOnly>
+
+        <div className="flex mt-1">
+          <div className="w-5 h-full flex flex-col justify-center self-center">
+            <div>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+                role="img"
+                className="w-4 h-4"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                />
+              </svg>
+            </div>
+            <div className="w-[45%] h-[15px] border-r border-gray-400"></div>
+            <div>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+                role="img"
+                className="w-4 h-4"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 32 32"
+              >
+                <path
+                  fill="currentColor"
+                  d="M16 18a5 5 0 1 1 5-5a5.006 5.006 0 0 1-5 5Zm0-8a3 3 0 1 0 3 3a3.003 3.003 0 0 0-3-3Z"
+                />
+                <path
+                  fill="currentColor"
+                  d="m16 30l-8.436-9.949a35.076 35.076 0 0 1-.348-.451A10.889 10.889 0 0 1 5 13a11 11 0 0 1 22 0a10.884 10.884 0 0 1-2.215 6.597l-.001.003s-.3.394-.345.447ZM8.812 18.395c.002 0 .234.308.287.374L16 26.908l6.91-8.15c.044-.055.278-.365.279-.366A8.901 8.901 0 0 0 25 13a9 9 0 1 0-18 0a8.905 8.905 0 0 0 1.813 5.395Z"
+                />
+              </svg>
+            </div>
+          </div>
+          <div className="flex flex-col gap-2 overflow-hidden">
+            <div className="truncate">Nairobi</div>
+            <div className="truncate">Naivasha</div>
+          </div>
         </div>
       </Card>
-
-      <div>
-        {driver.vehicle_type === "SUV" && driver.vehicle === "car" && (
-          <div className="absolute top-2 left-2 z-10 flex gap-1">
-            <div className="px-2 rounded-md bg-lime-600 text-white">Car</div>
-            <div className="px-2 rounded-md bg-blue-600 text-white">SUV</div>
-          </div>
-        )}
-        {driver.vehicle_type === "Sedan" && driver.vehicle === "car" && (
-          <div className="absolute top-2 left-2 z-10 flex gap-1">
-            <div className="px-2 rounded-md bg-lime-600 text-white">Car</div>
-            <div className="px-2 rounded-md bg-blue-600 text-white">Sedan</div>
-          </div>
-        )}
-        {driver.vehicle_type === "Estate" && driver.vehicle === "car" && (
-          <div className="absolute top-2 left-2 z-10 flex gap-1">
-            <div className="px-2 rounded-md bg-lime-600 text-white">Car</div>
-            <div className="px-2 rounded-md bg-blue-600 text-white">Estate</div>
-          </div>
-        )}
-      </div>
     </div>
   );
 };

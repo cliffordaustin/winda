@@ -282,6 +282,8 @@ function PlanTrip({
     label: "Nairobi Internation Airport",
   });
 
+  const initializePayment = usePaystackPayment(config);
+
   const locations = [
     {
       value: "Nairobi Internation Airport",
@@ -824,7 +826,12 @@ function PlanTrip({
             </div>
             <div className="fixed lg:w-[calc(78%-450px)] md:w-[calc(100%-420px)] h-[90vh] md:mt-0 top-20 right-4 w-full">
               <div className="mb-2"></div>
-              <Map trips={userTrips.trip}></Map>
+              <Map
+                trips={userTrips.trip}
+                startingPoint={
+                  userTrips.starting_point || startingLocationSelected.value
+                }
+              ></Map>
 
               <div className="absolute hidden md:flex bottom-5 left-2/4 w-full justify-center -translate-x-2/4">
                 <div className="bg-white flex gap-0.5 w-fit rounded-2xl py-1">
@@ -1790,8 +1797,6 @@ function PlanTrip({
       </div>
     );
   }
-
-  const initializePayment = usePaystackPayment(config);
 
   return (
     <div>

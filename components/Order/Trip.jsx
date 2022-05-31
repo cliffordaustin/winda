@@ -437,9 +437,12 @@ const Trip = ({
               {index > 0 && (
                 <p className="text-sm font-medium">
                   From{" "}
-                  {order[index - 1].stay
+                  {order[index - 1].stay && order[index - 1].stay.location
                     ? order[index - 1].stay.location
-                    : order[index - 1].activity.location}
+                    : order[index - 1].activity &&
+                      order[index - 1].activity.location
+                    ? order[index - 1].activity.location
+                    : ""}
                 </p>
               )}
               <h1 className="font-bold">Transportation</h1>
