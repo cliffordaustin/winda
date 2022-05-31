@@ -54,7 +54,7 @@ const Cart = ({
     activitiesCart.forEach((item) => {
       price += item.price;
     });
-    allItemsInTransportCart.forEach((item) => {
+    transportCart.forEach((item) => {
       price += ((item.distance * 0.001).toFixed(1) / 10) * item.transport.price;
     });
     return parseFloat(price);
