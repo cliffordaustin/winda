@@ -22,6 +22,7 @@ import TransportTrip from "./TransportTrip";
 import TripStayCard from "./TripStayCard";
 import TripActivityCard from "./TripActivityCard";
 import LoadingSpinerChase from "../ui/LoadingSpinerChase";
+import DatePicker from "../ui/DatePicker";
 
 const Trip = ({
   nights,
@@ -218,6 +219,16 @@ const Trip = ({
         setDeleteButtonLoading(false);
         console.log(err.response.data);
       });
+  };
+
+  const [checkinDate, setCheckinDate] = useState("");
+
+  const [showCheckInDate, setShowCheckInDate] = useState(false);
+
+  const [updateDateLoading, setUpdateDateLoading] = useState(false);
+
+  const updateDate = () => {
+    console.log("Update");
   };
 
   return (
@@ -741,6 +752,65 @@ const Trip = ({
             </div>
           </div>
 
+          <div className="absolute top-1 right-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6 cursor-pointer"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth="2"
+              onClick={() => {
+                setShowCheckInDate(!showCheckInDate);
+              }}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+              />
+            </svg>
+          </div>
+
+          <div
+            className={
+              "absolute !z-40 py-1 !bg-white border border-gray-100 shadow-md rounded-xl !top-4 !-right-2 mt-4 !w-96 " +
+              (!showCheckInDate ? "hidden" : "")
+            }
+          >
+            <DatePicker
+              setDate={(date, modifiers = {}) => {
+                if (!modifiers.disabled) {
+                  setCheckinDate(date);
+                }
+              }}
+              date={checkinDate}
+              showDate={showCheckInDate}
+              className="!sticky !bg-white !border-none !rounded-none"
+              disableDate={new Date()}
+            ></DatePicker>
+
+            <div className="my-2 z-50 px-3">
+              <Button
+                onClick={() => {
+                  updateDate();
+                }}
+                className="flex text-lg !bg-blue-600 !w-full !py-2 !text-primary-blue-200"
+              >
+                <span className="mr-2">Update</span>
+
+                {updateDateLoading && (
+                  <div>
+                    <LoadingSpinerChase
+                      width={18}
+                      height={18}
+                    ></LoadingSpinerChase>
+                  </div>
+                )}
+              </Button>
+            </div>
+          </div>
+
           {/* <div
             onClick={(e) => {
               setCartId(e);
@@ -1038,6 +1108,65 @@ const Trip = ({
                   color="blue"
                 ></LoadingSpinerChase>
               </div>
+            </div>
+          </div>
+
+          <div className="absolute top-1 right-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6 cursor-pointer"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth="2"
+              onClick={() => {
+                setShowCheckInDate(!showCheckInDate);
+              }}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+              />
+            </svg>
+          </div>
+
+          <div
+            className={
+              "absolute !z-40 py-1 !bg-white border border-gray-100 shadow-md rounded-xl !top-4 !-right-2 mt-4 !w-96 " +
+              (!showCheckInDate ? "hidden" : "")
+            }
+          >
+            <DatePicker
+              setDate={(date, modifiers = {}) => {
+                if (!modifiers.disabled) {
+                  setCheckinDate(date);
+                }
+              }}
+              date={checkinDate}
+              showDate={showCheckInDate}
+              className="!sticky !bg-white !border-none !rounded-none"
+              disableDate={new Date()}
+            ></DatePicker>
+
+            <div className="my-2 z-50 px-3">
+              <Button
+                onClick={() => {
+                  updateDate();
+                }}
+                className="flex text-lg !bg-blue-600 !w-full !py-2 !text-primary-blue-200"
+              >
+                <span className="mr-2">Update</span>
+
+                {updateDateLoading && (
+                  <div>
+                    <LoadingSpinerChase
+                      width={18}
+                      height={18}
+                    ></LoadingSpinerChase>
+                  </div>
+                )}
+              </Button>
             </div>
           </div>
         </div>
