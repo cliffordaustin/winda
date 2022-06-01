@@ -60,14 +60,10 @@ function Carousel({ imageClass = "", className = "", images }) {
         });
       }}
       className="!h-full !relative "
+      onMouseOver={() => setState({ ...state, showNavigation: true })}
     >
       {images.map((image, index) => (
-        <SwiperSlide
-          onMouseOver={() => setState({ ...state, showNavigation: true })}
-          onMouseOut={() => setState({ ...state, showNavigation: false })}
-          key={index}
-          className={"!h-full " + className}
-        >
+        <SwiperSlide key={index} className={"!h-full " + className}>
           <Image
             className={"w-full object-cover " + imageClass}
             src={image}
