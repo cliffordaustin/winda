@@ -50,7 +50,7 @@ function Carousel({ imageClass = "", className = "", images }) {
   };
   return (
     <div
-      className="!h-full"
+      className="!h-full stepWebkitSetting"
       onMouseOver={() => setState({ ...state, showNavigation: true })}
       onMouseOut={() => setState({ ...state, showNavigation: false })}
     >
