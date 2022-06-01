@@ -52,19 +52,19 @@ function Carousel({ imageClass = "", className = "", images }) {
     <Swiper
       {...settings}
       modules={[Pagination]}
-      onSlideChange={(swiper) => {
-        setState({
-          ...state,
-          swiperIndex: swiper.realIndex,
-          endOfSlide: swiper.isEnd,
-        });
-      }}
+      // onSlideChange={(swiper) => {
+      //   setState({
+      //     ...state,
+      //     swiperIndex: swiper.realIndex,
+      //     endOfSlide: swiper.isEnd,
+      //   });
+      // }}
       className="!h-full !relative "
     >
       {images.map((image, index) => (
         <SwiperSlide
-          onMouseLeave={() => setState({ ...state, showNavigation: false })}
-          onMouseEnter={() => setState({ ...state, showNavigation: true })}
+          // onMouseLeave={() => setState({ ...state, showNavigation: false })}
+          // onMouseEnter={() => setState({ ...state, showNavigation: true })}
           key={index}
           className={"!h-full " + className}
         >
@@ -78,8 +78,8 @@ function Carousel({ imageClass = "", className = "", images }) {
       ))}
 
       <motion.div
-        onMouseLeave={() => setState({ ...state, showNavigation: false })}
-        onMouseEnter={() => setState({ ...state, showNavigation: true })}
+        // onMouseLeave={() => setState({ ...state, showNavigation: false })}
+        // onMouseEnter={() => setState({ ...state, showNavigation: true })}
         variants={variants}
         animate={state.showNavigation ? "show" : ""}
         initial="hide"
@@ -103,8 +103,8 @@ function Carousel({ imageClass = "", className = "", images }) {
         </svg>
       </motion.div>
       <motion.div
-        onMouseLeave={() => setState({ ...state, showNavigation: false })}
-        onMouseEnter={() => setState({ ...state, showNavigation: true })}
+        // onMouseLeave={() => setState({ ...state, showNavigation: false })}
+        // onMouseEnter={() => setState({ ...state, showNavigation: true })}
         variants={variants}
         animate={state.showNavigation ? "show" : ""}
         initial="hide"
