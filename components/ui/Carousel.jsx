@@ -49,12 +49,7 @@ function Carousel({ imageClass = "", className = "", images }) {
     },
   };
   return (
-    <div
-      className="!h-full stepWebkitSetting"
-      onMouseOver={() => setState({ ...state, showNavigation: true })}
-      onMouseOut={() => setState({ ...state, showNavigation: false })}
-      onClick={() => {}}
-    >
+    <div className="!h-full stepWebkitSetting">
       <Swiper
         {...settings}
         modules={[Pagination]}
@@ -78,17 +73,11 @@ function Carousel({ imageClass = "", className = "", images }) {
           </SwiperSlide>
         ))}
 
-        <motion.div
-          variants={variants}
+        <div
           onClick={() => {}}
-          animate={state.showNavigation ? "show" : ""}
-          initial="hide"
-          exit="exit"
           className={
             "absolute flex cursor-pointer items-center justify-center top-2/4 z-20 left-3 -translate-y-2/4 swiper-pagination swiper-button-prev w-8 -mt-4 h-8 rounded-full bg-white shadow-lg " +
-            (state.swiperIndex === 0 || !state.showNavigation
-              ? "invisible"
-              : "")
+            (state.swiperIndex === 0 ? "invisible" : "")
           }
         >
           <svg
@@ -103,18 +92,12 @@ function Carousel({ imageClass = "", className = "", images }) {
               clipRule="evenodd"
             />
           </svg>
-        </motion.div>
-        <motion.div
-          variants={variants}
-          animate={state.showNavigation ? "show" : ""}
+        </div>
+        <div
           onClick={() => {}}
-          initial="hide"
-          exit="exit"
           className={
             "absolute cursor-pointer flex items-center justify-center top-2/4 z-20 right-3 -translate-y-2/4 swiper-pagination swiper-button-next w-8 h-8 -mt-4 rounded-full bg-white shadow-lg " +
-            (state.endOfSlide || !state.showNavigation || images.length === 1
-              ? "invisible"
-              : "")
+            (state.endOfSlide || images.length === 1 ? "invisible" : "")
           }
         >
           <svg
@@ -129,7 +112,7 @@ function Carousel({ imageClass = "", className = "", images }) {
               clipRule="evenodd"
             />
           </svg>
-        </motion.div>
+        </div>
       </Swiper>
     </div>
   );
