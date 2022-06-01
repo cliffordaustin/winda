@@ -231,9 +231,33 @@ const Trip = ({
     console.log("Update");
   };
 
+  const containsActivityOption = (option) => {
+    const options = router.query.dontShowActivity
+      ? router.query.dontShowActivity.split(",")
+      : [];
+
+    return options.includes(option);
+  };
+
+  const containsStayOption = (option) => {
+    const options = router.query.dontShowStay
+      ? router.query.dontShowStay.split(",")
+      : [];
+
+    return options.includes(option);
+  };
+
+  const containsTransportOption = (option) => {
+    const options = router.query.dontShowTransport
+      ? router.query.dontShowTransport.split(",")
+      : [];
+
+    return options.includes(option);
+  };
+
   return (
     <div className="border border-gray-200 px-2 py-2 rounded-lg">
-      {!trip.transport && (
+      {!trip.transport && !containsTransportOption(`${index}`) && (
         <div className="px-2 mt-1 relative bg-gray-100 py-1 rounded-lg">
           <div className="flex gap-2">
             <div className="w-12 h-12 my-auto bg-gray-200 rounded-lg flex items-center justify-center">
@@ -278,50 +302,83 @@ const Trip = ({
             </div>
           </div>
 
-          {!state.showEdit && (
-            <div
-              onClick={() => {
-                setState({ ...state, showEdit: true });
-              }}
-              className="w-8 h-8 cursor-pointer shadow-md bg-white flex items-center justify-center rounded-full absolute top-1 right-2"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
-                role="img"
-                className="w-6 h-6"
-                preserveAspectRatio="xMidYMid meet"
-                viewBox="0 0 24 24"
+          <div className="absolute top-1 right-2 flex gap-2 items-center">
+            {!state.showEdit && (
+              <div
+                onClick={() => {
+                  setState({ ...state, showEdit: true });
+                }}
+                className="w-7 h-7 cursor-pointer bg-blue-200 flex items-center justify-center rounded-full"
               >
-                <path
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4 text-blue-600"
+                  viewBox="0 0 20 20"
                   fill="currentColor"
-                  d="M19.4 7.34L16.66 4.6A2 2 0 0 0 14 4.53l-9 9a2 2 0 0 0-.57 1.21L4 18.91a1 1 0 0 0 .29.8A1 1 0 0 0 5 20h.09l4.17-.38a2 2 0 0 0 1.21-.57l9-9a1.92 1.92 0 0 0-.07-2.71ZM9.08 17.62l-3 .28l.27-3L12 9.32l2.7 2.7ZM16 10.68L13.32 8l1.95-2L18 8.73Z"
-                />
-              </svg>
-            </div>
-          )}
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+            )}
 
-          {state.showEdit && (
+            {state.showEdit && (
+              <div
+                onClick={() => {
+                  setState({ ...state, showEdit: false });
+                }}
+                className="w-7 h-7 cursor-pointer bg-blue-200 flex items-center justify-center rounded-full"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-4 h-4 text-blue-600"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+            )}
+
             <div
               onClick={() => {
-                setState({ ...state, showEdit: false });
+                if (!containsTransportOption(`${index}`)) {
+                  router.push({
+                    query: {
+                      ...router.query,
+                      dontShowTransport:
+                        (router.query.dontShowTransport
+                          ? router.query.dontShowTransport + ","
+                          : "") + index,
+                    },
+                  });
+                }
               }}
-              className="w-8 h-8 cursor-pointer shadow-md bg-white flex items-center justify-center rounded-full absolute top-1 right-2"
+              className="w-7 h-7 cursor-pointer bg-red-200 flex items-center justify-center rounded-full"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="w-6 h-6"
-                viewBox="0 0 20 20"
-                fill="currentColor"
+                className="h-4 w-4 text-red-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
               >
                 <path
-                  fillRule="evenodd"
-                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                  clipRule="evenodd"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                 />
               </svg>
             </div>
-          )}
+          </div>
 
           {!trip.transport && (
             <div
@@ -490,7 +547,7 @@ const Trip = ({
         </div>
       )}
 
-      {!trip.stay && (
+      {!trip.stay && !containsStayOption(`${index}`) && (
         <div className="px-2 mt-4 relative bg-gray-100 py-1 rounded-lg">
           <div className="flex gap-2">
             <div className="w-12 h-12 my-auto bg-gray-200 rounded-lg flex items-center justify-center">
@@ -531,50 +588,83 @@ const Trip = ({
             </div>
           </div>
 
-          {!state.showStaysEdit && (
-            <div
-              onClick={() => {
-                setState({ ...state, showStaysEdit: true });
-              }}
-              className="w-8 h-8 cursor-pointer shadow-md bg-white flex items-center justify-center rounded-full absolute top-1 right-2"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
-                role="img"
-                className="w-6 h-6"
-                preserveAspectRatio="xMidYMid meet"
-                viewBox="0 0 24 24"
+          <div className="absolute top-1 right-2 flex gap-2 items-center">
+            {!state.showStaysEdit && (
+              <div
+                onClick={() => {
+                  setState({ ...state, showStaysEdit: true });
+                }}
+                className="w-7 h-7 cursor-pointer bg-blue-200 flex items-center justify-center rounded-full"
               >
-                <path
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4 text-blue-600"
+                  viewBox="0 0 20 20"
                   fill="currentColor"
-                  d="M19.4 7.34L16.66 4.6A2 2 0 0 0 14 4.53l-9 9a2 2 0 0 0-.57 1.21L4 18.91a1 1 0 0 0 .29.8A1 1 0 0 0 5 20h.09l4.17-.38a2 2 0 0 0 1.21-.57l9-9a1.92 1.92 0 0 0-.07-2.71ZM9.08 17.62l-3 .28l.27-3L12 9.32l2.7 2.7ZM16 10.68L13.32 8l1.95-2L18 8.73Z"
-                />
-              </svg>
-            </div>
-          )}
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+            )}
 
-          {state.showStaysEdit && (
+            {state.showStaysEdit && (
+              <div
+                onClick={() => {
+                  setState({ ...state, showStaysEdit: false });
+                }}
+                className="w-7 h-7 cursor-pointer bg-blue-200 flex items-center justify-center rounded-full"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-4 h-4 text-blue-600"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+            )}
+
             <div
               onClick={() => {
-                setState({ ...state, showStaysEdit: false });
+                if (!containsStayOption(`${index}`)) {
+                  router.push({
+                    query: {
+                      ...router.query,
+                      dontShowStay:
+                        (router.query.dontShowStay
+                          ? router.query.dontShowStay + ","
+                          : "") + index,
+                    },
+                  });
+                }
               }}
-              className="w-8 h-8 cursor-pointer shadow-md bg-white flex items-center justify-center rounded-full absolute top-1 right-2"
+              className="w-7 h-7 cursor-pointer bg-red-200 flex items-center justify-center rounded-full"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="w-6 h-6"
-                viewBox="0 0 20 20"
-                fill="currentColor"
+                className="h-4 w-4 text-red-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
               >
                 <path
-                  fillRule="evenodd"
-                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                  clipRule="evenodd"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                 />
               </svg>
             </div>
-          )}
+          </div>
 
           {!trip.stay && (
             <div
@@ -843,7 +933,7 @@ const Trip = ({
         </div>
       )}
 
-      {!trip.activity && (
+      {!trip.activity && !containsActivityOption(`${index}`) && (
         <div className="px-2 mt-4 relative bg-gray-100 py-1 rounded-lg">
           <div className="flex gap-2">
             <div className="w-12 h-12 my-auto bg-gray-200 rounded-lg flex items-center justify-center">
@@ -891,50 +981,83 @@ const Trip = ({
             </div>
           </div>
 
-          {!state.showActivitiesEdit && (
-            <div
-              onClick={() => {
-                setState({ ...state, showActivitiesEdit: true });
-              }}
-              className="w-8 h-8 cursor-pointer shadow-md bg-white flex items-center justify-center rounded-full absolute top-1 right-2"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
-                role="img"
-                className="w-6 h-6"
-                preserveAspectRatio="xMidYMid meet"
-                viewBox="0 0 24 24"
+          <div className="absolute top-1 right-2 flex gap-2 items-center">
+            {!state.showActivitiesEdit && (
+              <div
+                onClick={() => {
+                  setState({ ...state, showActivitiesEdit: true });
+                }}
+                className="w-7 h-7 cursor-pointer bg-blue-200 flex items-center justify-center rounded-full"
               >
-                <path
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4 text-blue-600"
+                  viewBox="0 0 20 20"
                   fill="currentColor"
-                  d="M19.4 7.34L16.66 4.6A2 2 0 0 0 14 4.53l-9 9a2 2 0 0 0-.57 1.21L4 18.91a1 1 0 0 0 .29.8A1 1 0 0 0 5 20h.09l4.17-.38a2 2 0 0 0 1.21-.57l9-9a1.92 1.92 0 0 0-.07-2.71ZM9.08 17.62l-3 .28l.27-3L12 9.32l2.7 2.7ZM16 10.68L13.32 8l1.95-2L18 8.73Z"
-                />
-              </svg>
-            </div>
-          )}
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+            )}
 
-          {state.showActivitiesEdit && (
+            {state.showActivitiesEdit && (
+              <div
+                onClick={() => {
+                  setState({ ...state, showActivitiesEdit: false });
+                }}
+                className="w-7 h-7 cursor-pointer bg-blue-200 flex items-center justify-center rounded-full"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-4 h-4 text-blue-600"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+            )}
+
             <div
               onClick={() => {
-                setState({ ...state, showActivitiesEdit: false });
+                if (!containsActivityOption(`${index}`)) {
+                  router.push({
+                    query: {
+                      ...router.query,
+                      dontShowActivity:
+                        (router.query.dontShowActivity
+                          ? router.query.dontShowActivity + ","
+                          : "") + index,
+                    },
+                  });
+                }
               }}
-              className="w-8 h-8 cursor-pointer shadow-md bg-white flex items-center justify-center rounded-full absolute top-1 right-2"
+              className="w-7 h-7 cursor-pointer bg-red-200 flex items-center justify-center rounded-full"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="w-6 h-6"
-                viewBox="0 0 20 20"
-                fill="currentColor"
+                className="h-4 w-4 text-red-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
               >
                 <path
-                  fillRule="evenodd"
-                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                  clipRule="evenodd"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                 />
               </svg>
             </div>
-          )}
+          </div>
 
           {!trip.activity && (
             <div
@@ -1172,7 +1295,142 @@ const Trip = ({
         </div>
       )}
 
-      <div className="mt-4">
+      {containsStayOption(`${index}`) && (
+        <div className="mt-4">
+          <Button
+            onClick={() => {
+              const exist = router.query.dontShowStay
+                ? router.query.dontShowStay.split(",")
+                : [];
+              let newFilter = exist.filter((e) => e !== `${index}`);
+
+              newFilter = newFilter
+                .toString()
+                .replace("[", "")
+                .replace("]", "")
+                .trim();
+
+              router.push({
+                query: {
+                  ...router.query,
+                  dontShowStay: newFilter,
+                },
+              });
+            }}
+            className="!w-full !bg-blue-100 hover:!bg-blue-200 py-2 flex items-center gap-1"
+          >
+            <div className="font-bold text-blue-600 flex items-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                />
+              </svg>
+              <span>Stay</span>
+            </div>
+          </Button>
+        </div>
+      )}
+
+      {containsActivityOption(`${index}`) && (
+        <div className="mt-2">
+          <Button
+            onClick={() => {
+              const exist = router.query.dontShowActivity
+                ? router.query.dontShowActivity.split(",")
+                : [];
+              let newFilter = exist.filter((e) => e !== `${index}`);
+
+              newFilter = newFilter
+                .toString()
+                .replace("[", "")
+                .replace("]", "")
+                .trim();
+
+              router.push({
+                query: {
+                  ...router.query,
+                  dontShowActivity: newFilter,
+                },
+              });
+            }}
+            className="!w-full !bg-blue-100 hover:!bg-blue-200 py-2 flex items-center gap-1"
+          >
+            <div className="font-bold text-blue-600 flex items-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                />
+              </svg>
+              <span>Experiences</span>
+            </div>
+          </Button>
+        </div>
+      )}
+
+      {containsTransportOption(`${index}`) && (
+        <div className="mt-2">
+          <Button
+            onClick={() => {
+              const exist = router.query.dontShowTransport
+                ? router.query.dontShowTransport.split(",")
+                : [];
+              let newFilter = exist.filter((e) => e !== `${index}`);
+
+              newFilter = newFilter
+                .toString()
+                .replace("[", "")
+                .replace("]", "")
+                .trim();
+
+              router.push({
+                query: {
+                  ...router.query,
+                  dontShowTransport: newFilter,
+                },
+              });
+            }}
+            className="!w-full !bg-blue-100 hover:!bg-blue-200 py-2 flex items-center gap-1"
+          >
+            <div className="font-bold text-blue-600 flex items-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                />
+              </svg>
+              <span>Transport</span>
+            </div>
+          </Button>
+        </div>
+      )}
+
+      <div className="mt-2">
         <Button
           onClick={() => {
             deleteTrip();

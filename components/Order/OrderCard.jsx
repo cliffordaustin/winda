@@ -456,18 +456,35 @@ const OrderCard = ({
               </div>
             )}
 
-            <div
-              className="text-sm w-fit flex items-center bg-red-400 bg-opacity-30 px-2 py-1 text-red-500 font-bold p-3 rounded-md mt-2
+            <div className="flex gap-1">
+              <div
+                className="text-sm w-fit flex gap-1 items-center bg-red-400 bg-opacity-30 px-2 xsMax:px-0.5 py-1 text-red-500 font-bold p-3 rounded-md mt-2
           "
-              onClick={removeCart}
-            >
-              <span className="mr-1">Remove</span>
-              <div className={" " + (!removeButtonLoading ? "hidden" : "")}>
-                <LoadingSpinerChase
-                  width={13}
-                  height={13}
-                  color="red"
-                ></LoadingSpinerChase>
+                onClick={removeCart}
+              >
+                <span className="">Remove</span>
+                <div className={" " + (!removeButtonLoading ? "hidden" : "")}>
+                  <LoadingSpinerChase
+                    width={13}
+                    height={13}
+                    color="red"
+                  ></LoadingSpinerChase>
+                </div>
+              </div>
+              <div
+                className="text-sm w-fit xsMax:px-0.5 gap-1 flex items-center bg-blue-400 bg-opacity-30 px-2 py-1 text-blue-500 font-bold p-3 rounded-md mt-2
+          "
+                onClick={() => {
+                  stayPage
+                    ? router.push(`/stays/${stay.slug}`)
+                    : activitiesPage
+                    ? router.push(`/experiences/${activity.slug}`)
+                    : transportPage
+                    ? router.push(`/transport/${transport.slug}`)
+                    : null;
+                }}
+              >
+                <span className="">View</span>
               </div>
             </div>
           </div>

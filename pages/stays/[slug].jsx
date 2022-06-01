@@ -227,7 +227,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
         </div>
       </div> */}
       <div className="md:w-[85%] px-4 sm:px-8 md:px-0 mx-auto">
-        <div className="relative">
+        <div className="relative -m-4 sm:-m-8 md:-m-0">
           <ImageGallery
             images={stay.stay_images}
             stayType={stay.type_of_stay}

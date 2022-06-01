@@ -205,7 +205,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
       ></Navbar>
 
       <div className="md:w-[85%] px-4 sm:px-8 md:px-0 mx-auto">
-        <div className="relative">
+        <div className="relative -m-4 sm:-m-8 md:-m-0">
           <ImageGallery images={activity.activity_images}></ImageGallery>
 
           <div className="flex absolute bg-white px-3 rounded-3xl py-1 top-4 right-3 gap-2 items-center">
