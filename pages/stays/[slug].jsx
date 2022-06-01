@@ -299,7 +299,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
           </div>
         </div>
 
-        <div className="flex mt-4">
+        <div className="flex mt-8">
           <div className="flex flex-col w-full">
             <div className="text-2xl font-bold">{stay.name}</div>
             <div className="text-lg font-medium">{stay.location}</div>
