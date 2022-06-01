@@ -49,79 +49,88 @@ function Carousel({ imageClass = "", className = "", images }) {
     },
   };
   return (
-    <Swiper
-      {...settings}
-      modules={[Pagination]}
-      onSlideChange={(swiper) => {
-        setState({
-          ...state,
-          swiperIndex: swiper.realIndex,
-          endOfSlide: swiper.isEnd,
-        });
-      }}
-      className="!h-full !relative "
+    <div
+      className="!h-full"
       onMouseOver={() => setState({ ...state, showNavigation: true })}
+      onMouseOut={() => setState({ ...state, showNavigation: false })}
     >
-      {images.map((image, index) => (
-        <SwiperSlide key={index} className={"!h-full " + className}>
-          <Image
-            className={"w-full object-cover " + imageClass}
-            src={image}
-            alt="Image Gallery"
-            layout="fill"
-          />
-        </SwiperSlide>
-      ))}
+      <Swiper
+        {...settings}
+        modules={[Pagination]}
+        onSlideChange={(swiper) => {
+          setState({
+            ...state,
+            swiperIndex: swiper.realIndex,
+            endOfSlide: swiper.isEnd,
+          });
+        }}
+        className="!h-full !relative "
+      >
+        {images.map((image, index) => (
+          <SwiperSlide key={index} className={"!h-full " + className}>
+            <Image
+              className={"w-full object-cover " + imageClass}
+              src={image}
+              alt="Image Gallery"
+              layout="fill"
+            />
+          </SwiperSlide>
+        ))}
 
-      <motion.div
-        variants={variants}
-        animate={state.showNavigation ? "show" : ""}
-        initial="hide"
-        exit="exit"
-        className={
-          "absolute flex cursor-pointer items-center justify-center top-2/4 z-10 left-3 -translate-y-2/4 swiper-pagination swiper-button-prev w-8 -mt-4 h-8 rounded-full bg-white shadow-lg " +
-          (state.swiperIndex === 0 || !state.showNavigation ? "invisible" : "")
-        }
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5"
-          viewBox="0 0 20 20"
-          fill="currentColor"
+        <motion.div
+          variants={variants}
+          onClick={() => {}}
+          animate={state.showNavigation ? "show" : ""}
+          initial="hide"
+          exit="exit"
+          className={
+            "absolute flex cursor-pointer items-center justify-center top-2/4 z-50 left-3 -translate-y-2/4 swiper-pagination swiper-button-prev w-8 -mt-4 h-8 rounded-full bg-white shadow-lg " +
+            (state.swiperIndex === 0 || !state.showNavigation
+              ? "invisible"
+              : "")
+          }
         >
-          <path
-            fillRule="evenodd"
-            d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-            clipRule="evenodd"
-          />
-        </svg>
-      </motion.div>
-      <motion.div
-        variants={variants}
-        animate={state.showNavigation ? "show" : ""}
-        initial="hide"
-        exit="exit"
-        className={
-          "absolute cursor-pointer flex items-center justify-center top-2/4 z-10 right-3 -translate-y-2/4 swiper-pagination swiper-button-next w-8 h-8 -mt-4 rounded-full bg-white shadow-lg " +
-          (state.endOfSlide || !state.showNavigation || images.length === 1
-            ? "invisible"
-            : "")
-        }
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5"
-          viewBox="0 0 20 20"
-          fill="currentColor"
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </motion.div>
+        <motion.div
+          variants={variants}
+          animate={state.showNavigation ? "show" : ""}
+          onClick={() => {}}
+          initial="hide"
+          exit="exit"
+          className={
+            "absolute cursor-pointer flex items-center justify-center top-2/4 z-50 right-3 -translate-y-2/4 swiper-pagination swiper-button-next w-8 h-8 -mt-4 rounded-full bg-white shadow-lg " +
+            (state.endOfSlide || !state.showNavigation || images.length === 1
+              ? "invisible"
+              : "")
+          }
         >
-          <path
-            fillRule="evenodd"
-            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-            clipRule="evenodd"
-          />
-        </svg>
-      </motion.div>
-    </Swiper>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </motion.div>
+      </Swiper>
+    </div>
   );
 }
 
