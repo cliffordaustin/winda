@@ -78,8 +78,6 @@ function Carousel({ imageClass = "", className = "", images }) {
       ))}
 
       <motion.div
-        onMouseOver={() => setState({ ...state, showNavigation: true })}
-        onMouseOut={() => setState({ ...state, showNavigation: false })}
         variants={variants}
         animate={state.showNavigation ? "show" : ""}
         initial="hide"
@@ -103,8 +101,6 @@ function Carousel({ imageClass = "", className = "", images }) {
         </svg>
       </motion.div>
       <motion.div
-        onMouseOver={() => setState({ ...state, showNavigation: true })}
-        onMouseOut={() => setState({ ...state, showNavigation: false })}
         variants={variants}
         animate={state.showNavigation ? "show" : ""}
         initial="hide"
