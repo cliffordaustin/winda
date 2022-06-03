@@ -45,6 +45,8 @@ import "swiper/css/effect-creative";
 import "swiper/css";
 import TripTransportCard from "../../../components/Order/TripTransportCard";
 import Search from "../../../components/Trip/Search";
+import BottomTooltip from "../../../components/ui/BottomTooltip";
+import TopTooltip from "../../../components/ui/TopTooltip";
 
 function PlanTrip({
   userProfile,
@@ -259,8 +261,9 @@ function PlanTrip({
   const [order, setOrder] = useState([]);
 
   const setAllOrders = () => {
+    let orderFormatted = [];
     if (userTrips.trip) {
-      const orderFormatted = userTrips.trip.sort((a, b) => {
+      orderFormatted = userTrips.trip.sort((a, b) => {
         return new Date(a.from_date) - new Date(b.from_date);
       });
     }
@@ -304,7 +307,11 @@ function PlanTrip({
       .put(
         `${process.env.NEXT_PUBLIC_baseURL}/trips/${userTrips.slug}/`,
         {
-          starting_point: location ? location : startingLocationSelected.value,
+          starting_point: location
+            ? location
+            : startingLocationSelected
+            ? startingLocationSelected.value
+            : "",
         },
         {
           headers: {
@@ -347,6 +354,8 @@ function PlanTrip({
       },
     },
   };
+
+  const [itineraryTooltip, setItineraryTooltip] = useState(false);
 
   if (!userTrips.trip || userTrips.trip.length === 0) {
     nothingInOrder = (
@@ -481,8 +490,101 @@ function PlanTrip({
             </div>
             <div className="relative hidden md:block h-full top-20 px-4 w-full md:w-[380px] lg:w-[420px]">
               {order.length > 0 && (
-                <div className="mt-3 mb-4 text-lg font-bold">
-                  Your itinerary
+                <div className="mt-3 mb-4 flex items-center gap-2 text-lg font-bold">
+                  <span>Your itinerary</span>
+
+                  <TopTooltip
+                    showTooltip={itineraryTooltip}
+                    className="text-sm !w-[240px] !font-normal"
+                    changeTooltipState={() => {
+                      setItineraryTooltip(!itineraryTooltip);
+                    }}
+                  >
+                    {userTrips.starting_point && `Your trip starts at `}
+                    {userTrips.starting_point && (
+                      <span className="font-bold">
+                        {userTrips.starting_point}, from{" "}
+                        {order.length > 0 &&
+                          moment(
+                            order[0].stay && !order[0].activity
+                              ? order[0].from_date
+                              : order[0].activity && !order[0].stay
+                              ? order[0].activity_from_date
+                              : order[0].stay &&
+                                order[0].activity &&
+                                order[0].activity_from_date < order[0].from_date
+                              ? order[0].activity_from_date
+                              : order[0].stay &&
+                                order[0].activity &&
+                                order[0].activity_from_date > order[0].from_date
+                              ? order[0].from_date
+                              : order[0].from_date
+                          ).format("Do MMM")}{" "}
+                        to{" "}
+                        {order.length > 0 &&
+                          moment(
+                            order[order.length - 1].stay &&
+                              !order[order.length - 1].activity
+                              ? new Date(
+                                  new Date(
+                                    order[order.length - 1].from_date
+                                  ).setDate(
+                                    new Date(
+                                      order[order.length - 1].from_date
+                                    ).getDate() + order[order.length - 1].nights
+                                  )
+                                ).toISOString()
+                              : !order[order.length - 1].stay &&
+                                order[order.length - 1].activity
+                              ? new Date(
+                                  new Date(
+                                    order[order.length - 1].activity_from_date
+                                  ).getDate()
+                                ).toISOString()
+                              : order[order.length - 1].stay &&
+                                order[order.length - 1].activity &&
+                                new Date(
+                                  new Date(
+                                    order[order.length - 1].from_date
+                                  ).setDate(
+                                    new Date(
+                                      order[order.length - 1].from_date
+                                    ).getDate() + order[order.length - 1].nights
+                                  )
+                                ) >
+                                  new Date(
+                                    order[order.length - 1].activity_from_date
+                                  )
+                              ? new Date(
+                                  new Date(
+                                    order[order.length - 1].from_date
+                                  ).setDate(
+                                    new Date(
+                                      order[order.length - 1].from_date
+                                    ).getDate() + order[order.length - 1].nights
+                                  )
+                                ).toISOString()
+                              : order[order.length - 1].stay &&
+                                order[order.length - 1].activity &&
+                                new Date(
+                                  order[order.length - 1].activity_from_date
+                                ) >
+                                  new Date(
+                                    new Date(
+                                      order[order.length - 1].from_date
+                                    ).setDate(
+                                      new Date(
+                                        order[order.length - 1].from_date
+                                      ).getDate() +
+                                        order[order.length - 1].nights
+                                    )
+                                  )
+                              ? order[order.length - 1].activity_from_date
+                              : ""
+                          ).format("Do MMM")}
+                      </span>
+                    )}
+                  </TopTooltip>
                 </div>
               )}
               {order.length > 0 && (
@@ -506,29 +608,34 @@ function PlanTrip({
                     <div>
                       <p className="text-sm font-medium">Day 1</p>
                       <h1 className="font-bold">Starting point</h1>
-                      <h1 className="font-medium mt-2 text-sm">
-                        {userTrips.starting_point ||
-                          startingLocationSelected.value}
-                      </h1>
+                      {userTrips.starting_point && (
+                        <h1 className="font-medium mt-2 text-sm">
+                          {userTrips.starting_point}
+                        </h1>
+                      )}
+                      {!userTrips.starting_point && (
+                        <h1 className="font-medium mt-2 text-red-500 text-sm">
+                          where are you coming from?
+                        </h1>
+                      )}
                     </div>
 
                     <div
                       onClick={() => {
                         setShowStartLocation(true);
                       }}
-                      className="w-8 h-8 shadow-md cursor-pointer bg-white flex items-center justify-center rounded-full absolute top-1 right-2"
+                      className="w-7 h-7 cursor-pointer bg-blue-200 flex items-center justify-center absolute top-1 right-2 rounded-full"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        aria-hidden="true"
-                        role="img"
-                        className="w-6 h-6"
-                        preserveAspectRatio="xMidYMid meet"
-                        viewBox="0 0 24 24"
+                        className="h-4 w-4 text-blue-600"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
                       >
                         <path
-                          fill="currentColor"
-                          d="M19.4 7.34L16.66 4.6A2 2 0 0 0 14 4.53l-9 9a2 2 0 0 0-.57 1.21L4 18.91a1 1 0 0 0 .29.8A1 1 0 0 0 5 20h.09l4.17-.38a2 2 0 0 0 1.21-.57l9-9a1.92 1.92 0 0 0-.07-2.71ZM9.08 17.62l-3 .28l.27-3L12 9.32l2.7 2.7ZM16 10.68L13.32 8l1.95-2L18 8.73Z"
+                          fillRule="evenodd"
+                          d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                          clipRule="evenodd"
                         />
                       </svg>
                     </div>
@@ -557,11 +664,43 @@ function PlanTrip({
                     ></Trip>
                     {order.length - 1 !== index && (
                       <div className="flex items-center">
-                        <div className="w-2/4 h-12 border-r border-gray-400"></div>
+                        <div className="w-[5%] h-16 border-r border-gray-400"></div>
 
                         <div className="w-fit text-sm ml-1 bg-red-700 bg-opacity-10 px-1.5 font-bold rounded-md">
-                          {moment(item.from_date).format("Do")} -{" "}
-                          {moment(item.to_date).format("Do MMM")}
+                          {moment(
+                            item.stay && !item.activity
+                              ? item.from_date
+                              : item.activity && !item.stay
+                              ? item.activity_from_date
+                              : item.stay &&
+                                item.activity &&
+                                item.activity_from_date < item.from_date
+                              ? item.activity_from_date
+                              : item.stay &&
+                                item.activity &&
+                                item.activity_from_date > item.from_date
+                              ? item.from_date
+                              : item.from_date
+                          ).format("Do")}{" "}
+                          -{" "}
+                          {moment(
+                            order[index + 1].stay && !order[index + 1].activity
+                              ? order[index + 1].from_date
+                              : order[index + 1].activity &&
+                                !order[index + 1].stay
+                              ? order[index + 1].activity_from_date
+                              : order[index + 1].stay &&
+                                order[index + 1].activity &&
+                                order[index + 1].activity_from_date <
+                                  order[index + 1].from_date
+                              ? order[index + 1].activity_from_date
+                              : order[index + 1].stay &&
+                                order[index + 1].activity &&
+                                order[index + 1].activity_from_date >
+                                  order[index + 1].from_date
+                              ? order[index + 1].from_date
+                              : order[index + 1].from_date
+                          ).format("Do MMM")}
                         </div>
                       </div>
                     )}
@@ -1092,7 +1231,15 @@ function PlanTrip({
             <div className="absolute right-0 h-full xsMax:w-full px-4 w-[62%]">
               {order.length > 0 && (
                 <div className="mt-3 mb-4 text-lg font-bold">
-                  Your itinerary
+                  <span>Your itinerary</span>
+                  <BottomTooltip
+                    showTooltip={itineraryTooltip}
+                    changeTooltipState={() => {
+                      setItineraryTooltip(!itineraryTooltip);
+                    }}
+                  >
+                    This is the tooltip
+                  </BottomTooltip>
                 </div>
               )}
               {order.length > 0 && (
@@ -1126,19 +1273,18 @@ function PlanTrip({
                       onClick={() => {
                         setShowStartLocation(true);
                       }}
-                      className="w-8 h-8 shadow-md cursor-pointer bg-white flex items-center justify-center rounded-full absolute top-1 right-2"
+                      className="w-7 h-7 cursor-pointer bg-blue-200 flex items-center justify-center absolute top-1 right-2 rounded-full"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        aria-hidden="true"
-                        role="img"
-                        className="w-6 h-6"
-                        preserveAspectRatio="xMidYMid meet"
-                        viewBox="0 0 24 24"
+                        className="h-4 w-4 text-blue-600"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
                       >
                         <path
-                          fill="currentColor"
-                          d="M19.4 7.34L16.66 4.6A2 2 0 0 0 14 4.53l-9 9a2 2 0 0 0-.57 1.21L4 18.91a1 1 0 0 0 .29.8A1 1 0 0 0 5 20h.09l4.17-.38a2 2 0 0 0 1.21-.57l9-9a1.92 1.92 0 0 0-.07-2.71ZM9.08 17.62l-3 .28l.27-3L12 9.32l2.7 2.7ZM16 10.68L13.32 8l1.95-2L18 8.73Z"
+                          fillRule="evenodd"
+                          d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                          clipRule="evenodd"
                         />
                       </svg>
                     </div>
@@ -1166,11 +1312,43 @@ function PlanTrip({
                     ></Trip>
                     {order.length - 1 !== index && (
                       <div className="flex items-center">
-                        <div className="w-2/4 h-12 border-r border-gray-400"></div>
+                        <div className="w-[5%] h-16 border-r border-gray-400"></div>
 
                         <div className="w-fit text-sm ml-1 bg-red-700 bg-opacity-10 px-1.5 font-bold rounded-md">
-                          {moment(item.from_date).format("Do")} -{" "}
-                          {moment(item.to_date).format("Do MMM")}
+                          {moment(
+                            item.stay && !item.activity
+                              ? item.from_date
+                              : item.activity && !item.stay
+                              ? item.activity_from_date
+                              : item.stay &&
+                                item.activity &&
+                                item.activity_from_date < item.from_date
+                              ? item.activity_from_date
+                              : item.stay &&
+                                item.activity &&
+                                item.activity_from_date > item.from_date
+                              ? item.from_date
+                              : item.from_date
+                          ).format("Do")}{" "}
+                          -{" "}
+                          {moment(
+                            order[index + 1].stay && !order[index + 1].activity
+                              ? order[index + 1].from_date
+                              : order[index + 1].activity &&
+                                !order[index + 1].stay
+                              ? order[index + 1].activity_from_date
+                              : order[index + 1].stay &&
+                                order[index + 1].activity &&
+                                order[index + 1].activity_from_date <
+                                  order[index + 1].from_date
+                              ? order[index + 1].activity_from_date
+                              : order[index + 1].stay &&
+                                order[index + 1].activity &&
+                                order[index + 1].activity_from_date >
+                                  order[index + 1].from_date
+                              ? order[index + 1].from_date
+                              : order[index + 1].from_date
+                          ).format("Do MMM")}
                         </div>
                       </div>
                     )}
@@ -1755,11 +1933,7 @@ function PlanTrip({
 
             <Button
               onClick={() => {
-                if (startingLocationSelected || location) {
-                  updateStartingLocation();
-                } else {
-                  setShowStartLocation(false);
-                }
+                updateStartingLocation();
               }}
               className="flex text-lg !bg-blue-600 mt-16 !text-primary-blue-200"
             >

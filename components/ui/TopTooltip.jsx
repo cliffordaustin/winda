@@ -3,7 +3,12 @@ import PropTypes from "prop-types";
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "../../styles/TopTooltip.module.css";
 
-function TopTooltip({ changeTooltipState, showTooltip, children }) {
+function TopTooltip({
+  changeTooltipState,
+  showTooltip,
+  children,
+  className = "",
+}) {
   const variants = {
     hide: {
       scale: 0.8,
@@ -50,8 +55,8 @@ function TopTooltip({ changeTooltipState, showTooltip, children }) {
             initial="hide"
             exit="exit"
             className={
-              styles.tooltip +
-              " w-40 px-2 py-3 bg-gray-200 rounded-md absolute bottom-full left-2/4 -ml-3 mb-2"
+              " w-40 px-2 py-3 bg-gray-200 rounded-md !z-40 absolute top-full mt-2 -left-0.5 " +
+              className
             }
           >
             {children}

@@ -2,8 +2,17 @@ import React from "react";
 import Dropdown from "../ui/Dropdown";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
-function UserDropdown({ changeShowDropdown, showDropdown, userProfile }) {
+function UserDropdown({
+  changeShowDropdown,
+  showDropdown,
+  userProfile,
+  isHomePage = false,
+  numberOfItemsInCart = 0,
+  numberOfTrips = 0,
+}) {
+  const router = useRouter();
   let fullName = userProfile.first_name + " " + userProfile.last_name;
   return (
     <div
@@ -84,11 +93,65 @@ function UserDropdown({ changeShowDropdown, showDropdown, userProfile }) {
           </div>
         )}
         {!userProfile && <hr className="" />}
+        {isHomePage && (
+          <div
+            onClick={() => {
+              router.push("/cart");
+            }}
+            className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2 flex justify-between items-center"
+          >
+            <span className="font-bold">cart</span>
+            <div className="h-5 w-5 p-1 text-white text-sm rounded-full bg-[#303960] flex items-center justify-center">
+              {numberOfItemsInCart}
+            </div>
+          </div>
+        )}
+        {isHomePage && (
+          <div
+            onClick={() => {
+              router.push("/trip/plan");
+            }}
+            className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2 flex justify-between items-center"
+          >
+            <span className="font-bold">trips</span>
+            <div className="h-5 w-5 p-1 text-white text-sm rounded-full bg-[#303960] flex items-center justify-center">
+              {numberOfTrips}
+            </div>
+          </div>
+        )}
+
+        {!isHomePage && (
+          <div
+            onClick={() => {
+              router.push("/cart");
+            }}
+            className="hover:bg-gray-100 transition-colors duration-300 md:hidden cursor-pointer ease-in-out px-2 py-2 flex justify-between items-center"
+          >
+            <span className="font-bold">cart</span>
+            <div className="h-5 w-5 p-1 text-white text-sm rounded-full bg-[#303960] flex items-center justify-center">
+              {numberOfItemsInCart}
+            </div>
+          </div>
+        )}
+        {!isHomePage && (
+          <div
+            onClick={() => {
+              router.push("/trip/plan");
+            }}
+            className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2 flex justify-between items-center"
+          >
+            <span className="font-bold">trips</span>
+            <div className="h-5 w-5 p-1 text-white text-sm rounded-full bg-[#303960] flex items-center justify-center">
+              {numberOfTrips}
+            </div>
+          </div>
+        )}
+
         <div className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2">
-          Add a listing
+          About
         </div>
         <div className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2">
-          Help
+          Terms of use
         </div>
         {userProfile && <hr className="" />}
         {userProfile && (
