@@ -309,7 +309,7 @@ function Listing({
                   </div>
                 )}
 
-                {listing.beds && (
+                {/* {listing.beds && (
                   <div className="flex items-center gap-0.5">
                     <svg
                       className="w-3 h-3"
@@ -335,7 +335,7 @@ function Listing({
                     </svg>{" "}
                     <span>{listing.bathrooms} ba</span>
                   </div>
-                )}
+                )} */}
               </div>
               <div className="font-bold text-sm truncate mt-1">
                 {listing.location}
@@ -644,7 +644,7 @@ function Listing({
                     </div>
                   )}
 
-                  {listing.beds && (
+                  {/* {listing.beds && (
                     <div className="flex items-center gap-0.5">
                       <svg
                         className="w-3 h-3"
@@ -670,7 +670,7 @@ function Listing({
                       </svg>{" "}
                       <span>{listing.bathrooms} ba</span>
                     </div>
-                  )}
+                  )} */}
                 </div>
                 <div className="font-bold text-sm truncate mt-1">
                   {listing.location}
