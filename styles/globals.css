@@ -110,7 +110,7 @@ body {
 }
 
 .rdp-cell {
-  @apply w-10 h-10 sm:!w-12 sm:!h-12 rounded-full outline-none transition-colors ease-linear duration-200;
+  @apply !w-[44px] !h-[44px] sm:!w-12 sm:!h-12 rounded-full outline-none transition-colors ease-linear duration-200;
 }
 
 .rdp-day {

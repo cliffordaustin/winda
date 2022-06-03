@@ -95,42 +95,38 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
   }, []);
 
   const addToBasket = async () => {
-    const token = Cookies.get("token");
-
-    setAddToBasketLoading(true);
-
-    if (token) {
-      axios
-        .post(
-          `${process.env.NEXT_PUBLIC_baseURL}/stays/${stay.slug}/add-to-cart/`,
-          {},
-          {
-            headers: {
-              Authorization: "Token " + token,
-            },
-          }
-        )
-        .then(() => location.reload())
-        .catch((err) => {
-          console.log(err.response);
-        });
-    } else if (!token) {
-      let cookieVal = Cookies.get("cart");
-
-      if (cookieVal !== undefined) {
-        cookieVal = JSON.parse(cookieVal);
-      }
-
-      const data = [...(cookieVal || [])];
-      const exist = data.some((val) => {
-        return val.slug === stay.slug;
-      });
-      if (!exist) {
-        data.push({ slug: stay.slug, itemCategory: "stays" });
-        Cookies.set("cart", JSON.stringify(data));
-        location.reload();
-      }
-    }
+    // const token = Cookies.get("token");
+    // setAddToBasketLoading(true);
+    // if (token) {
+    //   axios
+    //     .post(
+    //       `${process.env.NEXT_PUBLIC_baseURL}/stays/${stay.slug}/add-to-cart/`,
+    //       {},
+    //       {
+    //         headers: {
+    //           Authorization: "Token " + token,
+    //         },
+    //       }
+    //     )
+    //     .then(() => location.reload())
+    //     .catch((err) => {
+    //       console.log(err.response);
+    //     });
+    // } else if (!token) {
+    //   let cookieVal = Cookies.get("cart");
+    //   if (cookieVal !== undefined) {
+    //     cookieVal = JSON.parse(cookieVal);
+    //   }
+    //   const data = [...(cookieVal || [])];
+    //   const exist = data.some((val) => {
+    //     return val.slug === stay.slug;
+    //   });
+    //   if (!exist) {
+    //     data.push({ slug: stay.slug, itemCategory: "stays" });
+    //     Cookies.set("cart", JSON.stringify(data));
+    //     location.reload();
+    //   }
+    // }
   };
 
   const getReview = async () => {
@@ -530,7 +526,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
           </div>
         )}
 
-        <div className="flex flex-col md:flex-row justify-between mt-10 mb-10 lg:pl-10">
+        <div className="flex flex-col md:flex-row gap-3 justify-between mt-10 mb-10 lg:pl-10">
           <div className="border h-fit border-gray-200 rounded-xl overflow-hidden w-full md:w-[48%] order-2 md:order-1 mt-4 md:mt-0">
             <div className="py-2 bg-gray-200 mb-2">
               <span className="font-bold text-xl ml-6">Amenities</span>
@@ -599,8 +595,8 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
           </div>
           <div
             className={
-              "w-full h-fit md:w-fit border border-gray-200 rounded-lg order-1 md:order-2 " +
-              (!inCart ? "-mt-32" : "hidden")
+              " h-fit w-fit border border-gray-200 rounded-lg order-1 md:order-2 " +
+              (!inCart ? "md:-mt-32" : "hidden")
             }
           >
             <DatePicker
@@ -675,11 +671,24 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               </Button>
             </div>
           </div>
+          <div
+            className={
+              "w-full h-[350px] md:w-[50%] md:h-[450px] order-1 md:order-2 " +
+              (!inCart ? "hidden" : "")
+            }
+          >
+            <Map longitude={stay.longitude} latitude={stay.latitude}></Map>
+          </div>
         </div>
 
         <div className="flex flex-col md:flex-row justify-between mb-5 lg:px-10 gap-3">
           <DescribesStay stay={stay}></DescribesStay>
-          <div className="w-full h-[350px] md:w-[50%] md:h-[450px] order-1 md:order-2">
+          <div
+            className={
+              "w-full h-[350px] md:w-[50%] md:h-[450px] order-1 md:order-2 " +
+              (inCart ? "hidden" : "")
+            }
+          >
             <Map longitude={stay.longitude} latitude={stay.latitude}></Map>
           </div>
         </div>

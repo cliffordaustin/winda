@@ -6,7 +6,7 @@ function MapBox({ longitude, latitude }) {
   const [viewState, setViewState] = React.useState({
     longitude: longitude,
     latitude: latitude,
-    zoom: 14,
+    zoom: 9,
   });
 
   const GlobalStyle = createGlobalStyle`
