@@ -9,6 +9,7 @@ import Cookies from "js-cookie";
 import ClientOnly from "../ClientOnly";
 import LoadingSpinerChase from "../ui/LoadingSpinerChase";
 import { priceConversionRateFunc } from "../../lib/PriceRate";
+import moment from "moment";
 
 const CartItem = ({
   stay,
@@ -26,6 +27,8 @@ const CartItem = ({
   setInfoPopup,
   itemType,
   stayPage,
+  from_date,
+  to_date,
 
   transportPage,
   transport,
@@ -556,6 +559,11 @@ const CartItem = ({
                       /for {(transportDistance * 0.001).toFixed(1)}km
                     </span>
                   )}
+                  {stayPage && (
+                    <span className="inline text-xs mt-2 font-semibold ml-0.5">
+                      /night
+                    </span>
+                  )}
                 </div>
               </ClientOnly>
             </div>
@@ -733,6 +741,20 @@ const CartItem = ({
                 ? stay.location
                 : ""}
             </div>
+
+            {!checkoutInfo && stayPage && (
+              <div className="flex items-center gap-1 text-xs mt-1 font-bold truncate flex-wrap">
+                <span>
+                  {moment(from_date).format("MMM DD")} -{" "}
+                  {moment(to_date).format("MMM DD")}
+                </span>
+                <span className="font-bold text-xl -mt-3">.</span>
+                <span>
+                  {new Date(to_date).getDate() - new Date(from_date).getDate()}{" "}
+                  nights
+                </span>
+              </div>
+            )}
 
             {checkoutInfo && (
               <div className="font-bold text-sm truncate mt-1">

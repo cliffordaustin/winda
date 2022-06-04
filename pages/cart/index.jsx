@@ -81,6 +81,10 @@ const Cart = ({
             `${process.env.NEXT_PUBLIC_baseURL}/create-trip/`,
             {
               stay_id: item.stay.id,
+              nights:
+                new Date(item.to_date).getDate() -
+                new Date(item.from_date).getDate(),
+              from_date: new Date(item.from_date),
               activity_id: null,
               transport_id: null,
             },
@@ -101,7 +105,7 @@ const Cart = ({
             );
           })
           .catch((err) => {
-            console.log(err.response);
+            console.log(err.response.data);
             setLoading(false);
           });
       }
@@ -285,6 +289,8 @@ const Cart = ({
                     Cookies.get("token") ? allItemsInCart[index].id : null
                   }
                   stay={item}
+                  from_date={allItemsInCart[index].from_date}
+                  to_date={allItemsInCart[index].to_date}
                   stayPage={true}
                 ></CartItem>
               </div>

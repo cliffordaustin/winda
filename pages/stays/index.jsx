@@ -31,6 +31,7 @@ import MobileStayTypes from "../../components/Lodging/MobileStayTypes";
 import Amenities from "../../components/Lodging/Amenities";
 import ThemeFilter from "../../components/Lodging/ThemeFilter";
 import Cookies from "js-cookie";
+import { route } from "next/dist/server/router";
 
 function Stays({ userProfile, longitude, latitude }) {
   const [state, setState] = useState({
@@ -184,61 +185,16 @@ function Stays({ userProfile, longitude, latitude }) {
     }
   };
 
-  const minPriceFilterFormat = router.query.min_price
-    ? "KES" + router.query.min_price.replace("000", "k")
-    : "";
+  const [minPrice, setMinSelected] = useState(null);
+  const [maxPrice, setMaxSelected] = useState(null);
 
-  const minPriceFilterFormatObject = router.query.min_price
-    ? {
-        value: minPriceFilterFormat,
-        label: minPriceFilterFormat,
-      }
-    : "";
-
-  const maxPriceFilterFormat = router.query.max_price
-    ? "KES" + router.query.max_price.replace("000", "k")
-    : "";
-
-  const maxPriceFilterFormatObject = router.query.min_price
-    ? {
-        value: maxPriceFilterFormat,
-        label: maxPriceFilterFormat,
-      }
-    : "";
-
-  const minRoomFilterFormat = "KES" + router.query.min_rooms;
-
-  const minRoomFilterFormatObject = router.query.min_price
-    ? {
-        value: minRoomFilterFormat,
-        label: minRoomFilterFormat,
-      }
-    : "";
-
-  const maxRoomFilterFormat = "KES" + router.query.max_rooms;
-
-  const maxRoomFilterFormatObject = router.query.min_price
-    ? {
-        value: maxRoomFilterFormat,
-        label: maxRoomFilterFormat,
-      }
-    : "";
-
-  const [minPrice, setMinSelected] = useState(minPriceFilterFormatObject);
-  const [maxPrice, setMaxSelected] = useState(maxPriceFilterFormatObject);
-
-  const [minRoom, setminRoomSelected] = useState(minRoomFilterFormatObject);
-  const [maxRoom, setmaxRoomSelected] = useState(maxRoomFilterFormatObject);
+  const [minRoom, setminRoomSelected] = useState(null);
+  const [maxRoom, setmaxRoomSelected] = useState(null);
 
   const [mobileMap, setMobileMap] = useState(false);
   const filterStayLoading = useSelector(
     (state) => state.stay.filterStayLoading
   );
-
-  // const userLatLng = {
-  //   latitude: latitude,
-  //   longitude: longitude,
-  // };
 
   const [isFixed, setIsFixed] = useState(true);
 
@@ -255,25 +211,46 @@ function Stays({ userProfile, longitude, latitude }) {
   }, [router.query]);
 
   useEffect(() => {
+    const minPriceFilterFormat = router.query.min_price
+      ? "KES" + router.query.min_price.replace("000", "k")
+      : "";
+
+    const minPriceFilterFormatObject = router.query.min_price
+      ? {
+          value: minPriceFilterFormat,
+          label: minPriceFilterFormat,
+        }
+      : "";
+
+    const maxPriceFilterFormat = router.query.max_price
+      ? "KES" + router.query.max_price.replace("000", "k")
+      : "";
+
+    const maxPriceFilterFormatObject = router.query.max_price
+      ? {
+          value: maxPriceFilterFormat,
+          label: maxPriceFilterFormat,
+        }
+      : "";
+
+    setMinSelected(minPriceFilterFormatObject);
+    setMaxSelected(maxPriceFilterFormatObject);
+  }, [router.query.min_price, router.query.max_price]);
+
+  useEffect(() => {
     const maxPriceSelect = maxPrice
       ? maxPrice.value.replace("KES", "").replace("k", "000")
       : "";
     const minPriceSelect = minPrice
       ? minPrice.value.replace("KES", "").replace("k", "000")
       : "";
-    const maxRoomSelect = maxRoom
-      ? maxRoom.value.replace("KES", "").replace("k", "000")
-      : "";
-    const minRoomSelect = minRoom
-      ? minRoom.value.replace("KES", "").replace("k", "000")
-      : "";
     router.push({
       query: {
         ...router.query,
         min_price: minPriceSelect,
         max_price: maxPriceSelect,
-        min_rooms: minRoomSelect,
-        max_rooms: maxRoomSelect,
+        min_rooms: minRoom,
+        max_rooms: maxRoom,
       },
     });
   }, [minPrice, maxPrice, minRoom, maxRoom]);
@@ -832,6 +809,7 @@ function Stays({ userProfile, longitude, latitude }) {
                 </svg>
               </div>
             )}
+
             {minPrice && maxPrice && (
               <div className="flex items-center gap-2">
                 <div className="flex items-center gap-1">
@@ -903,6 +881,107 @@ function Stays({ userProfile, longitude, latitude }) {
               <h1 className="font-bold text-base mb-2 text-gray-600">
                 Price Range
               </h1>
+              <div className="flex gap-1 my-2">
+                <div
+                  onClick={() => {
+                    if (router.query.isBudget === "true") {
+                      router.push({
+                        query: {
+                          ...router.query,
+                          isBudget: "",
+                          min_price: "",
+                          max_price: "",
+                        },
+                      });
+                    } else {
+                      router.push({
+                        query: {
+                          ...router.query,
+                          isBudget: "true",
+                          min_price: "0",
+                          max_price: "6000",
+                          isHighEnd: "",
+                          isMidEnd: "",
+                        },
+                      });
+                    }
+                  }}
+                  className={
+                    "py-1 px-2 rounded-3xl text-sm bg-blue-100 cursor-pointer " +
+                    (router.query.isBudget === "true"
+                      ? "!bg-blue-500 !text-white"
+                      : "")
+                  }
+                >
+                  Budget
+                </div>
+                <div
+                  onClick={() => {
+                    if (router.query.isMidRange === "true") {
+                      router.push({
+                        query: {
+                          ...router.query,
+                          isMidRange: "",
+                          min_price: "",
+                          max_price: "",
+                        },
+                      });
+                    } else {
+                      router.push({
+                        query: {
+                          ...router.query,
+                          isMidRange: "true",
+                          min_price: "6000",
+                          max_price: "18000",
+                          isHighEnd: "",
+                          isBudget: "",
+                        },
+                      });
+                    }
+                  }}
+                  className={
+                    "py-1 px-2 rounded-3xl text-sm bg-blue-100 cursor-pointer " +
+                    (router.query.isMidRange === "true"
+                      ? "!bg-blue-500 !text-white"
+                      : "")
+                  }
+                >
+                  Mid-range
+                </div>
+                <div
+                  onClick={() => {
+                    if (router.query.highEnd === "true") {
+                      router.push({
+                        query: {
+                          ...router.query,
+                          highEnd: "",
+                          min_price: "",
+                          max_price: "",
+                          isBudget: "",
+                          isMidRange: "",
+                        },
+                      });
+                    } else {
+                      router.push({
+                        query: {
+                          ...router.query,
+                          highEnd: "true",
+                          min_price: "18000",
+                          max_price: "",
+                        },
+                      });
+                    }
+                  }}
+                  className={
+                    "py-1 px-2 rounded-3xl text-sm bg-blue-100 cursor-pointer " +
+                    (router.query.highEnd === "true"
+                      ? "!bg-blue-500 !text-white"
+                      : "")
+                  }
+                >
+                  High-end
+                </div>
+              </div>
               <PriceFilter
                 setMinPriceSelected={setMinSelected}
                 setMaxPriceSelected={setMaxSelected}

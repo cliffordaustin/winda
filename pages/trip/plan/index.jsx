@@ -503,87 +503,89 @@ function PlanTrip({
                     {userTrips.starting_point && `Your trip starts at `}
                     {userTrips.starting_point && (
                       <span className="font-bold">
-                        {userTrips.starting_point}, from{" "}
-                        {order.length > 0 &&
-                          moment(
-                            order[0].stay && !order[0].activity
-                              ? order[0].from_date
-                              : order[0].activity && !order[0].stay
-                              ? order[0].activity_from_date
-                              : order[0].stay &&
-                                order[0].activity &&
-                                order[0].activity_from_date < order[0].from_date
-                              ? order[0].activity_from_date
-                              : order[0].stay &&
-                                order[0].activity &&
-                                order[0].activity_from_date > order[0].from_date
-                              ? order[0].from_date
-                              : order[0].from_date
-                          ).format("Do MMM")}{" "}
-                        to{" "}
-                        {order.length > 0 &&
-                          moment(
-                            order[order.length - 1].stay &&
-                              !order[order.length - 1].activity
-                              ? new Date(
-                                  new Date(
-                                    order[order.length - 1].from_date
-                                  ).setDate(
-                                    new Date(
-                                      order[order.length - 1].from_date
-                                    ).getDate() + order[order.length - 1].nights
-                                  )
-                                ).toISOString()
-                              : !order[order.length - 1].stay &&
-                                order[order.length - 1].activity
-                              ? new Date(
-                                  new Date(
-                                    order[order.length - 1].activity_from_date
-                                  ).getDate()
-                                ).toISOString()
-                              : order[order.length - 1].stay &&
-                                order[order.length - 1].activity &&
-                                new Date(
-                                  new Date(
-                                    order[order.length - 1].from_date
-                                  ).setDate(
-                                    new Date(
-                                      order[order.length - 1].from_date
-                                    ).getDate() + order[order.length - 1].nights
-                                  )
-                                ) >
-                                  new Date(
-                                    order[order.length - 1].activity_from_date
-                                  )
-                              ? new Date(
-                                  new Date(
-                                    order[order.length - 1].from_date
-                                  ).setDate(
-                                    new Date(
-                                      order[order.length - 1].from_date
-                                    ).getDate() + order[order.length - 1].nights
-                                  )
-                                ).toISOString()
-                              : order[order.length - 1].stay &&
-                                order[order.length - 1].activity &&
-                                new Date(
-                                  order[order.length - 1].activity_from_date
-                                ) >
-                                  new Date(
-                                    new Date(
-                                      order[order.length - 1].from_date
-                                    ).setDate(
-                                      new Date(
-                                        order[order.length - 1].from_date
-                                      ).getDate() +
-                                        order[order.length - 1].nights
-                                    )
-                                  )
-                              ? order[order.length - 1].activity_from_date
-                              : ""
-                          ).format("Do MMM")}
+                        {userTrips.starting_point},
                       </span>
                     )}
+                    from{" "}
+                    <span className="font-bold">
+                      {order.length > 0 &&
+                        moment(
+                          order[0].stay && !order[0].activity
+                            ? order[0].from_date
+                            : order[0].activity && !order[0].stay
+                            ? order[0].activity_from_date
+                            : order[0].stay &&
+                              order[0].activity &&
+                              order[0].activity_from_date < order[0].from_date
+                            ? order[0].activity_from_date
+                            : order[0].stay &&
+                              order[0].activity &&
+                              order[0].activity_from_date > order[0].from_date
+                            ? order[0].from_date
+                            : order[0].from_date
+                        ).format("MMMM Do")}{" "}
+                      to{" "}
+                      {order.length > 0 &&
+                        moment(
+                          order[order.length - 1].stay &&
+                            !order[order.length - 1].activity
+                            ? new Date(
+                                new Date(
+                                  order[order.length - 1].from_date
+                                ).setDate(
+                                  new Date(
+                                    order[order.length - 1].from_date
+                                  ).getDate() + order[order.length - 1].nights
+                                )
+                              ).toISOString()
+                            : !order[order.length - 1].stay &&
+                              order[order.length - 1].activity
+                            ? new Date(
+                                new Date(
+                                  order[order.length - 1].activity_from_date
+                                ).getDate()
+                              ).toISOString()
+                            : order[order.length - 1].stay &&
+                              order[order.length - 1].activity &&
+                              new Date(
+                                new Date(
+                                  order[order.length - 1].from_date
+                                ).setDate(
+                                  new Date(
+                                    order[order.length - 1].from_date
+                                  ).getDate() + order[order.length - 1].nights
+                                )
+                              ) >
+                                new Date(
+                                  order[order.length - 1].activity_from_date
+                                )
+                            ? new Date(
+                                new Date(
+                                  order[order.length - 1].from_date
+                                ).setDate(
+                                  new Date(
+                                    order[order.length - 1].from_date
+                                  ).getDate() + order[order.length - 1].nights
+                                )
+                              ).toISOString()
+                            : order[order.length - 1].stay &&
+                              order[order.length - 1].activity &&
+                              new Date(
+                                order[order.length - 1].activity_from_date
+                              ) >
+                                new Date(
+                                  new Date(
+                                    order[order.length - 1].from_date
+                                  ).setDate(
+                                    new Date(
+                                      order[order.length - 1].from_date
+                                    ).getDate() + order[order.length - 1].nights
+                                  )
+                                )
+                            ? order[order.length - 1].activity_from_date
+                            : ""
+                        ).format("MMMM Do")}
+                    </span>
                   </TopTooltip>
                 </div>
               )}
@@ -653,10 +655,7 @@ function PlanTrip({
                       index={index}
                       order={order}
                       tripId={item.id}
-                      startingDestination={
-                        userTrips.starting_point ||
-                        startingLocationSelected.value
-                      }
+                      startingDestination={userTrips.starting_point}
                       tripSlug={item.slug}
                       setInfoPopup={setInfoPopup}
                       setShowInfo={setShowInfo}
@@ -1301,10 +1300,7 @@ function PlanTrip({
                       nights={3}
                       index={index}
                       order={order}
-                      startingDestination={
-                        userTrips.starting_point ||
-                        startingLocationSelected.value
-                      }
+                      startingDestination={userTrips.starting_point}
                       tripId={item.id}
                       tripSlug={item.slug}
                       setInfoPopup={setInfoPopup}

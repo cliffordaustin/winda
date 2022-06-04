@@ -407,9 +407,14 @@ const Trip = ({
               </svg>
             </div>
             <div>
-              {index === 0 && (
+              {index === 0 && startingDestination && (
                 <p className="text-sm font-medium">
                   From {startingDestination}
+                </p>
+              )}
+              {index === 0 && !startingDestination && (
+                <p className="text-sm font-medium text-red-500">
+                  No starting location chosen
                 </p>
               )}
 
@@ -630,8 +635,15 @@ const Trip = ({
               </svg>
             </div>
             <div>
-              {index === 0 && (
-                <p className="text-sm font-medium">From Nairobi</p>
+              {index === 0 && startingDestination && (
+                <p className="text-sm font-medium">
+                  From {startingDestination}
+                </p>
+              )}
+              {index === 0 && !startingDestination && (
+                <p className="text-sm font-medium text-red-500">
+                  No starting location chosen
+                </p>
               )}
               {index > 0 && (
                 <p className="text-sm font-medium">
@@ -1046,12 +1058,21 @@ const Trip = ({
 
               <div className="text-sm">
                 {trip && (
-                  <h1>
-                    Booked for{" "}
+                  <div className="flex items-center">
                     <span className="font-bold">
                       {moment(trip.from_date).format("MMMM Do")}
                     </span>
-                  </h1>
+                    <span className="font-bold mx-1"> - </span>
+                    <span className="font-bold">
+                      {moment(
+                        new Date(
+                          new Date(trip.from_date).setDate(
+                            new Date(trip.from_date).getDate() + trip.nights
+                          )
+                        ).toISOString()
+                      ).format("MMMM Do")}
+                    </span>
+                  </div>
                 )}
               </div>
             </div>

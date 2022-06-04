@@ -95,38 +95,46 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
   }, []);
 
   const addToBasket = async () => {
-    // const token = Cookies.get("token");
-    // setAddToBasketLoading(true);
-    // if (token) {
-    //   axios
-    //     .post(
-    //       `${process.env.NEXT_PUBLIC_baseURL}/stays/${stay.slug}/add-to-cart/`,
-    //       {},
-    //       {
-    //         headers: {
-    //           Authorization: "Token " + token,
-    //         },
-    //       }
-    //     )
-    //     .then(() => location.reload())
-    //     .catch((err) => {
-    //       console.log(err.response);
-    //     });
-    // } else if (!token) {
-    //   let cookieVal = Cookies.get("cart");
-    //   if (cookieVal !== undefined) {
-    //     cookieVal = JSON.parse(cookieVal);
-    //   }
-    //   const data = [...(cookieVal || [])];
-    //   const exist = data.some((val) => {
-    //     return val.slug === stay.slug;
-    //   });
-    //   if (!exist) {
-    //     data.push({ slug: stay.slug, itemCategory: "stays" });
-    //     Cookies.set("cart", JSON.stringify(data));
-    //     location.reload();
-    //   }
-    // }
+    const token = Cookies.get("token");
+    setAddToBasketLoading(true);
+    if (token) {
+      axios
+        .post(
+          `${process.env.NEXT_PUBLIC_baseURL}/stays/${stay.slug}/add-to-cart/`,
+          {
+            from_date: addToCartDate.from,
+            to_date: addToCartDate.to,
+          },
+          {
+            headers: {
+              Authorization: "Token " + token,
+            },
+          }
+        )
+        .then(() => location.reload())
+        .catch((err) => {
+          console.log(err.response);
+        });
+    } else if (!token) {
+      let cookieVal = Cookies.get("cart");
+      if (cookieVal !== undefined) {
+        cookieVal = JSON.parse(cookieVal);
+      }
+      const data = [...(cookieVal || [])];
+      const exist = data.some((val) => {
+        return val.slug === stay.slug;
+      });
+      if (!exist) {
+        data.push({
+          slug: stay.slug,
+          itemCategory: "stays",
+          from_date: addToCartDate.from,
+          to_date: addToCartDate.to,
+        });
+        Cookies.set("cart", JSON.stringify(data));
+        location.reload();
+      }
+    }
   };
 
   const getReview = async () => {
@@ -602,6 +610,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
             <DatePicker
               setDate={setAddToCartDate}
               date={addToCartDate}
+              disableDate={new Date()}
             ></DatePicker>
             <div>
               <Button
