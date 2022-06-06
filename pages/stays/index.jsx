@@ -205,10 +205,12 @@ function Stays({ userProfile, longitude, latitude }) {
   const currencyToDollar = useSelector((state) => state.home.currencyToDollar);
 
   useEffect(() => {
-    if (router.query) {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+    } else {
       dispatch(setFilteredStays(router));
     }
-  }, [router.query]);
+  }, [router.query.min_price, router.query.max_price]);
 
   useEffect(() => {
     const minPriceFilterFormat = router.query.min_price
@@ -238,21 +240,23 @@ function Stays({ userProfile, longitude, latitude }) {
   }, [router.query.min_price, router.query.max_price]);
 
   useEffect(() => {
-    const maxPriceSelect = maxPrice
-      ? maxPrice.value.replace("KES", "").replace("k", "000")
-      : "";
-    const minPriceSelect = minPrice
-      ? minPrice.value.replace("KES", "").replace("k", "000")
-      : "";
-    router.push({
-      query: {
-        ...router.query,
-        min_price: minPriceSelect,
-        max_price: maxPriceSelect,
-        min_rooms: minRoom,
-        max_rooms: maxRoom,
-      },
-    });
+    if (minPrice || maxPrice || minRoom || maxRoom) {
+      const maxPriceSelect = maxPrice
+        ? maxPrice.value.replace("KES", "").replace("k", "000")
+        : "";
+      const minPriceSelect = minPrice
+        ? minPrice.value.replace("KES", "").replace("k", "000")
+        : "";
+      router.push({
+        query: {
+          ...router.query,
+          min_price: minPriceSelect,
+          max_price: maxPriceSelect,
+          min_rooms: minRoom,
+          max_rooms: maxRoom,
+        },
+      });
+    }
   }, [minPrice, maxPrice, minRoom, maxRoom]);
 
   const priceConversionRate = async () => {

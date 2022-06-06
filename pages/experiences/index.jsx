@@ -122,20 +122,22 @@ function Activities({ userProfile, longitude, latitude }) {
   }, [router.query]);
 
   useEffect(() => {
-    const maxPriceSelect = maxPrice
-      ? maxPrice.value.replace("KES", "").replace("k", "000")
-      : "";
-    const minPriceSelect = minPrice
-      ? minPrice.value.replace("KES", "").replace("k", "000")
-      : "";
+    if (minPrice || maxPrice) {
+      const maxPriceSelect = maxPrice
+        ? maxPrice.value.replace("KES", "").replace("k", "000")
+        : "";
+      const minPriceSelect = minPrice
+        ? minPrice.value.replace("KES", "").replace("k", "000")
+        : "";
 
-    router.push({
-      query: {
-        ...router.query,
-        min_price: minPriceSelect,
-        max_price: maxPriceSelect,
-      },
-    });
+      router.push({
+        query: {
+          ...router.query,
+          min_price: minPriceSelect,
+          max_price: maxPriceSelect,
+        },
+      });
+    }
   }, [minPrice, maxPrice]);
 
   const priceConversionRate = async () => {
