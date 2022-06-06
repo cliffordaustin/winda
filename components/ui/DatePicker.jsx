@@ -11,6 +11,7 @@ export default function DatePicker({
   disableDate,
   className = "",
   mode = "single",
+  setShowDate = () => {},
 }) {
   const variants = {
     hide: {
@@ -52,7 +53,10 @@ export default function DatePicker({
             disabled={{ before: disableDate }}
             mode={mode}
             selected={date}
-            onSelect={setDate}
+            onSelect={(date) => {
+              setShowDate(false);
+              setDate(date);
+            }}
           />
         </motion.div>
       )}

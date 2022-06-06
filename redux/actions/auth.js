@@ -31,7 +31,10 @@ export const signup = (payload) => async (dispatch) => {
           await axios
             .post(
               `${process.env.NEXT_PUBLIC_baseURL}/stays/${item.slug}/add-to-cart/`,
-              {},
+              {
+                from_date: item.from_date,
+                to_date: item.to_date,
+              },
               {
                 headers: {
                   Authorization: "Token " + response.data.key,
@@ -45,6 +48,23 @@ export const signup = (payload) => async (dispatch) => {
           await axios
             .post(
               `${process.env.NEXT_PUBLIC_baseURL}/activities/${item.slug}/add-to-cart/`,
+              {
+                from_date: item.from_date,
+                number_of_people: item.number_of_people,
+              },
+              {
+                headers: {
+                  Authorization: "Token " + response.data.key,
+                },
+              }
+            )
+            .catch((err) => {
+              console.log(err.response);
+            });
+        } else if (item.itemCategory === "transport") {
+          await axios
+            .post(
+              `${process.env.NEXT_PUBLIC_baseURL}/transport/${item.slug}/add-to-cart/`,
               {},
               {
                 headers: {

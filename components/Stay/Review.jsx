@@ -19,6 +19,7 @@ const Review = ({ isSafari, review }) => {
               alt="profile image of a user"
               className="object-cover rounded-full"
               src={review.profile_pic}
+              unoptimized={true}
               priority
             ></Image>
           </div>

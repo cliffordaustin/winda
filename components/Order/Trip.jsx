@@ -386,6 +386,24 @@ const Trip = ({
     router.query.highEndOptions,
   ]);
 
+  const priceOfTransportCart = (item) => {
+    let price = 0;
+    if (!item.number_of_days) {
+      price +=
+        ((item.distance * 0.001).toFixed(1) / 10) * item.transport.price +
+        (item.user_need_a_driver
+          ? item.transport.additional_price_with_a_driver
+          : 0);
+    } else if (item.number_of_days) {
+      price +=
+        item.number_of_days * item.transport.price_per_day +
+        (item.user_need_a_driver
+          ? item.transport.additional_price_with_a_driver
+          : 0);
+    }
+    return price;
+  };
+
   return (
     <div className="border relative border-gray-200 px-2 py-2 rounded-lg">
       {!trip.transport && !containsTransportOption(`${index}`) && (
@@ -665,25 +683,12 @@ const Trip = ({
               orderSlug={trip.slug}
               transport={trip.transport}
               transportPage={true}
-              transportDistance={34009}
-              transportDestination={
-                order[index].stay && order[index].stay.location
-                  ? order[index].stay.location
-                  : order[index].activity && order[index].activity.location
-                  ? order[index].activity.location
-                  : "Nairobi"
-              }
-              transportStartingPoint={
-                index === 0
-                  ? startingDestination
-                  : order[index - 1].stay && order[index - 1].stay.location
-                  ? order[index - 1].stay.location
-                  : order[index - 1].activity &&
-                    order[index - 1].activity.location
-                  ? order[index - 1].activity.location
-                  : "Nairobi"
-              }
-              transportPrice={1200}
+              transportDistance={trip.distance}
+              numberOfDays={trip.number_of_days}
+              userNeedADriver={trip.user_need_a_driver}
+              transportDestination={trip.destination}
+              transportStartingPoint={trip.starting_point}
+              transportPrice={priceOfTransportCart(trip)}
               checkoutInfo={true}
             ></OrderCard>
           </div>
@@ -1452,9 +1457,11 @@ const Trip = ({
         <div className="px-2 mt-4 relative bg-gray-100 py-1 rounded-lg">
           <div className="flex gap-2">
             <div className="w-12 h-12 my-auto bg-gray-200 rounded-lg flex items-center flex-col justify-center">
-              <span className="text-gray-500 font-extrabold text-lg">{2}</span>
+              <span className="text-gray-500 font-extrabold text-lg">
+                {trip.number_of_people}
+              </span>
               <span className="text-gray-500 -mt-1.5 font-extrabold text-xs">
-                hours
+                {trip.number_of_people > 1 ? "people" : "person"}
               </span>
             </div>
             <div>

@@ -54,8 +54,20 @@ const Cart = ({
     activitiesCart.forEach((item) => {
       price += item.price;
     });
-    transportCart.forEach((item) => {
-      price += ((item.distance * 0.001).toFixed(1) / 10) * item.transport.price;
+    allItemsInTransportCart.forEach((item) => {
+      if (!item.number_of_days) {
+        price +=
+          ((item.distance * 0.001).toFixed(1) / 10) * item.transport.price +
+          (item.user_need_a_driver
+            ? item.transport.additional_price_with_a_driver
+            : 0);
+      } else if (item.number_of_days) {
+        price +=
+          item.number_of_days * item.transport.price_per_day +
+          (item.user_need_a_driver
+            ? item.transport.additional_price_with_a_driver
+            : 0);
+      }
     });
     return parseFloat(price);
   };
@@ -117,6 +129,8 @@ const Cart = ({
               activity_id: item.activity.id,
               stay_id: null,
               transport_id: null,
+              activity_from_date: new Date(item.from_date),
+              number_of_people: item.number_of_people,
             },
             {
               headers: {
@@ -147,6 +161,12 @@ const Cart = ({
               transport_id: item.transport.id,
               stay_id: null,
               activity_id: null,
+              number_of_days: item.number_of_days,
+              user_need_a_driver: item.user_need_a_driver,
+              distance: item.distance,
+              starting_point: item.starting_point,
+              destination: item.destination,
+              transport_from_date: new Date(item.from_date),
             },
             {
               headers: {
@@ -186,6 +206,24 @@ const Cart = ({
 
   let showCartItems = "";
   let nothingInCart = "";
+
+  const priceOfTransportCart = (item) => {
+    let price = 0;
+    if (!item.number_of_days) {
+      price +=
+        ((item.distance * 0.001).toFixed(1) / 10) * item.transport.price +
+        (item.user_need_a_driver
+          ? item.transport.additional_price_with_a_driver
+          : 0);
+    } else if (item.number_of_days) {
+      price +=
+        item.number_of_days * item.transport.price_per_day +
+        (item.user_need_a_driver
+          ? item.transport.additional_price_with_a_driver
+          : 0);
+    }
+    return price;
+  };
 
   if (
     cart.length === 0 &&
@@ -311,6 +349,10 @@ const Cart = ({
                       ? allItemsInActivityCart[index].id
                       : null
                   }
+                  from_date={allItemsInActivityCart[index].from_date}
+                  number_of_people={
+                    allItemsInActivityCart[index].number_of_people
+                  }
                   activity={item}
                   activitiesPage={true}
                 ></CartItem>
@@ -335,19 +377,20 @@ const Cart = ({
                   transport={item}
                   transportPage={true}
                   transportDistance={allItemsInTransportCart[index].distance}
+                  transportFromDate={allItemsInTransportCart[index].from_date}
+                  numberOfDays={allItemsInTransportCart[index].number_of_days}
+                  userNeedADriver={
+                    allItemsInTransportCart[index].user_need_a_driver
+                  }
                   transportDestination={
                     allItemsInTransportCart[index].destination
                   }
                   transportStartingPoint={
                     allItemsInTransportCart[index].starting_point
                   }
-                  transportPrice={
-                    ((allItemsInTransportCart[index].distance * 0.001).toFixed(
-                      1
-                    ) /
-                      10) *
-                    item.price
-                  }
+                  transportPrice={priceOfTransportCart(
+                    allItemsInTransportCart[index]
+                  )}
                 ></CartItem>
               </div>
             ))}

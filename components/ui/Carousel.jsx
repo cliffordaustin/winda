@@ -69,6 +69,7 @@ function Carousel({ imageClass = "", className = "", images }) {
               src={image}
               alt="Image Gallery"
               layout="fill"
+              unoptimized={true}
             />
           </SwiperSlide>
         ))}

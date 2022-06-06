@@ -44,6 +44,7 @@ const ImageGallery = ({ images }) => {
                 className="w-full h-full object-cover"
                 layout="fill"
                 alt="Image of a car"
+                unoptimized={true}
               ></Image>
             </div>
           </SwiperSlide>
@@ -108,6 +109,7 @@ const ImageGallery = ({ images }) => {
                 className="w-full h-full object-cover"
                 layout="fill"
                 alt="Image of a car"
+                unoptimized={true}
               ></Image>
             </div>
           </SwiperSlide>

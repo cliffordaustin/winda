@@ -29,7 +29,7 @@ const Search = ({ setLocation, location }) => {
               event.stopPropagation();
             }}
             className={
-              "w-full flex items-center !py-3 stepWebkitSetting border border-gray-100 rounded-sm " +
+              "w-full flex items-center !py-3 stepWebkitSetting border border-gray-200 rounded-md " +
               (autoCompleteSearch.length > 0 &&
                 " !rounded-t-xl !rounded-b-none")
             }

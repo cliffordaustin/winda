@@ -23,6 +23,7 @@ import AllReviews from "../../components/Stay/AllReviews";
 import getCart from "../../lib/getCart";
 import ClientOnly from "../../components/ClientOnly";
 import Footer from "../../components/Home/Footer";
+import DatePicker from "../../components/ui/DatePickerOpen";
 
 const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
   const [state, setState] = useState({
@@ -103,7 +104,10 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
       axios
         .post(
           `${process.env.NEXT_PUBLIC_baseURL}/activities/${activity.slug}/add-to-cart/`,
-          {},
+          {
+            from_date: addToCartDate,
+            number_of_people: numOfPeople,
+          },
           {
             headers: {
               Authorization: "Token " + token,
@@ -126,7 +130,12 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
         return val.slug === activity.slug;
       });
       if (!exist) {
-        data.push({ slug: activity.slug, itemCategory: "activities" });
+        data.push({
+          slug: activity.slug,
+          itemCategory: "activities",
+          from_date: addToCartDate,
+          number_of_people: numOfPeople,
+        });
         Cookies.set("cart", JSON.stringify(data));
         location.reload();
       }
@@ -177,6 +186,10 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
     setPrevReview(data.previous);
     setSpinner(false);
   };
+
+  const [addToCartDate, setAddToCartDate] = useState("");
+
+  const [numOfPeople, setNumOfPeople] = useState(1);
 
   return (
     <div>
@@ -330,76 +343,6 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
 
           <div className="w-full z-10 px-4 md:hidden fixed bottom-0 left-0 right-0 bg-white py-2">
             <div className="flex justify-between items-center gap-2">
-              {!inCart && (
-                <Button
-                  onClick={addToBasket}
-                  className="!bg-transparent !w-full !text-black !border-2 border-blue-800"
-                >
-                  Add to basket
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    viewBox="0 0 24 24"
-                    version="1.1"
-                  >
-                    <title>bag</title>
-                    <desc>Created with Sketch.</desc>
-                    <defs />
-                    <g
-                      id="Page-1"
-                      stroke="none"
-                      strokeWidth="1"
-                      fill="none"
-                      fillRule="evenodd"
-                    >
-                      <g
-                        id="Artboard-4"
-                        transform="translate(-620.000000, -291.000000)"
-                      >
-                        <g
-                          id="94"
-                          transform="translate(620.000000, 291.000000)"
-                        >
-                          <rect
-                            id="Rectangle-40"
-                            stroke="#333333"
-                            strokeWidth="2"
-                            x="4"
-                            y="7"
-                            width="16"
-                            height="16"
-                            rx="1"
-                          />
-                          <path
-                            d="M16,10 L16,5 C16,2.790861 14.209139,1 12,1 C9.790861,1 8,2.790861 8,5 L8,10"
-                            id="Oval-21"
-                            stroke="#333333"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                          />
-                          <rect
-                            id="Rectangle-41"
-                            fill="#333333"
-                            x="5"
-                            y="18"
-                            width="14"
-                            height="2"
-                          />
-                        </g>
-                      </g>
-                    </g>
-                  </svg>
-                  <div
-                    className={" " + (!addToBasketLoading ? "hidden" : "ml-2")}
-                  >
-                    <LoadingSpinerChase
-                      width={16}
-                      height={16}
-                      color="#000"
-                    ></LoadingSpinerChase>
-                  </div>
-                </Button>
-              )}
               {inCart && (
                 <Button
                   onClick={() => {
@@ -469,78 +412,6 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
             <div className="flex flex-col items-end">
               <Price stayPrice={activity.price}></Price>
               <div className="flex items-center mt-2 gap-2 justify-between self-start w-full">
-                {!inCart && (
-                  <Button
-                    onClick={addToBasket}
-                    className="!bg-transparent !w-[185px] !text-black !border-2 border-blue-800"
-                  >
-                    Add to basket
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
-                      viewBox="0 0 24 24"
-                      version="1.1"
-                    >
-                      <title>bag</title>
-                      <desc>Created with Sketch.</desc>
-                      <defs />
-                      <g
-                        id="Page-1"
-                        stroke="none"
-                        strokeWidth="1"
-                        fill="none"
-                        fillRule="evenodd"
-                      >
-                        <g
-                          id="Artboard-4"
-                          transform="translate(-620.000000, -291.000000)"
-                        >
-                          <g
-                            id="94"
-                            transform="translate(620.000000, 291.000000)"
-                          >
-                            <rect
-                              id="Rectangle-40"
-                              stroke="#333333"
-                              strokeWidth="2"
-                              x="4"
-                              y="7"
-                              width="16"
-                              height="16"
-                              rx="1"
-                            />
-                            <path
-                              d="M16,10 L16,5 C16,2.790861 14.209139,1 12,1 C9.790861,1 8,2.790861 8,5 L8,10"
-                              id="Oval-21"
-                              stroke="#333333"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                            />
-                            <rect
-                              id="Rectangle-41"
-                              fill="#333333"
-                              x="5"
-                              y="18"
-                              width="14"
-                              height="2"
-                            />
-                          </g>
-                        </g>
-                      </g>
-                    </svg>
-                    <div
-                      className={
-                        " " + (!addToBasketLoading ? "hidden" : "ml-2")
-                      }
-                    >
-                      <LoadingSpinerChase
-                        width={16}
-                        height={16}
-                        color="#000"
-                      ></LoadingSpinerChase>
-                    </div>
-                  </Button>
-                )}
                 {inCart && (
                   <Button
                     onClick={() => {
@@ -620,7 +491,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
           </div>
         )}
 
-        <div className="flex flex-col md:flex-row justify-between my-10 lg:px-10">
+        <div className="flex flex-col md:flex-row gap-3 justify-between mt-10 mb-10 lg:pl-10">
           <div className="border h-fit border-gray-200 rounded-xl overflow-hidden w-full md:w-[48%] order-2 md:order-1 mt-4 md:mt-0">
             <div className="py-2 bg-gray-200 mb-2">
               <span className="font-bold text-xl ml-6">Experiences</span>
@@ -689,7 +560,115 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
               </div>
             )}
           </div>
-          <div className="w-full h-[350px] md:w-[50%] md:h-[450px] order-1 md:order-2">
+          <div
+            className={
+              " h-fit w-fit border border-gray-200 rounded-lg order-1 md:order-2 " +
+              (!inCart ? "md:-mt-32" : "hidden")
+            }
+          >
+            <DatePicker
+              setDate={setAddToCartDate}
+              date={addToCartDate}
+              disableDate={new Date()}
+            ></DatePicker>
+            <div className="flex gap-3 items-center mb-4 ml-4">
+              <div
+                onClick={() => {
+                  if (numOfPeople > 1) {
+                    setNumOfPeople(numOfPeople - 1);
+                  }
+                }}
+                className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-gray-100 shadow-lg font-bold"
+              >
+                -
+              </div>
+
+              <div className="font-bold">
+                {numOfPeople} {numOfPeople > 1 ? "People" : "Person"}
+              </div>
+              <div
+                onClick={() => {
+                  setNumOfPeople(numOfPeople + 1);
+                }}
+                className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-gray-100 shadow-lg font-bold"
+              >
+                +
+              </div>
+            </div>
+            <div>
+              <Button
+                onClick={addToBasket}
+                className="!bg-blue-500 !text-white !w-[95%] mx-auto mb-2"
+              >
+                Add to basket
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 text-white ml-2"
+                  viewBox="0 0 24 24"
+                  version="1.1"
+                >
+                  <title>bag</title>
+                  <desc>Created with Sketch.</desc>
+                  <defs />
+                  <g
+                    id="Page-1"
+                    stroke="none"
+                    strokeWidth="1"
+                    fill="none"
+                    fillRule="evenodd"
+                  >
+                    <g
+                      id="Artboard-4"
+                      transform="translate(-620.000000, -291.000000)"
+                    >
+                      <g id="94" transform="translate(620.000000, 291.000000)">
+                        <rect
+                          id="Rectangle-40"
+                          stroke="#fff"
+                          strokeWidth="2"
+                          x="4"
+                          y="7"
+                          width="16"
+                          height="16"
+                          rx="1"
+                        />
+                        <path
+                          d="M16,10 L16,5 C16,2.790861 14.209139,1 12,1 C9.790861,1 8,2.790861 8,5 L8,10"
+                          id="Oval-21"
+                          stroke="#fff"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                        />
+                        <rect
+                          id="Rectangle-41"
+                          fill="#fff"
+                          x="5"
+                          y="18"
+                          width="14"
+                          height="2"
+                        />
+                      </g>
+                    </g>
+                  </g>
+                </svg>
+                <div
+                  className={" " + (!addToBasketLoading ? "hidden" : "ml-2")}
+                >
+                  <LoadingSpinerChase
+                    width={16}
+                    height={16}
+                    color="#000"
+                  ></LoadingSpinerChase>
+                </div>
+              </Button>
+            </div>
+          </div>
+          <div
+            className={
+              "w-full h-[350px] md:w-[50%] md:h-[450px] order-1 md:order-2 " +
+              (!inCart ? "hidden" : "")
+            }
+          >
             <Map
               longitude={activity.longitude}
               latitude={activity.latitude}

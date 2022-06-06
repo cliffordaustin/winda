@@ -240,6 +240,14 @@ body {
   border-radius: 0.75rem;
 }
 
+.remove-scroll {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+}
+.remove-scroll::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
   select,
   textarea,

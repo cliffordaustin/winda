@@ -4,6 +4,9 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper";
+import SwiperCore from "swiper";
 
 import Navbar from "../../components/Stay/Navbar";
 import getToken from "../../lib/getToken";
@@ -23,6 +26,12 @@ import Reviews from "../../components/Transport/Reviews";
 import ReviewOverview from "../../components/Transport/ReviewOverview";
 import AllReviews from "../../components/Transport/AllReviews";
 import CreateReview from "../../components/Transport/CreateReview";
+import Switch from "../../components/ui/Switch";
+import SearchBar from "../../components/Trip/Search";
+
+import "swiper/css";
+import moment from "moment";
+import DatePicker from "../../components/ui/DatePicker";
 
 function TransportDetail({ userProfile, transport, inCart }) {
   const router = useRouter();
@@ -36,6 +45,7 @@ function TransportDetail({ userProfile, transport, inCart }) {
     showCheckInDate: false,
     showPopup: false,
     showSearchModal: false,
+    swiperIndex: 0,
     from: "",
     to: "",
     fromLat: 0,
@@ -52,6 +62,19 @@ function TransportDetail({ userProfile, transport, inCart }) {
     toLat: 0,
     toLong: 0,
   });
+
+  const settings = {
+    spaceBetween: 40,
+    slidesPerView: "auto",
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+    },
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+  };
 
   const dispatch = useDispatch();
 
@@ -174,9 +197,13 @@ function TransportDetail({ userProfile, transport, inCart }) {
         .post(
           `${process.env.NEXT_PUBLIC_baseURL}/transport/${transport.slug}/add-to-cart/`,
           {
-            starting_point: basketState.from,
-            destination: basketState.to,
-            distance: mapRoute.distance,
+            starting_point:
+              state.swiperIndex === 0 ? startingDestination : basketState.from,
+            destination: state.swiperIndex === 0 ? "" : basketState.to,
+            distance: state.swiperIndex === 0 ? null : mapRoute.distance,
+            user_need_a_driver: needADriver,
+            from_date: startingDate,
+            number_of_days: state.swiperIndex === 0 ? numberOfDays : null,
           },
           {
             headers: {
@@ -211,6 +238,18 @@ function TransportDetail({ userProfile, transport, inCart }) {
 
   const [showDetailBasket, setShowDetailBasket] = useState(false);
 
+  const [needADriver, setNeedADriver] = useState(false);
+
+  const [showHirePerDay, setShowHirePerDay] = useState(false);
+
+  const [numberOfDays, setNumberOfDays] = useState(1);
+
+  const [startingDestination, setStartingDestination] = useState("");
+
+  const [startingDate, setStartingDate] = useState(new Date());
+
+  const [showStartingDate, setShowStartingDate] = useState(false);
+
   return (
     <div className="relative">
       <div className="fixed top-0 w-full bg-white z-20">
@@ -237,11 +276,11 @@ function TransportDetail({ userProfile, transport, inCart }) {
         ></Navbar>
       </div>
 
-      <div className="flex justify-around relative h-full w-full">
-        <div className="fixed left-2 md:w-[64%] h-[87vh] top-20 hidden md:block">
+      <div className="flex flex-col md:flex-row justify-around relative h-full w-full">
+        <div className="md:fixed left-2 md:w-[64%] h-[50vh] md:h-[87vh] top-20 md:block">
           <ImageGallery images={images}></ImageGallery>
         </div>
-        <div className="absolute hidden right-0 md:block top-20 md:w-[35%]">
+        <div className="md:absolute md:mt-0 mt-10 right-0 md:block top-20 md:w-[35%]">
           <div className="px-4">
             <div className="flex items-center gap-2">
               <h1 className="font-bold uppercase text-2xl">
@@ -264,9 +303,65 @@ function TransportDetail({ userProfile, transport, inCart }) {
               {transport.type_of_car}
             </h2>
 
-            <div className="mt-3 flex gap-0.5">
-              <Price stayPrice={transport.price}></Price>
-              <div className="text-xs mt-2.5">/10km</div>
+            <div className="mt-3 flex items-center gap-2">
+              {transport.price_per_day && (
+                <div className="flex gap-0.5">
+                  <Price stayPrice={transport.price_per_day}></Price>
+                  <div className="text-xs mt-2">{"/day"}</div>
+                </div>
+              )}
+
+              <div className="text-xl font-bold ">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                  role="img"
+                  className="w-4 h-4"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 24 24"
+                >
+                  <g
+                    fill="none"
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                  >
+                    <path
+                      strokeDasharray="10"
+                      strokeDashoffset="10"
+                      d="M12 12H3.5M12 12H20.5"
+                    >
+                      <animate
+                        fill="freeze"
+                        attributeName="stroke-dashoffset"
+                        dur="0.3s"
+                        values="10;0"
+                      />
+                    </path>
+                    <path
+                      strokeDasharray="6"
+                      strokeDashoffset="6"
+                      d="M3 12L7 16M21 12L17 16M3 12L7 8M21 12L17 8"
+                    >
+                      <animate
+                        fill="freeze"
+                        attributeName="stroke-dashoffset"
+                        begin="0.3s"
+                        dur="0.3s"
+                        values="6;0"
+                      />
+                    </path>
+                  </g>
+                </svg>
+              </div>
+
+              {transport.price && (
+                <div className="flex gap-0.5">
+                  <Price stayPrice={transport.price}></Price>
+                  <div className="text-xs mt-2">/10km</div>
+                </div>
+              )}
             </div>
 
             <div className="flex items-center mt-4 gap-2 justify-between self-start w-full">
@@ -997,111 +1092,449 @@ function TransportDetail({ userProfile, transport, inCart }) {
 
       <Modal
         showModal={showBasketPopup}
-        className={"h-[400px] w-[500px] "}
+        className={
+          "max-w-[600px] !py-2 !pt-4 " +
+          (state.swiperIndex === 1 && showDetailBasket
+            ? "h-[490px]"
+            : "h-[450px]")
+        }
         closeModal={() => {
           setShowBasketPopup(false);
         }}
       >
-        <div className="mb-4 ml-2 font-bold text-lg">Destination</div>
-        <Search
-          state={basketState}
-          setState={setBasketState}
-          setShowSearchDetails={setShowDetailBasket}
-        ></Search>
-
-        {showDetailBasket && (
-          <div>
-            <div className="mt-6 flex justify-between items-center">
-              <span className="font-bold">Total price</span>
-              <span>
-                <Price
-                  className="!text-base"
-                  stayPrice={
-                    ((mapRoute.distance * 0.001).toFixed(1) / 10) *
-                    transport.price
-                  }
-                ></Price>
-              </span>
-            </div>
-
-            <hr className="mt-2" />
-
-            <div className="mt-2 flex justify-between items-center">
-              <span className="font-bold">Total distance</span>
-              <span>{(mapRoute.distance * 0.001).toFixed(1)}km</span>
-            </div>
-            <Button
+        <Swiper
+          preventInteractionOnTransition={true}
+          allowTouchMove={false}
+          autoHeight={true}
+          onSlideChange={(swiper) =>
+            setState({
+              ...state,
+              swiperIndex: swiper.realIndex,
+            })
+          }
+          pagination={{
+            el: ".swiper-pagination-class",
+            clickable: true,
+          }}
+          navigation={{
+            nextEl: ".swiper-button-next-class",
+            prevEl: ".swiper-button-prev-class",
+          }}
+          className={"!h-full !w-full !overflow-y-scroll remove-scroll"}
+        >
+          <SwiperSlide>
+            <div
               onClick={() => {
-                addToBasket();
+                setShowStartingDate(false);
               }}
-              className="!bg-blue-600 mt-4 flex gap-1.5 !w-full !text-white !border-2 border-blue-600"
+              className="h-full"
             >
-              Add to basket
+              <SearchBar
+                location={startingDestination}
+                setLocation={setStartingDestination}
+              ></SearchBar>
+              <div className="mt-4 ml-4 relative">
+                <div className="flex gap-1 items-center">
+                  <span className="font-bold">Select a starting date</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 mt-0.5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
+                  </svg>
+                </div>
+                <div className="flex items-center gap-2 mb-3 mt-0.5">
+                  <span className="text-sm font-bold text-blue-600">
+                    {moment(startingDate).format("Do MMMM YYYY")}
+                  </span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                    role="img"
+                    className="h-4 w-4 text-blue-600 cursor-pointer"
+                    preserveAspectRatio="xMidYMid meet"
+                    viewBox="0 0 24 24"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowStartingDate(!showStartingDate);
+                    }}
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M8.707 19.707L18 10.414L13.586 6l-9.293 9.293a1.003 1.003 0 0 0-.263.464L3 21l5.242-1.03c.176-.044.337-.135.465-.263zM21 7.414a2 2 0 0 0 0-2.828L19.414 3a2 2 0 0 0-2.828 0L15 4.586L19.414 9L21 7.414z"
+                    />
+                  </svg>
+                </div>
+                <DatePicker
+                  date={startingDate}
+                  setDate={setStartingDate}
+                  showDate={showStartingDate}
+                  setShowDate={setShowStartingDate}
+                  disableDate={new Date()}
+                  className="!w-[400px] !top-[46px]"
+                ></DatePicker>
+                <div className="mb-1 font-semibold">Hire per day</div>
+
+                <div className="flex gap-3 items-center mb-4 mt-2">
+                  <div
+                    onClick={() => {
+                      if (numberOfDays > 1) {
+                        setNumberOfDays(numberOfDays - 1);
+                      }
+                    }}
+                    className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-gray-100 shadow-lg font-bold"
+                  >
+                    -
+                  </div>
+
+                  <div className="font-bold">
+                    {numberOfDays} {numberOfDays > 1 ? "days" : "day"}
+                  </div>
+                  <div
+                    onClick={() => {
+                      setNumberOfDays(numberOfDays + 1);
+                    }}
+                    className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-gray-100 shadow-lg font-bold"
+                  >
+                    +
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-6 ml-4 relative">
+                <div className="mb-1 font-semibold">Do you need a driver?</div>
+                <div className="flex gap-2 items-center">
+                  <Switch
+                    switchButton={needADriver}
+                    changeSwitchButtonState={() => {
+                      setNeedADriver(!needADriver);
+                    }}
+                    switchButtonContainer="!w-[55px] !h-6"
+                    switchButtonCircle="!w-5 !h-5 !bg-blue-500"
+                    slideColorClass="!bg-blue-200"
+                  ></Switch>
+                  {!needADriver && (
+                    <div
+                      onClick={() => {
+                        setNeedADriver(true);
+                      }}
+                      className="cursor-pointer text-sm"
+                    >
+                      no
+                    </div>
+                  )}
+                  {needADriver && (
+                    <div
+                      onClick={() => {
+                        setNeedADriver(false);
+                      }}
+                      className="cursor-pointer text-sm"
+                    >
+                      yes
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <Button className="!border border-blue-500 !w-full swiper-pagination-class swiper-button-next-class !py-2 !text-black mt-5 !bg-transparent">
+                <span>I need the ride per distance</span>
+              </Button>
+
+              {
+                <Button
+                  onClick={() => {
+                    addToBasket();
+                  }}
+                  disabled={startingDestination ? false : true}
+                  className={
+                    "!bg-blue-600 mt-4 flex gap-1.5 !w-full !text-white !border-2 border-blue-600 " +
+                    (!startingDestination
+                      ? "!bg-opacity-50 !border-blue-100"
+                      : "")
+                  }
+                >
+                  Add to basket
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 "
+                    viewBox="0 0 24 24"
+                    version="1.1"
+                  >
+                    <title>bag</title>
+                    <desc>Created with Sketch.</desc>
+                    <defs />
+                    <g
+                      id="Page-1"
+                      stroke="none"
+                      strokeWidth="1"
+                      fill="none"
+                      fillRule="evenodd"
+                    >
+                      <g
+                        id="Artboard-4"
+                        transform="translate(-620.000000, -291.000000)"
+                      >
+                        <g
+                          id="94"
+                          transform="translate(620.000000, 291.000000)"
+                        >
+                          <rect
+                            id="Rectangle-40"
+                            stroke="#fff"
+                            strokeWidth="2"
+                            x="4"
+                            y="7"
+                            width="16"
+                            height="16"
+                            rx="1"
+                          />
+                          <path
+                            d="M16,10 L16,5 C16,2.790861 14.209139,1 12,1 C9.790861,1 8,2.790861 8,5 L8,10"
+                            id="Oval-21"
+                            stroke="#fff"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                          />
+                          <rect
+                            id="Rectangle-41"
+                            fill="#fff"
+                            x="5"
+                            y="18"
+                            width="14"
+                            height="2"
+                          />
+                        </g>
+                      </g>
+                    </g>
+                  </svg>
+                  <div
+                    className={" " + (!addToBasketLoading ? "hidden" : "ml-2")}
+                  >
+                    <LoadingSpinerChase
+                      width={16}
+                      height={16}
+                      color="#000"
+                    ></LoadingSpinerChase>
+                  </div>
+                </Button>
+              }
+            </div>
+          </SwiperSlide>
+
+          <SwiperSlide>
+            <div className="swiper-pagination-class swiper-button-prev-class cursor-pointer flex items-center gap-1 mb-3">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 "
-                viewBox="0 0 24 24"
-                version="1.1"
+                className="h-6 w-6 text-blue-600"
+                viewBox="0 0 20 20"
+                fill="currentColor"
               >
-                <title>bag</title>
-                <desc>Created with Sketch.</desc>
-                <defs />
-                <g
-                  id="Page-1"
-                  stroke="none"
-                  strokeWidth="1"
-                  fill="none"
+                <path
                   fillRule="evenodd"
-                >
-                  <g
-                    id="Artboard-4"
-                    transform="translate(-620.000000, -291.000000)"
-                  >
-                    <g id="94" transform="translate(620.000000, 291.000000)">
-                      <rect
-                        id="Rectangle-40"
-                        stroke="#fff"
-                        strokeWidth="2"
-                        x="4"
-                        y="7"
-                        width="16"
-                        height="16"
-                        rx="1"
-                      />
-                      <path
-                        d="M16,10 L16,5 C16,2.790861 14.209139,1 12,1 C9.790861,1 8,2.790861 8,5 L8,10"
-                        id="Oval-21"
-                        stroke="#fff"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                      />
-                      <rect
-                        id="Rectangle-41"
-                        fill="#fff"
-                        x="5"
-                        y="18"
-                        width="14"
-                        height="2"
-                      />
-                    </g>
-                  </g>
-                </g>
+                  d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                  clipRule="evenodd"
+                />
               </svg>
-              <div className={" " + (!addToBasketLoading ? "hidden" : "ml-2")}>
-                <LoadingSpinerChase
-                  width={16}
-                  height={16}
-                  color="#000"
-                ></LoadingSpinerChase>
+              <h3 className="font-bold text-blue-600">Back</h3>
+            </div>
+            <div className="mb-2 ml-2 font-bold text-lg">Destination</div>
+            <Search
+              state={basketState}
+              setState={setBasketState}
+              setShowSearchDetails={setShowDetailBasket}
+            ></Search>
+
+            <div className="mt-2 ml-1 relative">
+              <div className="mt-4 relative">
+                <div className="flex gap-1 items-center">
+                  <span className="font-bold">Select a starting date</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 mt-0.5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
+                  </svg>
+                </div>
+                <div className="flex items-center gap-2 mb-3 mt-0.5">
+                  <span className="text-sm font-bold text-blue-600">
+                    {moment(startingDate).format("Do MMMM YYYY")}
+                  </span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                    role="img"
+                    className="h-4 w-4 text-blue-600 cursor-pointer"
+                    preserveAspectRatio="xMidYMid meet"
+                    viewBox="0 0 24 24"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowStartingDate(!showStartingDate);
+                    }}
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M8.707 19.707L18 10.414L13.586 6l-9.293 9.293a1.003 1.003 0 0 0-.263.464L3 21l5.242-1.03c.176-.044.337-.135.465-.263zM21 7.414a2 2 0 0 0 0-2.828L19.414 3a2 2 0 0 0-2.828 0L15 4.586L19.414 9L21 7.414z"
+                    />
+                  </svg>
+                </div>
+                <DatePicker
+                  date={startingDate}
+                  setDate={setStartingDate}
+                  showDate={showStartingDate}
+                  setShowDate={setShowStartingDate}
+                  disableDate={new Date()}
+                  className="!w-[400px] !top-[46px]"
+                ></DatePicker>
               </div>
-            </Button>
-          </div>
-        )}
+              <div className="mb-1 font-semibold">Do you need a driver?</div>
+              <div className="flex gap-2 items-center">
+                <Switch
+                  switchButton={needADriver}
+                  changeSwitchButtonState={() => {
+                    setNeedADriver(!needADriver);
+                  }}
+                  switchButtonContainer="!w-[55px] !h-6"
+                  switchButtonCircle="!w-5 !h-5 !bg-blue-500"
+                  slideColorClass="!bg-blue-200"
+                ></Switch>
+                {!needADriver && (
+                  <div
+                    onClick={() => {
+                      setNeedADriver(true);
+                    }}
+                    className="cursor-pointer text-sm mb-1"
+                  >
+                    no
+                  </div>
+                )}
+                {needADriver && (
+                  <div
+                    onClick={() => {
+                      setNeedADriver(false);
+                    }}
+                    className="cursor-pointer text-sm mb-1"
+                  >
+                    yes
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {showDetailBasket && (
+              <div>
+                <div className="mt-6 flex justify-between items-center">
+                  <span className="font-bold">Total price</span>
+                  <span>
+                    <Price
+                      className="!text-base"
+                      stayPrice={
+                        ((mapRoute.distance * 0.001).toFixed(1) / 10) *
+                        transport.price
+                      }
+                    ></Price>
+                  </span>
+                </div>
+
+                <hr className="mt-2" />
+
+                <div className="mt-2 flex justify-between items-center">
+                  <span className="font-bold">Total distance</span>
+                  <span>{(mapRoute.distance * 0.001).toFixed(1)}km</span>
+                </div>
+                <Button
+                  onClick={() => {
+                    addToBasket();
+                  }}
+                  className="!bg-blue-600 mt-4 flex gap-1.5 !w-full !text-white !border-2 border-blue-600"
+                >
+                  Add to basket
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 "
+                    viewBox="0 0 24 24"
+                    version="1.1"
+                  >
+                    <title>bag</title>
+                    <desc>Created with Sketch.</desc>
+                    <defs />
+                    <g
+                      id="Page-1"
+                      stroke="none"
+                      strokeWidth="1"
+                      fill="none"
+                      fillRule="evenodd"
+                    >
+                      <g
+                        id="Artboard-4"
+                        transform="translate(-620.000000, -291.000000)"
+                      >
+                        <g
+                          id="94"
+                          transform="translate(620.000000, 291.000000)"
+                        >
+                          <rect
+                            id="Rectangle-40"
+                            stroke="#fff"
+                            strokeWidth="2"
+                            x="4"
+                            y="7"
+                            width="16"
+                            height="16"
+                            rx="1"
+                          />
+                          <path
+                            d="M16,10 L16,5 C16,2.790861 14.209139,1 12,1 C9.790861,1 8,2.790861 8,5 L8,10"
+                            id="Oval-21"
+                            stroke="#fff"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                          />
+                          <rect
+                            id="Rectangle-41"
+                            fill="#fff"
+                            x="5"
+                            y="18"
+                            width="14"
+                            height="2"
+                          />
+                        </g>
+                      </g>
+                    </g>
+                  </svg>
+                  <div
+                    className={" " + (!addToBasketLoading ? "hidden" : "ml-2")}
+                  >
+                    <LoadingSpinerChase
+                      width={16}
+                      height={16}
+                      color="#000"
+                    ></LoadingSpinerChase>
+                  </div>
+                </Button>
+              </div>
+            )}
+          </SwiperSlide>
+        </Swiper>
       </Modal>
 
       <div>
         <ClientOnly>
-          <div>Add to cart</div>
           <Share
             showShare={showShare}
             type_of_stay="Transport"
