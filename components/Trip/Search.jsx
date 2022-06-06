@@ -81,7 +81,6 @@ const Search = ({ setLocation, location }) => {
               )}
             </div>
           </div>
-
           {autoCompleteSearch.length > 0 && (
             <div className="absolute top-full left-0 z-30 rounded-b-xl w-full py-2 shadow-md bg-white">
               {autoCompleteSearch.map((item, index) => (
