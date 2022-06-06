@@ -38,7 +38,7 @@ const ImageGallery = ({ images }) => {
       >
         {images.map((image, index) => (
           <SwiperSlide key={index}>
-            <div className="h-full rounded-xl w-full overflow-hidden relative flex-shrink-0 flex-grow-0">
+            <div className="h-full md:rounded-xl w-full overflow-hidden relative flex-shrink-0 flex-grow-0">
               <Image
                 src={image}
                 className="w-full h-full object-cover"
@@ -101,7 +101,7 @@ const ImageGallery = ({ images }) => {
         {images.map((image, index) => (
           <SwiperSlide
             key={index}
-            className="!w-[25%] !h-full rounded-xl !overflow-hidden select-none"
+            className="!w-[25%] !h-full md:rounded-xl !overflow-hidden select-none"
           >
             <div className="h-full w-full relative flex-shrink-0 flex-grow-0">
               <Image

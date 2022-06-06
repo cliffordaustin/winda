@@ -218,8 +218,9 @@ body {
   right: 0;
   left: 0;
   background-color: black;
-  border-radius: 0.75rem;
   opacity: 0.6;
+
+  @apply rounded-none md:rounded-xl;
 }
 
 .image-picker-container .swiper-slide-thumb-active {

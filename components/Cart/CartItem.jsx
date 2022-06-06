@@ -583,23 +583,25 @@ const CartItem = ({
                       .{" "}
                     </div>
                   )}
-                  {userNeedADriver && (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      aria-hidden="true"
-                      role="img"
-                      className="w-5 h-5 text-blue-700"
-                      preserveAspectRatio="xMidYMid meet"
-                      viewBox="0 0 48 48"
-                    >
-                      <path
-                        fill="currentColor"
-                        fillRule="evenodd"
-                        d="M15 9.5c0-.438 4.516-3.5 9-3.5s9 3.063 9 3.5c0 1.56-.166 2.484-.306 2.987c-.093.33-.402.513-.745.513H16.051c-.343 0-.652-.183-.745-.513C15.166 11.984 15 11.06 15 9.5Zm7.5-.5a1 1 0 1 0 0 2h3a1 1 0 0 0 0-2h-3Zm-6.462 10.218c-3.33-1.03-2.49-2.87-1.22-4.218H33.46c1.016 1.298 1.561 3.049-1.51 4.097a8 8 0 1 1-15.912.12Zm7.69.782c2.642 0 4.69-.14 6.26-.384a6 6 0 1 1-11.98.069c1.463.202 3.338.315 5.72.315Zm8.689 14.6A9.992 9.992 0 0 0 24 30a9.992 9.992 0 0 0-8.42 4.602a2.49 2.49 0 0 0-1.447-1.05l-1.932-.517a2.5 2.5 0 0 0-3.062 1.767L8.363 37.7a2.5 2.5 0 0 0 1.768 3.062l1.931.518A2.492 2.492 0 0 0 14 41.006A1 1 0 0 0 16 41v-1c0-.381.027-.756.078-1.123l5.204 1.395a3 3 0 0 0 5.436 0l5.204-1.395c.051.367.078.742.078 1.123v1a1 1 0 0 0 2 .01c.56.336 1.252.453 1.933.27l1.932-.517a2.5 2.5 0 0 0 1.768-3.062l-.777-2.898a2.5 2.5 0 0 0-3.062-1.767l-1.932.517a2.49 2.49 0 0 0-1.445 1.046Zm-15.814 2.347A8.008 8.008 0 0 1 23 32.062v4.109a3.007 3.007 0 0 0-1.88 1.987l-4.517-1.21Zm14.794 0A8.009 8.009 0 0 0 25 32.062v4.109c.904.32 1.61 1.06 1.88 1.987l4.517-1.21ZM24 40a1 1 0 1 0 0-2a1 1 0 0 0 0 2Z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  )}
+                  <ClientOnly>
+                    {userNeedADriver && (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true"
+                        role="img"
+                        className="w-5 h-5 text-blue-700"
+                        preserveAspectRatio="xMidYMid meet"
+                        viewBox="0 0 48 48"
+                      >
+                        <path
+                          fill="currentColor"
+                          fillRule="evenodd"
+                          d="M15 9.5c0-.438 4.516-3.5 9-3.5s9 3.063 9 3.5c0 1.56-.166 2.484-.306 2.987c-.093.33-.402.513-.745.513H16.051c-.343 0-.652-.183-.745-.513C15.166 11.984 15 11.06 15 9.5Zm7.5-.5a1 1 0 1 0 0 2h3a1 1 0 0 0 0-2h-3Zm-6.462 10.218c-3.33-1.03-2.49-2.87-1.22-4.218H33.46c1.016 1.298 1.561 3.049-1.51 4.097a8 8 0 1 1-15.912.12Zm7.69.782c2.642 0 4.69-.14 6.26-.384a6 6 0 1 1-11.98.069c1.463.202 3.338.315 5.72.315Zm8.689 14.6A9.992 9.992 0 0 0 24 30a9.992 9.992 0 0 0-8.42 4.602a2.49 2.49 0 0 0-1.447-1.05l-1.932-.517a2.5 2.5 0 0 0-3.062 1.767L8.363 37.7a2.5 2.5 0 0 0 1.768 3.062l1.931.518A2.492 2.492 0 0 0 14 41.006A1 1 0 0 0 16 41v-1c0-.381.027-.756.078-1.123l5.204 1.395a3 3 0 0 0 5.436 0l5.204-1.395c.051.367.078.742.078 1.123v1a1 1 0 0 0 2 .01c.56.336 1.252.453 1.933.27l1.932-.517a2.5 2.5 0 0 0 1.768-3.062l-.777-2.898a2.5 2.5 0 0 0-3.062-1.767l-1.932.517a2.49 2.49 0 0 0-1.445 1.046Zm-15.814 2.347A8.008 8.008 0 0 1 23 32.062v4.109a3.007 3.007 0 0 0-1.88 1.987l-4.517-1.21Zm14.794 0A8.009 8.009 0 0 0 25 32.062v4.109c.904.32 1.61 1.06 1.88 1.987l4.517-1.21ZM24 40a1 1 0 1 0 0-2a1 1 0 0 0 0 2Z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    )}
+                  </ClientOnly>
                 </div>
               </ClientOnly>
             </div>
@@ -677,122 +679,126 @@ const CartItem = ({
               </div>
             )}
 
-            {!checkoutInfo && stayPage && (
-              <div className="text-gray-500 flex gap-1 text-sm truncate flex-wrap">
-                {stay.capacity && (
-                  <div className="flex items-center gap-0.5">
-                    <svg
-                      className="w-3 h-3"
-                      xmlns="http://www.w3.org/2000/svg"
-                      aria-hidden="true"
-                      role="img"
-                      width="1em"
-                      height="1em"
-                      preserveAspectRatio="xMidYMid meet"
-                      viewBox="0 0 36 36"
-                    >
-                      <path
-                        fill="currentColor"
-                        d="M12 16.14h-.87a8.67 8.67 0 0 0-6.43 2.52l-.24.28v8.28h4.08v-4.7l.55-.62l.25-.29a11 11 0 0 1 4.71-2.86A6.59 6.59 0 0 1 12 16.14Z"
-                      />
-                      <path
-                        fill="currentColor"
-                        d="M31.34 18.63a8.67 8.67 0 0 0-6.43-2.52a10.47 10.47 0 0 0-1.09.06a6.59 6.59 0 0 1-2 2.45a10.91 10.91 0 0 1 5 3l.25.28l.54.62v4.71h3.94v-8.32Z"
-                      />
-                      <path
-                        fill="currentColor"
-                        d="M11.1 14.19h.31a6.45 6.45 0 0 1 3.11-6.29a4.09 4.09 0 1 0-3.42 6.33Z"
-                      />
-                      <path
-                        fill="currentColor"
-                        d="M24.43 13.44a6.54 6.54 0 0 1 0 .69a4.09 4.09 0 0 0 .58.05h.19A4.09 4.09 0 1 0 21.47 8a6.53 6.53 0 0 1 2.96 5.44Z"
-                      />
-                      <circle
-                        cx="17.87"
-                        cy="13.45"
-                        r="4.47"
-                        fill="currentColor"
-                      />
-                      <path
-                        fill="currentColor"
-                        d="M18.11 20.3A9.69 9.69 0 0 0 11 23l-.25.28v6.33a1.57 1.57 0 0 0 1.6 1.54h11.49a1.57 1.57 0 0 0 1.6-1.54V23.3l-.24-.3a9.58 9.58 0 0 0-7.09-2.7Z"
-                      />
-                      <path fill="none" d="M0 0h36v36H0z" />
-                    </svg>
-                    <span>{stay.capacity} Guests</span>
-                  </div>
-                )}
-                {stay.rooms && (
-                  <div className="flex items-center gap-0.5">
-                    <svg
-                      className="w-3 h-3"
-                      xmlns="http://www.w3.org/2000/svg"
-                      aria-hidden="true"
-                      role="img"
-                      width="1em"
-                      height="1em"
-                      preserveAspectRatio="xMidYMid meet"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        fill="currentColor"
-                        d="M5 5v14a1 1 0 0 0 1 1h3v-2H7V6h2V4H6a1 1 0 0 0-1 1zm14.242-.97l-8-2A1 1 0 0 0 10 3v18a.998.998 0 0 0 1.242.97l8-2A1 1 0 0 0 20 19V5a1 1 0 0 0-.758-.97zM15 12.188a1.001 1.001 0 0 1-2 0v-.377a1 1 0 1 1 2 .001v.376z"
-                      />
-                    </svg>
+            <ClientOnly>
+              {!checkoutInfo && stayPage && (
+                <div className="text-gray-500 flex gap-1 text-sm truncate flex-wrap">
+                  {stay.capacity && (
+                    <div className="flex items-center gap-0.5">
+                      <svg
+                        className="w-3 h-3"
+                        xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true"
+                        role="img"
+                        width="1em"
+                        height="1em"
+                        preserveAspectRatio="xMidYMid meet"
+                        viewBox="0 0 36 36"
+                      >
+                        <path
+                          fill="currentColor"
+                          d="M12 16.14h-.87a8.67 8.67 0 0 0-6.43 2.52l-.24.28v8.28h4.08v-4.7l.55-.62l.25-.29a11 11 0 0 1 4.71-2.86A6.59 6.59 0 0 1 12 16.14Z"
+                        />
+                        <path
+                          fill="currentColor"
+                          d="M31.34 18.63a8.67 8.67 0 0 0-6.43-2.52a10.47 10.47 0 0 0-1.09.06a6.59 6.59 0 0 1-2 2.45a10.91 10.91 0 0 1 5 3l.25.28l.54.62v4.71h3.94v-8.32Z"
+                        />
+                        <path
+                          fill="currentColor"
+                          d="M11.1 14.19h.31a6.45 6.45 0 0 1 3.11-6.29a4.09 4.09 0 1 0-3.42 6.33Z"
+                        />
+                        <path
+                          fill="currentColor"
+                          d="M24.43 13.44a6.54 6.54 0 0 1 0 .69a4.09 4.09 0 0 0 .58.05h.19A4.09 4.09 0 1 0 21.47 8a6.53 6.53 0 0 1 2.96 5.44Z"
+                        />
+                        <circle
+                          cx="17.87"
+                          cy="13.45"
+                          r="4.47"
+                          fill="currentColor"
+                        />
+                        <path
+                          fill="currentColor"
+                          d="M18.11 20.3A9.69 9.69 0 0 0 11 23l-.25.28v6.33a1.57 1.57 0 0 0 1.6 1.54h11.49a1.57 1.57 0 0 0 1.6-1.54V23.3l-.24-.3a9.58 9.58 0 0 0-7.09-2.7Z"
+                        />
+                        <path fill="none" d="M0 0h36v36H0z" />
+                      </svg>
+                      <span>{stay.capacity} Guests</span>
+                    </div>
+                  )}
+                  {stay.rooms && (
+                    <div className="flex items-center gap-0.5">
+                      <svg
+                        className="w-3 h-3"
+                        xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true"
+                        role="img"
+                        width="1em"
+                        height="1em"
+                        preserveAspectRatio="xMidYMid meet"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          fill="currentColor"
+                          d="M5 5v14a1 1 0 0 0 1 1h3v-2H7V6h2V4H6a1 1 0 0 0-1 1zm14.242-.97l-8-2A1 1 0 0 0 10 3v18a.998.998 0 0 0 1.242.97l8-2A1 1 0 0 0 20 19V5a1 1 0 0 0-.758-.97zM15 12.188a1.001 1.001 0 0 1-2 0v-.377a1 1 0 1 1 2 .001v.376z"
+                        />
+                      </svg>
 
-                    <span>{stay.rooms} rm</span>
-                  </div>
-                )}
-              </div>
-            )}
+                      <span>{stay.rooms} rm</span>
+                    </div>
+                  )}
+                </div>
+              )}
+            </ClientOnly>
 
-            {!checkoutInfo && activitiesPage && (
-              <div className="text-gray-500 flex gap-1 text-sm truncate flex-wrap">
-                {activity.capacity && (
-                  <div className="flex items-center gap-0.5">
-                    <svg
-                      className="w-3 h-3"
-                      xmlns="http://www.w3.org/2000/svg"
-                      aria-hidden="true"
-                      role="img"
-                      width="1em"
-                      height="1em"
-                      preserveAspectRatio="xMidYMid meet"
-                      viewBox="0 0 36 36"
-                    >
-                      <path
-                        fill="currentColor"
-                        d="M12 16.14h-.87a8.67 8.67 0 0 0-6.43 2.52l-.24.28v8.28h4.08v-4.7l.55-.62l.25-.29a11 11 0 0 1 4.71-2.86A6.59 6.59 0 0 1 12 16.14Z"
-                      />
-                      <path
-                        fill="currentColor"
-                        d="M31.34 18.63a8.67 8.67 0 0 0-6.43-2.52a10.47 10.47 0 0 0-1.09.06a6.59 6.59 0 0 1-2 2.45a10.91 10.91 0 0 1 5 3l.25.28l.54.62v4.71h3.94v-8.32Z"
-                      />
-                      <path
-                        fill="currentColor"
-                        d="M11.1 14.19h.31a6.45 6.45 0 0 1 3.11-6.29a4.09 4.09 0 1 0-3.42 6.33Z"
-                      />
-                      <path
-                        fill="currentColor"
-                        d="M24.43 13.44a6.54 6.54 0 0 1 0 .69a4.09 4.09 0 0 0 .58.05h.19A4.09 4.09 0 1 0 21.47 8a6.53 6.53 0 0 1 2.96 5.44Z"
-                      />
-                      <circle
-                        cx="17.87"
-                        cy="13.45"
-                        r="4.47"
-                        fill="currentColor"
-                      />
-                      <path
-                        fill="currentColor"
-                        d="M18.11 20.3A9.69 9.69 0 0 0 11 23l-.25.28v6.33a1.57 1.57 0 0 0 1.6 1.54h11.49a1.57 1.57 0 0 0 1.6-1.54V23.3l-.24-.3a9.58 9.58 0 0 0-7.09-2.7Z"
-                      />
-                      <path fill="none" d="M0 0h36v36H0z" />
-                    </svg>
-                    <span>{activity.capacity} Guests</span>
-                  </div>
-                )}
-              </div>
-            )}
+            <ClientOnly>
+              {!checkoutInfo && activitiesPage && (
+                <div className="text-gray-500 flex gap-1 text-sm truncate flex-wrap">
+                  {activity.capacity && (
+                    <div className="flex items-center gap-0.5">
+                      <svg
+                        className="w-3 h-3"
+                        xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true"
+                        role="img"
+                        width="1em"
+                        height="1em"
+                        preserveAspectRatio="xMidYMid meet"
+                        viewBox="0 0 36 36"
+                      >
+                        <path
+                          fill="currentColor"
+                          d="M12 16.14h-.87a8.67 8.67 0 0 0-6.43 2.52l-.24.28v8.28h4.08v-4.7l.55-.62l.25-.29a11 11 0 0 1 4.71-2.86A6.59 6.59 0 0 1 12 16.14Z"
+                        />
+                        <path
+                          fill="currentColor"
+                          d="M31.34 18.63a8.67 8.67 0 0 0-6.43-2.52a10.47 10.47 0 0 0-1.09.06a6.59 6.59 0 0 1-2 2.45a10.91 10.91 0 0 1 5 3l.25.28l.54.62v4.71h3.94v-8.32Z"
+                        />
+                        <path
+                          fill="currentColor"
+                          d="M11.1 14.19h.31a6.45 6.45 0 0 1 3.11-6.29a4.09 4.09 0 1 0-3.42 6.33Z"
+                        />
+                        <path
+                          fill="currentColor"
+                          d="M24.43 13.44a6.54 6.54 0 0 1 0 .69a4.09 4.09 0 0 0 .58.05h.19A4.09 4.09 0 1 0 21.47 8a6.53 6.53 0 0 1 2.96 5.44Z"
+                        />
+                        <circle
+                          cx="17.87"
+                          cy="13.45"
+                          r="4.47"
+                          fill="currentColor"
+                        />
+                        <path
+                          fill="currentColor"
+                          d="M18.11 20.3A9.69 9.69 0 0 0 11 23l-.25.28v6.33a1.57 1.57 0 0 0 1.6 1.54h11.49a1.57 1.57 0 0 0 1.6-1.54V23.3l-.24-.3a9.58 9.58 0 0 0-7.09-2.7Z"
+                        />
+                        <path fill="none" d="M0 0h36v36H0z" />
+                      </svg>
+                      <span>{activity.capacity} Guests</span>
+                    </div>
+                  )}
+                </div>
+              )}
+            </ClientOnly>
             <div className="font-bold text-sm truncate mt-1">
               {activitiesPage
                 ? activity.location
@@ -801,19 +807,22 @@ const CartItem = ({
                 : ""}
             </div>
 
-            {!checkoutInfo && stayPage && (
-              <div className="flex items-center gap-1 text-xs mt-1 font-bold truncate flex-wrap">
-                <span>
-                  {moment(from_date).format("MMM DD")} -{" "}
-                  {moment(to_date).format("MMM DD")}
-                </span>
-                <span className="font-bold text-xl -mt-3">.</span>
-                <span>
-                  {new Date(to_date).getDate() - new Date(from_date).getDate()}{" "}
-                  nights
-                </span>
-              </div>
-            )}
+            <ClientOnly>
+              {!checkoutInfo && stayPage && (
+                <div className="flex items-center gap-1 text-xs mt-1 font-bold truncate flex-wrap">
+                  <span>
+                    {moment(from_date).format("MMM DD")} -{" "}
+                    {moment(to_date).format("MMM DD")}
+                  </span>
+                  <span className="font-bold text-xl -mt-3">.</span>
+                  <span>
+                    {new Date(to_date).getDate() -
+                      new Date(from_date).getDate()}{" "}
+                    nights
+                  </span>
+                </div>
+              )}
+            </ClientOnly>
 
             {transportPage && (
               <div className="flex items-center gap-1 text-xs my-1 font-bold truncate flex-wrap">
@@ -823,16 +832,18 @@ const CartItem = ({
               </div>
             )}
 
-            {!checkoutInfo && activitiesPage && (
-              <div className="flex items-center gap-1 text-xs mt-1 font-bold truncate flex-wrap">
-                <span>{moment(from_date).format("MMM DD")}</span>
-                <span className="font-bold text-xl -mt-3">.</span>
-                <span>
-                  {number_of_people}{" "}
-                  {number_of_people > 1 ? "People" : "Person"}
-                </span>
-              </div>
-            )}
+            <ClientOnly>
+              {!checkoutInfo && activitiesPage && (
+                <div className="flex items-center gap-1 text-xs mt-1 font-bold truncate flex-wrap">
+                  <span>{moment(from_date).format("MMM DD")}</span>
+                  <span className="font-bold text-xl -mt-3">.</span>
+                  <span>
+                    {number_of_people}{" "}
+                    {number_of_people > 1 ? "People" : "Person"}
+                  </span>
+                </div>
+              )}
+            </ClientOnly>
 
             {checkoutInfo && (
               <div className="font-bold text-sm truncate mt-1">

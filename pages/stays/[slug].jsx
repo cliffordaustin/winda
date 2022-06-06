@@ -603,7 +603,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
           </div>
           <div
             className={
-              " h-fit w-fit border border-gray-200 rounded-lg order-1 md:order-2 " +
+              " h-fit w-full md:w-fit border border-gray-200 rounded-lg order-1 md:order-2 " +
               (!inCart ? "md:-mt-32" : "hidden")
             }
           >

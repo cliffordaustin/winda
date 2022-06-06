@@ -75,7 +75,9 @@ function Carousel({ imageClass = "", className = "", images }) {
         ))}
 
         <div
-          onClick={() => {}}
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
           className={
             "absolute flex cursor-pointer items-center justify-center top-2/4 z-20 left-3 -translate-y-2/4 swiper-pagination swiper-button-prev w-8 -mt-4 h-8 rounded-full bg-white shadow-lg " +
             (state.swiperIndex === 0 ? "invisible" : "")
@@ -95,7 +97,9 @@ function Carousel({ imageClass = "", className = "", images }) {
           </svg>
         </div>
         <div
-          onClick={() => {}}
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
           className={
             "absolute cursor-pointer flex items-center justify-center top-2/4 z-20 right-3 -translate-y-2/4 swiper-pagination swiper-button-next w-8 h-8 -mt-4 rounded-full bg-white shadow-lg " +
             (state.endOfSlide || images.length === 1 ? "invisible" : "")

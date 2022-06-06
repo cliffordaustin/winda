@@ -227,7 +227,17 @@ function TransportDetail({ userProfile, transport, inCart }) {
         return val.slug === transport.slug;
       });
       if (!exist) {
-        data.push({ slug: transport.slug, itemCategory: "transport" });
+        data.push({
+          slug: transport.slug,
+          itemCategory: "transport",
+          starting_point:
+            state.swiperIndex === 0 ? startingDestination : basketState.from,
+          destination: state.swiperIndex === 0 ? "" : basketState.to,
+          distance: state.swiperIndex === 0 ? null : mapRoute.distance,
+          user_need_a_driver: needADriver,
+          from_date: startingDate,
+          number_of_days: state.swiperIndex === 0 ? numberOfDays : null,
+        });
         Cookies.set("cart", JSON.stringify(data));
         location.reload();
       }
@@ -1566,7 +1576,7 @@ export async function getServerSideProps(context) {
     const token = getToken(context);
     let cart = getCart(context);
 
-    const stay = await axios.get(
+    const transport = await axios.get(
       `${process.env.NEXT_PUBLIC_baseURL}/transport/${context.query.slug}/`
     );
 

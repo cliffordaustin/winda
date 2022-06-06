@@ -65,7 +65,14 @@ export const signup = (payload) => async (dispatch) => {
           await axios
             .post(
               `${process.env.NEXT_PUBLIC_baseURL}/transport/${item.slug}/add-to-cart/`,
-              {},
+              {
+                starting_point: item.starting_point,
+                destination: item.destination,
+                from_date: item.from_date,
+                distance: item.distance,
+                user_need_a_driver: item.user_need_a_driver,
+                number_of_days: item.number_of_days,
+              },
               {
                 headers: {
                   Authorization: "Token " + response.data.key,

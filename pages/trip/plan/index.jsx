@@ -1229,16 +1229,103 @@ function PlanTrip({
             </div>
             <div className="absolute right-0 h-full xsMax:w-full px-4 w-[62%]">
               {order.length > 0 && (
-                <div className="mt-3 mb-4 text-lg font-bold">
+                <div className="mt-3 mb-4 flex items-center gap-2 text-lg font-bold">
                   <span>Your itinerary</span>
-                  <BottomTooltip
+
+                  <TopTooltip
                     showTooltip={itineraryTooltip}
+                    className="text-sm !w-[240px] !font-normal"
                     changeTooltipState={() => {
                       setItineraryTooltip(!itineraryTooltip);
                     }}
                   >
-                    This is the tooltip
-                  </BottomTooltip>
+                    {userTrips.starting_point && `Your trip starts at `}
+                    {userTrips.starting_point && (
+                      <span className="font-bold">
+                        {userTrips.starting_point},
+                      </span>
+                    )}
+                    from{" "}
+                    <span className="font-bold">
+                      {order.length > 0 &&
+                        moment(
+                          order[0].stay && !order[0].activity
+                            ? order[0].from_date
+                            : order[0].activity && !order[0].stay
+                            ? order[0].activity_from_date
+                            : order[0].stay &&
+                              order[0].activity &&
+                              order[0].activity_from_date < order[0].from_date
+                            ? order[0].activity_from_date
+                            : order[0].stay &&
+                              order[0].activity &&
+                              order[0].activity_from_date > order[0].from_date
+                            ? order[0].from_date
+                            : order[0].from_date
+                        ).format("MMMM Do")}{" "}
+                      to{" "}
+                      {order.length > 0 &&
+                        moment(
+                          order[order.length - 1].stay &&
+                            !order[order.length - 1].activity
+                            ? new Date(
+                                new Date(
+                                  order[order.length - 1].from_date
+                                ).setDate(
+                                  new Date(
+                                    order[order.length - 1].from_date
+                                  ).getDate() + order[order.length - 1].nights
+                                )
+                              ).toISOString()
+                            : !order[order.length - 1].stay &&
+                              order[order.length - 1].activity
+                            ? new Date(
+                                new Date(
+                                  order[order.length - 1].activity_from_date
+                                ).getDate()
+                              ).toISOString()
+                            : order[order.length - 1].stay &&
+                              order[order.length - 1].activity &&
+                              new Date(
+                                new Date(
+                                  order[order.length - 1].from_date
+                                ).setDate(
+                                  new Date(
+                                    order[order.length - 1].from_date
+                                  ).getDate() + order[order.length - 1].nights
+                                )
+                              ) >
+                                new Date(
+                                  order[order.length - 1].activity_from_date
+                                )
+                            ? new Date(
+                                new Date(
+                                  order[order.length - 1].from_date
+                                ).setDate(
+                                  new Date(
+                                    order[order.length - 1].from_date
+                                  ).getDate() + order[order.length - 1].nights
+                                )
+                              ).toISOString()
+                            : order[order.length - 1].stay &&
+                              order[order.length - 1].activity &&
+                              new Date(
+                                order[order.length - 1].activity_from_date
+                              ) >
+                                new Date(
+                                  new Date(
+                                    order[order.length - 1].from_date
+                                  ).setDate(
+                                    new Date(
+                                      order[order.length - 1].from_date
+                                    ).getDate() + order[order.length - 1].nights
+                                  )
+                                )
+                            ? order[order.length - 1].activity_from_date
+                            : ""
+                        ).format("MMMM Do")}
+                    </span>
+                  </TopTooltip>
                 </div>
               )}
               {order.length > 0 && (
@@ -1262,10 +1349,16 @@ function PlanTrip({
                     <div>
                       <p className="text-sm font-medium">Day 1</p>
                       <h1 className="font-bold">Starting point</h1>
-                      <h1 className="font-medium mt-2 text-sm">
-                        {userTrips.starting_point ||
-                          startingLocationSelected.value}
-                      </h1>
+                      {userTrips.starting_point && (
+                        <h1 className="font-medium mt-2 text-sm">
+                          {userTrips.starting_point}
+                        </h1>
+                      )}
+                      {!userTrips.starting_point && (
+                        <h1 className="font-medium mt-2 text-red-500 text-sm">
+                          where are you coming from?
+                        </h1>
+                      )}
                     </div>
 
                     <div

@@ -48,27 +48,54 @@ const Cart = ({
 
   const totalPrice = () => {
     let price = 0;
-    cart.forEach((item) => {
-      price += item.price;
-    });
-    activitiesCart.forEach((item) => {
-      price += item.price;
-    });
-    allItemsInTransportCart.forEach((item) => {
-      if (!item.number_of_days) {
-        price +=
-          ((item.distance * 0.001).toFixed(1) / 10) * item.transport.price +
-          (item.user_need_a_driver
-            ? item.transport.additional_price_with_a_driver
-            : 0);
-      } else if (item.number_of_days) {
-        price +=
-          item.number_of_days * item.transport.price_per_day +
-          (item.user_need_a_driver
-            ? item.transport.additional_price_with_a_driver
-            : 0);
+    cart.forEach((item, index) => {
+      if (Cookies.get("token")) {
+        const nights =
+          new Date(allItemsInCart[index].to_date).getDate() -
+          new Date(allItemsInCart[index].from_date).getDate();
+        price += item.price * nights;
+      } else if (!Cookies.get("token") && Cookies.get("cart")) {
+        const nights =
+          new Date(item.to_date).getDate() - new Date(item.from_date).getDate();
+        price += item.price * nights;
       }
     });
+    activitiesCart.forEach((item, index) => {
+      if (Cookies.get("token")) {
+        price += item.price * allItemsInActivityCart[index].number_of_people;
+      } else if (!Cookies.get("token") && Cookies.get("cart")) {
+        price += item.price * item.number_of_people;
+      }
+    });
+    if (Cookies.get("token")) {
+      allItemsInTransportCart.forEach((item) => {
+        if (!item.number_of_days) {
+          price +=
+            ((item.distance * 0.001).toFixed(1) / 10) * item.transport.price +
+            (item.user_need_a_driver
+              ? item.transport.additional_price_with_a_driver
+              : 0);
+        } else if (item.number_of_days) {
+          price +=
+            item.number_of_days * item.transport.price_per_day +
+            (item.user_need_a_driver
+              ? item.transport.additional_price_with_a_driver
+              : 0);
+        }
+      });
+    } else if (!Cookies.get("token") && Cookies.get("cart")) {
+      transportCart.forEach((item) => {
+        if (!item.number_of_days) {
+          price +=
+            ((item.distance * 0.001).toFixed(1) / 10) * item.price +
+            (item.user_need_a_driver ? item.additional_price_with_a_driver : 0);
+        } else if (item.number_of_days) {
+          price +=
+            item.number_of_days * item.price_per_day +
+            (item.user_need_a_driver ? item.additional_price_with_a_driver : 0);
+        }
+      });
+    }
     return parseFloat(price);
   };
 
@@ -209,18 +236,30 @@ const Cart = ({
 
   const priceOfTransportCart = (item) => {
     let price = 0;
-    if (!item.number_of_days) {
-      price +=
-        ((item.distance * 0.001).toFixed(1) / 10) * item.transport.price +
-        (item.user_need_a_driver
-          ? item.transport.additional_price_with_a_driver
-          : 0);
-    } else if (item.number_of_days) {
-      price +=
-        item.number_of_days * item.transport.price_per_day +
-        (item.user_need_a_driver
-          ? item.transport.additional_price_with_a_driver
-          : 0);
+    if (Cookies.get("token")) {
+      if (!item.number_of_days) {
+        price +=
+          ((item.distance * 0.001).toFixed(1) / 10) * item.transport.price +
+          (item.user_need_a_driver
+            ? item.transport.additional_price_with_a_driver
+            : 0);
+      } else if (item.number_of_days) {
+        price +=
+          item.number_of_days * item.transport.price_per_day +
+          (item.user_need_a_driver
+            ? item.transport.additional_price_with_a_driver
+            : 0);
+      }
+    } else if (!Cookies.get("token") && Cookies.get("cart")) {
+      if (!item.number_of_days) {
+        price +=
+          ((item.distance * 0.001).toFixed(1) / 10) * item.price +
+          (item.user_need_a_driver ? item.additional_price_with_a_driver : 0);
+      } else if (item.number_of_days) {
+        price +=
+          item.number_of_days * item.price_per_day +
+          (item.user_need_a_driver ? item.additional_price_with_a_driver : 0);
+      }
     }
     return price;
   };
@@ -320,19 +359,29 @@ const Cart = ({
             </div>
           )}
           <div className="flex flex-wrap mb-5 justify-between">
-            {cart.map((item, index) => (
-              <div key={index} className="md:w-[50%] w-full">
-                <CartItem
-                  cartId={
-                    Cookies.get("token") ? allItemsInCart[index].id : null
-                  }
-                  stay={item}
-                  from_date={allItemsInCart[index].from_date}
-                  to_date={allItemsInCart[index].to_date}
-                  stayPage={true}
-                ></CartItem>
-              </div>
-            ))}
+            {cart.map((item, index) => {
+              return (
+                <div key={index} className="md:w-[50%] w-full">
+                  <CartItem
+                    cartId={
+                      Cookies.get("token") ? allItemsInCart[index].id : null
+                    }
+                    stay={item}
+                    from_date={
+                      Cookies.get("token")
+                        ? allItemsInCart[index].from_date
+                        : item.from_date
+                    }
+                    to_date={
+                      Cookies.get("token")
+                        ? allItemsInCart[index].to_date
+                        : item.to_date
+                    }
+                    stayPage={true}
+                  ></CartItem>
+                </div>
+              );
+            })}
           </div>
 
           {activitiesCart.length > 0 && (
@@ -349,9 +398,15 @@ const Cart = ({
                       ? allItemsInActivityCart[index].id
                       : null
                   }
-                  from_date={allItemsInActivityCart[index].from_date}
+                  from_date={
+                    Cookies.get("token")
+                      ? allItemsInActivityCart[index].from_date
+                      : item.from_date
+                  }
                   number_of_people={
-                    allItemsInActivityCart[index].number_of_people
+                    Cookies.get("token")
+                      ? allItemsInActivityCart[index].number_of_people
+                      : item.number_of_people
                   }
                   activity={item}
                   activitiesPage={true}
@@ -376,20 +431,38 @@ const Cart = ({
                   }
                   transport={item}
                   transportPage={true}
-                  transportDistance={allItemsInTransportCart[index].distance}
-                  transportFromDate={allItemsInTransportCart[index].from_date}
-                  numberOfDays={allItemsInTransportCart[index].number_of_days}
+                  transportDistance={
+                    Cookies.get("token")
+                      ? allItemsInTransportCart[index].distance
+                      : item.distance
+                  }
+                  transportFromDate={
+                    Cookies.get("token")
+                      ? allItemsInTransportCart[index].from_date
+                      : item.from_date
+                  }
+                  numberOfDays={
+                    Cookies.get("token")
+                      ? allItemsInTransportCart[index].number_of_days
+                      : item.number_of_days
+                  }
                   userNeedADriver={
-                    allItemsInTransportCart[index].user_need_a_driver
+                    Cookies.get("token")
+                      ? allItemsInTransportCart[index].user_need_a_driver
+                      : item.user_need_a_driver
                   }
                   transportDestination={
-                    allItemsInTransportCart[index].destination
+                    Cookies.get("token")
+                      ? allItemsInTransportCart[index].destination
+                      : item.destination
                   }
                   transportStartingPoint={
-                    allItemsInTransportCart[index].starting_point
+                    Cookies.get("token")
+                      ? allItemsInTransportCart[index].starting_point
+                      : item.starting_point
                   }
                   transportPrice={priceOfTransportCart(
-                    allItemsInTransportCart[index]
+                    Cookies.get("token") ? allItemsInTransportCart[index] : item
                   )}
                 ></CartItem>
               </div>
@@ -556,7 +629,11 @@ export async function getServerSideProps(context) {
           await axios
             .get(`${process.env.NEXT_PUBLIC_baseURL}/stays/${item.slug}/`)
             .then((res) => {
-              cartItems.push(res.data);
+              cartItems.push({
+                ...res.data,
+                from_date: item.from_date,
+                to_date: item.to_date,
+              });
             })
             .catch((err) => {
               console.log(err.response);
@@ -565,7 +642,11 @@ export async function getServerSideProps(context) {
           await axios
             .get(`${process.env.NEXT_PUBLIC_baseURL}/activities/${item.slug}/`)
             .then((res) => {
-              activitiesCart.push(res.data);
+              activitiesCart.push({
+                ...res.data,
+                number_of_people: item.number_of_people,
+                from_date: item.from_date,
+              });
             })
             .catch((err) => {
               console.log(err.response);
@@ -574,7 +655,15 @@ export async function getServerSideProps(context) {
           await axios
             .get(`${process.env.NEXT_PUBLIC_baseURL}/transport/${item.slug}/`)
             .then((res) => {
-              transportCart.push(res.data);
+              transportCart.push({
+                ...res.data,
+                starting_point: item.starting_point,
+                destination: item.destination,
+                distance: item.distance,
+                user_need_a_driver: item.user_need_a_driver,
+                from_date: item.from_date,
+                number_of_days: item.number_of_days,
+              });
             })
             .catch((err) => {
               console.log(err.response);
@@ -588,6 +677,9 @@ export async function getServerSideProps(context) {
           userProfile: "",
           activitiesCart: activitiesCart,
           transportCart: transportCart,
+          allItemsInActivityCart: [],
+          allItemsInCart: [],
+          allItemsInTransportCart: [],
         },
       };
     }
@@ -598,6 +690,9 @@ export async function getServerSideProps(context) {
         cart: [],
         activitiesCart: [],
         transportCart: [],
+        allItemsInActivityCart: [],
+        allItemsInCart: [],
+        allItemsInTransportCart: [],
       },
     };
   } catch (error) {

@@ -376,7 +376,7 @@ function Listing({
             <div className="font-medium text-sm">({listing.numRating})</div>
           </div> */}
         </Card>
-        <div className="absolute bg-white rounded-3xl mt-2 pr-2 mr-2 flex z-10 items-center justify-center gap-0.5 top-0 right-0">
+        <div className="absolute rounded-3xl mt-2 mr-2 flex z-10 items-center justify-center gap-0.5 top-0 right-0">
           {liked && (
             <svg
               width="28px"
@@ -419,75 +419,6 @@ function Listing({
               />
             </svg>
           )}
-
-          <div
-            onClick={(e) => {
-              e.stopPropagation();
-              addToCart(e);
-            }}
-            className="hover:bg-gray-200 h-8 w-8 flex items-center justify-center rounded-3xl"
-          >
-            <div className="cursor-pointer flex items-center justify-center rounded-full">
-              {!cartLoading && (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 cursor-pointer"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                  />
-                </svg>
-              )}
-              {cartLoading && (
-                <LoadingSpinerChase
-                  width={15}
-                  height={15}
-                  color="#000"
-                ></LoadingSpinerChase>
-              )}
-            </div>
-
-            {!listingIsInCart && !cartLoading && (
-              <div className="absolute top-0 right-1 cursor-pointer">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 cursor-pointer"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-            )}
-
-            {listingIsInCart && !cartLoading && (
-              <div className="absolute top-0 right-1 cursor-pointer">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 cursor-pointer text-red-700"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                  <path
-                    fillRule="evenodd"
-                    d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-            )}
-          </div>
         </div>
       </div>
 
@@ -696,7 +627,7 @@ function Listing({
               <div className="font-medium text-sm">({listing.numRating})</div>
             </div> */}
 
-            <div className="absolute flex z-10 bg-white items-center justify-center gap-0.5 top-0 right-0">
+            <div className="absolute flex z-10 items-center justify-center gap-0.5 top-0 right-0">
               {liked && (
                 <svg
                   width="28px"
@@ -739,75 +670,6 @@ function Listing({
                   />
                 </svg>
               )}
-
-              <div
-                onClick={(e) => {
-                  e.stopPropagation();
-                  addToCart(e);
-                }}
-                className="hover:bg-gray-200 h-8 w-8 flex items-center justify-center rounded-3xl"
-              >
-                <div className="cursor-pointer flex items-center justify-center rounded-full">
-                  {!cartLoading && (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6 cursor-pointer"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                      />
-                    </svg>
-                  )}
-                  {cartLoading && (
-                    <LoadingSpinerChase
-                      width={15}
-                      height={15}
-                      color="#000"
-                    ></LoadingSpinerChase>
-                  )}
-                </div>
-
-                {!listingIsInCart && !cartLoading && (
-                  <div className="absolute -top-0.5 -right-1.5 cursor-pointer">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4 cursor-pointer"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                )}
-
-                {listingIsInCart && !cartLoading && (
-                  <div className="absolute -top-0.5 -right-[0.25rem] cursor-pointer">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4 cursor-pointer text-red-700"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                      <path
-                        fillRule="evenodd"
-                        d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                )}
-              </div>
             </div>
           </div>
         </SecondCard>

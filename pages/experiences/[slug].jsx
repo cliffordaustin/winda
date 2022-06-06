@@ -287,7 +287,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
           </div>
         </div>
 
-        <div className="flex mt-4">
+        <div className="flex mt-8">
           <div className="flex flex-col w-full">
             <div className="text-2xl font-bold">{activity.name}</div>
             <div className="text-lg font-medium">{activity.location}</div>
@@ -562,7 +562,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
           </div>
           <div
             className={
-              " h-fit w-fit border border-gray-200 rounded-lg order-1 md:order-2 " +
+              " h-fit w-full md:w-fit border border-gray-200 rounded-lg order-1 md:order-2 " +
               (!inCart ? "md:-mt-32" : "hidden")
             }
           >
