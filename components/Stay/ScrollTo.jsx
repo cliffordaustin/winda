@@ -63,7 +63,7 @@ function ScrollTo({}) {
 
       <Swiper
         {...settings}
-        slidesPerView={4}
+        slidesPerView={"auto"}
         freeMode={true}
         watchSlidesProgress={true}
         onSwiper={(swiper) => setSwiper(swiper)}
@@ -74,10 +74,10 @@ function ScrollTo({}) {
         modules={[FreeMode, Navigation, Thumbs]}
         className="!w-full !h-full relative"
       >
-        <SwiperSlide className="!w-fit cursor-pointer flex justify-center">
+        <SwiperSlide className="!w-auto flex cursor-pointer justify-center">
           <Link
-            className="px-4 flex items-center border-b-4 border-transparent"
-            activeClass="!border-b-4 !border-slate-800"
+            className="px-4 flex items-center border-b-2 border-transparent"
+            activeClass="!border-b-2 !border-slate-800"
             to="about"
             spy={true}
             smooth={true}
@@ -91,10 +91,10 @@ function ScrollTo({}) {
           </Link>
         </SwiperSlide>
 
-        <SwiperSlide className="!w-fit cursor-pointer flex justify-center">
+        <SwiperSlide className="!w-auto flex cursor-pointer justify-center">
           <Link
-            className="px-4 flex items-center border-b-4 border-transparent"
-            activeClass="!border-b-4 !border-slate-800"
+            className="px-4 flex items-center border-b-2 border-transparent"
+            activeClass="!border-b-2 !border-slate-800"
             to="amenities"
             spy={true}
             smooth={true}
@@ -107,82 +107,82 @@ function ScrollTo({}) {
             <div>Amenities</div>
           </Link>
         </SwiperSlide>
-        <SwiperSlide className="!w-fit cursor-pointer flex justify-center">
+        <SwiperSlide className="!w-auto flex cursor-pointer justify-center">
           <Link
-            className="px-4 flex items-center border-b-4 border-transparent"
-            activeClass="!border-b-4 !border-slate-800"
+            className="px-4 flex items-center border-b-2 border-transparent"
+            activeClass="!border-b-2 !border-slate-800"
             to="best-describe-as"
             spy={true}
             smooth={true}
             offset={-200}
             duration={500}
             onSetActive={() => {
-              slideto(0);
+              slideto(1);
             }}
           >
             <div>Best describes as</div>
           </Link>
         </SwiperSlide>
-        <SwiperSlide className="!w-fit cursor-pointer flex justify-center">
+        <SwiperSlide className="!w-auto flex cursor-pointer justify-center">
           <Link
-            className="px-4 flex items-center border-b-4 border-transparent"
-            activeClass="!border-b-4 !border-slate-800"
+            className="px-4 flex items-center border-b-2 border-transparent"
+            activeClass="!border-b-2 !border-slate-800"
             to="unique-about-place"
             spy={true}
             smooth={true}
             offset={-200}
             duration={500}
             onSetActive={() => {
-              slideto(0);
+              slideto(1);
             }}
           >
             <div>Unique about place</div>
           </Link>
         </SwiperSlide>
 
-        <SwiperSlide className="!w-fit cursor-pointer flex justify-center">
+        <SwiperSlide className="!w-auto flex cursor-pointer justify-center">
           <Link
-            className="px-4 flex items-center border-b-4 border-transparent"
-            activeClass="!border-b-4 !border-slate-800"
+            className="px-4 flex items-center border-b-2 border-transparent"
+            activeClass="!border-b-2 !border-slate-800"
             to="map"
             spy={true}
             smooth={true}
             offset={-200}
             duration={500}
             onSetActive={() => {
-              slideto(1);
+              slideto(2);
             }}
           >
             <div>Map</div>
           </Link>
         </SwiperSlide>
-        <SwiperSlide className="!w-fit cursor-pointer flex justify-center">
+        <SwiperSlide className="!w-auto flex cursor-pointer justify-center">
           <Link
-            className="px-4 flex items-center border-b-4 border-transparent"
-            activeClass="!border-b-4 !border-slate-800"
+            className="px-4 flex items-center border-b-2 border-transparent"
+            activeClass="!border-b-2 !border-slate-800"
             to="policies"
             spy={true}
             smooth={true}
             offset={-200}
             duration={500}
             onSetActive={() => {
-              slideto(1);
+              slideto(2);
             }}
           >
             <div>Policies</div>
           </Link>
         </SwiperSlide>
-        <SwiperSlide className="!w-fit cursor-pointer flex justify-center">
+        <SwiperSlide className="!w-auto flex cursor-pointer justify-center">
           <Link
-            className="px-4 flex items-center border-b-4 border-transparent"
-            activeClass="!border-b-4 !border-slate-800"
+            className="px-4 flex items-center border-b-2 border-transparent"
+            activeClass="!border-b-2 !border-slate-800"
             to="reviews"
             spy={true}
             smooth={true}
             offset={-200}
             duration={500}
             onSetActive={() => {
-              slideto(2);
+              slideto(3);
             }}
           >
             <div>Reviews</div>
