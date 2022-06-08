@@ -110,7 +110,7 @@ body {
 }
 
 .rdp-cell {
-  @apply !w-[44px] !h-[44px] sm:!w-12 sm:!h-12 rounded-full outline-none transition-colors ease-linear duration-200;
+  @apply !min-w-[44px] !min-h-[44px] sm:!w-12 sm:!h-12 rounded-full outline-none transition-colors ease-linear duration-200;
 }
 
 .rdp-day {
@@ -119,12 +119,11 @@ body {
 
 .rdp-button:focus:not([disabled]),
 .rdp-button:active:not([disabled]) {
-  @apply outline-none !bg-blue-400 !border-none;
+  @apply outline-none !bg-slate-400 !border-none;
 }
 
-.rdp:not(.rdp--interactionDisabled)
-  .rdp-day:not(.rdp-day--disabled):not(.rdp-day--selected):not(.rdp-day--outside):hover {
-  @apply !bg-blue-200;
+.rdp-button:hover:not([disabled]) {
+  @apply !bg-slate-300;
 }
 
 .DayPicker-wrapper {
@@ -135,7 +134,7 @@ body {
 .rdp-day_selected:focus:not([disabled]),
 .rdp-day_selected:active:not([disabled]),
 .rdp-day_selected:hover:not([disabled]) {
-  @apply !bg-blue-400;
+  @apply !bg-slate-700;
 }
 
 .rdp-button {
@@ -143,7 +142,7 @@ body {
 }
 
 .rdp-cell--selected {
-  @apply !bg-blue-400 !rounded-full w-10 h-10 sm:!w-12 sm:!h-12 outline-none transition-colors ease-linear duration-200;
+  @apply !bg-slate-700 !rounded-full w-10 h-10 sm:!w-12 sm:!h-12 outline-none transition-colors ease-linear duration-200;
 }
 
 .swiper-pagination > .swiper-pagination-bullet {
@@ -178,11 +177,11 @@ body {
 }
 
 .css-1n7v3ny-option {
-  @apply !bg-blue-100 transition-all duration-300 ease-linear !py-2.5 !px-2;
+  @apply !bg-slate-100 transition-all duration-300 ease-linear !py-2.5 !px-2;
 }
 
 .css-9gakcf-option {
-  @apply !bg-blue-500 transition-all duration-300 ease-linear !py-2.5 !px-2;
+  @apply !bg-slate-700 transition-all duration-300 ease-linear !py-2.5 !px-2;
 }
 
 .css-yt9ioa-option {
@@ -247,6 +246,10 @@ body {
 }
 .remove-scroll::-webkit-scrollbar {
   display: none; /* Safari and Chrome */
+}
+
+.safari-bottom {
+  bottom: env(safe-area-inset-bottom);
 }
 
 @media screen and (-webkit-min-device-pixel-ratio: 0) {

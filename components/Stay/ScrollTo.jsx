@@ -1,0 +1,213 @@
+import React, { useState, useEffect } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { FreeMode, Navigation, Thumbs } from "swiper";
+import {
+  Link,
+  Element,
+  Events,
+  animateScroll as scroll,
+  scrollSpy,
+  scroller,
+} from "react-scroll";
+
+import "swiper/css";
+import "swiper/css/free-mode";
+import "swiper/css/thumbs";
+
+function ScrollTo({}) {
+  const settings = {
+    spaceBetween: 10,
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+    },
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+  };
+
+  const [swiper, setSwiper] = useState(null);
+
+  const [isEndOfSlide, setIsEndOfSlide] = useState(false);
+  const [swiperIndex, setSwiperIndex] = useState(0);
+
+  const slideto = (index) => {
+    if (swiper) {
+      swiper.slideToLoop(index);
+    }
+  };
+  return (
+    <div className="md:!w-full lg:!w-[87%] h-full mx-auto flex items-center">
+      <div
+        className={
+          "flex cursor-pointer select-none items-center justify-center swiper-pagination swiper-button-prev " +
+          (swiperIndex === 0 ? "invisible" : "")
+        }
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-5 w-5 text-gray-500"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+      </div>
+
+      <Swiper
+        {...settings}
+        slidesPerView={4}
+        freeMode={true}
+        watchSlidesProgress={true}
+        onSwiper={(swiper) => setSwiper(swiper)}
+        onSlideChange={(swiper) => {
+          setIsEndOfSlide(swiper.isEnd);
+          setSwiperIndex(swiper.realIndex);
+        }}
+        modules={[FreeMode, Navigation, Thumbs]}
+        className="!w-full !h-full relative"
+      >
+        <SwiperSlide className="!w-fit cursor-pointer flex justify-center">
+          <Link
+            className="px-4 flex items-center border-b-4 border-transparent"
+            activeClass="!border-b-4 !border-slate-800"
+            to="about"
+            spy={true}
+            smooth={true}
+            offset={-200}
+            duration={500}
+            onSetActive={() => {
+              slideto(0);
+            }}
+          >
+            <div>About</div>
+          </Link>
+        </SwiperSlide>
+
+        <SwiperSlide className="!w-fit cursor-pointer flex justify-center">
+          <Link
+            className="px-4 flex items-center border-b-4 border-transparent"
+            activeClass="!border-b-4 !border-slate-800"
+            to="amenities"
+            spy={true}
+            smooth={true}
+            offset={-200}
+            duration={500}
+            onSetActive={() => {
+              slideto(0);
+            }}
+          >
+            <div>Amenities</div>
+          </Link>
+        </SwiperSlide>
+        <SwiperSlide className="!w-fit cursor-pointer flex justify-center">
+          <Link
+            className="px-4 flex items-center border-b-4 border-transparent"
+            activeClass="!border-b-4 !border-slate-800"
+            to="best-describe-as"
+            spy={true}
+            smooth={true}
+            offset={-200}
+            duration={500}
+            onSetActive={() => {
+              slideto(0);
+            }}
+          >
+            <div>Best describes as</div>
+          </Link>
+        </SwiperSlide>
+        <SwiperSlide className="!w-fit cursor-pointer flex justify-center">
+          <Link
+            className="px-4 flex items-center border-b-4 border-transparent"
+            activeClass="!border-b-4 !border-slate-800"
+            to="unique-about-place"
+            spy={true}
+            smooth={true}
+            offset={-200}
+            duration={500}
+            onSetActive={() => {
+              slideto(0);
+            }}
+          >
+            <div>Unique about place</div>
+          </Link>
+        </SwiperSlide>
+
+        <SwiperSlide className="!w-fit cursor-pointer flex justify-center">
+          <Link
+            className="px-4 flex items-center border-b-4 border-transparent"
+            activeClass="!border-b-4 !border-slate-800"
+            to="map"
+            spy={true}
+            smooth={true}
+            offset={-200}
+            duration={500}
+            onSetActive={() => {
+              slideto(1);
+            }}
+          >
+            <div>Map</div>
+          </Link>
+        </SwiperSlide>
+        <SwiperSlide className="!w-fit cursor-pointer flex justify-center">
+          <Link
+            className="px-4 flex items-center border-b-4 border-transparent"
+            activeClass="!border-b-4 !border-slate-800"
+            to="policies"
+            spy={true}
+            smooth={true}
+            offset={-200}
+            duration={500}
+            onSetActive={() => {
+              slideto(1);
+            }}
+          >
+            <div>Policies</div>
+          </Link>
+        </SwiperSlide>
+        <SwiperSlide className="!w-fit cursor-pointer flex justify-center">
+          <Link
+            className="px-4 flex items-center border-b-4 border-transparent"
+            activeClass="!border-b-4 !border-slate-800"
+            to="reviews"
+            spy={true}
+            smooth={true}
+            offset={-200}
+            duration={500}
+            onSetActive={() => {
+              slideto(2);
+            }}
+          >
+            <div>Reviews</div>
+          </Link>
+        </SwiperSlide>
+      </Swiper>
+      <div
+        className={
+          "flex cursor-pointer select-none items-center justify-center swiper-pagination swiper-button-next " +
+          (isEndOfSlide ? "invisible" : "")
+        }
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-5 w-5 text-gray-500"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+      </div>
+    </div>
+  );
+}
+
+export default ScrollTo;
