@@ -354,7 +354,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               className={
                 "h-12 border-b border-gray-200 absolute top-[430px] sm:top-[480px] w-[100%] left-0 right-0 lg:px-10 px-5 " +
                 (!isVisible
-                  ? "!fixed md:!w-[56.5%] lg:!w-[63.5%]  !w-full !top-[65px] left-0 right-0 z-[50] bg-white"
+                  ? "!fixed md:!w-[56.5%] lg:!w-[63.5%]  !w-full !top-[65px] left-0 right-0 z-[40] bg-white"
                   : "")
               }
             >
