@@ -377,6 +377,21 @@ const Cart = ({
                         ? allItemsInCart[index].to_date
                         : item.to_date
                     }
+                    num_of_adults={
+                      Cookies.get("token")
+                        ? allItemsInCart[index].num_of_adults
+                        : item.to_date
+                    }
+                    num_of_children={
+                      Cookies.get("token")
+                        ? allItemsInCart[index].num_of_children
+                        : item.to_date
+                    }
+                    plan={
+                      Cookies.get("token")
+                        ? allItemsInCart[index].plan
+                        : item.to_date
+                    }
                     stayPage={true}
                   ></CartItem>
                 </div>

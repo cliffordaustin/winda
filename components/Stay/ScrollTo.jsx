@@ -14,7 +14,7 @@ import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/thumbs";
 
-function ScrollTo({}) {
+function ScrollTo({ guestPopup }) {
   const settings = {
     spaceBetween: 10,
     pagination: {
@@ -72,13 +72,13 @@ function ScrollTo({}) {
           setSwiperIndex(swiper.realIndex);
         }}
         modules={[FreeMode, Navigation, Thumbs]}
-        className="!w-full !h-full relative"
+        className={"!w-full !h-full relative " + (guestPopup ? "!-z-10" : "")}
       >
         <SwiperSlide className="!w-auto flex cursor-pointer justify-center">
           <Link
             className="px-4 flex items-center border-b-2 border-transparent"
             activeClass="!border-b-2 !border-slate-800"
-            to="about"
+            to="quick-facts"
             spy={true}
             smooth={true}
             offset={-200}
@@ -87,7 +87,7 @@ function ScrollTo({}) {
               slideto(0);
             }}
           >
-            <div>About</div>
+            <div>Quick facts</div>
           </Link>
         </SwiperSlide>
 
@@ -107,36 +107,21 @@ function ScrollTo({}) {
             <div>Amenities</div>
           </Link>
         </SwiperSlide>
+
         <SwiperSlide className="!w-auto flex cursor-pointer justify-center">
           <Link
             className="px-4 flex items-center border-b-2 border-transparent"
             activeClass="!border-b-2 !border-slate-800"
-            to="best-describe-as"
+            to="experiences"
             spy={true}
             smooth={true}
             offset={-200}
             duration={500}
             onSetActive={() => {
-              slideto(1);
+              slideto(0);
             }}
           >
-            <div>Best describes as</div>
-          </Link>
-        </SwiperSlide>
-        <SwiperSlide className="!w-auto flex cursor-pointer justify-center">
-          <Link
-            className="px-4 flex items-center border-b-2 border-transparent"
-            activeClass="!border-b-2 !border-slate-800"
-            to="unique-about-place"
-            spy={true}
-            smooth={true}
-            offset={-200}
-            duration={500}
-            onSetActive={() => {
-              slideto(1);
-            }}
-          >
-            <div>Unique about place</div>
+            <div>Experiences</div>
           </Link>
         </SwiperSlide>
 

@@ -30,7 +30,7 @@ const Price = ({ stayPrice, className = "" }) => {
 
   useEffect(() => {
     priceConversion(price());
-  }, [priceConversionRate, currencyToDollar]);
+  }, [priceConversionRate, currencyToDollar, stayPrice]);
 
   return (
     <ClientOnly>

@@ -31,6 +31,9 @@ const CartItem = ({
   to_date,
   transportFromDate,
   number_of_people,
+  num_of_adults,
+  num_of_children,
+  plan,
 
   transportPage,
   transport,
@@ -824,6 +827,25 @@ const CartItem = ({
               )}
             </ClientOnly>
 
+            <ClientOnly>
+              {!checkoutInfo && stayPage && (
+                <div className="flex items-center gap-1 text-xs mt-1 font-bold truncate flex-wrap">
+                  <span>
+                    {num_of_adults} {num_of_adults === 1 ? "Adult" : "Adults"}
+                  </span>
+                  {num_of_children > 0 && (
+                    <>
+                      <span className="font-bold text-xl -mt-3">.</span>
+                      <span>
+                        {num_of_children}{" "}
+                        {num_of_children === 1 ? "Child" : "Children"}
+                      </span>
+                    </>
+                  )}
+                </div>
+              )}
+            </ClientOnly>
+
             {transportPage && (
               <div className="flex items-center gap-1 text-xs my-1 font-bold truncate flex-wrap">
                 <span className="">
@@ -903,29 +925,55 @@ const CartItem = ({
       </div>
       {stayPage && (
         <div>
-          {stay.type_of_stay === "LODGE" && (
-            <div className="absolute top-1.5 left-5 z-10 px-2 rounded-md bg-green-600 text-white">
-              Lodge
+          {plan === "STANDARD" && (
+            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-white">
+              Standard
             </div>
           )}
-          {stay.type_of_stay === "HOUSE" && (
-            <div className="absolute top-1.5 left-5 z-10 px-2 rounded-md bg-green-600 text-white">
-              House
+          {plan === "DELUXE" && (
+            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-white">
+              Deluxe
             </div>
           )}
-          {stay.type_of_stay === "UNIQUE SPACE" && (
-            <div className="absolute top-1.5 left-5 z-10 px-2 rounded-md bg-green-600 text-white">
-              Unique space
+          {plan === "SUPER DELUXE" && (
+            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-white">
+              Super Deluxe
             </div>
           )}
-          {stay.type_of_stay === "CAMPSITE" && (
-            <div className="absolute top-1.5 left-5 z-10 px-2 rounded-md bg-green-600 text-white">
-              Campsite
+          {plan === "STUDIO" && (
+            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-white">
+              Studio
             </div>
           )}
-          {stay.type_of_stay === "BOUTIQUE HOTEL" && (
-            <div className="absolute top-1.5 left-5 z-10 px-2 rounded-md bg-green-600 text-white">
-              Boutique hotel
+          {plan === "DOUBLE ROOM" && (
+            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-white">
+              Double Room
+            </div>
+          )}
+
+          {plan === "TRIPLE ROOM" && (
+            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-white">
+              Tripple Room
+            </div>
+          )}
+          {plan === "QUAD ROOM" && (
+            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-white">
+              Quad Room
+            </div>
+          )}
+          {plan === "KING ROOM" && (
+            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-white">
+              King Room
+            </div>
+          )}
+          {plan === "QUEEN ROOM" && (
+            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-white">
+              Queen Room
+            </div>
+          )}
+          {plan === "TWIN ROOM" && (
+            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-white">
+              Twin Room
             </div>
           )}
         </div>
