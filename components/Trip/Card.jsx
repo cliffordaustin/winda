@@ -13,7 +13,7 @@ import Button from "../ui/Button";
 const Card = ({ listing, userProfile, trips }) => {
   const dispatch = useDispatch();
 
-  const currencyToDollar = useSelector((state) => state.home.currencyToDollar);
+  const currencyToKES = useSelector((state) => state.home.currencyToKES);
 
   const priceConversionRate = useSelector(
     (state) => state.stay.priceConversionRate
@@ -37,7 +37,7 @@ const Card = ({ listing, userProfile, trips }) => {
 
   const priceConversion = async (price) => {
     if (price) {
-      if (currencyToDollar && priceConversionRate) {
+      if (currencyToKES && priceConversionRate) {
         setNewPrice(priceConversionRate * price);
       } else {
         setNewPrice(price);
@@ -49,7 +49,7 @@ const Card = ({ listing, userProfile, trips }) => {
 
   useEffect(() => {
     priceConversion(price());
-  }, [price(), currencyToDollar, priceConversionRate]);
+  }, [price(), currencyToKES, priceConversionRate]);
 
   const [addToTripLoading, setAddToTripLoading] = useState(false);
 
@@ -127,17 +127,17 @@ const Card = ({ listing, userProfile, trips }) => {
           <div className="flex flex-col gap-1">
             <h1 className="text-gray-500 truncate">{listing.name}</h1>
 
-            {currencyToDollar && (
-              <h1 className="font-bold text-xl font-OpenSans">
+            {!currencyToKES && (
+              <h1 className={"font-bold text-xl font-OpenSans "}>
                 {price()
-                  ? "$" + Math.ceil(newPrice).toLocaleString()
+                  ? "$" + Math.ceil(price()).toLocaleString()
                   : "No data"}
               </h1>
             )}
-            {!currencyToDollar && (
-              <h1 className="font-bold text-xl font-OpenSans">
+            {currencyToKES && (
+              <h1 className={"font-bold text-xl font-OpenSans "}>
                 {price()
-                  ? "KES" + Math.ceil(price()).toLocaleString()
+                  ? "KES" + Math.ceil(newPrice).toLocaleString()
                   : "No data"}
               </h1>
             )}

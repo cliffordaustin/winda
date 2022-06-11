@@ -11,7 +11,7 @@ import LoadingSpinerChase from "../ui/LoadingSpinerChase";
 const TripActivityCard = ({ images, activity, tripId, tripSlug }) => {
   const [newPrice, setNewPrice] = useState(null);
 
-  const currencyToDollar = useSelector((state) => state.home.currencyToDollar);
+  const currencyToKES = useSelector((state) => state.home.currencyToKES);
 
   const priceConversionRate = useSelector(
     (state) => state.stay.priceConversionRate
@@ -25,7 +25,7 @@ const TripActivityCard = ({ images, activity, tripId, tripSlug }) => {
 
   const priceConversion = async (price) => {
     if (price) {
-      if (currencyToDollar && priceConversionRate) {
+      if (currencyToKES && priceConversionRate) {
         setNewPrice(priceConversionRate * price);
       } else {
         setNewPrice(price);
@@ -59,7 +59,7 @@ const TripActivityCard = ({ images, activity, tripId, tripSlug }) => {
 
   useEffect(() => {
     priceConversion(price());
-  }, [price(), currencyToDollar, priceConversionRate]);
+  }, [price(), currencyToKES, priceConversionRate]);
   return (
     <div>
       <Card
@@ -72,15 +72,15 @@ const TripActivityCard = ({ images, activity, tripId, tripSlug }) => {
         <h1 className="text-gray-500 truncate">{activity.name}</h1>
 
         <div className="flex gap-1">
-          {currencyToDollar && (
-            <h1 className="font-bold text-base font-OpenSans">
-              {price() ? "$" + Math.ceil(newPrice).toLocaleString() : "No data"}
+          {!currencyToKES && (
+            <h1 className={"font-bold text-xl font-OpenSans "}>
+              {price() ? "$" + Math.ceil(price()).toLocaleString() : "No data"}
             </h1>
           )}
-          {!currencyToDollar && (
-            <h1 className="font-bold text-base font-OpenSans">
+          {currencyToKES && (
+            <h1 className={"font-bold text-xl font-OpenSans "}>
               {price()
-                ? "KES" + Math.ceil(price()).toLocaleString()
+                ? "KES" + Math.ceil(newPrice).toLocaleString()
                 : "No data"}
             </h1>
           )}

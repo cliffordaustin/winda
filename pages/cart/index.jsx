@@ -16,6 +16,7 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import LoadingSpinerChase from "../../components/ui/LoadingSpinerChase";
 import ClientOnly from "../../components/ClientOnly";
+import { stayPriceOfPlan } from "../../lib/pricePlan";
 
 const Cart = ({
   cart,
@@ -39,7 +40,7 @@ const Cart = ({
     showSearchModal: false,
   });
 
-  const currencyToDollar = useSelector((state) => state.home.currencyToDollar);
+  const currencyToKES = useSelector((state) => state.home.currencyToKES);
   const priceConversionRate = useSelector(
     (state) => state.stay.priceConversionRate
   );
@@ -53,11 +54,22 @@ const Cart = ({
         const nights =
           new Date(allItemsInCart[index].to_date).getDate() -
           new Date(allItemsInCart[index].from_date).getDate();
-        price += item.price * nights;
+        price +=
+          stayPriceOfPlan(
+            allItemsInCart[index].plan,
+            allItemsInCart[index].non_resident,
+            item
+          ) *
+          (allItemsInCart[index].num_of_adults +
+            allItemsInCart[index].num_of_children) *
+          nights;
       } else if (!Cookies.get("token") && Cookies.get("cart")) {
         const nights =
           new Date(item.to_date).getDate() - new Date(item.from_date).getDate();
-        price += item.price * nights;
+        price +=
+          stayPriceOfPlan(item.plan, item.non_resident, item) *
+          (item.num_of_adults + item.num_of_children) *
+          nights;
       }
     });
     activitiesCart.forEach((item, index) => {
@@ -101,7 +113,7 @@ const Cart = ({
 
   const priceConversion = async (price) => {
     if (price) {
-      if (currencyToDollar && priceConversionRate) {
+      if (currencyToKES && priceConversionRate) {
         setNewPrice(priceConversionRate * price);
       } else {
         setNewPrice(price);
@@ -380,17 +392,22 @@ const Cart = ({
                     num_of_adults={
                       Cookies.get("token")
                         ? allItemsInCart[index].num_of_adults
-                        : item.to_date
+                        : item.num_of_adults
                     }
                     num_of_children={
                       Cookies.get("token")
                         ? allItemsInCart[index].num_of_children
-                        : item.to_date
+                        : item.num_of_children
+                    }
+                    non_resident={
+                      Cookies.get("token")
+                        ? allItemsInCart[index].non_resident
+                        : item.non_resident
                     }
                     plan={
                       Cookies.get("token")
                         ? allItemsInCart[index].plan
-                        : item.to_date
+                        : item.plan
                     }
                     stayPage={true}
                   ></CartItem>
@@ -488,17 +505,17 @@ const Cart = ({
             <ClientOnly>
               <div className={styles.priceTotal}>
                 <div className="font-bold">Price Total</div>
-                {currencyToDollar && (
-                  <h1 className="font-bold text-lg font-OpenSans">
+                {!currencyToKES && (
+                  <h1 className={"font-bold text-xl font-OpenSans "}>
                     {totalPrice()
-                      ? "$" + Math.ceil(newPrice).toLocaleString()
+                      ? "$" + Math.ceil(totalPrice()).toLocaleString()
                       : "No data"}
                   </h1>
                 )}
-                {!currencyToDollar && (
-                  <h1 className="font-bold text-lg font-OpenSans">
+                {currencyToKES && (
+                  <h1 className={"font-bold text-xl font-OpenSans "}>
                     {totalPrice()
-                      ? "KES" + Math.ceil(totalPrice()).toLocaleString()
+                      ? "KES" + Math.ceil(newPrice).toLocaleString()
                       : "No data"}
                   </h1>
                 )}
@@ -548,7 +565,7 @@ const Cart = ({
 
   useEffect(() => {
     priceConversion(totalPrice());
-  }, [totalPrice(), currencyToDollar, priceConversionRate]);
+  }, [totalPrice(), currencyToKES, priceConversionRate]);
 
   return (
     <div>
@@ -648,6 +665,10 @@ export async function getServerSideProps(context) {
                 ...res.data,
                 from_date: item.from_date,
                 to_date: item.to_date,
+                num_of_adults: item.num_of_adults,
+                num_of_children: item.num_of_children,
+                plan: item.plan,
+                non_resident: item.non_resident,
               });
             })
             .catch((err) => {

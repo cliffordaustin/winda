@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 const MapMakers = ({ order, state, index }) => {
   const [showPopup, setShowPopup] = useState(false);
 
-  const currencyToDollar = useSelector((state) => state.home.currencyToDollar);
+  const currencyToKES = useSelector((state) => state.home.currencyToKES);
 
   const priceConversionRate = useSelector(
     (state) => state.stay.priceConversionRate
@@ -44,7 +44,7 @@ const MapMakers = ({ order, state, index }) => {
 
   const priceConversion = async (price) => {
     if (price) {
-      if (currencyToDollar && priceConversionRate) {
+      if (currencyToKES && priceConversionRate) {
         setNewPrice(priceConversionRate * price);
       } else {
         setNewPrice(price);

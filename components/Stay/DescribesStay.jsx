@@ -12,7 +12,7 @@ function DescribesStay({ stay }) {
   });
 
   return (
-    <div className="border border-gray-200 rounded-xl overflow-hidden h-fit pb-4">
+    <div className="border border-gray-200 rounded-xl !w-full overflow-hidden h-fit pb-4">
       <div className="py-2 bg-gray-200 mb-2">
         <span className="font-bold text-xl ml-6">Best describe as</span>
       </div>

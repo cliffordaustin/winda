@@ -10,7 +10,7 @@ import Badge from "../ui/Badge";
 const MapMakerPopup = ({ activity }) => {
   const [isSafari, setIsSafari] = useState(false);
 
-  const currencyToDollar = useSelector((state) => state.home.currencyToDollar);
+  const currencyToKES = useSelector((state) => state.home.currencyToKES);
 
   const priceConversionRate = useSelector(
     (state) => state.stay.priceConversionRate
@@ -39,7 +39,7 @@ const MapMakerPopup = ({ activity }) => {
 
   const priceConversion = async (price) => {
     if (price) {
-      if (currencyToDollar && priceConversionRate) {
+      if (currencyToKES && priceConversionRate) {
         setNewPrice(priceConversionRate * price);
       } else {
         setNewPrice(price);
@@ -63,15 +63,15 @@ const MapMakerPopup = ({ activity }) => {
       >
         <div className="flex flex-col gap-1">
           <h1 className="text-gray-500 text-sm truncate">{activity.name}</h1>
-          {currencyToDollar && (
-            <h1 className="font-bold text-xl font-OpenSans">
-              {price() ? "$" + Math.ceil(newPrice).toLocaleString() : "No data"}
+          {!currencyToKES && (
+            <h1 className={"font-bold text-xl font-OpenSans "}>
+              {price() ? "$" + Math.ceil(price()).toLocaleString() : "No data"}
             </h1>
           )}
-          {!currencyToDollar && (
-            <h1 className="font-bold text-xl font-OpenSans">
+          {currencyToKES && (
+            <h1 className={"font-bold text-xl font-OpenSans "}>
               {price()
-                ? "KES" + Math.ceil(price()).toLocaleString()
+                ? "KES" + Math.ceil(newPrice).toLocaleString()
                 : "No data"}
             </h1>
           )}

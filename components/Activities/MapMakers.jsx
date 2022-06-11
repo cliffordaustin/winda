@@ -11,7 +11,7 @@ const MapMakers = ({ activity }) => {
 
   const activeActivity = useSelector((state) => state.activity.activeActivity);
 
-  const currencyToDollar = useSelector((state) => state.home.currencyToDollar);
+  const currencyToKES = useSelector((state) => state.home.currencyToKES);
 
   const priceConversionRate = useSelector(
     (state) => state.stay.priceConversionRate
@@ -43,7 +43,7 @@ const MapMakers = ({ activity }) => {
 
   const priceConversion = async (price) => {
     if (price) {
-      if (currencyToDollar && priceConversionRate) {
+      if (currencyToKES && priceConversionRate) {
         setNewPrice(priceConversionRate * price);
       } else {
         setNewPrice(price);
@@ -69,15 +69,15 @@ const MapMakers = ({ activity }) => {
           onMouseLeave={() => setShowPopup(false)}
           onClick={() => setShowPopup(!showPopup)}
         >
-          {currencyToDollar && (
-            <h1 className="font-medium text-xs text-white">
-              {price() ? "$" + Math.ceil(newPrice).toLocaleString() : "No data"}
+          {!currencyToKES && (
+            <h1 className={"text-white font-semibold text-sm font-OpenSans "}>
+              {price() ? "$" + Math.ceil(price()).toLocaleString() : "No data"}
             </h1>
           )}
-          {!currencyToDollar && (
-            <h1 className="font-medium text-xs text-white">
+          {currencyToKES && (
+            <h1 className={"text-white font-semibold text-sm font-OpenSans "}>
               {price()
-                ? "KES" + Math.ceil(price()).toLocaleString()
+                ? "KES" + Math.ceil(newPrice).toLocaleString()
                 : "No data"}
             </h1>
           )}
@@ -117,20 +117,17 @@ const MapMakers = ({ activity }) => {
               styles.tooltip
             }
           >
-            {currencyToDollar && (
-              <h1 className="font-medium text-xs text-white">
-                {activeActivity.price
-                  ? "$" +
-                    Math.ceil(
-                      activeActivity.price * priceConversionRate
-                    ).toLocaleString()
+            {!currencyToKES && (
+              <h1 className={"text-white font-semibold text-sm font-OpenSans "}>
+                {price()
+                  ? "$" + Math.ceil(price()).toLocaleString()
                   : "No data"}
               </h1>
             )}
-            {!currencyToDollar && (
-              <h1 className="font-medium text-xs text-white">
-                {activeActivity.price
-                  ? "KES" + Math.ceil(activeActivity.price).toLocaleString()
+            {currencyToKES && (
+              <h1 className={"text-white font-semibold text-sm font-OpenSans "}>
+                {price()
+                  ? "KES" + Math.ceil(newPrice).toLocaleString()
                   : "No data"}
               </h1>
             )}

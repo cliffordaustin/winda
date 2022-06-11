@@ -20,7 +20,7 @@ function Navbar({
   userProfile,
   showSearchModal,
 }) {
-  const currencyToDollar = useSelector((state) => state.home.currencyToDollar);
+  const currencyToKES = useSelector((state) => state.home.currencyToKES);
 
   const [numberOfItemsInCart, setNumberOfItemsInCart] = useState(0);
 
@@ -149,7 +149,7 @@ function Navbar({
 
       <div className="flex justify-center items-center gap-4 text-xs lg:text-base">
         <ClientOnly>
-          {currencyToDollar && (
+          {currencyToKES && (
             <div
               className="font-bold text-gray-700 hover:text-gray-900 cursor-pointer transition-all duration-300 ease-linear flex gap-1 items-center"
               onClick={() => {
@@ -176,7 +176,7 @@ function Navbar({
               <div>KES</div>
             </div>
           )}
-          {!currencyToDollar && (
+          {!currencyToKES && (
             <div
               className="font-bold text-gray-700 hover:text-gray-900 cursor-pointer transition-all duration-300 ease-linear flex gap-1 items-center"
               onClick={() => {

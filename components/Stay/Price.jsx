@@ -10,7 +10,7 @@ const Price = ({ stayPrice, className = "" }) => {
     (state) => state.stay.priceConversionRate
   );
 
-  const currencyToDollar = useSelector((state) => state.home.currencyToDollar);
+  const currencyToKES = useSelector((state) => state.home.currencyToKES);
 
   const price = () => {
     return stayPrice;
@@ -18,7 +18,7 @@ const Price = ({ stayPrice, className = "" }) => {
 
   const priceConversion = async (price) => {
     if (price) {
-      if (currencyToDollar && priceConversionRate) {
+      if (currencyToKES && priceConversionRate) {
         setNewPrice(priceConversionRate * price);
       } else {
         setNewPrice(price);
@@ -30,20 +30,18 @@ const Price = ({ stayPrice, className = "" }) => {
 
   useEffect(() => {
     priceConversion(price());
-  }, [priceConversionRate, currencyToDollar, stayPrice]);
+  }, [priceConversionRate, currencyToKES, stayPrice]);
 
   return (
     <ClientOnly>
-      {currencyToDollar && (
+      {!currencyToKES && (
         <h1 className={"font-bold text-xl font-OpenSans " + className}>
-          {stayPrice ? "$" + Math.ceil(newPrice).toLocaleString() : "No data"}
+          {stayPrice ? "$" + Math.ceil(stayPrice).toLocaleString() : "No data"}
         </h1>
       )}
-      {!currencyToDollar && (
+      {currencyToKES && (
         <h1 className={"font-bold text-xl font-OpenSans " + className}>
-          {stayPrice
-            ? "KES" + Math.ceil(stayPrice).toLocaleString()
-            : "No data"}
+          {stayPrice ? "KES" + Math.ceil(newPrice).toLocaleString() : "No data"}
         </h1>
       )}
     </ClientOnly>

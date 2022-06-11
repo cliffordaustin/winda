@@ -18,7 +18,7 @@ const TripTransportCard = ({
 }) => {
   const [newPrice, setNewPrice] = useState(null);
 
-  const currencyToDollar = useSelector((state) => state.home.currencyToDollar);
+  const currencyToKES = useSelector((state) => state.home.currencyToKES);
 
   const priceConversionRate = useSelector(
     (state) => state.stay.priceConversionRate
@@ -32,7 +32,7 @@ const TripTransportCard = ({
 
   const priceConversion = async (price) => {
     if (price) {
-      if (currencyToDollar && priceConversionRate) {
+      if (currencyToKES && priceConversionRate) {
         setNewPrice(priceConversionRate * price);
       } else {
         setNewPrice(price);
@@ -89,7 +89,7 @@ const TripTransportCard = ({
 
   useEffect(() => {
     priceConversion(price());
-  }, [price(), currencyToDollar, priceConversionRate]);
+  }, [price(), currencyToKES, priceConversionRate]);
   return (
     <div>
       <Card
@@ -112,15 +112,15 @@ const TripTransportCard = ({
         </div>
 
         <div className="flex gap-1">
-          {currencyToDollar && (
-            <h1 className="font-bold text-base font-OpenSans">
-              {price() ? "$" + Math.ceil(newPrice).toLocaleString() : "No data"}
+          {!currencyToKES && (
+            <h1 className={"font-bold text-xl font-OpenSans "}>
+              {price() ? "$" + Math.ceil(price()).toLocaleString() : "No data"}
             </h1>
           )}
-          {!currencyToDollar && (
-            <h1 className="font-bold text-base font-OpenSans">
+          {currencyToKES && (
+            <h1 className={"font-bold text-xl font-OpenSans "}>
               {price()
-                ? "KES" + Math.ceil(price()).toLocaleString()
+                ? "KES" + Math.ceil(newPrice).toLocaleString()
                 : "No data"}
             </h1>
           )}

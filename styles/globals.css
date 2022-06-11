@@ -252,6 +252,10 @@ body {
   bottom: env(safe-area-inset-bottom);
 }
 
+.safari-top {
+  top: env(safe-area-inset-top);
+}
+
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
   select,
   textarea,

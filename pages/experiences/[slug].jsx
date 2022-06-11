@@ -75,7 +75,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
   const priceConversionRate = async () => {
     try {
       const response = await fetch(
-        "https://api.exchangerate-api.com/v4/latest/kes",
+        "https://api.exchangerate-api.com/v4/latest/usd",
         {
           method: "GET",
         }
@@ -84,7 +84,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
       const data = await response.json();
       dispatch({
         type: "SET_PRICE_CONVERSION",
-        payload: data.rates.USD,
+        payload: data.rates.KES,
       });
     } catch (error) {
       console.log(error);

@@ -5,7 +5,7 @@ import storage from "redux-persist/lib/storage";
 const homePageState = {
   topBanner: true,
   helpReorderPopup: true,
-  currencyToDollar: false,
+  currencyToKES: false,
   currentCartItemId: 0,
   currentCartItemActivitiesId: -1,
   currentCartItemName: "",
@@ -36,10 +36,10 @@ const homePageReducer = (state = homePageState, action) => {
       return { ...state, topBanner: true };
 
     case "CHANGE_CURRENCY_TO_DOLLAR_FALSE":
-      return { ...state, currencyToDollar: false };
+      return { ...state, currencyToKES: false };
 
     case "CHANGE_CURRENCY_TO_DOLLAR_TRUE":
-      return { ...state, currencyToDollar: true };
+      return { ...state, currencyToKES: true };
 
     default:
       return state;
@@ -49,7 +49,7 @@ const homePageReducer = (state = homePageState, action) => {
 const persistConfig = {
   key: "home",
   storage: storage,
-  whitelist: ["topBanner", "currencyToDollar", "helpReorderPopup"],
+  whitelist: ["topBanner", "currencyToKES", "helpReorderPopup"],
 };
 
 export default persistReducer(persistConfig, homePageReducer);

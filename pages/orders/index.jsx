@@ -62,7 +62,7 @@ function Orders({
 
   const [mobileMap, setMobileMap] = useState(false);
 
-  const currencyToDollar = useSelector((state) => state.home.currencyToDollar);
+  const currencyToKES = useSelector((state) => state.home.currencyToKES);
   const activeItem = useSelector((state) => state.order.activeItem);
   const currentCartItemName = useSelector(
     (state) => state.home.currentCartItemName
@@ -110,7 +110,7 @@ function Orders({
 
   const priceConversion = async (price) => {
     if (price) {
-      if (currencyToDollar && priceConversionRate) {
+      if (currencyToKES && priceConversionRate) {
         setNewPrice(priceConversionRate * price);
       } else {
         setNewPrice(price);
@@ -242,7 +242,7 @@ function Orders({
 
   useEffect(() => {
     priceConversion(totalPrice());
-  }, [totalPrice(), currencyToDollar, priceConversionRate]);
+  }, [totalPrice(), currencyToKES, priceConversionRate]);
 
   const config = {
     reference: reference(),
@@ -584,17 +584,17 @@ function Orders({
               ></TripOverview> */}
 
               <ClientOnly>
-                {currencyToDollar && (
-                  <h1 className="font-bold text-xl font-OpenSans">
+                {!currencyToKES && (
+                  <h1 className={"font-bold text-xl font-OpenSans "}>
                     {totalPrice()
-                      ? "$" + Math.ceil(newPrice).toLocaleString()
+                      ? "$" + Math.ceil(totalPrice()).toLocaleString()
                       : "No data"}
                   </h1>
                 )}
-                {!currencyToDollar && (
-                  <h1 className="font-bold text-xl font-OpenSans">
+                {currencyToKES && (
+                  <h1 className={"font-bold text-xl font-OpenSans "}>
                     {totalPrice()
-                      ? "KES" + Math.ceil(totalPrice()).toLocaleString()
+                      ? "KES" + Math.ceil(newPrice).toLocaleString()
                       : "No data"}
                   </h1>
                 )}
@@ -798,14 +798,14 @@ function Orders({
                   <ClientOnly>
                     <div className={styles.priceTotal}>
                       <div className="font-bold">Price Total</div>
-                      {currencyToDollar && (
+                      {currencyToKES && (
                         <h1 className="font-bold text-lg font-OpenSans">
                           {totalPrice()
                             ? "$" + Math.ceil(newPrice).toLocaleString()
                             : "No data"}
                         </h1>
                       )}
-                      {!currencyToDollar && (
+                      {!currencyToKES && (
                         <h1 className="font-bold text-lg font-OpenSans">
                           {totalPrice()
                             ? "KES" + Math.ceil(totalPrice()).toLocaleString()
@@ -824,14 +824,14 @@ function Orders({
                   >
                     <span className="font-bold mr-1">Pay</span>
                     <ClientOnly>
-                      {currencyToDollar && (
+                      {currencyToKES && (
                         <h1 className="font-bold font-OpenSans">
                           {totalPrice()
                             ? "$" + Math.ceil(newPrice).toLocaleString()
                             : "No data"}
                         </h1>
                       )}
-                      {!currencyToDollar && (
+                      {!currencyToKES && (
                         <h1 className="font-bold font-OpenSans">
                           {totalPrice()
                             ? "KES" + Math.ceil(totalPrice()).toLocaleString()
@@ -1704,17 +1704,17 @@ function Orders({
                   >
                     <span className="font-bold mr-1">Pay</span>
                     <ClientOnly>
-                      {currencyToDollar && (
-                        <h1 className="font-bold font-OpenSans">
+                      {!currencyToKES && (
+                        <h1 className={"font-bold text-xl font-OpenSans "}>
                           {totalPrice()
-                            ? "$" + Math.ceil(newPrice).toLocaleString()
+                            ? "$" + Math.ceil(totalPrice()).toLocaleString()
                             : "No data"}
                         </h1>
                       )}
-                      {!currencyToDollar && (
-                        <h1 className="font-bold font-OpenSans">
+                      {currencyToKES && (
+                        <h1 className={"font-bold text-xl font-OpenSans "}>
                           {totalPrice()
-                            ? "KES" + Math.ceil(totalPrice()).toLocaleString()
+                            ? "KES" + Math.ceil(newPrice).toLocaleString()
                             : "No data"}
                         </h1>
                       )}

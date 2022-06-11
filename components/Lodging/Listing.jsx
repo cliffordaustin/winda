@@ -27,7 +27,7 @@ function Listing({
 
   const [isSafari, setIsSafari] = useState(false);
 
-  const currencyToDollar = useSelector((state) => state.home.currencyToDollar);
+  const currencyToKES = useSelector((state) => state.home.currencyToKES);
 
   const priceConversionRate = useSelector(
     (state) => state.stay.priceConversionRate
@@ -60,7 +60,7 @@ function Listing({
 
   const priceConversion = async (price) => {
     if (price) {
-      if (currencyToDollar && priceConversionRate) {
+      if (currencyToKES && priceConversionRate) {
         setNewPrice(priceConversionRate * price);
       } else {
         setNewPrice(price);
@@ -72,7 +72,7 @@ function Listing({
 
   useEffect(() => {
     priceConversion(price());
-  }, [price(), currencyToDollar, priceConversionRate]);
+  }, [price(), currencyToKES, priceConversionRate]);
 
   const [cartLoading, setCartLoading] = useState(false);
 
@@ -228,17 +228,17 @@ function Listing({
             >
               <div className="flex flex-col gap-1">
                 <h1 className="text-gray-500 truncate">{listing.name}</h1>
-                {currencyToDollar && (
-                  <h1 className="font-bold text-xl font-OpenSans">
+                {!currencyToKES && (
+                  <h1 className={"font-bold text-xl font-OpenSans "}>
                     {price()
-                      ? "$" + Math.ceil(newPrice).toLocaleString()
+                      ? "$" + Math.ceil(price()).toLocaleString()
                       : "No data"}
                   </h1>
                 )}
-                {!currencyToDollar && (
-                  <h1 className="font-bold text-xl font-OpenSans">
+                {currencyToKES && (
+                  <h1 className={"font-bold text-xl font-OpenSans "}>
                     {price()
-                      ? "KES" + Math.ceil(price()).toLocaleString()
+                      ? "KES" + Math.ceil(newPrice).toLocaleString()
                       : "No data"}
                   </h1>
                 )}
@@ -494,17 +494,17 @@ function Listing({
                 <div className="flex flex-col gap-1">
                   <h1 className="text-gray-500 truncate">{listing.name}</h1>
 
-                  {currencyToDollar && (
-                    <h1 className="font-bold text-xl font-OpenSans">
+                  {!currencyToKES && (
+                    <h1 className={"font-bold text-xl font-OpenSans "}>
                       {price()
-                        ? "$" + Math.ceil(newPrice).toLocaleString()
+                        ? "$" + Math.ceil(price()).toLocaleString()
                         : "No data"}
                     </h1>
                   )}
-                  {!currencyToDollar && (
-                    <h1 className="font-bold text-xl font-OpenSans">
+                  {currencyToKES && (
+                    <h1 className={"font-bold text-xl font-OpenSans "}>
                       {price()
-                        ? "KES" + Math.ceil(price()).toLocaleString()
+                        ? "KES" + Math.ceil(newPrice).toLocaleString()
                         : "No data"}
                     </h1>
                   )}

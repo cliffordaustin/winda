@@ -10,6 +10,7 @@ import ClientOnly from "../ClientOnly";
 import LoadingSpinerChase from "../ui/LoadingSpinerChase";
 import { priceConversionRateFunc } from "../../lib/PriceRate";
 import moment from "moment";
+import { stayPriceOfPlan } from "../../lib/pricePlan";
 
 const CartItem = ({
   stay,
@@ -34,6 +35,7 @@ const CartItem = ({
   num_of_adults,
   num_of_children,
   plan,
+  non_resident,
 
   transportPage,
   transport,
@@ -44,7 +46,7 @@ const CartItem = ({
   userNeedADriver,
   numberOfDays,
 }) => {
-  const currencyToDollar = useSelector((state) => state.home.currencyToDollar);
+  const currencyToKES = useSelector((state) => state.home.currencyToKES);
   const activeItem = useSelector((state) => state.order.activeItem);
   const priceConversionRate = useSelector(
     (state) => state.stay.priceConversionRate
@@ -68,7 +70,12 @@ const CartItem = ({
 
   const price = () => {
     return stayPage
-      ? stay.price
+      ? stayPriceOfPlan(
+          (plan = plan),
+          (non_resident = non_resident),
+          (stay = stay)
+        ) *
+          (num_of_adults + num_of_children)
       : transportPage
       ? transportPrice
       : activity.price;
@@ -460,7 +467,7 @@ const CartItem = ({
 
   const priceConversion = async (price) => {
     if (price) {
-      if (currencyToDollar && priceConversionRate) {
+      if (currencyToKES && priceConversionRate) {
         setNewPrice(priceConversionRate * price);
       } else {
         setNewPrice(price);
@@ -472,7 +479,7 @@ const CartItem = ({
 
   useEffect(() => {
     priceConversion(price());
-  }, [price(), currencyToDollar, priceConversionRate]);
+  }, [price(), currencyToKES, priceConversionRate]);
   const sortedImages = stayPage
     ? stay.stay_images.sort((x, y) => y.main - x.main)
     : transportPage
@@ -529,7 +536,7 @@ const CartItem = ({
               />
             </div>
           </div>
-          <div className={"w-2/4 px-2 py-2 "}>
+          <div className={"w-2/4 px-2 pb-1 "}>
             <div className="flex flex-col gap-1">
               <h1 className="text-gray-500 truncate">
                 {activitiesPage ? activity.name : stayPage ? stay.name : ""}
@@ -551,17 +558,17 @@ const CartItem = ({
               )}
               <ClientOnly>
                 <div className="flex items-center">
-                  {currencyToDollar && (
-                    <h1 className="font-bold text-lg font-OpenSans">
+                  {!currencyToKES && (
+                    <h1 className={"font-bold text-xl font-OpenSans "}>
                       {price()
-                        ? "$" + Math.ceil(newPrice).toLocaleString()
+                        ? "$" + Math.ceil(price()).toLocaleString()
                         : "No data"}
                     </h1>
                   )}
-                  {!currencyToDollar && (
-                    <h1 className="font-bold text-lg font-OpenSans">
+                  {currencyToKES && (
+                    <h1 className={"font-bold text-xl font-OpenSans "}>
                       {price()
-                        ? "KES" + Math.ceil(price()).toLocaleString()
+                        ? "KES" + Math.ceil(newPrice).toLocaleString()
                         : "No data"}
                     </h1>
                   )}
@@ -842,6 +849,19 @@ const CartItem = ({
                       </span>
                     </>
                   )}
+                  {non_resident && (
+                    <>
+                      <span className="font-bold text-xl -mt-3">.</span>
+                      <span>Non-resident</span>
+                    </>
+                  )}
+
+                  {!non_resident && (
+                    <>
+                      <span className="font-bold text-xl -mt-3">.</span>
+                      <span>Resident</span>
+                    </>
+                  )}
                 </div>
               )}
             </ClientOnly>
@@ -926,53 +946,59 @@ const CartItem = ({
       {stayPage && (
         <div>
           {plan === "STANDARD" && (
-            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-white">
+            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-sm text-white">
               Standard
             </div>
           )}
           {plan === "DELUXE" && (
-            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-white">
+            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-sm text-white">
               Deluxe
             </div>
           )}
           {plan === "SUPER DELUXE" && (
-            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-white">
+            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-sm text-white">
               Super Deluxe
             </div>
           )}
           {plan === "STUDIO" && (
-            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-white">
+            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-sm text-white">
               Studio
             </div>
           )}
           {plan === "DOUBLE ROOM" && (
-            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-white">
+            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-sm text-white">
               Double Room
             </div>
           )}
 
-          {plan === "TRIPLE ROOM" && (
-            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-white">
+          {plan === "FAMILY ROOM" && (
+            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-sm text-white">
+              Family Room
+            </div>
+          )}
+
+          {plan === "TRIPPLE ROOM" && (
+            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-sm text-white">
               Tripple Room
             </div>
           )}
           {plan === "QUAD ROOM" && (
-            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-white">
+            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-sm text-white">
               Quad Room
             </div>
           )}
           {plan === "KING ROOM" && (
-            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-white">
+            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-sm text-white">
               King Room
             </div>
           )}
           {plan === "QUEEN ROOM" && (
-            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-white">
+            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-sm text-white">
               Queen Room
             </div>
           )}
           {plan === "TWIN ROOM" && (
-            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-white">
+            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-sm text-white">
               Twin Room
             </div>
           )}

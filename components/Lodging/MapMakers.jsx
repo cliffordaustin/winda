@@ -11,7 +11,7 @@ const MapMakers = ({ stay }) => {
 
   const activeStay = useSelector((state) => state.stay.activeStay);
 
-  const currencyToDollar = useSelector((state) => state.home.currencyToDollar);
+  const currencyToKES = useSelector((state) => state.home.currencyToKES);
 
   const priceConversionRate = useSelector(
     (state) => state.stay.priceConversionRate
@@ -43,7 +43,7 @@ const MapMakers = ({ stay }) => {
 
   const priceConversion = async (price) => {
     if (price) {
-      if (currencyToDollar && priceConversionRate) {
+      if (currencyToKES && priceConversionRate) {
         setNewPrice(priceConversionRate * price);
       } else {
         setNewPrice(price);
@@ -69,15 +69,15 @@ const MapMakers = ({ stay }) => {
           onMouseLeave={() => setShowPopup(false)}
           onClick={() => setShowPopup(!showPopup)}
         >
-          {currencyToDollar && (
-            <h1 className="font-medium text-xs text-white">
-              {price() ? "$" + Math.ceil(newPrice).toLocaleString() : "No data"}
+          {!currencyToKES && (
+            <h1 className={"text-white font-semibold text-sm font-OpenSans "}>
+              {price() ? "$" + Math.ceil(price()).toLocaleString() : "No data"}
             </h1>
           )}
-          {!currencyToDollar && (
-            <h1 className="font-medium text-xs text-white">
+          {currencyToKES && (
+            <h1 className={"text-white font-semibold text-sm font-OpenSans "}>
               {price()
-                ? "KES" + Math.ceil(price()).toLocaleString()
+                ? "KES" + Math.ceil(newPrice).toLocaleString()
                 : "No data"}
             </h1>
           )}
@@ -114,20 +114,17 @@ const MapMakers = ({ stay }) => {
               styles.tooltip
             }
           >
-            {currencyToDollar && (
-              <h1 className="font-medium text-xs text-white">
-                {activeStay.price
-                  ? "$" +
-                    Math.ceil(
-                      activeStay.price * priceConversionRate
-                    ).toLocaleString()
+            {!currencyToKES && (
+              <h1 className={"text-white font-semibold text-sm font-OpenSans "}>
+                {price()
+                  ? "$" + Math.ceil(price()).toLocaleString()
                   : "No data"}
               </h1>
             )}
-            {!currencyToDollar && (
-              <h1 className="font-medium text-xs text-white">
-                {activeStay.price
-                  ? "KES" + Math.ceil(activeStay.price).toLocaleString()
+            {currencyToKES && (
+              <h1 className={"text-white font-semibold text-sm font-OpenSans "}>
+                {price()
+                  ? "KES" + Math.ceil(newPrice).toLocaleString()
                   : "No data"}
               </h1>
             )}

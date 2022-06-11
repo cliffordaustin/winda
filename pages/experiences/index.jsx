@@ -113,7 +113,7 @@ function Activities({ userProfile, longitude, latitude }) {
 
   const dispatch = useDispatch();
 
-  const currencyToDollar = useSelector((state) => state.home.currencyToDollar);
+  const currencyToKES = useSelector((state) => state.home.currencyToKES);
 
   useEffect(() => {
     if (router.query) {
@@ -143,7 +143,7 @@ function Activities({ userProfile, longitude, latitude }) {
   const priceConversionRate = async () => {
     try {
       const response = await fetch(
-        "https://api.exchangerate-api.com/v4/latest/kes",
+        "https://api.exchangerate-api.com/v4/latest/usd",
         {
           method: "GET",
         }
@@ -152,7 +152,7 @@ function Activities({ userProfile, longitude, latitude }) {
       const data = await response.json();
       dispatch({
         type: "SET_PRICE_CONVERSION",
-        payload: data.rates.USD,
+        payload: data.rates.KES,
       });
     } catch (error) {
       console.log(error);
@@ -480,7 +480,7 @@ function Activities({ userProfile, longitude, latitude }) {
         </div>
 
         <ClientOnly>
-          {currencyToDollar && (
+          {currencyToKES && (
             <div
               className="text-xs md:text-base absolute md:right-12 right-6 bottom-7 font-bold text-gray-700 hover:text-gray-900 cursor-pointer transition-all duration-300 ease-linear flex items-center"
               onClick={() => {
@@ -507,7 +507,7 @@ function Activities({ userProfile, longitude, latitude }) {
               <div>KES</div>
             </div>
           )}
-          {!currencyToDollar && (
+          {!currencyToKES && (
             <div
               className="text-xs md:text-base absolute md:right-12 right-6 bottom-7 font-bold text-gray-700 hover:text-gray-900 cursor-pointer transition-all duration-300 ease-linear flex md:gap-1 items-center"
               onClick={() => {

@@ -7,6 +7,8 @@ import Cookies from "js-cookie";
 import { Element } from "react-scroll";
 import { createGlobalStyle } from "styled-components";
 import Select from "react-select";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Thumbs } from "swiper";
 
 // import { getServerSideProps } from "../../lib/getServerSideProps";
 import Navbar from "../../components/Stay/Navbar";
@@ -34,6 +36,10 @@ import useOnScreen from "../../lib/onScreen";
 import moment from "moment";
 import Modal from "../../components/ui/MobileModal";
 import SelectInput from "../../components/ui/SelectInput";
+import Checkbox from "../../components/ui/Checkbox";
+
+import "swiper/css";
+import "swiper/css/thumbs";
 
 const StaysDetail = ({ userProfile, stay, inCart }) => {
   const GlobalStyle = createGlobalStyle`
@@ -92,7 +98,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
   const priceConversionRate = async () => {
     try {
       const response = await fetch(
-        "https://api.exchangerate-api.com/v4/latest/kes",
+        "https://api.exchangerate-api.com/v4/latest/usd",
         {
           method: "GET",
         }
@@ -101,7 +107,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
       const data = await response.json();
       dispatch({
         type: "SET_PRICE_CONVERSION",
-        payload: data.rates.USD,
+        payload: data.rates.KES,
       });
     } catch (error) {
       console.log(error);
@@ -125,6 +131,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               to_date: addToCartDate.to,
               num_of_adults: numOfAdults,
               num_of_children: numOfChildren,
+              non_resident: nonResident,
               plan:
                 currentTypeOfLodge.value === "Standard"
                   ? "STANDARD"
@@ -138,8 +145,8 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                   ? "DOUBLE ROOM"
                   : currentTypeOfLodge.value === "Single Room"
                   ? "SINGLE ROOM"
-                  : currentTypeOfLodge.value === "Triple Room"
-                  ? "TRIPLE ROOM"
+                  : currentTypeOfLodge.value === "Tripple Room"
+                  ? "TRIPPLE ROOM"
                   : currentTypeOfLodge.value === "Quad Room"
                   ? "QUAD ROOM"
                   : currentTypeOfLodge.value === "Queen Room"
@@ -148,6 +155,10 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                   ? "KING ROOM"
                   : currentTypeOfLodge.value === "Twin Room"
                   ? "TWIN ROOM"
+                  : currentTypeOfLodge.value === "Twin Room"
+                  ? "TWIN ROOM"
+                  : currentTypeOfLodge.value === "Family Room"
+                  ? "FAMILY ROOM"
                   : "STANDARD",
             },
             {
@@ -177,6 +188,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
             to_date: addToCartDate.to,
             num_of_adults: numOfAdults,
             num_of_children: numOfChildren,
+            non_resident: nonResident,
             plan:
               currentTypeOfLodge.value === "Standard"
                 ? "STANDARD"
@@ -190,8 +202,8 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                 ? "DOUBLE ROOM"
                 : currentTypeOfLodge.value === "Single Room"
                 ? "SINGLE ROOM"
-                : currentTypeOfLodge.value === "Triple Room"
-                ? "TRIPLE ROOM"
+                : currentTypeOfLodge.value === "Tripple Room"
+                ? "TRIPPLE ROOM"
                 : currentTypeOfLodge.value === "Quad Room"
                 ? "QUAD ROOM"
                 : currentTypeOfLodge.value === "Queen Room"
@@ -200,6 +212,8 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                 ? "KING ROOM"
                 : currentTypeOfLodge.value === "Twin Room"
                 ? "TWIN ROOM"
+                : currentTypeOfLodge.value === "Family Room"
+                ? "FAMILY ROOM"
                 : "STANDARD",
           });
           Cookies.set("cart", JSON.stringify(data));
@@ -298,8 +312,8 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
     if (stay.double_room) {
       availableOptions.push("Double Room");
     }
-    if (stay.triple_room) {
-      availableOptions.push("Triple Room");
+    if (stay.tripple_room) {
+      availableOptions.push("Tripple Room");
     }
     if (stay.quad_room) {
       availableOptions.push("Quad Room");
@@ -312,6 +326,9 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
     }
     if (stay.twin_room) {
       availableOptions.push("Twin Room");
+    }
+    if (stay.family_room) {
+      availableOptions.push("Family Room");
     }
 
     availableOptions.forEach((e) => {
@@ -330,6 +347,8 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
   const [guestPopup, setGuestPopup] = useState(false);
 
+  const [swiper, setSwiper] = useState(null);
+
   const maxGuests =
     currentTypeOfLodge.value === "Standard"
       ? stay.standard_capacity
@@ -343,8 +362,8 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
       ? stay.double_room_capacity
       : currentTypeOfLodge.value === "Single Room"
       ? stay.single_room_capacity
-      : currentTypeOfLodge.value === "Triple Room"
-      ? stay.triple_room_capacity
+      : currentTypeOfLodge.value === "Tripple Room"
+      ? stay.tripple_room_capacity
       : currentTypeOfLodge.value === "Quad Room"
       ? stay.quad_room_capacity
       : currentTypeOfLodge.value === "Queen Room"
@@ -353,33 +372,65 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
       ? stay.king_room_capacity
       : currentTypeOfLodge.value === "Twin Room"
       ? stay.twin_room_capacity
+      : currentTypeOfLodge.value === "Family Room"
+      ? stay.family_room_capacity
       : "";
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [showMoreExperiences, setShowMoreExperiences] = useState(false);
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const [nonResident, setNonResident] = useState(false);
+
   const priceOfPlan =
-    currentTypeOfLodge.value === "Standard"
+    currentTypeOfLodge.value === "Standard" && !nonResident
       ? stay.price
-      : currentTypeOfLodge.value === "Deluxe"
+      : currentTypeOfLodge.value === "Standard" && nonResident
+      ? stay.price_non_resident
+      : currentTypeOfLodge.value === "Deluxe" && !nonResident
       ? stay.deluxe_price
-      : currentTypeOfLodge.value === "Super Deluxe"
+      : currentTypeOfLodge.value === "Family Room" && nonResident
+      ? stay.family_room_price_non_resident
+      : currentTypeOfLodge.value === "Family Room" && !nonResident
+      ? stay.family_room_price
+      : currentTypeOfLodge.value === "Deluxe" && nonResident
+      ? stay.deluxe_price_non_resident
+      : currentTypeOfLodge.value === "Super Deluxe" && !nonResident
       ? stay.super_deluxe_price
-      : currentTypeOfLodge.value === "Studio"
+      : currentTypeOfLodge.value === "Super Deluxe" && nonResident
+      ? stay.super_deluxe_price_non_resident
+      : currentTypeOfLodge.value === "Studio" && !nonResident
       ? stay.studio_price
-      : currentTypeOfLodge.value === "Double Room"
+      : currentTypeOfLodge.value === "Studio" && nonResident
+      ? stay.studio_price_non_resident
+      : currentTypeOfLodge.value === "Double Room" && !nonResident
       ? stay.double_room_price
-      : currentTypeOfLodge.value === "Single Room"
+      : currentTypeOfLodge.value === "Double Room" && nonResident
+      ? stay.double_room_price_non_resident
+      : currentTypeOfLodge.value === "Single Room" && !nonResident
       ? stay.single_room_price
-      : currentTypeOfLodge.value === "Triple Room"
-      ? stay.triple_room_price
-      : currentTypeOfLodge.value === "Quad Room"
+      : currentTypeOfLodge.value === "Single Room" && nonResident
+      ? stay.single_room_price_non_resident
+      : currentTypeOfLodge.value === "Tripple Room" && !nonResident
+      ? stay.tripple_room_price
+      : currentTypeOfLodge.value === "Tripple Room" && nonResident
+      ? stay.tripple_room_price_non_resident
+      : currentTypeOfLodge.value === "Quad Room" && !nonResident
       ? stay.quad_room_price
-      : currentTypeOfLodge.value === "Queen Room"
+      : currentTypeOfLodge.value === "Quad Room" && nonResident
+      ? stay.quad_room_price_non_resident
+      : currentTypeOfLodge.value === "Queen Room" && !nonResident
       ? stay.queen_room_price
-      : currentTypeOfLodge.value === "King Room"
+      : currentTypeOfLodge.value === "Queen Room" && nonResident
+      ? stay.queen_room_price_non_resident
+      : currentTypeOfLodge.value === "King Room" && !nonResident
       ? stay.king_room_price
-      : currentTypeOfLodge.value === "Twin Room"
+      : currentTypeOfLodge.value === "King Room" && nonResident
+      ? stay.king_room_price_non_resident
+      : currentTypeOfLodge.value === "Twin Room" && !nonResident
       ? stay.twin_room_price
+      : currentTypeOfLodge.value === "Twin Room" && nonResident
+      ? stay.twin_room_price_non_resident
       : stay.price;
 
   return (
@@ -439,8 +490,65 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
         </div>
       </div> */}
       <div className="flex flex-col px-4 md:px-0 md:flex-row justify-around relative h-full w-full">
-        <div className="md:w-[56%] lg:w-[63%] md:px-4 md:border-r md:border-gray-200 md:absolute md:mt-0 mt-10 left-2 md:block top-10">
-          <Element name="quick-facts">
+        <div
+          className={
+            "md:w-[56%] lg:w-[63%] md:px-4 md:border-r md:border-gray-200 md:absolute md:mt-0 mt-10 left-2 md:block top-10 " +
+            (stay.type_of_stay === "HOUSE" && inCart
+              ? "md:!w-[900px] !sticky !mt-12 !mx-auto !border-0"
+              : "")
+          }
+        >
+          <Element name="about">
+            <div className="mt-10">
+              <div className="text-sm text-gray-600 font-medium flex items-center">
+                <div>
+                  <div
+                    onClick={() => {
+                      router.push({
+                        pathname: "/stays",
+                        query: {
+                          search: stay.country,
+                        },
+                      });
+                    }}
+                    className="cursor-pointer hover:text-blue-600 inline transition-colors duration-200 ease-in-out"
+                  >
+                    {stay.country}
+                  </div>{" "}
+                  <span className="mx-1">/</span>
+                </div>
+                <div>
+                  <div
+                    onClick={() => {
+                      router.push({
+                        pathname: "/stays",
+                        query: {
+                          search: stay.city,
+                        },
+                      });
+                    }}
+                    className="cursor-pointer hover:text-blue-600 inline transition-colors duration-200 ease-in-out"
+                  >
+                    {stay.city}
+                  </div>{" "}
+                  <span className="mx-1">/</span>{" "}
+                </div>
+                <div
+                  onClick={() => {
+                    router.push({
+                      pathname: "/stays",
+                      query: {
+                        search: stay.location,
+                      },
+                    });
+                  }}
+                  className="cursor-pointer hover:text-blue-600 inline transition-colors duration-200 ease-in-out"
+                >
+                  {stay.location}
+                </div>
+              </div>
+              <div className="text-2xl font-bold">{stay.name}</div>
+            </div>
             <div ref={scrollToVisible} className="relative -ml-8 -mr-4">
               <ImageGallery
                 images={stay.stay_images}
@@ -515,22 +623,24 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
             <div
               className={
-                "h-12 border-b border-gray-200 absolute top-[430px] sm:top-[480px] w-[100%] left-0 right-0 lg:px-10 px-5 " +
-                (!isVisible
-                  ? "!fixed md:!w-[56.5%] lg:!w-[63.5%]  !w-full !top-[65px] left-0 right-0 z-[40] bg-white"
-                  : "")
+                (!isVisible && (stay.type_of_stay !== "HOUSE" || !inCart)
+                  ? "!fixed md:!w-[56.5%] lg:!w-[63.5%]  !w-full !top-[70px] left-0 right-0 z-[40] bg-white "
+                  : "") +
+                (!isVisible && stay.type_of_stay === "HOUSE" && inCart
+                  ? "!fixed !w-full !top-[70px] left-0 right-0 z-[40] bg-white "
+                  : "") +
+                (stay.type_of_stay === "HOUSE" && inCart
+                  ? "h-12 border-b border-gray-200 absolute top-[460px] sm:top-[510px] md:top-[560px] w-[100%] left-0 right-0 lg:px-10 px-5"
+                  : "h-12 border-b border-gray-200 absolute top-[515px] sm:top-[565px] w-[100%] left-0 right-0 lg:px-10 px-5")
               }
             >
-              <ScrollTo guestPopup={guestPopup}></ScrollTo>
+              <ScrollTo guestPopup={guestPopup} stay={stay}></ScrollTo>
             </div>
 
             {/* about */}
 
-            <div className="flex mt-20">
+            <div className="flex mt-14">
               <div className="flex flex-col w-full">
-                <div className="text-2xl font-bold">{stay.name}</div>
-                <div className="text-lg font-medium">{stay.location}</div>
-
                 <div className="text-gray-500 flex gap-2 text-sm truncate mt-3 flex-wrap">
                   {stay.capacity && (
                     <div className="flex items-center gap-0.5">
@@ -627,43 +737,181 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                 </div>
               </div>
 
-              <div className="w-full z-10 px-4 md:hidden fixed bottom-0 safari-bottom left-0 right-0 bg-white py-4">
+              {stay.type_of_stay === "HOUSE" && inCart && (
+                <Button
+                  onClick={() => {
+                    router.push({ pathname: "/cart" });
+                  }}
+                  className={
+                    "!bg-transparent !hidden md:!flex !w-[200px] h-[45px] !text-black relative border-2 border-pink-500 "
+                  }
+                >
+                  View in basket
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    viewBox="0 0 24 24"
+                    version="1.1"
+                  >
+                    <title>bag</title>
+                    <desc>Created with Sketch.</desc>
+                    <defs />
+                    <g
+                      id="Page-1"
+                      stroke="none"
+                      strokeWidth="1"
+                      fill="none"
+                      fillRule="evenodd"
+                    >
+                      <g
+                        id="Artboard-4"
+                        transform="translate(-620.000000, -291.000000)"
+                      >
+                        <g
+                          id="94"
+                          transform="translate(620.000000, 291.000000)"
+                        >
+                          <rect
+                            id="Rectangle-40"
+                            stroke="#333333"
+                            strokeWidth="2"
+                            x="4"
+                            y="7"
+                            width="16"
+                            height="16"
+                            rx="1"
+                          />
+                          <path
+                            d="M16,10 L16,5 C16,2.790861 14.209139,1 12,1 C9.790861,1 8,2.790861 8,5 L8,10"
+                            id="Oval-21"
+                            stroke="#333333"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                          />
+                          <rect
+                            id="Rectangle-41"
+                            fill="#333333"
+                            x="5"
+                            y="18"
+                            width="14"
+                            height="2"
+                          />
+                        </g>
+                      </g>
+                    </g>
+                  </svg>
+                </Button>
+              )}
+
+              <div
+                className={
+                  "w-full z-10 px-2 md:hidden fixed bottom-0 safari-bottom left-0 right-0 bg-white py-1 " +
+                  (stay.type_of_stay === "HOUSE" && inCart && "!py-2.5")
+                }
+              >
                 <div className="flex justify-between items-center gap-2">
                   <div>
-                    <div className="flex">
-                      <Price stayPrice={priceOfPlan}></Price>
+                    <div className="flex items-center">
+                      <Price
+                        stayPrice={priceOfPlan * (numOfAdults + numOfChildren)}
+                      ></Price>
                       <span className="mt-1">/night</span>
+
+                      {addToCartDate &&
+                        addToCartDate.from &&
+                        addToCartDate.to && (
+                          <div className="mx-1 mb-1 font-bold">.</div>
+                        )}
+
+                      {addToCartDate && addToCartDate.from && addToCartDate.to && (
+                        <span className="text-sm font-bold mt-1.5">
+                          {moment(addToCartDate.from).format("MMM DD")} -{" "}
+                          {moment(addToCartDate.to).format("MMM DD")}
+                        </span>
+                      )}
                     </div>
-                    {addToCartDate && addToCartDate.from && addToCartDate.to && (
-                      <span className="text-sm font-bold">
-                        {moment(addToCartDate.from).format("MMM DD")} -{" "}
-                        {moment(addToCartDate.to).format("MMM DD")}
-                      </span>
+
+                    {(stay.type_of_stay !== "HOUSE" || !inCart) && (
+                      <div className="text-gray-600 text-sm justify-start flex flex-wrap self-start">
+                        {
+                          <span>
+                            {numOfAdults} {numOfAdults > 1 ? "Adults" : "Adult"}
+                          </span>
+                        }
+                        {numOfChildren > 0 && (
+                          <>
+                            <span className="font-bold mx-0.5 ">,</span>
+                            <span>
+                              {numOfChildren}{" "}
+                              {numOfChildren > 1 ? "Children" : "Child"}
+                            </span>
+                          </>
+                        )}
+                        {nonResident && (
+                          <>
+                            <span className="font-bold mx-0.5 ">,</span>
+                            <span>Non-resident</span>
+                          </>
+                        )}
+
+                        {!nonResident && (
+                          <>
+                            <span className="font-bold mx-0.5 ">,</span>
+                            <span>Resident</span>
+                          </>
+                        )}
+                      </div>
                     )}
                   </div>
 
-                  <Button
-                    onClick={() => {
-                      setShowMobileDateModal(true);
-                    }}
-                    className={
-                      "!bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white " +
-                      (!inCart ? "" : "")
-                    }
-                  >
-                    {!inCart ? "Add to basket" : "Add to basket again"}
-                    <div
+                  {(stay.type_of_stay !== "HOUSE" || !inCart) && (
+                    <Button
+                      onClick={() => {
+                        setShowMobileDateModal(true);
+                      }}
                       className={
-                        " " + (!addToBasketLoading ? "hidden" : "ml-2")
+                        "!bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white " +
+                        (!inCart ? "" : "")
                       }
                     >
-                      <LoadingSpinerChase
-                        width={16}
-                        height={16}
-                        color="#fff"
-                      ></LoadingSpinerChase>
-                    </div>
-                  </Button>
+                      {!inCart ? "Add to basket" : "Add to basket again"}
+                      <div
+                        className={
+                          " " + (!addToBasketLoading ? "hidden" : "ml-2")
+                        }
+                      >
+                        <LoadingSpinerChase
+                          width={16}
+                          height={16}
+                          color="#fff"
+                        ></LoadingSpinerChase>
+                      </div>
+                    </Button>
+                  )}
+
+                  {stay.type_of_stay === "HOUSE" && inCart && (
+                    <Button
+                      onClick={() => {
+                        router.push({ pathname: "/cart" });
+                      }}
+                      className={
+                        "!bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white "
+                      }
+                    >
+                      View in basket
+                      <div
+                        className={
+                          " " + (!addToBasketLoading ? "hidden" : "ml-2")
+                        }
+                      >
+                        <LoadingSpinerChase
+                          width={16}
+                          height={16}
+                          color="#fff"
+                        ></LoadingSpinerChase>
+                      </div>
+                    </Button>
+                  )}
                 </div>
               </div>
             </div>
@@ -673,190 +921,532 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               closeModal={() => {
                 setShowMobileDateModal(!showMobileDateModal);
               }}
+              className="md:!hidden"
             >
-              <div
-                className={
-                  " h-fit w-full lg:w-fit py-2 mx-auto xl:ml-2 mt-2 order-1 md:order-2 "
+              <Swiper
+                preventInteractionOnTransition={true}
+                // allowTouchMove={false}
+                simulateTouch={false}
+                onSlideChange={(swiper) =>
+                  setState({
+                    ...state,
+                    swiperIndex: swiper.realIndex,
+                  })
                 }
+                onSwiper={(swiper) => setSwiper(swiper)}
+                modules={[Navigation]}
+                pagination={{
+                  el: ".swiper-pagination-mobile",
+                  clickable: true,
+                }}
+                navigation={{
+                  nextEl: ".swiper-button-next-mobile",
+                  prevEl: ".swiper-button-prev-mobile",
+                }}
+                className={"!h-full !w-full !overflow-y-scroll remove-scroll"}
               >
-                <div>
-                  {addToCartDate &&
-                    !addToCartDate.from &&
-                    !addToCartDate.to && (
-                      <div className="text-xl ml-4 font-bold">
-                        Select a date
+                <SwiperSlide>
+                  <div
+                    className={
+                      " h-full w-full lg:w-fit mx-auto xl:ml-2 order-1 md:order-2 "
+                    }
+                  >
+                    <div className="flex justify-between">
+                      {addToCartDate &&
+                        !addToCartDate.from &&
+                        !addToCartDate.to && (
+                          <div className="text-lg mt-6 ml-4 font-bold">
+                            Select a date
+                          </div>
+                        )}
+                      {!addToCartDate && (
+                        <div className="text-lg mt-6 ml-4 font-bold">
+                          Select a date
+                        </div>
+                      )}
+                      {addToCartDate &&
+                        addToCartDate.from &&
+                        !addToCartDate.to && (
+                          <div className="text-lg mt-6 ml-4 font-bold">
+                            Select checkout date
+                          </div>
+                        )}
+                      <div></div>
+
+                      <div className="flex flex-col mr-4">
+                        <div className="flex self-end">
+                          <Price
+                            stayPrice={
+                              priceOfPlan * (numOfAdults + numOfChildren)
+                            }
+                          ></Price>
+                          <span className="mt-1">/night</span>
+                        </div>
+                        {addToCartDate &&
+                          addToCartDate.from &&
+                          addToCartDate.to && (
+                            <span className="text-gray-600 text-sm font-bold self-end">
+                              {moment(addToCartDate.from).format("MMM DD")} -{" "}
+                              {moment(addToCartDate.to).format("MMM DD")}
+                            </span>
+                          )}
+                        <div className="text-gray-600 text-sm justify-end flex flex-wrap self-end">
+                          {
+                            <span>
+                              {numOfAdults}{" "}
+                              {numOfAdults > 1 ? "Adults" : "Adult"}
+                            </span>
+                          }
+                          {numOfChildren > 0 && (
+                            <>
+                              <span className="font-bold mx-0.5 ">,</span>
+                              <span>
+                                {numOfChildren}{" "}
+                                {numOfChildren > 1 ? "Children" : "Child"}
+                              </span>
+                            </>
+                          )}
+                          {nonResident && (
+                            <>
+                              <span className="font-bold mx-0.5 ">,</span>
+                              <span>Non-resident</span>
+                            </>
+                          )}
+
+                          {!nonResident && (
+                            <>
+                              <span className="font-bold mx-0.5 ">,</span>
+                              <span>Resident</span>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <DatePicker
+                      setDate={setAddToCartDate}
+                      date={addToCartDate}
+                      disableDate={new Date()}
+                    ></DatePicker>
+                    {addToCartDate && (addToCartDate.from || addToCartDate.to) && (
+                      <div
+                        className="mb-2 cursor-pointer text-sm ml-4 underline"
+                        onClick={() => {
+                          setAddToCartDate({
+                            ...addToCartDate,
+                            from: "",
+                            to: "",
+                          });
+                        }}
+                      >
+                        clear date
                       </div>
                     )}
-                  {!addToCartDate && (
-                    <div className="text-xl ml-4 font-bold">Select a date</div>
-                  )}
-                  {addToCartDate && addToCartDate.from && !addToCartDate.to && (
-                    <div className="text-xl ml-4 font-bold">
-                      Select checkout date
+
+                    <div className=" mt-4 px-3 relative swiper-pagination-mobile swiper-button-next-mobile">
+                      {
+                        <div className="py-2 bg-blue-600 rounded-md swiper-pagination-mobile swiper-button-next-mobile bg-opacity-10 gap-1 flex cursor-pointer font-bold items-center justify-center text-blue-800 mb-3">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            aria-hidden="true"
+                            role="img"
+                            className="w-5 h-5"
+                            preserveAspectRatio="xMidYMid meet"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              fill="none"
+                              stroke="currentColor"
+                              strokeLinecap="round"
+                              strokeWidth="2"
+                              d="M12 20v-8m0 0V4m0 8h8m-8 0H4"
+                            />
+                          </svg>
+                          <span>Add Guests</span>
+                        </div>
+                      }
                     </div>
-                  )}
-                </div>
-                <DatePicker
-                  setDate={setAddToCartDate}
-                  date={addToCartDate}
-                  disableDate={new Date()}
-                ></DatePicker>
-                {addToCartDate && (addToCartDate.from || addToCartDate.to) && (
-                  <div
-                    className="my-2 cursor-pointer text-sm ml-4 underline"
-                    onClick={() => {
-                      setAddToCartDate({ ...addToCartDate, from: "", to: "" });
-                    }}
-                  >
-                    clear date
-                  </div>
-                )}
-                <div className="flex justify-around px-3 gap-2">
-                  {inCart && (
-                    <Button
-                      onClick={() => {
-                        router.push({ pathname: "/cart" });
-                      }}
-                      className="!bg-transparent !w-[48%] !text-black relative border-2 border-pink-500"
-                    >
-                      View in basket
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5"
-                        viewBox="0 0 24 24"
-                        version="1.1"
-                      >
-                        <title>bag</title>
-                        <desc>Created with Sketch.</desc>
-                        <defs />
-                        <g
-                          id="Page-1"
-                          stroke="none"
-                          strokeWidth="1"
-                          fill="none"
-                          fillRule="evenodd"
+
+                    <div className="flex justify-around px-3 gap-2">
+                      {inCart && (
+                        <Button
+                          onClick={() => {
+                            router.push({ pathname: "/cart" });
+                          }}
+                          className="!bg-transparent !w-[48%] !text-black relative border-2 border-pink-500"
                         >
+                          View in basket
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5"
+                            viewBox="0 0 24 24"
+                            version="1.1"
+                          >
+                            <title>bag</title>
+                            <desc>Created with Sketch.</desc>
+                            <defs />
+                            <g
+                              id="Page-1"
+                              stroke="none"
+                              strokeWidth="1"
+                              fill="none"
+                              fillRule="evenodd"
+                            >
+                              <g
+                                id="Artboard-4"
+                                transform="translate(-620.000000, -291.000000)"
+                              >
+                                <g
+                                  id="94"
+                                  transform="translate(620.000000, 291.000000)"
+                                >
+                                  <rect
+                                    id="Rectangle-40"
+                                    stroke="#333333"
+                                    strokeWidth="2"
+                                    x="4"
+                                    y="7"
+                                    width="16"
+                                    height="16"
+                                    rx="1"
+                                  />
+                                  <path
+                                    d="M16,10 L16,5 C16,2.790861 14.209139,1 12,1 C9.790861,1 8,2.790861 8,5 L8,10"
+                                    id="Oval-21"
+                                    stroke="#333333"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                  />
+                                  <rect
+                                    id="Rectangle-41"
+                                    fill="#333333"
+                                    x="5"
+                                    y="18"
+                                    width="14"
+                                    height="2"
+                                  />
+                                </g>
+                              </g>
+                            </g>
+                          </svg>
+                        </Button>
+                      )}
+
+                      <Button
+                        onClick={addToBasket}
+                        disabled={
+                          !addToCartDate || (addToCartDate && !addToCartDate.to)
+                        }
+                        className={
+                          "!bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white " +
+                          (!inCart ? "!w-full" : "!w-[48%]") +
+                          (!addToCartDate ||
+                          (addToCartDate && !addToCartDate.to)
+                            ? " !opacity-70 cursor-not-allowed"
+                            : "")
+                        }
+                      >
+                        {!inCart ? "Add to basket" : "Add again"}
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5 text-white ml-2"
+                          viewBox="0 0 24 24"
+                          version="1.1"
+                        >
+                          <title>bag</title>
+                          <desc>Created with Sketch.</desc>
+                          <defs />
                           <g
-                            id="Artboard-4"
-                            transform="translate(-620.000000, -291.000000)"
+                            id="Page-1"
+                            stroke="none"
+                            strokeWidth="1"
+                            fill="none"
+                            fillRule="evenodd"
                           >
                             <g
-                              id="94"
-                              transform="translate(620.000000, 291.000000)"
+                              id="Artboard-4"
+                              transform="translate(-620.000000, -291.000000)"
                             >
-                              <rect
-                                id="Rectangle-40"
-                                stroke="#333333"
-                                strokeWidth="2"
-                                x="4"
-                                y="7"
-                                width="16"
-                                height="16"
-                                rx="1"
-                              />
-                              <path
-                                d="M16,10 L16,5 C16,2.790861 14.209139,1 12,1 C9.790861,1 8,2.790861 8,5 L8,10"
-                                id="Oval-21"
-                                stroke="#333333"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                              />
-                              <rect
-                                id="Rectangle-41"
-                                fill="#333333"
-                                x="5"
-                                y="18"
-                                width="14"
-                                height="2"
-                              />
+                              <g
+                                id="94"
+                                transform="translate(620.000000, 291.000000)"
+                              >
+                                <rect
+                                  id="Rectangle-40"
+                                  stroke="#fff"
+                                  strokeWidth="2"
+                                  x="4"
+                                  y="7"
+                                  width="16"
+                                  height="16"
+                                  rx="1"
+                                />
+                                <path
+                                  d="M16,10 L16,5 C16,2.790861 14.209139,1 12,1 C9.790861,1 8,2.790861 8,5 L8,10"
+                                  id="Oval-21"
+                                  stroke="#fff"
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                />
+                                <rect
+                                  id="Rectangle-41"
+                                  fill="#fff"
+                                  x="5"
+                                  y="18"
+                                  width="14"
+                                  height="2"
+                                />
+                              </g>
                             </g>
                           </g>
-                        </g>
-                      </svg>
-                    </Button>
-                  )}
-
-                  <Button
-                    onClick={addToBasket}
-                    disabled={
-                      !addToCartDate || (addToCartDate && !addToCartDate.to)
-                    }
-                    className={
-                      "!bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white " +
-                      (!inCart ? "!w-full" : "!w-[48%]") +
-                      (!addToCartDate || (addToCartDate && !addToCartDate.to)
-                        ? " !opacity-70 cursor-not-allowed"
-                        : "")
-                    }
-                  >
-                    {!inCart ? "Add to basket" : "Add again"}
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 text-white ml-2"
-                      viewBox="0 0 24 24"
-                      version="1.1"
-                    >
-                      <title>bag</title>
-                      <desc>Created with Sketch.</desc>
-                      <defs />
-                      <g
-                        id="Page-1"
-                        stroke="none"
-                        strokeWidth="1"
-                        fill="none"
-                        fillRule="evenodd"
-                      >
-                        <g
-                          id="Artboard-4"
-                          transform="translate(-620.000000, -291.000000)"
+                        </svg>
+                        <div
+                          className={
+                            " " + (!addToBasketLoading ? "hidden" : "ml-2")
+                          }
                         >
-                          <g
-                            id="94"
-                            transform="translate(620.000000, 291.000000)"
-                          >
-                            <rect
-                              id="Rectangle-40"
-                              stroke="#fff"
-                              strokeWidth="2"
-                              x="4"
-                              y="7"
-                              width="16"
-                              height="16"
-                              rx="1"
-                            />
-                            <path
-                              d="M16,10 L16,5 C16,2.790861 14.209139,1 12,1 C9.790861,1 8,2.790861 8,5 L8,10"
-                              id="Oval-21"
-                              stroke="#fff"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                            />
-                            <rect
-                              id="Rectangle-41"
-                              fill="#fff"
-                              x="5"
-                              y="18"
-                              width="14"
-                              height="2"
-                            />
-                          </g>
-                        </g>
-                      </g>
-                    </svg>
-                    <div
-                      className={
-                        " " + (!addToBasketLoading ? "hidden" : "ml-2")
-                      }
-                    >
-                      <LoadingSpinerChase
-                        width={16}
-                        height={16}
-                        color="#fff"
-                      ></LoadingSpinerChase>
+                          <LoadingSpinerChase
+                            width={16}
+                            height={16}
+                            color="#fff"
+                          ></LoadingSpinerChase>
+                        </div>
+                      </Button>
                     </div>
-                  </Button>
-                </div>
-              </div>
+                  </div>
+                </SwiperSlide>
+
+                <SwiperSlide>
+                  <div className="flex justify-between mb-4">
+                    <div className="swiper-pagination-mobile swiper-button-prev-mobile mt-2 cursor-pointer flex items-center gap-1 mb-6">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-6 w-6 text-blue-600"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                      <h3 className="font-bold text-blue-600">Back</h3>
+                    </div>
+
+                    <div className="flex flex-col mr-4">
+                      <div className="flex self-end">
+                        <Price
+                          stayPrice={
+                            priceOfPlan * (numOfAdults + numOfChildren)
+                          }
+                        ></Price>
+                        <span className="mt-1">/night</span>
+                      </div>
+                      {addToCartDate && addToCartDate.from && addToCartDate.to && (
+                        <span className="text-gray-600 text-sm font-bold self-end">
+                          {moment(addToCartDate.from).format("MMM DD")} -{" "}
+                          {moment(addToCartDate.to).format("MMM DD")}
+                        </span>
+                      )}
+                      <div className="text-gray-600 text-sm justify-end flex flex-wrap self-end">
+                        {
+                          <span>
+                            {numOfAdults} {numOfAdults > 1 ? "Adults" : "Adult"}
+                          </span>
+                        }
+                        {numOfChildren > 0 && (
+                          <>
+                            <span className="font-bold mx-0.5 ">,</span>
+                            <span>
+                              {numOfChildren}{" "}
+                              {numOfChildren > 1 ? "Children" : "Child"}
+                            </span>
+                          </>
+                        )}
+                        {nonResident && (
+                          <>
+                            <span className="font-bold mx-0.5 ">,</span>
+                            <span>Non-resident</span>
+                          </>
+                        )}
+
+                        {!nonResident && (
+                          <>
+                            <span className="font-bold mx-0.5 ">,</span>
+                            <span>Resident</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="px-4">
+                    <div>
+                      <Select
+                        defaultValue={currentTypeOfLodge}
+                        onChange={(value) => {
+                          setCurrentTypeOfLodge(value);
+                          setNumOfAdults(1);
+                          setNumOfChildren(0);
+                        }}
+                        className={
+                          "text-sm outline-none border border-gray-500 "
+                        }
+                        instanceId={typeOfLodge}
+                        placeholder="Type of room"
+                        options={typeOfLodge}
+                        isSearchable={true}
+                      />
+                    </div>
+
+                    <div className="flex items-center gap-0.5 mt-4">
+                      <svg
+                        className="w-4 h-4 text-gray-500"
+                        xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true"
+                        role="img"
+                        width="1em"
+                        height="1em"
+                        preserveAspectRatio="xMidYMid meet"
+                        viewBox="0 0 36 36"
+                      >
+                        <path
+                          fill="currentColor"
+                          d="M12 16.14h-.87a8.67 8.67 0 0 0-6.43 2.52l-.24.28v8.28h4.08v-4.7l.55-.62l.25-.29a11 11 0 0 1 4.71-2.86A6.59 6.59 0 0 1 12 16.14Z"
+                        />
+                        <path
+                          fill="currentColor"
+                          d="M31.34 18.63a8.67 8.67 0 0 0-6.43-2.52a10.47 10.47 0 0 0-1.09.06a6.59 6.59 0 0 1-2 2.45a10.91 10.91 0 0 1 5 3l.25.28l.54.62v4.71h3.94v-8.32Z"
+                        />
+                        <path
+                          fill="currentColor"
+                          d="M11.1 14.19h.31a6.45 6.45 0 0 1 3.11-6.29a4.09 4.09 0 1 0-3.42 6.33Z"
+                        />
+                        <path
+                          fill="currentColor"
+                          d="M24.43 13.44a6.54 6.54 0 0 1 0 .69a4.09 4.09 0 0 0 .58.05h.19A4.09 4.09 0 1 0 21.47 8a6.53 6.53 0 0 1 2.96 5.44Z"
+                        />
+                        <circle
+                          cx="17.87"
+                          cy="13.45"
+                          r="4.47"
+                          fill="currentColor"
+                        />
+                        <path
+                          fill="currentColor"
+                          d="M18.11 20.3A9.69 9.69 0 0 0 11 23l-.25.28v6.33a1.57 1.57 0 0 0 1.6 1.54h11.49a1.57 1.57 0 0 0 1.6-1.54V23.3l-.24-.3a9.58 9.58 0 0 0-7.09-2.7Z"
+                        />
+                        <path fill="none" d="M0 0h36v36H0z" />
+                      </svg>
+                      {currentTypeOfLodge && (
+                        <span className="text-gray-600 text-sm">
+                          Maximum number of guests is {maxGuests}
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="flex justify-between mt-6">
+                      <div className="flex flex-col text-sm text-gray-600 items-center">
+                        <span>
+                          {numOfAdults} {numOfAdults > 1 ? "Adults" : "Adult"}
+                        </span>
+                        <span>(18+)</span>
+                      </div>
+
+                      <div className="flex gap-3 items-center">
+                        <div
+                          onClick={() => {
+                            if (numOfAdults > 1) {
+                              setNumOfAdults(numOfAdults - 1);
+                            }
+                          }}
+                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
+                        >
+                          -
+                        </div>
+
+                        <div
+                          onClick={() => {
+                            if (numOfAdults + numOfChildren < maxGuests) {
+                              setNumOfAdults(numOfAdults + 1);
+                            }
+                          }}
+                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
+                        >
+                          +
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex justify-between mt-6">
+                      <div className="flex flex-col text-sm text-gray-600 items-center">
+                        <span>
+                          {numOfChildren}{" "}
+                          {numOfChildren > 1 ? "Children" : "Child"}
+                        </span>
+                        <span>(0 - 17)</span>
+                      </div>
+
+                      <div className="flex gap-3 items-center">
+                        <div
+                          onClick={() => {
+                            if (numOfChildren > 0) {
+                              setNumOfChildren(numOfChildren - 1);
+                            }
+                          }}
+                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
+                        >
+                          -
+                        </div>
+
+                        <div
+                          onClick={() => {
+                            if (numOfAdults + numOfChildren < maxGuests) {
+                              setNumOfChildren(numOfChildren + 1);
+                            }
+                          }}
+                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
+                        >
+                          +
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 mt-3">
+                      <Checkbox
+                        checked={nonResident}
+                        onChange={() => setNonResident(!nonResident)}
+                      ></Checkbox>
+                      <span className="text-gray-600 text-sm">
+                        Non-resident
+                      </span>
+                    </div>
+
+                    {(numOfAdults > 1 || numOfChildren > 0) && (
+                      <div
+                        className="mt-2 cursor-pointer text-sm underline"
+                        onClick={() => {
+                          setNumOfAdults(1);
+                          setNumOfChildren(0);
+                        }}
+                      >
+                        clear data
+                      </div>
+                    )}
+
+                    <div className="swiper-pagination-mobile swiper-button-prev-mobile flex justify-between mt-6">
+                      <div></div>
+                      <Button
+                        onClick={() => {
+                          swiper.slidePrev();
+                        }}
+                        className="!bg-blue-700 !rounded-3xl"
+                      >
+                        <span>Done</span>
+                      </Button>
+                    </div>
+                  </div>
+                </SwiperSlide>
+              </Swiper>
             </Modal>
 
             {stay.views > 0 && stay.views === 1 && (
@@ -983,7 +1573,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               )}
             </div>
 
-            <div className="flex flex-col md:flex-row justify-between pt-10 gap-3">
+            <div className="flex flex-col w-full md:flex-row justify-between pt-10 gap-3">
               <DescribesStay stay={stay}></DescribesStay>
             </div>
           </Element>
@@ -1067,84 +1657,86 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
           </Element>
 
           {/* Experiences */}
-          <Element
-            name="experiences"
-            className="flex flex-col md:flex-row gap-3 justify-between pt-10 "
-          >
-            <div className="border pb-2 h-fit border-gray-200 rounded-xl overflow-hidden w-full order-2 md:order-1 mt-4 md:mt-0">
-              <div className="py-2 bg-gray-200 mb-2">
-                <span className="font-bold text-xl ml-6">Experiences</span>
-              </div>
+          {stay.experiences_included.length > 0 && (
+            <Element
+              name="experiences"
+              className="flex flex-col md:flex-row gap-3 justify-between pt-10 "
+            >
+              <div className="border pb-2 h-fit border-gray-200 rounded-xl overflow-hidden w-full order-2 md:order-1 mt-4 md:mt-0">
+                <div className="py-2 bg-gray-200 mb-2">
+                  <span className="font-bold text-xl ml-6">Experiences</span>
+                </div>
 
-              {!showMoreExperiences && (
-                <div className="flex flex-wrap gap-2 px-2">
-                  {stay.experiences_included
-                    .slice(0, 5)
-                    .map((amenity, index) => (
+                {!showMoreExperiences && (
+                  <div className="flex flex-wrap gap-2 px-2">
+                    {stay.experiences_included
+                      .slice(0, 5)
+                      .map((amenity, index) => (
+                        <div key={index} className="w-[48%]">
+                          <ListItem>{amenity}</ListItem>
+                        </div>
+                      ))}
+                  </div>
+                )}
+
+                {showMoreExperiences && (
+                  <div className="flex flex-wrap gap-2 px-2">
+                    {stay.experiences_included.map((amenity, index) => (
                       <div key={index} className="w-[48%]">
                         <ListItem>{amenity}</ListItem>
                       </div>
                     ))}
-                </div>
-              )}
+                  </div>
+                )}
 
-              {showMoreExperiences && (
-                <div className="flex flex-wrap gap-2 px-2">
-                  {stay.experiences_included.map((amenity, index) => (
-                    <div key={index} className="w-[48%]">
-                      <ListItem>{amenity}</ListItem>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {!showMoreExperiences && stay.experiences_included.length > 5 && (
-                <div
-                  onClick={() => {
-                    setShowMoreExperiences(true);
-                  }}
-                  className="font-bold text-blue-700 mt-2 flex items-center gap-0.5 cursor-pointer ml-2 mb-1"
-                >
-                  <span>Read more</span>{" "}
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 mt-1"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
+                {!showMoreExperiences && stay.experiences_included.length > 5 && (
+                  <div
+                    onClick={() => {
+                      setShowMoreExperiences(true);
+                    }}
+                    className="font-bold text-blue-700 mt-2 flex items-center gap-0.5 cursor-pointer ml-2 mb-1"
                   >
-                    <path
-                      fillRule="evenodd"
-                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-              )}
+                    <span>Read more</span>{" "}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 mt-1"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                )}
 
-              {showMoreExperiences && stay.experiences_included.length > 5 && (
-                <div
-                  onClick={() => {
-                    setShowMoreExperiences(false);
-                  }}
-                  className="font-bold text-blue-700 mt-2 flex items-center gap-0.5 cursor-pointer ml-2 mb-1"
-                >
-                  <span>Read less</span>{" "}
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 mt-1"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
+                {showMoreExperiences && stay.experiences_included.length > 5 && (
+                  <div
+                    onClick={() => {
+                      setShowMoreExperiences(false);
+                    }}
+                    className="font-bold text-blue-700 mt-2 flex items-center gap-0.5 cursor-pointer ml-2 mb-1"
                   >
-                    <path
-                      fillRule="evenodd"
-                      d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-              )}
-            </div>
-          </Element>
+                    <span>Read less</span>{" "}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 mt-1"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                )}
+              </div>
+            </Element>
+          )}
 
           {/* best describe as */}
 
@@ -1419,10 +2011,10 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
             <Footer></Footer>
           </div>
         </div>
-        {
+        {(stay.type_of_stay !== "HOUSE" || !inCart) && (
           <div className="md:fixed hidden right-2 md:w-[42%] md:pl-2 lg:px-0 lg:w-[35%] top-20 md:block">
-            <div className="mb-2 flex justify-between">
-              {(stay.type_of_stay !== "HOUSE" || !inCart) && (
+            <div className="flex justify-between">
+              {
                 <div>
                   {addToCartDate &&
                     !addToCartDate.from &&
@@ -1440,33 +2032,46 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     </div>
                   )}
                 </div>
-              )}
-              <div>
-                <div className="flex">
-                  <Price stayPrice={priceOfPlan}></Price>
+              }
+              <div className="flex flex-col">
+                <div className="flex self-end">
+                  <Price
+                    stayPrice={priceOfPlan * (numOfAdults + numOfChildren)}
+                  ></Price>
                   <span className="mt-1">/night</span>
                 </div>
                 {addToCartDate && addToCartDate.from && addToCartDate.to && (
-                  <span className="text-gray-600 text-sm font-bold">
+                  <span className="text-gray-600 text-sm font-bold self-end">
                     {moment(addToCartDate.from).format("MMM DD")} -{" "}
                     {moment(addToCartDate.to).format("MMM DD")}
                   </span>
                 )}
-                <div className="text-gray-600 text-sm flex items-center justify-center">
-                  {(stay.type_of_stay !== "HOUSE" || !inCart) && (
+                <div className="text-gray-600 text-sm justify-end flex flex-wrap self-end">
+                  {
                     <span>
                       {numOfAdults} {numOfAdults > 1 ? "Adults" : "Adult"}
                     </span>
-                  )}
+                  }
                   {numOfChildren > 0 && (
                     <>
-                      <span className="font-bold text-2xl mx-0.5 mb-0.5">
-                        ,
-                      </span>
+                      <span className="font-bold mx-0.5 ">,</span>
                       <span>
                         {numOfChildren}{" "}
                         {numOfChildren > 1 ? "Children" : "Child"}
                       </span>
+                    </>
+                  )}
+                  {nonResident && (
+                    <>
+                      <span className="font-bold mx-0.5 ">,</span>
+                      <span>Non-resident</span>
+                    </>
+                  )}
+
+                  {!nonResident && (
+                    <>
+                      <span className="font-bold mx-0.5 ">,</span>
+                      <span>Resident</span>
                     </>
                   )}
                 </div>
@@ -1474,16 +2079,16 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
             </div>
             <div
               className={
-                " h-fit w-full lg:w-fit py-2 mx-auto xl:ml-2 mt-2 order-1 md:order-2 "
+                " h-fit w-full lg:w-fit mx-auto xl:ml-2 order-1 md:order-2 "
               }
             >
-              {(stay.type_of_stay !== "HOUSE" || !inCart) && (
+              {
                 <DatePicker
                   setDate={setAddToCartDate}
                   date={addToCartDate}
                   disableDate={new Date()}
                 ></DatePicker>
-              )}
+              }
               {addToCartDate && (addToCartDate.from || addToCartDate.to) && (
                 <div
                   className="my-2 cursor-pointer text-sm ml-4 underline"
@@ -1495,7 +2100,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                 </div>
               )}
               <div className=" mt-4 relative">
-                {(stay.type_of_stay !== "HOUSE" || !inCart) && (
+                {
                   <div
                     onClick={(e) => {
                       e.stopPropagation();
@@ -1521,14 +2126,14 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     </svg>
                     <span>Add Guests</span>
                   </div>
-                )}
+                }
 
                 {guestPopup && (
                   <div
                     onClick={(e) => {
                       e.stopPropagation();
                     }}
-                    className="absolute -left-[410px] -top-[200px] px-4 py-4 !z-[99] w-[400px] bg-white shadow-lg rounded-lg h-fit"
+                    className="absolute -left-[410px] -top-[250px] px-4 py-4 !z-[99] w-[400px] bg-white shadow-lg rounded-lg h-fit"
                   >
                     <Select
                       defaultValue={currentTypeOfLodge}
@@ -1657,6 +2262,16 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       </div>
                     </div>
 
+                    <div className="flex items-center gap-2 mt-3">
+                      <Checkbox
+                        checked={nonResident}
+                        onChange={() => setNonResident(!nonResident)}
+                      ></Checkbox>
+                      <span className="text-gray-600 text-sm">
+                        Non-resident
+                      </span>
+                    </div>
+
                     {(numOfAdults > 1 || numOfChildren > 0) && (
                       <div
                         className="mt-2 cursor-pointer text-sm underline"
@@ -1684,7 +2299,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                 )}
               </div>
               <div className="flex justify-around gap-2">
-                {inCart && (stay.type_of_stay !== "HOUSE" || !inCart) && (
+                {inCart && (
                   <Button
                     onClick={() => {
                       router.push({ pathname: "/cart" });
@@ -1750,73 +2365,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                   </Button>
                 )}
 
-                {inCart && (stay.type_of_stay === "HOUSE" || !inCart) && (
-                  <Button
-                    onClick={() => {
-                      router.push({ pathname: "/cart" });
-                    }}
-                    className={
-                      "!bg-transparent !w-full !text-black relative border-2 border-pink-500 "
-                    }
-                  >
-                    View in basket
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
-                      viewBox="0 0 24 24"
-                      version="1.1"
-                    >
-                      <title>bag</title>
-                      <desc>Created with Sketch.</desc>
-                      <defs />
-                      <g
-                        id="Page-1"
-                        stroke="none"
-                        strokeWidth="1"
-                        fill="none"
-                        fillRule="evenodd"
-                      >
-                        <g
-                          id="Artboard-4"
-                          transform="translate(-620.000000, -291.000000)"
-                        >
-                          <g
-                            id="94"
-                            transform="translate(620.000000, 291.000000)"
-                          >
-                            <rect
-                              id="Rectangle-40"
-                              stroke="#333333"
-                              strokeWidth="2"
-                              x="4"
-                              y="7"
-                              width="16"
-                              height="16"
-                              rx="1"
-                            />
-                            <path
-                              d="M16,10 L16,5 C16,2.790861 14.209139,1 12,1 C9.790861,1 8,2.790861 8,5 L8,10"
-                              id="Oval-21"
-                              stroke="#333333"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                            />
-                            <rect
-                              id="Rectangle-41"
-                              fill="#333333"
-                              x="5"
-                              y="18"
-                              width="14"
-                              height="2"
-                            />
-                          </g>
-                        </g>
-                      </g>
-                    </svg>
-                  </Button>
-                )}
-
-                {(stay.type_of_stay !== "HOUSE" || !inCart) && (
+                {
                   <Button
                     onClick={addToBasket}
                     disabled={
@@ -1896,11 +2445,11 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       ></LoadingSpinerChase>
                     </div>
                   </Button>
-                )}
+                }
               </div>
             </div>
           </div>
-        }
+        )}
       </div>
     </div>
   );

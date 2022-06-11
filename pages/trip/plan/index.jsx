@@ -73,7 +73,7 @@ function PlanTrip({
 
   const [checkoutButtonClicked, setCheckoutButtonClicked] = useState(false);
 
-  const currencyToDollar = useSelector((state) => state.home.currencyToDollar);
+  const currencyToKES = useSelector((state) => state.home.currencyToKES);
   const activeItem = useSelector((state) => state.order.activeItem);
   const currentCartItemName = useSelector(
     (state) => state.home.currentCartItemName
@@ -123,7 +123,7 @@ function PlanTrip({
 
   const priceConversion = async (price) => {
     if (price) {
-      if (currencyToDollar && priceConversionRate) {
+      if (currencyToKES && priceConversionRate) {
         setNewPrice(priceConversionRate * price);
       } else {
         setNewPrice(price);
@@ -186,7 +186,7 @@ function PlanTrip({
 
   useEffect(() => {
     priceConversion(totalPrice());
-  }, [totalPrice(), currencyToDollar, priceConversionRate]);
+  }, [totalPrice(), currencyToKES, priceConversionRate]);
 
   const [transport, setTransport] = useState([]);
 
@@ -436,17 +436,17 @@ function PlanTrip({
           <div className="flex relative h-full w-full">
             <div className="sticky lg:w-[22%] top-32 h-full hidden lg:block">
               <ClientOnly>
-                {currencyToDollar && (
-                  <h1 className="font-bold text-xl font-OpenSans">
+                {!currencyToKES && (
+                  <h1 className={"font-bold text-xl font-OpenSans "}>
                     {totalPrice()
-                      ? "$" + Math.ceil(newPrice).toLocaleString()
+                      ? "$" + Math.ceil(totalPrice()).toLocaleString()
                       : "No data"}
                   </h1>
                 )}
-                {!currencyToDollar && (
-                  <h1 className="font-bold text-xl font-OpenSans">
+                {currencyToKES && (
+                  <h1 className={"font-bold text-xl font-OpenSans "}>
                     {totalPrice()
-                      ? "KES" + Math.ceil(totalPrice()).toLocaleString()
+                      ? "KES" + Math.ceil(newPrice).toLocaleString()
                       : "No data"}
                   </h1>
                 )}
@@ -1175,17 +1175,17 @@ function PlanTrip({
           <div className="flex relative h-full w-full">
             <div className="w-[35%] fixed xsMax:hidden left-4 h-full">
               <ClientOnly>
-                {currencyToDollar && (
-                  <h1 className="font-bold text-xl font-OpenSans">
+                {!currencyToKES && (
+                  <h1 className={"font-bold text-xl font-OpenSans "}>
                     {totalPrice()
-                      ? "$" + Math.ceil(newPrice).toLocaleString()
+                      ? "$" + Math.ceil(totalPrice()).toLocaleString()
                       : "No data"}
                   </h1>
                 )}
-                {!currencyToDollar && (
-                  <h1 className="font-bold text-xl font-OpenSans">
+                {currencyToKES && (
+                  <h1 className={"font-bold text-xl font-OpenSans "}>
                     {totalPrice()
-                      ? "KES" + Math.ceil(totalPrice()).toLocaleString()
+                      ? "KES" + Math.ceil(newPrice).toLocaleString()
                       : "No data"}
                   </h1>
                 )}
