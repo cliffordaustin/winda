@@ -1263,7 +1263,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
                   <Button
                     onClick={() => {
-                      setShowMobileDateModal(true);
+                      addToBasket();
                     }}
                     className={
                       "!bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white " +
