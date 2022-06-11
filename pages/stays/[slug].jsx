@@ -1010,8 +1010,34 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     className="flex cursor-pointer items-center justify-between px-4 py-4 rounded-2xl mt-6 border border-gray-200"
                   >
                     <div className="font-bold">Guests</div>
-                    <div className="text-sm text-gray-500">
-                      2 Adults, 2 Childrebn
+                    <div className="text-gray-600 text-sm justify-start flex flex-wrap self-start">
+                      {
+                        <span>
+                          {numOfAdults} {numOfAdults > 1 ? "Adults" : "Adult"}
+                        </span>
+                      }
+                      {numOfChildren > 0 && (
+                        <>
+                          <span className="font-bold mx-0.5 ">,</span>
+                          <span>
+                            {numOfChildren}{" "}
+                            {numOfChildren > 1 ? "Children" : "Child"}
+                          </span>
+                        </>
+                      )}
+                      {nonResident && (
+                        <>
+                          <span className="font-bold mx-0.5 ">,</span>
+                          <span>Non-resident</span>
+                        </>
+                      )}
+
+                      {!nonResident && (
+                        <>
+                          <span className="font-bold mx-0.5 ">,</span>
+                          <span>Resident</span>
+                        </>
+                      )}
                     </div>
                   </div>
                 )}
