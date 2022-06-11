@@ -34,7 +34,7 @@ import { useRef } from "react";
 import StickyHeader from "../../components/Home/StickyHeader";
 import useOnScreen from "../../lib/onScreen";
 import moment from "moment";
-import Modal from "../../components/ui/MobileModal";
+import Modal from "../../components/ui/FullScreenMobileModal";
 import SelectInput from "../../components/ui/SelectInput";
 import Checkbox from "../../components/ui/Checkbox";
 
@@ -349,6 +349,10 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
   const [swiper, setSwiper] = useState(null);
 
+  const [showDateForMobilePopup, setShowDateForMobilePopup] = useState(true);
+
+  const [showGuestForMobilePopup, setShowGuestForMobilePopup] = useState(false);
+
   const maxGuests =
     currentTypeOfLodge.value === "Standard"
       ? stay.standard_capacity
@@ -438,6 +442,9 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
       onClick={(e) => {
         setGuestPopup(false);
       }}
+      className={
+        "" + (showMobileDateModal ? " !overflow-y-hidden h-screen" : "")
+      }
     >
       <GlobalStyle></GlobalStyle>
       <div className="fixed top-0 w-full bg-white z-20">
@@ -630,8 +637,8 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                   ? "!fixed !w-full !top-[70px] left-0 right-0 z-[40] bg-white "
                   : "") +
                 (stay.type_of_stay === "HOUSE" && inCart
-                  ? "h-12 border-b border-gray-200 absolute top-[460px] sm:top-[510px] md:top-[560px] w-[100%] left-0 right-0 lg:px-10 px-5"
-                  : "h-12 border-b border-gray-200 absolute top-[515px] sm:top-[565px] w-[100%] left-0 right-0 lg:px-10 px-5")
+                  ? "h-12 border-b border-gray-200 absolute top-[450px] sm:top-[510px] md:top-[560px] w-[100%] left-0 right-0 lg:px-10 px-5"
+                  : "h-12 border-b border-gray-200 absolute top-[505px] sm:top-[565px] w-[100%] left-0 right-0 lg:px-10 px-5")
               }
             >
               <ScrollTo guestPopup={guestPopup} stay={stay}></ScrollTo>
@@ -870,7 +877,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                         setShowMobileDateModal(true);
                       }}
                       className={
-                        "!bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white " +
+                        "!bg-gradient-to-r !px-2 from-pink-500 via-red-500 to-yellow-500 !text-white " +
                         (!inCart ? "" : "")
                       }
                     >
@@ -895,7 +902,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                         router.push({ pathname: "/cart" });
                       }}
                       className={
-                        "!bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white "
+                        "!bg-gradient-to-r !px-2 from-pink-500 via-red-500 to-yellow-500 !text-white "
                       }
                     >
                       View in basket
@@ -922,106 +929,56 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                 setShowMobileDateModal(!showMobileDateModal);
               }}
               className="md:!hidden"
+              title="Book this stay"
             >
-              <Swiper
-                preventInteractionOnTransition={true}
-                // allowTouchMove={false}
-                simulateTouch={false}
-                onSlideChange={(swiper) =>
-                  setState({
-                    ...state,
-                    swiperIndex: swiper.realIndex,
-                  })
-                }
-                onSwiper={(swiper) => setSwiper(swiper)}
-                modules={[Navigation]}
-                pagination={{
-                  el: ".swiper-pagination-mobile",
-                  clickable: true,
-                }}
-                navigation={{
-                  nextEl: ".swiper-button-next-mobile",
-                  prevEl: ".swiper-button-prev-mobile",
-                }}
-                className={"!h-full !w-full !overflow-y-scroll remove-scroll"}
-              >
-                <SwiperSlide>
+              <div className="px-2 mt-2">
+                {!showDateForMobilePopup && (
+                  <div
+                    onClick={() => {
+                      setShowDateForMobilePopup(true);
+                      setShowGuestForMobilePopup(false);
+                    }}
+                    className="cursor-pointer flex items-center justify-between px-4 py-4 rounded-2xl mt-6 border border-gray-200"
+                  >
+                    <div className="font-bold">Date</div>
+                    {addToCartDate && addToCartDate.from && addToCartDate.to && (
+                      <span className="text-sm font-bold mt-1.5">
+                        {moment(addToCartDate.from).format("MMM DD")} -{" "}
+                        {moment(addToCartDate.to).format("MMM DD")}
+                      </span>
+                    )}
+                    {((addToCartDate && !addToCartDate.to) ||
+                      !addToCartDate) && (
+                      <div className="text-sm text-gray-500">Add a date +</div>
+                    )}
+                  </div>
+                )}
+
+                {showDateForMobilePopup && (
                   <div
                     className={
-                      " h-full w-full lg:w-fit mx-auto xl:ml-2 order-1 md:order-2 "
+                      " h-full bg-white py-2 border border-gray-200 rounded-2xl w-full mx-auto xl:ml-2 order-1 md:order-2 "
                     }
                   >
-                    <div className="flex justify-between">
-                      {addToCartDate &&
-                        !addToCartDate.from &&
-                        !addToCartDate.to && (
-                          <div className="text-lg mt-6 ml-4 font-bold">
-                            Select a date
-                          </div>
-                        )}
-                      {!addToCartDate && (
-                        <div className="text-lg mt-6 ml-4 font-bold">
+                    {addToCartDate &&
+                      !addToCartDate.from &&
+                      !addToCartDate.to && (
+                        <div className="text-lg ml-4 font-bold">
                           Select a date
                         </div>
                       )}
-                      {addToCartDate &&
-                        addToCartDate.from &&
-                        !addToCartDate.to && (
-                          <div className="text-lg mt-6 ml-4 font-bold">
-                            Select checkout date
-                          </div>
-                        )}
-                      <div></div>
-
-                      <div className="flex flex-col mr-4">
-                        <div className="flex self-end">
-                          <Price
-                            stayPrice={
-                              priceOfPlan * (numOfAdults + numOfChildren)
-                            }
-                          ></Price>
-                          <span className="mt-1">/night</span>
-                        </div>
-                        {addToCartDate &&
-                          addToCartDate.from &&
-                          addToCartDate.to && (
-                            <span className="text-gray-600 text-sm font-bold self-end">
-                              {moment(addToCartDate.from).format("MMM DD")} -{" "}
-                              {moment(addToCartDate.to).format("MMM DD")}
-                            </span>
-                          )}
-                        <div className="text-gray-600 text-sm justify-end flex flex-wrap self-end">
-                          {
-                            <span>
-                              {numOfAdults}{" "}
-                              {numOfAdults > 1 ? "Adults" : "Adult"}
-                            </span>
-                          }
-                          {numOfChildren > 0 && (
-                            <>
-                              <span className="font-bold mx-0.5 ">,</span>
-                              <span>
-                                {numOfChildren}{" "}
-                                {numOfChildren > 1 ? "Children" : "Child"}
-                              </span>
-                            </>
-                          )}
-                          {nonResident && (
-                            <>
-                              <span className="font-bold mx-0.5 ">,</span>
-                              <span>Non-resident</span>
-                            </>
-                          )}
-
-                          {!nonResident && (
-                            <>
-                              <span className="font-bold mx-0.5 ">,</span>
-                              <span>Resident</span>
-                            </>
-                          )}
-                        </div>
+                    {!addToCartDate && (
+                      <div className="text-lg ml-4 font-bold">
+                        Select a date
                       </div>
-                    </div>
+                    )}
+                    {addToCartDate &&
+                      addToCartDate.from &&
+                      !addToCartDate.to && (
+                        <div className="text-lg ml-4 font-bold">
+                          Select checkout date
+                        </div>
+                      )}
                     <DatePicker
                       setDate={setAddToCartDate}
                       date={addToCartDate}
@@ -1041,245 +998,26 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                         clear date
                       </div>
                     )}
+                  </div>
+                )}
 
-                    <div className=" mt-4 px-3 relative swiper-pagination-mobile swiper-button-next-mobile">
-                      {
-                        <div className="py-2 bg-blue-600 rounded-md swiper-pagination-mobile swiper-button-next-mobile bg-opacity-10 gap-1 flex cursor-pointer font-bold items-center justify-center text-blue-800 mb-3">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            aria-hidden="true"
-                            role="img"
-                            className="w-5 h-5"
-                            preserveAspectRatio="xMidYMid meet"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              fill="none"
-                              stroke="currentColor"
-                              strokeLinecap="round"
-                              strokeWidth="2"
-                              d="M12 20v-8m0 0V4m0 8h8m-8 0H4"
-                            />
-                          </svg>
-                          <span>Add Guests</span>
-                        </div>
-                      }
-                    </div>
-
-                    <div className="flex justify-around px-3 gap-2">
-                      {inCart && (
-                        <Button
-                          onClick={() => {
-                            router.push({ pathname: "/cart" });
-                          }}
-                          className="!bg-transparent !w-[48%] !text-black relative border-2 border-pink-500"
-                        >
-                          View in basket
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5"
-                            viewBox="0 0 24 24"
-                            version="1.1"
-                          >
-                            <title>bag</title>
-                            <desc>Created with Sketch.</desc>
-                            <defs />
-                            <g
-                              id="Page-1"
-                              stroke="none"
-                              strokeWidth="1"
-                              fill="none"
-                              fillRule="evenodd"
-                            >
-                              <g
-                                id="Artboard-4"
-                                transform="translate(-620.000000, -291.000000)"
-                              >
-                                <g
-                                  id="94"
-                                  transform="translate(620.000000, 291.000000)"
-                                >
-                                  <rect
-                                    id="Rectangle-40"
-                                    stroke="#333333"
-                                    strokeWidth="2"
-                                    x="4"
-                                    y="7"
-                                    width="16"
-                                    height="16"
-                                    rx="1"
-                                  />
-                                  <path
-                                    d="M16,10 L16,5 C16,2.790861 14.209139,1 12,1 C9.790861,1 8,2.790861 8,5 L8,10"
-                                    id="Oval-21"
-                                    stroke="#333333"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                  />
-                                  <rect
-                                    id="Rectangle-41"
-                                    fill="#333333"
-                                    x="5"
-                                    y="18"
-                                    width="14"
-                                    height="2"
-                                  />
-                                </g>
-                              </g>
-                            </g>
-                          </svg>
-                        </Button>
-                      )}
-
-                      <Button
-                        onClick={addToBasket}
-                        disabled={
-                          !addToCartDate || (addToCartDate && !addToCartDate.to)
-                        }
-                        className={
-                          "!bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white " +
-                          (!inCart ? "!w-full" : "!w-[48%]") +
-                          (!addToCartDate ||
-                          (addToCartDate && !addToCartDate.to)
-                            ? " !opacity-70 cursor-not-allowed"
-                            : "")
-                        }
-                      >
-                        {!inCart ? "Add to basket" : "Add again"}
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-5 w-5 text-white ml-2"
-                          viewBox="0 0 24 24"
-                          version="1.1"
-                        >
-                          <title>bag</title>
-                          <desc>Created with Sketch.</desc>
-                          <defs />
-                          <g
-                            id="Page-1"
-                            stroke="none"
-                            strokeWidth="1"
-                            fill="none"
-                            fillRule="evenodd"
-                          >
-                            <g
-                              id="Artboard-4"
-                              transform="translate(-620.000000, -291.000000)"
-                            >
-                              <g
-                                id="94"
-                                transform="translate(620.000000, 291.000000)"
-                              >
-                                <rect
-                                  id="Rectangle-40"
-                                  stroke="#fff"
-                                  strokeWidth="2"
-                                  x="4"
-                                  y="7"
-                                  width="16"
-                                  height="16"
-                                  rx="1"
-                                />
-                                <path
-                                  d="M16,10 L16,5 C16,2.790861 14.209139,1 12,1 C9.790861,1 8,2.790861 8,5 L8,10"
-                                  id="Oval-21"
-                                  stroke="#fff"
-                                  strokeWidth="2"
-                                  strokeLinecap="round"
-                                />
-                                <rect
-                                  id="Rectangle-41"
-                                  fill="#fff"
-                                  x="5"
-                                  y="18"
-                                  width="14"
-                                  height="2"
-                                />
-                              </g>
-                            </g>
-                          </g>
-                        </svg>
-                        <div
-                          className={
-                            " " + (!addToBasketLoading ? "hidden" : "ml-2")
-                          }
-                        >
-                          <LoadingSpinerChase
-                            width={16}
-                            height={16}
-                            color="#fff"
-                          ></LoadingSpinerChase>
-                        </div>
-                      </Button>
+                {!showGuestForMobilePopup && (
+                  <div
+                    onClick={() => {
+                      setShowGuestForMobilePopup(true);
+                      setShowDateForMobilePopup(false);
+                    }}
+                    className="flex cursor-pointer items-center justify-between px-4 py-4 rounded-2xl mt-6 border border-gray-200"
+                  >
+                    <div className="font-bold">Guests</div>
+                    <div className="text-sm text-gray-500">
+                      2 Adults, 2 Childrebn
                     </div>
                   </div>
-                </SwiperSlide>
+                )}
 
-                <SwiperSlide>
-                  <div className="flex justify-between mb-4">
-                    <div className="swiper-pagination-mobile swiper-button-prev-mobile mt-2 cursor-pointer flex items-center gap-1 mb-6">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-6 w-6 text-blue-600"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <h3 className="font-bold text-blue-600">Back</h3>
-                    </div>
-
-                    <div className="flex flex-col mr-4">
-                      <div className="flex self-end">
-                        <Price
-                          stayPrice={
-                            priceOfPlan * (numOfAdults + numOfChildren)
-                          }
-                        ></Price>
-                        <span className="mt-1">/night</span>
-                      </div>
-                      {addToCartDate && addToCartDate.from && addToCartDate.to && (
-                        <span className="text-gray-600 text-sm font-bold self-end">
-                          {moment(addToCartDate.from).format("MMM DD")} -{" "}
-                          {moment(addToCartDate.to).format("MMM DD")}
-                        </span>
-                      )}
-                      <div className="text-gray-600 text-sm justify-end flex flex-wrap self-end">
-                        {
-                          <span>
-                            {numOfAdults} {numOfAdults > 1 ? "Adults" : "Adult"}
-                          </span>
-                        }
-                        {numOfChildren > 0 && (
-                          <>
-                            <span className="font-bold mx-0.5 ">,</span>
-                            <span>
-                              {numOfChildren}{" "}
-                              {numOfChildren > 1 ? "Children" : "Child"}
-                            </span>
-                          </>
-                        )}
-                        {nonResident && (
-                          <>
-                            <span className="font-bold mx-0.5 ">,</span>
-                            <span>Non-resident</span>
-                          </>
-                        )}
-
-                        {!nonResident && (
-                          <>
-                            <span className="font-bold mx-0.5 ">,</span>
-                            <span>Resident</span>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="px-4">
+                {showGuestForMobilePopup && (
+                  <div className="px-4 mt-4 py-4 bg-white border border-gray-200 rounded-2xl w-full">
                     <div>
                       <Select
                         defaultValue={currentTypeOfLodge}
@@ -1432,21 +1170,95 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                         clear data
                       </div>
                     )}
-
-                    <div className="swiper-pagination-mobile swiper-button-prev-mobile flex justify-between mt-6">
-                      <div></div>
-                      <Button
-                        onClick={() => {
-                          swiper.slidePrev();
-                        }}
-                        className="!bg-blue-700 !rounded-3xl"
-                      >
-                        <span>Done</span>
-                      </Button>
-                    </div>
                   </div>
-                </SwiperSlide>
-              </Swiper>
+                )}
+              </div>
+
+              <div
+                className={
+                  "w-full z-10 px-2 md:hidden fixed bottom-0 safari-bottom left-0 right-0 bg-gray-100 border-t border-gray-200 py-1 " +
+                  (stay.type_of_stay === "HOUSE" && inCart && "!py-2.5")
+                }
+              >
+                <div className="flex justify-between items-center gap-2">
+                  <div>
+                    <div className="flex items-center">
+                      <Price
+                        stayPrice={priceOfPlan * (numOfAdults + numOfChildren)}
+                      ></Price>
+                      <span className="mt-1">/night</span>
+
+                      {addToCartDate &&
+                        addToCartDate.from &&
+                        addToCartDate.to && (
+                          <div className="mx-1 mb-1 font-bold">.</div>
+                        )}
+
+                      {addToCartDate && addToCartDate.from && addToCartDate.to && (
+                        <span className="text-sm font-bold mt-1.5">
+                          {moment(addToCartDate.from).format("MMM DD")} -{" "}
+                          {moment(addToCartDate.to).format("MMM DD")}
+                        </span>
+                      )}
+                    </div>
+
+                    {(stay.type_of_stay !== "HOUSE" || !inCart) && (
+                      <div className="text-gray-600 text-sm justify-start flex flex-wrap self-start">
+                        {
+                          <span>
+                            {numOfAdults} {numOfAdults > 1 ? "Adults" : "Adult"}
+                          </span>
+                        }
+                        {numOfChildren > 0 && (
+                          <>
+                            <span className="font-bold mx-0.5 ">,</span>
+                            <span>
+                              {numOfChildren}{" "}
+                              {numOfChildren > 1 ? "Children" : "Child"}
+                            </span>
+                          </>
+                        )}
+                        {nonResident && (
+                          <>
+                            <span className="font-bold mx-0.5 ">,</span>
+                            <span>Non-resident</span>
+                          </>
+                        )}
+
+                        {!nonResident && (
+                          <>
+                            <span className="font-bold mx-0.5 ">,</span>
+                            <span>Resident</span>
+                          </>
+                        )}
+                      </div>
+                    )}
+                  </div>
+
+                  <Button
+                    onClick={() => {
+                      setShowMobileDateModal(true);
+                    }}
+                    className={
+                      "!bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white " +
+                      (!inCart ? "" : "")
+                    }
+                  >
+                    {!inCart ? "Book" : "Book again"}
+                    <div
+                      className={
+                        " " + (!addToBasketLoading ? "hidden" : "ml-2")
+                      }
+                    >
+                      <LoadingSpinerChase
+                        width={16}
+                        height={16}
+                        color="#fff"
+                      ></LoadingSpinerChase>
+                    </div>
+                  </Button>
+                </div>
+              </div>
             </Modal>
 
             {stay.views > 0 && stay.views === 1 && (
