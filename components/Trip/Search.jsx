@@ -37,15 +37,22 @@ const Search = ({ setLocation, location }) => {
             <div className="h-full w-10 ml-1 flex justify-center items-center z-10 cursor-pointer">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                viewBox="0 0 20 20"
-                fill="currentColor"
+                aria-hidden="true"
+                role="img"
+                className="w-5 h-5 text-gray-600"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 16 16"
               >
-                <path
-                  fillRule="evenodd"
-                  d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                  clipRule="evenodd"
-                />
+                <g
+                  fill="none"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="1.5"
+                >
+                  <path d="m11.25 11.25l3 3" />
+                  <circle cx="7.5" cy="7.5" r="4.75" />
+                </g>
               </svg>
             </div>
             <Input
@@ -64,25 +71,27 @@ const Search = ({ setLocation, location }) => {
               {location && (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="w-5 h-5 cursor-pointer"
-                  viewBox="0 0 20 20"
                   onClick={() => {
                     setLocation("");
                     setAutoCompleteSearch([]);
                   }}
-                  fill="currentColor"
+                  className="w-5 h-5 cursor-pointer text-gray-600"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth="2"
                 >
                   <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                    clipRule="evenodd"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
               )}
             </div>
           </div>
           {autoCompleteSearch.length > 0 && (
-            <div className="absolute top-full left-0 z-30 rounded-b-xl w-full py-2 shadow-md bg-white">
+            <div className="absolute top-full left-0 z-30 rounded-b-xl w-full py-2 border border-t-0 border-gray-200 bg-white">
               {autoCompleteSearch.map((item, index) => (
                 <div
                   key={index}
@@ -90,18 +99,26 @@ const Search = ({ setLocation, location }) => {
                     setLocation(item.place_name);
                     setAutoCompleteSearch([]);
                   }}
-                  className="flex items-center gap-6 hover:bg-gray-100 transition-all duration-300 ease-linear cursor-pointer px-4 py-3"
+                  className="flex items-center gap-3 hover:bg-gray-100 transition-all duration-300 ease-linear cursor-pointer px-4 py-3"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    fill="currentColor"
+                    aria-hidden="true"
+                    role="img"
+                    className="w-6 h-6"
+                    preserveAspectRatio="xMidYMid meet"
+                    viewBox="0 0 32 32"
                   >
-                    <path
-                      fillRule="evenodd"
-                      d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                      clipRule="evenodd"
-                    />
+                    <g
+                      fill="none"
+                      stroke="currentcolor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                    >
+                      <circle cx="16" cy="11" r="4" />
+                      <path d="M24 15c-3 7-8 15-8 15s-5-8-8-15s2-13 8-13s11 6 8 13Z" />
+                    </g>
                   </svg>
                   <span className="truncate">{item.place_name}</span>
                 </div>

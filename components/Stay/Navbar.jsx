@@ -158,7 +158,7 @@ function Navbar({
                 });
               }}
             >
-              <div>USD</div>
+              <div>KES</div>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-4 w-4"
@@ -173,7 +173,7 @@ function Navbar({
                   d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
                 />
               </svg>
-              <div>KES</div>
+              <div>USD</div>
             </div>
           )}
           {!currencyToKES && (
@@ -185,7 +185,7 @@ function Navbar({
                 });
               }}
             >
-              <div>KES</div>
+              <div>USD</div>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-4 w-4"
@@ -200,7 +200,7 @@ function Navbar({
                   d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
                 />
               </svg>
-              <div>USD</div>
+              <div>KES</div>
             </div>
           )}
         </ClientOnly>

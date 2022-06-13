@@ -34,6 +34,10 @@ export const signup = (payload) => async (dispatch) => {
               {
                 from_date: item.from_date,
                 to_date: item.to_date,
+                num_of_adults: item.num_of_adults,
+                num_of_children: item.num_of_children,
+                non_resident: item.non_resident,
+                plan: item.plan,
               },
               {
                 headers: {
@@ -51,6 +55,10 @@ export const signup = (payload) => async (dispatch) => {
               {
                 from_date: item.from_date,
                 number_of_people: item.number_of_people,
+                number_of_sessions: item.number_of_sessions,
+                number_of_groups: item.number_of_groups,
+                non_resident: item.non_resident,
+                pricing_type: item.pricing_type,
               },
               {
                 headers: {
@@ -119,19 +127,70 @@ export const login = (payload) => async (dispatch) => {
       cart = JSON.parse(decodeURIComponent(cart));
 
       for (const item of cart) {
-        await axios
-          .post(
-            `${process.env.NEXT_PUBLIC_baseURL}/stays/${item.slug}/add-to-cart/`,
-            {},
-            {
-              headers: {
-                Authorization: "Token " + response.data.key,
+        if (item.itemCategory === "stays") {
+          await axios
+            .post(
+              `${process.env.NEXT_PUBLIC_baseURL}/stays/${item.slug}/add-to-cart/`,
+              {
+                from_date: item.from_date,
+                to_date: item.to_date,
+                num_of_adults: item.num_of_adults,
+                num_of_children: item.num_of_children,
+                non_resident: item.non_resident,
+                plan: item.plan,
               },
-            }
-          )
-          .catch((err) => {
-            console.log(err.response);
-          });
+              {
+                headers: {
+                  Authorization: "Token " + response.data.key,
+                },
+              }
+            )
+            .catch((err) => {
+              console.log(err.response);
+            });
+        } else if (item.itemCategory === "activities") {
+          await axios
+            .post(
+              `${process.env.NEXT_PUBLIC_baseURL}/activities/${item.slug}/add-to-cart/`,
+              {
+                from_date: item.from_date,
+                number_of_people: item.number_of_people,
+                number_of_sessions: item.number_of_sessions,
+                number_of_groups: item.number_of_groups,
+                non_resident: item.non_resident,
+                pricing_type: item.pricing_type,
+              },
+              {
+                headers: {
+                  Authorization: "Token " + response.data.key,
+                },
+              }
+            )
+            .catch((err) => {
+              console.log(err.response);
+            });
+        } else if (item.itemCategory === "transport") {
+          await axios
+            .post(
+              `${process.env.NEXT_PUBLIC_baseURL}/transport/${item.slug}/add-to-cart/`,
+              {
+                starting_point: item.starting_point,
+                destination: item.destination,
+                from_date: item.from_date,
+                distance: item.distance,
+                user_need_a_driver: item.user_need_a_driver,
+                number_of_days: item.number_of_days,
+              },
+              {
+                headers: {
+                  Authorization: "Token " + response.data.key,
+                },
+              }
+            )
+            .catch((err) => {
+              console.log(err.response);
+            });
+        }
       }
       Cookies.remove("cart");
     }

@@ -82,15 +82,15 @@ const Amenities = () => {
   };
   return (
     <>
-      <div className="flex justify-between flex-wrap mb-4">
+      <div className="flex flex-wrap mb-4">
         {options.map((option, index) => (
           <label key={index} className={styles.amenitiesItem}>
-            <div className="flex gap-2 items-center">{option}</div>
             <Checkbox
               checked={containsOption(option)}
               value={option}
               onChange={handleCheck}
             ></Checkbox>
+            <div className="flex gap-2 items-center">{option}</div>
           </label>
         ))}
       </div>

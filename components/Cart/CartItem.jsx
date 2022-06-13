@@ -10,7 +10,11 @@ import ClientOnly from "../ClientOnly";
 import LoadingSpinerChase from "../ui/LoadingSpinerChase";
 import { priceConversionRateFunc } from "../../lib/PriceRate";
 import moment from "moment";
-import { stayPriceOfPlan } from "../../lib/pricePlan";
+import {
+  stayPriceOfPlan,
+  activityPriceOfPlan,
+  activityNumOfGuests,
+} from "../../lib/pricePlan";
 
 const CartItem = ({
   stay,
@@ -36,6 +40,11 @@ const CartItem = ({
   num_of_children,
   plan,
   non_resident,
+
+  number_of_sessions,
+  number_of_groups,
+  activity_non_resident,
+  pricing_type,
 
   transportPage,
   transport,
@@ -78,7 +87,7 @@ const CartItem = ({
           (num_of_adults + num_of_children)
       : transportPage
       ? transportPrice
-      : activity.price;
+      : activityPriceOfPlan(pricing_type, activity_non_resident, activity);
   };
 
   const orderAgain = async (e) => {
@@ -582,6 +591,21 @@ const CartItem = ({
                       /for {numberOfDays} days
                     </span>
                   )}
+                  {activitiesPage && pricing_type === "PER PERSON" && (
+                    <span className="inline text-xs mt-1 font-semibold ml-0.5">
+                      /person
+                    </span>
+                  )}
+                  {activitiesPage && pricing_type === "PER SESSION" && (
+                    <span className="inline text-xs mt-1 font-semibold ml-0.5">
+                      /session
+                    </span>
+                  )}
+                  {activitiesPage && pricing_type === "PER GROUP" && (
+                    <span className="inline text-xs mt-1 font-semibold ml-0.5">
+                      /group
+                    </span>
+                  )}
                   {stayPage && (
                     <span className="inline text-xs mt-1 font-semibold ml-0.5">
                       /night
@@ -880,8 +904,30 @@ const CartItem = ({
                   <span>{moment(from_date).format("MMM DD")}</span>
                   <span className="font-bold text-xl -mt-3">.</span>
                   <span>
-                    {number_of_people}{" "}
-                    {number_of_people > 1 ? "People" : "Person"}
+                    {pricing_type === "PER PERSON" && (
+                      <span>
+                        {number_of_people}{" "}
+                        {number_of_people > 1 ? "People" : "Person"}
+                      </span>
+                    )}
+                    {pricing_type === "PER SESSION" && (
+                      <span>
+                        {number_of_sessions}{" "}
+                        {number_of_sessions > 1 ? "Sessions" : "Session"}
+                      </span>
+                    )}
+                    {pricing_type === "PER GROUP" && (
+                      <span>
+                        {number_of_groups}{" "}
+                        {number_of_groups > 1 ? "Groups" : "Group"}
+                      </span>
+                    )}
+                  </span>
+                  <span className="font-bold text-xl -mt-3">.</span>
+                  <span>
+                    {activity_non_resident && <span>Non-resident</span>}
+
+                    {!activity_non_resident && <span>Resident</span>}
                   </span>
                 </div>
               )}

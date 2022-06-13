@@ -11,5 +11,5 @@
 }
 
 .amenitiesItem {
-  @apply w-47p flex justify-between items-center border-b cursor-pointer border-b-gray-200 py-1 mt-4;
+  @apply w-47p flex gap-4 items-center cursor-pointer py-1 mt-4;
 }

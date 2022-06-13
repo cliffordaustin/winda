@@ -14,7 +14,7 @@ import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/thumbs";
 
-function ScrollTo({ guestPopup, stay }) {
+function ScrollTo({ guestPopup, activity }) {
   const settings = {
     spaceBetween: 10,
     pagination: {
@@ -88,24 +88,7 @@ function ScrollTo({ guestPopup, stay }) {
           </Link>
         </SwiperSlide>
 
-        <SwiperSlide className="!w-auto flex cursor-pointer justify-center">
-          <Link
-            className="px-4 flex items-center border-b-2 border-transparent"
-            activeClass="!border-b-2 !border-slate-800"
-            to="amenities"
-            spy={true}
-            smooth={true}
-            offset={-200}
-            duration={500}
-            onSetActive={() => {
-              slideto(0);
-            }}
-          >
-            <div>Amenities</div>
-          </Link>
-        </SwiperSlide>
-
-        {stay.experiences_included.length > 0 && (
+        {activity.type_of_activities.length > 0 && (
           <SwiperSlide className="!w-auto flex cursor-pointer justify-center">
             <Link
               className="px-4 flex items-center border-b-2 border-transparent"
@@ -120,6 +103,26 @@ function ScrollTo({ guestPopup, stay }) {
               }}
             >
               <div>Experiences</div>
+            </Link>
+          </SwiperSlide>
+        )}
+
+        {(activity.equipments_provided.length > 0 ||
+          activity.equipments_required_by_user_to_bring.length > 0) && (
+          <SwiperSlide className="!w-auto flex cursor-pointer justify-center">
+            <Link
+              className="px-4 flex items-center border-b-2 border-transparent"
+              activeClass="!border-b-2 !border-slate-800"
+              to="essentials"
+              spy={true}
+              smooth={true}
+              offset={-200}
+              duration={500}
+              onSetActive={() => {
+                slideto(0);
+              }}
+            >
+              <div>Essentials</div>
             </Link>
           </SwiperSlide>
         )}
@@ -156,7 +159,7 @@ function ScrollTo({ guestPopup, stay }) {
             <div>Policies</div>
           </Link>
         </SwiperSlide>
-        {stay.total_num_of_reviews > 0 && (
+        {activity.total_num_of_reviews > 0 && (
           <SwiperSlide className="!w-auto flex cursor-pointer justify-center">
             <Link
               className="px-4 flex items-center border-b-2 border-transparent"

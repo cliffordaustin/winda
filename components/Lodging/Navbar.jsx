@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Image from "next/image";
 import Link from "next/link";
+import { useDispatch, useSelector } from "react-redux";
 
 import SearchSelect from "../Home/SearchSelect";
 import UserDropdown from "../Home/UserDropdown";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
+import ClientOnly from "../ClientOnly";
 
 function Navbar({
   showDropdown,
@@ -19,7 +21,11 @@ function Navbar({
 }) {
   const [numberOfItemsInCart, setNumberOfItemsInCart] = useState(0);
 
+  const currencyToKES = useSelector((state) => state.home.currencyToKES);
+
   const router = useRouter();
+
+  const dispatch = useDispatch();
 
   const getNumberOfItemsInCartInDatabase = async () => {
     const stayCart = await axios.get(
@@ -94,7 +100,7 @@ function Navbar({
   }, []);
 
   return (
-    <div className="flex items-center justify-between sm:px-12 px-6 md:px-24 py-4">
+    <div className="flex items-center justify-between sm:px-8 px-6 md:px-12 lg:px-24 py-4">
       <div className="flex items-center gap-8">
         <Link href="/">
           <a className="font-lobster text-xl relative w-28 h-9 cursor-pointer">
@@ -116,6 +122,62 @@ function Navbar({
         )}
       </div>
       <div className="flex items-center gap-2">
+        <ClientOnly>
+          {currencyToKES && (
+            <div
+              className="font-bold text-xs md:text-base text-gray-700 hover:text-gray-900 cursor-pointer transition-all duration-300 ease-linear flex gap-1 items-center"
+              onClick={() => {
+                dispatch({
+                  type: "CHANGE_CURRENCY_TO_DOLLAR_FALSE",
+                });
+              }}
+            >
+              <div>KES</div>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
+                />
+              </svg>
+              <div>USD</div>
+            </div>
+          )}
+          {!currencyToKES && (
+            <div
+              className="font-bold text-xs md:text-base text-gray-700 hover:text-gray-900 cursor-pointer transition-all duration-300 ease-linear flex gap-1 items-center"
+              onClick={() => {
+                dispatch({
+                  type: "CHANGE_CURRENCY_TO_DOLLAR_TRUE",
+                });
+              }}
+            >
+              <div>USD</div>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
+                />
+              </svg>
+              <div>KES</div>
+            </div>
+          )}
+        </ClientOnly>
         <UserDropdown
           changeShowDropdown={changeShowDropdown}
           showDropdown={showDropdown}

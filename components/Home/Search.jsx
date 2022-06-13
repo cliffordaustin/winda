@@ -12,22 +12,20 @@ import LoadingSpinerChase from "../ui/LoadingSpinerChase";
 
 function Search({
   location,
-  checkin,
-  checkout,
-  showCheckInDate,
-  setCheckInDate,
-  changeShowCheckInDate,
-  showCheckOutDate,
-  setCheckOutDate,
-  changeShowCheckOutDate,
+
   showPopup,
   changeShowPopup,
   onChange,
   selectedSearchItem,
   changeSelectedSearchItem,
   clearInput,
-  clearCheckInDate,
-  clearCheckOutDate,
+
+  dateRange,
+  clearDateRange,
+  showDateRange,
+  setDateRange,
+  setShowDateRange,
+
   numOfAdults,
   numOfChildren,
   numOfInfants,
@@ -104,94 +102,70 @@ function Search({
           </div>
         )}
       </div>
-      <div className="flex gap-4 md:w-2/5 md:flex-none">
-        <div
-          onClick={(e) => {
-            e.stopPropagation();
-            changeShowCheckInDate();
-          }}
-          className={
-            "relative w-2/4 !py-2 !justify-between " + styles.searchInput
-          }
-        >
-          <div className="font-bold text-sm">Check-in</div>
-          <div className="text-sm text-gray-400">
-            {checkin ? moment(checkin).format("MMM Do") : "Add date"}
-          </div>
-          <div
-            className={
-              "absolute top-2/4 right-3 -translate-y-2/4 " +
-              (selectedSearchItem === 2 ? "block" : "hidden")
-            }
-          >
-            <SearchButtonClose onClick={clearCheckInDate}></SearchButtonClose>
-          </div>
-          <div
-            className={
-              "mt-4 absolute !w-full smMobile:!w-96 " +
-              (showSearchModal ? "hidden" : "")
-            }
-          >
-            <DatePicker
-              setDate={(date, modifiers = {}) => {
-                if (!modifiers.disabled) {
-                  setCheckInDate(date);
-                }
-              }}
-              date={checkin}
-              showDate={showCheckInDate}
-              className="!top-12 !-left-6 md:!-left-12 "
-              disableDate={new Date()}
-            ></DatePicker>
-          </div>
+
+      <div
+        onClick={(e) => {
+          e.stopPropagation();
+          setShowDateRange(!showDateRange);
+          changeSelectedSearchItem(2);
+        }}
+        className={
+          "relative md:w-2/6 !py-2 !justify-between " + styles.searchInput
+        }
+      >
+        <div className="font-bold text-sm">Date</div>
+        <div className="text-sm text-gray-400 flex">
+          {dateRange && dateRange.from && (
+            <div className="mr-1">
+              {moment(dateRange.from).format("MMM Do")}
+            </div>
+          )}
+          {dateRange && dateRange.to && (
+            <div>
+              {" "}
+              <span> - </span> {moment(dateRange.to).format("MMM Do")}
+            </div>
+          )}
+          {dateRange && !dateRange.from && !dateRange.to && (
+            <div>Add a date</div>
+          )}
+          {!dateRange && <div>Add a date</div>}
         </div>
         <div
-          onClick={(e) => {
-            e.stopPropagation();
-            changeShowCheckOutDate();
-          }}
           className={
-            "relative w-2/4 !py-2 !justify-between " + styles.searchInput
+            "absolute top-2/4 right-3 -translate-y-2/4 " +
+            (selectedSearchItem === 2 ? "block" : "hidden")
           }
         >
-          <div className="font-bold text-sm">Check out</div>
-          <div className="text-sm text-gray-400">
-            {checkout ? moment(checkout).format("MMM Do") : "Add date"}
-          </div>
-          <div
-            className={
-              "absolute top-2/4 right-3 -translate-y-2/4 " +
-              (selectedSearchItem === 3 ? "block" : "hidden")
-            }
-          >
-            <SearchButtonClose onClick={clearCheckOutDate}></SearchButtonClose>
-          </div>
-          <div
-            className={
-              "mt-4 absolute !w-full smMobile:!w-96 " +
-              (showSearchModal ? "hidden" : "")
-            }
-          >
-            <DatePicker
-              setDate={(date, modifiers = {}) => {
-                if (!modifiers.disabled) {
-                  setCheckOutDate(date);
-                }
-              }}
-              date={checkout}
-              showDate={showCheckOutDate}
-              className="!top-12 -left-48 mobile:-left-44 sm:!-left-24 md:!-left-24 "
-              disableDate={checkin}
-            ></DatePicker>
-          </div>
+          <SearchButtonClose onClick={clearDateRange}></SearchButtonClose>
+        </div>
+        <div
+          className={
+            "mt-4 absolute !w-full smMobile:!w-96 " +
+            (showSearchModal ? "hidden" : "")
+          }
+        >
+          <DatePicker
+            setDate={(date, modifiers = {}) => {
+              if (!modifiers.disabled) {
+                setDateRange(date);
+              }
+            }}
+            date={dateRange}
+            showDate={showDateRange}
+            className="!top-12 !-left-6 md:!-left-12 "
+            disableDate={new Date()}
+            mode="range"
+          ></DatePicker>
         </div>
       </div>
+
       <div
         onClick={(e) => {
           e.stopPropagation();
           changeShowPopup();
         }}
-        className={"relative md:w-1/5 w-full !py-2 " + styles.searchInput}
+        className={"relative md:w-[30%] w-full !py-2 " + styles.searchInput}
       >
         <div className="font-bold text-sm">Guest</div>
         <div className="text-sm text-gray-400">

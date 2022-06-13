@@ -631,10 +631,10 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
             <div
               className={
                 (!isVisible && (stay.type_of_stay !== "HOUSE" || !inCart)
-                  ? "!fixed md:!w-[56.5%] lg:!w-[63.5%]  !w-full !top-[70px] left-0 right-0 z-[40] bg-white "
+                  ? "!fixed md:!w-[56.5%] lg:!w-[63.5%]  !w-full !top-[65px] left-0 right-0 z-[40] bg-white "
                   : "") +
                 (!isVisible && stay.type_of_stay === "HOUSE" && inCart
-                  ? "!fixed !w-full !top-[70px] left-0 right-0 z-[40] bg-white "
+                  ? "!fixed !w-full !top-[65px] left-0 right-0 z-[40] bg-white "
                   : "") +
                 (stay.type_of_stay === "HOUSE" && inCart
                   ? "h-12 border-b border-gray-200 absolute top-[450px] sm:top-[510px] md:top-[560px] w-[100%] left-0 right-0 lg:px-10 px-5"
@@ -1595,9 +1595,17 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
             <div className="py-2 px-2 border-b border-gray-100">
               <span className="font-semibold">Refund Policy</span>
             </div>
+
             {!stay.refundable && (
               <div className="mt-2 ml-2">
                 <p>Bookings at this property is non-refundable.</p>
+              </div>
+            )}
+
+            {stay.refundable && (
+              <div className="mt-2 ml-2">
+                <p>Bookings at this property is refundable.</p>
+                <div className="mt-6">{stay.refundable_policy}</div>
               </div>
             )}
 
@@ -1608,7 +1616,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                 </div>
 
                 <div className="mt-2 ml-2">
-                  <p>Bookings at this property is non-refundable.</p>
+                  <p>{stay.damage_policy}</p>
                 </div>
               </div>
             )}

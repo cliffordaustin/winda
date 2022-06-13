@@ -14,7 +14,7 @@ import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/thumbs";
 
-function ScrollTo({ guestPopup, stay }) {
+function ScrollTo({ guestPopup, transport }) {
   const settings = {
     spaceBetween: 10,
     pagination: {
@@ -38,7 +38,7 @@ function ScrollTo({ guestPopup, stay }) {
     }
   };
   return (
-    <div className="!w-full sm:!w-[80%] lg:!w-[70%] h-full mx-auto flex justify-center items-center">
+    <div className="!w-full sm:!w-full lg:!w-[95%] h-full mx-auto flex justify-center items-center">
       <div
         className={"cursor-pointer " + (swiperIndex === 0 ? "invisible" : "")}
       >
@@ -69,7 +69,7 @@ function ScrollTo({ guestPopup, stay }) {
           setSwiperIndex(swiper.realIndex);
         }}
         modules={[FreeMode, Navigation, Thumbs]}
-        className={"!w-full !h-full relative " + (guestPopup ? "!-z-10" : "")}
+        className={"!w-full !h-full relative "}
       >
         <SwiperSlide className="!w-auto flex cursor-pointer justify-center">
           <Link
@@ -92,7 +92,7 @@ function ScrollTo({ guestPopup, stay }) {
           <Link
             className="px-4 flex items-center border-b-2 border-transparent"
             activeClass="!border-b-2 !border-slate-800"
-            to="amenities"
+            to="price-distance-calculator"
             spy={true}
             smooth={true}
             offset={-200}
@@ -101,45 +101,10 @@ function ScrollTo({ guestPopup, stay }) {
               slideto(0);
             }}
           >
-            <div>Amenities</div>
+            <div>Calculator</div>
           </Link>
         </SwiperSlide>
 
-        {stay.experiences_included.length > 0 && (
-          <SwiperSlide className="!w-auto flex cursor-pointer justify-center">
-            <Link
-              className="px-4 flex items-center border-b-2 border-transparent"
-              activeClass="!border-b-2 !border-slate-800"
-              to="experiences"
-              spy={true}
-              smooth={true}
-              offset={-200}
-              duration={500}
-              onSetActive={() => {
-                slideto(0);
-              }}
-            >
-              <div>Experiences</div>
-            </Link>
-          </SwiperSlide>
-        )}
-
-        <SwiperSlide className="!w-auto flex cursor-pointer justify-center">
-          <Link
-            className="px-4 flex items-center border-b-2 border-transparent"
-            activeClass="!border-b-2 !border-slate-800"
-            to="map"
-            spy={true}
-            smooth={true}
-            offset={-200}
-            duration={500}
-            onSetActive={() => {
-              slideto(2);
-            }}
-          >
-            <div>Map</div>
-          </Link>
-        </SwiperSlide>
         <SwiperSlide className="!w-auto flex cursor-pointer justify-center">
           <Link
             className="px-4 flex items-center border-b-2 border-transparent"
@@ -156,24 +121,23 @@ function ScrollTo({ guestPopup, stay }) {
             <div>Policies</div>
           </Link>
         </SwiperSlide>
-        {stay.total_num_of_reviews > 0 && (
-          <SwiperSlide className="!w-auto flex cursor-pointer justify-center">
-            <Link
-              className="px-4 flex items-center border-b-2 border-transparent"
-              activeClass="!border-b-2 !border-slate-800"
-              to="reviews"
-              spy={true}
-              smooth={true}
-              offset={-200}
-              duration={500}
-              onSetActive={() => {
-                slideto(3);
-              }}
-            >
-              <div>Reviews</div>
-            </Link>
-          </SwiperSlide>
-        )}
+
+        <SwiperSlide className="!w-auto flex cursor-pointer justify-center">
+          <Link
+            className="px-4 flex items-center border-b-2 border-transparent"
+            activeClass="!border-b-2 !border-slate-800"
+            to="reviews"
+            spy={true}
+            smooth={true}
+            offset={-200}
+            duration={500}
+            onSetActive={() => {
+              slideto(2);
+            }}
+          >
+            <div>Reviews</div>
+          </Link>
+        </SwiperSlide>
       </Swiper>
       <div className={"cursor-pointer " + (isEndOfSlide ? "invisible" : "")}>
         <svg

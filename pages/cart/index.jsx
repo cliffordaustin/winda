@@ -16,7 +16,11 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import LoadingSpinerChase from "../../components/ui/LoadingSpinerChase";
 import ClientOnly from "../../components/ClientOnly";
-import { stayPriceOfPlan } from "../../lib/pricePlan";
+import {
+  stayPriceOfPlan,
+  activityPriceOfPlan,
+  activityNumOfGuests,
+} from "../../lib/pricePlan";
 
 const Cart = ({
   cart,
@@ -74,9 +78,20 @@ const Cart = ({
     });
     activitiesCart.forEach((item, index) => {
       if (Cookies.get("token")) {
-        price += item.price * allItemsInActivityCart[index].number_of_people;
+        price +=
+          activityPriceOfPlan(
+            allItemsInActivityCart[index].pricing_type,
+            allItemsInActivityCart[index].non_resident,
+            item
+          ) *
+          activityNumOfGuests(
+            allItemsInActivityCart[index].pricing_type,
+            allItemsInActivityCart[index]
+          );
       } else if (!Cookies.get("token") && Cookies.get("cart")) {
-        price += item.price * item.number_of_people;
+        price +=
+          activityPriceOfPlan(item.pricing_type, item.non_resident, item) *
+          activityNumOfGuests(item.pricing_type, item);
       }
     });
     if (Cookies.get("token")) {
@@ -440,6 +455,26 @@ const Cart = ({
                       ? allItemsInActivityCart[index].number_of_people
                       : item.number_of_people
                   }
+                  number_of_sessions={
+                    Cookies.get("token")
+                      ? allItemsInActivityCart[index].number_of_sessions
+                      : item.number_of_sessions
+                  }
+                  number_of_groups={
+                    Cookies.get("token")
+                      ? allItemsInActivityCart[index].number_of_groups
+                      : item.number_of_groups
+                  }
+                  activity_non_resident={
+                    Cookies.get("token")
+                      ? allItemsInActivityCart[index].non_resident
+                      : item.non_resident
+                  }
+                  pricing_type={
+                    Cookies.get("token")
+                      ? allItemsInActivityCart[index].pricing_type
+                      : item.pricing_type
+                  }
                   activity={item}
                   activitiesPage={true}
                 ></CartItem>
@@ -681,7 +716,11 @@ export async function getServerSideProps(context) {
               activitiesCart.push({
                 ...res.data,
                 number_of_people: item.number_of_people,
+                number_of_sessions: item.number_of_sessions,
+                number_of_groups: item.number_of_groups,
                 from_date: item.from_date,
+                non_resident: item.non_resident,
+                pricing_type: item.pricing_type,
               });
             })
             .catch((err) => {

@@ -25,21 +25,6 @@ function SearchSelect({ setCurrentNavState, currentNavState, isHomePage }) {
       <div
         onClick={(event) => {
           event.stopPropagation();
-          setCurrentNavState(2);
-          if (!isHomePage) {
-            router.push("/transport");
-          }
-        }}
-        className={
-          "cursor-pointer md:!text-base " +
-          (currentNavState === 2 ? styles.showLinkLine : styles.link)
-        }
-      >
-        Transport
-      </div>
-      <div
-        onClick={(event) => {
-          event.stopPropagation();
           setCurrentNavState(3);
           if (!isHomePage) {
             router.push("/experiences");
@@ -51,6 +36,21 @@ function SearchSelect({ setCurrentNavState, currentNavState, isHomePage }) {
         }
       >
         Experiences
+      </div>
+      <div
+        onClick={(event) => {
+          event.stopPropagation();
+          setCurrentNavState(2);
+          if (!isHomePage) {
+            router.push("/transport");
+          }
+        }}
+        className={
+          "cursor-pointer md:!text-base " +
+          (currentNavState === 2 ? styles.showLinkLine : styles.link)
+        }
+      >
+        Transport
       </div>
     </div>
   );
