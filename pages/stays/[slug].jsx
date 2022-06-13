@@ -40,6 +40,7 @@ import Checkbox from "../../components/ui/Checkbox";
 
 import "swiper/css";
 import "swiper/css/thumbs";
+import Amenities from "../../components/Stay/Amenities";
 
 const StaysDetail = ({ userProfile, stay, inCart }) => {
   const GlobalStyle = createGlobalStyle`
@@ -646,279 +647,287 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
             {/* about */}
 
-            <div className="flex mt-14">
-              <div className="flex flex-col w-full">
-                <div className="text-gray-500 flex gap-2 text-sm truncate mt-3 flex-wrap">
-                  {stay.capacity && (
-                    <div className="flex items-center gap-0.5">
-                      <svg
-                        className="w-3 h-3"
-                        xmlns="http://www.w3.org/2000/svg"
-                        aria-hidden="true"
-                        role="img"
-                        width="1em"
-                        height="1em"
-                        preserveAspectRatio="xMidYMid meet"
-                        viewBox="0 0 36 36"
-                      >
-                        <path
-                          fill="currentColor"
-                          d="M12 16.14h-.87a8.67 8.67 0 0 0-6.43 2.52l-.24.28v8.28h4.08v-4.7l.55-.62l.25-.29a11 11 0 0 1 4.71-2.86A6.59 6.59 0 0 1 12 16.14Z"
-                        />
-                        <path
-                          fill="currentColor"
-                          d="M31.34 18.63a8.67 8.67 0 0 0-6.43-2.52a10.47 10.47 0 0 0-1.09.06a6.59 6.59 0 0 1-2 2.45a10.91 10.91 0 0 1 5 3l.25.28l.54.62v4.71h3.94v-8.32Z"
-                        />
-                        <path
-                          fill="currentColor"
-                          d="M11.1 14.19h.31a6.45 6.45 0 0 1 3.11-6.29a4.09 4.09 0 1 0-3.42 6.33Z"
-                        />
-                        <path
-                          fill="currentColor"
-                          d="M24.43 13.44a6.54 6.54 0 0 1 0 .69a4.09 4.09 0 0 0 .58.05h.19A4.09 4.09 0 1 0 21.47 8a6.53 6.53 0 0 1 2.96 5.44Z"
-                        />
-                        <circle
-                          cx="17.87"
-                          cy="13.45"
-                          r="4.47"
-                          fill="currentColor"
-                        />
-                        <path
-                          fill="currentColor"
-                          d="M18.11 20.3A9.69 9.69 0 0 0 11 23l-.25.28v6.33a1.57 1.57 0 0 0 1.6 1.54h11.49a1.57 1.57 0 0 0 1.6-1.54V23.3l-.24-.3a9.58 9.58 0 0 0-7.09-2.7Z"
-                        />
-                        <path fill="none" d="M0 0h36v36H0z" />
-                      </svg>
-                      <span>{stay.capacity} Guests</span>
-                    </div>
-                  )}
-                  {stay.rooms && (
-                    <div className="flex items-center gap-0.5">
-                      <svg
-                        className="w-3 h-3"
-                        xmlns="http://www.w3.org/2000/svg"
-                        aria-hidden="true"
-                        role="img"
-                        width="1em"
-                        height="1em"
-                        preserveAspectRatio="xMidYMid meet"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          fill="currentColor"
-                          d="M5 5v14a1 1 0 0 0 1 1h3v-2H7V6h2V4H6a1 1 0 0 0-1 1zm14.242-.97l-8-2A1 1 0 0 0 10 3v18a.998.998 0 0 0 1.242.97l8-2A1 1 0 0 0 20 19V5a1 1 0 0 0-.758-.97zM15 12.188a1.001 1.001 0 0 1-2 0v-.377a1 1 0 1 1 2 .001v.376z"
-                        />
-                      </svg>
-
-                      <span>{stay.rooms} rm</span>
-                    </div>
-                  )}
-
-                  {stay.beds && (
-                    <div className="flex items-center gap-0.5">
-                      <svg
-                        className="w-3 h-3"
-                        xmlns="http://www.w3.org/2000/svg"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        width="24"
-                      >
-                        <path d="M20 9.556V3h-2v2H6V3H4v6.557C2.81 10.25 2 11.526 2 13v4a1 1 0 0 0 1 1h1v4h2v-4h12v4h2v-4h1a1 1 0 0 0 1-1v-4c0-1.474-.811-2.75-2-3.444zM11 9H6V7h5v2zm7 0h-5V7h5v2z" />
-                      </svg>
-                      <span>{stay.beds} bd</span>
-                    </div>
-                  )}
-
-                  {stay.bathrooms && (
-                    <div className="flex items-center gap-0.5">
-                      <svg
-                        className="w-3 h-3"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 512 512"
-                      >
-                        <path d="M32 384c0 28.32 12.49 53.52 32 71.09V496C64 504.8 71.16 512 80 512h32C120.8 512 128 504.8 128 496v-15.1h256V496c0 8.836 7.164 16 16 16h32c8.836 0 16-7.164 16-16v-40.9c19.51-17.57 32-42.77 32-71.09V352H32V384zM496 256H96V77.25C95.97 66.45 111 60.23 118.6 67.88L132.4 81.66C123.6 108.6 129.4 134.5 144.2 153.2C137.9 159.5 137.8 169.8 144 176l11.31 11.31c6.248 6.248 16.38 6.248 22.63 0l105.4-105.4c6.248-6.248 6.248-16.38 0-22.63l-11.31-11.31c-6.248-6.248-16.38-6.248-22.63 0C230.7 33.26 204.7 27.55 177.7 36.41L163.9 22.64C149.5 8.25 129.6 0 109.3 0C66.66 0 32 34.66 32 77.25v178.8L16 256C7.164 256 0 263.2 0 272v32C0 312.8 7.164 320 16 320h480c8.836 0 16-7.164 16-16v-32C512 263.2 504.8 256 496 256z" />
-                      </svg>{" "}
-                      <span>{stay.bathrooms} ba</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {stay.type_of_stay === "HOUSE" && inCart && (
-                <Button
-                  onClick={() => {
-                    router.push({ pathname: "/cart" });
-                  }}
-                  className={
-                    "!bg-transparent !hidden md:!flex !w-[200px] h-[45px] !text-black relative border-2 border-pink-500 "
-                  }
-                >
-                  View in basket
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    viewBox="0 0 24 24"
-                    version="1.1"
-                  >
-                    <title>bag</title>
-                    <desc>Created with Sketch.</desc>
-                    <defs />
-                    <g
-                      id="Page-1"
-                      stroke="none"
-                      strokeWidth="1"
-                      fill="none"
-                      fillRule="evenodd"
-                    >
-                      <g
-                        id="Artboard-4"
-                        transform="translate(-620.000000, -291.000000)"
-                      >
-                        <g
-                          id="94"
-                          transform="translate(620.000000, 291.000000)"
+            <div className="mt-16">
+              <h1 className="font-bold text-2xl">Quick facts</h1>
+              <div className="flex">
+                <div className="flex flex-col w-full">
+                  <div className="text-gray-500 flex gap-2 text-sm truncate mt-3 flex-wrap">
+                    {stay.capacity && (
+                      <div className="flex items-center gap-0.5">
+                        <svg
+                          className="w-3 h-3"
+                          xmlns="http://www.w3.org/2000/svg"
+                          aria-hidden="true"
+                          role="img"
+                          width="1em"
+                          height="1em"
+                          preserveAspectRatio="xMidYMid meet"
+                          viewBox="0 0 36 36"
                         >
-                          <rect
-                            id="Rectangle-40"
-                            stroke="#333333"
-                            strokeWidth="2"
-                            x="4"
-                            y="7"
-                            width="16"
-                            height="16"
-                            rx="1"
+                          <path
+                            fill="currentColor"
+                            d="M12 16.14h-.87a8.67 8.67 0 0 0-6.43 2.52l-.24.28v8.28h4.08v-4.7l.55-.62l.25-.29a11 11 0 0 1 4.71-2.86A6.59 6.59 0 0 1 12 16.14Z"
                           />
                           <path
-                            d="M16,10 L16,5 C16,2.790861 14.209139,1 12,1 C9.790861,1 8,2.790861 8,5 L8,10"
-                            id="Oval-21"
-                            stroke="#333333"
-                            strokeWidth="2"
-                            strokeLinecap="round"
+                            fill="currentColor"
+                            d="M31.34 18.63a8.67 8.67 0 0 0-6.43-2.52a10.47 10.47 0 0 0-1.09.06a6.59 6.59 0 0 1-2 2.45a10.91 10.91 0 0 1 5 3l.25.28l.54.62v4.71h3.94v-8.32Z"
                           />
-                          <rect
-                            id="Rectangle-41"
-                            fill="#333333"
-                            x="5"
-                            y="18"
-                            width="14"
-                            height="2"
+                          <path
+                            fill="currentColor"
+                            d="M11.1 14.19h.31a6.45 6.45 0 0 1 3.11-6.29a4.09 4.09 0 1 0-3.42 6.33Z"
                           />
+                          <path
+                            fill="currentColor"
+                            d="M24.43 13.44a6.54 6.54 0 0 1 0 .69a4.09 4.09 0 0 0 .58.05h.19A4.09 4.09 0 1 0 21.47 8a6.53 6.53 0 0 1 2.96 5.44Z"
+                          />
+                          <circle
+                            cx="17.87"
+                            cy="13.45"
+                            r="4.47"
+                            fill="currentColor"
+                          />
+                          <path
+                            fill="currentColor"
+                            d="M18.11 20.3A9.69 9.69 0 0 0 11 23l-.25.28v6.33a1.57 1.57 0 0 0 1.6 1.54h11.49a1.57 1.57 0 0 0 1.6-1.54V23.3l-.24-.3a9.58 9.58 0 0 0-7.09-2.7Z"
+                          />
+                          <path fill="none" d="M0 0h36v36H0z" />
+                        </svg>
+                        <span>{stay.capacity} Guests</span>
+                      </div>
+                    )}
+                    {stay.rooms && (
+                      <div className="flex items-center gap-0.5">
+                        <svg
+                          className="w-3 h-3"
+                          xmlns="http://www.w3.org/2000/svg"
+                          aria-hidden="true"
+                          role="img"
+                          width="1em"
+                          height="1em"
+                          preserveAspectRatio="xMidYMid meet"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            fill="currentColor"
+                            d="M5 5v14a1 1 0 0 0 1 1h3v-2H7V6h2V4H6a1 1 0 0 0-1 1zm14.242-.97l-8-2A1 1 0 0 0 10 3v18a.998.998 0 0 0 1.242.97l8-2A1 1 0 0 0 20 19V5a1 1 0 0 0-.758-.97zM15 12.188a1.001 1.001 0 0 1-2 0v-.377a1 1 0 1 1 2 .001v.376z"
+                          />
+                        </svg>
+
+                        <span>{stay.rooms} rm</span>
+                      </div>
+                    )}
+
+                    {stay.beds && (
+                      <div className="flex items-center gap-0.5">
+                        <svg
+                          className="w-3 h-3"
+                          xmlns="http://www.w3.org/2000/svg"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          width="24"
+                        >
+                          <path d="M20 9.556V3h-2v2H6V3H4v6.557C2.81 10.25 2 11.526 2 13v4a1 1 0 0 0 1 1h1v4h2v-4h12v4h2v-4h1a1 1 0 0 0 1-1v-4c0-1.474-.811-2.75-2-3.444zM11 9H6V7h5v2zm7 0h-5V7h5v2z" />
+                        </svg>
+                        <span>{stay.beds} bd</span>
+                      </div>
+                    )}
+
+                    {stay.bathrooms && (
+                      <div className="flex items-center gap-0.5">
+                        <svg
+                          className="w-3 h-3"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 512 512"
+                        >
+                          <path d="M32 384c0 28.32 12.49 53.52 32 71.09V496C64 504.8 71.16 512 80 512h32C120.8 512 128 504.8 128 496v-15.1h256V496c0 8.836 7.164 16 16 16h32c8.836 0 16-7.164 16-16v-40.9c19.51-17.57 32-42.77 32-71.09V352H32V384zM496 256H96V77.25C95.97 66.45 111 60.23 118.6 67.88L132.4 81.66C123.6 108.6 129.4 134.5 144.2 153.2C137.9 159.5 137.8 169.8 144 176l11.31 11.31c6.248 6.248 16.38 6.248 22.63 0l105.4-105.4c6.248-6.248 6.248-16.38 0-22.63l-11.31-11.31c-6.248-6.248-16.38-6.248-22.63 0C230.7 33.26 204.7 27.55 177.7 36.41L163.9 22.64C149.5 8.25 129.6 0 109.3 0C66.66 0 32 34.66 32 77.25v178.8L16 256C7.164 256 0 263.2 0 272v32C0 312.8 7.164 320 16 320h480c8.836 0 16-7.164 16-16v-32C512 263.2 504.8 256 496 256z" />
+                        </svg>{" "}
+                        <span>{stay.bathrooms} ba</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {stay.type_of_stay === "HOUSE" && inCart && (
+                  <Button
+                    onClick={() => {
+                      router.push({ pathname: "/cart" });
+                    }}
+                    className={
+                      "!bg-transparent !hidden md:!flex !w-[200px] h-[45px] !text-black relative border-2 border-pink-500 "
+                    }
+                  >
+                    View in basket
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      viewBox="0 0 24 24"
+                      version="1.1"
+                    >
+                      <title>bag</title>
+                      <desc>Created with Sketch.</desc>
+                      <defs />
+                      <g
+                        id="Page-1"
+                        stroke="none"
+                        strokeWidth="1"
+                        fill="none"
+                        fillRule="evenodd"
+                      >
+                        <g
+                          id="Artboard-4"
+                          transform="translate(-620.000000, -291.000000)"
+                        >
+                          <g
+                            id="94"
+                            transform="translate(620.000000, 291.000000)"
+                          >
+                            <rect
+                              id="Rectangle-40"
+                              stroke="#333333"
+                              strokeWidth="2"
+                              x="4"
+                              y="7"
+                              width="16"
+                              height="16"
+                              rx="1"
+                            />
+                            <path
+                              d="M16,10 L16,5 C16,2.790861 14.209139,1 12,1 C9.790861,1 8,2.790861 8,5 L8,10"
+                              id="Oval-21"
+                              stroke="#333333"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                            />
+                            <rect
+                              id="Rectangle-41"
+                              fill="#333333"
+                              x="5"
+                              y="18"
+                              width="14"
+                              height="2"
+                            />
+                          </g>
                         </g>
                       </g>
-                    </g>
-                  </svg>
-                </Button>
-              )}
+                    </svg>
+                  </Button>
+                )}
 
-              <div
-                className={
-                  "w-full z-10 px-2 md:hidden fixed bottom-0 safari-bottom left-0 right-0 bg-white py-1 " +
-                  (stay.type_of_stay === "HOUSE" && inCart && "!py-2.5")
-                }
-              >
-                <div className="flex justify-between items-center gap-2">
-                  <div>
-                    <div className="flex items-center">
-                      <Price
-                        stayPrice={priceOfPlan * (numOfAdults + numOfChildren)}
-                      ></Price>
-                      <span className="mt-1">/night</span>
+                <div
+                  className={
+                    "w-full z-10 px-2 md:hidden fixed bottom-0 safari-bottom left-0 right-0 bg-white py-1 " +
+                    (stay.type_of_stay === "HOUSE" && inCart && "!py-2.5")
+                  }
+                >
+                  <div className="flex justify-between items-center gap-2">
+                    <div>
+                      <div className="flex items-center">
+                        <Price
+                          stayPrice={
+                            priceOfPlan * (numOfAdults + numOfChildren)
+                          }
+                        ></Price>
+                        <span className="mt-1">/night</span>
 
-                      {addToCartDate &&
-                        addToCartDate.from &&
-                        addToCartDate.to && (
-                          <div className="mx-1 mb-1 font-bold">.</div>
-                        )}
+                        {addToCartDate &&
+                          addToCartDate.from &&
+                          addToCartDate.to && (
+                            <div className="mx-1 mb-1 font-bold">.</div>
+                          )}
 
-                      {addToCartDate && addToCartDate.from && addToCartDate.to && (
-                        <span className="text-sm font-bold mt-1.5">
-                          {moment(addToCartDate.from).format("MMM DD")} -{" "}
-                          {moment(addToCartDate.to).format("MMM DD")}
-                        </span>
+                        {addToCartDate &&
+                          addToCartDate.from &&
+                          addToCartDate.to && (
+                            <span className="text-sm font-bold mt-1.5">
+                              {moment(addToCartDate.from).format("MMM DD")} -{" "}
+                              {moment(addToCartDate.to).format("MMM DD")}
+                            </span>
+                          )}
+                      </div>
+
+                      {(stay.type_of_stay !== "HOUSE" || !inCart) && (
+                        <div className="text-gray-600 text-sm justify-start flex flex-wrap self-start">
+                          {
+                            <span>
+                              {numOfAdults}{" "}
+                              {numOfAdults > 1 ? "Adults" : "Adult"}
+                            </span>
+                          }
+                          {numOfChildren > 0 && (
+                            <>
+                              <span className="font-bold mx-0.5 ">,</span>
+                              <span>
+                                {numOfChildren}{" "}
+                                {numOfChildren > 1 ? "Children" : "Child"}
+                              </span>
+                            </>
+                          )}
+                          {nonResident && (
+                            <>
+                              <span className="font-bold mx-0.5 ">,</span>
+                              <span>Non-resident</span>
+                            </>
+                          )}
+
+                          {!nonResident && (
+                            <>
+                              <span className="font-bold mx-0.5 ">,</span>
+                              <span>Resident</span>
+                            </>
+                          )}
+                        </div>
                       )}
                     </div>
 
                     {(stay.type_of_stay !== "HOUSE" || !inCart) && (
-                      <div className="text-gray-600 text-sm justify-start flex flex-wrap self-start">
-                        {
-                          <span>
-                            {numOfAdults} {numOfAdults > 1 ? "Adults" : "Adult"}
-                          </span>
+                      <Button
+                        onClick={() => {
+                          setShowMobileDateModal(true);
+                        }}
+                        className={
+                          "!bg-gradient-to-r !px-2 from-pink-500 via-red-500 to-yellow-500 !text-white " +
+                          (!inCart ? "" : "")
                         }
-                        {numOfChildren > 0 && (
-                          <>
-                            <span className="font-bold mx-0.5 ">,</span>
-                            <span>
-                              {numOfChildren}{" "}
-                              {numOfChildren > 1 ? "Children" : "Child"}
-                            </span>
-                          </>
-                        )}
-                        {nonResident && (
-                          <>
-                            <span className="font-bold mx-0.5 ">,</span>
-                            <span>Non-resident</span>
-                          </>
-                        )}
+                      >
+                        {!inCart ? "Add to basket" : "Add to basket again"}
+                        <div
+                          className={
+                            " " + (!addToBasketLoading ? "hidden" : "ml-2")
+                          }
+                        >
+                          <LoadingSpinerChase
+                            width={16}
+                            height={16}
+                            color="#fff"
+                          ></LoadingSpinerChase>
+                        </div>
+                      </Button>
+                    )}
 
-                        {!nonResident && (
-                          <>
-                            <span className="font-bold mx-0.5 ">,</span>
-                            <span>Resident</span>
-                          </>
-                        )}
-                      </div>
+                    {stay.type_of_stay === "HOUSE" && inCart && (
+                      <Button
+                        onClick={() => {
+                          router.push({ pathname: "/cart" });
+                        }}
+                        className={
+                          "!bg-gradient-to-r !px-2 from-pink-500 via-red-500 to-yellow-500 !text-white "
+                        }
+                      >
+                        View in basket
+                        <div
+                          className={
+                            " " + (!addToBasketLoading ? "hidden" : "ml-2")
+                          }
+                        >
+                          <LoadingSpinerChase
+                            width={16}
+                            height={16}
+                            color="#fff"
+                          ></LoadingSpinerChase>
+                        </div>
+                      </Button>
                     )}
                   </div>
-
-                  {(stay.type_of_stay !== "HOUSE" || !inCart) && (
-                    <Button
-                      onClick={() => {
-                        setShowMobileDateModal(true);
-                      }}
-                      className={
-                        "!bg-gradient-to-r !px-2 from-pink-500 via-red-500 to-yellow-500 !text-white " +
-                        (!inCart ? "" : "")
-                      }
-                    >
-                      {!inCart ? "Add to basket" : "Add to basket again"}
-                      <div
-                        className={
-                          " " + (!addToBasketLoading ? "hidden" : "ml-2")
-                        }
-                      >
-                        <LoadingSpinerChase
-                          width={16}
-                          height={16}
-                          color="#fff"
-                        ></LoadingSpinerChase>
-                      </div>
-                    </Button>
-                  )}
-
-                  {stay.type_of_stay === "HOUSE" && inCart && (
-                    <Button
-                      onClick={() => {
-                        router.push({ pathname: "/cart" });
-                      }}
-                      className={
-                        "!bg-gradient-to-r !px-2 from-pink-500 via-red-500 to-yellow-500 !text-white "
-                      }
-                    >
-                      View in basket
-                      <div
-                        className={
-                          " " + (!addToBasketLoading ? "hidden" : "ml-2")
-                        }
-                      >
-                        <LoadingSpinerChase
-                          width={16}
-                          height={16}
-                          color="#fff"
-                        ></LoadingSpinerChase>
-                      </div>
-                    </Button>
-                  )}
                 </div>
               </div>
             </div>
@@ -1421,12 +1430,14 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
             name="amenities"
             className="flex flex-col md:flex-row gap-3 justify-between pt-10"
           >
-            <div className="border h-fit border-gray-200 rounded-xl overflow-hidden w-full order-2 md:order-1 mt-4 md:mt-0">
-              <div className="py-2 bg-gray-200 mb-2">
-                <span className="font-bold text-xl ml-6">Amenities</span>
+            <div className="w-full">
+              <div className="mb-3">
+                <span className="font-bold text-xl">Amenities</span>
               </div>
 
-              {!showMoreAmenities && (
+              <Amenities amenities={stay}></Amenities>
+
+              {/* {!showMoreAmenities && (
                 <div className="flex flex-wrap gap-2 px-2">
                   {stay.amenities.slice(0, 5).map((amenity, index) => (
                     <div key={index} className="w-[48%]">
@@ -1490,7 +1501,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     />
                   </svg>
                 </div>
-              )}
+              )} */}
             </div>
           </Element>
 
@@ -1500,9 +1511,9 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               name="experiences"
               className="flex flex-col md:flex-row gap-3 justify-between pt-10 "
             >
-              <div className="border pb-2 h-fit border-gray-200 rounded-xl overflow-hidden w-full order-2 md:order-1 mt-4 md:mt-0">
-                <div className="py-2 bg-gray-200 mb-2">
-                  <span className="font-bold text-xl ml-6">Experiences</span>
+              <div className="">
+                <div className="mb-3">
+                  <span className="font-bold text-xl">Experiences</span>
                 </div>
 
                 {!showMoreExperiences && (
@@ -1605,7 +1616,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
             {stay.refundable && (
               <div className="mt-2 ml-2">
                 <p>Bookings at this property is refundable.</p>
-                <div className="mt-6">{stay.refundable_policy}</div>
+                <div className="mt-6">{stay.refund_policy}</div>
               </div>
             )}
 

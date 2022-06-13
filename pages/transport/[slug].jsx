@@ -968,7 +968,7 @@ function TransportDetail({ userProfile, transport, inCart }) {
             {transport.refundable && (
               <div className="mt-2 ml-2">
                 <p>Bookings at this transport is refundable.</p>
-                <div className="mt-6">{transport.refundable_policy}</div>
+                <div className="mt-6">{transport.refund_policy}</div>
               </div>
             )}
 

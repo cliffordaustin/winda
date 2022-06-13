@@ -458,134 +458,139 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
             <div
               className={
                 !isVisible
-                  ? "h-12 !fixed md:!w-[56.5%] lg:!w-[63.5%]  !w-full !top-[65px] left-0 right-0 z-[40] bg-white "
+                  ? "h-12 !fixed md:!w-[56.5%] lg:!w-[63.5%]  !w-full !top-[65px] left-0 right-0 z-[40] bg-white lg:px-10 px-5"
                   : "h-12 border-b border-gray-200 absolute top-[505px] sm:top-[565px] w-[100%] left-0 right-0 lg:px-10 px-5"
               }
             >
               <ScrollTo guestPopup={guestPopup} activity={activity}></ScrollTo>
             </div>
 
-            <div className="flex mt-14">
-              <div className="flex flex-col w-full">
-                <div className="text-gray-500 flex gap-2 text-sm truncate mt-3 flex-wrap">
-                  {activity.capacity && (
-                    <div className="flex items-center gap-0.5">
-                      <svg
-                        className="w-3 h-3"
-                        xmlns="http://www.w3.org/2000/svg"
-                        aria-hidden="true"
-                        role="img"
-                        width="1em"
-                        height="1em"
-                        preserveAspectRatio="xMidYMid meet"
-                        viewBox="0 0 36 36"
-                      >
-                        <path
-                          fill="currentColor"
-                          d="M12 16.14h-.87a8.67 8.67 0 0 0-6.43 2.52l-.24.28v8.28h4.08v-4.7l.55-.62l.25-.29a11 11 0 0 1 4.71-2.86A6.59 6.59 0 0 1 12 16.14Z"
-                        />
-                        <path
-                          fill="currentColor"
-                          d="M31.34 18.63a8.67 8.67 0 0 0-6.43-2.52a10.47 10.47 0 0 0-1.09.06a6.59 6.59 0 0 1-2 2.45a10.91 10.91 0 0 1 5 3l.25.28l.54.62v4.71h3.94v-8.32Z"
-                        />
-                        <path
-                          fill="currentColor"
-                          d="M11.1 14.19h.31a6.45 6.45 0 0 1 3.11-6.29a4.09 4.09 0 1 0-3.42 6.33Z"
-                        />
-                        <path
-                          fill="currentColor"
-                          d="M24.43 13.44a6.54 6.54 0 0 1 0 .69a4.09 4.09 0 0 0 .58.05h.19A4.09 4.09 0 1 0 21.47 8a6.53 6.53 0 0 1 2.96 5.44Z"
-                        />
-                        <circle
-                          cx="17.87"
-                          cy="13.45"
-                          r="4.47"
-                          fill="currentColor"
-                        />
-                        <path
-                          fill="currentColor"
-                          d="M18.11 20.3A9.69 9.69 0 0 0 11 23l-.25.28v6.33a1.57 1.57 0 0 0 1.6 1.54h11.49a1.57 1.57 0 0 0 1.6-1.54V23.3l-.24-.3a9.58 9.58 0 0 0-7.09-2.7Z"
-                        />
-                        <path fill="none" d="M0 0h36v36H0z" />
-                      </svg>
-                      <span>{activity.capacity} Maximum number of guests</span>
-                    </div>
-                  )}
+            <div className="mt-16">
+              <h1 className="font-bold text-2xl">Quick facts</h1>
+              <div className="flex">
+                <div className="flex flex-col w-full">
+                  <div className="text-gray-500 flex gap-2 text-sm truncate mt-3 flex-wrap">
+                    {activity.capacity && (
+                      <div className="flex items-center gap-0.5">
+                        <svg
+                          className="w-3 h-3"
+                          xmlns="http://www.w3.org/2000/svg"
+                          aria-hidden="true"
+                          role="img"
+                          width="1em"
+                          height="1em"
+                          preserveAspectRatio="xMidYMid meet"
+                          viewBox="0 0 36 36"
+                        >
+                          <path
+                            fill="currentColor"
+                            d="M12 16.14h-.87a8.67 8.67 0 0 0-6.43 2.52l-.24.28v8.28h4.08v-4.7l.55-.62l.25-.29a11 11 0 0 1 4.71-2.86A6.59 6.59 0 0 1 12 16.14Z"
+                          />
+                          <path
+                            fill="currentColor"
+                            d="M31.34 18.63a8.67 8.67 0 0 0-6.43-2.52a10.47 10.47 0 0 0-1.09.06a6.59 6.59 0 0 1-2 2.45a10.91 10.91 0 0 1 5 3l.25.28l.54.62v4.71h3.94v-8.32Z"
+                          />
+                          <path
+                            fill="currentColor"
+                            d="M11.1 14.19h.31a6.45 6.45 0 0 1 3.11-6.29a4.09 4.09 0 1 0-3.42 6.33Z"
+                          />
+                          <path
+                            fill="currentColor"
+                            d="M24.43 13.44a6.54 6.54 0 0 1 0 .69a4.09 4.09 0 0 0 .58.05h.19A4.09 4.09 0 1 0 21.47 8a6.53 6.53 0 0 1 2.96 5.44Z"
+                          />
+                          <circle
+                            cx="17.87"
+                            cy="13.45"
+                            r="4.47"
+                            fill="currentColor"
+                          />
+                          <path
+                            fill="currentColor"
+                            d="M18.11 20.3A9.69 9.69 0 0 0 11 23l-.25.28v6.33a1.57 1.57 0 0 0 1.6 1.54h11.49a1.57 1.57 0 0 0 1.6-1.54V23.3l-.24-.3a9.58 9.58 0 0 0-7.09-2.7Z"
+                          />
+                          <path fill="none" d="M0 0h36v36H0z" />
+                        </svg>
+                        <span>
+                          {activity.capacity} Maximum number of guests
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  <h1 className="text-sm text-gray-600 mt-2">
+                    This experience has a duration of{" "}
+                    {moment
+                      .duration(activity.duration_of_activity, "minutes")
+                      .humanize()}
+                  </h1>
                 </div>
 
-                <h1 className="text-sm text-gray-600 mt-2">
-                  This experience has a duration of{" "}
-                  {moment
-                    .duration(activity.duration_of_activity, "minutes")
-                    .humanize()}
-                </h1>
-              </div>
-
-              <div className="w-full z-10 px-4 md:hidden fixed bottom-0 left-0 right-0 bg-white py-2">
-                <div className="flex justify-between items-center gap-2">
-                  {inCart && (
-                    <Button
-                      onClick={() => {
-                        router.push({ pathname: "/cart" });
-                      }}
-                      className="!bg-transparent !w-full !text-black !border-2 border-blue-800"
-                    >
-                      View in basket
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5"
-                        viewBox="0 0 24 24"
-                        version="1.1"
+                <div className="w-full z-10 px-4 md:hidden fixed bottom-0 left-0 right-0 bg-white py-2">
+                  <div className="flex justify-between items-center gap-2">
+                    {inCart && (
+                      <Button
+                        onClick={() => {
+                          router.push({ pathname: "/cart" });
+                        }}
+                        className="!bg-transparent !w-full !text-black !border-2 border-blue-800"
                       >
-                        <title>bag</title>
-                        <desc>Created with Sketch.</desc>
-                        <defs />
-                        <g
-                          id="Page-1"
-                          stroke="none"
-                          strokeWidth="1"
-                          fill="none"
-                          fillRule="evenodd"
+                        View in basket
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5"
+                          viewBox="0 0 24 24"
+                          version="1.1"
                         >
+                          <title>bag</title>
+                          <desc>Created with Sketch.</desc>
+                          <defs />
                           <g
-                            id="Artboard-4"
-                            transform="translate(-620.000000, -291.000000)"
+                            id="Page-1"
+                            stroke="none"
+                            strokeWidth="1"
+                            fill="none"
+                            fillRule="evenodd"
                           >
                             <g
-                              id="94"
-                              transform="translate(620.000000, 291.000000)"
+                              id="Artboard-4"
+                              transform="translate(-620.000000, -291.000000)"
                             >
-                              <rect
-                                id="Rectangle-40"
-                                stroke="#333333"
-                                strokeWidth="2"
-                                x="4"
-                                y="7"
-                                width="16"
-                                height="16"
-                                rx="1"
-                              />
-                              <path
-                                d="M16,10 L16,5 C16,2.790861 14.209139,1 12,1 C9.790861,1 8,2.790861 8,5 L8,10"
-                                id="Oval-21"
-                                stroke="#333333"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                              />
-                              <rect
-                                id="Rectangle-41"
-                                fill="#333333"
-                                x="5"
-                                y="18"
-                                width="14"
-                                height="2"
-                              />
+                              <g
+                                id="94"
+                                transform="translate(620.000000, 291.000000)"
+                              >
+                                <rect
+                                  id="Rectangle-40"
+                                  stroke="#333333"
+                                  strokeWidth="2"
+                                  x="4"
+                                  y="7"
+                                  width="16"
+                                  height="16"
+                                  rx="1"
+                                />
+                                <path
+                                  d="M16,10 L16,5 C16,2.790861 14.209139,1 12,1 C9.790861,1 8,2.790861 8,5 L8,10"
+                                  id="Oval-21"
+                                  stroke="#333333"
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                />
+                                <rect
+                                  id="Rectangle-41"
+                                  fill="#333333"
+                                  x="5"
+                                  y="18"
+                                  width="14"
+                                  height="2"
+                                />
+                              </g>
                             </g>
                           </g>
-                        </g>
-                      </svg>
-                    </Button>
-                  )}
+                        </svg>
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -1392,7 +1397,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
             {activity.refundable && (
               <div className="mt-2 ml-2">
                 <p>Bookings at this experience is refundable.</p>
-                <div className="mt-6">{activity.refundable_policy}</div>
+                <div className="mt-6">{activity.refund_policy}</div>
               </div>
             )}
 
@@ -1509,18 +1514,19 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
             </div>
           </Element>
 
-          {!reviewLoading && reviews.length > 0 && (
-            <div>
-              <div className="max-w-[750px] mb-10 lg:px-10">
-                <h1 className="font-bold text-2xl mb-5">Reviews</h1>
-                <ReviewOverview
-                  reviews={reviews}
-                  filterReview={filterReview}
-                  stay={activity}
-                  setFilterRateVal={setFilterRateVal}
-                ></ReviewOverview>
-                <div className="flex gap-2">
-                  {/* {!activity.has_user_reviewed && !activity.is_user_activity && (
+          <Element name="reviews" className="pt-12">
+            {!reviewLoading && reviews.length > 0 && (
+              <div>
+                <div className="max-w-[750px] mb-10">
+                  <h1 className="font-bold text-2xl mb-5">Reviews</h1>
+                  <ReviewOverview
+                    reviews={reviews}
+                    filterReview={filterReview}
+                    stay={activity}
+                    setFilterRateVal={setFilterRateVal}
+                  ></ReviewOverview>
+                  <div className="flex gap-2">
+                    {/* {!activity.has_user_reviewed && !activity.is_user_activity && (
                   <div
                     onClick={() => {
                       const token = Cookies.get("token");
@@ -1552,83 +1558,84 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                     <div>Add Review</div>
                   </div>
                 )} */}
-                  {filteredReviews && (
-                    <div
-                      onClick={() => {
-                        getReview();
-                        setFilteredReviews(null);
-                      }}
-                      className="flex gap-1 border border-gray-200 cursor-pointer rounded-md px-2 py-2 w-fit mt-4"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-6 w-6"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth="2"
+                    {filteredReviews && (
+                      <div
+                        onClick={() => {
+                          getReview();
+                          setFilteredReviews(null);
+                        }}
+                        className="flex gap-1 border border-gray-200 cursor-pointer rounded-md px-2 py-2 w-fit mt-4"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-                        />
-                      </svg>
-                      <div>Clear Filter</div>
-                    </div>
-                  )}
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-6 w-6"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                        <div>Clear Filter</div>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
 
-              <div>
-                <CreateReview
-                  show={showCreateReview}
-                  setShowCreateReview={setShowCreateReview}
-                ></CreateReview>
-              </div>
-
-              <div>
-                <Share
-                  showShare={showShare}
-                  type_of_stay={"EXPERIENCE"}
-                  setShowShare={setShowShare}
-                ></Share>
-              </div>
-
-              {showAllReviews && (
                 <div>
-                  <AllReviews
-                    showAllReviews={showAllReviews}
-                    setShowAllReviews={setShowAllReviews}
-                    next={nextReview}
-                    filterRateVal={filterRateVal}
-                    filteredReviews={filteredReviews}
-                    reviewPageSize={reviewPageSize}
-                    reviewCount={reviewCount}
-                  ></AllReviews>
+                  <CreateReview
+                    show={showCreateReview}
+                    setShowCreateReview={setShowCreateReview}
+                  ></CreateReview>
                 </div>
-              )}
 
-              <div className="mb-16 lg:px-10">
-                <Reviews
-                  reviews={reviews}
-                  spinner={spinner}
-                  filteredReviews={filteredReviews}
-                  setShowAllReviews={setShowAllReviews}
-                  count={reviewCount}
-                ></Reviews>
+                <div>
+                  <Share
+                    showShare={showShare}
+                    type_of_stay={"EXPERIENCE"}
+                    setShowShare={setShowShare}
+                  ></Share>
+                </div>
+
+                {showAllReviews && (
+                  <div>
+                    <AllReviews
+                      showAllReviews={showAllReviews}
+                      setShowAllReviews={setShowAllReviews}
+                      next={nextReview}
+                      filterRateVal={filterRateVal}
+                      filteredReviews={filteredReviews}
+                      reviewPageSize={reviewPageSize}
+                      reviewCount={reviewCount}
+                    ></AllReviews>
+                  </div>
+                )}
+
+                <div className="mb-16">
+                  <Reviews
+                    reviews={reviews}
+                    spinner={spinner}
+                    filteredReviews={filteredReviews}
+                    setShowAllReviews={setShowAllReviews}
+                    count={reviewCount}
+                  ></Reviews>
+                </div>
               </div>
-            </div>
-          )}
-          {reviewLoading && (
-            <div className="flex items-center justify-center mb-16">
-              <LoadingSpinerChase
-                width={35}
-                height={35}
-                color="#000"
-              ></LoadingSpinerChase>
-            </div>
-          )}
+            )}
+            {reviewLoading && (
+              <div className="flex items-center justify-center mb-16">
+                <LoadingSpinerChase
+                  width={35}
+                  height={35}
+                  color="#000"
+                ></LoadingSpinerChase>
+              </div>
+            )}
+          </Element>
 
           <div className="mt-6 -ml-10 -mr-4">
             <Footer></Footer>

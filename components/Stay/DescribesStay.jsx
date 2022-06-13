@@ -12,9 +12,9 @@ function DescribesStay({ stay }) {
   });
 
   return (
-    <div className="border border-gray-200 rounded-xl !w-full overflow-hidden h-fit pb-4">
-      <div className="py-2 bg-gray-200 mb-2">
-        <span className="font-bold text-xl ml-6">Best describe as</span>
+    <div className="">
+      <div className="mb-3">
+        <span className="font-bold text-xl">Best describe as</span>
       </div>
       {stay.type_of_stay === "HOUSE" && !state.showMoreOfHouse && (
         <div className="flex flex-wrap gap-2 justify-between px-2">
