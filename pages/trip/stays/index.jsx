@@ -8,23 +8,26 @@ import { useDispatch, useSelector } from "react-redux";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Thumbs } from "swiper";
 import { useRouter } from "next/router";
+import Search from "../../../components/Trip/Search";
 
 import { wrapper } from "../../../redux/store";
 import styles from "../../../styles/StyledLink.module.css";
 import UserDropdown from "../../../components/Home/UserDropdown";
-import getTokenFromReq from "../../../lib/getTokenFromReq";
 import Button from "../../../components/ui/Button";
 import Input from "../../../components/ui/Input";
 import SearchButtonClose from "../../../components/Home/SearchButtonClose";
 import DatePicker from "../../../components/ui/DatePicker";
+import { getRecommendeTripUrl } from "../../../lib/url";
 
 import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/thumbs";
 import AllTrips from "../../../components/Trip/Trips";
 import Cookies from "js-cookie";
+import getToken from "../../../lib/getToken";
+import Tags from "../../../components/Trip/Tags";
 
-const Trips = ({ userProfile }) => {
+const Trips = ({ userProfile, recommendedTrips }) => {
   const [state, setState] = useState({});
 
   const [showDropdown, changeShowDropdown] = useState(false);
@@ -224,17 +227,46 @@ const Trips = ({ userProfile }) => {
                 A Trip building experience
               </h1>
             </div>
+          </div>
 
-            <Button className="flex items-center gap-4 w-36 !py-3 !bg-blue-600">
-              <span className="font-bold">Learn more</span>
-            </Button>
+          <div className="absolute z-[30] flex bottom-20 w-[95%] md:w-[700px] left-2/4 -translate-x-2/4 h-14 bg-white rounded-lg">
+            <div className="w-[60%] flex items-center h-full rounded-tl-lg rounded-bl-lg bg-white border-r border-gray-300">
+              <Search
+                inputBoxClassName="border-0 "
+                searchClass="w-full"
+                location={location}
+                placeholder="Search for a place"
+                setLocation={setLocation}
+              ></Search>
+            </div>
+            <div className="w-[40%] cursor-pointer pl-3 gap-2 h-full bg-white rounded-tr-lg rounded-br-lg flex items-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 text-gray-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                />
+              </svg>
+              <div className="text-gray-500 text-sm">Date</div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="w-full flex gap-2 top-4 relative">
-        <div className="flex justify-between relative h-full w-full">
-          <div
+      <div className="w-full">
+        <div className="h-12 flex justify-center mt-2">
+          <Tags></Tags>
+        </div>
+        <div className="flex justify-between relative mt-6 h-full w-full">
+          <div>
+            {/* <div
             className={
               "sticky w-[35%] hidden md:block overflow-y-scroll top-[74px] h-screen border-r border-gray-200 px-4 "
             }
@@ -459,9 +491,14 @@ const Trips = ({ userProfile }) => {
                 </div>
               </div>
             </div>
+          </div> */}
           </div>
-          <div className="relative right-0 h-full xsMax:w-full px-4 w-[63%]">
-            <AllTrips userProfile={userProfile} trips={trips}></AllTrips>
+          <div className="h-full mx-auto w-full px-4 xl:w-[1300px] lg:w-[900px] ">
+            <AllTrips
+              userProfile={userProfile}
+              trips={trips}
+              recommendedTrips={recommendedTrips}
+            ></AllTrips>
           </div>
         </div>
       </div>
@@ -471,68 +508,55 @@ const Trips = ({ userProfile }) => {
 
 Trips.propTypes = {};
 
-export const getServerSideProps = wrapper.getServerSideProps(
-  (context) =>
-    async ({ req, res, query, resolvedUrl }) => {
-      try {
-        const token = getTokenFromReq(req);
+export async function getServerSideProps(context) {
+  try {
+    const token = getToken(context);
 
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_baseURL}/stays/?search=${
-            query.search ? query.search : ""
-          }&type_of_stay=${
-            query.type_of_stay ? query.type_of_stay : ""
-          }&min_price=${query.min_price ? query.min_price : ""}&max_price=${
-            query.max_price ? query.max_price : ""
-          }&min_rooms=${query.min_rooms ? query.min_rooms : ""}&max_rooms=${
-            query.max_rooms ? query.max_rooms : ""
-          }&ordering=${query.ordering ? query.ordering : ""}`
-        );
+    const url = getRecommendeTripUrl(context);
 
-        await context.dispatch({
-          type: "SET_STAYS",
-          payload: response.data.results,
-        });
+    const trips = await axios.get(`${url}`);
 
-        if (token) {
-          const response = await axios.get(
-            `${process.env.NEXT_PUBLIC_baseURL}/user/`,
-            {
-              headers: {
-                Authorization: "Token " + token,
-              },
-            }
-          );
-
-          return {
-            props: {
-              userProfile: response.data[0],
-            },
-          };
-        }
-
-        return {
-          props: {
-            userProfile: "",
+    if (token) {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_baseURL}/user/`,
+        {
+          headers: {
+            Authorization: "Token " + token,
           },
-        };
-      } catch (error) {
-        if (error.response.status === 401) {
-          return {
-            redirect: {
-              permanent: false,
-              destination: "logout",
-            },
-          };
-        } else {
-          return {
-            props: {
-              userProfile: "",
-            },
-          };
         }
-      }
+      );
+
+      return {
+        props: {
+          userProfile: response.data[0],
+          recommendedTrips: trips.data.results,
+        },
+      };
     }
-);
+
+    return {
+      props: {
+        userProfile: "",
+        recommendedTrips: trips.data.results,
+      },
+    };
+  } catch (error) {
+    if (error.response.status === 401) {
+      return {
+        redirect: {
+          permanent: false,
+          destination: "logout",
+        },
+      };
+    } else {
+      return {
+        props: {
+          userProfile: "",
+          recommendedTrips: [],
+        },
+      };
+    }
+  }
+}
 
 export default Trips;

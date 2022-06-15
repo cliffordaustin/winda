@@ -4,16 +4,14 @@ import { useSelector } from "react-redux";
 import ClientOnly from "../ClientOnly";
 import Card from "./Card";
 
-function AllTrips({ userProfile, trips }) {
-  const stays = useSelector((state) => state.stay.stays);
-
+function AllTrips({ userProfile, trips, recommendedTrips }) {
   return (
     <ClientOnly>
       <div className="w-full flex flex-wrap justify-between">
-        {stays.map((stay, index) => (
+        {recommendedTrips.map((trip, index) => (
           <Card
             key={index}
-            listing={stay}
+            listing={trip}
             userProfile={userProfile}
             trips={trips}
           ></Card>

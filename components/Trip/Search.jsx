@@ -5,7 +5,15 @@ import PropTypes from "prop-types";
 import styles from "../../styles/Search.module.css";
 import Input from "../ui/Input";
 
-const Search = ({ setLocation, location }) => {
+const Search = ({
+  setLocation,
+  location,
+  placeholder = "Starting point",
+  inputClassName = "",
+  autoCompleteClassName = "",
+  inputBoxClassName = "",
+  searchClass = "",
+}) => {
   const [autoCompleteSearch, setAutoCompleteSearch] = useState([]);
 
   const onChange = (event) => {
@@ -21,7 +29,7 @@ const Search = ({ setLocation, location }) => {
   };
 
   return (
-    <div className="flex">
+    <div className={"flex " + searchClass}>
       <div className="w-full flex flex-col gap-1">
         <div className="relative">
           <div
@@ -30,6 +38,7 @@ const Search = ({ setLocation, location }) => {
             }}
             className={
               "w-full flex items-center !py-3 stepWebkitSetting border border-gray-200 rounded-md " +
+              inputBoxClassName +
               (autoCompleteSearch.length > 0 &&
                 " !rounded-t-xl !rounded-b-none")
             }
@@ -56,11 +65,11 @@ const Search = ({ setLocation, location }) => {
               </svg>
             </div>
             <Input
-              placeholder="Starting point"
+              placeholder={placeholder}
               type="text"
               name="from"
               value={location}
-              className={styles.input + " truncate !w-full "}
+              className={styles.input + " truncate !w-full " + inputClassName}
               autoComplete="off"
               onChange={(event) => {
                 onChange(event);
@@ -91,7 +100,12 @@ const Search = ({ setLocation, location }) => {
             </div>
           </div>
           {autoCompleteSearch.length > 0 && (
-            <div className="absolute top-full left-0 z-30 rounded-b-xl w-full py-2 border border-t-0 border-gray-200 bg-white">
+            <div
+              className={
+                "absolute top-full left-0 z-30 rounded-b-xl w-full py-2 border border-t-0 border-gray-200 bg-white " +
+                autoCompleteClassName
+              }
+            >
               {autoCompleteSearch.map((item, index) => (
                 <div
                   key={index}
