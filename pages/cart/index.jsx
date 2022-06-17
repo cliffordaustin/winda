@@ -10,6 +10,7 @@ import Button from "../../components/ui/Button";
 import Footer from "../../components/Home/Footer";
 
 import axios from "axios";
+import { usePaystackPayment } from "react-paystack";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -126,6 +127,36 @@ const Cart = ({
     return parseFloat(price);
   };
 
+  const reference = () => {
+    let text = "";
+    const possible =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for (let i = 0; i < 10; i++)
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+  };
+
+  const config = {
+    reference: reference(),
+    email: userProfile.email,
+    amount: totalPrice(),
+    publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLICK_KEY,
+    currency: "GHS",
+    embed: false,
+  };
+
+  const onClose = () => {
+    console.log("Close");
+  };
+
+  // const onSuccess = (reference) => {
+  //   console.log("success ", reference);
+  // };
+
+  const initializePayment = usePaystackPayment(config);
+
   const priceConversion = async (price) => {
     if (price) {
       if (currencyToKES && priceConversionRate) {
@@ -138,21 +169,23 @@ const Cart = ({
     }
   };
 
-  const addToOrders = async () => {
+  const onSuccess = async (reference) => {
     if (Cookies.get("token")) {
       setLoading(true);
       for (const item of allItemsInCart) {
         await axios
           .post(
-            `${process.env.NEXT_PUBLIC_baseURL}/create-trip/`,
+            `${process.env.NEXT_PUBLIC_baseURL}/stays/${item.stay.slug}/add-to-order/`,
             {
-              stay_id: item.stay.id,
-              nights:
-                new Date(item.to_date).getDate() -
-                new Date(item.from_date).getDate(),
               from_date: new Date(item.from_date),
-              activity_id: null,
-              transport_id: null,
+              to_date: new Date(item.to_date),
+              non_resident: item.non_resident,
+              num_of_adults: item.num_of_adults,
+              num_of_children: item.num_of_children,
+              plan: item.plan,
+              first_name: userProfile.first_name,
+              last_name: userProfile.last_name,
+              paid: true,
             },
             {
               headers: {
@@ -178,13 +211,17 @@ const Cart = ({
       for (const item of allItemsInActivityCart) {
         await axios
           .post(
-            `${process.env.NEXT_PUBLIC_baseURL}/create-trip/`,
+            `${process.env.NEXT_PUBLIC_baseURL}/activities/${item.activity.slug}/add-to-order/`,
             {
-              activity_id: item.activity.id,
-              stay_id: null,
-              transport_id: null,
-              activity_from_date: new Date(item.from_date),
+              first_name: userProfile.first_name,
+              last_name: userProfile.last_name,
+              paid: true,
+              from_date: new Date(item.from_date),
+              non_resident: item.non_resident,
+              pricing_type: item.pricing_type,
               number_of_people: item.number_of_people,
+              number_of_sessions: item.number_of_sessions,
+              number_of_groups: item.number_of_groups,
             },
             {
               headers: {
@@ -210,17 +247,17 @@ const Cart = ({
       for (const item of allItemsInTransportCart) {
         await axios
           .post(
-            `${process.env.NEXT_PUBLIC_baseURL}/create-trip/`,
+            `${process.env.NEXT_PUBLIC_baseURL}/transport/${item.transport.slug}/add-to-order/`,
             {
-              transport_id: item.transport.id,
-              stay_id: null,
-              activity_id: null,
+              first_name: userProfile.first_name,
+              last_name: userProfile.last_name,
+              paid: true,
               number_of_days: item.number_of_days,
               user_need_a_driver: item.user_need_a_driver,
               distance: item.distance,
               starting_point: item.starting_point,
               destination: item.destination,
-              transport_from_date: new Date(item.from_date),
+              from_date: new Date(item.from_date),
             },
             {
               headers: {
@@ -244,11 +281,7 @@ const Cart = ({
           });
       }
       router.push({
-        pathname: "/trip/plan",
-        query: {
-          stay: "show",
-          experiences: "show",
-        },
+        pathname: "/orders",
       });
     } else if (!Cookies.get("token")) {
       router.push({
@@ -577,7 +610,14 @@ const Cart = ({
             <div className="flex mt-2 justify-center">
               <Button
                 onClick={() => {
-                  addToOrders();
+                  if (Cookies.get("token")) {
+                    initializePayment(onSuccess, onClose);
+                  } else {
+                    router.push({
+                      pathname: "/login",
+                      query: { redirect: `${router.asPath}` },
+                    });
+                  }
                 }}
                 className="w-full !py-3 flex items-center gap-2 text-lg !bg-blue-900 !text-primary-blue-200"
               >

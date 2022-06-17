@@ -4,6 +4,7 @@ import OrderCard from "./OrderCard";
 import moment from "moment";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { Icon } from "@iconify/react";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper";
@@ -22,8 +23,13 @@ import TransportTrip from "./TransportTrip";
 import TripStayCard from "./TripStayCard";
 import TripActivityCard from "./TripActivityCard";
 import LoadingSpinerChase from "../ui/LoadingSpinerChase";
-import DatePicker from "../ui/DatePicker";
+import DatePicker from "../ui/DatePickerRange";
+import DatePickerSingle from "../ui/DatePickerOpen";
 import Dropdown from "../ui/Dropdown";
+import Select from "react-select";
+import Checkbox from "../ui/Checkbox";
+import { stayPriceOfPlanLower } from "../../lib/pricePlan";
+import Price from "../Stay/Price";
 
 const Trip = ({
   nights,
@@ -123,8 +129,6 @@ const Trip = ({
 
   const [numOfNightLoading, setNumOfNightLoading] = useState(false);
 
-  const [numOfPeople, setNumOfPeople] = useState(trip.number_of_people);
-
   const [numOfPeopleLoading, setNumOfPeopleLoading] = useState(false);
 
   const updateStayNights = async () => {
@@ -201,52 +205,16 @@ const Trip = ({
 
   const [checkInDateLoading, setCheckInDateLoading] = useState(false);
 
+  const [guestsLoading, setGuestsLoading] = useState(false);
+
+  const [activityGuestsLoading, setActivityGuestsLoading] = useState(false);
+
   const [showActivityCheckInDate, setShowActivityCheckInDate] = useState(false);
 
   const [activityCheckinDate, setActivityCheckinDate] = useState("");
 
   const [activityCheckInDateLoading, setActivityCheckInDateLoading] =
     useState(false);
-
-  const updateDate = async () => {
-    const token = Cookies.get("token");
-    setCheckInDateLoading(true);
-    await axios
-      .put(
-        `${process.env.NEXT_PUBLIC_baseURL}/trip/${trip.slug}/`,
-        {
-          from_date: checkinDate,
-        },
-        {
-          headers: {
-            Authorization: "Token " + token,
-          },
-        }
-      )
-      .then(() => {
-        router
-          .push({
-            pathname: "/trip/plan",
-            query: {
-              ...router.query,
-              dontShowStay: null,
-              dontShowActivity: null,
-              dontShowTransport: null,
-              budgeOptions: null,
-              midRangeOptions: null,
-              highEndOptions: null,
-            },
-          })
-          .then(() => {
-            setShowCheckInDate(false);
-            location.reload();
-          });
-      })
-      .catch((err) => {
-        setCheckInDateLoading(false);
-        console.log(err.response.data);
-      });
-  };
 
   const updateActivityDate = async () => {
     const token = Cookies.get("token");
@@ -264,22 +232,7 @@ const Trip = ({
         }
       )
       .then(() => {
-        router
-          .push({
-            query: {
-              ...router.query,
-              dontShowStay: null,
-              dontShowActivity: null,
-              dontShowTransport: null,
-              budgeOptions: null,
-              midRangeOptions: null,
-              highEndOptions: null,
-            },
-          })
-          .then(() => {
-            setShowActivityCheckInDate(false);
-            location.reload();
-          });
+        location.reload();
       })
       .catch((err) => {
         setActivityCheckInDateLoading(false);
@@ -403,6 +356,249 @@ const Trip = ({
     }
     return price;
   };
+
+  const [addToCartDate, setAddToCartDate] = useState({
+    from: "",
+    to: "",
+  });
+
+  const [typeOfLodge, setTypeOfLodge] = useState([]);
+
+  useEffect(() => {
+    const availableOptions = [];
+    if (trip.stay && trip.stay.standard) {
+      availableOptions.push("Standard");
+    }
+    if (trip.stay && trip.stay.super_deluxe) {
+      availableOptions.push("Super Deluxe");
+    }
+    if (trip.stay && trip.stay.deluxe) {
+      availableOptions.push("Deluxe");
+    }
+    if (trip.stay && trip.stay.studio) {
+      availableOptions.push("Studio");
+    }
+    if (trip.stay && trip.stay.double_room) {
+      availableOptions.push("Double Room");
+    }
+    if (trip.stay && trip.stay.tripple_room) {
+      availableOptions.push("Tripple Room");
+    }
+    if (trip.stay && trip.stay.quad_room) {
+      availableOptions.push("Quad Room");
+    }
+    if (trip.stay && trip.stay.queen_room) {
+      availableOptions.push("Queen Room");
+    }
+    if (trip.stay && trip.stay.king_room) {
+      availableOptions.push("King Room");
+    }
+    if (trip.stay && trip.stay.twin_room) {
+      availableOptions.push("Twin Room");
+    }
+    if (trip.stay && trip.stay.family_room) {
+      availableOptions.push("Family Room");
+    }
+
+    availableOptions.forEach((e) => {
+      setTypeOfLodge((prev) => [...prev, { label: e, value: e }]);
+    });
+  }, []);
+
+  const [currentTypeOfLodge, setCurrentTypeOfLodge] = useState({
+    label: "Standard",
+    value: "Standard",
+  });
+
+  const [nonResident, setNonResident] = useState(false);
+
+  const [activityNonResident, setActivityNonResident] = useState(false);
+
+  const [guestPopup, setGuestPopup] = useState(false);
+
+  const [activityGuestPopup, setActivityGuestPopup] = useState(false);
+
+  const [numOfAdults, setNumOfAdults] = useState(1);
+
+  const [numOfChildren, setNumOfChildren] = useState(0);
+
+  const [numOfPeople, setNumOfPeople] = useState(1);
+
+  const [numOfSession, setNumOfSession] = useState(1);
+
+  const [numOfGroups, setNumOfGroups] = useState(1);
+
+  const [priceType, setPriceType] = useState([]);
+
+  const [currentPrice, setCurrentPrice] = useState({
+    label: "Price per person",
+    value: "Price per person",
+  });
+
+  useEffect(() => {
+    const availableOptions = [];
+
+    if (trip.activity && trip.activity.price_per_person) {
+      availableOptions.push("Price per person");
+    }
+    if (trip.activity && trip.activity.price_per_session) {
+      availableOptions.push("Price per session");
+    }
+    if (trip.activity && trip.activity.price_per_group) {
+      availableOptions.push("Price per group");
+    }
+
+    availableOptions.forEach((e) => {
+      setPriceType((prev) => [...prev, { label: e, value: e }]);
+    });
+  }, []);
+
+  const updateDate = async () => {
+    const token = Cookies.get("token");
+    setCheckInDateLoading(true);
+    await axios
+      .put(
+        `${process.env.NEXT_PUBLIC_baseURL}/trip/${trip.slug}/`,
+        {
+          from_date: addToCartDate.from,
+          to_date: addToCartDate.to,
+        },
+        {
+          headers: {
+            Authorization: "Token " + token,
+          },
+        }
+      )
+      .then(() => {
+        router.reload();
+      })
+      .catch((err) => {
+        setCheckInDateLoading(false);
+        console.log(err.response.data);
+      });
+  };
+
+  const updateActivityGuest = async () => {
+    const token = Cookies.get("token");
+    setActivityGuestsLoading(true);
+    await axios
+      .put(
+        `${process.env.NEXT_PUBLIC_baseURL}/trip/${trip.slug}/`,
+        {
+          activity_number_of_people: numOfPeople,
+          activity_number_of_sessions: numOfSession,
+          activity_number_of_groups: numOfGroups,
+          activity_non_resident: activityNonResident,
+          pricing_type:
+            currentPrice.value === "Price per person"
+              ? "PER PERSON"
+              : currentPrice.value === "Price per session"
+              ? "PER SESSION"
+              : currentPrice.value === "Price per group"
+              ? "PER GROUP"
+              : "PER PERSON",
+        },
+        {
+          headers: {
+            Authorization: "Token " + token,
+          },
+        }
+      )
+      .then(() => {
+        router.reload();
+      })
+      .catch((err) => {
+        setActivityGuestsLoading(false);
+        console.log(err.response.data);
+      });
+  };
+
+  const updateGuest = async () => {
+    const token = Cookies.get("token");
+    setGuestsLoading(true);
+    await axios
+      .put(
+        `${process.env.NEXT_PUBLIC_baseURL}/trip/${trip.slug}/`,
+        {
+          stay_num_of_adults: numOfAdults,
+          stay_num_of_children: numOfChildren,
+          stay_non_resident: nonResident,
+          stay_plan: currentTypeOfLodge.value.toUpperCase(),
+        },
+        {
+          headers: {
+            Authorization: "Token " + token,
+          },
+        }
+      )
+      .then(() => {
+        router.reload();
+      })
+      .catch((err) => {
+        setGuestsLoading(false);
+        console.log(err.response.data);
+      });
+  };
+
+  const maxGuests =
+    trip.stay &&
+    (currentTypeOfLodge.value === "Standard"
+      ? trip.stay.standard_capacity
+      : currentTypeOfLodge.value === "Deluxe"
+      ? trip.stay.deluxe_capacity
+      : currentTypeOfLodge.value === "Super Deluxe"
+      ? trip.stay.super_deluxe_capacity
+      : currentTypeOfLodge.value === "Studio"
+      ? trip.stay.studio_capacity
+      : currentTypeOfLodge.value === "Double Room"
+      ? trip.stay.double_room_capacity
+      : currentTypeOfLodge.value === "Single Room"
+      ? trip.stay.single_room_capacity
+      : currentTypeOfLodge.value === "Tripple Room"
+      ? trip.stay.tripple_room_capacity
+      : currentTypeOfLodge.value === "Quad Room"
+      ? trip.stay.quad_room_capacity
+      : currentTypeOfLodge.value === "Queen Room"
+      ? trip.stay.queen_room_capacity
+      : currentTypeOfLodge.value === "King Room"
+      ? trip.stay.king_room_capacity
+      : currentTypeOfLodge.value === "Twin Room"
+      ? trip.stay.twin_room_capacity
+      : currentTypeOfLodge.value === "Family Room"
+      ? trip.stay.family_room_capacity
+      : "");
+
+  const priceOfPlan = stayPriceOfPlanLower(
+    currentTypeOfLodge.value,
+    nonResident,
+    trip.stay
+  );
+
+  const activityMaxGuests =
+    trip.activity &&
+    (currentPrice.value === "Price per person"
+      ? trip.activity.max_number_of_people
+      : currentPrice.value === "Price per session"
+      ? trip.activity.max_number_of_sessions
+      : currentPrice.value === "Price per group"
+      ? trip.activity.max_number_of_groups
+      : "");
+
+  const activityPriceOfPlan =
+    trip.activity &&
+    (currentPrice.value === "Price per person" && !activityNonResident
+      ? trip.activity.price
+      : currentPrice.value === "Price per person" && activityNonResident
+      ? trip.activity.price_non_resident
+      : currentPrice.value === "Price per session" && !activityNonResident
+      ? trip.activity.session_price
+      : currentPrice.value === "Price per session" && activityNonResident
+      ? trip.activity.session_price_non_resident
+      : currentPrice.value === "Price per group" && !activityNonResident
+      ? trip.activity.group_price
+      : currentPrice.value === "Price per group" && activityNonResident
+      ? trip.activity.group_price_non_resident
+      : trip.activity.price);
 
   return (
     <div className="border relative border-gray-200 px-2 py-2 rounded-lg">
@@ -684,11 +880,11 @@ const Trip = ({
               transport={trip.transport}
               transportPage={true}
               transportDistance={trip.distance}
-              numberOfDays={trip.number_of_days}
+              numberOfDays={1}
               userNeedADriver={trip.user_need_a_driver}
-              transportDestination={trip.destination}
-              transportStartingPoint={trip.starting_point}
-              transportPrice={priceOfTransportCart(trip)}
+              // transportDestination={trip.destination}
+              transportStartingPoint={"Nairobi"}
+              transportPrice={125}
               checkoutInfo={true}
             ></OrderCard>
           </div>
@@ -1044,12 +1240,21 @@ const Trip = ({
         <div className="px-2 mt-4 relative bg-gray-100 py-1 rounded-lg">
           <div className="flex gap-2">
             <div className="w-12 h-12 my-auto bg-gray-200 rounded-lg flex items-center flex-col justify-center">
-              <span className="text-gray-500 font-extrabold text-lg">
-                {trip.nights}
-              </span>
-              <span className="text-gray-500 -mt-1.5 font-extrabold text-xs">
-                nights
-              </span>
+              {trip.from_date && trip.to_date && (
+                <>
+                  <span className="text-gray-500 font-extrabold text-lg">
+                    {new Date(trip.to_date).getDate() -
+                      new Date(trip.from_date).getDate()}
+                  </span>
+                  <span className="text-gray-500 -mt-1.5 font-extrabold text-xs">
+                    nights
+                  </span>
+                </>
+              )}
+
+              {(!trip.from_date || !trip.to_date) && (
+                <Icon className="w-6 h-6 text-gray-500" icon="bx:home-alt-2" />
+              )}
             </div>
             <div>
               <div className="">
@@ -1062,22 +1267,20 @@ const Trip = ({
               </div>
 
               <div className="text-sm">
-                {trip && (
+                {trip && trip.from_date && trip.to_date && (
                   <div className="flex items-center">
                     <span className="font-bold">
                       {moment(trip.from_date).format("MMMM Do")}
                     </span>
                     <span className="font-bold mx-1"> - </span>
                     <span className="font-bold">
-                      {moment(
-                        new Date(
-                          new Date(trip.from_date).setDate(
-                            new Date(trip.from_date).getDate() + trip.nights
-                          )
-                        ).toISOString()
-                      ).format("MMMM Do")}
+                      {moment(trip.to_date).format("MMMM Do")}
                     </span>
                   </div>
+                )}
+
+                {trip && (!trip.from_date || !trip.to_date) && (
+                  <span className="text-red-400">Please select a date</span>
                 )}
               </div>
             </div>
@@ -1089,13 +1292,17 @@ const Trip = ({
               stay={trip.stay}
               orderId={trip.id}
               orderDays={trip.days}
+              plan={trip.stay_plan}
               itemType="order"
               stayPage={true}
+              non_resident={trip.stay_non_resident}
+              num_of_adults={trip.stay_num_of_adults}
+              num_of_children={trip.stay_num_of_children}
             ></OrderCard>
           </div>
 
-          {/* white plus and minus round button to add and remove */}
-          <div className="flex mt-4 mb-1 items-center gap-4">
+          <div>
+            {/* <div className="flex mt-4 mb-1 items-center gap-4">
             <div className="flex gap-3 items-center">
               <div
                 onClick={() => {
@@ -1133,6 +1340,7 @@ const Trip = ({
                 ></LoadingSpinerChase>
               </div>
             </div>
+          </div> */}
           </div>
 
           <div className="absolute top-1 right-2">
@@ -1161,26 +1369,60 @@ const Trip = ({
               (!showCheckInDate ? "hidden" : "")
             }
           >
-            <DatePicker
-              setDate={(date, modifiers = {}) => {
-                if (!modifiers.disabled) {
-                  setCheckinDate(date);
-                }
-              }}
-              date={checkinDate}
-              showDate={showCheckInDate}
-              className="!sticky !bg-white !border-none !rounded-none"
-              disableDate={new Date()}
-            ></DatePicker>
+            {
+              <div>
+                {addToCartDate && !addToCartDate.from && !addToCartDate.to && (
+                  <div className="text-xl ml-2 mt-2 font-bold">
+                    Select a date
+                  </div>
+                )}
+                {!addToCartDate && (
+                  <div className="text-xl ml-2 mt-2 font-bold">
+                    Select a date
+                  </div>
+                )}
+                {addToCartDate && addToCartDate.from && !addToCartDate.to && (
+                  <div className="text-xl ml-2 mt-2 font-bold">
+                    Select checkout date
+                  </div>
+                )}
+              </div>
+            }
+            {
+              <DatePicker
+                setDate={setAddToCartDate}
+                date={addToCartDate}
+                className="!sticky !bg-white !border-none !rounded-none"
+                disableDate={new Date()}
+              ></DatePicker>
+            }
+            {addToCartDate && (addToCartDate.from || addToCartDate.to) && (
+              <div
+                className="my-2 cursor-pointer text-sm ml-4 underline"
+                onClick={() => {
+                  setAddToCartDate({ ...addToCartDate, from: "", to: "" });
+                }}
+              >
+                clear date
+              </div>
+            )}
 
-            <div className="my-2 z-50 px-3">
+            <div className="my-2 z-50 px-3 flex gap-2">
               <Button
                 onClick={() => {
                   updateDate();
                 }}
-                className="flex text-lg !bg-blue-600 !w-full !py-2 !text-primary-blue-200"
+                disabled={
+                  !addToCartDate || (addToCartDate && !addToCartDate.to)
+                }
+                className={
+                  "flex text-lg !bg-blue-600 !w-[60%] !py-2 " +
+                  (!addToCartDate || (addToCartDate && !addToCartDate.to)
+                    ? " !opacity-70 cursor-not-allowed"
+                    : "")
+                }
               >
-                <span className="mr-2">Update</span>
+                <span className="mr-2 font-bold">Update</span>
 
                 {checkInDateLoading && (
                   <div>
@@ -1191,7 +1433,221 @@ const Trip = ({
                   </div>
                 )}
               </Button>
+
+              <Button
+                onClick={() => {
+                  setShowCheckInDate(false);
+                }}
+                className="flex text-lg !bg-transparent border border-black !w-[40%] !py-2 !text-black"
+              >
+                <span className="mr-2 font-bold">Close</span>
+              </Button>
             </div>
+          </div>
+
+          <div className="w-full relative flex gap-2">
+            <div className="px-3 cursor-pointer text-sm py-1 w-fit text-black border bg-white rounded-md">
+              Change
+            </div>
+            <div
+              onClick={() => {
+                setGuestPopup(!guestPopup);
+              }}
+              className="px-3 cursor-pointer text-sm py-1 w-fit text-white bg-blue-500 rounded-md"
+            >
+              add a guest
+            </div>
+
+            {guestPopup && (
+              <div
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+                className="absolute lg:-right-[240px] right-10 md:-right-[280px] xsMax:right-2 xsMax:w-full top-[50px] md:-top-[250px] px-4 py-4 !z-[99] w-[400px] bg-white shadow-lg rounded-lg h-fit"
+              >
+                <div className="mb-2">
+                  <Price
+                    stayPrice={priceOfPlan * (numOfAdults + numOfChildren)}
+                  ></Price>
+                </div>
+                <Select
+                  defaultValue={currentTypeOfLodge}
+                  onChange={(value) => {
+                    setCurrentTypeOfLodge(value);
+                    setNumOfAdults(1);
+                    setNumOfChildren(0);
+                  }}
+                  className={"text-sm outline-none border border-gray-500"}
+                  instanceId={typeOfLodge}
+                  placeholder="Type of room"
+                  options={typeOfLodge}
+                  isSearchable={true}
+                />
+
+                <div className="flex items-center gap-0.5 mt-4">
+                  <svg
+                    className="w-4 h-4 text-gray-500"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                    role="img"
+                    width="1em"
+                    height="1em"
+                    preserveAspectRatio="xMidYMid meet"
+                    viewBox="0 0 36 36"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M12 16.14h-.87a8.67 8.67 0 0 0-6.43 2.52l-.24.28v8.28h4.08v-4.7l.55-.62l.25-.29a11 11 0 0 1 4.71-2.86A6.59 6.59 0 0 1 12 16.14Z"
+                    />
+                    <path
+                      fill="currentColor"
+                      d="M31.34 18.63a8.67 8.67 0 0 0-6.43-2.52a10.47 10.47 0 0 0-1.09.06a6.59 6.59 0 0 1-2 2.45a10.91 10.91 0 0 1 5 3l.25.28l.54.62v4.71h3.94v-8.32Z"
+                    />
+                    <path
+                      fill="currentColor"
+                      d="M11.1 14.19h.31a6.45 6.45 0 0 1 3.11-6.29a4.09 4.09 0 1 0-3.42 6.33Z"
+                    />
+                    <path
+                      fill="currentColor"
+                      d="M24.43 13.44a6.54 6.54 0 0 1 0 .69a4.09 4.09 0 0 0 .58.05h.19A4.09 4.09 0 1 0 21.47 8a6.53 6.53 0 0 1 2.96 5.44Z"
+                    />
+                    <circle
+                      cx="17.87"
+                      cy="13.45"
+                      r="4.47"
+                      fill="currentColor"
+                    />
+                    <path
+                      fill="currentColor"
+                      d="M18.11 20.3A9.69 9.69 0 0 0 11 23l-.25.28v6.33a1.57 1.57 0 0 0 1.6 1.54h11.49a1.57 1.57 0 0 0 1.6-1.54V23.3l-.24-.3a9.58 9.58 0 0 0-7.09-2.7Z"
+                    />
+                    <path fill="none" d="M0 0h36v36H0z" />
+                  </svg>
+                  {currentTypeOfLodge && (
+                    <span className="text-gray-600 text-sm">
+                      Maximum number of guests is {maxGuests}
+                    </span>
+                  )}
+                </div>
+
+                <div className="flex justify-between mt-6">
+                  <div className="flex flex-col text-sm text-gray-600 items-center">
+                    <span>
+                      {numOfAdults} {numOfAdults > 1 ? "Adults" : "Adult"}
+                    </span>
+                    <span>(18+)</span>
+                  </div>
+
+                  <div className="flex gap-3 items-center">
+                    <div
+                      onClick={() => {
+                        if (numOfAdults > 1) {
+                          setNumOfAdults(numOfAdults - 1);
+                        }
+                      }}
+                      className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
+                    >
+                      -
+                    </div>
+
+                    <div
+                      onClick={() => {
+                        if (numOfAdults + numOfChildren < maxGuests) {
+                          setNumOfAdults(numOfAdults + 1);
+                        }
+                      }}
+                      className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
+                    >
+                      +
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex justify-between mt-6">
+                  <div className="flex flex-col text-sm text-gray-600 items-center">
+                    <span>
+                      {numOfChildren} {numOfChildren > 1 ? "Children" : "Child"}
+                    </span>
+                    <span>(0 - 17)</span>
+                  </div>
+
+                  <div className="flex gap-3 items-center">
+                    <div
+                      onClick={() => {
+                        if (numOfChildren > 0) {
+                          setNumOfChildren(numOfChildren - 1);
+                        }
+                      }}
+                      className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
+                    >
+                      -
+                    </div>
+
+                    <div
+                      onClick={() => {
+                        if (numOfAdults + numOfChildren < maxGuests) {
+                          setNumOfChildren(numOfChildren + 1);
+                        }
+                      }}
+                      className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
+                    >
+                      +
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 mt-3">
+                  <Checkbox
+                    checked={nonResident}
+                    onChange={() => setNonResident(!nonResident)}
+                  ></Checkbox>
+                  <span className="text-gray-600 text-sm">Non-resident</span>
+                </div>
+
+                {(numOfAdults > 1 || numOfChildren > 0) && (
+                  <div
+                    className="mt-2 cursor-pointer text-sm underline"
+                    onClick={() => {
+                      setNumOfAdults(1);
+                      setNumOfChildren(0);
+                    }}
+                  >
+                    clear data
+                  </div>
+                )}
+
+                <div className="flex justify-between mt-6">
+                  <div></div>
+                  <div className="flex gap-2">
+                    <div
+                      onClick={() => {
+                        setGuestPopup(false);
+                      }}
+                      className="!bg-white text-black border !rounded-3xl px-4 text-sm cursor-pointer py-2"
+                    >
+                      Close
+                    </div>
+                    <Button
+                      onClick={() => {
+                        updateGuest();
+                      }}
+                      className="!bg-blue-700 flex gap-2 items-center !rounded-3xl"
+                    >
+                      <span>Update</span>
+
+                      {guestsLoading && (
+                        <div>
+                          <LoadingSpinerChase
+                            width={16}
+                            height={16}
+                          ></LoadingSpinerChase>
+                        </div>
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* <div
@@ -1457,12 +1913,42 @@ const Trip = ({
         <div className="px-2 mt-4 relative bg-gray-100 py-1 rounded-lg">
           <div className="flex gap-2">
             <div className="w-12 h-12 my-auto bg-gray-200 rounded-lg flex items-center flex-col justify-center">
-              <span className="text-gray-500 font-extrabold text-lg">
-                {trip.number_of_people}
-              </span>
-              <span className="text-gray-500 -mt-1.5 font-extrabold text-xs">
-                {trip.number_of_people > 1 ? "people" : "person"}
-              </span>
+              {trip.activity_pricing_type === "PER PERSON" && (
+                <>
+                  <span className="text-gray-500 font-extrabold text-lg">
+                    {trip.activity_number_of_people}
+                  </span>
+                  <span className="text-gray-500 -mt-1.5 font-extrabold text-xs">
+                    {trip.activity_number_of_people > 1 ? "people" : "person"}
+                  </span>
+                </>
+              )}
+              {trip.activity_pricing_type === "PER SESSION" && (
+                <span className="text-gray-500 -mt-1.5 font-extrabold text-xs">
+                  <span className="text-gray-500 font-extrabold text-lg">
+                    {trip.activity_number_of_sessions}
+                  </span>
+                  <span className="text-gray-500 -mt-1.5 font-extrabold text-xs">
+                    {trip.activity_number_of_sessions > 1
+                      ? "sessions"
+                      : "session"}
+                  </span>
+                </span>
+              )}
+              {trip.activity_pricing_type === "PER GROUP" && (
+                <span className="text-gray-500 -mt-1.5 font-extrabold text-xs">
+                  <span className="text-gray-500 font-extrabold text-lg">
+                    {trip.activity_number_of_groups}
+                  </span>
+                  <span className="text-gray-500 -mt-1.5 font-extrabold text-xs">
+                    {trip.activity_number_of_groups > 1 ? "groups" : "group"}
+                  </span>
+                </span>
+              )}
+
+              {!trip.activity_number_of_people && (
+                <Icon icon="iconoir:yoga" className="w-6 h-6 text-gray-500" />
+              )}
             </div>
             <div>
               <div className="">
@@ -1475,13 +1961,15 @@ const Trip = ({
               </div>
 
               <div className="text-sm">
-                {trip && (
-                  <h1>
-                    Booked for{" "}
+                {trip.activity_from_date && (
+                  <div>
                     <span className="font-bold">
                       {moment(trip.activity_from_date).format("MMMM Do")}
                     </span>
-                  </h1>
+                  </div>
+                )}
+                {!trip.activity_from_date && (
+                  <span className="text-red-400">Please select a date</span>
                 )}
               </div>
             </div>
@@ -1493,12 +1981,18 @@ const Trip = ({
               activity={trip.activity}
               orderId={trip.id}
               orderDays={trip.days}
+              pricing_type={trip.activity_pricing_type}
+              number_of_people={trip.activity_number_of_people}
+              number_of_sessions={trip.activity_number_of_sessions}
+              number_of_groups={trip.activity_number_of_groups}
               itemType="order"
               activitiesPage={true}
+              non_resident={trip.activity_non_resident}
             ></OrderCard>
           </div>
 
-          <div className="flex mt-4 mb-1 items-center gap-4">
+          <div>
+            {/* <div className="flex mt-4 mb-1 items-center gap-4">
             <div className="flex gap-3 items-center">
               <div
                 onClick={() => {
@@ -1538,6 +2032,7 @@ const Trip = ({
                 ></LoadingSpinerChase>
               </div>
             </div>
+          </div> */}
           </div>
 
           <div className="absolute top-1 right-2">
@@ -1566,7 +2061,14 @@ const Trip = ({
               (!showActivityCheckInDate ? "hidden" : "")
             }
           >
-            <DatePicker
+            <div>
+              {!activityCheckinDate && (
+                <div className="text-base ml-2 mt-2 font-bold">
+                  Select the date you will be coming
+                </div>
+              )}
+            </div>
+            <DatePickerSingle
               setDate={(date, modifiers = {}) => {
                 if (!modifiers.disabled) {
                   setActivityCheckinDate(date);
@@ -1576,14 +2078,31 @@ const Trip = ({
               showDate={showActivityCheckInDate}
               className="!sticky !bg-white !border-none !rounded-none"
               disableDate={new Date()}
-            ></DatePicker>
+            ></DatePickerSingle>
 
-            <div className="my-2 z-50 px-3">
+            {activityCheckinDate && (
+              <div
+                className="my-2 cursor-pointer text-sm ml-4 underline"
+                onClick={() => {
+                  setActivityCheckinDate("");
+                }}
+              >
+                clear date
+              </div>
+            )}
+
+            <div className="my-2 z-50 px-3 flex gap-2">
               <Button
                 onClick={() => {
                   updateActivityDate();
                 }}
-                className="flex text-lg !bg-blue-600 !w-full !py-2 !text-primary-blue-200"
+                disabled={!activityCheckinDate}
+                className={
+                  "flex text-lg !bg-blue-600 !w-[60%] !py-2 " +
+                  (!activityCheckinDate
+                    ? " !opacity-70 cursor-not-allowed"
+                    : "")
+                }
               >
                 <span className="mr-2">Update</span>
 
@@ -1596,7 +2115,271 @@ const Trip = ({
                   </div>
                 )}
               </Button>
+
+              <Button
+                onClick={() => {
+                  setShowActivityCheckInDate(false);
+                }}
+                className="flex text-lg !bg-transparent border border-black !w-[40%] !py-2 !text-black"
+              >
+                <span className="mr-2 font-bold">Close</span>
+              </Button>
             </div>
+          </div>
+
+          <div className="w-full relative flex gap-2">
+            <div className="px-3 cursor-pointer text-sm py-1 w-fit text-black border bg-white rounded-md">
+              Change
+            </div>
+            <div
+              onClick={() => {
+                setActivityGuestPopup(!activityGuestPopup);
+              }}
+              className="px-3 cursor-pointer text-sm py-1 w-fit text-white bg-blue-500 rounded-md"
+            >
+              add a guest
+            </div>
+
+            {activityGuestPopup && (
+              <div
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+                className="absolute lg:-right-[240px] right-10 md:-right-[280px] xsMax:right-2 xsMax:w-full top-[50px] md:-top-[250px] px-4 py-4 !z-[99] w-[400px] bg-white shadow-lg rounded-lg h-fit"
+              >
+                <div className="mb-2">
+                  <Price
+                    stayPrice={
+                      activityPriceOfPlan *
+                      (currentPrice.value === "Price per person"
+                        ? numOfPeople
+                        : currentPrice.value === "Price per session"
+                        ? numOfSession
+                        : currentPrice.value === "Price per group"
+                        ? numOfGroups
+                        : 1)
+                    }
+                  ></Price>
+                </div>
+                <Select
+                  defaultValue={currentPrice}
+                  onChange={(value) => {
+                    setCurrentPrice(value);
+                    setNumOfPeople(1);
+                    setNumOfGroups(1);
+                    setNumOfSession(1);
+                  }}
+                  className={"text-sm outline-none border border-gray-500"}
+                  instanceId={priceType}
+                  placeholder="Type of room"
+                  options={priceType}
+                  isSearchable={true}
+                />
+
+                <div className="flex items-center gap-0.5 mt-4">
+                  <svg
+                    className="w-4 h-4 text-gray-500"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                    role="img"
+                    width="1em"
+                    height="1em"
+                    preserveAspectRatio="xMidYMid meet"
+                    viewBox="0 0 36 36"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M12 16.14h-.87a8.67 8.67 0 0 0-6.43 2.52l-.24.28v8.28h4.08v-4.7l.55-.62l.25-.29a11 11 0 0 1 4.71-2.86A6.59 6.59 0 0 1 12 16.14Z"
+                    />
+                    <path
+                      fill="currentColor"
+                      d="M31.34 18.63a8.67 8.67 0 0 0-6.43-2.52a10.47 10.47 0 0 0-1.09.06a6.59 6.59 0 0 1-2 2.45a10.91 10.91 0 0 1 5 3l.25.28l.54.62v4.71h3.94v-8.32Z"
+                    />
+                    <path
+                      fill="currentColor"
+                      d="M11.1 14.19h.31a6.45 6.45 0 0 1 3.11-6.29a4.09 4.09 0 1 0-3.42 6.33Z"
+                    />
+                    <path
+                      fill="currentColor"
+                      d="M24.43 13.44a6.54 6.54 0 0 1 0 .69a4.09 4.09 0 0 0 .58.05h.19A4.09 4.09 0 1 0 21.47 8a6.53 6.53 0 0 1 2.96 5.44Z"
+                    />
+                    <circle
+                      cx="17.87"
+                      cy="13.45"
+                      r="4.47"
+                      fill="currentColor"
+                    />
+                    <path
+                      fill="currentColor"
+                      d="M18.11 20.3A9.69 9.69 0 0 0 11 23l-.25.28v6.33a1.57 1.57 0 0 0 1.6 1.54h11.49a1.57 1.57 0 0 0 1.6-1.54V23.3l-.24-.3a9.58 9.58 0 0 0-7.09-2.7Z"
+                    />
+                    <path fill="none" d="M0 0h36v36H0z" />
+                  </svg>
+                  {currentPrice && (
+                    <span className="text-gray-600 text-sm">
+                      Maximum number of guests is {activityMaxGuests}
+                    </span>
+                  )}
+                </div>
+
+                {currentPrice.value === "Price per person" && (
+                  <div className="flex justify-between mt-6">
+                    <div className="flex flex-col text-sm text-gray-600 items-center">
+                      <span>
+                        {numOfPeople} {numOfPeople > 1 ? "People" : "Person"}
+                      </span>
+                    </div>
+
+                    <div className="flex gap-3 items-center">
+                      <div
+                        onClick={() => {
+                          if (numOfPeople > 1) {
+                            setNumOfPeople(numOfPeople - 1);
+                          }
+                        }}
+                        className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
+                      >
+                        -
+                      </div>
+
+                      <div
+                        onClick={() => {
+                          if (numOfPeople < activityMaxGuests) {
+                            setNumOfPeople(numOfPeople + 1);
+                          }
+                        }}
+                        className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
+                      >
+                        +
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {currentPrice.value === "Price per session" && (
+                  <div className="flex justify-between mt-6">
+                    <div className="flex flex-col text-sm text-gray-600 items-center">
+                      <span>
+                        {numOfSession}{" "}
+                        {numOfSession > 1 ? "Sessions" : "Session"}
+                      </span>
+                    </div>
+
+                    <div className="flex gap-3 items-center">
+                      <div
+                        onClick={() => {
+                          if (numOfSession > 0) {
+                            setNumOfSession(numOfSession - 1);
+                          }
+                        }}
+                        className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
+                      >
+                        -
+                      </div>
+
+                      <div
+                        onClick={() => {
+                          if (numOfSession < activityMaxGuests) {
+                            setNumOfSession(numOfSession + 1);
+                          }
+                        }}
+                        className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
+                      >
+                        +
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {currentPrice.value === "Price per group" && (
+                  <div className="flex justify-between mt-6">
+                    <div className="flex flex-col text-sm text-gray-600 items-center">
+                      <span>
+                        {numOfGroups} {numOfGroups > 1 ? "Groups" : "Group"}
+                      </span>
+                    </div>
+
+                    <div className="flex gap-3 items-center">
+                      <div
+                        onClick={() => {
+                          if (numOfGroups > 0) {
+                            setNumOfGroups(numOfGroups - 1);
+                          }
+                        }}
+                        className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
+                      >
+                        -
+                      </div>
+
+                      <div
+                        onClick={() => {
+                          if (numOfGroups < activityMaxGuests) {
+                            setNumOfGroups(numOfGroups + 1);
+                          }
+                        }}
+                        className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
+                      >
+                        +
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex items-center gap-2 mt-3">
+                  <Checkbox
+                    checked={activityNonResident}
+                    onChange={() =>
+                      setActivityNonResident(!activityNonResident)
+                    }
+                  ></Checkbox>
+                  <span className="text-gray-600 text-sm">Non-resident</span>
+                </div>
+
+                {(numOfPeople > 1 || numOfSession > 0 || numOfGroups > 0) && (
+                  <div
+                    className="mt-2 cursor-pointer text-sm underline"
+                    onClick={() => {
+                      setNumOfPeople(1);
+                      setNumOfGroups(1);
+                      setNumOfSession(1);
+                    }}
+                  >
+                    clear data
+                  </div>
+                )}
+
+                <div className="flex justify-between mt-6">
+                  <div></div>
+                  <div className="flex gap-2">
+                    <div
+                      onClick={() => {
+                        setActivityGuestPopup(false);
+                      }}
+                      className="!bg-white text-black border !rounded-3xl px-4 text-sm cursor-pointer py-2"
+                    >
+                      Close
+                    </div>
+                    <Button
+                      onClick={() => {
+                        updateActivityGuest();
+                      }}
+                      className="!bg-blue-700 flex gap-2 !rounded-3xl"
+                    >
+                      <span>Update</span>
+
+                      {activityGuestsLoading && (
+                        <div>
+                          <LoadingSpinerChase
+                            width={16}
+                            height={16}
+                          ></LoadingSpinerChase>
+                        </div>
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}

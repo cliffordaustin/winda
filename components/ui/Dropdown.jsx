@@ -9,6 +9,7 @@ function Dropdown({ children, showDropdown, className = "" }) {
     },
     show: {
       y: 0,
+      opacity: 1,
       transition: {
         duration: 0.2,
         type: "linear",
@@ -16,6 +17,7 @@ function Dropdown({ children, showDropdown, className = "" }) {
     },
     exit: {
       y: -10,
+      opacity: 0,
       transition: {
         duration: 0.2,
         type: "linear",

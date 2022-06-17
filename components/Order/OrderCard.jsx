@@ -9,6 +9,11 @@ import Cookies from "js-cookie";
 import ClientOnly from "../ClientOnly";
 import LoadingSpinerChase from "../ui/LoadingSpinerChase";
 import { priceConversionRateFunc } from "../../lib/PriceRate";
+import {
+  stayPriceOfPlan,
+  activityPriceOfPlan,
+  activityNumOfGuests,
+} from "../../lib/pricePlan";
 
 const OrderCard = ({
   stay,
@@ -35,6 +40,14 @@ const OrderCard = ({
   transportPrice,
   groupTripSlug,
   groupTripTransport,
+  plan,
+  pricing_type,
+  non_resident,
+  num_of_adults,
+  num_of_children,
+  number_of_sessions,
+  number_of_people,
+  number_of_groups,
 
   userNeedADriver,
   numberOfDays,
@@ -55,11 +68,16 @@ const OrderCard = ({
 
   const price = () => {
     return stayPage
-      ? stay.price
+      ? stayPriceOfPlan(
+          (plan = plan),
+          (non_resident = non_resident),
+          (stay = stay)
+        ) *
+          (num_of_adults + num_of_children)
       : transportPage
       ? transportPrice
       : activitiesPage
-      ? activity.price
+      ? activityPriceOfPlan(pricing_type, non_resident, activity)
       : groupTripTransport
       ? transportPrice
       : null;
@@ -263,7 +281,7 @@ const OrderCard = ({
             </div>
           </div>
           <div className={"flex-grow-0 flex-shrink-0 px-2 py-2 w-2/4 "}>
-            <div className="flex flex-col gap-1 mb-2">
+            <div className="flex flex-col">
               <div className="text-gray-500 truncate">
                 {activitiesPage ? activity.name : stayPage ? stay.name : ""}
 
@@ -286,18 +304,24 @@ const OrderCard = ({
               <ClientOnly>
                 <div className="flex items-center">
                   {!currencyToKES && (
-                    <h1 className={"font-bold text-xl font-OpenSans "}>
+                    <h1 className={"font-bold text-lg font-OpenSans "}>
                       {price()
                         ? "$" + Math.ceil(price()).toLocaleString()
                         : "No data"}
                     </h1>
                   )}
                   {currencyToKES && (
-                    <h1 className={"font-bold text-xl font-OpenSans "}>
+                    <h1 className={"font-bold text-lg font-OpenSans "}>
                       {price()
                         ? "KES" + Math.ceil(newPrice).toLocaleString()
                         : "No data"}
                     </h1>
+                  )}
+
+                  {stayPage && (
+                    <span className="inline text-xs mt-1 font-semibold ml-0.5">
+                      /night
+                    </span>
                   )}
 
                   {transportPage && !numberOfDays && (
@@ -308,6 +332,21 @@ const OrderCard = ({
                   {transportPage && numberOfDays && (
                     <span className="inline text-xs mt-1 font-semibold ml-0.5">
                       /for {numberOfDays} days
+                    </span>
+                  )}
+                  {activitiesPage && pricing_type === "PER PERSON" && (
+                    <span className="inline text-xs mt-1 font-semibold ml-0.5">
+                      /person
+                    </span>
+                  )}
+                  {activitiesPage && pricing_type === "PER SESSION" && (
+                    <span className="inline text-xs mt-1 font-semibold ml-0.5">
+                      /session
+                    </span>
+                  )}
+                  {activitiesPage && pricing_type === "PER GROUP" && (
+                    <span className="inline text-xs mt-1 font-semibold ml-0.5">
+                      /group
                     </span>
                   )}
                   {userNeedADriver && (
@@ -333,6 +372,25 @@ const OrderCard = ({
                 </div>
               </ClientOnly>
             </div>
+
+            <ClientOnly>
+              {stayPage && (
+                <div className="flex items-center gap-0.5 text-xs mb-1 font-bold truncate flex-wrap">
+                  <span>
+                    {num_of_adults} {num_of_adults === 1 ? "Adult" : "Adults"}
+                  </span>
+                  {num_of_children > 0 && (
+                    <>
+                      <span className="font-bold text-xl -mt-3">.</span>
+                      <span>
+                        {num_of_children}{" "}
+                        {num_of_children === 1 ? "Child" : "Children"}
+                      </span>
+                    </>
+                  )}
+                </div>
+              )}
+            </ClientOnly>
 
             {transportPage && !numberOfDays && (
               <div className="flex mt-1">
@@ -558,29 +616,61 @@ const OrderCard = ({
       </div>
       {stayPage && (
         <div>
-          {stay.type_of_stay === "LODGE" && (
-            <div className="absolute top-1.5 left-2 z-10 px-1 rounded-md bg-green-600 text-white">
-              Lodge
+          {plan === "STANDARD" && (
+            <div className="absolute top-2 left-2 z-10 px-2 rounded-md bg-blue-600 text-sm text-white">
+              Standard
             </div>
           )}
-          {stay.type_of_stay === "HOUSE" && (
-            <div className="absolute top-1.5 left-2 z-10 px-1 rounded-md bg-green-600 text-white">
-              House
+          {plan === "DELUXE" && (
+            <div className="absolute top-2 left-2 z-10 px-2 rounded-md bg-blue-600 text-sm text-white">
+              Deluxe
             </div>
           )}
-          {stay.type_of_stay === "UNIQUE SPACE" && (
-            <div className="absolute top-1.5 left-2 z-10 px-1 rounded-md bg-green-600 text-white">
-              Unique space
+          {plan === "SUPER DELUXE" && (
+            <div className="absolute top-2 left-2 z-10 px-2 rounded-md bg-blue-600 text-sm text-white">
+              Super Deluxe
             </div>
           )}
-          {stay.type_of_stay === "CAMPSITE" && (
-            <div className="absolute top-1.5 left-2 z-10 px-1 rounded-md bg-green-600 text-white">
-              Campsite
+          {plan === "STUDIO" && (
+            <div className="absolute top-2 left-2 z-10 px-2 rounded-md bg-blue-600 text-sm text-white">
+              Studio
             </div>
           )}
-          {stay.type_of_stay === "BOUTIQUE HOTEL" && (
-            <div className="absolute top-1.5 left-2 z-10 px-1 rounded-md bg-green-600 text-white">
-              Boutique hotel
+          {plan === "DOUBLE ROOM" && (
+            <div className="absolute top-2 left-2 z-10 px-2 rounded-md bg-blue-600 text-sm text-white">
+              Double Room
+            </div>
+          )}
+
+          {plan === "FAMILY ROOM" && (
+            <div className="absolute top-2 left-2 z-10 px-2 rounded-md bg-blue-600 text-sm text-white">
+              Family Room
+            </div>
+          )}
+
+          {plan === "TRIPPLE ROOM" && (
+            <div className="absolute top-2 left-2 z-10 px-2 rounded-md bg-blue-600 text-sm text-white">
+              Tripple Room
+            </div>
+          )}
+          {plan === "QUAD ROOM" && (
+            <div className="absolute top-2 left-2 z-10 px-2 rounded-md bg-blue-600 text-sm text-white">
+              Quad Room
+            </div>
+          )}
+          {plan === "KING ROOM" && (
+            <div className="absolute top-2 left-2 z-10 px-2 rounded-md bg-blue-600 text-sm text-white">
+              King Room
+            </div>
+          )}
+          {plan === "QUEEN ROOM" && (
+            <div className="absolute top-2 left-2 z-10 px-2 rounded-md bg-blue-600 text-sm text-white">
+              Queen Room
+            </div>
+          )}
+          {plan === "TWIN ROOM" && (
+            <div className="absolute top-2 left-2 z-10 px-2 rounded-md bg-blue-600 text-sm text-white">
+              Twin Room
             </div>
           )}
         </div>

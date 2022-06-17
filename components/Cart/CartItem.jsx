@@ -54,6 +54,7 @@ const CartItem = ({
   transportPrice,
   userNeedADriver,
   numberOfDays,
+  forOrder,
 }) => {
   const currencyToKES = useSelector((state) => state.home.currencyToKES);
   const activeItem = useSelector((state) => state.order.activeItem);
@@ -953,22 +954,44 @@ const CartItem = ({
                   Edit detail
                 </div>
               )}
-              {!orderSuccessfull && (
-                <div
-                  className="text-sm w-fit flex items-center bg-red-400 bg-opacity-30 px-2 py-1 text-red-500 font-bold p-3 rounded-md mt-2
+
+              <div className="flex gap-2">
+                {!orderSuccessfull && !forOrder && (
+                  <div
+                    className="text-sm w-fit flex items-center bg-red-400 bg-opacity-30 px-2 py-1 text-red-500 font-bold p-3 rounded-md mt-2
           "
-                  onClick={removeCart}
-                >
-                  <span className="mr-1">Remove</span>
-                  <div className={" " + (!removeButtonLoading ? "hidden" : "")}>
-                    <LoadingSpinerChase
-                      width={13}
-                      height={13}
-                      color="red"
-                    ></LoadingSpinerChase>
+                    onClick={removeCart}
+                  >
+                    <span className="mr-1">Remove</span>
+                    <div
+                      className={" " + (!removeButtonLoading ? "hidden" : "")}
+                    >
+                      <LoadingSpinerChase
+                        width={13}
+                        height={13}
+                        color="red"
+                      ></LoadingSpinerChase>
+                    </div>
                   </div>
+                )}
+
+                <div
+                  className="text-sm w-fit xsMax:px-0.5 gap-1 flex items-center bg-blue-400 bg-opacity-30 px-2 py-1 text-blue-500 font-bold p-3 rounded-md mt-2
+"
+                  onClick={() => {
+                    stayPage
+                      ? router.push(`/stays/${stay.slug}`)
+                      : activitiesPage
+                      ? router.push(`/experiences/${activity.slug}`)
+                      : transportPage
+                      ? router.push(`/transport/${transport.slug}`)
+                      : null;
+                  }}
+                >
+                  <span className="">View</span>
                 </div>
-              )}
+              </div>
+
               {orderSuccessfull && (
                 <div
                   className="text-sm w-fit flex items-center bg-green-500 bg-opacity-30 px-2 py-1 text-green-700 bg-primary-red-100 font-bold p-3 rounded-md mt-2

@@ -4,7 +4,15 @@ import { useSelector } from "react-redux";
 import ClientOnly from "../ClientOnly";
 import Card from "./Card";
 
-function AllTrips({ userProfile, trips, recommendedTrips }) {
+function AllTrips({
+  userProfile,
+  trips,
+  userTrips,
+  recommendedTrips,
+  setShowAddToTripPopup,
+  showAddToTripPopup,
+  setSelectedData,
+}) {
   return (
     <ClientOnly>
       <div className="w-full flex flex-wrap justify-between">
@@ -14,8 +22,18 @@ function AllTrips({ userProfile, trips, recommendedTrips }) {
             listing={trip}
             userProfile={userProfile}
             trips={trips}
+            userTrips={userTrips}
+            setSelectedData={setSelectedData}
+            setShowAddToTripPopup={setShowAddToTripPopup}
+            showAddToTripPopup={showAddToTripPopup}
           ></Card>
         ))}
+
+        {recommendedTrips.length === 0 && (
+          <div className="font-bold text-2xl text-center w-full mt-4">
+            No result for this filter
+          </div>
+        )}
       </div>
     </ClientOnly>
   );

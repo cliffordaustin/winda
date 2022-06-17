@@ -148,7 +148,7 @@ const ExperiencesTrips = ({ userProfile }) => {
                 onClick={(event) => {
                   event.stopPropagation();
                   setCurrentNavState(1);
-                  router.push("/trip/stays");
+                  router.push("/trip");
                 }}
                 className={
                   "cursor-pointer md:!text-base " +

@@ -74,6 +74,7 @@ function Tags(props) {
           onClick={() => {
             router.push({
               query: {
+                ...router.query,
                 tag: "honeymoon",
               },
             });
@@ -96,6 +97,7 @@ function Tags(props) {
           onClick={() => {
             router.push({
               query: {
+                ...router.query,
                 tag: "game",
               },
             });
@@ -118,6 +120,7 @@ function Tags(props) {
           onClick={() => {
             router.push({
               query: {
+                ...router.query,
                 tag: "family",
               },
             });
@@ -140,6 +143,7 @@ function Tags(props) {
           onClick={() => {
             router.push({
               query: {
+                ...router.query,
                 tag: "camping",
               },
             });
@@ -162,6 +166,7 @@ function Tags(props) {
           onClick={() => {
             router.push({
               query: {
+                ...router.query,
                 tag: "hiking",
               },
             });
@@ -184,6 +189,7 @@ function Tags(props) {
           onClick={() => {
             router.push({
               query: {
+                ...router.query,
                 tag: "couples",
               },
             });
@@ -209,6 +215,7 @@ function Tags(props) {
           onClick={() => {
             router.push({
               query: {
+                ...router.query,
                 tag: "friends",
               },
             });
@@ -231,6 +238,7 @@ function Tags(props) {
           onClick={() => {
             router.push({
               query: {
+                ...router.query,
                 tag: "desert",
               },
             });
@@ -253,6 +261,7 @@ function Tags(props) {
           onClick={() => {
             router.push({
               query: {
+                ...router.query,
                 tag: "surfing",
               },
             });
@@ -275,6 +284,7 @@ function Tags(props) {
           onClick={() => {
             router.push({
               query: {
+                ...router.query,
                 tag: "tropical",
               },
             });
@@ -297,6 +307,7 @@ function Tags(props) {
           onClick={() => {
             router.push({
               query: {
+                ...router.query,
                 tag: "mountain",
               },
             });
@@ -319,6 +330,7 @@ function Tags(props) {
           onClick={() => {
             router.push({
               query: {
+                ...router.query,
                 tag: "treehouse",
               },
             });
@@ -341,6 +353,7 @@ function Tags(props) {
           onClick={() => {
             router.push({
               query: {
+                ...router.query,
                 tag: "boat",
               },
             });
@@ -366,6 +379,7 @@ function Tags(props) {
           onClick={() => {
             router.push({
               query: {
+                ...router.query,
                 tag: "beach",
               },
             });
@@ -388,6 +402,7 @@ function Tags(props) {
           onClick={() => {
             router.push({
               query: {
+                ...router.query,
                 tag: "creative_space",
               },
             });
@@ -400,7 +415,7 @@ function Tags(props) {
             <div
               className={
                 "w-[50%] h-1 mt-0.5 " +
-                (router.query.tag === "creative_space" ? "bg-black" : "")
+                (router.query.tag === "creative space" ? "bg-black" : "")
               }
             ></div>
           </div>

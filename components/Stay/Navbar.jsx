@@ -94,7 +94,7 @@ function Navbar({
           },
         }
       );
-      setTrips(data[0] || []);
+      setTrips(data);
     }
   };
 
@@ -253,7 +253,7 @@ function Navbar({
             showDropdown={showDropdown}
             userProfile={userProfile}
             numberOfItemsInCart={numberOfItemsInCart}
-            numberOfTrips={trips.trip && trips.trip.length}
+            numberOfTrips={trips.length}
           ></UserDropdown>
 
           {
@@ -288,7 +288,7 @@ function Navbar({
       </div>
 
       {showPopup && (
-        <div className="w-[500px] hidden md:block p-4 h-[400px] overflow-y-scroll rounded-xl bg-white shadow-xl absolute right-6 top-14">
+        <div className="w-[500px] z-[50] hidden md:block p-4 h-[400px] overflow-y-scroll rounded-xl bg-white shadow-xl absolute right-6 top-14">
           {!cartLoading && (
             <div className="">
               {cart.length > 0 && (

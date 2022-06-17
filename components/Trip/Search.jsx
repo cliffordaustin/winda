@@ -13,6 +13,7 @@ const Search = ({
   autoCompleteClassName = "",
   inputBoxClassName = "",
   searchClass = "",
+  search = () => {},
 }) => {
   const [autoCompleteSearch, setAutoCompleteSearch] = useState([]);
 
@@ -112,6 +113,7 @@ const Search = ({
                   onClick={() => {
                     setLocation(item.place_name);
                     setAutoCompleteSearch([]);
+                    search(item.place_name);
                   }}
                   className="flex items-center gap-3 hover:bg-gray-100 transition-all duration-300 ease-linear cursor-pointer px-4 py-3"
                 >

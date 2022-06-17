@@ -31,7 +31,7 @@ const Destination = ({ className = "", data }) => {
       if (currentNavState === 1) {
         router
           .push({
-            pathname: "/trip/stays",
+            pathname: "/trip",
             // query: { search: location, fromOrder: "true" },
           })
           .then(() => {
@@ -61,7 +61,7 @@ const Destination = ({ className = "", data }) => {
           if (currentNavState === 1) {
             router
               .push({
-                pathname: "/trip/stays",
+                pathname: "/trip",
                 // query: {
                 //   search: autoCompleteFromSearch[0].place_name,
                 //   fromOrder: "true",
@@ -91,7 +91,7 @@ const Destination = ({ className = "", data }) => {
   const staysSearch = () => {
     router
       .push({
-        pathname: "/trip/stays",
+        pathname: "/trip",
         // query: { search: data.location, fromOrder: "true" },
       })
       .then(() => {

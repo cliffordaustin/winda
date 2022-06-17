@@ -1012,7 +1012,7 @@ export default function Home({ userProfile }) {
             <div className="flex gap-2">
               <Button
                 onClick={() => {
-                  router.push("/trip/stays");
+                  router.push("/trip");
                 }}
                 className="flex items-center gap-4 w-36 !py-3 !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500"
               >

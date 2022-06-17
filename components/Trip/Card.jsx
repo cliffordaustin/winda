@@ -10,8 +10,18 @@ import styles from "../../styles/Listing.module.css";
 import ItemCard from "../ui/SecondCard";
 import Button from "../ui/Button";
 import Carousel from "../ui/Carousel";
+import Dropdown from "../ui/Dropdown";
+import Price from "../Stay/Price";
 
-const Card = ({ listing, userProfile, trips }) => {
+const Card = ({
+  listing,
+  userProfile,
+  trips,
+  userTrips,
+  setShowAddToTripPopup,
+  showAddToTripPopup,
+  setSelectedData,
+}) => {
   const dispatch = useDispatch();
 
   const currencyToKES = useSelector((state) => state.home.currencyToKES);
@@ -118,6 +128,46 @@ const Card = ({ listing, userProfile, trips }) => {
     itemIsInTrip();
   }, [trips]);
 
+  const [loading, setLoading] = useState(false);
+
+  const addToOrder = async () => {
+    setLoading(true);
+
+    await axios
+      .post(
+        `${process.env.NEXT_PUBLIC_baseURL}/create-trip/`,
+        {
+          stay_id: listing.stay ? listing.stay.id : null,
+          activity_id: listing.activity ? listing.activity.id : null,
+          transport_id: listing.transport ? listing.transport.id : null,
+        },
+        {
+          headers: {
+            Authorization: `Token ${Cookies.get("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        router.push({
+          pathname: `/trip/plan/${res.data.slug}`,
+        });
+      })
+      .catch((err) => {
+        console.log(err.response);
+        setLoading(false);
+      });
+  };
+
+  const totalPrice = () => {
+    if (listing.stay && listing.activity) {
+      return listing.stay.price + listing.activity.price;
+    } else if (listing.activity && !listing.stay) {
+      return listing.activity.price;
+    } else if (listing.stay && !listing.activity) {
+      return listing.stay.price;
+    }
+  };
+
   return (
     <div className="border flex overflow-hidden stepWebkitSetting flex-col xl:flex-row w-full md:w-[48%] bg-white xl:h-[300px] mb-6 shadow-md rounded-2xl">
       <div className="xl:w-[320px] h-[230px] xl:h-full">
@@ -199,9 +249,11 @@ const Card = ({ listing, userProfile, trips }) => {
 
         <div className="mt-1 mb-10 xl:mb-0">
           <div className="text-sm text-gray-700 flex gap-0.5 items-center">
-            <div className="text-xl mr-0.5 font-bold">$1300</div>
+            <div className="text-xl mr-0.5 font-bold">
+              <Price stayPrice={totalPrice()}></Price>
+            </div>
             <div className="mt-0.5 mb-1.5 font-bold">.</div>
-            <div className="mt-0.5">3 nights</div>
+            <div className="mt-0.5">1 person / night</div>
           </div>
         </div>
 
@@ -209,9 +261,52 @@ const Card = ({ listing, userProfile, trips }) => {
           <Button className="w-[40%] !px-0 !bg-transparent border border-gray-400 !text-black font-bold">
             view trip
           </Button>
-          <Button className="w-[58%] !px-0 !py-2 font-bold !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white">
-            Add to trip
-          </Button>
+          <div className="w-[58%] relative">
+            <Button
+              onClick={() => {
+                if (userTrips.length > 0) {
+                  setSelectedData({
+                    stay_id: listing.stay ? listing.stay.id : null,
+                    activity_id: listing.activity ? listing.activity.id : null,
+                    transport_id: listing.transport
+                      ? listing.transport.id
+                      : null,
+                  });
+                  setShowAddToTripPopup(!showAddToTripPopup);
+                } else {
+                  addToOrder();
+                }
+              }}
+              className="flex w-full items-center gap-1 !px-0 !py-2 font-bold !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white"
+            >
+              <span>Add to trip</span>
+
+              <div className={" " + (!loading ? "hidden" : " ml-1")}>
+                <LoadingSpinerChase
+                  width={13}
+                  height={13}
+                  color="white"
+                ></LoadingSpinerChase>
+              </div>
+
+              {userTrips.length > 0 && (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
+                  />
+                </svg>
+              )}
+            </Button>
+          </div>
         </div>
       </div>
     </div>
