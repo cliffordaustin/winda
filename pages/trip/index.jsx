@@ -399,7 +399,7 @@ const Trips = ({ userProfile, recommendedTrips, userTrips }) => {
 
                 <Dropdown
                   showDropdown={showPricePopup}
-                  className="absolute left-[5%] top-full mt-2 w-56"
+                  className="absolute -left-20 sm:-left-0 md:-left-10 !z-30 lg:left-[5%] top-full mt-2 w-56"
                 >
                   <div
                     onClick={() => {
@@ -699,7 +699,9 @@ const Trips = ({ userProfile, recommendedTrips, userTrips }) => {
             <div className="flex items-center flex-wrap gap-2 mb-4">
               {router.query.tag && (
                 <div className="px-2 py-1 flex items-center gap-2 rounded-3xl text-white bg-blue-500 mr-4">
-                  <span className="text-sm font-semibold">honeymoon</span>
+                  <span className="text-sm font-semibold">
+                    {router.query.tag}
+                  </span>
                   <Icon
                     onClick={() => {
                       router.push({
