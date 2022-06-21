@@ -30,6 +30,7 @@ import Select from "react-select";
 import Checkbox from "../ui/Checkbox";
 import { stayPriceOfPlanLower } from "../../lib/pricePlan";
 import Price from "../Stay/Price";
+import Search from "../Trip/Search";
 
 const Trip = ({
   nights,
@@ -540,6 +541,45 @@ const Trip = ({
       });
   };
 
+  const updateTransportInfo = async () => {
+    const token = Cookies.get("token");
+    setTransportEditLoading(true);
+
+    await axios
+      .put(
+        `${process.env.NEXT_PUBLIC_baseURL}/trip/${trip.slug}/`,
+        {
+          transport_number_of_days: numberOfDays,
+          starting_point: searchLocation,
+          transport_from_date: startingDate,
+        },
+        {
+          headers: {
+            Authorization: "Token " + token,
+          },
+        }
+      )
+      .then(() => {
+        router.reload();
+      })
+      .catch((err) => {
+        setTransportEditLoading(false);
+        console.log(err.response.data);
+      });
+  };
+
+  const [numberOfDays, setNumberOfDays] = useState(
+    trip.transport_number_of_days
+  );
+
+  const [startingDate, setStartingDate] = useState(trip.transport_from_date);
+
+  const [editTransportPopup, setEditTransportPopup] = useState(false);
+
+  const [transportEditLoading, setTransportEditLoading] = useState(false);
+
+  const [searchLocation, setSearchLocation] = useState(trip.starting_point);
+
   const maxGuests =
     trip.stay &&
     (currentTypeOfLodge.value === "Standard"
@@ -832,46 +872,156 @@ const Trip = ({
 
       {trip.transport && (
         <div className="px-2 mt-1 relative bg-gray-100 py-1 rounded-lg">
-          <div className="flex gap-2">
-            <div className="w-12 h-12 my-auto bg-gray-200 rounded-lg flex items-center justify-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
-                role="img"
-                className="w-6 h-6 fill-current text-gray-500"
-                preserveAspectRatio="xMidYMid meet"
-                viewBox="0 0 512 512"
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-12 h-12 my-auto bg-gray-200 rounded-lg flex items-center justify-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                  role="img"
+                  className="w-6 h-6 fill-current text-gray-500"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 512 512"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M39.61 196.8L74.8 96.29C88.27 57.78 124.6 32 165.4 32h181.2c40.8 0 77.1 25.78 90.6 64.29l35.2 100.51c23.2 9.6 39.6 32.5 39.6 59.2v192c0 17.7-14.3 32-32 32h-32c-17.7 0-32-14.3-32-32v-48H96v48c0 17.7-14.33 32-32 32H32c-17.67 0-32-14.3-32-32V256c0-26.7 16.36-49.6 39.61-59.2zm69.49-4.8h293.8l-26.1-74.6c-4.5-12.8-16.6-21.4-30.2-21.4H165.4c-13.6 0-25.7 8.6-30.2 21.4L109.1 192zM96 256c-17.67 0-32 14.3-32 32s14.33 32 32 32c17.7 0 32-14.3 32-32s-14.3-32-32-32zm320 64c17.7 0 32-14.3 32-32s-14.3-32-32-32s-32 14.3-32 32s14.3 32 32 32z"
+                  />
+                </svg>
+              </div>
+              <div>
+                {trip.starting_point && (
+                  <p className="text-sm font-medium">
+                    From {trip.starting_point}
+                  </p>
+                )}
+                {!trip.starting_point && (
+                  <p className="text-sm font-medium text-red-500">
+                    No starting location chosen
+                  </p>
+                )}
+
+                <h1 className="font-bold">Transportation</h1>
+
+                {!trip.transport_from_date && (
+                  <p className="text-sm font-medium text-red-500">
+                    No starting date chosen
+                  </p>
+                )}
+
+                {trip.transport_from_date && (
+                  <p className="text-sm font-medium">
+                    {moment(trip.transport_from_date).format("Do MMMM YYYY")}
+                  </p>
+                )}
+              </div>
+            </div>
+            <div
+              onClick={() => {
+                setEditTransportPopup(!editTransportPopup);
+              }}
+              className="self-start"
+            >
+              <Icon
+                className="cursor-pointer w-6 h-6 text-gray-600"
+                icon="akar-icons:edit"
+              />
+            </div>
+
+            {editTransportPopup && (
+              <div
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+                className="absolute !z-40 py-3 px-3 !bg-white border border-gray-100 shadow-md rounded-xl !top-4 right-0 sm:!-right-2 mt-4 !w-full sm:!w-96"
               >
-                <path
-                  fill="currentColor"
-                  d="M39.61 196.8L74.8 96.29C88.27 57.78 124.6 32 165.4 32h181.2c40.8 0 77.1 25.78 90.6 64.29l35.2 100.51c23.2 9.6 39.6 32.5 39.6 59.2v192c0 17.7-14.3 32-32 32h-32c-17.7 0-32-14.3-32-32v-48H96v48c0 17.7-14.33 32-32 32H32c-17.67 0-32-14.3-32-32V256c0-26.7 16.36-49.6 39.61-59.2zm69.49-4.8h293.8l-26.1-74.6c-4.5-12.8-16.6-21.4-30.2-21.4H165.4c-13.6 0-25.7 8.6-30.2 21.4L109.1 192zM96 256c-17.67 0-32 14.3-32 32s14.33 32 32 32c17.7 0 32-14.3 32-32s-14.3-32-32-32zm320 64c17.7 0 32-14.3 32-32s-14.3-32-32-32s-32 14.3-32 32s14.3 32 32 32z"
-                />
-              </svg>
-            </div>
-            <div>
-              {index === 0 && startingDestination && (
-                <p className="text-sm font-medium">
-                  From {startingDestination}
-                </p>
-              )}
-              {index === 0 && !startingDestination && (
-                <p className="text-sm font-medium text-red-500">
-                  No starting location chosen
-                </p>
-              )}
-              {index > 0 && (
-                <p className="text-sm font-medium">
-                  From{" "}
-                  {order[index - 1].stay && order[index - 1].stay.location
-                    ? order[index - 1].stay.location
-                    : order[index - 1].activity &&
-                      order[index - 1].activity.location
-                    ? order[index - 1].activity.location
-                    : ""}
-                </p>
-              )}
-              <h1 className="font-bold">Transportation</h1>
-            </div>
+                <div>
+                  <Search
+                    location={searchLocation}
+                    setLocation={setSearchLocation}
+                  ></Search>
+                </div>
+
+                <div className="flex items-center mt-2">
+                  {/* {startingDate && (
+                  <span className="text-sm font-bold text-blue-600">
+                    {moment(startingDate).format("Do MMMM YYYY")}
+                  </span>
+                )} */}
+
+                  <span className="text-lg font-bold text-gray-600">
+                    selected a starting date
+                  </span>
+                </div>
+
+                <DatePickerSingle
+                  date={startingDate}
+                  setDate={setStartingDate}
+                  disableDate={new Date()}
+                  className="!w-[400px] !top-[46px]"
+                ></DatePickerSingle>
+
+                <div className="mb-1 font-semibold">
+                  How long do you need this car?
+                </div>
+
+                <div className="flex gap-3 items-center mt-2">
+                  <div
+                    onClick={() => {
+                      if (numberOfDays > 1) {
+                        setNumberOfDays(numberOfDays - 1);
+                      }
+                    }}
+                    className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-gray-100 shadow-lg font-bold"
+                  >
+                    -
+                  </div>
+
+                  <div className="font-bold">
+                    {numberOfDays} {numberOfDays > 1 ? "days" : "day"}
+                  </div>
+                  <div
+                    onClick={() => {
+                      setNumberOfDays(numberOfDays + 1);
+                    }}
+                    className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-gray-100 shadow-lg font-bold"
+                  >
+                    +
+                  </div>
+                </div>
+
+                <div className="flex justify-between mt-3">
+                  <div></div>
+                  <div className="flex gap-2">
+                    <div
+                      onClick={() => {
+                        setEditTransportPopup(false);
+                      }}
+                      className="!bg-white text-black border !rounded-3xl px-4 text-sm cursor-pointer py-2"
+                    >
+                      Close
+                    </div>
+                    <Button
+                      onClick={() => {
+                        updateTransportInfo();
+                      }}
+                      className="!bg-blue-700 flex gap-2 items-center !rounded-3xl"
+                    >
+                      <span>Update</span>
+
+                      {transportEditLoading && (
+                        <div>
+                          <LoadingSpinerChase
+                            width={16}
+                            height={16}
+                          ></LoadingSpinerChase>
+                        </div>
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
           <div className="mt-2">
             <OrderCard
@@ -880,11 +1030,20 @@ const Trip = ({
               transport={trip.transport}
               transportPage={true}
               transportDistance={trip.distance}
-              numberOfDays={1}
+              numberOfDays={
+                trip.transport_number_of_days
+                  ? trip.transport_number_of_days
+                  : 1
+              }
               userNeedADriver={trip.user_need_a_driver}
               // transportDestination={trip.destination}
-              transportStartingPoint={"Nairobi"}
-              transportPrice={125}
+              transportStartingPoint={trip.starting_point}
+              transportPrice={
+                trip.transport.price_per_day *
+                (trip.transport_number_of_days
+                  ? trip.transport_number_of_days
+                  : 1)
+              }
               checkoutInfo={true}
             ></OrderCard>
           </div>
@@ -1346,7 +1505,7 @@ const Trip = ({
           <div className="absolute top-1 right-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 cursor-pointer"
+              className="h-6 w-6 cursor-pointer text-gray-600"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -1445,7 +1604,7 @@ const Trip = ({
             </div>
           </div>
 
-          <div className="w-full relative flex gap-2">
+          <div className="w-full flex gap-2">
             <div className="px-3 cursor-pointer text-sm py-1 w-fit text-black border bg-white rounded-md">
               Change
             </div>
@@ -1463,7 +1622,7 @@ const Trip = ({
                 onClick={(e) => {
                   e.stopPropagation();
                 }}
-                className="absolute lg:-right-[240px] right-10 md:-right-[280px] xsMax:right-2 xsMax:w-full top-[50px] md:-top-[250px] px-4 py-4 !z-[99] w-[400px] bg-white shadow-lg rounded-lg h-fit"
+                className="absolute !z-40 py-3 px-3 !bg-white border border-gray-100 shadow-md rounded-xl right-0 sm:!-right-2 mt-4 !w-full sm:!w-96 top-[320px] md:-top-[250px]"
               >
                 <div className="mb-2">
                   <Price
@@ -1483,6 +1642,81 @@ const Trip = ({
                   options={typeOfLodge}
                   isSearchable={true}
                 />
+
+                {currentTypeOfLodge.value === "Standard" && (
+                  <div className="text-sm text-gray-500 mt-2">
+                    This is the perfect room for you if you are looking for a
+                    simple, clean, and affordable room.
+                  </div>
+                )}
+
+                {currentTypeOfLodge.value === "Super Deluxe" && (
+                  <div className="text-sm text-gray-500 mt-2">
+                    This is the perfect room for you if you are looking for the
+                    very best and well decorated room this place has to offer
+                  </div>
+                )}
+
+                {currentTypeOfLodge.value === "Deluxe" && (
+                  <div className="text-sm text-gray-500 mt-2">
+                    This is the perfect room for you if you are looking for the
+                    best this place has to offer.
+                  </div>
+                )}
+
+                {currentTypeOfLodge.value === "Family Room" && (
+                  <div className="text-sm text-gray-500 mt-2">
+                    If you just want to spend sometime with the family, this is
+                    the room for you.
+                  </div>
+                )}
+
+                {currentTypeOfLodge.value === "Studio" && (
+                  <div className="text-sm text-gray-500 mt-2">
+                    This room normally contains a kitchen, and a living space in
+                    one room
+                  </div>
+                )}
+
+                {currentTypeOfLodge.value === "Double Room" && (
+                  <div className="text-sm text-gray-500 mt-2">
+                    This room is assigned to two people; normally has one double
+                    bed, or two twin beds.
+                  </div>
+                )}
+
+                {currentTypeOfLodge.value === "Tripple Room" && (
+                  <div className="text-sm text-gray-500 mt-2">
+                    This room is assigned to three people; normally has three
+                    beds.
+                  </div>
+                )}
+
+                {currentTypeOfLodge.value === "Quad Room" && (
+                  <div className="text-sm text-gray-500 mt-2">
+                    This room is assigned to four people; normally has four
+                    beds.
+                  </div>
+                )}
+
+                {currentTypeOfLodge.value === "King Room" && (
+                  <div className="text-sm text-gray-500 mt-2">
+                    This room usually contains a king sized bed.
+                  </div>
+                )}
+
+                {currentTypeOfLodge.value === "Queen Room" && (
+                  <div className="text-sm text-gray-500 mt-2">
+                    This room usually contains a queen sized bed.
+                  </div>
+                )}
+
+                {currentTypeOfLodge.value === "Twin Room" && (
+                  <div className="text-sm text-gray-500 mt-2">
+                    This room usually contains two small beds, each for one
+                    person.
+                  </div>
+                )}
 
                 <div className="flex items-center gap-0.5 mt-4">
                   <svg
@@ -2038,7 +2272,7 @@ const Trip = ({
           <div className="absolute top-1 right-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 cursor-pointer"
+              className="h-6 w-6 cursor-pointer text-gray-600"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -2127,7 +2361,7 @@ const Trip = ({
             </div>
           </div>
 
-          <div className="w-full relative flex gap-2">
+          <div className="w-full flex gap-2">
             <div className="px-3 cursor-pointer text-sm py-1 w-fit text-black border bg-white rounded-md">
               Change
             </div>
@@ -2145,7 +2379,7 @@ const Trip = ({
                 onClick={(e) => {
                   e.stopPropagation();
                 }}
-                className="absolute lg:-right-[240px] right-10 md:-right-[280px] xsMax:right-2 xsMax:w-full top-[50px] md:-top-[250px] px-4 py-4 !z-[99] w-[400px] bg-white shadow-lg rounded-lg h-fit"
+                className="absolute !z-40 py-3 px-3 !bg-white border border-gray-100 shadow-md rounded-xl right-0 sm:!-right-2 mt-4 !w-full sm:!w-96 top-[320px] md:-top-[250px]"
               >
                 <div className="mb-2">
                   <Price

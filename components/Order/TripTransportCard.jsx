@@ -128,7 +128,7 @@ const TripTransportCard = ({
         </div>
 
         <div className="mt-1 mb-2">
-          <h1 className="font-semibold mb-1 text-sm">Driver operates within</h1>
+          <h1 className="font-semibold mb-1 text-sm">Car operates within</h1>
           <div className="flex flex-wrap">
             {transport.dropoff_city.split(",").map((city, index) => (
               <div

@@ -890,7 +890,7 @@ function TransportDetail({ userProfile, transport, inCart }) {
                 </div>
               </div>
               <div className="mt-6 mb-6">
-                <h1 className="font-bold mb-2">Driver operates within</h1>
+                <h1 className="font-bold mb-2">Car operates within</h1>
                 <div className="flex">
                   {transport.dropoff_city.split(",").map((city, index) => (
                     <div
@@ -1293,7 +1293,9 @@ function TransportDetail({ userProfile, transport, inCart }) {
                 <Button className="!border border-blue-500 mb-3 !w-full swiper-pagination-class swiper-button-next-class !py-2 !text-black mt-5 !bg-transparent">
                   <span>I need the ride per distance</span>
                 </Button>
-                <div className="mb-1 font-semibold">Hire per day</div>
+                <div className="mb-1 font-semibold">
+                  How long do you need this car?
+                </div>
 
                 <div className="flex gap-3 items-center mb-4 mt-2">
                   <div
@@ -1622,7 +1624,9 @@ function TransportDetail({ userProfile, transport, inCart }) {
                 <Button className="!border border-blue-500 mb-3 !w-full swiper-pagination-class swiper-button-next-class !py-2 !text-black mt-5 !bg-transparent">
                   <span>I need the ride per distance</span>
                 </Button>
-                <div className="mb-1 font-semibold">Hire per day</div>
+                <div className="mb-1 font-semibold">
+                  How long do you need this car?
+                </div>
 
                 <div className="flex gap-3 items-center mb-4 mt-2">
                   <div

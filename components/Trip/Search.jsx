@@ -22,7 +22,7 @@ const Search = ({
 
     axios
       .get(
-        `https://api.mapbox.com/geocoding/v5/mapbox.places/${event.target.value}.json?access_token=${process.env.NEXT_PUBLIC_MAPBOX_API_KEY}&autocomplete=true&country=ke,ug,tz,rw,bi,tz,ug,tz,gh`
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${event.target.value}.json?access_token=${process.env.NEXT_PUBLIC_MAPBOX_API_KEY}&autocomplete=true&country=ke,ug,tz`
       )
       .then((response) => {
         setAutoCompleteSearch(response.data.features);
@@ -74,6 +74,9 @@ const Search = ({
               autoComplete="off"
               onChange={(event) => {
                 onChange(event);
+              }}
+              onBlur={() => {
+                setAutoCompleteSearch([]);
               }}
             ></Input>
 

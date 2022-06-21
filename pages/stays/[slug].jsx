@@ -1071,6 +1071,82 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       />
                     </div>
 
+                    {currentTypeOfLodge.value === "Standard" && (
+                      <div className="text-sm text-gray-500 mt-2">
+                        This is the perfect room for you if you are looking for
+                        a simple, clean, and affordable room.
+                      </div>
+                    )}
+
+                    {currentTypeOfLodge.value === "Super Deluxe" && (
+                      <div className="text-sm text-gray-500 mt-2">
+                        This is the perfect room for you if you are looking for
+                        the very best and well decorated room this place has to
+                        offer
+                      </div>
+                    )}
+
+                    {currentTypeOfLodge.value === "Deluxe" && (
+                      <div className="text-sm text-gray-500 mt-2">
+                        This is the perfect room for you if you are looking for
+                        the best this place has to offer.
+                      </div>
+                    )}
+
+                    {currentTypeOfLodge.value === "Family Room" && (
+                      <div className="text-sm text-gray-500 mt-2">
+                        If you just want to spend sometime with the family, this
+                        is the room for you.
+                      </div>
+                    )}
+
+                    {currentTypeOfLodge.value === "Studio" && (
+                      <div className="text-sm text-gray-500 mt-2">
+                        This room normally contains a kitchen, and a living
+                        space in one room
+                      </div>
+                    )}
+
+                    {currentTypeOfLodge.value === "Double Room" && (
+                      <div className="text-sm text-gray-500 mt-2">
+                        This room is assigned to two people; normally has one
+                        double bed, or two twin beds.
+                      </div>
+                    )}
+
+                    {currentTypeOfLodge.value === "Tripple Room" && (
+                      <div className="text-sm text-gray-500 mt-2">
+                        This room is assigned to three people; normally has
+                        three beds.
+                      </div>
+                    )}
+
+                    {currentTypeOfLodge.value === "Quad Room" && (
+                      <div className="text-sm text-gray-500 mt-2">
+                        This room is assigned to four people; normally has four
+                        beds.
+                      </div>
+                    )}
+
+                    {currentTypeOfLodge.value === "King Room" && (
+                      <div className="text-sm text-gray-500 mt-2">
+                        This room usually contains a king sized bed.
+                      </div>
+                    )}
+
+                    {currentTypeOfLodge.value === "Queen Room" && (
+                      <div className="text-sm text-gray-500 mt-2">
+                        This room usually contains a queen sized bed.
+                      </div>
+                    )}
+
+                    {currentTypeOfLodge.value === "Twin Room" && (
+                      <div className="text-sm text-gray-500 mt-2">
+                        This room usually contains two small beds, each for one
+                        person.
+                      </div>
+                    )}
+
                     <div className="flex items-center gap-0.5 mt-4">
                       <svg
                         className="w-4 h-4 text-gray-500"
@@ -1418,10 +1494,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                   </svg>
                 </div>
               )}
-            </div>
-
-            <div className="flex flex-col w-full md:flex-row justify-between pt-10 gap-3">
-              <DescribesStay stay={stay}></DescribesStay>
             </div>
           </Element>
 
@@ -2006,7 +2078,83 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       isSearchable={true}
                     />
 
-                    <div className="flex items-center gap-0.5 mt-4">
+                    {currentTypeOfLodge.value === "Standard" && (
+                      <div className="text-sm text-gray-500 mt-2">
+                        This is the perfect room for you if you are looking for
+                        a simple, clean, and affordable room.
+                      </div>
+                    )}
+
+                    {currentTypeOfLodge.value === "Super Deluxe" && (
+                      <div className="text-sm text-gray-500 mt-2">
+                        This is the perfect room for you if you are looking for
+                        the very best and well decorated room this place has to
+                        offer
+                      </div>
+                    )}
+
+                    {currentTypeOfLodge.value === "Deluxe" && (
+                      <div className="text-sm text-gray-500 mt-2">
+                        This is the perfect room for you if you are looking for
+                        the best this place has to offer.
+                      </div>
+                    )}
+
+                    {currentTypeOfLodge.value === "Family Room" && (
+                      <div className="text-sm text-gray-500 mt-2">
+                        If you just want to spend sometime with the family, this
+                        is the room for you.
+                      </div>
+                    )}
+
+                    {currentTypeOfLodge.value === "Studio" && (
+                      <div className="text-sm text-gray-500 mt-2">
+                        This room normally contains a kitchen, and a living
+                        space in one room
+                      </div>
+                    )}
+
+                    {currentTypeOfLodge.value === "Double Room" && (
+                      <div className="text-sm text-gray-500 mt-2">
+                        This room is assigned to two people; normally has one
+                        double bed, or two twin beds.
+                      </div>
+                    )}
+
+                    {currentTypeOfLodge.value === "Tripple Room" && (
+                      <div className="text-sm text-gray-500 mt-2">
+                        This room is assigned to three people; normally has
+                        three beds.
+                      </div>
+                    )}
+
+                    {currentTypeOfLodge.value === "Quad Room" && (
+                      <div className="text-sm text-gray-500 mt-2">
+                        This room is assigned to four people; normally has four
+                        beds.
+                      </div>
+                    )}
+
+                    {currentTypeOfLodge.value === "King Room" && (
+                      <div className="text-sm text-gray-500 mt-2">
+                        This room usually contains a king sized bed.
+                      </div>
+                    )}
+
+                    {currentTypeOfLodge.value === "Queen Room" && (
+                      <div className="text-sm text-gray-500 mt-2">
+                        This room usually contains a queen sized bed.
+                      </div>
+                    )}
+
+                    {currentTypeOfLodge.value === "Twin Room" && (
+                      <div className="text-sm text-gray-500 mt-2">
+                        This room usually contains two small beds, each for one
+                        person.
+                      </div>
+                    )}
+
+                    <div className="flex items-center gap-0.5 mt-2">
                       <svg
                         className="w-4 h-4 text-gray-500"
                         xmlns="http://www.w3.org/2000/svg"
