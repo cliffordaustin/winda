@@ -292,6 +292,68 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
   const isVisible = useOnScreen(scrollToVisible);
 
+  const [slugIsCorrect, setSlugIsCorrect] = useState(false);
+
+  const checkSlug = async () => {
+    const token = Cookies.get("token");
+
+    if (token) {
+      await axios
+        .get(`${process.env.NEXT_PUBLIC_baseURL}/trip/${router.query.trip}/`, {
+          headers: {
+            Authorization: "Token " + token,
+          },
+        })
+        .then((res) => {
+          setSlugIsCorrect(true);
+        })
+        .catch((err) => {
+          if (err.response.status === 404) {
+            setSlugIsCorrect(false);
+          }
+        });
+    } else {
+      setSlugIsCorrect(false);
+    }
+  };
+
+  useEffect(() => {
+    if (router.query.trip) {
+      checkSlug();
+    }
+  }, []);
+
+  const [addToTripLoading, setAddToTripLoading] = useState(false);
+
+  const addToTrip = async () => {
+    const token = Cookies.get("token");
+
+    setAddToTripLoading(true);
+
+    if (token) {
+      await axios
+        .put(
+          `${process.env.NEXT_PUBLIC_baseURL}/trip/${router.query.trip}/`,
+          {
+            stay_id: stay.id,
+          },
+          {
+            headers: {
+              Authorization: "Token " + token,
+            },
+          }
+        )
+        .then(() => {
+          router.push({
+            pathname: `/trip/plan/${router.query.group_trip}`,
+          });
+        })
+        .catch((err) => {
+          setAddToTripLoading(false);
+        });
+    }
+  };
+
   const [showMobileDateModal, setShowMobileDateModal] = useState(false);
 
   const [typeOfLodge, setTypeOfLodge] = useState([]);
@@ -745,6 +807,38 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       </div>
                     )}
                   </div>
+                  {stay.views > 0 && stay.views === 1 && (
+                    <div className="mt-2 text-gray-600">
+                      {stay.views} person has viewed this listing
+                    </div>
+                  )}
+                  {stay.views > 0 && stay.views > 1 && (
+                    <div className="mt-2 text-gray-600">
+                      {stay.views} people has viewed this listing
+                    </div>
+                  )}
+
+                  {slugIsCorrect && (
+                    <div className="mt-2">
+                      <Button
+                        onClick={() => {
+                          addToTrip();
+                        }}
+                        className={"!bg-blue-500 flex gap-2 !text-white "}
+                      >
+                        <span className="text-white text-sm">Add to trip</span>
+
+                        {addToTripLoading && (
+                          <div>
+                            <LoadingSpinerChase
+                              width={14}
+                              height={14}
+                            ></LoadingSpinerChase>
+                          </div>
+                        )}
+                      </Button>
+                    </div>
+                  )}
                 </div>
 
                 {stay.type_of_stay === "HOUSE" && inCart && (
@@ -1371,17 +1465,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                 </div>
               </div>
             </Modal>
-
-            {stay.views > 0 && stay.views === 1 && (
-              <div className="mt-2 text-gray-600">
-                {stay.views} person has viewed this listing
-              </div>
-            )}
-            {stay.views > 0 && stay.views > 1 && (
-              <div className="mt-2 text-gray-600">
-                {stay.views} people has viewed this listing
-              </div>
-            )}
 
             <div className="mt-10">
               {!showAllDescription && (

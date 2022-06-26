@@ -65,7 +65,6 @@ export default function DatePicker({
 }
 
 DatePicker.propTypes = {
-  date: PropTypes.any.isRequired,
   disableDate: PropTypes.any,
   setDate: PropTypes.func.isRequired,
   showDate: PropTypes.bool.isRequired,

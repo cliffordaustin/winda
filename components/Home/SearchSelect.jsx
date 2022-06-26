@@ -11,8 +11,16 @@ function SearchSelect({ setCurrentNavState, currentNavState, isHomePage }) {
         onClick={(event) => {
           event.stopPropagation();
           setCurrentNavState(1);
-          if (!isHomePage) {
+          if (!isHomePage && !router.query.trip) {
             router.push("/stays");
+          } else if (!isHomePage && router.query.trip) {
+            router.push({
+              pathname: `/stays`,
+              query: {
+                trip: router.query.trip,
+                group_trip: router.query.group_trip,
+              },
+            });
           }
         }}
         className={
@@ -26,8 +34,17 @@ function SearchSelect({ setCurrentNavState, currentNavState, isHomePage }) {
         onClick={(event) => {
           event.stopPropagation();
           setCurrentNavState(3);
-          if (!isHomePage) {
+
+          if (!isHomePage && !router.query.trip) {
             router.push("/experiences");
+          } else if (!isHomePage && router.query.trip) {
+            router.push({
+              pathname: `/experiences`,
+              query: {
+                trip: router.query.trip,
+                group_trip: router.query.group_trip,
+              },
+            });
           }
         }}
         className={
@@ -41,8 +58,16 @@ function SearchSelect({ setCurrentNavState, currentNavState, isHomePage }) {
         onClick={(event) => {
           event.stopPropagation();
           setCurrentNavState(2);
-          if (!isHomePage) {
+          if (!isHomePage && !router.query.trip) {
             router.push("/transport");
+          } else if (!isHomePage && router.query.trip) {
+            router.push({
+              pathname: `/transport`,
+              query: {
+                trip: router.query.trip,
+                group_trip: router.query.group_trip,
+              },
+            });
           }
         }}
         className={

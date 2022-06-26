@@ -35,7 +35,7 @@ import Cookies from "js-cookie";
 import { route } from "next/dist/server/router";
 import MobileSearchModal from "../../components/Stay/MobileSearchModal";
 
-function Stays({ userProfile, longitude, latitude }) {
+function Stays({ userProfile, longitude, latitude, stays }) {
   const [state, setState] = useState({
     showDropdown: false,
     checkin: "",
@@ -155,7 +155,10 @@ function Stays({ userProfile, longitude, latitude }) {
       router
         .push({
           pathname: "/stays",
-          query: { search: location },
+          query: {
+            search: location,
+            min_capacity: numOfAdults > 0 ? numOfAdults : "",
+          },
         })
         .then(() => {
           setShowSearchLoader(false);
@@ -187,8 +190,8 @@ function Stays({ userProfile, longitude, latitude }) {
     }
   };
 
-  const [minPrice, setMinSelected] = useState(null);
-  const [maxPrice, setMaxSelected] = useState(null);
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
 
   const [minRoom, setminRoomSelected] = useState(null);
   const [maxRoom, setmaxRoomSelected] = useState(null);
@@ -206,60 +209,60 @@ function Stays({ userProfile, longitude, latitude }) {
 
   const currencyToKES = useSelector((state) => state.home.currencyToKES);
 
-  useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-    } else {
-      dispatch(setFilteredStays(router));
-    }
-  }, [router.query.min_price, router.query.max_price]);
+  // useEffect(() => {
+  //   if (isFirstRender.current) {
+  //     isFirstRender.current = false;
+  //   } else {
+  //     dispatch(setFilteredStays(router));
+  //   }
+  // }, [router.query.min_price, router.query.max_price, router.query.ordering]);
 
-  useEffect(() => {
-    const minPriceFilterFormat = router.query.min_price
-      ? "KES" + router.query.min_price.replace("000", "k")
-      : "";
+  // useEffect(() => {
+  //   const minPriceFilterFormat = router.query.min_price
+  //     ? "KES" + router.query.min_price.replace("000", "k")
+  //     : "";
 
-    const minPriceFilterFormatObject = router.query.min_price
-      ? {
-          value: minPriceFilterFormat,
-          label: minPriceFilterFormat,
-        }
-      : "";
+  //   const minPriceFilterFormatObject = router.query.min_price
+  //     ? {
+  //         value: minPriceFilterFormat,
+  //         label: minPriceFilterFormat,
+  //       }
+  //     : "";
 
-    const maxPriceFilterFormat = router.query.max_price
-      ? "KES" + router.query.max_price.replace("000", "k")
-      : "";
+  //   const maxPriceFilterFormat = router.query.max_price
+  //     ? "KES" + router.query.max_price.replace("000", "k")
+  //     : "";
 
-    const maxPriceFilterFormatObject = router.query.max_price
-      ? {
-          value: maxPriceFilterFormat,
-          label: maxPriceFilterFormat,
-        }
-      : "";
+  //   const maxPriceFilterFormatObject = router.query.max_price
+  //     ? {
+  //         value: maxPriceFilterFormat,
+  //         label: maxPriceFilterFormat,
+  //       }
+  //     : "";
 
-    setMinSelected(minPriceFilterFormatObject);
-    setMaxSelected(maxPriceFilterFormatObject);
-  }, [router.query.min_price, router.query.max_price]);
+  //   setMinSelected(minPriceFilterFormatObject);
+  //   setMaxSelected(maxPriceFilterFormatObject);
+  // }, [router.query.min_price, router.query.max_price]);
 
-  useEffect(() => {
-    if (minPrice || maxPrice || minRoom || maxRoom) {
-      const maxPriceSelect = maxPrice
-        ? maxPrice.value.replace("KES", "").replace("k", "000")
-        : "";
-      const minPriceSelect = minPrice
-        ? minPrice.value.replace("KES", "").replace("k", "000")
-        : "";
-      router.push({
-        query: {
-          ...router.query,
-          min_price: minPriceSelect,
-          max_price: maxPriceSelect,
-          min_rooms: minRoom,
-          max_rooms: maxRoom,
-        },
-      });
-    }
-  }, [minPrice, maxPrice, minRoom, maxRoom]);
+  // useEffect(() => {
+  //   if (minPrice || maxPrice || minRoom || maxRoom) {
+  //     const maxPriceSelect = maxPrice
+  //       ? maxPrice.value.replace("KES", "").replace("k", "000")
+  //       : "";
+  //     const minPriceSelect = minPrice
+  //       ? minPrice.value.replace("KES", "").replace("k", "000")
+  //       : "";
+  //     router.push({
+  //       query: {
+  //         ...router.query,
+  //         min_price: minPriceSelect,
+  //         max_price: maxPriceSelect,
+  //         min_rooms: minRoom,
+  //         max_rooms: maxRoom,
+  //       },
+  //     });
+  //   }
+  // }, [minPrice, maxPrice, minRoom, maxRoom]);
 
   const priceConversionRate = async () => {
     try {
@@ -358,21 +361,43 @@ function Stays({ userProfile, longitude, latitude }) {
 
   const [mobileSearchModal, setMobileSearchModal] = useState(false);
 
-  const [numOfAdults, setNumOfAdults] = useState(0);
+  const [numOfAdults, setNumOfAdults] = useState(
+    Number(router.query.min_capacity) || 0
+  );
 
   const [numOfChildren, setNumOfChildren] = useState(0);
 
   const [showDateRangePopup, setShowDateRangePopup] = useState(false);
-
-  const searchFilter = () => {
-    console.log("search Filter");
-  };
 
   const [numOfRoomsFilter, setNumOfRoomsFilter] = useState(0);
 
   const [numOfBedsFilter, setNumOfBedsFilter] = useState(0);
 
   const [numOfBathroomsFilter, setNumOfBathroomsFilter] = useState(0);
+
+  const filterMinPrice = () => {
+    if (minPrice) {
+      router.push({
+        query: {
+          ...router.query,
+          min_price: minPrice,
+          max_price: router.query.max_price || "",
+        },
+      });
+    }
+  };
+
+  const filterMaxPrice = () => {
+    if (maxPrice) {
+      router.push({
+        query: {
+          ...router.query,
+          min_price: router.query.min_price || "",
+          max_price: maxPrice,
+        },
+      });
+    }
+  };
 
   return (
     <div
@@ -395,8 +420,9 @@ function Stays({ userProfile, longitude, latitude }) {
           showRoomPopup: false,
           showHomeTypesPopup: false,
           showMobileFilter: false,
-          setShowDateRangePopup: false,
         });
+
+        setShowDateRangePopup(false);
       }}
     >
       <div className="fixed top-0 left-0 right-0 bg-white border-b z-20 pb-4">
@@ -489,13 +515,10 @@ function Stays({ userProfile, longitude, latitude }) {
                       ...turnOffAllPopup,
                       showSortPopup: false,
                     });
-                    if (router.query.ordering) {
-                      router.push({ query: { ...router.query, ordering: "" } });
-                    } else {
-                      router.push({
-                        query: { ...router.query, ordering: "-date_posted" },
-                      });
-                    }
+
+                    router.push({
+                      query: { ...router.query, ordering: "-date_posted" },
+                    });
                   }}
                 >
                   Newest
@@ -514,13 +537,10 @@ function Stays({ userProfile, longitude, latitude }) {
                       ...turnOffAllPopup,
                       showSortPopup: false,
                     });
-                    if (router.query.ordering) {
-                      router.push({ query: { ...router.query, ordering: "" } });
-                    } else {
-                      router.push({
-                        query: { ...router.query, ordering: "+price" },
-                      });
-                    }
+
+                    router.push({
+                      query: { ...router.query, ordering: "+price" },
+                    });
                   }}
                 >
                   Price(min to max)
@@ -539,13 +559,10 @@ function Stays({ userProfile, longitude, latitude }) {
                       ...turnOffAllPopup,
                       showSortPopup: false,
                     });
-                    if (router.query.ordering) {
-                      router.push({ query: { ...router.query, ordering: "" } });
-                    } else {
-                      router.push({
-                        query: { ...router.query, ordering: "-price" },
-                      });
-                    }
+
+                    router.push({
+                      query: { ...router.query, ordering: "-price" },
+                    });
                   }}
                 >
                   Price(max to min)
@@ -564,13 +581,10 @@ function Stays({ userProfile, longitude, latitude }) {
                       ...turnOffAllPopup,
                       showSortPopup: false,
                     });
-                    if (router.query.ordering) {
-                      router.push({ query: { ...router.query, ordering: "" } });
-                    } else {
-                      router.push({
-                        query: { ...router.query, ordering: "-rooms" },
-                      });
-                    }
+
+                    router.push({
+                      query: { ...router.query, ordering: "-rooms" },
+                    });
                   }}
                 >
                   Rooms(max to min)
@@ -589,13 +603,10 @@ function Stays({ userProfile, longitude, latitude }) {
                       ...turnOffAllPopup,
                       showSortPopup: false,
                     });
-                    if (router.query.ordering) {
-                      router.push({ query: { ...router.query, ordering: "" } });
-                    } else {
-                      router.push({
-                        query: { ...router.query, ordering: "-beds" },
-                      });
-                    }
+
+                    router.push({
+                      query: { ...router.query, ordering: "-beds" },
+                    });
                   }}
                 >
                   Beds(max to min)
@@ -614,13 +625,10 @@ function Stays({ userProfile, longitude, latitude }) {
                       ...turnOffAllPopup,
                       showSortPopup: false,
                     });
-                    if (router.query.ordering) {
-                      router.push({ query: { ...router.query, ordering: "" } });
-                    } else {
-                      router.push({
-                        query: { ...router.query, ordering: "-bathrooms" },
-                      });
-                    }
+
+                    router.push({
+                      query: { ...router.query, ordering: "-bathrooms" },
+                    });
                   }}
                 >
                   Bathrooms(max to min)
@@ -671,13 +679,12 @@ function Stays({ userProfile, longitude, latitude }) {
           closeModal={setMobileSearchModal}
           search={location}
           setSearch={setLocation}
-          date={dateRange}
-          setDate={setDateRange}
           numOfAdults={numOfAdults}
           setNumOfAdults={setNumOfAdults}
           numOfChildren={numOfChildren}
           setNumOfChildren={setNumOfChildren}
-          searchFilter={searchFilter}
+          searchFilter={apiSearchResult}
+          showSearchLoader={showSearchLoader}
         ></MobileSearchModal>
 
         <div
@@ -724,12 +731,11 @@ function Stays({ userProfile, longitude, latitude }) {
               onChange={(event) => {
                 onChange(event);
               }}
-              numOfAdults={state.numOfAdults}
+              numOfAdults={numOfAdults}
               numOfChildren={state.numOfChildren}
               numOfInfants={state.numOfInfants}
               addToAdults={() => {
-                console.log("add");
-                setState({ ...state, numOfAdults: state.numOfAdults + 1 });
+                setNumOfAdults(numOfAdults + 1);
               }}
               addToChildren={() => {
                 setState({
@@ -741,9 +747,7 @@ function Stays({ userProfile, longitude, latitude }) {
                 setState({ ...state, numOfInfants: state.numOfInfants + 1 });
               }}
               removeFromAdults={() => {
-                state.numOfAdults > 0
-                  ? setState({ ...state, numOfAdults: state.numOfAdults - 1 })
-                  : null;
+                numOfAdults > 0 ? setNumOfAdults(numOfAdults - 1) : null;
               }}
               removeFromChildren={() => {
                 state.numOfChildren > 0
@@ -854,13 +858,10 @@ function Stays({ userProfile, longitude, latitude }) {
                       ...turnOffAllPopup,
                       showSortPopup: false,
                     });
-                    if (router.query.ordering) {
-                      router.push({ query: { ...router.query, ordering: "" } });
-                    } else {
-                      router.push({
-                        query: { ...router.query, ordering: "-date_posted" },
-                      });
-                    }
+
+                    router.push({
+                      query: { ...router.query, ordering: "-date_posted" },
+                    });
                   }}
                 >
                   Newest
@@ -879,13 +880,10 @@ function Stays({ userProfile, longitude, latitude }) {
                       ...turnOffAllPopup,
                       showSortPopup: false,
                     });
-                    if (router.query.ordering) {
-                      router.push({ query: { ...router.query, ordering: "" } });
-                    } else {
-                      router.push({
-                        query: { ...router.query, ordering: "+price" },
-                      });
-                    }
+
+                    router.push({
+                      query: { ...router.query, ordering: "+price" },
+                    });
                   }}
                 >
                   Price(min to max)
@@ -904,13 +902,10 @@ function Stays({ userProfile, longitude, latitude }) {
                       ...turnOffAllPopup,
                       showSortPopup: false,
                     });
-                    if (router.query.ordering) {
-                      router.push({ query: { ...router.query, ordering: "" } });
-                    } else {
-                      router.push({
-                        query: { ...router.query, ordering: "-price" },
-                      });
-                    }
+
+                    router.push({
+                      query: { ...router.query, ordering: "-price" },
+                    });
                   }}
                 >
                   Price(max to min)
@@ -929,13 +924,10 @@ function Stays({ userProfile, longitude, latitude }) {
                       ...turnOffAllPopup,
                       showSortPopup: false,
                     });
-                    if (router.query.ordering) {
-                      router.push({ query: { ...router.query, ordering: "" } });
-                    } else {
-                      router.push({
-                        query: { ...router.query, ordering: "-rooms" },
-                      });
-                    }
+
+                    router.push({
+                      query: { ...router.query, ordering: "-rooms" },
+                    });
                   }}
                 >
                   Rooms(max to min)
@@ -954,13 +946,10 @@ function Stays({ userProfile, longitude, latitude }) {
                       ...turnOffAllPopup,
                       showSortPopup: false,
                     });
-                    if (router.query.ordering) {
-                      router.push({ query: { ...router.query, ordering: "" } });
-                    } else {
-                      router.push({
-                        query: { ...router.query, ordering: "-beds" },
-                      });
-                    }
+
+                    router.push({
+                      query: { ...router.query, ordering: "-beds" },
+                    });
                   }}
                 >
                   Beds(max to min)
@@ -979,13 +968,10 @@ function Stays({ userProfile, longitude, latitude }) {
                       ...turnOffAllPopup,
                       showSortPopup: false,
                     });
-                    if (router.query.ordering) {
-                      router.push({ query: { ...router.query, ordering: "" } });
-                    } else {
-                      router.push({
-                        query: { ...router.query, ordering: "-bathrooms" },
-                      });
-                    }
+
+                    router.push({
+                      query: { ...router.query, ordering: "-bathrooms" },
+                    });
                   }}
                 >
                   Bathrooms(max to min)
@@ -1614,7 +1600,7 @@ function Stays({ userProfile, longitude, latitude }) {
 
       <div className="mt-36 md:mt-44 flex relative h-full overflow-y-scroll">
         <div className={"hidden lg:block w-2/4 px-4 h-[75vh] relative"}>
-          <Map></Map>
+          <Map stays={stays}></Map>
         </div>
 
         {!mobileMap && (
@@ -1629,6 +1615,7 @@ function Stays({ userProfile, longitude, latitude }) {
               userLatLng={userLatLng}
               itemsInCart={itemsInCart}
               itemsInOrders={itemsInOrders}
+              stays={stays}
               userProfile={userProfile}
             ></Listings>
             {filterStayLoading && (
@@ -1671,12 +1658,23 @@ function Stays({ userProfile, longitude, latitude }) {
                     maxPriceSelected={maxPrice}
                   ></PriceFilter> */}
 
-              <div className="flex items-center gap-3 px-4">
+              <div className="flex items-center gap-3 px-2">
                 <div className="w-[50%] border rounded-md h-fit px-2 py-1">
                   <span className="text-sm text-gray-500">Min price</span>
                   <div className="flex items-center">
                     <div className="text-sm font-bold mr-2 ">$</div>
-                    <input className="w-full focus:outline-none text-sm " />
+                    <input
+                      onBlur={() => {
+                        filterMinPrice();
+                      }}
+                      name="min-price"
+                      value={minPrice}
+                      type="number"
+                      onChange={(event) => {
+                        setMinPrice(event.target.value);
+                      }}
+                      className="w-full focus:outline-none text-sm "
+                    />
                   </div>
                 </div>
                 <div> - </div>
@@ -1684,7 +1682,18 @@ function Stays({ userProfile, longitude, latitude }) {
                   <span className="text-sm text-gray-500">Max price</span>
                   <div className="flex items-center">
                     <div className="text-sm font-bold mr-2 ">$</div>
-                    <input className="w-full focus:outline-none text-sm " />
+                    <input
+                      onBlur={() => {
+                        filterMaxPrice();
+                      }}
+                      name="max-price"
+                      value={maxPrice}
+                      type="number"
+                      onChange={(event) => {
+                        setMaxPrice(event.target.value);
+                      }}
+                      className="w-full focus:outline-none text-sm "
+                    />
                   </div>
                 </div>
               </div>
@@ -1695,15 +1704,28 @@ function Stays({ userProfile, longitude, latitude }) {
             <div className="mt-2 mb-4">
               <h1 className="font-bold text-base mb-2">Rooms</h1>
 
-              <div className="flex flex-wrap items-center gap-3 px-4">
+              <div className="flex flex-wrap items-center gap-3 px-2">
                 <div
                   onClick={() => {
-                    setNumOfRoomsFilter(0);
+                    router.push({
+                      query: {
+                        ...router.query,
+                        max_rooms: "",
+                        min_rooms: "",
+                      },
+                    });
                   }}
                   className={
-                    "px-3 py-2 cursor-pointer border rounded-3xl bg-slate-800 text-white text-sm font-bold " +
-                    (numOfRoomsFilter !== 0
-                      ? "!bg-transparent !text-black"
+                    "px-3 py-2 cursor-pointer border rounded-3xl text-sm font-bold " +
+                    (router.query.max_rooms != 1 &&
+                    router.query.max_rooms != 2 &&
+                    router.query.max_rooms != 3 &&
+                    router.query.max_rooms != 4 &&
+                    router.query.max_rooms != 5 &&
+                    router.query.max_rooms != 6 &&
+                    router.query.max_rooms != 7 &&
+                    router.query.min_rooms != 8
+                      ? "bg-slate-800 text-white"
                       : "")
                   }
                 >
@@ -1712,11 +1734,15 @@ function Stays({ userProfile, longitude, latitude }) {
 
                 <div
                   onClick={() => {
-                    setNumOfRoomsFilter(1);
+                    router.push({
+                      query: { ...router.query, max_rooms: 1, min_rooms: "" },
+                    });
                   }}
                   className={
                     "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                    (numOfRoomsFilter === 1 ? "!bg-slate-800 !text-white" : "")
+                    (router.query.max_rooms == 1
+                      ? "!bg-slate-800 !text-white"
+                      : "")
                   }
                 >
                   1
@@ -1724,11 +1750,15 @@ function Stays({ userProfile, longitude, latitude }) {
 
                 <div
                   onClick={() => {
-                    setNumOfRoomsFilter(2);
+                    router.push({
+                      query: { ...router.query, max_rooms: 2, min_rooms: "" },
+                    });
                   }}
                   className={
                     "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                    (numOfRoomsFilter === 2 ? "!bg-slate-800 !text-white" : "")
+                    (router.query.max_rooms == 2
+                      ? "!bg-slate-800 !text-white"
+                      : "")
                   }
                 >
                   2
@@ -1736,11 +1766,15 @@ function Stays({ userProfile, longitude, latitude }) {
 
                 <div
                   onClick={() => {
-                    setNumOfRoomsFilter(3);
+                    router.push({
+                      query: { ...router.query, max_rooms: 3, min_rooms: "" },
+                    });
                   }}
                   className={
                     "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                    (numOfRoomsFilter === 3 ? "!bg-slate-800 !text-white" : "")
+                    (router.query.max_rooms == 3
+                      ? "!bg-slate-800 !text-white"
+                      : "")
                   }
                 >
                   3
@@ -1748,11 +1782,15 @@ function Stays({ userProfile, longitude, latitude }) {
 
                 <div
                   onClick={() => {
-                    setNumOfRoomsFilter(4);
+                    router.push({
+                      query: { ...router.query, max_rooms: 4, min_rooms: "" },
+                    });
                   }}
                   className={
                     "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                    (numOfRoomsFilter === 4 ? "!bg-slate-800 !text-white" : "")
+                    (router.query.max_rooms == 4
+                      ? "!bg-slate-800 !text-white"
+                      : "")
                   }
                 >
                   4
@@ -1760,11 +1798,15 @@ function Stays({ userProfile, longitude, latitude }) {
 
                 <div
                   onClick={() => {
-                    setNumOfRoomsFilter(5);
+                    router.push({
+                      query: { ...router.query, max_rooms: 5, min_rooms: "" },
+                    });
                   }}
                   className={
                     "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                    (numOfRoomsFilter === 5 ? "!bg-slate-800 !text-white" : "")
+                    (router.query.max_rooms == 5
+                      ? "!bg-slate-800 !text-white"
+                      : "")
                   }
                 >
                   5
@@ -1772,11 +1814,15 @@ function Stays({ userProfile, longitude, latitude }) {
 
                 <div
                   onClick={() => {
-                    setNumOfRoomsFilter(6);
+                    router.push({
+                      query: { ...router.query, max_rooms: 6, min_rooms: "" },
+                    });
                   }}
                   className={
                     "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                    (numOfRoomsFilter === 6 ? "!bg-slate-800 !text-white" : "")
+                    (router.query.max_rooms == 6
+                      ? "!bg-slate-800 !text-white"
+                      : "")
                   }
                 >
                   6
@@ -1784,11 +1830,15 @@ function Stays({ userProfile, longitude, latitude }) {
 
                 <div
                   onClick={() => {
-                    setNumOfRoomsFilter(7);
+                    router.push({
+                      query: { ...router.query, max_rooms: 7, min_rooms: "" },
+                    });
                   }}
                   className={
                     "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                    (numOfRoomsFilter === 7 ? "!bg-slate-800 !text-white" : "")
+                    (router.query.max_rooms == 7
+                      ? "!bg-slate-800 !text-white"
+                      : "")
                   }
                 >
                   7
@@ -1796,11 +1846,15 @@ function Stays({ userProfile, longitude, latitude }) {
 
                 <div
                   onClick={() => {
-                    setNumOfRoomsFilter(8);
+                    router.push({
+                      query: { ...router.query, min_rooms: 8, max_rooms: "" },
+                    });
                   }}
                   className={
                     "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                    (numOfRoomsFilter === 8 ? "!bg-slate-800 !text-white" : "")
+                    (router.query.min_rooms == 8
+                      ? "!bg-slate-800 !text-white"
+                      : "")
                   }
                 >
                   8+
@@ -1811,14 +1865,29 @@ function Stays({ userProfile, longitude, latitude }) {
             <div className="mt-2 mb-4">
               <h1 className="font-bold text-base mb-2">Beds</h1>
 
-              <div className="flex flex-wrap items-center gap-3 px-4">
+              <div className="flex flex-wrap items-center gap-3 px-2">
                 <div
                   onClick={() => {
-                    setNumOfBedsFilter(0);
+                    router.push({
+                      query: {
+                        ...router.query,
+                        max_beds: "",
+                        min_beds: "",
+                      },
+                    });
                   }}
                   className={
-                    "px-3 py-2 cursor-pointer border rounded-3xl bg-slate-800 text-white text-sm font-bold " +
-                    (numOfBedsFilter !== 0 ? "!bg-transparent !text-black" : "")
+                    "px-3 py-2 cursor-pointer border rounded-3xl text-sm font-bold " +
+                    (router.query.max_beds != 1 &&
+                    router.query.max_beds != 2 &&
+                    router.query.max_beds != 3 &&
+                    router.query.max_beds != 4 &&
+                    router.query.max_beds != 5 &&
+                    router.query.max_beds != 6 &&
+                    router.query.max_beds != 7 &&
+                    router.query.min_beds != 8
+                      ? "bg-slate-800 text-white"
+                      : "")
                   }
                 >
                   Any
@@ -1826,11 +1895,15 @@ function Stays({ userProfile, longitude, latitude }) {
 
                 <div
                   onClick={() => {
-                    setNumOfBedsFilter(1);
+                    router.push({
+                      query: { ...router.query, max_beds: 1, min_beds: "" },
+                    });
                   }}
                   className={
                     "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                    (numOfBedsFilter === 1 ? "!bg-slate-800 !text-white" : "")
+                    (router.query.max_beds == 1
+                      ? "!bg-slate-800 !text-white"
+                      : "")
                   }
                 >
                   1
@@ -1838,11 +1911,15 @@ function Stays({ userProfile, longitude, latitude }) {
 
                 <div
                   onClick={() => {
-                    setNumOfBedsFilter(2);
+                    router.push({
+                      query: { ...router.query, max_beds: 2, min_beds: "" },
+                    });
                   }}
                   className={
                     "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                    (numOfBedsFilter === 2 ? "!bg-slate-800 !text-white" : "")
+                    (router.query.max_beds == 2
+                      ? "!bg-slate-800 !text-white"
+                      : "")
                   }
                 >
                   2
@@ -1850,11 +1927,15 @@ function Stays({ userProfile, longitude, latitude }) {
 
                 <div
                   onClick={() => {
-                    setNumOfBedsFilter(3);
+                    router.push({
+                      query: { ...router.query, max_beds: 3, min_beds: "" },
+                    });
                   }}
                   className={
                     "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                    (numOfBedsFilter === 3 ? "!bg-slate-800 !text-white" : "")
+                    (router.query.max_beds == 3
+                      ? "!bg-slate-800 !text-white"
+                      : "")
                   }
                 >
                   3
@@ -1862,11 +1943,15 @@ function Stays({ userProfile, longitude, latitude }) {
 
                 <div
                   onClick={() => {
-                    setNumOfBedsFilter(4);
+                    router.push({
+                      query: { ...router.query, max_beds: 4, min_beds: "" },
+                    });
                   }}
                   className={
                     "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                    (numOfBedsFilter === 4 ? "!bg-slate-800 !text-white" : "")
+                    (router.query.max_beds == 4
+                      ? "!bg-slate-800 !text-white"
+                      : "")
                   }
                 >
                   4
@@ -1874,11 +1959,15 @@ function Stays({ userProfile, longitude, latitude }) {
 
                 <div
                   onClick={() => {
-                    setNumOfBedsFilter(5);
+                    router.push({
+                      query: { ...router.query, max_beds: 5, min_beds: "" },
+                    });
                   }}
                   className={
                     "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                    (numOfBedsFilter === 5 ? "!bg-slate-800 !text-white" : "")
+                    (router.query.max_beds == 5
+                      ? "!bg-slate-800 !text-white"
+                      : "")
                   }
                 >
                   5
@@ -1886,11 +1975,15 @@ function Stays({ userProfile, longitude, latitude }) {
 
                 <div
                   onClick={() => {
-                    setNumOfBedsFilter(6);
+                    router.push({
+                      query: { ...router.query, max_beds: 6, min_beds: "" },
+                    });
                   }}
                   className={
                     "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                    (numOfBedsFilter === 6 ? "!bg-slate-800 !text-white" : "")
+                    (router.query.max_beds == 6
+                      ? "!bg-slate-800 !text-white"
+                      : "")
                   }
                 >
                   6
@@ -1898,11 +1991,15 @@ function Stays({ userProfile, longitude, latitude }) {
 
                 <div
                   onClick={() => {
-                    setNumOfBedsFilter(7);
+                    router.push({
+                      query: { ...router.query, max_beds: 7, min_beds: "" },
+                    });
                   }}
                   className={
                     "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                    (numOfBedsFilter === 7 ? "!bg-slate-800 !text-white" : "")
+                    (router.query.max_beds == 7
+                      ? "!bg-slate-800 !text-white"
+                      : "")
                   }
                 >
                   7
@@ -1910,11 +2007,15 @@ function Stays({ userProfile, longitude, latitude }) {
 
                 <div
                   onClick={() => {
-                    setNumOfBedsFilter(8);
+                    router.push({
+                      query: { ...router.query, min_beds: 8, max_beds: "" },
+                    });
                   }}
                   className={
                     "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                    (numOfBedsFilter === 8 ? "!bg-slate-800 !text-white" : "")
+                    (router.query.min_beds == 8
+                      ? "!bg-slate-800 !text-white"
+                      : "")
                   }
                 >
                   8+
@@ -1925,15 +2026,28 @@ function Stays({ userProfile, longitude, latitude }) {
             <div className="mt-2 mb-4">
               <h1 className="font-bold text-base mb-2">Bathrooms</h1>
 
-              <div className="flex flex-wrap items-center gap-3 px-4">
+              <div className="flex flex-wrap items-center gap-3 px-2">
                 <div
                   onClick={() => {
-                    setNumOfBathroomsFilter(0);
+                    router.push({
+                      query: {
+                        ...router.query,
+                        max_bathrooms: "",
+                        min_bathrooms: "",
+                      },
+                    });
                   }}
                   className={
-                    "px-3 py-2 cursor-pointer border rounded-3xl bg-slate-800 text-white text-sm font-bold " +
-                    (numOfBathroomsFilter !== 0
-                      ? "!bg-transparent !text-black"
+                    "px-3 py-2 cursor-pointer border rounded-3xl text-sm font-bold " +
+                    (router.query.max_bathrooms != 1 &&
+                    router.query.max_bathrooms != 2 &&
+                    router.query.max_bathrooms != 3 &&
+                    router.query.max_bathrooms != 4 &&
+                    router.query.max_bathrooms != 5 &&
+                    router.query.max_bathrooms != 6 &&
+                    router.query.max_bathrooms != 7 &&
+                    router.query.min_bathrooms != 8
+                      ? "bg-slate-800 text-white"
                       : "")
                   }
                 >
@@ -1942,11 +2056,17 @@ function Stays({ userProfile, longitude, latitude }) {
 
                 <div
                   onClick={() => {
-                    setNumOfBathroomsFilter(1);
+                    router.push({
+                      query: {
+                        ...router.query,
+                        max_bathrooms: 1,
+                        min_bathrooms: "",
+                      },
+                    });
                   }}
                   className={
                     "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                    (numOfBathroomsFilter === 1
+                    (router.query.max_bathrooms == 1
                       ? "!bg-slate-800 !text-white"
                       : "")
                   }
@@ -1956,11 +2076,17 @@ function Stays({ userProfile, longitude, latitude }) {
 
                 <div
                   onClick={() => {
-                    setNumOfBathroomsFilter(2);
+                    router.push({
+                      query: {
+                        ...router.query,
+                        max_bathrooms: 2,
+                        min_bathrooms: "",
+                      },
+                    });
                   }}
                   className={
                     "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                    (numOfBathroomsFilter === 2
+                    (router.query.max_bathrooms == 2
                       ? "!bg-slate-800 !text-white"
                       : "")
                   }
@@ -1970,11 +2096,17 @@ function Stays({ userProfile, longitude, latitude }) {
 
                 <div
                   onClick={() => {
-                    setNumOfBathroomsFilter(3);
+                    router.push({
+                      query: {
+                        ...router.query,
+                        max_bathrooms: 3,
+                        min_bathrooms: "",
+                      },
+                    });
                   }}
                   className={
                     "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                    (numOfBathroomsFilter === 3
+                    (router.query.max_bathrooms == 3
                       ? "!bg-slate-800 !text-white"
                       : "")
                   }
@@ -1984,11 +2116,17 @@ function Stays({ userProfile, longitude, latitude }) {
 
                 <div
                   onClick={() => {
-                    setNumOfBathroomsFilter(4);
+                    router.push({
+                      query: {
+                        ...router.query,
+                        max_bathrooms: 4,
+                        min_bathrooms: "",
+                      },
+                    });
                   }}
                   className={
                     "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                    (numOfBathroomsFilter === 4
+                    (router.query.max_bathrooms == 4
                       ? "!bg-slate-800 !text-white"
                       : "")
                   }
@@ -1998,11 +2136,17 @@ function Stays({ userProfile, longitude, latitude }) {
 
                 <div
                   onClick={() => {
-                    setNumOfBathroomsFilter(5);
+                    router.push({
+                      query: {
+                        ...router.query,
+                        max_bathrooms: 5,
+                        min_bathrooms: "",
+                      },
+                    });
                   }}
                   className={
                     "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                    (numOfBathroomsFilter === 5
+                    (router.query.max_bathrooms == 5
                       ? "!bg-slate-800 !text-white"
                       : "")
                   }
@@ -2012,11 +2156,17 @@ function Stays({ userProfile, longitude, latitude }) {
 
                 <div
                   onClick={() => {
-                    setNumOfBathroomsFilter(6);
+                    router.push({
+                      query: {
+                        ...router.query,
+                        max_bathrooms: 6,
+                        min_bathrooms: "",
+                      },
+                    });
                   }}
                   className={
                     "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                    (numOfBathroomsFilter === 6
+                    (router.query.max_bathrooms == 6
                       ? "!bg-slate-800 !text-white"
                       : "")
                   }
@@ -2026,11 +2176,17 @@ function Stays({ userProfile, longitude, latitude }) {
 
                 <div
                   onClick={() => {
-                    setNumOfBathroomsFilter(7);
+                    router.push({
+                      query: {
+                        ...router.query,
+                        max_bathrooms: 7,
+                        min_bathrooms: "",
+                      },
+                    });
                   }}
                   className={
                     "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                    (numOfBathroomsFilter === 7
+                    (router.query.max_bathrooms == 7
                       ? "!bg-slate-800 !text-white"
                       : "")
                   }
@@ -2040,11 +2196,17 @@ function Stays({ userProfile, longitude, latitude }) {
 
                 <div
                   onClick={() => {
-                    setNumOfBathroomsFilter(8);
+                    router.push({
+                      query: {
+                        ...router.query,
+                        min_bathrooms: 8,
+                        max_bathrooms: "",
+                      },
+                    });
                   }}
                   className={
                     "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                    (numOfBathroomsFilter === 8
+                    (router.query.min_bathrooms == 8
                       ? "!bg-slate-800 !text-white"
                       : "")
                   }
@@ -2075,11 +2237,6 @@ function Stays({ userProfile, longitude, latitude }) {
 
           <hr className="-mx-4 my-6" />
 
-          <div className="text-lg font-bold mb-2 mt-2">Travel themes</div>
-          <ThemeFilter></ThemeFilter>
-
-          <hr className="-mx-4 my-6" />
-
           <div className="text-lg font-bold mb-2 mt-8">Amenities</div>
           <Amenities></Amenities>
         </div>
@@ -2089,17 +2246,30 @@ function Stays({ userProfile, longitude, latitude }) {
           }
         >
           <div className="flex justify-between items-center gap-2">
-            <div onClick={() => {}} className="underline cursor-pointer">
+            <div
+              onClick={() => {
+                router.push({
+                  pathname: "/stays",
+                });
+              }}
+              className="underline cursor-pointer"
+            >
               Clear all
             </div>
 
             <Button
-              onClick={() => {}}
+              onClick={() => {
+                setState({
+                  ...state,
+                  ...turnOffAllPopup,
+                  showMobileFilter: false,
+                });
+              }}
               className={
                 "!bg-gradient-to-r !px-4 from-pink-500 via-red-500 to-yellow-500 !text-white "
               }
             >
-              Show all 92 stays
+              Show all {stays.length} stays
             </Button>
           </div>
         </div>
@@ -2204,7 +2374,18 @@ function Stays({ userProfile, longitude, latitude }) {
                     <span className="text-sm text-gray-500">Min price</span>
                     <div className="flex items-center">
                       <div className="text-sm font-bold mr-2 ">$</div>
-                      <input className="w-full focus:outline-none text-sm " />
+                      <input
+                        onBlur={() => {
+                          filterMinPrice();
+                        }}
+                        name="min-price"
+                        value={minPrice}
+                        type="number"
+                        onChange={(event) => {
+                          setMinPrice(event.target.value);
+                        }}
+                        className="w-full focus:outline-none text-sm "
+                      />
                     </div>
                   </div>
                   <div> - </div>
@@ -2212,7 +2393,18 @@ function Stays({ userProfile, longitude, latitude }) {
                     <span className="text-sm text-gray-500">Max price</span>
                     <div className="flex items-center">
                       <div className="text-sm font-bold mr-2 ">$</div>
-                      <input className="w-full focus:outline-none text-sm " />
+                      <input
+                        onBlur={() => {
+                          filterMaxPrice();
+                        }}
+                        name="max-price"
+                        value={maxPrice}
+                        type="number"
+                        onChange={(event) => {
+                          setMaxPrice(event.target.value);
+                        }}
+                        className="w-full focus:outline-none text-sm "
+                      />
                     </div>
                   </div>
                 </div>
@@ -2226,12 +2418,25 @@ function Stays({ userProfile, longitude, latitude }) {
                 <div className="flex flex-wrap items-center gap-3 px-10">
                   <div
                     onClick={() => {
-                      setNumOfRoomsFilter(0);
+                      router.push({
+                        query: {
+                          ...router.query,
+                          max_rooms: "",
+                          min_rooms: "",
+                        },
+                      });
                     }}
                     className={
-                      "px-3 py-2 cursor-pointer border rounded-3xl bg-slate-800 text-white text-sm font-bold " +
-                      (numOfRoomsFilter !== 0
-                        ? "!bg-transparent !text-black"
+                      "px-3 py-2 cursor-pointer border rounded-3xl text-sm font-bold " +
+                      (router.query.max_rooms != 1 &&
+                      router.query.max_rooms != 2 &&
+                      router.query.max_rooms != 3 &&
+                      router.query.max_rooms != 4 &&
+                      router.query.max_rooms != 5 &&
+                      router.query.max_rooms != 6 &&
+                      router.query.max_rooms != 7 &&
+                      router.query.min_rooms != 8
+                        ? "bg-slate-800 text-white"
                         : "")
                     }
                   >
@@ -2240,11 +2445,13 @@ function Stays({ userProfile, longitude, latitude }) {
 
                   <div
                     onClick={() => {
-                      setNumOfRoomsFilter(1);
+                      router.push({
+                        query: { ...router.query, max_rooms: 1, min_rooms: "" },
+                      });
                     }}
                     className={
                       "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (numOfRoomsFilter === 1
+                      (router.query.max_rooms == 1
                         ? "!bg-slate-800 !text-white"
                         : "")
                     }
@@ -2254,11 +2461,13 @@ function Stays({ userProfile, longitude, latitude }) {
 
                   <div
                     onClick={() => {
-                      setNumOfRoomsFilter(2);
+                      router.push({
+                        query: { ...router.query, max_rooms: 2, min_rooms: "" },
+                      });
                     }}
                     className={
                       "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (numOfRoomsFilter === 2
+                      (router.query.max_rooms == 2
                         ? "!bg-slate-800 !text-white"
                         : "")
                     }
@@ -2268,11 +2477,13 @@ function Stays({ userProfile, longitude, latitude }) {
 
                   <div
                     onClick={() => {
-                      setNumOfRoomsFilter(3);
+                      router.push({
+                        query: { ...router.query, max_rooms: 3, min_rooms: "" },
+                      });
                     }}
                     className={
                       "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (numOfRoomsFilter === 3
+                      (router.query.max_rooms == 3
                         ? "!bg-slate-800 !text-white"
                         : "")
                     }
@@ -2282,11 +2493,13 @@ function Stays({ userProfile, longitude, latitude }) {
 
                   <div
                     onClick={() => {
-                      setNumOfRoomsFilter(4);
+                      router.push({
+                        query: { ...router.query, max_rooms: 4, min_rooms: "" },
+                      });
                     }}
                     className={
                       "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (numOfRoomsFilter === 4
+                      (router.query.max_rooms == 4
                         ? "!bg-slate-800 !text-white"
                         : "")
                     }
@@ -2296,11 +2509,13 @@ function Stays({ userProfile, longitude, latitude }) {
 
                   <div
                     onClick={() => {
-                      setNumOfRoomsFilter(5);
+                      router.push({
+                        query: { ...router.query, max_rooms: 5, min_rooms: "" },
+                      });
                     }}
                     className={
                       "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (numOfRoomsFilter === 5
+                      (router.query.max_rooms == 5
                         ? "!bg-slate-800 !text-white"
                         : "")
                     }
@@ -2310,11 +2525,13 @@ function Stays({ userProfile, longitude, latitude }) {
 
                   <div
                     onClick={() => {
-                      setNumOfRoomsFilter(6);
+                      router.push({
+                        query: { ...router.query, max_rooms: 6, min_rooms: "" },
+                      });
                     }}
                     className={
                       "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (numOfRoomsFilter === 6
+                      (router.query.max_rooms == 6
                         ? "!bg-slate-800 !text-white"
                         : "")
                     }
@@ -2324,11 +2541,13 @@ function Stays({ userProfile, longitude, latitude }) {
 
                   <div
                     onClick={() => {
-                      setNumOfRoomsFilter(7);
+                      router.push({
+                        query: { ...router.query, max_rooms: 7, min_rooms: "" },
+                      });
                     }}
                     className={
                       "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (numOfRoomsFilter === 7
+                      (router.query.max_rooms == 7
                         ? "!bg-slate-800 !text-white"
                         : "")
                     }
@@ -2338,11 +2557,13 @@ function Stays({ userProfile, longitude, latitude }) {
 
                   <div
                     onClick={() => {
-                      setNumOfRoomsFilter(8);
+                      router.push({
+                        query: { ...router.query, min_rooms: 8, max_rooms: "" },
+                      });
                     }}
                     className={
                       "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (numOfRoomsFilter === 8
+                      (router.query.min_rooms == 8
                         ? "!bg-slate-800 !text-white"
                         : "")
                     }
@@ -2358,12 +2579,25 @@ function Stays({ userProfile, longitude, latitude }) {
                 <div className="flex flex-wrap items-center gap-3 px-10">
                   <div
                     onClick={() => {
-                      setNumOfBedsFilter(0);
+                      router.push({
+                        query: {
+                          ...router.query,
+                          max_beds: "",
+                          min_beds: "",
+                        },
+                      });
                     }}
                     className={
-                      "px-3 py-2 cursor-pointer border rounded-3xl bg-slate-800 text-white text-sm font-bold " +
-                      (numOfBedsFilter !== 0
-                        ? "!bg-transparent !text-black"
+                      "px-3 py-2 cursor-pointer border rounded-3xl text-sm font-bold " +
+                      (router.query.max_beds != 1 &&
+                      router.query.max_beds != 2 &&
+                      router.query.max_beds != 3 &&
+                      router.query.max_beds != 4 &&
+                      router.query.max_beds != 5 &&
+                      router.query.max_beds != 6 &&
+                      router.query.max_beds != 7 &&
+                      router.query.min_beds != 8
+                        ? "bg-slate-800 text-white"
                         : "")
                     }
                   >
@@ -2372,11 +2606,15 @@ function Stays({ userProfile, longitude, latitude }) {
 
                   <div
                     onClick={() => {
-                      setNumOfBedsFilter(1);
+                      router.push({
+                        query: { ...router.query, max_beds: 1, min_beds: "" },
+                      });
                     }}
                     className={
                       "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (numOfBedsFilter === 1 ? "!bg-slate-800 !text-white" : "")
+                      (router.query.max_beds == 1
+                        ? "!bg-slate-800 !text-white"
+                        : "")
                     }
                   >
                     1
@@ -2384,11 +2622,15 @@ function Stays({ userProfile, longitude, latitude }) {
 
                   <div
                     onClick={() => {
-                      setNumOfBedsFilter(2);
+                      router.push({
+                        query: { ...router.query, max_beds: 2, min_beds: "" },
+                      });
                     }}
                     className={
                       "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (numOfBedsFilter === 2 ? "!bg-slate-800 !text-white" : "")
+                      (router.query.max_beds == 2
+                        ? "!bg-slate-800 !text-white"
+                        : "")
                     }
                   >
                     2
@@ -2396,11 +2638,15 @@ function Stays({ userProfile, longitude, latitude }) {
 
                   <div
                     onClick={() => {
-                      setNumOfBedsFilter(3);
+                      router.push({
+                        query: { ...router.query, max_beds: 3, min_beds: "" },
+                      });
                     }}
                     className={
                       "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (numOfBedsFilter === 3 ? "!bg-slate-800 !text-white" : "")
+                      (router.query.max_beds == 3
+                        ? "!bg-slate-800 !text-white"
+                        : "")
                     }
                   >
                     3
@@ -2408,11 +2654,15 @@ function Stays({ userProfile, longitude, latitude }) {
 
                   <div
                     onClick={() => {
-                      setNumOfBedsFilter(4);
+                      router.push({
+                        query: { ...router.query, max_beds: 4, min_beds: "" },
+                      });
                     }}
                     className={
                       "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (numOfBedsFilter === 4 ? "!bg-slate-800 !text-white" : "")
+                      (router.query.max_beds == 4
+                        ? "!bg-slate-800 !text-white"
+                        : "")
                     }
                   >
                     4
@@ -2420,11 +2670,15 @@ function Stays({ userProfile, longitude, latitude }) {
 
                   <div
                     onClick={() => {
-                      setNumOfBedsFilter(5);
+                      router.push({
+                        query: { ...router.query, max_beds: 5, min_beds: "" },
+                      });
                     }}
                     className={
                       "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (numOfBedsFilter === 5 ? "!bg-slate-800 !text-white" : "")
+                      (router.query.max_beds == 5
+                        ? "!bg-slate-800 !text-white"
+                        : "")
                     }
                   >
                     5
@@ -2432,11 +2686,15 @@ function Stays({ userProfile, longitude, latitude }) {
 
                   <div
                     onClick={() => {
-                      setNumOfBedsFilter(6);
+                      router.push({
+                        query: { ...router.query, max_beds: 6, min_beds: "" },
+                      });
                     }}
                     className={
                       "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (numOfBedsFilter === 6 ? "!bg-slate-800 !text-white" : "")
+                      (router.query.max_beds == 6
+                        ? "!bg-slate-800 !text-white"
+                        : "")
                     }
                   >
                     6
@@ -2444,11 +2702,15 @@ function Stays({ userProfile, longitude, latitude }) {
 
                   <div
                     onClick={() => {
-                      setNumOfBedsFilter(7);
+                      router.push({
+                        query: { ...router.query, max_beds: 7, min_beds: "" },
+                      });
                     }}
                     className={
                       "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (numOfBedsFilter === 7 ? "!bg-slate-800 !text-white" : "")
+                      (router.query.max_beds == 7
+                        ? "!bg-slate-800 !text-white"
+                        : "")
                     }
                   >
                     7
@@ -2456,11 +2718,15 @@ function Stays({ userProfile, longitude, latitude }) {
 
                   <div
                     onClick={() => {
-                      setNumOfBedsFilter(8);
+                      router.push({
+                        query: { ...router.query, min_beds: 8, max_beds: "" },
+                      });
                     }}
                     className={
                       "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (numOfBedsFilter === 8 ? "!bg-slate-800 !text-white" : "")
+                      (router.query.min_beds == 8
+                        ? "!bg-slate-800 !text-white"
+                        : "")
                     }
                   >
                     8+
@@ -2474,12 +2740,25 @@ function Stays({ userProfile, longitude, latitude }) {
                 <div className="flex flex-wrap items-center gap-3 px-10">
                   <div
                     onClick={() => {
-                      setNumOfBathroomsFilter(0);
+                      router.push({
+                        query: {
+                          ...router.query,
+                          max_bathrooms: "",
+                          min_bathrooms: "",
+                        },
+                      });
                     }}
                     className={
-                      "px-3 py-2 cursor-pointer border rounded-3xl bg-slate-800 text-white text-sm font-bold " +
-                      (numOfBathroomsFilter !== 0
-                        ? "!bg-transparent !text-black"
+                      "px-3 py-2 cursor-pointer border rounded-3xl text-sm font-bold " +
+                      (router.query.max_bathrooms != 1 &&
+                      router.query.max_bathrooms != 2 &&
+                      router.query.max_bathrooms != 3 &&
+                      router.query.max_bathrooms != 4 &&
+                      router.query.max_bathrooms != 5 &&
+                      router.query.max_bathrooms != 6 &&
+                      router.query.max_bathrooms != 7 &&
+                      router.query.min_bathrooms != 8
+                        ? "bg-slate-800 text-white"
                         : "")
                     }
                   >
@@ -2488,11 +2767,17 @@ function Stays({ userProfile, longitude, latitude }) {
 
                   <div
                     onClick={() => {
-                      setNumOfBathroomsFilter(1);
+                      router.push({
+                        query: {
+                          ...router.query,
+                          max_bathrooms: 1,
+                          min_bathrooms: "",
+                        },
+                      });
                     }}
                     className={
                       "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (numOfBathroomsFilter === 1
+                      (router.query.max_bathrooms == 1
                         ? "!bg-slate-800 !text-white"
                         : "")
                     }
@@ -2502,11 +2787,17 @@ function Stays({ userProfile, longitude, latitude }) {
 
                   <div
                     onClick={() => {
-                      setNumOfBathroomsFilter(2);
+                      router.push({
+                        query: {
+                          ...router.query,
+                          max_bathrooms: 2,
+                          min_bathrooms: "",
+                        },
+                      });
                     }}
                     className={
                       "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (numOfBathroomsFilter === 2
+                      (router.query.max_bathrooms == 2
                         ? "!bg-slate-800 !text-white"
                         : "")
                     }
@@ -2516,11 +2807,17 @@ function Stays({ userProfile, longitude, latitude }) {
 
                   <div
                     onClick={() => {
-                      setNumOfBathroomsFilter(3);
+                      router.push({
+                        query: {
+                          ...router.query,
+                          max_bathrooms: 3,
+                          min_bathrooms: "",
+                        },
+                      });
                     }}
                     className={
                       "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (numOfBathroomsFilter === 3
+                      (router.query.max_bathrooms == 3
                         ? "!bg-slate-800 !text-white"
                         : "")
                     }
@@ -2530,11 +2827,17 @@ function Stays({ userProfile, longitude, latitude }) {
 
                   <div
                     onClick={() => {
-                      setNumOfBathroomsFilter(4);
+                      router.push({
+                        query: {
+                          ...router.query,
+                          max_bathrooms: 4,
+                          min_bathrooms: "",
+                        },
+                      });
                     }}
                     className={
                       "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (numOfBathroomsFilter === 4
+                      (router.query.max_bathrooms == 4
                         ? "!bg-slate-800 !text-white"
                         : "")
                     }
@@ -2544,11 +2847,17 @@ function Stays({ userProfile, longitude, latitude }) {
 
                   <div
                     onClick={() => {
-                      setNumOfBathroomsFilter(5);
+                      router.push({
+                        query: {
+                          ...router.query,
+                          max_bathrooms: 5,
+                          min_bathrooms: "",
+                        },
+                      });
                     }}
                     className={
                       "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (numOfBathroomsFilter === 5
+                      (router.query.max_bathrooms == 5
                         ? "!bg-slate-800 !text-white"
                         : "")
                     }
@@ -2558,11 +2867,17 @@ function Stays({ userProfile, longitude, latitude }) {
 
                   <div
                     onClick={() => {
-                      setNumOfBathroomsFilter(6);
+                      router.push({
+                        query: {
+                          ...router.query,
+                          max_bathrooms: 6,
+                          min_bathrooms: "",
+                        },
+                      });
                     }}
                     className={
                       "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (numOfBathroomsFilter === 6
+                      (router.query.max_bathrooms == 6
                         ? "!bg-slate-800 !text-white"
                         : "")
                     }
@@ -2572,11 +2887,17 @@ function Stays({ userProfile, longitude, latitude }) {
 
                   <div
                     onClick={() => {
-                      setNumOfBathroomsFilter(7);
+                      router.push({
+                        query: {
+                          ...router.query,
+                          max_bathrooms: 7,
+                          min_bathrooms: "",
+                        },
+                      });
                     }}
                     className={
                       "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (numOfBathroomsFilter === 7
+                      (router.query.max_bathrooms == 7
                         ? "!bg-slate-800 !text-white"
                         : "")
                     }
@@ -2586,11 +2907,17 @@ function Stays({ userProfile, longitude, latitude }) {
 
                   <div
                     onClick={() => {
-                      setNumOfBathroomsFilter(8);
+                      router.push({
+                        query: {
+                          ...router.query,
+                          min_bathrooms: 8,
+                          max_bathrooms: "",
+                        },
+                      });
                     }}
                     className={
                       "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (numOfBathroomsFilter === 8
+                      (router.query.min_bathrooms == 8
                         ? "!bg-slate-800 !text-white"
                         : "")
                     }
@@ -2635,17 +2962,30 @@ function Stays({ userProfile, longitude, latitude }) {
             }
           >
             <div className="flex justify-between items-center gap-2">
-              <div onClick={() => {}} className="underline cursor-pointer">
+              <div
+                onClick={() => {
+                  router.push({
+                    pathname: "/stays",
+                  });
+                }}
+                className="underline cursor-pointer"
+              >
                 Clear all
               </div>
 
               <Button
-                onClick={() => {}}
+                onClick={() => {
+                  setState({
+                    ...state,
+                    ...turnOffAllPopup,
+                    showMobileFilter: false,
+                  });
+                }}
                 className={
                   "!bg-gradient-to-r !px-4 from-pink-500 via-red-500 to-yellow-500 !text-white "
                 }
               >
-                Show all 92 stays
+                Show all {stays.length} stays
               </Button>
             </div>
           </div>
@@ -2654,7 +2994,7 @@ function Stays({ userProfile, longitude, latitude }) {
 
       {mobileMap && (
         <div className={"h-[80vh] md:hidden"}>
-          <Map></Map>
+          <Map stays={stays}></Map>
         </div>
       )}
 
@@ -2725,20 +3065,28 @@ export const getServerSideProps = wrapper.getServerSideProps(
             query.search ? query.search : ""
           }&type_of_stay=${
             query.type_of_stay ? query.type_of_stay : ""
+          }&min_capacity=${
+            query.min_capacity ? query.min_capacity : ""
           }&min_price=${query.min_price ? query.min_price : ""}&max_price=${
             query.max_price ? query.max_price : ""
           }&min_rooms=${query.min_rooms ? query.min_rooms : ""}&max_rooms=${
             query.max_rooms ? query.max_rooms : ""
+          }&min_beds=${query.min_beds ? query.min_beds : ""}&max_beds=${
+            query.max_beds ? query.max_beds : ""
+          }&min_bathrooms=${
+            query.min_bathrooms ? query.min_bathrooms : ""
+          }&max_bathrooms=${
+            query.max_bathrooms ? query.min_bathrooms : ""
           }&ordering=${query.ordering ? query.ordering : ""}`
         );
 
-        await context.dispatch({
-          type: "SET_STAYS",
-          payload: response.data.results,
-        });
+        // await context.dispatch({
+        //   type: "SET_STAYS",
+        //   payload: response.data.results,
+        // });
 
         if (token) {
-          const response = await axios.get(
+          const userProfile = await axios.get(
             `${process.env.NEXT_PUBLIC_baseURL}/user/`,
             {
               headers: {
@@ -2749,7 +3097,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
           return {
             props: {
-              userProfile: response.data[0],
+              userProfile: userProfile.data[0],
+              stays: response.data.results,
             },
           };
         }
@@ -2757,6 +3106,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         return {
           props: {
             userProfile: "",
+            stays: response.data.results,
           },
         };
       } catch (error) {
@@ -2771,6 +3121,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           return {
             props: {
               userProfile: "",
+              stays: [],
             },
           };
         }

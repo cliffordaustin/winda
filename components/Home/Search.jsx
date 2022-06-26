@@ -44,14 +44,14 @@ function Search({
   onKeyDown,
 }) {
   return (
-    <div className="flex flex-col md:flex-row rounded-2xl py-4 px-2 md:py-0 md:px-0 md:rounded-full bg-white w-full shadow-md">
+    <div className="flex flex-col md:flex-row rounded-md py-4 px-2 md:py-0 md:px-0 md:rounded-xl bg-white w-full shadow-md">
       <div
         onClick={(event) => {
           event.stopPropagation();
           changeSelectedSearchItem(1);
         }}
         className={
-          "md:w-2/6 w-full !py-2 !justify-between relative " +
+          "md:w-[60%] w-full !py-2 !justify-between relative " +
           styles.searchInput
         }
       >
@@ -103,7 +103,8 @@ function Search({
         )}
       </div>
 
-      <div
+      <>
+        {/* <div
         onClick={(e) => {
           e.stopPropagation();
           setShowDateRange(!showDateRange);
@@ -158,14 +159,15 @@ function Search({
             mode="range"
           ></DatePicker>
         </div>
-      </div>
+      </div> */}
+      </>
 
       <div
         onClick={(e) => {
           e.stopPropagation();
           changeShowPopup();
         }}
-        className={"relative md:w-[30%] w-full !py-2 " + styles.searchInput}
+        className={"relative md:w-[38%] w-full !py-2 " + styles.searchInput}
       >
         <div className="font-bold text-sm">Guest</div>
         <div className="text-sm text-gray-400">
@@ -189,9 +191,9 @@ function Search({
         >
           <Popup
             showPopup={showPopup}
-            className="bg-white px-4 pb-4 pt-4 !border !border-gray-200 !rounded-2xl shadow-xl"
+            className="bg-white px-4 !border !border-gray-200 !rounded-2xl shadow-xl"
           >
-            <div className="py-4">
+            <div className="py-2">
               <Guest
                 add={addToAdults}
                 remove={removeFromAdults}
@@ -199,7 +201,7 @@ function Search({
                 type="Adults"
               ></Guest>
             </div>
-            <div className="flex flex-col items-center">
+            {/* <div className="flex flex-col items-center">
               <div className="h-0.5 w-4/5 bg-gray-100"></div>
             </div>
             <div className="py-4">
@@ -209,27 +211,20 @@ function Search({
                 guests={numOfChildren}
                 type="Children"
               ></Guest>
-            </div>
-            <div className="flex flex-col items-center">
-              <div className="h-0.5 w-4/5 bg-gray-100"></div>
-            </div>
-            <div className="py-4">
-              <Guest
-                add={addToInfants}
-                remove={removeFromInfants}
-                guests={numOfInfants}
-                type="Infants"
-              ></Guest>
-            </div>
+            </div> */}
           </Popup>
         </div>
       </div>
       <div className="flex-grow md:pr-4 flex mt-4 md:mt-0 items-center">
-        <Button onClick={apiSearchResult} className="!rounded-full w-full">
-          <span className="font-bold md:hidden mr-1 md:mr-0">Search</span>
+        <Button
+          onClick={apiSearchResult}
+          className="!rounded-lg h-[65%] !flex gap-1 !px-1 !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 items-center justify-center w-[100px]"
+        >
+          <span className="font-bold mr-0.5">Search</span>
+
           {!showSearchLoader && (
             <svg
-              className="h-6 w-6 hidden md:block"
+              className="h-5 w-5"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -242,8 +237,9 @@ function Search({
               />
             </svg>
           )}
+
           {showSearchLoader && (
-            <LoadingSpinerChase width={24} height={24}></LoadingSpinerChase>
+            <LoadingSpinerChase width={16} height={16}></LoadingSpinerChase>
           )}
         </Button>
       </div>

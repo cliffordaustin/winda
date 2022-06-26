@@ -14,8 +14,9 @@ import styles from "../../styles/Listing.module.css";
 import Rating from "../ui/Rating";
 import Badge from "../ui/Badge";
 import LoadingSpinerChase from "../ui/LoadingSpinerChase";
+import Button from "../ui/Button";
 
-function Listing({ listing, userProfile }) {
+function Listing({ listing, userProfile, slugIsCorrect }) {
   const currencyToKES = useSelector((state) => state.home.currencyToKES);
 
   const router = useRouter();
@@ -64,15 +65,55 @@ function Listing({ listing, userProfile }) {
     }
   };
 
+  const [addToTripLoading, setAddToTripLoading] = useState(false);
+
+  const addToTrip = async () => {
+    const token = Cookies.get("token");
+
+    setAddToTripLoading(true);
+
+    if (token) {
+      await axios
+        .put(
+          `${process.env.NEXT_PUBLIC_baseURL}/trip/${router.query.trip}/`,
+          {
+            transport_id: listing.id,
+          },
+          {
+            headers: {
+              Authorization: "Token " + token,
+            },
+          }
+        )
+        .then(() => {
+          router.push({
+            pathname: `/trip/plan/${router.query.group_trip}`,
+          });
+        })
+        .catch((err) => {
+          setAddToTripLoading(false);
+        });
+    }
+  };
+
   useEffect(() => {
     priceConversion(price());
   }, [price(), currencyToKES, priceConversionRate]);
+
   return (
     <div
       onClick={() => {
-        router.push({
-          pathname: `transport/${listing.slug}`,
-        });
+        if (router.query.trip) {
+          router.push({
+            pathname: `transport/${listing.slug}`,
+            query: {
+              trip: router.query.trip,
+              group_trip: router.query.group_trip,
+            },
+          });
+        } else {
+          router.push(`transport/${listing.slug}`);
+        }
       }}
       className="smMax:!w-full mdMax:!w-[48%] md:!w-[47%] lg:!w-[31%] xl:!w-[25%] !relative select-none"
     >
@@ -109,7 +150,7 @@ function Listing({ listing, userProfile }) {
           <div className="text-xs mt-2">/10km</div>
         </div>
 
-        <div className="absolute bg-white rounded-3xl mt-2 pr-2 mr-2 flex z-10 items-center justify-center gap-0.5 top-0 right-0">
+        <div className="absolute bg-white rounded-3xl mt-2 mr-2 flex z-10 items-center justify-center gap-0.5 top-0 right-0">
           {liked && (
             <svg
               width="28px"
@@ -154,18 +195,49 @@ function Listing({ listing, userProfile }) {
           )}
         </div>
 
-        <div className="flex items-center gap-1 mt-2">
-          <div className={!isSafari ? "-mb-0.5" : "-mb-1"}>
-            <Badge className={"bg-blue-500"}>{randomRatingNum}</Badge>
+        {listing.total_num_of_reviews > 0 && (
+          <div className="flex items-center gap-1 mt-2">
+            <div className={!isSafari ? "-mb-0.5" : "-mb-1"}>
+              <Badge className={"bg-blue-500"}>
+                {Number(
+                  (
+                    listing.count_total_review_rates /
+                    listing.total_num_of_reviews
+                  ).toFixed(2)
+                )}
+              </Badge>
+            </div>
+            <Rating
+              rating={Number(randomRatingNum)}
+              fontSize={!isSafari ? 25 : 16}
+            ></Rating>
+            <div className="font-medium text-sm">
+              ({listing.total_num_of_reviews})
+            </div>
           </div>
-          <Rating
-            rating={Number(randomRatingNum)}
-            fontSize={!isSafari ? 25 : 16}
-          ></Rating>
-          <div className="font-medium text-sm">
-            ({randomNumber(20, 100).toFixed(0)})
+        )}
+
+        {slugIsCorrect && (
+          <div className="mt-2">
+            <Button
+              onClick={() => {
+                addToTrip();
+              }}
+              className="!bg-blue-500 !py-1 flex gap-2 !px-1.5"
+            >
+              <span className="text-white text-sm">Add to trip</span>
+
+              {addToTripLoading && (
+                <div>
+                  <LoadingSpinerChase
+                    width={14}
+                    height={14}
+                  ></LoadingSpinerChase>
+                </div>
+              )}
+            </Button>
           </div>
-        </div>
+        )}
       </Card>
     </div>
   );

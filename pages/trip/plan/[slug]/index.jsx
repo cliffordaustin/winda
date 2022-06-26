@@ -41,6 +41,11 @@ import Trip from "../../../../components/Order/Trip";
 import TransportTrip from "../../../../components/Order/TransportTrip";
 import { console } from "jsondiffpatch";
 import SelectInput from "../../../../components/ui/SelectInput";
+import {
+  stayPriceOfPlan,
+  activityPriceOfPlan,
+  activityNumOfGuests,
+} from "../../../../lib/pricePlan";
 
 import "swiper/css/effect-creative";
 import "swiper/css";
@@ -83,6 +88,44 @@ function PlanTrip({
     (state) => state.stay.priceConversionRate
   );
 
+  const totalPrice = () => {
+    let price = 0;
+    userTrips.trip &&
+      userTrips.trip.forEach((item, index) => {
+        const nights =
+          new Date(item.to_date).getDate() - new Date(item.from_date).getDate();
+        if (item.stay) {
+          price +=
+            stayPriceOfPlan(item.stay_plan, item.stay_non_resident, item.stay) *
+            (item.stay_num_of_adults + item.stay_num_of_children) *
+            nights;
+        }
+
+        if (item.activity) {
+          price +=
+            activityPriceOfPlan(
+              item.activity_pricing_type,
+              item.activity_non_resident,
+              item.activity
+            ) *
+            activityNumOfGuests(item.activity_pricing_type, {
+              number_of_people: item.activity_number_of_people,
+              number_of_groups: item.activity_number_of_groups,
+              number_of_sessions: item.activity_number_of_sessions,
+            });
+        }
+
+        if (item.transport) {
+          price +=
+            item.transport_number_of_days * item.transport.price_per_day +
+            (item.user_need_a_driver
+              ? item.transport.additional_price_with_a_driver
+              : 0);
+        }
+      });
+    return parseFloat(price);
+  };
+
   const [newPrice, setNewPrice] = useState(null);
 
   const [showInfo, setShowInfo] = useState(false);
@@ -96,20 +139,20 @@ function PlanTrip({
   const dispatch = useDispatch();
 
   // work on this later
-  const totalPrice = () => {
-    let price = 0;
-    if (userTrips.trip) {
-      userTrips.trip.forEach((item) => {
-        const calcPrice =
-          (item.stay ? item.stay.price : 0) +
-          (item.transport ? item.transport.price : 0) +
-          (item.activity ? item.activity.price : 0);
+  // const totalPrice = () => {
+  //   let price = 0;
+  //   if (userTrips.trip) {
+  //     userTrips.trip.forEach((item) => {
+  //       const calcPrice =
+  //         (item.stay ? item.stay.price : 0) +
+  //         (item.transport ? item.transport.price : 0) +
+  //         (item.activity ? item.activity.price : 0);
 
-        price += calcPrice;
-      });
-    }
-    return parseFloat(price);
-  };
+  //       price += calcPrice;
+  //     });
+  //   }
+  //   return parseFloat(price);
+  // };
 
   const reference = () => {
     let text = "";
@@ -537,87 +580,86 @@ function PlanTrip({
                   <div className="mt-3 mb-4 flex items-center gap-2 text-lg font-bold">
                     <span>Your itinerary</span>
 
-                    <TopTooltip
-                      showTooltip={itineraryTooltip}
-                      className="text-sm !w-[240px] !font-normal"
-                      changeTooltipState={() => {
-                        setItineraryTooltip(!itineraryTooltip);
-                      }}
-                    >
-                      {userTrips.starting_point && `Your trip starts at `}
-                      {userTrips.starting_point && (
+                    <div>
+                      {/* <TopTooltip
+                        showTooltip={itineraryTooltip}
+                        className="text-sm !w-[240px] !font-normal"
+                        changeTooltipState={() => {
+                          setItineraryTooltip(!itineraryTooltip);
+                        }}
+                      >
+                        {order[0].starting_point && `Your trip starts at `}
+                        {order[0].starting_point && (
+                          <span className="font-bold">
+                            {order[0].starting_point},{" "}
+                          </span>
+                        )}
+                        from{" "}
                         <span className="font-bold">
-                          {userTrips.starting_point},
-                        </span>
-                      )}
-                      from{" "}
-                      <span className="font-bold">
-                        {order.length > 0 &&
-                          moment(
-                            order[0].stay && !order[0].activity
-                              ? order[0].from_date
-                              : order[0].activity && !order[0].stay
-                              ? order[0].activity_from_date
-                              : order[0].stay &&
-                                order[0].activity &&
-                                order[0].activity_from_date < order[0].from_date
-                              ? order[0].activity_from_date
-                              : order[0].stay &&
-                                order[0].activity &&
-                                order[0].activity_from_date > order[0].from_date
-                              ? order[0].from_date
-                              : order[0].from_date
-                          ).format("MMMM Do")}{" "}
-                        to{" "}
-                        {order.length > 0 &&
-                          moment(
-                            order[order.length - 1].stay &&
-                              !order[order.length - 1].activity
-                              ? new Date(
-                                  new Date(
-                                    order[order.length - 1].from_date
-                                  ).setDate(
-                                    new Date(
-                                      order[order.length - 1].from_date
-                                    ).getDate() + order[order.length - 1].nights
-                                  )
-                                ).toISOString()
-                              : !order[order.length - 1].stay &&
-                                order[order.length - 1].activity
-                              ? new Date(
-                                  new Date(
-                                    order[order.length - 1].activity_from_date
-                                  ).getDate()
-                                ).toISOString()
-                              : order[order.length - 1].stay &&
-                                order[order.length - 1].activity &&
-                                new Date(
-                                  new Date(
-                                    order[order.length - 1].from_date
-                                  ).setDate(
-                                    new Date(
-                                      order[order.length - 1].from_date
-                                    ).getDate() + order[order.length - 1].nights
-                                  )
-                                ) >
-                                  new Date(
-                                    order[order.length - 1].activity_from_date
-                                  )
-                              ? new Date(
-                                  new Date(
-                                    order[order.length - 1].from_date
-                                  ).setDate(
-                                    new Date(
-                                      order[order.length - 1].from_date
-                                    ).getDate() + order[order.length - 1].nights
-                                  )
-                                ).toISOString()
-                              : order[order.length - 1].stay &&
-                                order[order.length - 1].activity &&
-                                new Date(
-                                  order[order.length - 1].activity_from_date
-                                ) >
-                                  new Date(
+                          {order.length > 0 &&
+                            moment(
+                              order[0].stay &&
+                                !order[0].activity &&
+                                !order[0].transport
+                                ? order[0].from_date
+                                : order[0].activity &&
+                                  !order[0].stay &&
+                                  !order[0].transport
+                                ? order[0].activity_from_date
+                                : !order[0].activity &&
+                                  !order[0].stay &&
+                                  order[0].transport
+                                ? order[0].transport_from_date
+                                : order[0].stay &&
+                                  order[0].activity &&
+                                  order[0].transport &&
+                                  order[0].activity_from_date <=
+                                    order[0].from_date &&
+                                  order[0].activity_from_date <=
+                                    order[0].transport_from_date
+                                ? order[0].activity_from_date
+                                : order[0].stay &&
+                                  order[0].activity &&
+                                  order[0].transport &&
+                                  order[0].activity_from_date >=
+                                    order[0].from_date &&
+                                  order[0].transport_from_date >=
+                                    order[0].from_date
+                                ? order[0].from_date
+                                : order[0].stay &&
+                                  order[0].activity &&
+                                  order[0].transport &&
+                                  order[0].activity_from_date >=
+                                    order[0].transport_from_date &&
+                                  order[0].from_date >=
+                                    order[0].transport_from_date
+                                ? order[0].transport_from_date
+                                : order[0].from_date
+                            ).format("MMMM Do")}{" "}
+                          to{" "}
+                          {order.length > 0 &&
+                            moment(
+                              order[order.length - 1].stay &&
+                                !order[order.length - 1].activity &&
+                                !order[order.length - 1].transport
+                                ? order[order.length - 1].to_date
+                                : !order[order.length - 1].stay &&
+                                  !order[order.length - 1].transport &&
+                                  order[order.length - 1].activity
+                                ? order[order.length - 1].activity_from_date
+                                : !order[order.length - 1].stay &&
+                                  order[order.length - 1].transport &&
+                                  !order[order.length - 1].activity
+                                ? order[order.length - 1].transport_from_date
+                                : order[order.length - 1].stay &&
+                                  order[order.length - 1].activity &&
+                                  order[order.length - 1].transport &&
+                                  order[order.length - 1].to_date >
+                                    order[order.length - 1]
+                                      .activity_from_date &&
+                                  order[order.length - 1].to_date >
+                                    order[order.length - 1].transport_from_date
+                                ? new Date(
                                     new Date(
                                       order[order.length - 1].from_date
                                     ).setDate(
@@ -626,12 +668,28 @@ function PlanTrip({
                                       ).getDate() +
                                         order[order.length - 1].nights
                                     )
-                                  )
-                              ? order[order.length - 1].activity_from_date
-                              : ""
-                          ).format("MMMM Do")}
-                      </span>
-                    </TopTooltip>
+                                  ).toISOString()
+                                : order[order.length - 1].stay &&
+                                  order[order.length - 1].activity &&
+                                  new Date(
+                                    order[order.length - 1].activity_from_date
+                                  ) >
+                                    new Date(
+                                      new Date(
+                                        order[order.length - 1].from_date
+                                      ).setDate(
+                                        new Date(
+                                          order[order.length - 1].from_date
+                                        ).getDate() +
+                                          order[order.length - 1].nights
+                                      )
+                                    )
+                                ? order[order.length - 1].activity_from_date
+                                : ""
+                            ).format("MMMM Do")}
+                        </span>
+                      </TopTooltip> */}
+                    </div>
                   </div>
                 </>
               )}
@@ -1291,87 +1349,86 @@ function PlanTrip({
                   <div className="mt-3 mb-4 flex items-center gap-2 text-lg font-bold">
                     <span>Your itinerary</span>
 
-                    <TopTooltip
-                      showTooltip={itineraryTooltip}
-                      className="text-sm !w-[240px] !font-normal"
-                      changeTooltipState={() => {
-                        setItineraryTooltip(!itineraryTooltip);
-                      }}
-                    >
-                      {userTrips.starting_point && `Your trip starts at `}
-                      {userTrips.starting_point && (
+                    <div>
+                      {/* <TopTooltip
+                        showTooltip={itineraryTooltip}
+                        className="text-sm !w-[240px] !font-normal"
+                        changeTooltipState={() => {
+                          setItineraryTooltip(!itineraryTooltip);
+                        }}
+                      >
+                        {order[0].starting_point && `Your trip starts at `}
+                        {order[0].starting_point && (
+                          <span className="font-bold">
+                            {order[0].starting_point},{" "}
+                          </span>
+                        )}
+                        from{" "}
                         <span className="font-bold">
-                          {userTrips.starting_point},
-                        </span>
-                      )}
-                      from{" "}
-                      <span className="font-bold">
-                        {order.length > 0 &&
-                          moment(
-                            order[0].stay && !order[0].activity
-                              ? order[0].from_date
-                              : order[0].activity && !order[0].stay
-                              ? order[0].activity_from_date
-                              : order[0].stay &&
-                                order[0].activity &&
-                                order[0].activity_from_date < order[0].from_date
-                              ? order[0].activity_from_date
-                              : order[0].stay &&
-                                order[0].activity &&
-                                order[0].activity_from_date > order[0].from_date
-                              ? order[0].from_date
-                              : order[0].from_date
-                          ).format("MMMM Do")}{" "}
-                        to{" "}
-                        {order.length > 0 &&
-                          moment(
-                            order[order.length - 1].stay &&
-                              !order[order.length - 1].activity
-                              ? new Date(
-                                  new Date(
-                                    order[order.length - 1].from_date
-                                  ).setDate(
-                                    new Date(
-                                      order[order.length - 1].from_date
-                                    ).getDate() + order[order.length - 1].nights
-                                  )
-                                ).toISOString()
-                              : !order[order.length - 1].stay &&
-                                order[order.length - 1].activity
-                              ? new Date(
-                                  new Date(
-                                    order[order.length - 1].activity_from_date
-                                  ).getDate()
-                                ).toISOString()
-                              : order[order.length - 1].stay &&
-                                order[order.length - 1].activity &&
-                                new Date(
-                                  new Date(
-                                    order[order.length - 1].from_date
-                                  ).setDate(
-                                    new Date(
-                                      order[order.length - 1].from_date
-                                    ).getDate() + order[order.length - 1].nights
-                                  )
-                                ) >
-                                  new Date(
-                                    order[order.length - 1].activity_from_date
-                                  )
-                              ? new Date(
-                                  new Date(
-                                    order[order.length - 1].from_date
-                                  ).setDate(
-                                    new Date(
-                                      order[order.length - 1].from_date
-                                    ).getDate() + order[order.length - 1].nights
-                                  )
-                                ).toISOString()
-                              : order[order.length - 1].stay &&
-                                order[order.length - 1].activity &&
-                                new Date(
-                                  order[order.length - 1].activity_from_date
-                                ) >
-                                  new Date(
+                          {order.length > 0 &&
+                            moment(
+                              order[0].stay &&
+                                !order[0].activity &&
+                                !order[0].transport
+                                ? order[0].from_date
+                                : order[0].activity &&
+                                  !order[0].stay &&
+                                  !order[0].transport
+                                ? order[0].activity_from_date
+                                : !order[0].activity &&
+                                  !order[0].stay &&
+                                  order[0].transport
+                                ? order[0].transport_from_date
+                                : order[0].stay &&
+                                  order[0].activity &&
+                                  order[0].transport &&
+                                  order[0].activity_from_date <=
+                                    order[0].from_date &&
+                                  order[0].activity_from_date <=
+                                    order[0].transport_from_date
+                                ? order[0].activity_from_date
+                                : order[0].stay &&
+                                  order[0].activity &&
+                                  order[0].transport &&
+                                  order[0].activity_from_date >=
+                                    order[0].from_date &&
+                                  order[0].transport_from_date >=
+                                    order[0].from_date
+                                ? order[0].from_date
+                                : order[0].stay &&
+                                  order[0].activity &&
+                                  order[0].transport &&
+                                  order[0].activity_from_date >=
+                                    order[0].transport_from_date &&
+                                  order[0].from_date >=
+                                    order[0].transport_from_date
+                                ? order[0].transport_from_date
+                                : order[0].from_date
+                            ).format("MMMM Do")}{" "}
+                          to{" "}
+                          {order.length > 0 &&
+                            moment(
+                              order[order.length - 1].stay &&
+                                !order[order.length - 1].activity &&
+                                !order[order.length - 1].transport
+                                ? order[order.length - 1].to_date
+                                : !order[order.length - 1].stay &&
+                                  !order[order.length - 1].transport &&
+                                  order[order.length - 1].activity
+                                ? order[order.length - 1].activity_from_date
+                                : !order[order.length - 1].stay &&
+                                  order[order.length - 1].transport &&
+                                  !order[order.length - 1].activity
+                                ? order[order.length - 1].transport_from_date
+                                : order[order.length - 1].stay &&
+                                  order[order.length - 1].activity &&
+                                  order[order.length - 1].transport &&
+                                  order[order.length - 1].to_date >
+                                    order[order.length - 1]
+                                      .activity_from_date &&
+                                  order[order.length - 1].to_date >
+                                    order[order.length - 1].transport_from_date
+                                ? new Date(
                                     new Date(
                                       order[order.length - 1].from_date
                                     ).setDate(
@@ -1380,12 +1437,28 @@ function PlanTrip({
                                       ).getDate() +
                                         order[order.length - 1].nights
                                     )
-                                  )
-                              ? order[order.length - 1].activity_from_date
-                              : ""
-                          ).format("MMMM Do")}
-                      </span>
-                    </TopTooltip>
+                                  ).toISOString()
+                                : order[order.length - 1].stay &&
+                                  order[order.length - 1].activity &&
+                                  new Date(
+                                    order[order.length - 1].activity_from_date
+                                  ) >
+                                    new Date(
+                                      new Date(
+                                        order[order.length - 1].from_date
+                                      ).setDate(
+                                        new Date(
+                                          order[order.length - 1].from_date
+                                        ).getDate() +
+                                          order[order.length - 1].nights
+                                      )
+                                    )
+                                ? order[order.length - 1].activity_from_date
+                                : ""
+                            ).format("MMMM Do")}
+                        </span>
+                      </TopTooltip> */}
+                    </div>
                   </div>
                 </>
               )}
@@ -2262,6 +2335,10 @@ export async function getServerSideProps(context) {
           permanent: false,
           destination: "/login",
         },
+      };
+    } else if (error.response.status === 404) {
+      return {
+        notFound: true,
       };
     } else {
       return {

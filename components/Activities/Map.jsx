@@ -5,8 +5,7 @@ import { createGlobalStyle } from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import MapMakers from "./MapMakers";
 
-function MapBox() {
-  const activities = useSelector((state) => state.activity.activities);
+function MapBox({ activities }) {
   const activeActivity = useSelector((state) => state.activity.activeStay);
 
   const [viewState, setViewState] = React.useState({

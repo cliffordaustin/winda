@@ -238,6 +238,68 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
 
   const [numOfPeople, setNumOfPeople] = useState(1);
 
+  const [slugIsCorrect, setSlugIsCorrect] = useState(false);
+
+  const checkSlug = async () => {
+    const token = Cookies.get("token");
+
+    if (token) {
+      await axios
+        .get(`${process.env.NEXT_PUBLIC_baseURL}/trip/${router.query.trip}/`, {
+          headers: {
+            Authorization: "Token " + token,
+          },
+        })
+        .then((res) => {
+          setSlugIsCorrect(true);
+        })
+        .catch((err) => {
+          if (err.response.status === 404) {
+            setSlugIsCorrect(false);
+          }
+        });
+    } else {
+      setSlugIsCorrect(false);
+    }
+  };
+
+  useEffect(() => {
+    if (router.query.trip) {
+      checkSlug();
+    }
+  }, []);
+
+  const [addToTripLoading, setAddToTripLoading] = useState(false);
+
+  const addToTrip = async () => {
+    const token = Cookies.get("token");
+
+    setAddToTripLoading(true);
+
+    if (token) {
+      await axios
+        .put(
+          `${process.env.NEXT_PUBLIC_baseURL}/trip/${router.query.trip}/`,
+          {
+            activity_id: activity.id,
+          },
+          {
+            headers: {
+              Authorization: "Token " + token,
+            },
+          }
+        )
+        .then(() => {
+          router.push({
+            pathname: `/trip/plan/${router.query.group_trip}`,
+          });
+        })
+        .catch((err) => {
+          setAddToTripLoading(false);
+        });
+    }
+  };
+
   const [numOfSession, setNumOfSession] = useState(1);
 
   const [numOfGroups, setNumOfGroups] = useState(1);
@@ -523,6 +585,39 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                       .duration(activity.duration_of_activity, "minutes")
                       .humanize()}
                   </h1>
+
+                  {activity.views > 0 && activity.views === 1 && (
+                    <div className="mt-2 text-gray-600">
+                      {activity.views} person has viewed this listing
+                    </div>
+                  )}
+                  {activity.views > 0 && activity.views > 1 && (
+                    <div className="mt-2 text-gray-600">
+                      {activity.views} people has viewed this listing
+                    </div>
+                  )}
+
+                  {slugIsCorrect && (
+                    <div className="mt-2">
+                      <Button
+                        onClick={() => {
+                          addToTrip();
+                        }}
+                        className={"!bg-blue-500 flex gap-2 !text-white "}
+                      >
+                        <span className="text-white text-sm">Add to trip</span>
+
+                        {addToTripLoading && (
+                          <div>
+                            <LoadingSpinerChase
+                              width={14}
+                              height={14}
+                            ></LoadingSpinerChase>
+                          </div>
+                        )}
+                      </Button>
+                    </div>
+                  )}
                 </div>
 
                 <div className="w-full z-10 px-4 md:hidden fixed bottom-0 left-0 right-0 bg-white py-2">
@@ -594,17 +689,6 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                 </div>
               </div>
             </div>
-
-            {activity.views > 0 && activity.views === 1 && (
-              <div className="mt-2 text-gray-600">
-                {activity.views} person has viewed this listing
-              </div>
-            )}
-            {activity.views > 0 && activity.views > 1 && (
-              <div className="mt-2 text-gray-600">
-                {activity.views} people has viewed this listing
-              </div>
-            )}
 
             <div className="mt-10">
               {!showAllDescription && (

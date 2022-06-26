@@ -1,7 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import axios from "axios";
+import Cookies from "js-cookie";
 // import { setFilteredStays } from "../../redux/actions/stay";
 
 import Listing from "./Listing";
@@ -13,8 +15,40 @@ function Listings({
   itemsInCart,
   userProfile,
   itemsInOrders,
+  activities,
 }) {
-  const activities = useSelector((state) => state.activity.activities);
+  const [slugIsCorrect, setSlugIsCorrect] = useState(false);
+
+  const router = useRouter();
+
+  const checkSlug = async () => {
+    const token = Cookies.get("token");
+
+    if (token) {
+      await axios
+        .get(`${process.env.NEXT_PUBLIC_baseURL}/trip/${router.query.trip}/`, {
+          headers: {
+            Authorization: "Token " + token,
+          },
+        })
+        .then((res) => {
+          setSlugIsCorrect(true);
+        })
+        .catch((err) => {
+          if (err.response.status === 404) {
+            setSlugIsCorrect(false);
+          }
+        });
+    } else {
+      setSlugIsCorrect(false);
+    }
+  };
+
+  useEffect(() => {
+    if (router.query.trip) {
+      checkSlug();
+    }
+  }, []);
 
   return (
     <ClientOnly>
@@ -27,6 +61,7 @@ function Listings({
             userLatLng={userLatLng}
             itemsInCart={itemsInCart}
             userProfile={userProfile}
+            slugIsCorrect={slugIsCorrect}
             itemsInOrders={itemsInOrders}
           ></Listing>
         ))}

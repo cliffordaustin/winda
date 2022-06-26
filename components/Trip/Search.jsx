@@ -78,13 +78,15 @@ const Search = ({
               onBlur={() => {
                 setAutoCompleteSearch([]);
               }}
+              on
             ></Input>
 
             <div className="h-full w-10 mr-1 flex justify-center items-center">
               {location && (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.preventDefault();
                     setLocation("");
                     setAutoCompleteSearch([]);
                   }}
@@ -113,7 +115,7 @@ const Search = ({
               {autoCompleteSearch.map((item, index) => (
                 <div
                   key={index}
-                  onClick={() => {
+                  onMouseDown={(e) => {
                     setLocation(item.place_name);
                     setAutoCompleteSearch([]);
                     search(item.place_name);

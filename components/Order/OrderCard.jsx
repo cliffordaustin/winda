@@ -244,7 +244,7 @@ const OrderCard = ({
     : [];
   let mainImage = sortedImages.find((image) => image.main);
   return (
-    <div className="relative mb-6">
+    <div className="relative mb-4">
       <div
         className="cursor-pointer"
         onClick={() => {
@@ -584,7 +584,8 @@ const OrderCard = ({
 
             <div
               className={
-                "flex gap-1 " + (!transportStartingPoint ? "mt-6" : "")
+                "flex gap-1 " +
+                (!transportStartingPoint && transportPage ? "mt-6" : "")
               }
             >
               <div

@@ -19,16 +19,19 @@ import Search from "../../components/Home/ActivitiesSearch";
 import Popup from "../../components/ui/Popup";
 import PriceFilter from "../../components/Lodging/PriceFilter";
 import Footer from "../../components/Home/Footer";
-import MobileModal from "../../components/ui/MobileModal";
+import MobileModal from "../../components/ui/FullScreenMobileModal";
+import LargeMobileModal from "../../components/ui/LargeFullscreenPopup";
 import Button from "../../components/ui/Button";
 import ClientOnly from "../../components/ClientOnly";
 import { setFilteredActivities } from "../../redux/actions/activity";
 import TypeOfActivities from "../../components/Activities/ActivitiesFilterItems";
+import MobileSearchModal from "../../components/Activities/MobileSearchModal";
 
-function Activities({ userProfile, longitude, latitude }) {
+function Activities({ userProfile, activities }) {
+  const router = useRouter();
   const [state, setState] = useState({
     showDropdown: false,
-    travelers: 0,
+    travelers: Number(router.query.min_capacity) || 0,
     activityDate: "",
     showActivityDate: false,
     selectedActivitiesSearchItem: 0,
@@ -71,7 +74,6 @@ function Activities({ userProfile, longitude, latitude }) {
     showTravelersPopup: false,
     showActivityDate: false,
   };
-  const router = useRouter();
 
   const isMounted = useRef(false);
 
@@ -99,8 +101,8 @@ function Activities({ userProfile, longitude, latitude }) {
       }
     : "";
 
-  const [minPrice, setMinSelected] = useState(minPriceFilterFormatObject);
-  const [maxPrice, setMaxSelected] = useState(maxPriceFilterFormatObject);
+  const [minPrice, setMinPrice] = useState(minPriceFilterFormatObject);
+  const [maxPrice, setMaxPrice] = useState(maxPriceFilterFormatObject);
 
   const [mobileMap, setMobileMap] = useState(false);
   const filterStayLoading = useSelector(
@@ -115,30 +117,30 @@ function Activities({ userProfile, longitude, latitude }) {
 
   const currencyToKES = useSelector((state) => state.home.currencyToKES);
 
-  useEffect(() => {
-    if (router.query) {
-      dispatch(setFilteredActivities(router));
-    }
-  }, [router.query]);
+  // useEffect(() => {
+  //   if (router.query) {
+  //     dispatch(setFilteredActivities(router));
+  //   }
+  // }, [router.query]);
 
-  useEffect(() => {
-    if (minPrice || maxPrice) {
-      const maxPriceSelect = maxPrice
-        ? maxPrice.value.replace("KES", "").replace("k", "000")
-        : "";
-      const minPriceSelect = minPrice
-        ? minPrice.value.replace("KES", "").replace("k", "000")
-        : "";
+  // useEffect(() => {
+  //   if (minPrice || maxPrice) {
+  //     const maxPriceSelect = maxPrice
+  //       ? maxPrice.value.replace("KES", "").replace("k", "000")
+  //       : "";
+  //     const minPriceSelect = minPrice
+  //       ? minPrice.value.replace("KES", "").replace("k", "000")
+  //       : "";
 
-      router.push({
-        query: {
-          ...router.query,
-          min_price: minPriceSelect,
-          max_price: maxPriceSelect,
-        },
-      });
-    }
-  }, [minPrice, maxPrice]);
+  //     router.push({
+  //       query: {
+  //         ...router.query,
+  //         min_price: minPriceSelect,
+  //         max_price: maxPriceSelect,
+  //       },
+  //     });
+  //   }
+  // }, [minPrice, maxPrice]);
 
   const priceConversionRate = async () => {
     try {
@@ -178,13 +180,13 @@ function Activities({ userProfile, longitude, latitude }) {
     longitude: null,
   });
 
-  useEffect(() => {
-    if (process.browser) {
-      window.onresize = function () {
-        setState({ ...state, windowSize: window.innerWidth });
-      };
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (process.browser) {
+  //     window.onresize = function () {
+  //       setState({ ...state, windowSize: window.innerWidth });
+  //     };
+  //   }
+  // }, []);
 
   useEffect(() => {
     const getLatLng = async () => {
@@ -219,16 +221,16 @@ function Activities({ userProfile, longitude, latitude }) {
     return d;
   }
 
-  useEffect(() => {
-    if (state.windowSize >= 768) {
-      setState({
-        ...state,
-        showSearchModal: false,
-        showMobileFilter: false,
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.windowSize]);
+  // useEffect(() => {
+  //   if (state.windowSize >= 768) {
+  //     setState({
+  //       ...state,
+  //       showSearchModal: false,
+  //       showMobileFilter: false,
+  //     });
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [state.windowSize]);
 
   const [activityLocation, setActivityLocation] = useState(
     router.query.search || ""
@@ -257,12 +259,16 @@ function Activities({ userProfile, longitude, latitude }) {
   };
 
   const apiActivitySearchResult = () => {
-    if (location !== "") {
+    if (activityLocation !== "") {
       setShowActivityLoader(true);
       router
         .push({
           pathname: "/experiences",
-          query: { search: activityLocation },
+          query: {
+            ...router.query,
+            search: activityLocation,
+            min_capacity: state.travelers ? state.travelers : "",
+          },
         })
         .then(() => {
           setShowActivityLoader(false);
@@ -339,6 +345,42 @@ function Activities({ userProfile, longitude, latitude }) {
     getItemsInOrder();
   }, []);
 
+  const searchFilter = () => {
+    console.log("search Filter");
+  };
+
+  const [numOfPeople, setNumOfPeople] = useState(1);
+
+  const [date, setDate] = useState(new Date());
+
+  const [location, setLocation] = useState("");
+
+  const [mobileSearchModal, setMobileSearchModal] = useState(false);
+
+  const filterMinPrice = () => {
+    if (minPrice) {
+      router.push({
+        query: {
+          ...router.query,
+          min_price: minPrice,
+          max_price: router.query.max_price || "",
+        },
+      });
+    }
+  };
+
+  const filterMaxPrice = () => {
+    if (maxPrice) {
+      router.push({
+        query: {
+          ...router.query,
+          min_price: router.query.min_price || "",
+          max_price: maxPrice,
+        },
+      });
+    }
+  };
+
   return (
     <div
       className="overflow-x-hidden"
@@ -364,7 +406,7 @@ function Activities({ userProfile, longitude, latitude }) {
         });
       }}
     >
-      <div className="fixed top-0 left-0 right-0 bg-white shadow-md z-20 pb-4">
+      <div className="fixed top-0 left-0 right-0 bg-white border-b z-20 md:pb-4">
         <Navbar
           showDropdown={state.showDropdown}
           currentNavState={state.currentNavState}
@@ -386,36 +428,202 @@ function Activities({ userProfile, longitude, latitude }) {
           }
         ></Navbar>
 
-        <div
-          onClick={(e) => {
-            e.stopPropagation();
-            setState({ ...state, showSearchModal: true });
-          }}
-          className="w-5/6 mx-auto md:hidden cursor-pointer"
-        >
-          <div className="flex items-center justify-center gap-2 !px-2 !py-2 !bg-gray-100 w-full rounded-full text-center ml-1 font-bold">
+        <div className="w-5/6 mx-auto flex shadow-lg border border-gray-200 rounded-xl pl-3 h-12 md:hidden cursor-pointer">
+          <div
+            onClick={() => {
+              setMobileSearchModal(true);
+            }}
+            className="flex items-center gap-2 w-full"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 text-red-600"
-              viewBox="0 0 20 20"
-              fill="currentColor"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth="2"
             >
-              <path d="M9 9a2 2 0 114 0 2 2 0 01-4 0z" />
               <path
-                fillRule="evenodd"
-                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a4 4 0 00-3.446 6.032l-2.261 2.26a1 1 0 101.414 1.415l2.261-2.261A4 4 0 1011 5z"
-                clipRule="evenodd"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
               />
             </svg>
-            <div>Nairobi</div>
+            <h1 className="font-bold text-sm">Where to?</h1>
+          </div>
+
+          <div className="flex w-32 border rounded-xl transition-all duration-200 ease-linear self-stretch ">
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                setState({
+                  ...state,
+                  ...turnOffAllPopup,
+                  showSortPopup: !state.showSortPopup,
+                });
+              }}
+              className="w-2/4 relative flex items-center justify-center transition-all duration-200 ease-linear hover:border-gray-200 rounded-xl"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-7 w-7"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4"
+                />
+              </svg>
+
+              <Popup
+                className="absolute top-full mt-2 w-60 -right-6"
+                showPopup={state.showSortPopup}
+              >
+                <div
+                  className={
+                    styles.listItem +
+                    (router.query.ordering === "-date_posted"
+                      ? " !bg-red-500 !text-white"
+                      : "")
+                  }
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    setState({
+                      ...state,
+                      ...turnOffAllPopup,
+                      showSortPopup: false,
+                    });
+                    if (router.query.ordering) {
+                      router.push({ query: { ...router.query, ordering: "" } });
+                    } else {
+                      router.push({
+                        query: { ...router.query, ordering: "-date_posted" },
+                      });
+                    }
+                  }}
+                >
+                  Newest
+                </div>
+                <div
+                  className={
+                    styles.listItem +
+                    (router.query.ordering === "+price"
+                      ? " !bg-red-500 !text-white"
+                      : "")
+                  }
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    setState({
+                      ...state,
+                      ...turnOffAllPopup,
+                      showSortPopup: false,
+                    });
+                    if (router.query.ordering) {
+                      router.push({ query: { ...router.query, ordering: "" } });
+                    } else {
+                      router.push({
+                        query: { ...router.query, ordering: "+price" },
+                      });
+                    }
+                  }}
+                >
+                  Price(min to max)
+                </div>
+                <div
+                  className={
+                    styles.listItem +
+                    (router.query.ordering === "-price"
+                      ? " !bg-red-500 !text-white"
+                      : "")
+                  }
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    setState({
+                      ...state,
+                      ...turnOffAllPopup,
+                      showSortPopup: false,
+                    });
+                    if (router.query.ordering) {
+                      router.push({ query: { ...router.query, ordering: "" } });
+                    } else {
+                      router.push({
+                        query: { ...router.query, ordering: "-price" },
+                      });
+                    }
+                  }}
+                >
+                  Price(max to min)
+                </div>
+              </Popup>
+            </div>
+
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                setState({
+                  ...state,
+                  ...turnOffAllPopup,
+                  showMobileFilter: true,
+                });
+              }}
+              className="w-2/4 flex items-center justify-center hover:border transition-all duration-200 ease-linear hover:border-gray-200 rounded-xl border"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+                role="img"
+                className="w-7 h-7"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 24 24"
+              >
+                <g
+                  fill="none"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                >
+                  <circle cx="14" cy="6" r="2" />
+                  <path d="M4 6h8m4 0h4" />
+                  <circle cx="8" cy="12" r="2" />
+                  <path d="M4 12h2m4 0h10" />
+                  <circle cx="17" cy="18" r="2" />
+                  <path d="M4 18h11m4 0h1" />
+                </g>
+              </svg>
+            </div>
           </div>
         </div>
 
+        <MobileSearchModal
+          showModal={mobileSearchModal}
+          closeModal={setMobileSearchModal}
+          search={activityLocation}
+          setSearch={setActivityLocation}
+          date={date}
+          setDate={setDate}
+          numOfPeople={state.travelers}
+          addTraveler={() => {
+            setState({ ...state, travelers: state.travelers + 1 });
+          }}
+          removeTraveler={() => {
+            state.travelers > 0
+              ? setState({ ...state, travelers: state.travelers - 1 })
+              : null;
+          }}
+          searchFilter={apiActivitySearchResult}
+          showSearchLoader={showActivityLoader}
+        ></MobileSearchModal>
+
         <div
           ref={searchRef}
-          className="mt-1 hidden w-full md:flex md:justify-center md:px-0 px-4"
+          className="mt-1 hidden w-full md:flex items-center lg:justify-center lg:px-0 md:px-4"
         >
-          <div className="lg:w-4/6 md:w-11/12 w-full">
+          <div className="lg:w-[750px] md:w-[80%]">
             <Search
               autoCompleteFromActivitySearch={autoCompleteFromActivitySearch}
               onKeyDown={keyDownActivitySearch}
@@ -477,9 +685,157 @@ function Activities({ userProfile, longitude, latitude }) {
               }}
             ></Search>
           </div>
+
+          <div className="flex absolute right-2 bottom-[45px]">
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                setState({
+                  ...state,
+                  ...turnOffAllPopup,
+                  showMobileFilter: true,
+                });
+              }}
+              className="flex items-center bg-gray-100 px-4 gap-1 cursor-pointer justify-center mr-1 transition-all duration-200 ease-linear hover:border-gray-600 border-gray-400 rounded-md border"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+                role="img"
+                className="w-5 h-5"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 24 24"
+              >
+                <g
+                  fill="none"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                >
+                  <circle cx="14" cy="6" r="2" />
+                  <path d="M4 6h8m4 0h4" />
+                  <circle cx="8" cy="12" r="2" />
+                  <path d="M4 12h2m4 0h10" />
+                  <circle cx="17" cy="18" r="2" />
+                  <path d="M4 18h11m4 0h1" />
+                </g>
+              </svg>
+
+              <span>filter</span>
+            </div>
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                setState({
+                  ...state,
+                  ...turnOffAllPopup,
+                  showSortPopup: !state.showSortPopup,
+                });
+              }}
+              className="w-2/4 relative border p-2 cursor-pointer flex items-center justify-center transition-all duration-200 ease-linear hover:border-gray-200 rounded-md"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4"
+                />
+              </svg>
+
+              <Popup
+                className="absolute top-full mt-2 w-60 right-2"
+                showPopup={state.showSortPopup}
+              >
+                <div
+                  className={
+                    styles.listItem +
+                    (router.query.ordering === "-date_posted"
+                      ? " !bg-red-500 !text-white"
+                      : "")
+                  }
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    setState({
+                      ...state,
+                      ...turnOffAllPopup,
+                      showSortPopup: false,
+                    });
+                    if (router.query.ordering) {
+                      router.push({ query: { ...router.query, ordering: "" } });
+                    } else {
+                      router.push({
+                        query: { ...router.query, ordering: "-date_posted" },
+                      });
+                    }
+                  }}
+                >
+                  Newest
+                </div>
+                <div
+                  className={
+                    styles.listItem +
+                    (router.query.ordering === "+price"
+                      ? " !bg-red-500 !text-white"
+                      : "")
+                  }
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    setState({
+                      ...state,
+                      ...turnOffAllPopup,
+                      showSortPopup: false,
+                    });
+                    if (router.query.ordering) {
+                      router.push({ query: { ...router.query, ordering: "" } });
+                    } else {
+                      router.push({
+                        query: { ...router.query, ordering: "+price" },
+                      });
+                    }
+                  }}
+                >
+                  Price(min to max)
+                </div>
+                <div
+                  className={
+                    styles.listItem +
+                    (router.query.ordering === "-price"
+                      ? " !bg-red-500 !text-white"
+                      : "")
+                  }
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    setState({
+                      ...state,
+                      ...turnOffAllPopup,
+                      showSortPopup: false,
+                    });
+                    if (router.query.ordering) {
+                      router.push({ query: { ...router.query, ordering: "" } });
+                    } else {
+                      router.push({
+                        query: { ...router.query, ordering: "-price" },
+                      });
+                    }
+                  }}
+                >
+                  Price(max to min)
+                </div>
+              </Popup>
+            </div>
+          </div>
         </div>
 
-        <ClientOnly>
+        <div>
+          {/* <ClientOnly>
           {currencyToKES && (
             <div
               className="text-xs md:text-base absolute md:right-12 right-6 bottom-7 font-bold text-gray-700 hover:text-gray-900 cursor-pointer transition-all duration-300 ease-linear flex items-center"
@@ -534,10 +890,11 @@ function Activities({ userProfile, longitude, latitude }) {
               <div>USD</div>
             </div>
           )}
-        </ClientOnly>
+        </ClientOnly> */}
+        </div>
 
         <div className="flex gap-4 mt-4 ml-4 sm:ml-10">
-          <div
+          {/* <div
             onClick={(event) => {
               event.stopPropagation();
               setState({
@@ -813,105 +1170,12 @@ function Activities({ userProfile, longitude, latitude }) {
               <div className="text-lg font-bold mb-2 mt-2">Activities</div>
               <TypeOfActivities></TypeOfActivities>
             </Popup>
-          </div>
+          </div> */}
         </div>
       </div>
 
-      <MobileModal
-        showModal={state.showSearchModal}
-        closeModal={() => {
-          setState({
-            ...state,
-            ...turnOffAllPopup,
-            showSearchModal: false,
-          });
-        }}
-        containerHeight={90}
-        closeAllPopups={() => {
-          setState({ ...state, ...turnOffAllPopup });
-        }}
-        title="Search"
-      >
-        <div className="flex justify-center mb-3 mt-6">
-          <SearchSelect
-            currentNavState={state.currentNavState}
-            setCurrentNavState={(currentNavState) => {
-              setState({
-                ...state,
-                currentNavState: currentNavState,
-                showCheckOutDate: false,
-                showCheckInDate: false,
-                showPopup: false,
-              });
-            }}
-          ></SearchSelect>
-        </div>
-        <div className="lg:w-4/6 md:w-11/12 w-full px-4">
-          <Search
-            autoCompleteFromActivitySearch={autoCompleteFromActivitySearch}
-            showActivityLoader={showActivityLoader}
-            locationFromActivitySearch={(item) => {
-              locationFromActivitySearch(item);
-            }}
-            apiActivitySearchResult={apiActivitySearchResult}
-            activityLocation={activityLocation}
-            onKeyDown={keyDownActivitySearch}
-            travelers={state.travelers}
-            activityDate={state.activityDate}
-            showSearchModal={state.showSearchModal}
-            onChange={(event) => {
-              onActivityChange(event);
-            }}
-            changeSelectedActivitiesSearchItem={(num) => {
-              setState({ ...state, selectedActivitiesSearchItem: num });
-            }}
-            changeActivityDate={() => {
-              setState({
-                ...state,
-                ...turnOffAllPopup,
-                showActivityDate: !state.showActivityDate,
-                selectedActivitiesSearchItem:
-                  state.selectedActivitiesSearchItem === 2 ? 0 : 2,
-              });
-            }}
-            setActivityDate={(date) => {
-              setState({ ...state, activityDate: date });
-            }}
-            showActivityDate={state.showActivityDate}
-            showTravelersPopup={state.showTravelersPopup}
-            changeShowTravelersPopup={() => {
-              setState({
-                ...state,
-                ...turnOffAllPopup,
-                showTravelersPopup: !state.showTravelersPopup,
-                selectedActivitiesSearchItem:
-                  state.selectedActivitiesSearchItem === 3 ? 0 : 3,
-              });
-            }}
-            selectedActivitiesSearchItem={state.selectedActivitiesSearchItem}
-            clearLocationInput={() => {
-              setActivityLocation("");
-            }}
-            clearActivityDate={() => {
-              setState({ ...state, activityDate: "" });
-            }}
-            clearTravelers={() => {
-              setState({ ...state, travelers: 0 });
-            }}
-            addTraveler={() => {
-              setState({ ...state, travelers: state.travelers + 1 });
-            }}
-            removeTraveler={() => {
-              state.travelers > 0
-                ? setState({ ...state, travelers: state.travelers - 1 })
-                : null;
-            }}
-          ></Search>
-        </div>
-      </MobileModal>
-
-      {state.windowSize < 768 && (
-        <MobileModal
+      <div className="relative hidden md:block ">
+        <LargeMobileModal
           showModal={state.showMobileFilter}
           closeModal={() => {
             setState({
@@ -920,42 +1184,205 @@ function Activities({ userProfile, longitude, latitude }) {
               showMobileFilter: false,
             });
           }}
-          containerHeight={90}
-          closeAllPopups={() => {
-            setState({ ...state, ...turnOffAllPopup });
-          }}
-          title="All Filters"
+          className="!overflow-y-scroll !relative max-w-[800px] !h-[700px]"
+          title="Filters"
         >
-          <div className="px-4">
-            <div className="lg:hidden">
-              <div className="mt-2 mb-4 md:hidden">
+          <div className="px-4 relative">
+            <div>
+              <div className="mt-2 mb-4">
                 <h1 className="font-bold text-base mb-2">Price Range</h1>
-                <PriceFilter
-                  setMinPriceSelected={setMinSelected}
-                  setMaxPriceSelected={setMaxSelected}
-                  minPriceInstanceId="minPrice"
-                  maxPriceInstanceId="maxPrice"
-                  minPriceSelected={minPrice}
-                  maxPriceSelected={maxPrice}
-                ></PriceFilter>
+
+                <div className="flex items-center gap-3 px-10">
+                  <div className="w-[50%] border rounded-md h-fit px-2 py-1">
+                    <span className="text-sm text-gray-500">Min price</span>
+                    <div className="flex items-center">
+                      <div className="text-sm font-bold mr-2 ">$</div>
+                      <input
+                        onBlur={() => {
+                          filterMinPrice();
+                        }}
+                        name="min-price"
+                        value={minPrice}
+                        type="number"
+                        onChange={(event) => {
+                          setMinPrice(event.target.value);
+                        }}
+                        className="w-full focus:outline-none text-sm "
+                      />
+                    </div>
+                  </div>
+                  <div> - </div>
+                  <div className="w-[50%] border rounded-md h-fit px-2 py-1">
+                    <span className="text-sm text-gray-500">Max price</span>
+                    <div className="flex items-center">
+                      <div className="text-sm font-bold mr-2 ">$</div>
+                      <input
+                        onBlur={() => {
+                          filterMaxPrice();
+                        }}
+                        name="max-price"
+                        value={maxPrice}
+                        type="number"
+                        onChange={(event) => {
+                          setMaxPrice(event.target.value);
+                        }}
+                        className="w-full focus:outline-none text-sm "
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
+
+            <hr className="-mx-4 my-6" />
 
             <div className="text-lg font-bold mb-2 mt-2">Activities</div>
             <TypeOfActivities></TypeOfActivities>
           </div>
-        </MobileModal>
-      )}
+          <div
+            className={
+              "w-full sticky z-10 px-2 py-2 bottom-0 safari-bottom left-0 right-0 bg-gray-100 border-t border-gray-200 "
+            }
+          >
+            <div className="flex justify-between items-center gap-2">
+              <div
+                onClick={() => {
+                  router.push({
+                    pathname: "/experiences",
+                  });
+                }}
+                className="underline cursor-pointer"
+              >
+                Clear all
+              </div>
 
-      <div className="mt-48 lg:mt-56 flex relative h-full overflow-y-scroll">
-        <div className={"hidden lg:block w-2/4 px-4 h-[70vh] relative"}>
-          <Map></Map>
+              <Button
+                onClick={() => {
+                  setState({
+                    ...state,
+                    ...turnOffAllPopup,
+                    showMobileFilter: false,
+                  });
+                }}
+                className={
+                  "!bg-gradient-to-r !px-4 from-pink-500 via-red-500 to-yellow-500 !text-white "
+                }
+              >
+                Show all {activities.length} experiences
+              </Button>
+            </div>
+          </div>
+        </LargeMobileModal>
+      </div>
+
+      <MobileModal
+        showModal={state.showMobileFilter}
+        closeModal={() => {
+          setState({
+            ...state,
+            ...turnOffAllPopup,
+            showMobileFilter: false,
+          });
+        }}
+        className="md:!hidden !overflow-y-scroll"
+        title="Filters"
+      >
+        <div className="px-4 relative">
+          <div>
+            <div className="mt-2 mb-4">
+              <h1 className="font-bold text-base mb-2">Price Range</h1>
+
+              <div className="flex items-center gap-3 px-2">
+                <div className="w-[50%] border rounded-md h-fit px-2 py-1">
+                  <span className="text-sm text-gray-500">Min price</span>
+                  <div className="flex items-center">
+                    <div className="text-sm font-bold mr-2 ">$</div>
+                    <input
+                      onBlur={() => {
+                        filterMinPrice();
+                      }}
+                      name="min-price"
+                      value={minPrice}
+                      type="number"
+                      onChange={(event) => {
+                        setMinPrice(event.target.value);
+                      }}
+                      className="w-full focus:outline-none text-sm "
+                    />
+                  </div>
+                </div>
+                <div> - </div>
+                <div className="w-[50%] border rounded-md h-fit px-2 py-1">
+                  <span className="text-sm text-gray-500">Max price</span>
+                  <div className="flex items-center">
+                    <div className="text-sm font-bold mr-2 ">$</div>
+                    <input
+                      onBlur={() => {
+                        filterMaxPrice();
+                      }}
+                      name="max-price"
+                      value={maxPrice}
+                      type="number"
+                      onChange={(event) => {
+                        setMaxPrice(event.target.value);
+                      }}
+                      className="w-full focus:outline-none text-sm "
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <hr className="-mx-4 my-6" />
+
+          <div className="text-lg font-bold mb-2 mt-2">Activities</div>
+          <TypeOfActivities></TypeOfActivities>
+        </div>
+        <div
+          className={
+            "w-full fixed z-10 px-2 py-2 bottom-0 safari-bottom left-0 right-0 bg-gray-100 border-t border-gray-200 "
+          }
+        >
+          <div className="flex justify-between items-center gap-2">
+            <div
+              onClick={() => {
+                router.push({
+                  pathname: "/experiences",
+                });
+              }}
+              className="underline cursor-pointer"
+            >
+              Clear all
+            </div>
+
+            <Button
+              onClick={() => {
+                setState({
+                  ...state,
+                  ...turnOffAllPopup,
+                  showMobileFilter: false,
+                });
+              }}
+              className={
+                "!bg-gradient-to-r !px-4 from-pink-500 via-red-500 to-yellow-500 !text-white "
+              }
+            >
+              Show all {activities.length} experiences
+            </Button>
+          </div>
+        </div>
+      </MobileModal>
+
+      <div className="mt-36 md:mt-40 lg:mt-[198px] flex relative h-full overflow-y-scroll">
+        <div className={"hidden lg:block w-2/4 px-4 h-[78vh] relative"}>
+          <Map activities={activities}></Map>
         </div>
 
         {!mobileMap && (
           <div
             className={
-              "px-4 md:mt-10 lg:mt-0 relative lg:h-[70vh] w-2/4 lgMax:w-full lg:overflow-y-scroll " +
+              "px-4 md:mt-10 lg:mt-0 relative lg:h-[80vh] w-2/4 lgMax:w-full lg:overflow-y-scroll " +
               (filterStayLoading ? "!overflow-y-hidden !h-[70vh]" : "")
             }
           >
@@ -965,6 +1392,7 @@ function Activities({ userProfile, longitude, latitude }) {
               itemsInCart={itemsInCart}
               itemsInOrders={itemsInOrders}
               userProfile={userProfile}
+              activities={activities}
             ></Listings>
             {filterStayLoading && (
               <div className="bg-white bg-opacity-50 lg:h-[70vh] lg:overflow-y-scroll absolute w-full top-0 bottom-0 right-0 left-0 z-10">
@@ -983,13 +1411,13 @@ function Activities({ userProfile, longitude, latitude }) {
 
       {state.windowSize < 768 && mobileMap && (
         <div className={"h-[80vh]"}>
-          <Map></Map>
+          <Map activities={activities}></Map>
         </div>
       )}
 
       <div
         onClick={() => setMobileMap(!mobileMap)}
-        className="w-40 lg:hidden fixed bottom-2 left-2/4 right-2/4 -translate-x-2/4 -translate-y-2/4 z-20"
+        className="w-40 lg:hidden fixed bottom-2 left-2/4 right-2/4 -translate-x-2/4 -translate-y-2/4 z-10"
       >
         <Button className="flex items-center justify-center gap-2 !bg-[#303960] !py-2.5 !w-full !rounded-full">
           <svg
@@ -1014,7 +1442,7 @@ function Activities({ userProfile, longitude, latitude }) {
       {mobileMap && (
         <div
           onClick={() => setMobileMap(false)}
-          className="w-40 lg:hidden fixed bottom-2 left-2/4 right-2/4 -translate-x-2/4 -translate-y-2/4 z-20"
+          className="w-40 lg:hidden fixed bottom-2 left-2/4 right-2/4 -translate-x-2/4 -translate-y-2/4 z-10"
         >
           <Button className="flex items-center justify-center gap-2 !bg-[#303960] !py-2.5 !w-full !rounded-full">
             <svg
@@ -1050,20 +1478,20 @@ export const getServerSideProps = wrapper.getServerSideProps(
       try {
         const token = getTokenFromReq(req);
 
-        const response = await axios.get(
+        const activities = await axios.get(
           `${process.env.NEXT_PUBLIC_baseURL}/activities/?search=${
             query.search ? query.search : ""
-          }&type_of_activities=${
+          }&min_capacity=${query.min_capacity}&type_of_activities=${
             query.type_of_stay ? query.type_of_stay : ""
           }&min_price=${query.min_price ? query.min_price : ""}&max_price=${
             query.max_price ? query.max_price : ""
           }&ordering=${query.ordering ? query.ordering : ""}`
         );
 
-        await context.dispatch({
-          type: "SET_ACTIVITIES",
-          payload: response.data.results,
-        });
+        // await context.dispatch({
+        //   type: "SET_ACTIVITIES",
+        //   payload: response.data.results,
+        // });
 
         if (token) {
           const response = await axios.get(
@@ -1078,6 +1506,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           return {
             props: {
               userProfile: response.data[0],
+              activities: activities.data.results,
             },
           };
         }
@@ -1085,6 +1514,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         return {
           props: {
             userProfile: "",
+            activities: activities.data.results,
           },
         };
       } catch (error) {
@@ -1099,6 +1529,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           return {
             props: {
               userProfile: "",
+              activities: [],
             },
           };
         }

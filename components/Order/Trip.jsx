@@ -29,8 +29,10 @@ import Dropdown from "../ui/Dropdown";
 import Select from "react-select";
 import Checkbox from "../ui/Checkbox";
 import { stayPriceOfPlanLower } from "../../lib/pricePlan";
+import Modal from "../../components/ui/FullScreenMobileModal";
 import Price from "../Stay/Price";
 import Search from "../Trip/Search";
+import Switch from "../ui/Switch";
 
 const Trip = ({
   nights,
@@ -552,6 +554,7 @@ const Trip = ({
           transport_number_of_days: numberOfDays,
           starting_point: searchLocation,
           transport_from_date: startingDate,
+          user_need_a_driver: needADriver,
         },
         {
           headers: {
@@ -568,17 +571,51 @@ const Trip = ({
       });
   };
 
+  const changeTransport = () => {
+    router.push({
+      pathname: "/transport",
+      query: {
+        trip: trip.slug,
+        group_trip: router.query.slug,
+      },
+    });
+  };
+
+  const changeStay = () => {
+    router.push({
+      pathname: "/stays",
+      query: {
+        trip: trip.slug,
+        group_trip: router.query.slug,
+      },
+    });
+  };
+
+  const changeExperiences = () => {
+    router.push({
+      pathname: "/experiences",
+      query: {
+        trip: trip.slug,
+        group_trip: router.query.slug,
+      },
+    });
+  };
+
   const [numberOfDays, setNumberOfDays] = useState(
     trip.transport_number_of_days
   );
 
-  const [startingDate, setStartingDate] = useState(trip.transport_from_date);
+  const [startingDate, setStartingDate] = useState(
+    new Date(trip.transport_from_date)
+  );
 
   const [editTransportPopup, setEditTransportPopup] = useState(false);
 
   const [transportEditLoading, setTransportEditLoading] = useState(false);
 
   const [searchLocation, setSearchLocation] = useState(trip.starting_point);
+
+  const [needADriver, setNeedADriver] = useState(trip.user_need_a_driver);
 
   const maxGuests =
     trip.stay &&
@@ -942,6 +979,22 @@ const Trip = ({
                   ></Search>
                 </div>
 
+                <div className="mt-2 mb-2">
+                  <h1 className="font-semibold mb-2">Car operates within</h1>
+                  <div className="flex">
+                    {trip.transport.dropoff_city
+                      .split(",")
+                      .map((city, index) => (
+                        <div
+                          key={index}
+                          className="bg-blue-500 text-sm mt-0.5 text-white px-2 py-1 mr-1 rounded-full"
+                        >
+                          {city}
+                        </div>
+                      ))}
+                  </div>
+                </div>
+
                 <div className="flex items-center mt-2">
                   {/* {startingDate && (
                   <span className="text-sm font-bold text-blue-600">
@@ -990,6 +1043,39 @@ const Trip = ({
                   </div>
                 </div>
 
+                <div className="mt-1 font-semibold">Do you need a driver?</div>
+                <div className="flex gap-2 items-center">
+                  <Switch
+                    switchButton={needADriver}
+                    changeSwitchButtonState={() => {
+                      setNeedADriver(!needADriver);
+                    }}
+                    switchButtonContainer="!w-[55px] !h-6"
+                    switchButtonCircle="!w-5 !h-5 !bg-blue-500"
+                    slideColorClass="!bg-blue-200"
+                  ></Switch>
+                  {!needADriver && (
+                    <div
+                      onClick={() => {
+                        setNeedADriver(true);
+                      }}
+                      className="cursor-pointer text-sm mb-1"
+                    >
+                      no
+                    </div>
+                  )}
+                  {needADriver && (
+                    <div
+                      onClick={() => {
+                        setNeedADriver(false);
+                      }}
+                      className="cursor-pointer text-sm mb-1"
+                    >
+                      yes
+                    </div>
+                  )}
+                </div>
+
                 <div className="flex justify-between mt-3">
                   <div></div>
                   <div className="flex gap-2">
@@ -1002,10 +1088,14 @@ const Trip = ({
                       Close
                     </div>
                     <Button
+                      disabled={!startingDate}
                       onClick={() => {
                         updateTransportInfo();
                       }}
-                      className="!bg-blue-700 flex gap-2 items-center !rounded-3xl"
+                      className={
+                        "!bg-blue-700 flex gap-2 items-center !rounded-3xl " +
+                        (!startingDate ? "opacity-50 cursor-not-allowed" : "")
+                      }
                     >
                       <span>Update</span>
 
@@ -1040,12 +1130,24 @@ const Trip = ({
               transportStartingPoint={trip.starting_point}
               transportPrice={
                 trip.transport.price_per_day *
-                (trip.transport_number_of_days
-                  ? trip.transport_number_of_days
-                  : 1)
+                  (trip.transport_number_of_days
+                    ? trip.transport_number_of_days
+                    : 1) +
+                (trip.user_need_a_driver
+                  ? trip.transport.additional_price_with_a_driver
+                  : 0)
               }
               checkoutInfo={true}
             ></OrderCard>
+          </div>
+
+          <div
+            onClick={() => {
+              changeTransport();
+            }}
+            className="px-3 cursor-pointer text-sm py-1 w-fit text-black border bg-white rounded-md"
+          >
+            Change
           </div>
         </div>
       )}
@@ -1605,7 +1707,12 @@ const Trip = ({
           </div>
 
           <div className="w-full flex gap-2">
-            <div className="px-3 cursor-pointer text-sm py-1 w-fit text-black border bg-white rounded-md">
+            <div
+              onClick={() => {
+                changeStay();
+              }}
+              className="px-3 cursor-pointer text-sm py-1 w-fit text-black border bg-white rounded-md"
+            >
               Change
             </div>
             <div
@@ -1622,7 +1729,7 @@ const Trip = ({
                 onClick={(e) => {
                   e.stopPropagation();
                 }}
-                className="absolute !z-40 py-3 px-3 !bg-white border border-gray-100 shadow-md rounded-xl right-0 sm:!-right-2 mt-4 !w-full sm:!w-96 top-[320px] md:-top-[250px]"
+                className="absolute !z-40 py-3 px-3 !bg-white border border-gray-100 shadow-md rounded-xl right-0 sm:!-right-2 mt-4 !w-full sm:!w-96 top-[300px] md:top-[320px]"
               >
                 <div className="mb-2">
                   <Price
@@ -2362,7 +2469,12 @@ const Trip = ({
           </div>
 
           <div className="w-full flex gap-2">
-            <div className="px-3 cursor-pointer text-sm py-1 w-fit text-black border bg-white rounded-md">
+            <div
+              onClick={() => {
+                changeExperiences();
+              }}
+              className="px-3 cursor-pointer text-sm py-1 w-fit text-black border bg-white rounded-md"
+            >
               Change
             </div>
             <div
@@ -2379,7 +2491,7 @@ const Trip = ({
                 onClick={(e) => {
                   e.stopPropagation();
                 }}
-                className="absolute !z-40 py-3 px-3 !bg-white border border-gray-100 shadow-md rounded-xl right-0 sm:!-right-2 mt-4 !w-full sm:!w-96 top-[320px] md:-top-[250px]"
+                className="absolute !z-40 py-3 px-3 !bg-white border border-gray-100 shadow-md rounded-xl right-0 sm:!-right-2 mt-4 !w-full sm:!w-96 top-[280px] md:top-[270px]"
               >
                 <div className="mb-2">
                   <Price

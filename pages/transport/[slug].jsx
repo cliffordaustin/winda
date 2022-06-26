@@ -103,6 +103,68 @@ function TransportDetail({ userProfile, transport, inCart }) {
 
   const [showRouteInMap, setShowRouteInMap] = useState(false);
 
+  const [slugIsCorrect, setSlugIsCorrect] = useState(false);
+
+  const checkSlug = async () => {
+    const token = Cookies.get("token");
+
+    if (token) {
+      await axios
+        .get(`${process.env.NEXT_PUBLIC_baseURL}/trip/${router.query.trip}/`, {
+          headers: {
+            Authorization: "Token " + token,
+          },
+        })
+        .then((res) => {
+          setSlugIsCorrect(true);
+        })
+        .catch((err) => {
+          if (err.response.status === 404) {
+            setSlugIsCorrect(false);
+          }
+        });
+    } else {
+      setSlugIsCorrect(false);
+    }
+  };
+
+  useEffect(() => {
+    if (router.query.trip) {
+      checkSlug();
+    }
+  }, []);
+
+  const [addToTripLoading, setAddToTripLoading] = useState(false);
+
+  const addToTrip = async () => {
+    const token = Cookies.get("token");
+
+    setAddToTripLoading(true);
+
+    if (token) {
+      await axios
+        .put(
+          `${process.env.NEXT_PUBLIC_baseURL}/trip/${router.query.trip}/`,
+          {
+            transport_id: transport.id,
+          },
+          {
+            headers: {
+              Authorization: "Token " + token,
+            },
+          }
+        )
+        .then(() => {
+          router.push({
+            pathname: `/trip/plan/${router.query.group_trip}`,
+          });
+        })
+        .catch((err) => {
+          setAddToTripLoading(false);
+        });
+    }
+  };
+
   const scrollToVisible = useRef(null);
 
   const isVisible = useOnScreen(scrollToVisible);
@@ -296,10 +358,10 @@ function TransportDetail({ userProfile, transport, inCart }) {
       </div>
 
       <div className="flex flex-col md:flex-row justify-around relative h-full w-full">
-        <div className="md:fixed left-2 md:w-[64%] h-[50vh] md:h-[87vh] top-20 md:block">
+        <div className="md:fixed left-2 md:w-[60%] lg:w-[64%] h-[50vh] md:h-[87vh] top-20 md:block">
           <ImageGallery images={images}></ImageGallery>
         </div>
-        <div className="md:absolute md:mt-0 mt-10 right-0 md:block top-20 md:w-[35%]">
+        <div className="md:absolute md:mt-0 mt-10 right-0 md:block top-20 md:w-[38%] lg:w-[35%]">
           <Element name="about" className="">
             <div ref={scrollToVisible}></div>
             <div
@@ -340,72 +402,48 @@ function TransportDetail({ userProfile, transport, inCart }) {
                     <div className="text-xs mt-2">{"/day"}</div>
                   </div>
                 )}
-
-                <div className="text-xl font-bold ">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden="true"
-                    role="img"
-                    className="w-4 h-4"
-                    preserveAspectRatio="xMidYMid meet"
-                    viewBox="0 0 24 24"
-                  >
-                    <g
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                    >
-                      <path
-                        strokeDasharray="10"
-                        strokeDashoffset="10"
-                        d="M12 12H3.5M12 12H20.5"
-                      >
-                        <animate
-                          fill="freeze"
-                          attributeName="stroke-dashoffset"
-                          dur="0.3s"
-                          values="10;0"
-                        />
-                      </path>
-                      <path
-                        strokeDasharray="6"
-                        strokeDashoffset="6"
-                        d="M3 12L7 16M21 12L17 16M3 12L7 8M21 12L17 8"
-                      >
-                        <animate
-                          fill="freeze"
-                          attributeName="stroke-dashoffset"
-                          begin="0.3s"
-                          dur="0.3s"
-                          values="6;0"
-                        />
-                      </path>
-                    </g>
-                  </svg>
-                </div>
-
-                {transport.price && (
-                  <div className="flex gap-0.5">
-                    <Price stayPrice={transport.price}></Price>
-                    <div className="text-xs mt-2">/10km</div>
-                  </div>
-                )}
               </div>
 
-              <div className="flex items-center mt-4 gap-2 justify-between self-start w-full">
+              <div className="sm:w-[70%] mx-auto flex items-center mt-4 gap-2 justify-between self-start md:w-full">
+                {slugIsCorrect && (
+                  <div className="!w-[40%] md:!w-[50%] lg:!w-[40%]">
+                    <Button
+                      onClick={() => {
+                        addToTrip();
+                      }}
+                      className={
+                        "!bg-blue-500 !text-white !w-full flex gap-2 !border-2 border-blue-500"
+                      }
+                    >
+                      <span className="text-white text-sm">Add to trip</span>
+
+                      {addToTripLoading && (
+                        <div>
+                          <LoadingSpinerChase
+                            width={14}
+                            height={14}
+                          ></LoadingSpinerChase>
+                        </div>
+                      )}
+                    </Button>
+                  </div>
+                )}
                 {!inCart && (
                   <Button
                     onClick={() => {
                       setShowBasketPopup(true);
                     }}
-                    className="!bg-transparent flex gap-1.5 !w-full !text-black !border-2 border-blue-800"
+                    className={
+                      "!bg-transparent flex gap-1.5 !text-black !border-2 border-blue-800 " +
+                      (slugIsCorrect
+                        ? "!w-[60%] md:!w-[50%] lg:!w-[60%]"
+                        : "w-full")
+                    }
                   >
                     Add to basket
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
+                      className="h-5 w-5 md:hidden lg:block"
                       viewBox="0 0 24 24"
                       version="1.1"
                     >
@@ -1211,27 +1249,8 @@ function TransportDetail({ userProfile, transport, inCart }) {
         className="md:!hidden"
         title="Book this ride"
       >
-        <Swiper
-          preventInteractionOnTransition={true}
-          allowTouchMove={false}
-          autoHeight={true}
-          onSlideChange={(swiper) =>
-            setState({
-              ...state,
-              swiperIndex: swiper.realIndex,
-            })
-          }
-          pagination={{
-            el: ".swiper-pagination-class",
-            clickable: true,
-          }}
-          navigation={{
-            nextEl: ".swiper-button-next-class",
-            prevEl: ".swiper-button-prev-class",
-          }}
-          className={"!h-full !w-full !overflow-y-scroll remove-scroll"}
-        >
-          <SwiperSlide className="!px-4 !mt-6 !h-full">
+        <div className={"!h-full !w-full !overflow-y-scroll remove-scroll"}>
+          <div className="!px-4 !mt-6 !h-full">
             <div
               onClick={() => {
                 setShowStartingDate(false);
@@ -1242,6 +1261,21 @@ function TransportDetail({ userProfile, transport, inCart }) {
                 location={startingDestination}
                 setLocation={setStartingDestination}
               ></SearchBar>
+
+              <div className="mt-3 mb-3">
+                <h1 className="font-bold mb-2">Car operates within</h1>
+                <div className="flex">
+                  {transport.dropoff_city.split(",").map((city, index) => (
+                    <div
+                      key={index}
+                      className="bg-blue-500 text-sm mt-0.5 text-white px-2 py-1 mr-1 rounded-full"
+                    >
+                      {city}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               <div className="mt-4 ml-4 relative">
                 <div className="flex gap-1 items-center">
                   <span className="font-bold">Select a starting date</span>
@@ -1290,9 +1324,7 @@ function TransportDetail({ userProfile, transport, inCart }) {
                   disableDate={new Date()}
                   className="!w-[400px] !top-[46px]"
                 ></DatePicker>
-                <Button className="!border border-blue-500 mb-3 !w-full swiper-pagination-class swiper-button-next-class !py-2 !text-black mt-5 !bg-transparent">
-                  <span>I need the ride per distance</span>
-                </Button>
+
                 <div className="mb-1 font-semibold">
                   How long do you need this car?
                 </div>
@@ -1358,9 +1390,10 @@ function TransportDetail({ userProfile, transport, inCart }) {
                 </div>
               </div>
             </div>
-          </SwiperSlide>
+          </div>
 
-          <SwiperSlide className="!px-4 !mt-6">
+          <div>
+            {/* <SwiperSlide className="!px-4 !mt-6">
             <div className="swiper-pagination-class swiper-button-prev-class cursor-pointer flex items-center gap-1 mb-3">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -1475,8 +1508,9 @@ function TransportDetail({ userProfile, transport, inCart }) {
                 </div>
               </div>
             )}
-          </SwiperSlide>
-        </Swiper>
+          </SwiperSlide> */}
+          </div>
+        </div>
 
         <div
           className={
@@ -1531,38 +1565,14 @@ function TransportDetail({ userProfile, transport, inCart }) {
 
       <Modal
         showModal={showBasketPopup}
-        className={
-          "max-w-[600px] !py-2 !pt-4 !hidden md:!block " +
-          (state.swiperIndex === 1 && showDetailBasket
-            ? "h-[490px]"
-            : "h-[450px]")
-        }
+        className={"max-w-[600px] !py-2 !pt-4 !hidden md:!block h-[500px]"}
         backdropClassName="!hidden md:!block"
         closeModal={() => {
           setShowBasketPopup(false);
         }}
       >
-        <Swiper
-          preventInteractionOnTransition={true}
-          allowTouchMove={false}
-          autoHeight={true}
-          onSlideChange={(swiper) =>
-            setState({
-              ...state,
-              swiperIndex: swiper.realIndex,
-            })
-          }
-          pagination={{
-            el: ".swiper-pagination-class",
-            clickable: true,
-          }}
-          navigation={{
-            nextEl: ".swiper-button-next-class",
-            prevEl: ".swiper-button-prev-class",
-          }}
-          className={"!h-full !w-full !overflow-y-scroll remove-scroll"}
-        >
-          <SwiperSlide>
+        <div className={"!h-full !w-full !overflow-y-scroll remove-scroll"}>
+          <div>
             <div
               onClick={() => {
                 setShowStartingDate(false);
@@ -1573,6 +1583,21 @@ function TransportDetail({ userProfile, transport, inCart }) {
                 location={startingDestination}
                 setLocation={setStartingDestination}
               ></SearchBar>
+
+              <div className="mt-3 mb-3">
+                <h1 className="font-bold mb-2">Car operates within</h1>
+                <div className="flex">
+                  {transport.dropoff_city.split(",").map((city, index) => (
+                    <div
+                      key={index}
+                      className="bg-blue-500 text-sm mt-0.5 text-white px-2 py-1 mr-1 rounded-full"
+                    >
+                      {city}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               <div className="mt-4 ml-4 relative">
                 <div className="flex gap-1 items-center">
                   <span className="font-bold">Select a starting date</span>
@@ -1621,9 +1646,7 @@ function TransportDetail({ userProfile, transport, inCart }) {
                   disableDate={new Date()}
                   className="!w-[400px] !top-[46px]"
                 ></DatePicker>
-                <Button className="!border border-blue-500 mb-3 !w-full swiper-pagination-class swiper-button-next-class !py-2 !text-black mt-5 !bg-transparent">
-                  <span>I need the ride per distance</span>
-                </Button>
+
                 <div className="mb-1 font-semibold">
                   How long do you need this car?
                 </div>
@@ -1768,213 +1791,217 @@ function TransportDetail({ userProfile, transport, inCart }) {
                 </Button>
               }
             </div>
-          </SwiperSlide>
+          </div>
 
-          <SwiperSlide>
-            <div className="swiper-pagination-class swiper-button-prev-class cursor-pointer flex items-center gap-1 mb-3">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 text-blue-600"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <h3 className="font-bold text-blue-600">Back</h3>
-            </div>
-            <div className="mb-2 ml-2 font-bold text-lg">Destination</div>
-            <Search
-              state={basketState}
-              setState={setBasketState}
-              setShowSearchDetails={setShowDetailBasket}
-            ></Search>
-
-            <div className="mt-2 ml-1 relative">
-              <div className="mt-4 relative">
-                <div className="flex gap-1 items-center">
-                  <span className="font-bold">Select a starting date</span>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 mt-0.5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                    />
-                  </svg>
-                </div>
-                <div className="flex items-center gap-2 mb-3 mt-0.5">
-                  <span className="text-sm font-bold text-blue-600">
-                    {moment(startingDate).format("Do MMMM YYYY")}
-                  </span>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden="true"
-                    role="img"
-                    className="h-4 w-4 text-blue-600 cursor-pointer"
-                    preserveAspectRatio="xMidYMid meet"
-                    viewBox="0 0 24 24"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setShowStartingDate(!showStartingDate);
-                    }}
-                  >
-                    <path
-                      fill="currentColor"
-                      d="M8.707 19.707L18 10.414L13.586 6l-9.293 9.293a1.003 1.003 0 0 0-.263.464L3 21l5.242-1.03c.176-.044.337-.135.465-.263zM21 7.414a2 2 0 0 0 0-2.828L19.414 3a2 2 0 0 0-2.828 0L15 4.586L19.414 9L21 7.414z"
-                    />
-                  </svg>
-                </div>
-                <DatePicker
-                  date={startingDate}
-                  setDate={setStartingDate}
-                  showDate={showStartingDate}
-                  setShowDate={setShowStartingDate}
-                  disableDate={new Date()}
-                  className="!w-[400px] !top-[46px]"
-                ></DatePicker>
-              </div>
-              <div className="mb-1 font-semibold">Do you need a driver?</div>
-              <div className="flex gap-2 items-center">
-                <Switch
-                  switchButton={needADriver}
-                  changeSwitchButtonState={() => {
-                    setNeedADriver(!needADriver);
-                  }}
-                  switchButtonContainer="!w-[55px] !h-6"
-                  switchButtonCircle="!w-5 !h-5 !bg-blue-500"
-                  slideColorClass="!bg-blue-200"
-                ></Switch>
-                {!needADriver && (
-                  <div
-                    onClick={() => {
-                      setNeedADriver(true);
-                    }}
-                    className="cursor-pointer text-sm mb-1"
-                  >
-                    no
-                  </div>
-                )}
-                {needADriver && (
-                  <div
-                    onClick={() => {
-                      setNeedADriver(false);
-                    }}
-                    className="cursor-pointer text-sm mb-1"
-                  >
-                    yes
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {showDetailBasket && (
-              <div>
-                <div className="mt-6 flex justify-between items-center">
-                  <span className="font-bold">Total price</span>
-                  <span>
-                    <Price
-                      className="!text-base"
-                      stayPrice={
-                        ((mapRoute.distance * 0.001).toFixed(1) / 10) *
-                          transport.price +
-                        (needADriver
-                          ? transport.additional_price_with_a_driver
-                          : 0)
-                      }
-                    ></Price>
-                  </span>
-                </div>
-
-                <hr className="mt-2" />
-
-                <div className="mt-2 flex justify-between items-center">
-                  <span className="font-bold">Total distance</span>
-                  <span>{(mapRoute.distance * 0.001).toFixed(1)}km</span>
-                </div>
-                <Button
-                  onClick={() => {
-                    addToBasket();
-                  }}
-                  className="!bg-blue-600 mt-4 flex gap-1.5 !w-full !text-white !border-2 border-blue-600"
+          <div>
+            {/* <SwiperSlide>
+              <div className="swiper-pagination-class swiper-button-prev-class cursor-pointer flex items-center gap-1 mb-3">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6 text-blue-600"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
                 >
-                  Add to basket
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 "
-                    viewBox="0 0 24 24"
-                    version="1.1"
-                  >
-                    <title>bag</title>
-                    <desc>Created with Sketch.</desc>
-                    <defs />
-                    <g
-                      id="Page-1"
-                      stroke="none"
-                      strokeWidth="1"
+                  <path
+                    fillRule="evenodd"
+                    d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <h3 className="font-bold text-blue-600">Back</h3>
+              </div>
+              <div className="mb-2 ml-2 font-bold text-lg">Destination</div>
+              <Search
+                state={basketState}
+                setState={setBasketState}
+                setShowSearchDetails={setShowDetailBasket}
+              ></Search>
+
+              <div className="mt-2 ml-1 relative">
+                <div className="mt-4 relative">
+                  <div className="flex gap-1 items-center">
+                    <span className="font-bold">Select a starting date</span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 mt-0.5"
                       fill="none"
-                      fillRule="evenodd"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth="2"
                     >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      />
+                    </svg>
+                  </div>
+                  <div className="flex items-center gap-2 mb-3 mt-0.5">
+                    <span className="text-sm font-bold text-blue-600">
+                      {moment(startingDate).format("Do MMMM YYYY")}
+                    </span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      aria-hidden="true"
+                      role="img"
+                      className="h-4 w-4 text-blue-600 cursor-pointer"
+                      preserveAspectRatio="xMidYMid meet"
+                      viewBox="0 0 24 24"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowStartingDate(!showStartingDate);
+                      }}
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M8.707 19.707L18 10.414L13.586 6l-9.293 9.293a1.003 1.003 0 0 0-.263.464L3 21l5.242-1.03c.176-.044.337-.135.465-.263zM21 7.414a2 2 0 0 0 0-2.828L19.414 3a2 2 0 0 0-2.828 0L15 4.586L19.414 9L21 7.414z"
+                      />
+                    </svg>
+                  </div>
+                  <DatePicker
+                    date={startingDate}
+                    setDate={setStartingDate}
+                    showDate={showStartingDate}
+                    setShowDate={setShowStartingDate}
+                    disableDate={new Date()}
+                    className="!w-[400px] !top-[46px]"
+                  ></DatePicker>
+                </div>
+                <div className="mb-1 font-semibold">Do you need a driver?</div>
+                <div className="flex gap-2 items-center">
+                  <Switch
+                    switchButton={needADriver}
+                    changeSwitchButtonState={() => {
+                      setNeedADriver(!needADriver);
+                    }}
+                    switchButtonContainer="!w-[55px] !h-6"
+                    switchButtonCircle="!w-5 !h-5 !bg-blue-500"
+                    slideColorClass="!bg-blue-200"
+                  ></Switch>
+                  {!needADriver && (
+                    <div
+                      onClick={() => {
+                        setNeedADriver(true);
+                      }}
+                      className="cursor-pointer text-sm mb-1"
+                    >
+                      no
+                    </div>
+                  )}
+                  {needADriver && (
+                    <div
+                      onClick={() => {
+                        setNeedADriver(false);
+                      }}
+                      className="cursor-pointer text-sm mb-1"
+                    >
+                      yes
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {showDetailBasket && (
+                <div>
+                  <div className="mt-6 flex justify-between items-center">
+                    <span className="font-bold">Total price</span>
+                    <span>
+                      <Price
+                        className="!text-base"
+                        stayPrice={
+                          ((mapRoute.distance * 0.001).toFixed(1) / 10) *
+                            transport.price +
+                          (needADriver
+                            ? transport.additional_price_with_a_driver
+                            : 0)
+                        }
+                      ></Price>
+                    </span>
+                  </div>
+
+                  <hr className="mt-2" />
+
+                  <div className="mt-2 flex justify-between items-center">
+                    <span className="font-bold">Total distance</span>
+                    <span>{(mapRoute.distance * 0.001).toFixed(1)}km</span>
+                  </div>
+                  <Button
+                    onClick={() => {
+                      addToBasket();
+                    }}
+                    className="!bg-blue-600 mt-4 flex gap-1.5 !w-full !text-white !border-2 border-blue-600"
+                  >
+                    Add to basket
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 "
+                      viewBox="0 0 24 24"
+                      version="1.1"
+                    >
+                      <title>bag</title>
+                      <desc>Created with Sketch.</desc>
+                      <defs />
                       <g
-                        id="Artboard-4"
-                        transform="translate(-620.000000, -291.000000)"
+                        id="Page-1"
+                        stroke="none"
+                        strokeWidth="1"
+                        fill="none"
+                        fillRule="evenodd"
                       >
                         <g
-                          id="94"
-                          transform="translate(620.000000, 291.000000)"
+                          id="Artboard-4"
+                          transform="translate(-620.000000, -291.000000)"
                         >
-                          <rect
-                            id="Rectangle-40"
-                            stroke="#fff"
-                            strokeWidth="2"
-                            x="4"
-                            y="7"
-                            width="16"
-                            height="16"
-                            rx="1"
-                          />
-                          <path
-                            d="M16,10 L16,5 C16,2.790861 14.209139,1 12,1 C9.790861,1 8,2.790861 8,5 L8,10"
-                            id="Oval-21"
-                            stroke="#fff"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                          />
-                          <rect
-                            id="Rectangle-41"
-                            fill="#fff"
-                            x="5"
-                            y="18"
-                            width="14"
-                            height="2"
-                          />
+                          <g
+                            id="94"
+                            transform="translate(620.000000, 291.000000)"
+                          >
+                            <rect
+                              id="Rectangle-40"
+                              stroke="#fff"
+                              strokeWidth="2"
+                              x="4"
+                              y="7"
+                              width="16"
+                              height="16"
+                              rx="1"
+                            />
+                            <path
+                              d="M16,10 L16,5 C16,2.790861 14.209139,1 12,1 C9.790861,1 8,2.790861 8,5 L8,10"
+                              id="Oval-21"
+                              stroke="#fff"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                            />
+                            <rect
+                              id="Rectangle-41"
+                              fill="#fff"
+                              x="5"
+                              y="18"
+                              width="14"
+                              height="2"
+                            />
+                          </g>
                         </g>
                       </g>
-                    </g>
-                  </svg>
-                  <div
-                    className={" " + (!addToBasketLoading ? "hidden" : "ml-2")}
-                  >
-                    <LoadingSpinerChase
-                      width={16}
-                      height={16}
-                      color="#000"
-                    ></LoadingSpinerChase>
-                  </div>
-                </Button>
-              </div>
-            )}
-          </SwiperSlide>
-        </Swiper>
+                    </svg>
+                    <div
+                      className={
+                        " " + (!addToBasketLoading ? "hidden" : "ml-2")
+                      }
+                    >
+                      <LoadingSpinerChase
+                        width={16}
+                        height={16}
+                        color="#000"
+                      ></LoadingSpinerChase>
+                    </div>
+                  </Button>
+                </div>
+              )}
+            </SwiperSlide> */}
+          </div>
+        </div>
       </Modal>
 
       <div>

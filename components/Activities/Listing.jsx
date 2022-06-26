@@ -14,6 +14,7 @@ import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
+import Button from "../ui/Button";
 
 function Listing({
   listing,
@@ -22,6 +23,7 @@ function Listing({
   itemsInCart,
   userProfile,
   itemsInOrders,
+  slugIsCorrect,
 }) {
   const dispatch = useDispatch();
 
@@ -153,7 +155,6 @@ function Listing({
   }, [itemsInCart]);
 
   const [listingIsInOrder, setListingIsInOrder] = useState(false);
-  const [addToTripLoading, setAddToTripLoading] = useState(false);
 
   const itemIsInOrder = async () => {
     let exist = false;
@@ -173,28 +174,30 @@ function Listing({
     itemIsInOrder();
   }, [itemsInOrders]);
 
-  const addToTrip = async (e) => {
-    e.stopPropagation();
-    e.preventDefault();
+  const [addToTripLoading, setAddToTripLoading] = useState(false);
+
+  const addToTrip = async () => {
+    const token = Cookies.get("token");
 
     setAddToTripLoading(true);
 
-    if (Cookies.get("token")) {
+    if (token) {
       await axios
-        .post(
-          `${process.env.NEXT_PUBLIC_baseURL}/activities/${listing.slug}/add-to-order/`,
+        .put(
+          `${process.env.NEXT_PUBLIC_baseURL}/trip/${router.query.trip}/`,
           {
-            first_name: userProfile.first_name || "",
-            last_name: userProfile.last_name || "",
+            activity_id: listing.id,
           },
           {
             headers: {
-              Authorization: `Token ${Cookies.get("token")}`,
+              Authorization: "Token " + token,
             },
           }
         )
-        .then((res) => {
-          location.reload();
+        .then(() => {
+          router.push({
+            pathname: `/trip/plan/${router.query.group_trip}`,
+          });
         })
         .catch((err) => {
           setAddToTripLoading(false);
@@ -214,9 +217,17 @@ function Listing({
     >
       <div
         onClick={() => {
-          router.push({
-            pathname: `experiences/${listing.slug}`,
-          });
+          if (router.query.trip) {
+            router.push({
+              pathname: `experiences/${listing.slug}`,
+              query: {
+                trip: router.query.trip,
+                group_trip: router.query.group_trip,
+              },
+            });
+          } else {
+            router.push(`experiences/${listing.slug}`);
+          }
         }}
         className="lgMax:block lg:hidden xl:block relative"
       >
@@ -319,38 +330,28 @@ function Listing({
             </div>
           )}
 
-          {Cookies.get("token") && router.query.fromOrder === "true" && (
-            <div
-              className="text-sm w-fit flex items-center bg-green-500 bg-opacity-30 px-2 py-1 text-green-700 bg-primary-red-100 font-bold p-3 rounded-md mt-2
-          "
-              onClick={(e) => {
-                if (!listingIsInOrder) {
-                  addToTrip(e);
-                } else if (listingIsInOrder) {
-                  e.stopPropagation();
-                  router.push({
-                    pathname: "/orders",
-                    query: {
-                      stay: "show",
-                      experiences: "show",
-                    },
-                  });
-                }
-              }}
-            >
-              {!listingIsInOrder && <span className="mr-1">Add to trip</span>}
-              {listingIsInOrder && (
-                <span className="mr-1">View in your trip</span>
-              )}
-              <div className={" " + (!addToTripLoading ? "hidden" : "")}>
-                <LoadingSpinerChase
-                  width={13}
-                  height={13}
-                  color="green"
-                ></LoadingSpinerChase>
-              </div>
+          {slugIsCorrect && (
+            <div className="mt-2">
+              <Button
+                onClick={() => {
+                  addToTrip();
+                }}
+                className="!bg-blue-500 !py-1 flex gap-2 !px-1.5"
+              >
+                <span className="text-white text-sm">Add to trip</span>
+
+                {addToTripLoading && (
+                  <div>
+                    <LoadingSpinerChase
+                      width={14}
+                      height={14}
+                    ></LoadingSpinerChase>
+                  </div>
+                )}
+              </Button>
             </div>
           )}
+
           {/* <div className="flex items-center gap-1 mt-2">
             <div className={!isSafari ? "-mb-0.5" : "-mb-1"}>
               <Badge
@@ -424,15 +425,23 @@ function Listing({
 
       <div
         onClick={() => {
-          router.push({
-            pathname: `experiences/${listing.slug}`,
-          });
+          if (router.query.trip) {
+            router.push({
+              pathname: `experiences/${listing.slug}`,
+              query: {
+                trip: router.query.trip,
+                group_trip: router.query.group_trip,
+              },
+            });
+          } else {
+            router.push(`experiences/${listing.slug}`);
+          }
         }}
         className="lgMax:hidden lg:block xl:hidden relative"
       >
         <SecondCard
           imagePaths={images}
-          carouselClassName="h-44 !w-[45%]"
+          carouselClassName="!w-[45%] min-h-[200px]"
           subCarouselClassName="hidden"
           className={styles.card}
         >
@@ -570,38 +579,29 @@ function Listing({
                 KM Away
               </div>
             )}
-            {Cookies.get("token") && router.query.fromOrder === "true" && (
-              <div
-                className="text-sm w-fit flex items-center bg-green-500 bg-opacity-30 px-2 py-1 text-green-700 bg-primary-red-100 font-bold p-3 rounded-md mt-2
-          "
-                onClick={(e) => {
-                  if (!listingIsInOrder) {
-                    addToTrip(e);
-                  } else if (listingIsInOrder) {
-                    e.stopPropagation();
-                    router.push({
-                      pathname: "/orders",
-                      query: {
-                        stay: "show",
-                        experiences: "show",
-                      },
-                    });
-                  }
-                }}
-              >
-                {!listingIsInOrder && <span className="mr-1">Add to trip</span>}
-                {listingIsInOrder && (
-                  <span className="mr-1">View in your trip</span>
-                )}
-                <div className={" " + (!addToTripLoading ? "hidden" : "")}>
-                  <LoadingSpinerChase
-                    width={13}
-                    height={13}
-                    color="green"
-                  ></LoadingSpinerChase>
-                </div>
+
+            {slugIsCorrect && (
+              <div className="mt-2">
+                <Button
+                  onClick={() => {
+                    addToTrip();
+                  }}
+                  className="!bg-blue-500 !py-1 flex gap-2 !px-1.5"
+                >
+                  <span className="text-white text-sm">Add to trip</span>
+
+                  {addToTripLoading && (
+                    <div>
+                      <LoadingSpinerChase
+                        width={14}
+                        height={14}
+                      ></LoadingSpinerChase>
+                    </div>
+                  )}
+                </Button>
               </div>
             )}
+
             {/* <div className="flex items-center gap-1 mt-2">
               <div className={!isSafari ? "-mb-0.5" : "-mb-1"}>
                 <Badge

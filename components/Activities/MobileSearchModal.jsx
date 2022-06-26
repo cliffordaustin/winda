@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Modal from "../ui/FullScreenMobileModal";
 import Search from "../Trip/Search";
-import DatePicker from "../ui/DatePickerRange";
+import DatePicker from "../ui/DatePickerOpen";
 import Button from "../ui/Button";
 import SearchSelect from "../Home/SearchSelect";
 import LoadingSpinerChase from "../ui/LoadingSpinerChase";
@@ -14,12 +14,13 @@ function MobileSearchModal({
   setSearch,
   date,
   setDate,
-  numOfAdults,
-  setNumOfAdults,
-  numOfChildren,
-  setNumOfChildren,
+  numOfPeople,
+  setNumOfPeople,
   searchFilter,
   showSearchLoader,
+
+  addTraveler,
+  removeTraveler,
 }) {
   const [showDate, setShowDate] = useState(false);
   const [showGuests, setShowGuests] = useState(false);
@@ -35,7 +36,7 @@ function MobileSearchModal({
     >
       <div className="flex justify-center mb-3 mt-6">
         <SearchSelect
-          currentNavState={1}
+          currentNavState={3}
           setCurrentNavState={(currentNavState) => {}}
         ></SearchSelect>
       </div>
@@ -67,38 +68,6 @@ function MobileSearchModal({
           </div>
         )}
 
-        {/* {!showDate && (
-          <div
-            onClick={() => {
-              setShowDate(true);
-              setShowGuests(false);
-              setShowSearch(false);
-            }}
-            className="px-3 mt-3 cursor-pointer py-6 border border-gray-200 rounded-2xl drop-shadow-lg bg-white w-full flex items-center justify-between"
-          >
-            <div className="text-sm">When?</div>
-            <div className="font-bold text-sm">Any week</div>
-          </div>
-        )}
-
-        {showDate && (
-          <div className="px-3 mt-3 py-2 cursor-pointer border border-gray-200 rounded-2xl drop-shadow-lg bg-white w-full">
-            <h1 className="text-xl font-bold mb-2">
-              {date && date.from && <div>To when?</div>}
-              {date && !date.from && !date.to && <div>From when?</div>}
-              {!date && <div>From when?</div>}
-            </h1>
-
-            <div className="mt-4">
-              <DatePicker
-                setDate={setDate}
-                date={date}
-                disableDate={new Date()}
-              ></DatePicker>
-            </div>
-          </div>
-        )} */}
-
         {!showGuests && (
           <div
             onClick={() => {
@@ -109,7 +78,11 @@ function MobileSearchModal({
             className="px-3 mt-3 cursor-pointer py-6 border border-gray-200 rounded-2xl drop-shadow-lg bg-white w-full flex items-center justify-between"
           >
             <div className="text-sm">Who?</div>
-            <div className="font-bold text-sm">Add a guest</div>
+            <div className="font-bold text-sm">
+              {numOfPeople > 0
+                ? `${numOfPeople} ${numOfPeople > 1 ? "Guests" : "Guest"}`
+                : "Add a guest"}
+            </div>
           </div>
         )}
 
@@ -118,21 +91,18 @@ function MobileSearchModal({
             <h1 className="text-xl font-bold mb-2">Who is coming?</h1>
 
             <hr />
-
             <div className="mt-0">
               <div className="flex justify-between items-center mt-4 mb-2">
                 <div className="flex flex-col text-sm text-gray-600 items-center">
                   <span>
-                    {numOfAdults} {numOfAdults > 1 ? "Guests" : "Guest"}
+                    {numOfPeople} {numOfPeople > 1 ? "People" : "Person"}
                   </span>
                 </div>
 
                 <div className="flex gap-3 items-center">
                   <div
                     onClick={() => {
-                      if (numOfAdults > 0) {
-                        setNumOfAdults(numOfAdults - 1);
-                      }
+                      removeTraveler();
                     }}
                     className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
                   >
@@ -141,7 +111,7 @@ function MobileSearchModal({
 
                   <div
                     onClick={() => {
-                      setNumOfAdults(numOfAdults + 1);
+                      addTraveler();
                     }}
                     className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
                   >
@@ -162,8 +132,7 @@ function MobileSearchModal({
         <div className="flex justify-between items-center gap-2">
           <div
             onClick={() => {
-              setNumOfAdults(0);
-              setNumOfChildren(0);
+              setNumOfPeople(0);
               setSearch("");
             }}
             className="underline cursor-pointer"
@@ -176,7 +145,7 @@ function MobileSearchModal({
               searchFilter();
             }}
             className={
-              "!bg-gradient-to-r !flex gap-1 from-pink-500 via-red-500 to-yellow-500 !text-white "
+              "!bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white "
             }
           >
             <span className="font-bold mr-0.5">Search</span>
