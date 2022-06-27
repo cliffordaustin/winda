@@ -92,23 +92,6 @@ function ScrollTo({ guestPopup, transport }) {
           <Link
             className="px-4 flex items-center border-b-2 border-transparent"
             activeClass="!border-b-2 !border-slate-800"
-            to="price-distance-calculator"
-            spy={true}
-            smooth={true}
-            offset={-200}
-            duration={500}
-            onSetActive={() => {
-              slideto(0);
-            }}
-          >
-            <div>Calculator</div>
-          </Link>
-        </SwiperSlide>
-
-        <SwiperSlide className="!w-auto flex cursor-pointer justify-center">
-          <Link
-            className="px-4 flex items-center border-b-2 border-transparent"
-            activeClass="!border-b-2 !border-slate-800"
             to="policies"
             spy={true}
             smooth={true}

@@ -79,30 +79,8 @@ function Activities({ userProfile, activities }) {
 
   const isFirstRender = useRef(true);
 
-  const minPriceFilterFormat = router.query.min_price
-    ? "KES" + router.query.min_price.replace("000", "k")
-    : "";
-
-  const minPriceFilterFormatObject = router.query.min_price
-    ? {
-        value: minPriceFilterFormat,
-        label: minPriceFilterFormat,
-      }
-    : "";
-
-  const maxPriceFilterFormat = router.query.max_price
-    ? "KES" + router.query.max_price.replace("000", "k")
-    : "";
-
-  const maxPriceFilterFormatObject = router.query.min_price
-    ? {
-        value: maxPriceFilterFormat,
-        label: maxPriceFilterFormat,
-      }
-    : "";
-
-  const [minPrice, setMinPrice] = useState(minPriceFilterFormatObject);
-  const [maxPrice, setMaxPrice] = useState(maxPriceFilterFormatObject);
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
 
   const [mobileMap, setMobileMap] = useState(false);
   const filterStayLoading = useSelector(
@@ -259,7 +237,7 @@ function Activities({ userProfile, activities }) {
   };
 
   const apiActivitySearchResult = () => {
-    if (activityLocation !== "") {
+    if (activityLocation !== "" || state.travelers !== 0) {
       setShowActivityLoader(true);
       router
         .push({
@@ -406,7 +384,7 @@ function Activities({ userProfile, activities }) {
         });
       }}
     >
-      <div className="fixed top-0 left-0 right-0 bg-white border-b z-20 md:pb-4">
+      <div className="fixed top-0 left-0 right-0 bg-white border-b z-20 pb-4">
         <Navbar
           showDropdown={state.showDropdown}
           currentNavState={state.currentNavState}
@@ -428,7 +406,7 @@ function Activities({ userProfile, activities }) {
           }
         ></Navbar>
 
-        <div className="w-5/6 mx-auto flex shadow-lg border border-gray-200 rounded-xl pl-3 h-12 md:hidden cursor-pointer">
+        <div className="w-[90%] sm:w-[70%] mx-auto flex shadow-lg border border-gray-200 rounded-xl pl-3 h-12 md:hidden cursor-pointer">
           <div
             onClick={() => {
               setMobileSearchModal(true);
@@ -449,7 +427,27 @@ function Activities({ userProfile, activities }) {
                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
               />
             </svg>
-            <h1 className="font-bold text-sm">Where to?</h1>
+            <div className="font-bold text-sm">
+              {router.query.search && (
+                <span className="truncate">
+                  {router.query.search.split(",")[0]}
+                </span>
+              )}
+              {router.query.search && "..."}
+              {Number(router.query.min_capacity) > 0 ? "," : ""}{" "}
+              <span>
+                {Number(router.query.min_capacity) > 0
+                  ? `${Number(router.query.min_capacity)} ${
+                      Number(router.query.min_capacity) > 1 ? "Guests" : "Guest"
+                    }`
+                  : ""}
+              </span>
+              <span>
+                {!Number(router.query.min_capacity) && !router.query.search
+                  ? "Where to?"
+                  : ""}
+              </span>
+            </div>
           </div>
 
           <div className="flex w-32 border rounded-xl transition-all duration-200 ease-linear self-stretch ">
@@ -615,6 +613,9 @@ function Activities({ userProfile, activities }) {
               ? setState({ ...state, travelers: state.travelers - 1 })
               : null;
           }}
+          clearNumOfPeople={() => {
+            setState({ ...state, travelers: 0 });
+          }}
           searchFilter={apiActivitySearchResult}
           showSearchLoader={showActivityLoader}
         ></MobileSearchModal>
@@ -623,7 +624,7 @@ function Activities({ userProfile, activities }) {
           ref={searchRef}
           className="mt-1 hidden w-full md:flex items-center lg:justify-center lg:px-0 md:px-4"
         >
-          <div className="lg:w-[750px] md:w-[80%]">
+          <div className="xl:w-[750px] lg:w-[70%] md:w-[80%]">
             <Search
               autoCompleteFromActivitySearch={autoCompleteFromActivitySearch}
               onKeyDown={keyDownActivitySearch}
@@ -686,7 +687,7 @@ function Activities({ userProfile, activities }) {
             ></Search>
           </div>
 
-          <div className="flex absolute right-2 bottom-[45px]">
+          <div className="flex absolute right-2 bottom-[30px]">
             <div
               onClick={(e) => {
                 e.stopPropagation();
@@ -893,7 +894,7 @@ function Activities({ userProfile, activities }) {
         </ClientOnly> */}
         </div>
 
-        <div className="flex gap-4 mt-4 ml-4 sm:ml-10">
+        <div>
           {/* <div
             onClick={(event) => {
               event.stopPropagation();
@@ -1184,7 +1185,7 @@ function Activities({ userProfile, activities }) {
               showMobileFilter: false,
             });
           }}
-          className="!overflow-y-scroll !relative max-w-[800px] !h-[700px]"
+          className="!overflow-y-scroll !relative max-w-[600px] !h-[500px]"
           title="Filters"
         >
           <div className="px-4 relative">
@@ -1374,7 +1375,7 @@ function Activities({ userProfile, activities }) {
         </div>
       </MobileModal>
 
-      <div className="mt-36 md:mt-40 lg:mt-[198px] flex relative h-full overflow-y-scroll">
+      <div className="mt-[146px] md:mt-[142px] lg:mt-[188px]  flex relative h-full overflow-y-scroll">
         <div className={"hidden lg:block w-2/4 px-4 h-[78vh] relative"}>
           <Map activities={activities}></Map>
         </div>
@@ -1481,7 +1482,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
         const activities = await axios.get(
           `${process.env.NEXT_PUBLIC_baseURL}/activities/?search=${
             query.search ? query.search : ""
-          }&min_capacity=${query.min_capacity}&type_of_activities=${
+          }&min_capacity=${
+            query.min_capacity ? query.min_capacity : ""
+          }&type_of_activities=${
             query.type_of_stay ? query.type_of_stay : ""
           }&min_price=${query.min_price ? query.min_price : ""}&max_price=${
             query.max_price ? query.max_price : ""

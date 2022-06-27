@@ -243,36 +243,6 @@ const Trips = ({ userProfile, recommendedTrips, userTrips }) => {
                 ></Image>
               </a>
             </Link>
-
-            {/* <div className="sm:flex items-center gap-8 hidden">
-              <div
-                onClick={(event) => {
-                  event.stopPropagation();
-                  setCurrentNavState(1);
-                  router.push("/trip");
-                }}
-                className={
-                  "cursor-pointer md:!text-base " +
-                  (currentNavState === 1 ? styles.showLinkLine : styles.link)
-                }
-              >
-                Stays
-              </div>
-
-              <div
-                onClick={(event) => {
-                  event.stopPropagation();
-                  setCurrentNavState(2);
-                  router.push("/trip/experiences");
-                }}
-                className={
-                  "cursor-pointer md:!text-base " +
-                  (currentNavState === 2 ? styles.showLinkLine : styles.link)
-                }
-              >
-                Experiences
-              </div>
-            </div> */}
           </div>
 
           <div className="flex items-center gap-3">

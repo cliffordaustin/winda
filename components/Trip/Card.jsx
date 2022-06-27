@@ -182,7 +182,7 @@ const Card = ({
         <div className="text-base text-gray-700">{listing.name}</div>
 
         <p className="mt-2 text-sm text-gray-500">
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Non...
+          {listing.description.substring(0, 80)}...
         </p>
 
         <div className="mt-2">
@@ -258,7 +258,14 @@ const Card = ({
         </div>
 
         <div className="flex mt-0.5 justify-between absolute bottom-2 w-full right-0 px-2">
-          <Button className="w-[40%] !px-0 !bg-transparent border border-gray-400 !text-black font-bold">
+          <Button
+            onClick={() => {
+              router.push({
+                pathname: `/trip/${listing.slug}`,
+              });
+            }}
+            className="w-[40%] !px-0 !bg-transparent border border-gray-400 !text-black font-bold"
+          >
             view trip
           </Button>
           <div className="w-[58%] relative">

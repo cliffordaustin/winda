@@ -2,7 +2,14 @@ import React from "react";
 import PropTypes from "prop-types";
 import { motion, AnimatePresence } from "framer-motion";
 
-function Accordion({ accordion, setAccordion, title, children }) {
+function Accordion({
+  accordion,
+  title,
+  children,
+  className = "",
+  setAccordion = () => {},
+  changeStateFunc = () => {},
+}) {
   const variants = {
     hide: {
       opacity: 0,
@@ -45,11 +52,17 @@ function Accordion({ accordion, setAccordion, title, children }) {
     },
   };
   return (
-    <div className="py-1 px-2 bg-white border-t border-b border-gray-300 w-full min-h-fit">
+    <div
+      className={
+        "py-1 px-2 bg-white border-t border-b border-gray-300 w-full min-h-fit " +
+        className
+      }
+    >
       <div
         onClick={(e) => {
           e.stopPropagation();
           setAccordion(!accordion);
+          changeStateFunc();
         }}
         className="flex items-center justify-between cursor-pointer py-2"
       >
@@ -90,7 +103,7 @@ function Accordion({ accordion, setAccordion, title, children }) {
 Accordion.propTypes = {
   accordion: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired,
-  setAccordion: PropTypes.func.isRequired,
+  setAccordion: PropTypes.func,
   children: PropTypes.node.isRequired,
 };
 

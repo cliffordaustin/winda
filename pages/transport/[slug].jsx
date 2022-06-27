@@ -364,21 +364,13 @@ function TransportDetail({ userProfile, transport, inCart }) {
         <div className="md:absolute md:mt-0 mt-10 right-0 md:block top-20 md:w-[38%] lg:w-[35%]">
           <Element name="about" className="">
             <div ref={scrollToVisible}></div>
-            <div
-              className={
-                !isVisible
-                  ? "h-12 border-b border-gray-200 !fixed md:!w-[35%] !w-full !top-[65px] right-0 z-[40] bg-white px-5 "
-                  : "h-12 border-b border-gray-200 absolute top-[416px] md:top-[0px] w-[100%] right-0 bg-white px-5"
-              }
-            >
-              <ScrollTo></ScrollTo>
-            </div>
-            <div className="px-4 mt-8 md:mt-16">
+
+            <div className="px-4">
               <div className="flex items-center gap-2">
-                <h1 className="font-bold uppercase text-2xl">
-                  {transport.vehicle_make}
+                <h1 className="font-bold capitalize text-2xl">
+                  {transport.vehicle_make.toLowerCase()}
                 </h1>
-                <div className="flex items-center gap-2 mb-1">
+                {/* <div className="flex items-center gap-2 mb-1">
                   <span className="flex h-3 w-3 relative">
                     <span
                       className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
@@ -389,7 +381,7 @@ function TransportDetail({ userProfile, transport, inCart }) {
                       style={{ backgroundColor: transport.vehicle_color }}
                     ></span>
                   </span>
-                </div>
+                </div> */}
               </div>
               <h2 className="lowercase -mt-1 text-lg text-gray-400">
                 {transport.type_of_car}
@@ -941,55 +933,6 @@ function TransportDetail({ userProfile, transport, inCart }) {
                 </div>
               </div>
             </div>
-          </Element>
-
-          <Element name="price-distance-calculator">
-            <Accordion
-              title="Price & Distance calculator"
-              accordion={priceDistanceCalculator}
-              setAccordion={setPriceDistanceCalculator}
-            >
-              <Search
-                state={state}
-                setState={setState}
-                setShowSearchDetails={setShowSearchDetails}
-              ></Search>
-
-              {showSearchDetails && (
-                <div>
-                  <div className="mt-6 flex justify-between items-center">
-                    <span className="font-bold">Total price</span>
-                    <span>
-                      <Price
-                        className="!text-base"
-                        stayPrice={
-                          ((mapRoute.distance * 0.001).toFixed(1) / 10) *
-                          transport.price
-                        }
-                      ></Price>
-                    </span>
-                  </div>
-
-                  <hr className="mt-2" />
-
-                  <div className="mt-2 flex justify-between items-center">
-                    <span className="font-bold">Total distance</span>
-                    <span>{(mapRoute.distance * 0.001).toFixed(1)}km</span>
-                  </div>
-
-                  <div className="mt-4">
-                    <Button
-                      onClick={() => {
-                        setShowRouteInMap(true);
-                      }}
-                      className="!bg-blue-600 !w-full"
-                    >
-                      View route in map
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </Accordion>
           </Element>
 
           <Element name="policies" className={"w-full pt-6 px-2 "}>

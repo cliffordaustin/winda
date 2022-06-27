@@ -5,17 +5,12 @@ import styles from "../../styles/BottomTooltip.module.css";
 import { motion, AnimatePresence } from "framer-motion";
 import MapMakerPopup from "./MapMakerPopup";
 import { useDispatch, useSelector } from "react-redux";
+import Price from "../Stay/Price";
 
 const MapMakers = ({ activity }) => {
   const [showPopup, setShowPopup] = useState(false);
 
   const activeActivity = useSelector((state) => state.activity.activeActivity);
-
-  const currencyToKES = useSelector((state) => state.home.currencyToKES);
-
-  const priceConversionRate = useSelector(
-    (state) => state.stay.priceConversionRate
-  );
 
   const variants = {
     hide: {
@@ -35,28 +30,6 @@ const MapMakers = ({ activity }) => {
     },
   };
 
-  const [newPrice, setNewPrice] = useState();
-
-  const price = () => {
-    return activity.price;
-  };
-
-  const priceConversion = async (price) => {
-    if (price) {
-      if (currencyToKES && priceConversionRate) {
-        setNewPrice(priceConversionRate * price);
-      } else {
-        setNewPrice(price);
-      }
-    } else {
-      return null;
-    }
-  };
-
-  useEffect(() => {
-    priceConversion(price());
-  });
-
   return (
     <div>
       <Marker longitude={activity.longitude} latitude={activity.latitude}>
@@ -69,18 +42,10 @@ const MapMakers = ({ activity }) => {
           onMouseLeave={() => setShowPopup(false)}
           onClick={() => setShowPopup(!showPopup)}
         >
-          {!currencyToKES && (
-            <h1 className={"text-white font-semibold text-sm font-OpenSans "}>
-              {price() ? "$" + Math.ceil(price()).toLocaleString() : "No data"}
-            </h1>
-          )}
-          {currencyToKES && (
-            <h1 className={"text-white font-semibold text-sm font-OpenSans "}>
-              {price()
-                ? "KES" + Math.ceil(newPrice).toLocaleString()
-                : "No data"}
-            </h1>
-          )}
+          <Price
+            className="text-white font-semibold text-sm font-OpenSans"
+            stayPrice={activity.price}
+          ></Price>
           <AnimatePresence exitBeforeEnter>
             {showPopup && (
               <Popup
@@ -117,20 +82,11 @@ const MapMakers = ({ activity }) => {
               styles.tooltip
             }
           >
-            {!currencyToKES && (
-              <h1 className={"text-white font-semibold text-sm font-OpenSans "}>
-                {price()
-                  ? "$" + Math.ceil(price()).toLocaleString()
-                  : "No data"}
-              </h1>
-            )}
-            {currencyToKES && (
-              <h1 className={"text-white font-semibold text-sm font-OpenSans "}>
-                {price()
-                  ? "KES" + Math.ceil(newPrice).toLocaleString()
-                  : "No data"}
-              </h1>
-            )}
+            <Price
+              className="text-white font-semibold text-sm font-OpenSans"
+              stayPrice={activeActivity.price}
+            ></Price>
+
             <AnimatePresence exitBeforeEnter>
               <Popup
                 closeButton={false}

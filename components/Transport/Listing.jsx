@@ -50,7 +50,7 @@ function Listing({ listing, userProfile, slugIsCorrect }) {
   const [liked, setLiked] = useState(false);
 
   const price = () => {
-    return listing.price;
+    return listing.price_per_day;
   };
 
   const priceConversion = async (price) => {
@@ -147,7 +147,7 @@ function Listing({ listing, userProfile, slugIsCorrect }) {
                 : "No data"}
             </h1>
           )}
-          <div className="text-xs mt-2">/10km</div>
+          <div className="text-xs mt-2">/day</div>
         </div>
 
         <div className="absolute bg-white rounded-3xl mt-2 mr-2 flex z-10 items-center justify-center gap-0.5 top-0 right-0">
@@ -208,7 +208,12 @@ function Listing({ listing, userProfile, slugIsCorrect }) {
               </Badge>
             </div>
             <Rating
-              rating={Number(randomRatingNum)}
+              rating={Number(
+                (
+                  listing.count_total_review_rates /
+                  listing.total_num_of_reviews
+                ).toFixed(2)
+              )}
               fontSize={!isSafari ? 25 : 16}
             ></Rating>
             <div className="font-medium text-sm">

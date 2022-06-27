@@ -15,9 +15,9 @@ function MobileSearchModal({
   date,
   setDate,
   numOfPeople,
-  setNumOfPeople,
   searchFilter,
   showSearchLoader,
+  clearNumOfPeople,
 
   addTraveler,
   removeTraveler,
@@ -49,7 +49,7 @@ function MobileSearchModal({
               setShowGuests(false);
               setShowDate(false);
             }}
-            className="px-3 py-6 cursor-pointer border border-gray-200 rounded-2xl drop-shadow-lg bg-white w-full flex items-center justify-between"
+            className="px-3 py-6 cursor-pointer border border-gray-200 rounded-2xl shadow-lg bg-white w-full flex items-center justify-between"
           >
             <div className="text-sm">Where?</div>
             <div className="font-bold text-sm truncate">
@@ -59,7 +59,7 @@ function MobileSearchModal({
         )}
 
         {showSearch && (
-          <div className="px-3 py-2 cursor-pointer border border-gray-200 rounded-2xl drop-shadow-lg bg-white w-full">
+          <div className="px-3 py-2 cursor-pointer border border-gray-200 rounded-2xl shadow-lg bg-white w-full">
             <h1 className="text-xl font-bold mb-2">Where to?</h1>
 
             <div className="mt-4">
@@ -75,7 +75,7 @@ function MobileSearchModal({
               setShowSearch(false);
               setShowDate(false);
             }}
-            className="px-3 mt-3 cursor-pointer py-6 border border-gray-200 rounded-2xl drop-shadow-lg bg-white w-full flex items-center justify-between"
+            className="px-3 mt-3 cursor-pointer py-6 border border-gray-200 rounded-2xl shadow-lg bg-white w-full flex items-center justify-between"
           >
             <div className="text-sm">Who?</div>
             <div className="font-bold text-sm">
@@ -87,7 +87,7 @@ function MobileSearchModal({
         )}
 
         {showGuests && (
-          <div className="px-3 mt-3 py-2 cursor-pointer border border-gray-200 rounded-2xl drop-shadow-lg bg-white w-full">
+          <div className="px-3 mt-3 py-2 cursor-pointer border border-gray-200 rounded-2xl shadow-lg bg-white w-full">
             <h1 className="text-xl font-bold mb-2">Who is coming?</h1>
 
             <hr />
@@ -132,7 +132,7 @@ function MobileSearchModal({
         <div className="flex justify-between items-center gap-2">
           <div
             onClick={() => {
-              setNumOfPeople(0);
+              clearNumOfPeople();
               setSearch("");
             }}
             className="underline cursor-pointer"

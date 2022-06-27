@@ -1,9 +1,9 @@
 import React from "react";
 
-function Guest({ type, guests, add, remove }) {
+function Guest({ guests, add, remove, type = "Guests" }) {
   return (
     <div className="flex items-center justify-between">
-      <div className="select-none text-sm">Guests</div>
+      <div className="select-none text-sm">{type}</div>
 
       <div className="flex gap-3 items-center">
         <div

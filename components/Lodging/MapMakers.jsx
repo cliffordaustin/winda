@@ -6,16 +6,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import MapMakerPopup from "./MapMakerPopup";
 import { useDispatch, useSelector } from "react-redux";
 
+import Price from "../Stay/Price";
+
 const MapMakers = ({ stay }) => {
   const [showPopup, setShowPopup] = useState(false);
 
   const activeStay = useSelector((state) => state.stay.activeStay);
-
-  const currencyToKES = useSelector((state) => state.home.currencyToKES);
-
-  const priceConversionRate = useSelector(
-    (state) => state.stay.priceConversionRate
-  );
 
   const variants = {
     hide: {
@@ -35,28 +31,6 @@ const MapMakers = ({ stay }) => {
     },
   };
 
-  const [newPrice, setNewPrice] = useState();
-
-  const price = () => {
-    return stay.price;
-  };
-
-  const priceConversion = async (price) => {
-    if (price) {
-      if (currencyToKES && priceConversionRate) {
-        setNewPrice(priceConversionRate * price);
-      } else {
-        setNewPrice(price);
-      }
-    } else {
-      return null;
-    }
-  };
-
-  useEffect(() => {
-    priceConversion(price());
-  });
-
   return (
     <div>
       <Marker longitude={stay.longitude} latitude={stay.latitude}>
@@ -69,18 +43,10 @@ const MapMakers = ({ stay }) => {
           onMouseLeave={() => setShowPopup(false)}
           onClick={() => setShowPopup(!showPopup)}
         >
-          {!currencyToKES && (
-            <h1 className={"text-white font-semibold text-sm font-OpenSans "}>
-              {price() ? "$" + Math.ceil(price()).toLocaleString() : "No data"}
-            </h1>
-          )}
-          {currencyToKES && (
-            <h1 className={"text-white font-semibold text-sm font-OpenSans "}>
-              {price()
-                ? "KES" + Math.ceil(newPrice).toLocaleString()
-                : "No data"}
-            </h1>
-          )}
+          <Price
+            className="text-white font-semibold text-sm font-OpenSans"
+            stayPrice={stay.price}
+          ></Price>
           <AnimatePresence exitBeforeEnter>
             {showPopup && (
               <Popup
@@ -114,20 +80,10 @@ const MapMakers = ({ stay }) => {
               styles.tooltip
             }
           >
-            {!currencyToKES && (
-              <h1 className={"text-white font-semibold text-sm font-OpenSans "}>
-                {price()
-                  ? "$" + Math.ceil(price()).toLocaleString()
-                  : "No data"}
-              </h1>
-            )}
-            {currencyToKES && (
-              <h1 className={"text-white font-semibold text-sm font-OpenSans "}>
-                {price()
-                  ? "KES" + Math.ceil(newPrice).toLocaleString()
-                  : "No data"}
-              </h1>
-            )}
+            <Price
+              className="text-white font-semibold text-sm font-OpenSans"
+              stayPrice={activeStay.price}
+            ></Price>
             <AnimatePresence exitBeforeEnter>
               <Popup
                 closeButton={false}

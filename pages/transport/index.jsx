@@ -13,7 +13,7 @@ import Popup from "../../components/ui/Popup";
 import PriceFilter from "../../components/Lodging/PriceFilter";
 import TypeOfActivities from "../../components/Activities/ActivitiesFilterItems";
 import styles from "../../styles/Lodging.module.css";
-import MobileModal from "../../components/ui/MobileModal";
+import MobileModal from "../../components/ui/FullScreenMobileModal";
 import SearchSelect from "../../components/Home/SearchSelect";
 import ClientOnly from "../../components/ClientOnly";
 import TransportTypes from "../../components/Transport/TransportTypes";
@@ -21,8 +21,11 @@ import MobileTransportTypes from "../../components/Transport/MobileTransportType
 import TransportCategories from "../../components/Transport/TransportCategories";
 import Listings from "../../components/Transport/Listings";
 import FilterTags from "../../components/Transport/FilterTags";
+import MobileSearchModal from "../../components/Transport/MobileSearchModal";
+import Button from "../../components/ui/Button";
+import Footer from "../../components/Home/Footer";
 
-const Transport = ({ userProfile }) => {
+const Transport = ({ userProfile, transport }) => {
   const router = useRouter();
 
   const [state, setState] = useState({
@@ -211,49 +214,29 @@ const Transport = ({ userProfile }) => {
     }
   };
 
-  const minPriceFilterFormat = router.query.min_price
-    ? "KES" + router.query.min_price.replace("000", "k")
-    : "";
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
 
-  const minPriceFilterFormatObject = router.query.min_price
-    ? {
-        value: minPriceFilterFormat,
-        label: minPriceFilterFormat,
-      }
-    : "";
+  const [mobileSearchModal, setMobileSearchModal] = useState(false);
 
-  const maxPriceFilterFormat = router.query.max_price
-    ? "KES" + router.query.max_price.replace("000", "k")
-    : "";
+  // useEffect(() => {
+  //   if (minPrice || maxPrice) {
+  //     const maxPriceSelect = maxPrice
+  //       ? maxPrice.value.replace("KES", "").replace("k", "000")
+  //       : "";
+  //     const minPriceSelect = minPrice
+  //       ? minPrice.value.replace("KES", "").replace("k", "000")
+  //       : "";
 
-  const maxPriceFilterFormatObject = router.query.min_price
-    ? {
-        value: maxPriceFilterFormat,
-        label: maxPriceFilterFormat,
-      }
-    : "";
-
-  const [minPrice, setMinSelected] = useState(minPriceFilterFormatObject);
-  const [maxPrice, setMaxSelected] = useState(maxPriceFilterFormatObject);
-
-  useEffect(() => {
-    if (minPrice || maxPrice) {
-      const maxPriceSelect = maxPrice
-        ? maxPrice.value.replace("KES", "").replace("k", "000")
-        : "";
-      const minPriceSelect = minPrice
-        ? minPrice.value.replace("KES", "").replace("k", "000")
-        : "";
-
-      router.push({
-        query: {
-          ...router.query,
-          min_price: minPriceSelect,
-          max_price: maxPriceSelect,
-        },
-      });
-    }
-  }, [minPrice, maxPrice]);
+  //     router.push({
+  //       query: {
+  //         ...router.query,
+  //         min_price: minPriceSelect,
+  //         max_price: maxPriceSelect,
+  //       },
+  //     });
+  //   }
+  // }, [minPrice, maxPrice]);
 
   const priceConversionRate = async () => {
     try {
@@ -278,23 +261,43 @@ const Transport = ({ userProfile }) => {
     priceConversionRate();
   });
 
-  useEffect(() => {
-    if (process.browser) {
-      setState({
-        ...state,
-        windowSize: window.innerWidth,
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   if (process.browser) {
+  //     setState({
+  //       ...state,
+  //       windowSize: window.innerWidth,
+  //     });
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
-  useEffect(() => {
-    if (process.browser) {
-      window.onresize = function () {
-        setState({ ...state, windowSize: window.innerWidth });
-      };
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (process.browser) {
+  //     window.onresize = function () {
+  //       setState({ ...state, windowSize: window.innerWidth });
+  //     };
+  //   }
+  // }, []);
+
+  const filterMinPrice = () => {
+    router.push({
+      query: {
+        ...router.query,
+        min_price: minPrice,
+        max_price: router.query.max_price || "",
+      },
+    });
+  };
+
+  const filterMaxPrice = () => {
+    router.push({
+      query: {
+        ...router.query,
+        min_price: router.query.min_price || "",
+        max_price: maxPrice,
+      },
+    });
+  };
 
   return (
     <div
@@ -306,7 +309,7 @@ const Transport = ({ userProfile }) => {
         });
       }}
     >
-      <div className="fixed top-0 left-0 right-0 z-20 bg-white border-b border-gray-100  pb-4">
+      <div className="fixed top-0 left-0 right-0 z-20 bg-white border-b  pb-4">
         <Navbar
           showDropdown={state.showDropdown}
           currentNavState={state.currentNavState}
@@ -326,36 +329,207 @@ const Transport = ({ userProfile }) => {
           }
         ></Navbar>
 
-        <div
-          onClick={(e) => {
-            e.stopPropagation();
-            setState({ ...state, showSearchModal: true });
-          }}
-          className="w-5/6 mx-auto md:hidden cursor-pointer"
-        >
-          <div className="flex items-center justify-center gap-2 !px-2 !py-2 !bg-gray-100 w-full rounded-full text-center ml-1 font-bold">
+        <div className="w-[90%] sm:w-[70%] mx-auto flex shadow-lg border border-gray-200 rounded-xl pl-3 h-12 md:hidden cursor-pointer">
+          <div
+            onClick={() => {
+              setMobileSearchModal(true);
+            }}
+            className="flex items-center gap-2 w-full"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 text-red-600"
-              viewBox="0 0 20 20"
-              fill="currentColor"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth="2"
             >
-              <path d="M9 9a2 2 0 114 0 2 2 0 01-4 0z" />
               <path
-                fillRule="evenodd"
-                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a4 4 0 00-3.446 6.032l-2.261 2.26a1 1 0 101.414 1.415l2.261-2.261A4 4 0 1011 5z"
-                clipRule="evenodd"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
               />
             </svg>
-            <div>Nairobi</div>
+            <div className="font-bold text-sm">
+              <span>Where to?</span>
+            </div>
+          </div>
+
+          <div className="flex w-32 border rounded-xl transition-all duration-200 ease-linear self-stretch ">
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                setState({
+                  ...state,
+                  ...turnOffAllPopup,
+                  showSortPopup: !state.showSortPopup,
+                });
+              }}
+              className="w-2/4 relative flex items-center justify-center transition-all duration-200 ease-linear hover:border-gray-200 rounded-xl"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-7 w-7"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4"
+                />
+              </svg>
+
+              <Popup
+                className="absolute top-full mt-2 w-60 -right-6"
+                showPopup={state.showSortPopup}
+              >
+                <div
+                  className={
+                    styles.listItem +
+                    (router.query.ordering === "-date_posted"
+                      ? " !bg-red-500 !text-white"
+                      : "")
+                  }
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    setState({
+                      ...state,
+                      ...turnOffAllPopup,
+                      showSortPopup: false,
+                    });
+                    if (router.query.ordering === "-date_posted") {
+                      router.push({ query: { ...router.query, ordering: "" } });
+                    } else {
+                      router.push({
+                        query: { ...router.query, ordering: "-date_posted" },
+                      });
+                    }
+                  }}
+                >
+                  Newest
+                </div>
+                <div
+                  className={
+                    styles.listItem +
+                    (router.query.ordering === "+price"
+                      ? " !bg-red-500 !text-white"
+                      : "")
+                  }
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    setState({
+                      ...state,
+                      ...turnOffAllPopup,
+                      showSortPopup: false,
+                    });
+                    if (router.query.ordering === "+price") {
+                      router.push({ query: { ...router.query, ordering: "" } });
+                    } else {
+                      router.push({
+                        query: { ...router.query, ordering: "+price" },
+                      });
+                    }
+                  }}
+                >
+                  Price(min to max)
+                </div>
+                <div
+                  className={
+                    styles.listItem +
+                    (router.query.ordering === "-price"
+                      ? " !bg-red-500 !text-white"
+                      : "")
+                  }
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    setState({
+                      ...state,
+                      ...turnOffAllPopup,
+                      showSortPopup: false,
+                    });
+                    if (router.query.ordering === "-price") {
+                      router.push({ query: { ...router.query, ordering: "" } });
+                    } else {
+                      router.push({
+                        query: { ...router.query, ordering: "-price" },
+                      });
+                    }
+                  }}
+                >
+                  Price(max to min)
+                </div>
+              </Popup>
+            </div>
+
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                setState({
+                  ...state,
+                  ...turnOffAllPopup,
+                  showMobileFilter: true,
+                });
+              }}
+              className="w-2/4 flex items-center justify-center hover:border transition-all duration-200 ease-linear hover:border-gray-200 rounded-xl border"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+                role="img"
+                className="w-7 h-7"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 24 24"
+              >
+                <g
+                  fill="none"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                >
+                  <circle cx="14" cy="6" r="2" />
+                  <path d="M4 6h8m4 0h4" />
+                  <circle cx="8" cy="12" r="2" />
+                  <path d="M4 12h2m4 0h10" />
+                  <circle cx="17" cy="18" r="2" />
+                  <path d="M4 18h11m4 0h1" />
+                </g>
+              </svg>
+            </div>
           </div>
         </div>
+
+        <MobileSearchModal
+          showModal={mobileSearchModal}
+          closeModal={setMobileSearchModal}
+          pickupLocation={pickupLocation}
+          setPickupLocation={setPickupLocation}
+          destinationLocation={destinationLocation}
+          setDestinationLocation={setDestinationLocation}
+          numOfPeople={state.passengers}
+          addTraveler={() => {
+            setState({ ...state, passengers: state.passengers + 1 });
+          }}
+          removeTraveler={() => {
+            state.passengers > 0
+              ? setState({ ...state, passengers: state.passengers - 1 })
+              : null;
+          }}
+          clearNumOfPeople={() => {
+            setState({ ...state, passengers: 0 });
+          }}
+          searchFilter={apiTransportSearchResult}
+          showSearchLoader={locationLoader}
+        ></MobileSearchModal>
 
         <div
           ref={searchRef}
           className="mt-1 hidden w-full md:flex md:justify-center md:px-0 px-4"
         >
-          <div className="lg:w-4/6 md:w-11/12 w-full">
+          <div className="xl:w-[750px] lg:w-[70%] md:w-[80%]">
             <TransportSearch
               transportDate={state.transportDate}
               showSearchModal={state.showSearchModal}
@@ -432,7 +606,113 @@ const Transport = ({ userProfile }) => {
           </div>
         </div>
 
-        <div className="flex gap-4 mt-4 ml-4 sm:ml-10">
+        <MobileModal
+          showModal={state.showMobileFilter}
+          closeModal={() => {
+            setState({
+              ...state,
+              ...turnOffAllPopup,
+              showMobileFilter: false,
+            });
+          }}
+          className="md:!hidden !overflow-y-scroll"
+          title="Filters"
+        >
+          <div className="px-1">
+            <div className="mb-2 mt-2">
+              <FilterTags></FilterTags>
+            </div>
+            <div className="ml-2">
+              <div className="mt-2 mb-4 md:hidden">
+                <h1 className="font-bold text-base mb-2">Price Range</h1>
+
+                <div className="flex items-center gap-3 px-2">
+                  <div className="w-[50%] border rounded-md h-fit px-2 py-1">
+                    <span className="text-sm text-gray-500">Min price</span>
+                    <div className="flex items-center">
+                      <div className="text-sm font-bold mr-2 ">$</div>
+                      <input
+                        onBlur={() => {
+                          filterMinPrice();
+                        }}
+                        name="min-price"
+                        value={minPrice}
+                        type="number"
+                        onChange={(event) => {
+                          setMinPrice(event.target.value);
+                        }}
+                        className="w-full focus:outline-none text-sm "
+                      />
+                    </div>
+                  </div>
+                  <div> - </div>
+                  <div className="w-[50%] border rounded-md h-fit px-2 py-1">
+                    <span className="text-sm text-gray-500">Max price</span>
+                    <div className="flex items-center">
+                      <div className="text-sm font-bold mr-2 ">$</div>
+                      <input
+                        onBlur={() => {
+                          filterMaxPrice();
+                        }}
+                        name="max-price"
+                        value={maxPrice}
+                        type="number"
+                        onChange={(event) => {
+                          setMaxPrice(event.target.value);
+                        }}
+                        className="w-full focus:outline-none text-sm "
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-2 mb-4">
+                <span className="block font-bold text-base mb-2">
+                  All car types
+                </span>
+                <MobileTransportTypes></MobileTransportTypes>
+              </div>
+
+              <TransportCategories></TransportCategories>
+            </div>
+          </div>
+          <div
+            className={
+              "w-full fixed z-10 px-2 py-2 bottom-0 safari-bottom left-0 right-0 bg-gray-100 border-t border-gray-200 "
+            }
+          >
+            <div className="flex justify-between items-center gap-2">
+              <div
+                onClick={() => {
+                  router.push({
+                    pathname: "/transport",
+                  });
+                }}
+                className="underline cursor-pointer"
+              >
+                Clear all
+              </div>
+
+              <Button
+                onClick={() => {
+                  setState({
+                    ...state,
+                    ...turnOffAllPopup,
+                    showMobileFilter: false,
+                  });
+                }}
+                className={
+                  "!bg-gradient-to-r !px-4 from-pink-500 via-red-500 to-yellow-500 !text-white "
+                }
+              >
+                Show all {transport.length} transports
+              </Button>
+            </div>
+          </div>
+        </MobileModal>
+
+        <div className="md:flex gap-4 hidden mt-4 ml-4 sm:ml-10">
           <div
             onClick={(event) => {
               event.stopPropagation();
@@ -442,9 +722,9 @@ const Transport = ({ userProfile }) => {
                 showSortPopup: !state.showSortPopup,
               });
             }}
-            className="cursor-pointer relative rounded-md border border-gray-200 py-2 px-2 mr-1 md:mr-4 flex gap-1 items-center justify-center"
+            className="cursor-pointer hidden relative rounded-md border border-gray-200 py-2 px-2 mr-1 md:mr-4 md:flex gap-1 items-center justify-center"
           >
-            <span className="block">Sort by</span>
+            <span className="block text-sm">Sort by</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6 mt-1"
@@ -552,7 +832,7 @@ const Transport = ({ userProfile }) => {
           >
             {!minPrice && !maxPrice && (
               <div className="flex gap-1 items-center justify-center">
-                <span className="block">Any Prices</span>
+                <span className="block text-sm">Any Prices</span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-6 w-6 mt-1"
@@ -569,10 +849,10 @@ const Transport = ({ userProfile }) => {
             )}
             {minPrice && maxPrice && (
               <div className="flex items-center gap-2">
-                <div className="flex items-center gap-1">
-                  <h1>{minPrice.value}</h1>
+                <div className="flex items-center gap-1 text-sm">
+                  <h1>{minPrice}</h1>
                   <div> - </div>
-                  <h1>{maxPrice.value}</h1>
+                  <h1>{maxPrice}</h1>
                 </div>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -591,8 +871,8 @@ const Transport = ({ userProfile }) => {
 
             {minPrice && !maxPrice && (
               <div className="flex items-center gap-1">
-                <div className="flex items-center">
-                  <h1>{minPrice.value}</h1>
+                <div className="flex items-center text-sm">
+                  <h1>{minPrice}</h1>
                   <div>+</div>
                 </div>
                 <svg
@@ -612,10 +892,10 @@ const Transport = ({ userProfile }) => {
 
             {!minPrice && maxPrice && (
               <div className="flex items-center gap-2">
-                <div className="flex items-center gap-1">
-                  <h1>KES0</h1>
+                <div className="flex items-center gap-1 text-sm">
+                  <h1>$0</h1>
                   <div> - </div>
-                  <h1>{maxPrice.value}</h1>
+                  <h1>{maxPrice}</h1>
                 </div>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -638,18 +918,49 @@ const Transport = ({ userProfile }) => {
               <h1 className="font-bold text-base mb-2 text-gray-600">
                 Price Range
               </h1>
-              <PriceFilter
-                setMinPriceSelected={setMinSelected}
-                setMaxPriceSelected={setMaxSelected}
-                minPriceInstanceId="minPrice"
-                maxPriceInstanceId="maxPrice"
-                minPriceSelected={minPrice}
-                maxPriceSelected={maxPrice}
-              ></PriceFilter>
+              <div className="flex items-center gap-3 px-2">
+                <div className="w-[50%] border rounded-md h-fit px-2 py-1">
+                  <span className="text-sm text-gray-500">Min price</span>
+                  <div className="flex items-center">
+                    <div className="text-sm font-bold mr-2 ">$</div>
+                    <input
+                      onBlur={() => {
+                        filterMinPrice();
+                      }}
+                      name="min-price"
+                      value={minPrice}
+                      type="number"
+                      onChange={(event) => {
+                        setMinPrice(event.target.value);
+                      }}
+                      className="w-full focus:outline-none text-sm "
+                    />
+                  </div>
+                </div>
+                <div> - </div>
+                <div className="w-[50%] border rounded-md h-fit px-2 py-1">
+                  <span className="text-sm text-gray-500">Max price</span>
+                  <div className="flex items-center">
+                    <div className="text-sm font-bold mr-2 ">$</div>
+                    <input
+                      onBlur={() => {
+                        filterMaxPrice();
+                      }}
+                      name="max-price"
+                      value={maxPrice}
+                      type="number"
+                      onChange={(event) => {
+                        setMaxPrice(event.target.value);
+                      }}
+                      className="w-full focus:outline-none text-sm "
+                    />
+                  </div>
+                </div>
+              </div>
             </Popup>
           </div>
 
-          <div className="hidden lg:block">
+          {/* <div className="hidden md:block">
             <TransportTypes
               handlePopup={() => {
                 setState({
@@ -660,277 +971,14 @@ const Transport = ({ userProfile }) => {
               }}
               showTransportTypesPopup={state.showTransportTypesPopup}
             ></TransportTypes>
-          </div>
-
-          <div
-            onClick={(event) => {
-              event.stopPropagation();
-              setState({
-                ...state,
-                ...turnOffAllPopup,
-                showFilterPopup: !state.showFilterPopup,
-                showMobileFilter: true,
-              });
-            }}
-            className="bg-gray-100 relative md:hidden cursor-pointer rounded-md border border-gray-200 py-2 px-2 flex gap-1 items-center justify-center"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
-              />
-            </svg>
-            <span className="block">Filters</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 mt-1"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                clipRule="evenodd"
-              />
-            </svg>
-            <Popup
-              className="hidden md:block absolute top-full mt-2 max-h-[500px] w-[500px] -left-32 lg:left-[-20rem] xl:-left-44 px-4 overflow-scroll"
-              showPopup={state.showFilterPopup}
-            >
-              <div className="md:hidden">
-                <div className="mt-2 mb-4 md:hidden">
-                  <h1 className="font-bold text-base mb-2">Price Range</h1>
-                  <PriceFilter
-                    setMinPriceSelected={setMinSelected}
-                    setMaxPriceSelected={setMaxSelected}
-                    minPriceInstanceId="minPrice"
-                    maxPriceInstanceId="maxPrice"
-                    minPriceSelected={minPrice}
-                    maxPriceSelected={maxPrice}
-                  ></PriceFilter>
-                </div>
-              </div>
-            </Popup>
-          </div>
+          </div> */}
         </div>
-
-        <MobileModal
-          showModal={state.showSearchModal}
-          closeModal={() => {
-            setState({
-              ...state,
-              ...turnOffAllPopup,
-              showSearchModal: false,
-            });
-          }}
-          containerHeight={70}
-          closeAllPopups={() => {
-            setState({ ...state, ...turnOffAllPopup });
-          }}
-          title="Search"
-        >
-          <div className="flex justify-center mb-3 mt-6">
-            <SearchSelect
-              currentNavState={state.currentNavState}
-              setCurrentNavState={(currentNavState) => {
-                setState({
-                  ...state,
-                  currentNavState: currentNavState,
-                  showPopup: false,
-                });
-              }}
-            ></SearchSelect>
-          </div>
-          <div className="lg:w-4/6 md:w-11/12 w-full px-4">
-            <TransportSearch
-              transportDate={state.transportDate}
-              showSearchModal={state.showSearchModal}
-              apiTransportSearchResult={apiTransportSearchResult}
-              changeShowTransportDate={() => {
-                setState({
-                  ...state,
-                  ...turnOffAllPopup,
-                  showTransportDate: !state.showTransportDate,
-                  selectedTransportSearchItem: 3,
-                });
-              }}
-              setTransportDate={(date) => {
-                setState({ ...state, transportDate: date });
-              }}
-              showTransportDate={state.showTransportDate}
-              showPassengerPopup={state.showPassengerPopup}
-              changeShowPassengerPopup={() => {
-                setState({
-                  ...state,
-                  ...turnOffAllPopup,
-                  showPassengerPopup: !state.showPassengerPopup,
-                  selectedTransportSearchItem: 4,
-                });
-              }}
-              selectedTransportSearchItem={state.selectedTransportSearchItem}
-              clearTransportDate={() => {
-                setState({ ...state, transportDate: "" });
-              }}
-              clearPassengers={() => {
-                setState({ ...state, passengers: 0 });
-              }}
-              passengers={state.passengers}
-              addPassenger={() => {
-                setState({ ...state, passengers: state.passengers + 1 });
-              }}
-              removePassenger={() => {
-                state.passengers > 0
-                  ? setState({ ...state, passengers: state.passengers - 1 })
-                  : null;
-              }}
-              pickupLocation={pickupLocation}
-              onPickupLocationChange={(event) => {
-                onPickupLocationChange(event);
-              }}
-              onKeyDown={onKeyDown}
-              autoCompleteFromPickupLocationSearch={
-                autoCompleteFromPickupLocationSearch
-              }
-              clearLocationInput={() => {
-                setPickupLocation("");
-                setAutoCompleteFromPickupLocationSearch([]);
-              }}
-              locationFromPickupLocationSearch={(item) => {
-                locationFromPickupLocationSearch(item);
-              }}
-              destinationLocation={destinationLocation}
-              onDestinationLocationChange={(event) => {
-                onDestinationLocationChange(event);
-              }}
-              onDestinationSearchKeyDown={onDestinationSearchKeyDown}
-              autoCompleteFromDestinationLocationSearch={
-                autoCompleteFromDestinationLocationSearch
-              }
-              clearDestinationLocationInput={() => {
-                setDestinationLocation("");
-                setAutoCompleteFromDestinationLocationSearch([]);
-              }}
-              locationFromDestinationLocationSearch={(item) => {
-                locationFromDestinationLocationSearch(item);
-              }}
-              locationLoader={locationLoader}
-            ></TransportSearch>
-          </div>
-        </MobileModal>
-
-        <ClientOnly>
-          {currencyToKES && (
-            <div
-              className="text-xs md:text-base absolute md:right-12 right-6 bottom-7 font-bold text-gray-700 hover:text-gray-900 cursor-pointer transition-all duration-300 ease-linear flex items-center"
-              onClick={() => {
-                dispatch({
-                  type: "CHANGE_CURRENCY_TO_DOLLAR_FALSE",
-                });
-              }}
-            >
-              <div>USD</div>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-3 w-3 md:h-4 md:w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
-                />
-              </svg>
-              <div>KES</div>
-            </div>
-          )}
-          {!currencyToKES && (
-            <div
-              className="text-xs md:text-base absolute md:right-12 right-6 bottom-7 font-bold text-gray-700 hover:text-gray-900 cursor-pointer transition-all duration-300 ease-linear flex md:gap-1 items-center"
-              onClick={() => {
-                dispatch({
-                  type: "CHANGE_CURRENCY_TO_DOLLAR_TRUE",
-                });
-              }}
-            >
-              <div>KES</div>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-3 w-3 md:h-4 md:w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
-                />
-              </svg>
-              <div>USD</div>
-            </div>
-          )}
-        </ClientOnly>
-
-        {state.windowSize < 768 && (
-          <MobileModal
-            showModal={state.showMobileFilter}
-            closeModal={() => {
-              setState({
-                ...state,
-                ...turnOffAllPopup,
-                showMobileFilter: false,
-              });
-            }}
-            containerHeight={60}
-            closeAllPopups={() => {
-              setState({ ...state, ...turnOffAllPopup });
-            }}
-            title="All Filters"
-          >
-            <div className="px-4">
-              <div className="mb-2">
-                <FilterTags></FilterTags>
-              </div>
-              <div className="ml-2">
-                <div className="mt-2 mb-4 md:hidden">
-                  <h1 className="font-bold text-base mb-2">Price Range</h1>
-                  <PriceFilter
-                    setMinPriceSelected={setMinSelected}
-                    setMaxPriceSelected={setMaxSelected}
-                    minPriceInstanceId="minPrice"
-                    maxPriceInstanceId="maxPrice"
-                    minPriceSelected={minPrice}
-                    maxPriceSelected={maxPrice}
-                  ></PriceFilter>
-                </div>
-
-                <div className="mt-2 mb-4">
-                  <span className="block font-bold text-base mb-2">
-                    All car types
-                  </span>
-                  <MobileTransportTypes></MobileTransportTypes>
-                </div>
-
-                <TransportCategories></TransportCategories>
-              </div>
-            </div>
-          </MobileModal>
-        )}
       </div>
 
-      <div className="flex relative justify-around h-full w-full">
+      <div className="flex md:flex-row flex-col relative justify-around h-full w-full">
+        <div className="mb-2 block md:hidden mt-[150px] px-4">
+          <FilterTags></FilterTags>
+        </div>
         <div className="relative hidden md:block md:w-[30%] lg:w-[20%] h-screen top-[180px] overflow-y-auto bg-white border-r border-gray-100">
           <div className="px-4">
             <h1 className="my-3 font-bold text-lg">Filter results</h1>
@@ -940,14 +988,45 @@ const Transport = ({ userProfile }) => {
             <div className="ml-2">
               <div className="mt-2 mb-4 md:hidden">
                 <h1 className="font-bold text-base mb-2">Price Range</h1>
-                <PriceFilter
-                  setMinPriceSelected={setMinSelected}
-                  setMaxPriceSelected={setMaxSelected}
-                  minPriceInstanceId="minPrice"
-                  maxPriceInstanceId="maxPrice"
-                  minPriceSelected={minPrice}
-                  maxPriceSelected={maxPrice}
-                ></PriceFilter>
+                <div className="flex items-center gap-3 px-2">
+                  <div className="w-[50%] border rounded-md h-fit px-2 py-1">
+                    <span className="text-sm text-gray-500">Min price</span>
+                    <div className="flex items-center">
+                      <div className="text-sm font-bold mr-2 ">$</div>
+                      <input
+                        onBlur={() => {
+                          filterMinPrice();
+                        }}
+                        name="min-price"
+                        value={minPrice}
+                        type="number"
+                        onChange={(event) => {
+                          setMinPrice(event.target.value);
+                        }}
+                        className="w-full focus:outline-none text-sm "
+                      />
+                    </div>
+                  </div>
+                  <div> - </div>
+                  <div className="w-[50%] border rounded-md h-fit px-2 py-1">
+                    <span className="text-sm text-gray-500">Max price</span>
+                    <div className="flex items-center">
+                      <div className="text-sm font-bold mr-2 ">$</div>
+                      <input
+                        onBlur={() => {
+                          filterMaxPrice();
+                        }}
+                        name="max-price"
+                        value={maxPrice}
+                        type="number"
+                        onChange={(event) => {
+                          setMaxPrice(event.target.value);
+                        }}
+                        className="w-full focus:outline-none text-sm "
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div className="mt-2 mb-4">
@@ -961,9 +1040,14 @@ const Transport = ({ userProfile }) => {
             </div>
           </div>
         </div>
-        <div className="relative h-screen overflow-y-auto top-52 md:top-56 md:px-4 md:w-[68%] lg:w-[78%]">
-          <Listings userProfile={userProfile}></Listings>
+
+        <div className="relative h-full md:h-screen overflow-y-auto md:top-56 md:px-4 md:w-[68%] lg:w-[78%]">
+          <Listings userProfile={userProfile} transports={transport}></Listings>
         </div>
+      </div>
+
+      <div className="mt-12 md:hidden">
+        <Footer></Footer>
       </div>
     </div>
   );
@@ -977,14 +1061,13 @@ export const getServerSideProps = wrapper.getServerSideProps(
       try {
         const token = getTokenFromReq(req);
 
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_baseURL}/transport/`
+        const transport = await axios.get(
+          `${process.env.NEXT_PUBLIC_baseURL}/transport/?min_price=${
+            query.min_price ? query.min_price : ""
+          }&max_price=${query.max_price ? query.max_price : ""}&ordering=${
+            query.ordering ? query.ordering : ""
+          }&type_of_car=${query.type_of_car ? query.type_of_car : ""}`
         );
-
-        await context.dispatch({
-          type: "SET_TRANSPORTS",
-          payload: response.data.results,
-        });
 
         if (token) {
           const response = await axios.get(
@@ -999,6 +1082,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           return {
             props: {
               userProfile: response.data[0],
+              transport: transport.data.results,
             },
           };
         }
@@ -1006,6 +1090,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         return {
           props: {
             userProfile: "",
+            transport: transport.data.results,
           },
         };
       } catch (error) {
@@ -1020,6 +1105,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           return {
             props: {
               userProfile: "",
+              transport: [],
             },
           };
         }

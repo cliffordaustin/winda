@@ -1469,7 +1469,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
             <div className="mt-10">
               {!showAllDescription && (
                 <p className="font-medium text-gray-600">
-                  {stay.description.slice(0, 500)}
+                  {stay.description.slice(0, 500)}...
                 </p>
               )}
               {showAllDescription && (
@@ -1591,72 +1591,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               </div>
 
               <Amenities amenities={stay}></Amenities>
-
-              {/* {!showMoreAmenities && (
-                <div className="flex flex-wrap gap-2 px-2">
-                  {stay.amenities.slice(0, 5).map((amenity, index) => (
-                    <div key={index} className="w-[48%]">
-                      <ListItem>{amenity}</ListItem>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {showMoreAmenities && (
-                <div className="flex flex-wrap gap-2 px-2">
-                  {stay.amenities.map((amenity, index) => (
-                    <div key={index} className="w-[48%]">
-                      <ListItem>{amenity}</ListItem>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {!showMoreAmenities && stay.amenities.length > 5 && (
-                <div
-                  onClick={() => {
-                    setShowMoreAmenities(true);
-                  }}
-                  className="font-bold text-blue-700 mt-2 flex items-center gap-0.5 cursor-pointer ml-2 mb-1"
-                >
-                  <span>Read more</span>{" "}
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 mt-1"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-              )}
-
-              {showMoreAmenities && stay.amenities.length > 5 && (
-                <div
-                  onClick={() => {
-                    setShowMoreAmenities(false);
-                  }}
-                  className="font-bold text-blue-700 mt-2 flex items-center gap-0.5 cursor-pointer ml-2 mb-1"
-                >
-                  <span>Read less</span>{" "}
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 mt-1"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-              )} */}
             </div>
           </Element>
 

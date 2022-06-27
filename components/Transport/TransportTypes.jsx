@@ -84,10 +84,10 @@ function TransportTypes({ handlePopup, showTransportTypesPopup, screenWidth }) {
           handlePopup();
         }}
         className={
-          "bg-gray-100 hidden relative cursor-pointer rounded-md border border-gray-200 py-2 px-2 lg:flex gap-1 items-center justify-center"
+          "bg-gray-100 hidden relative cursor-pointer rounded-md border border-gray-200 py-2 px-2 md:flex gap-1 items-center justify-center"
         }
       >
-        <span className="block">All car types</span>
+        <span className="block text-sm">All car types</span>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-6 w-6 mt-1"

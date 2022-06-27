@@ -34,7 +34,7 @@ const Message = ({ children, showMessage }) => {
           animate="show"
           initial="hide"
           exit="exit"
-          className="py-2 px-5 rounded-md drop-shadow-md bg-white w-[150px] fixed right-2/4 -mr-[75px] -translate-x-2/4 -translate-y-2/4"
+          className="py-2 px-5 rounded-md shadow-md bg-white w-[150px] fixed right-2/4 -mr-[75px] -translate-x-2/4 -translate-y-2/4"
         >
           <div className="text-sm font-bold text-center">{children}</div>
         </motion.div>

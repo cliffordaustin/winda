@@ -150,12 +150,13 @@ function Stays({ userProfile, longitude, latitude, stays }) {
   };
 
   const apiSearchResult = () => {
-    if (location !== "") {
+    if (location !== "" || numOfAdults !== 0) {
       setShowSearchLoader(true);
       router
         .push({
           pathname: "/stays",
           query: {
+            ...router.query,
             search: location,
             min_capacity: numOfAdults > 0 ? numOfAdults : "",
           },
@@ -446,7 +447,7 @@ function Stays({ userProfile, longitude, latitude, stays }) {
             })
           }
         ></Navbar>
-        <div className="w-5/6 mx-auto flex shadow-lg border border-gray-200 rounded-xl pl-3 h-12 md:hidden cursor-pointer">
+        <div className="w-[90%] sm:w-[70%] mx-auto flex shadow-lg border border-gray-200 rounded-xl pl-3 h-12 md:hidden cursor-pointer">
           <div
             onClick={() => {
               setMobileSearchModal(true);
@@ -467,7 +468,27 @@ function Stays({ userProfile, longitude, latitude, stays }) {
                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
               />
             </svg>
-            <h1 className="font-bold text-sm">Where to?</h1>
+            <div className="font-bold text-sm">
+              {router.query.search && (
+                <span className="truncate">
+                  {router.query.search.split(",")[0]}
+                </span>
+              )}
+              {router.query.search && "..."}
+              {Number(router.query.min_capacity) > 0 ? "," : ""}{" "}
+              <span>
+                {Number(router.query.min_capacity) > 0
+                  ? `${Number(router.query.min_capacity)} ${
+                      Number(router.query.min_capacity) > 1 ? "Guests" : "Guest"
+                    }`
+                  : ""}
+              </span>
+              <span>
+                {!Number(router.query.min_capacity) && !router.query.search
+                  ? "Where to?"
+                  : ""}
+              </span>
+            </div>
           </div>
 
           <div className="flex w-32 border rounded-xl transition-all duration-200 ease-linear self-stretch ">
@@ -1598,7 +1619,7 @@ function Stays({ userProfile, longitude, latitude, stays }) {
         </div>
       </div>
 
-      <div className="mt-36 md:mt-44 flex relative h-full overflow-y-scroll">
+      <div className="mt-[146px] md:mt-[142px] lg:mt-[188px] flex relative h-full overflow-y-scroll">
         <div className={"hidden lg:block w-2/4 px-4 h-[75vh] relative"}>
           <Map stays={stays}></Map>
         </div>
@@ -2993,7 +3014,7 @@ function Stays({ userProfile, longitude, latitude, stays }) {
       </div>
 
       {mobileMap && (
-        <div className={"h-[80vh] md:hidden"}>
+        <div className={"h-[82vh] md:hidden"}>
           <Map stays={stays}></Map>
         </div>
       )}
