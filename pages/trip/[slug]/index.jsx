@@ -17,6 +17,9 @@ import Amenities from "../../../components/Stay/Amenities";
 import ListItem from "../../../components/ui/ListItem";
 import moment from "moment";
 import Footer from "../../../components/Home/Footer";
+import LoadingSpinerChase from "../../../components/ui/LoadingSpinerChase";
+import Modal from "../../../components/ui/LargeFullscreenPopup";
+import SingleTrip from "../../../components/Trip/SingleTrip";
 
 function TripDetail({ userProfile, userTrips, trip }) {
   const router = useRouter();
@@ -88,6 +91,40 @@ function TripDetail({ userProfile, userTrips, trip }) {
     return array.filter((obj) => obj.value === value);
   };
 
+  const [listingIsInTrip, setListingIsInTrip] = useState(false);
+
+  const [showAddToTripPopup, setShowAddToTripPopup] = useState(false);
+
+  const [loading, setLoading] = useState(false);
+
+  const addToTrip = async () => {
+    setLoading(true);
+
+    await axios
+      .post(
+        `${process.env.NEXT_PUBLIC_baseURL}/create-trip/`,
+        {
+          stay_id: trip.stay ? trip.stay.id : null,
+          activity_id: trip.activity ? trip.activity.id : null,
+          transport_id: trip.transport ? trip.transport.id : null,
+        },
+        {
+          headers: {
+            Authorization: `Token ${Cookies.get("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        router.push({
+          pathname: `/trip/plan/${res.data.slug}`,
+        });
+      })
+      .catch((err) => {
+        console.log(err.response);
+        setLoading(false);
+      });
+  };
+
   return (
     <div>
       <div className="fixed top-0 w-full bg-white z-50">
@@ -121,7 +158,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
               }}
               className="!px-1 !py-1 !bg-blue-600"
             >
-              my trip
+              <span>my trip</span>
             </Button>
 
             <UserDropdown
@@ -164,8 +201,55 @@ function TripDetail({ userProfile, userTrips, trip }) {
           </div>
 
           <div className="">
-            <Button className="!bg-blue-500 !px-6">
+            <Button
+              onClick={() => {
+                if (Cookies.get("token")) {
+                  if (userTrips.length > 0) {
+                    setShowAddToTripPopup(!showAddToTripPopup);
+                  } else {
+                    addToTrip();
+                  }
+                } else {
+                  router.push({
+                    pathname: "/login",
+                    query: {
+                      redirect: router.asPath,
+                    },
+                  });
+                }
+              }}
+              className="!bg-blue-500 !px-6"
+            >
               <span>Add to trip</span>
+
+              <div
+                className={
+                  " " + (loading && !showAddToTripPopup ? "ml-1.5 " : " hidden")
+                }
+              >
+                <LoadingSpinerChase
+                  width={13}
+                  height={13}
+                  color="white"
+                ></LoadingSpinerChase>
+              </div>
+
+              {userTrips.length > 0 && (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
+                  />
+                </svg>
+              )}
             </Button>
           </div>
         </div>
@@ -256,8 +340,55 @@ function TripDetail({ userProfile, userTrips, trip }) {
           </div>
 
           <div className="mt-4 hidden md:block">
-            <Button className="!bg-blue-500 !px-6">
+            <Button
+              onClick={() => {
+                if (Cookies.get("token")) {
+                  if (userTrips.length > 0) {
+                    setShowAddToTripPopup(!showAddToTripPopup);
+                  } else {
+                    addToTrip();
+                  }
+                } else {
+                  router.push({
+                    pathname: "/login",
+                    query: {
+                      redirect: router.asPath,
+                    },
+                  });
+                }
+              }}
+              className="!bg-blue-500 !px-6"
+            >
               <span>Add to trip</span>
+
+              <div
+                className={
+                  " " + (loading && !showAddToTripPopup ? "ml-1.5 " : " hidden")
+                }
+              >
+                <LoadingSpinerChase
+                  width={13}
+                  height={13}
+                  color="white"
+                ></LoadingSpinerChase>
+              </div>
+
+              {userTrips.length > 0 && (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
+                  />
+                </svg>
+              )}
             </Button>
           </div>
 
@@ -1469,6 +1600,53 @@ function TripDetail({ userProfile, userTrips, trip }) {
         </div>
       </div>
 
+      <Modal
+        showModal={showAddToTripPopup}
+        closeModal={() => {
+          setShowAddToTripPopup(false);
+        }}
+        title="add to a trip"
+        className="!overflow-y-scroll max-w-[500px] !h-[700px]"
+      >
+        <div className="px-4 mt-2 h-full relative">
+          {userTrips.map((singleTrip, index) => {
+            return (
+              <SingleTrip
+                key={index}
+                trip={singleTrip}
+                isRecommendedPage={true}
+                selectedData={{
+                  stay_id: trip.stay ? trip.stay.id : null,
+                  activity_id: trip.activity ? trip.activity.id : null,
+                  transport_id: trip.transport ? trip.transport.id : null,
+                }}
+              ></SingleTrip>
+            );
+          })}
+
+          <div className="flex justify-between mt-8">
+            <div></div>
+
+            <Button
+              onClick={() => {
+                addToTrip();
+              }}
+              className="flex w-full items-center gap-1 !px-0 !py-2 font-bold !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white"
+            >
+              <span>Add to a new trip</span>
+
+              <div className={" " + (!loading ? "hidden" : " ml-1")}>
+                <LoadingSpinerChase
+                  width={13}
+                  height={13}
+                  color="white"
+                ></LoadingSpinerChase>
+              </div>
+            </Button>
+          </div>
+        </div>
+      </Modal>
+
       <div className="mt-6 mb-6 md:mb-0">
         <Footer></Footer>
       </div>
@@ -1496,7 +1674,7 @@ export async function getServerSideProps(context) {
         }
       );
 
-      const { data } = await axios.get(
+      const userTrips = await axios.get(
         `${process.env.NEXT_PUBLIC_baseURL}/trips/`,
         {
           headers: {
@@ -1509,7 +1687,7 @@ export async function getServerSideProps(context) {
         props: {
           userProfile: response.data[0],
           trip: data,
-          userTrips: data || [],
+          userTrips: userTrips.data || [],
         },
       };
     }

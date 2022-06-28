@@ -240,7 +240,7 @@ const Cart = ({
             );
           })
           .catch((err) => {
-            console.log(err);
+            console.log(err.response);
             setLoading(false);
           });
       }
@@ -276,7 +276,7 @@ const Cart = ({
             );
           })
           .catch((err) => {
-            console.log(err);
+            console.log(err.response);
             setLoading(false);
           });
       }

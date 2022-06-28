@@ -163,9 +163,9 @@ function Orders({
       </div>
 
       <div>
-        {(stayOrders.length === 0 ||
-          activitiesOrders.length === 0 ||
-          transportOrders.length === 0) && (
+        {(stayOrders.length > 0 ||
+          activitiesOrders.length > 0 ||
+          transportOrders.length > 0) && (
           <div>
             <Navbar
               showDropdown={state.showDropdown}
@@ -327,6 +327,7 @@ export async function getServerSideProps(context) {
       },
     };
   } catch (error) {
+    console.log(error.response.data);
     if (error.response.status === 401) {
       return {
         redirect: {

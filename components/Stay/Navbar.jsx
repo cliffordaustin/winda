@@ -143,6 +143,36 @@ function Navbar({
 
   const [showPopup, setShowPopup] = useState(false);
 
+  const priceOfTransportCart = (item) => {
+    let price = 0;
+    if (Cookies.get("token")) {
+      if (!item.number_of_days) {
+        price +=
+          ((item.distance * 0.001).toFixed(1) / 10) * item.transport.price +
+          (item.user_need_a_driver
+            ? item.transport.additional_price_with_a_driver
+            : 0);
+      } else if (item.number_of_days) {
+        price +=
+          item.number_of_days * item.transport.price_per_day +
+          (item.user_need_a_driver
+            ? item.transport.additional_price_with_a_driver
+            : 0);
+      }
+    } else if (!Cookies.get("token") && Cookies.get("cart")) {
+      if (!item.number_of_days) {
+        price +=
+          ((item.distance * 0.001).toFixed(1) / 10) * item.price +
+          (item.user_need_a_driver ? item.additional_price_with_a_driver : 0);
+      } else if (item.number_of_days) {
+        price +=
+          item.number_of_days * item.price_per_day +
+          (item.user_need_a_driver ? item.additional_price_with_a_driver : 0);
+      }
+    }
+    return price;
+  };
+
   return (
     <div className="relative flex items-center justify-between shadow-sm sm:px-12 px-6 md:px-20 py-4">
       <div className="flex items-center gap-8">
@@ -288,7 +318,16 @@ function Navbar({
       </div>
 
       {showPopup && (
-        <div className="w-[500px] z-[50] hidden md:block p-4 h-[400px] overflow-y-scroll rounded-xl bg-white shadow-xl absolute right-6 top-14">
+        <div
+          className={
+            "w-[500px] z-[50] hidden md:block p-4 h-[400px] overflow-y-scroll rounded-xl bg-white shadow-xl absolute right-6 top-14 " +
+            (cart.length === 0 &&
+            activitiesCart.length === 0 &&
+            transportCart.length === 0
+              ? " !h-[250px]"
+              : "")
+          }
+        >
           {!cartLoading && (
             <div className="">
               {cart.length > 0 && (
@@ -450,11 +489,26 @@ function Navbar({
               </div>
             </div>
           )}
+
+          {cart.length === 0 &&
+            activitiesCart.length === 0 &&
+            transportCart.length === 0 && (
+              <div className="font-bold text-2xl text-center w-full inline-block">
+                <span>Nothing here</span>
+              </div>
+            )}
           <div
             onClick={() => {
               router.push("/cart");
             }}
-            className="fixed  top-[430px] h-12 flex items-center justify-center font-bold cursor-pointer rounded-b-xl text-white w-[500px] right-6 bg-gray-700"
+            className={
+              "fixed top-[430px] h-12 flex items-center justify-center font-bold cursor-pointer rounded-b-xl text-white w-[500px] right-6 bg-gray-700 " +
+              (cart.length === 0 &&
+              activitiesCart.length === 0 &&
+              transportCart.length === 0
+                ? " !top-[300px] "
+                : "")
+            }
           >
             View in basket
           </div>

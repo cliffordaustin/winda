@@ -11,6 +11,7 @@ function UserDropdown({
   isHomePage = false,
   numberOfItemsInCart = 0,
   numberOfTrips = 0,
+  numberOfItemsInOrders = 0,
 }) {
   const router = useRouter();
   let fullName = userProfile.first_name + " " + userProfile.last_name;
@@ -146,6 +147,15 @@ function UserDropdown({
             </div>
           </div>
         )}
+
+        <div
+          onClick={() => {
+            router.push("/orders");
+          }}
+          className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2 flex justify-between items-center"
+        >
+          <span className="font-bold">orders</span>
+        </div>
 
         <div className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2">
           About

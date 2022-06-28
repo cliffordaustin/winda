@@ -68,46 +68,6 @@ const Card = ({
 
   const [listingIsInTrip, setListingIsInTrip] = useState(false);
 
-  const addToTrip = async (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-
-    setAddToTripLoading(true);
-
-    if (Cookies.get("token") && !listingIsInTrip) {
-      await axios
-        .post(
-          `${process.env.NEXT_PUBLIC_baseURL}/create-trip/`,
-          {
-            stay_id: listing.id,
-            activity_id: null,
-            transport_id: null,
-          },
-          {
-            headers: {
-              Authorization: `Token ${Cookies.get("token")}`,
-            },
-          }
-        )
-        .then((res) => {
-          router.reload();
-        })
-        .catch((err) => {
-          console.log(err.response);
-          setAddToTripLoading(false);
-        });
-    } else if (Cookies.get("token") && listingIsInTrip) {
-      router.push("/trip/plan");
-    } else {
-      router.push({
-        pathname: "/login",
-        query: {
-          redirect: router.asPath,
-        },
-      });
-    }
-  };
-
   const itemIsInTrip = async () => {
     let exist = false;
     let tripExists = false;
@@ -130,7 +90,7 @@ const Card = ({
 
   const [loading, setLoading] = useState(false);
 
-  const addToOrder = async () => {
+  const addToTrip = async () => {
     setLoading(true);
 
     await axios
@@ -271,17 +231,28 @@ const Card = ({
           <div className="w-[58%] relative">
             <Button
               onClick={() => {
-                if (userTrips.length > 0) {
-                  setSelectedData({
-                    stay_id: listing.stay ? listing.stay.id : null,
-                    activity_id: listing.activity ? listing.activity.id : null,
-                    transport_id: listing.transport
-                      ? listing.transport.id
-                      : null,
-                  });
-                  setShowAddToTripPopup(!showAddToTripPopup);
+                if (Cookies.get("token")) {
+                  if (userTrips.length > 0) {
+                    setSelectedData({
+                      stay_id: listing.stay ? listing.stay.id : null,
+                      activity_id: listing.activity
+                        ? listing.activity.id
+                        : null,
+                      transport_id: listing.transport
+                        ? listing.transport.id
+                        : null,
+                    });
+                    setShowAddToTripPopup(!showAddToTripPopup);
+                  } else {
+                    addToTrip();
+                  }
                 } else {
-                  addToOrder();
+                  router.push({
+                    pathname: "/login",
+                    query: {
+                      redirect: router.asPath,
+                    },
+                  });
                 }
               }}
               className="flex w-full items-center gap-1 !px-0 !py-2 font-bold !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white"
