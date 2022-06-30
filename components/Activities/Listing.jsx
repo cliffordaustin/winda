@@ -37,7 +37,7 @@ function Listing({
     (state) => state.stay.priceConversionRate
   );
 
-  const [liked, setLiked] = useState(false);
+  const [liked, setLiked] = useState(listing.has_user_saved);
 
   useEffect(() => {
     if (process.browser) {
@@ -202,6 +202,51 @@ function Listing({
         .catch((err) => {
           setAddToTripLoading(false);
         });
+    }
+  };
+
+  const changeLikeState = () => {
+    if (Cookies.get("token")) {
+      setLiked(false);
+      axios
+        .delete(
+          `${process.env.NEXT_PUBLIC_baseURL}/activities/${listing.id}/delete/`,
+          {
+            headers: {
+              Authorization: `Token ${Cookies.get("token")}`,
+            },
+          }
+        )
+        .then(() => {})
+        .catch((err) => console.log(err.response));
+    } else {
+      router.push({
+        pathname: "/login",
+        query: { redirect: `${router.asPath}` },
+      });
+    }
+  };
+
+  const changeUnLikeState = () => {
+    if (Cookies.get("token")) {
+      setLiked(true);
+      axios
+        .post(
+          `${process.env.NEXT_PUBLIC_baseURL}/activities/${listing.slug}/save/`,
+          "",
+          {
+            headers: {
+              Authorization: "Token " + Cookies.get("token"),
+            },
+          }
+        )
+        .then(() => {})
+        .catch((err) => console.log(err.response));
+    } else {
+      router.push({
+        pathname: "/login",
+        query: { redirect: `${router.asPath}` },
+      });
     }
   };
 
@@ -388,7 +433,7 @@ function Listing({
               fill="#e63946"
               onClick={(e) => {
                 e.stopPropagation();
-                setLiked(false);
+                changeLikeState();
               }}
             >
               <path
@@ -409,7 +454,7 @@ function Listing({
               stroke="currentColor"
               onClick={(e) => {
                 e.stopPropagation();
-                setLiked(true);
+                changeUnLikeState();
               }}
             >
               <path
@@ -638,7 +683,7 @@ function Listing({
                   fill="#e63946"
                   onClick={(e) => {
                     e.stopPropagation();
-                    setLiked(false);
+                    changeLikeState();
                   }}
                 >
                   <path
@@ -659,7 +704,7 @@ function Listing({
                   stroke="currentColor"
                   onClick={(e) => {
                     e.stopPropagation();
-                    setLiked(true);
+                    changeUnLikeState();
                   }}
                 >
                   <path

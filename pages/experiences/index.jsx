@@ -1506,6 +1506,23 @@ export const getServerSideProps = wrapper.getServerSideProps(
             }
           );
 
+          const activities = await axios.get(
+            `${process.env.NEXT_PUBLIC_baseURL}/activities/?search=${
+              query.search ? query.search : ""
+            }&min_capacity=${
+              query.min_capacity ? query.min_capacity : ""
+            }&type_of_activities=${
+              query.type_of_stay ? query.type_of_stay : ""
+            }&min_price=${query.min_price ? query.min_price : ""}&max_price=${
+              query.max_price ? query.max_price : ""
+            }&ordering=${query.ordering ? query.ordering : ""}`,
+            {
+              headers: {
+                Authorization: "Token " + token,
+              },
+            }
+          );
+
           return {
             props: {
               userProfile: response.data[0],

@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Icon } from "@iconify/react";
 
 const Amenities = ({ amenities }) => {
   return (
@@ -21,6 +22,61 @@ const Amenities = ({ amenities }) => {
             />
           </svg>
           <span>Swimming pool</span>
+        </div>
+      )}
+
+      {amenities.beauty_salon && (
+        <div className="w-full md:w-[48%] flex gap-2 items-center">
+          <Icon className="w-6 h-5 text-gray-500" icon="map:beauty-salon" />
+          <span>Beauty salon</span>
+        </div>
+      )}
+
+      {amenities.barber_shop && (
+        <div className="w-full md:w-[48%] flex gap-2 items-center">
+          <Icon
+            className="w-6 h-5 text-gray-500"
+            icon="icon-park-twotone:barber-clippers"
+          />
+          <span>Barber shop</span>
+        </div>
+      )}
+
+      {amenities.ensuite_room && (
+        <div className="w-full md:w-[48%] flex gap-2 items-center">
+          <Icon className="w-6 h-5 text-gray-500" icon="ic:baseline-bed" />
+          <span>Ensuite room</span>
+        </div>
+      )}
+
+      {amenities.purified_drinking_water && (
+        <div className="w-full md:w-[48%] flex gap-2 items-center">
+          <Icon className="w-6 h-5 text-gray-500" icon="akar-icons:water" />
+          <span>Purified drinking water</span>
+        </div>
+      )}
+
+      {amenities.firewood && (
+        <div className="w-full md:w-[48%] flex gap-2 items-center">
+          <Icon className="w-6 h-5 text-gray-500" icon="ps:fire" />
+          <span>Firewood</span>
+        </div>
+      )}
+
+      {amenities.conference_center && (
+        <div className="w-full md:w-[48%] flex gap-2 items-center">
+          <Icon
+            className="w-6 h-5 text-gray-500"
+            icon="fluent:conference-room-48-regular"
+          />
+          <span>Conference center</span>
+        </div>
+      )}
+
+      {amenities.library && (
+        <div className="w-full md:w-[48%] flex gap-2 items-center">
+          <Icon className="w-6 h-5 text-gray-500" icon="bx:book-alt" />
+          <span>Library</span>
         </div>
       )}
 

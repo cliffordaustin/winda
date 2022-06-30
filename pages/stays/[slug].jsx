@@ -35,12 +35,23 @@ import StickyHeader from "../../components/Home/StickyHeader";
 import useOnScreen from "../../lib/onScreen";
 import moment from "moment";
 import Modal from "../../components/ui/FullScreenMobileModal";
+import PopupModal from "../../components/ui/Modal";
 import SelectInput from "../../components/ui/SelectInput";
 import Checkbox from "../../components/ui/Checkbox";
 
 import "swiper/css";
 import "swiper/css/thumbs";
 import Amenities from "../../components/Stay/Amenities";
+import {
+  priceOfAdultResident,
+  priceOfAdultNonResident,
+  priceOfChildrenResident,
+  priceOfChildrenNonResident,
+  priceOfSingleAdultResident,
+  priceOfSingleAdultNonResident,
+  priceOfSingleChildResident,
+  priceOfSingleChildNonResident,
+} from "../../lib/pricePlan";
 
 const StaysDetail = ({ userProfile, stay, inCart }) => {
   const GlobalStyle = createGlobalStyle`
@@ -80,7 +91,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
   const [reviewLoading, setReviewLoading] = useState(false);
 
-  const [liked, setLiked] = useState(false);
+  const [liked, setLiked] = useState(stay.has_user_saved);
 
   const [showShare, setShowShare] = useState(false);
 
@@ -132,34 +143,21 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               to_date: addToCartDate.to,
               num_of_adults: numOfAdults,
               num_of_children: numOfChildren,
-              non_resident: nonResident,
+              num_of_adults_non_resident: numOfAdultsNonResident,
+              num_of_children_non_resident: numOfChildrenNonResident,
               plan:
                 currentTypeOfLodge.value === "Standard"
                   ? "STANDARD"
                   : currentTypeOfLodge.value === "Deluxe"
                   ? "DELUXE"
-                  : currentTypeOfLodge.value === "Super Deluxe"
-                  ? "SUPER DELUXE"
-                  : currentTypeOfLodge.value === "Studio"
-                  ? "STUDIO"
-                  : currentTypeOfLodge.value === "Double Room"
-                  ? "DOUBLE ROOM"
-                  : currentTypeOfLodge.value === "Single Room"
-                  ? "SINGLE ROOM"
-                  : currentTypeOfLodge.value === "Tripple Room"
-                  ? "TRIPPLE ROOM"
-                  : currentTypeOfLodge.value === "Quad Room"
-                  ? "QUAD ROOM"
-                  : currentTypeOfLodge.value === "Queen Room"
-                  ? "QUEEN ROOM"
-                  : currentTypeOfLodge.value === "King Room"
-                  ? "KING ROOM"
-                  : currentTypeOfLodge.value === "Twin Room"
-                  ? "TWIN ROOM"
-                  : currentTypeOfLodge.value === "Twin Room"
-                  ? "TWIN ROOM"
                   : currentTypeOfLodge.value === "Family Room"
                   ? "FAMILY ROOM"
+                  : currentTypeOfLodge.value === "Presidential Suite Room"
+                  ? "PRESIDENTIAL SUITE ROOM"
+                  : currentTypeOfLodge.value === "Executive Suite Room"
+                  ? "EXECUTIVE SUITE ROOM"
+                  : currentTypeOfLodge.value === "Emperor Suite Room"
+                  ? "EMPEROR SUITE ROOM"
                   : "STANDARD",
             },
             {
@@ -171,6 +169,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
           .then(() => location.reload())
           .catch((err) => {
             console.log(err.response);
+            setAddToBasketLoading(false);
           });
       } else if (!token) {
         let cookieVal = Cookies.get("cart");
@@ -189,32 +188,21 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
             to_date: addToCartDate.to,
             num_of_adults: numOfAdults,
             num_of_children: numOfChildren,
-            non_resident: nonResident,
+            num_of_adults_non_resident: numOfAdultsNonResident,
+            num_of_children_non_resident: numOfChildrenNonResident,
             plan:
               currentTypeOfLodge.value === "Standard"
                 ? "STANDARD"
                 : currentTypeOfLodge.value === "Deluxe"
                 ? "DELUXE"
-                : currentTypeOfLodge.value === "Super Deluxe"
-                ? "SUPER DELUXE"
-                : currentTypeOfLodge.value === "Studio"
-                ? "STUDIO"
-                : currentTypeOfLodge.value === "Double Room"
-                ? "DOUBLE ROOM"
-                : currentTypeOfLodge.value === "Single Room"
-                ? "SINGLE ROOM"
-                : currentTypeOfLodge.value === "Tripple Room"
-                ? "TRIPPLE ROOM"
-                : currentTypeOfLodge.value === "Quad Room"
-                ? "QUAD ROOM"
-                : currentTypeOfLodge.value === "Queen Room"
-                ? "QUEEN ROOM"
-                : currentTypeOfLodge.value === "King Room"
-                ? "KING ROOM"
-                : currentTypeOfLodge.value === "Twin Room"
-                ? "TWIN ROOM"
                 : currentTypeOfLodge.value === "Family Room"
                 ? "FAMILY ROOM"
+                : currentTypeOfLodge.value === "Presidential Suite Room"
+                ? "PRESIDENTIAL SUITE ROOM"
+                : currentTypeOfLodge.value === "Executive Suite Room"
+                ? "EXECUTIVE SUITE ROOM"
+                : currentTypeOfLodge.value === "Emperor Suite Room"
+                ? "EMPEROR SUITE ROOM"
                 : "STANDARD",
           });
           Cookies.set("cart", JSON.stringify(data));
@@ -363,35 +351,23 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
     if (stay.standard) {
       availableOptions.push("Standard");
     }
-    if (stay.super_deluxe) {
-      availableOptions.push("Super Deluxe");
-    }
+
     if (stay.deluxe) {
       availableOptions.push("Deluxe");
     }
-    if (stay.studio) {
-      availableOptions.push("Studio");
-    }
-    if (stay.double_room) {
-      availableOptions.push("Double Room");
-    }
-    if (stay.tripple_room) {
-      availableOptions.push("Tripple Room");
-    }
-    if (stay.quad_room) {
-      availableOptions.push("Quad Room");
-    }
-    if (stay.queen_room) {
-      availableOptions.push("Queen Room");
-    }
-    if (stay.king_room) {
-      availableOptions.push("King Room");
-    }
-    if (stay.twin_room) {
-      availableOptions.push("Twin Room");
-    }
+
     if (stay.family_room) {
       availableOptions.push("Family Room");
+    }
+    if (stay.presidential_suite_room) {
+      availableOptions.push("Presidential Suite Room");
+    }
+
+    if (stay.executive_suite_room) {
+      availableOptions.push("Executive Suite Room");
+    }
+    if (stay.emperor_suite_room) {
+      availableOptions.push("Emperor Suite Room");
     }
 
     availableOptions.forEach((e) => {
@@ -406,7 +382,11 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
   const [numOfAdults, setNumOfAdults] = useState(1);
 
+  const [numOfAdultsNonResident, setNumOfAdultsNonResident] = useState(0);
+
   const [numOfChildren, setNumOfChildren] = useState(0);
+
+  const [numOfChildrenNonResident, setNumOfChildrenNonResident] = useState(0);
 
   const [guestPopup, setGuestPopup] = useState(false);
 
@@ -416,32 +396,32 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
   const [showGuestForMobilePopup, setShowGuestForMobilePopup] = useState(false);
 
-  const maxGuests =
-    currentTypeOfLodge.value === "Standard"
-      ? stay.standard_capacity
-      : currentTypeOfLodge.value === "Deluxe"
-      ? stay.deluxe_capacity
-      : currentTypeOfLodge.value === "Super Deluxe"
-      ? stay.super_deluxe_capacity
-      : currentTypeOfLodge.value === "Studio"
-      ? stay.studio_capacity
-      : currentTypeOfLodge.value === "Double Room"
-      ? stay.double_room_capacity
-      : currentTypeOfLodge.value === "Single Room"
-      ? stay.single_room_capacity
-      : currentTypeOfLodge.value === "Tripple Room"
-      ? stay.tripple_room_capacity
-      : currentTypeOfLodge.value === "Quad Room"
-      ? stay.quad_room_capacity
-      : currentTypeOfLodge.value === "Queen Room"
-      ? stay.queen_room_capacity
-      : currentTypeOfLodge.value === "King Room"
-      ? stay.king_room_capacity
-      : currentTypeOfLodge.value === "Twin Room"
-      ? stay.twin_room_capacity
-      : currentTypeOfLodge.value === "Family Room"
-      ? stay.family_room_capacity
-      : "";
+  // const maxGuests =
+  //   currentTypeOfLodge.value === "Standard"
+  //     ? stay.standard_capacity
+  //     : currentTypeOfLodge.value === "Deluxe"
+  //     ? stay.deluxe_capacity
+  //     : currentTypeOfLodge.value === "Super Deluxe"
+  //     ? stay.super_deluxe_capacity
+  //     : currentTypeOfLodge.value === "Studio"
+  //     ? stay.studio_capacity
+  //     : currentTypeOfLodge.value === "Double Room"
+  //     ? stay.double_room_capacity
+  //     : currentTypeOfLodge.value === "Single Room"
+  //     ? stay.single_room_capacity
+  //     : currentTypeOfLodge.value === "Tripple Room"
+  //     ? stay.tripple_room_capacity
+  //     : currentTypeOfLodge.value === "Quad Room"
+  //     ? stay.quad_room_capacity
+  //     : currentTypeOfLodge.value === "Queen Room"
+  //     ? stay.queen_room_capacity
+  //     : currentTypeOfLodge.value === "King Room"
+  //     ? stay.king_room_capacity
+  //     : currentTypeOfLodge.value === "Twin Room"
+  //     ? stay.twin_room_capacity
+  //     : currentTypeOfLodge.value === "Family Room"
+  //     ? stay.family_room_capacity
+  //     : "";
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [showMoreExperiences, setShowMoreExperiences] = useState(false);
@@ -449,56 +429,87 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [nonResident, setNonResident] = useState(false);
 
-  const priceOfPlan =
-    currentTypeOfLodge.value === "Standard" && !nonResident
-      ? stay.price
-      : currentTypeOfLodge.value === "Standard" && nonResident
-      ? stay.price_non_resident
-      : currentTypeOfLodge.value === "Deluxe" && !nonResident
-      ? stay.deluxe_price
-      : currentTypeOfLodge.value === "Family Room" && nonResident
-      ? stay.family_room_price_non_resident
-      : currentTypeOfLodge.value === "Family Room" && !nonResident
-      ? stay.family_room_price
-      : currentTypeOfLodge.value === "Deluxe" && nonResident
-      ? stay.deluxe_price_non_resident
-      : currentTypeOfLodge.value === "Super Deluxe" && !nonResident
-      ? stay.super_deluxe_price
-      : currentTypeOfLodge.value === "Super Deluxe" && nonResident
-      ? stay.super_deluxe_price_non_resident
-      : currentTypeOfLodge.value === "Studio" && !nonResident
-      ? stay.studio_price
-      : currentTypeOfLodge.value === "Studio" && nonResident
-      ? stay.studio_price_non_resident
-      : currentTypeOfLodge.value === "Double Room" && !nonResident
-      ? stay.double_room_price
-      : currentTypeOfLodge.value === "Double Room" && nonResident
-      ? stay.double_room_price_non_resident
-      : currentTypeOfLodge.value === "Single Room" && !nonResident
-      ? stay.single_room_price
-      : currentTypeOfLodge.value === "Single Room" && nonResident
-      ? stay.single_room_price_non_resident
-      : currentTypeOfLodge.value === "Tripple Room" && !nonResident
-      ? stay.tripple_room_price
-      : currentTypeOfLodge.value === "Tripple Room" && nonResident
-      ? stay.tripple_room_price_non_resident
-      : currentTypeOfLodge.value === "Quad Room" && !nonResident
-      ? stay.quad_room_price
-      : currentTypeOfLodge.value === "Quad Room" && nonResident
-      ? stay.quad_room_price_non_resident
-      : currentTypeOfLodge.value === "Queen Room" && !nonResident
-      ? stay.queen_room_price
-      : currentTypeOfLodge.value === "Queen Room" && nonResident
-      ? stay.queen_room_price_non_resident
-      : currentTypeOfLodge.value === "King Room" && !nonResident
-      ? stay.king_room_price
-      : currentTypeOfLodge.value === "King Room" && nonResident
-      ? stay.king_room_price_non_resident
-      : currentTypeOfLodge.value === "Twin Room" && !nonResident
-      ? stay.twin_room_price
-      : currentTypeOfLodge.value === "Twin Room" && nonResident
-      ? stay.twin_room_price_non_resident
-      : stay.price;
+  const changeLikeState = () => {
+    if (Cookies.get("token")) {
+      setLiked(false);
+      axios
+        .delete(`${process.env.NEXT_PUBLIC_baseURL}/stays/${stay.id}/delete/`, {
+          headers: {
+            Authorization: `Token ${Cookies.get("token")}`,
+          },
+        })
+        .then(() => {})
+        .catch((err) => console.log(err.response));
+    } else {
+      router.push({
+        pathname: "/login",
+        query: { redirect: `${router.asPath}` },
+      });
+    }
+  };
+
+  const changeUnLikeState = () => {
+    if (Cookies.get("token")) {
+      setLiked(true);
+      axios
+        .post(
+          `${process.env.NEXT_PUBLIC_baseURL}/stays/${stay.slug}/save/`,
+          "",
+          {
+            headers: {
+              Authorization: "Token " + Cookies.get("token"),
+            },
+          }
+        )
+        .then(() => {})
+        .catch((err) => console.log(err.response));
+    } else {
+      router.push({
+        pathname: "/login",
+        query: { redirect: `${router.asPath}` },
+      });
+    }
+  };
+
+  const priceAdultResident = priceOfAdultResident(
+    currentTypeOfLodge.value,
+    stay
+  );
+
+  const priceAdultNonResident = priceOfAdultNonResident(
+    currentTypeOfLodge.value,
+    stay
+  );
+
+  const priceChildResident = priceOfChildrenResident(
+    currentTypeOfLodge.value,
+    stay
+  );
+
+  const priceChildNonResident = priceOfChildrenNonResident(
+    currentTypeOfLodge.value,
+    stay
+  );
+
+  const priceSingleAdultNonResident = priceOfSingleAdultNonResident(
+    currentTypeOfLodge.value,
+    stay
+  );
+
+  const priceSingleAdultResident = priceOfSingleAdultResident(
+    currentTypeOfLodge.value,
+    stay
+  );
+
+  const priceSingleChildNonResident = priceOfSingleChildNonResident(
+    currentTypeOfLodge.value,
+    stay
+  );
+
+  const priceSingleChildResident = priceOfSingleChildResident(
+    currentTypeOfLodge.value,
+    stay
+  );
 
   return (
     <div
@@ -638,7 +649,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       stroke="currentColor"
                       onClick={(e) => {
                         e.stopPropagation();
-                        setLiked(true);
+                        changeUnLikeState();
                       }}
                     >
                       <path
@@ -659,7 +670,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       className="cursor-pointer"
                       onClick={(e) => {
                         e.stopPropagation();
-                        setLiked(false);
+                        changeLikeState();
                       }}
                     >
                       <path
@@ -918,7 +929,22 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       <div className="flex items-center">
                         <Price
                           stayPrice={
-                            priceOfPlan * (numOfAdults + numOfChildren)
+                            (numOfAdults === 1
+                              ? priceSingleAdultResident
+                              : priceAdultResident) *
+                              numOfAdults +
+                            (numOfAdultsNonResident === 1
+                              ? priceSingleAdultNonResident
+                              : priceAdultNonResident) *
+                              numOfAdultsNonResident +
+                            (numOfChildren === 1
+                              ? priceSingleChildResident
+                              : priceChildResident) *
+                              numOfChildren +
+                            (numOfChildrenNonResident === 1
+                              ? priceSingleChildNonResident
+                              : priceChildNonResident) *
+                              numOfChildrenNonResident
                           }
                         ></Price>
                         <span className="mt-1">/night</span>
@@ -940,11 +966,13 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       </div>
 
                       {(stay.type_of_stay !== "HOUSE" || !inCart) && (
-                        <div className="text-gray-600 text-sm justify-start flex flex-wrap self-start">
+                        <div className="text-gray-600 text-sm flex flex-wrap self-end">
                           {
                             <span>
                               {numOfAdults}{" "}
-                              {numOfAdults > 1 ? "Adults" : "Adult"}
+                              {numOfAdults > 1
+                                ? "Resident Adults"
+                                : "Resident Adult"}
                             </span>
                           }
                           {numOfChildren > 0 && (
@@ -952,21 +980,34 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                               <span className="font-bold mx-0.5 ">,</span>
                               <span>
                                 {numOfChildren}{" "}
-                                {numOfChildren > 1 ? "Children" : "Child"}
+                                {numOfChildren > 1
+                                  ? "Resident Children"
+                                  : "Resident Child"}
                               </span>
                             </>
                           )}
-                          {nonResident && (
+
+                          {numOfAdultsNonResident > 0 && (
                             <>
                               <span className="font-bold mx-0.5 ">,</span>
-                              <span>Non-resident</span>
+                              <span>
+                                {numOfAdultsNonResident}{" "}
+                                {numOfAdultsNonResident > 1
+                                  ? "Non-Resident Children"
+                                  : "Non-Resident Child"}
+                              </span>
                             </>
                           )}
 
-                          {!nonResident && (
+                          {numOfChildrenNonResident > 0 && (
                             <>
                               <span className="font-bold mx-0.5 ">,</span>
-                              <span>Resident</span>
+                              <span>
+                                {numOfChildrenNonResident}{" "}
+                                {numOfChildrenNonResident > 1
+                                  ? "Non-Resident Children"
+                                  : "Non-Resident Child"}
+                              </span>
                             </>
                           )}
                         </div>
@@ -1172,7 +1213,22 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       </div>
                     )}
 
-                    {currentTypeOfLodge.value === "Super Deluxe" && (
+                    {currentTypeOfLodge.value === "Emperor Suite Room" && (
+                      <div className="text-sm text-gray-500 mt-2">
+                        This is the perfect room for you if you are looking for
+                        the very best and well decorated room this place has to
+                        offer
+                      </div>
+                    )}
+
+                    {currentTypeOfLodge.value === "Presidential Suite Room" && (
+                      <div className="text-sm text-gray-500 mt-2">
+                        This is the perfect room for you if you are looking for
+                        the very best and well decorated room this place has to
+                        offer
+                      </div>
+                    )}
+                    {currentTypeOfLodge.value === "Executive Suite Room" && (
                       <div className="text-sm text-gray-500 mt-2">
                         This is the perfect room for you if you are looking for
                         the very best and well decorated room this place has to
@@ -1194,103 +1250,13 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       </div>
                     )}
 
-                    {currentTypeOfLodge.value === "Studio" && (
-                      <div className="text-sm text-gray-500 mt-2">
-                        This room normally contains a kitchen, and a living
-                        space in one room
-                      </div>
-                    )}
-
-                    {currentTypeOfLodge.value === "Double Room" && (
-                      <div className="text-sm text-gray-500 mt-2">
-                        This room is assigned to two people; normally has one
-                        double bed, or two twin beds.
-                      </div>
-                    )}
-
-                    {currentTypeOfLodge.value === "Tripple Room" && (
-                      <div className="text-sm text-gray-500 mt-2">
-                        This room is assigned to three people; normally has
-                        three beds.
-                      </div>
-                    )}
-
-                    {currentTypeOfLodge.value === "Quad Room" && (
-                      <div className="text-sm text-gray-500 mt-2">
-                        This room is assigned to four people; normally has four
-                        beds.
-                      </div>
-                    )}
-
-                    {currentTypeOfLodge.value === "King Room" && (
-                      <div className="text-sm text-gray-500 mt-2">
-                        This room usually contains a king sized bed.
-                      </div>
-                    )}
-
-                    {currentTypeOfLodge.value === "Queen Room" && (
-                      <div className="text-sm text-gray-500 mt-2">
-                        This room usually contains a queen sized bed.
-                      </div>
-                    )}
-
-                    {currentTypeOfLodge.value === "Twin Room" && (
-                      <div className="text-sm text-gray-500 mt-2">
-                        This room usually contains two small beds, each for one
-                        person.
-                      </div>
-                    )}
-
-                    <div className="flex items-center gap-0.5 mt-4">
-                      <svg
-                        className="w-4 h-4 text-gray-500"
-                        xmlns="http://www.w3.org/2000/svg"
-                        aria-hidden="true"
-                        role="img"
-                        width="1em"
-                        height="1em"
-                        preserveAspectRatio="xMidYMid meet"
-                        viewBox="0 0 36 36"
-                      >
-                        <path
-                          fill="currentColor"
-                          d="M12 16.14h-.87a8.67 8.67 0 0 0-6.43 2.52l-.24.28v8.28h4.08v-4.7l.55-.62l.25-.29a11 11 0 0 1 4.71-2.86A6.59 6.59 0 0 1 12 16.14Z"
-                        />
-                        <path
-                          fill="currentColor"
-                          d="M31.34 18.63a8.67 8.67 0 0 0-6.43-2.52a10.47 10.47 0 0 0-1.09.06a6.59 6.59 0 0 1-2 2.45a10.91 10.91 0 0 1 5 3l.25.28l.54.62v4.71h3.94v-8.32Z"
-                        />
-                        <path
-                          fill="currentColor"
-                          d="M11.1 14.19h.31a6.45 6.45 0 0 1 3.11-6.29a4.09 4.09 0 1 0-3.42 6.33Z"
-                        />
-                        <path
-                          fill="currentColor"
-                          d="M24.43 13.44a6.54 6.54 0 0 1 0 .69a4.09 4.09 0 0 0 .58.05h.19A4.09 4.09 0 1 0 21.47 8a6.53 6.53 0 0 1 2.96 5.44Z"
-                        />
-                        <circle
-                          cx="17.87"
-                          cy="13.45"
-                          r="4.47"
-                          fill="currentColor"
-                        />
-                        <path
-                          fill="currentColor"
-                          d="M18.11 20.3A9.69 9.69 0 0 0 11 23l-.25.28v6.33a1.57 1.57 0 0 0 1.6 1.54h11.49a1.57 1.57 0 0 0 1.6-1.54V23.3l-.24-.3a9.58 9.58 0 0 0-7.09-2.7Z"
-                        />
-                        <path fill="none" d="M0 0h36v36H0z" />
-                      </svg>
-                      {currentTypeOfLodge && (
-                        <span className="text-gray-600 text-sm">
-                          Maximum number of guests is {maxGuests}
-                        </span>
-                      )}
-                    </div>
-
                     <div className="flex justify-between mt-6">
-                      <div className="flex flex-col text-sm text-gray-600 items-center">
+                      <div className="flex flex-col text-sm text-gray-600">
                         <span>
-                          {numOfAdults} {numOfAdults > 1 ? "Adults" : "Adult"}
+                          {numOfAdults}{" "}
+                          {numOfAdults > 1
+                            ? "Residents Adult"
+                            : "Resident Adult"}
                         </span>
                         <span>(18+)</span>
                       </div>
@@ -1298,7 +1264,10 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       <div className="flex gap-3 items-center">
                         <div
                           onClick={() => {
-                            if (numOfAdults > 1) {
+                            if (
+                              (numOfAdults > 1 || numOfAdultsNonResident > 0) &&
+                              numOfAdults > 0
+                            ) {
                               setNumOfAdults(numOfAdults - 1);
                             }
                           }}
@@ -1309,9 +1278,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
                         <div
                           onClick={() => {
-                            if (numOfAdults + numOfChildren < maxGuests) {
-                              setNumOfAdults(numOfAdults + 1);
-                            }
+                            setNumOfAdults(numOfAdults + 1);
                           }}
                           className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
                         >
@@ -1321,10 +1288,53 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     </div>
 
                     <div className="flex justify-between mt-6">
-                      <div className="flex flex-col text-sm text-gray-600 items-center">
+                      <div className="flex flex-col text-sm text-gray-600">
+                        <span>
+                          {numOfAdultsNonResident}{" "}
+                          {numOfAdultsNonResident > 1
+                            ? "Non-Residents Adult"
+                            : "Non-Resident Adult"}
+                        </span>
+                        <span>(18+)</span>
+                      </div>
+
+                      <div className="flex gap-3 items-center">
+                        <div
+                          onClick={() => {
+                            if (
+                              (numOfAdultsNonResident > 1 || numOfAdults > 0) &&
+                              numOfAdultsNonResident > 0
+                            ) {
+                              setNumOfAdultsNonResident(
+                                numOfAdultsNonResident - 1
+                              );
+                            }
+                          }}
+                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
+                        >
+                          -
+                        </div>
+
+                        <div
+                          onClick={() => {
+                            setNumOfAdultsNonResident(
+                              numOfAdultsNonResident + 1
+                            );
+                          }}
+                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
+                        >
+                          +
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex justify-between mt-6">
+                      <div className="flex flex-col text-sm text-gray-600">
                         <span>
                           {numOfChildren}{" "}
-                          {numOfChildren > 1 ? "Children" : "Child"}
+                          {numOfChildren > 1
+                            ? "Resident Children"
+                            : "Resident Child"}
                         </span>
                         <span>(0 - 17)</span>
                       </div>
@@ -1343,9 +1353,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
                         <div
                           onClick={() => {
-                            if (numOfAdults + numOfChildren < maxGuests) {
-                              setNumOfChildren(numOfChildren + 1);
-                            }
+                            setNumOfChildren(numOfChildren + 1);
                           }}
                           className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
                         >
@@ -1354,22 +1362,55 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-2 mt-3">
-                      <Checkbox
-                        checked={nonResident}
-                        onChange={() => setNonResident(!nonResident)}
-                      ></Checkbox>
-                      <span className="text-gray-600 text-sm">
-                        Non-resident
-                      </span>
+                    <div className="flex justify-between mt-6">
+                      <div className="flex flex-col text-sm text-gray-600">
+                        <span>
+                          {numOfChildrenNonResident}{" "}
+                          {numOfChildrenNonResident > 1
+                            ? "Non-Resident Children"
+                            : "Non-Resident Child"}
+                        </span>
+                        <span>(0 - 17)</span>
+                      </div>
+
+                      <div className="flex gap-3 items-center">
+                        <div
+                          onClick={() => {
+                            if (numOfChildrenNonResident > 0) {
+                              setNumOfChildrenNonResident(
+                                numOfChildrenNonResident - 1
+                              );
+                            }
+                          }}
+                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
+                        >
+                          -
+                        </div>
+
+                        <div
+                          onClick={() => {
+                            setNumOfChildrenNonResident(
+                              numOfChildrenNonResident + 1
+                            );
+                          }}
+                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
+                        >
+                          +
+                        </div>
+                      </div>
                     </div>
 
-                    {(numOfAdults > 1 || numOfChildren > 0) && (
+                    {(numOfAdults > 1 ||
+                      numOfChildren > 0 ||
+                      numOfAdultsNonResident > 0 ||
+                      numOfChildrenNonResident > 0) && (
                       <div
                         className="mt-2 cursor-pointer text-sm underline"
                         onClick={() => {
                           setNumOfAdults(1);
                           setNumOfChildren(0);
+                          setNumOfAdultsNonResident(0);
+                          setNumOfChildrenNonResident(0);
                         }}
                       >
                         clear data
@@ -1389,7 +1430,24 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                   <div>
                     <div className="flex items-center">
                       <Price
-                        stayPrice={priceOfPlan * (numOfAdults + numOfChildren)}
+                        stayPrice={
+                          (numOfAdults === 1
+                            ? priceSingleAdultResident
+                            : priceAdultResident) *
+                            numOfAdults +
+                          (numOfAdultsNonResident === 1
+                            ? priceSingleAdultNonResident
+                            : priceAdultNonResident) *
+                            numOfAdultsNonResident +
+                          (numOfChildren === 1
+                            ? priceSingleChildResident
+                            : priceChildResident) *
+                            numOfChildren +
+                          (numOfChildrenNonResident === 1
+                            ? priceSingleChildNonResident
+                            : priceChildNonResident) *
+                            numOfChildrenNonResident
+                        }
                       ></Price>
                       <span className="mt-1">/night</span>
 
@@ -1408,10 +1466,13 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     </div>
 
                     {(stay.type_of_stay !== "HOUSE" || !inCart) && (
-                      <div className="text-gray-600 text-sm justify-start flex flex-wrap self-start">
+                      <div className="text-gray-600 text-sm  flex flex-wrap self-end">
                         {
                           <span>
-                            {numOfAdults} {numOfAdults > 1 ? "Adults" : "Adult"}
+                            {numOfAdults}{" "}
+                            {numOfAdults > 1
+                              ? "Resident Adults"
+                              : "Resident Adult"}
                           </span>
                         }
                         {numOfChildren > 0 && (
@@ -1419,21 +1480,34 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                             <span className="font-bold mx-0.5 ">,</span>
                             <span>
                               {numOfChildren}{" "}
-                              {numOfChildren > 1 ? "Children" : "Child"}
+                              {numOfChildren > 1
+                                ? "Resident Children"
+                                : "Resident Child"}
                             </span>
                           </>
                         )}
-                        {nonResident && (
+
+                        {numOfAdultsNonResident > 0 && (
                           <>
                             <span className="font-bold mx-0.5 ">,</span>
-                            <span>Non-resident</span>
+                            <span>
+                              {numOfAdultsNonResident}{" "}
+                              {numOfAdultsNonResident > 1
+                                ? "Non-Resident Children"
+                                : "Non-Resident Child"}
+                            </span>
                           </>
                         )}
 
-                        {!nonResident && (
+                        {numOfChildrenNonResident > 0 && (
                           <>
                             <span className="font-bold mx-0.5 ">,</span>
-                            <span>Resident</span>
+                            <span>
+                              {numOfChildrenNonResident}{" "}
+                              {numOfChildrenNonResident > 1
+                                ? "Non-Resident Children"
+                                : "Non-Resident Child"}
+                            </span>
                           </>
                         )}
                       </div>
@@ -1475,7 +1549,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               {showAllDescription && (
                 <p className="font-medium text-gray-600">{stay.description}</p>
               )}
-              {!showAllDescription && (
+              {!showAllDescription && stay.description.length > 500 && (
                 <div
                   onClick={() => {
                     setShowAllDescription(true);
@@ -1533,7 +1607,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               {showAllUniqueFeature && (
                 <p className="ml-2 font-medium">{stay.unique_about_place}</p>
               )}
-              {!showAllUniqueFeature && (
+              {!showAllUniqueFeature && stay.unique_about_place.length > 500 && (
                 <div
                   onClick={() => {
                     setShowAllUniqueFeature(true);
@@ -1578,6 +1652,38 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                 </div>
               )}
             </div>
+
+            {stay.inclusions.length > 0 && (
+              <>
+                <div className="mb-3 mt-4">
+                  <span className="font-bold text-lg">inclusions</span>
+                </div>
+
+                <div className="flex gap-2 flex-wrap">
+                  {stay.inclusions.map((inclusion, index) => (
+                    <div key={index} className="w-full md:w-[48%]">
+                      <ListItem>{inclusion.name}</ListItem>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
+
+            {stay.facts.length > 0 && (
+              <>
+                <div className="mb-3 mt-4">
+                  <span className="font-bold text-lg">Other facts</span>
+                </div>
+
+                <div className="flex gap-2 flex-wrap">
+                  {stay.facts.map((fact, index) => (
+                    <div key={index} className="w-full md:w-[48%]">
+                      <ListItem>{fact.name}</ListItem>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
           </Element>
 
           {/* ammenities */}
@@ -1591,6 +1697,22 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               </div>
 
               <Amenities amenities={stay}></Amenities>
+
+              {stay.other_amenities.length > 0 && (
+                <>
+                  <div className="mb-3 mt-4">
+                    <span className="font-bold text-lg">Other amenities</span>
+                  </div>
+
+                  <div className="flex gap-2 flex-wrap">
+                    {stay.other_amenities.map((amenities, index) => (
+                      <div key={index} className="w-full md:w-[48%]">
+                        <ListItem>{amenities}</ListItem>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
           </Element>
 
@@ -1602,16 +1724,18 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
             >
               <div className="">
                 <div className="mb-3">
-                  <span className="font-bold text-xl">Experiences</span>
+                  <span className="font-bold text-xl">
+                    Additional Experiences
+                  </span>
                 </div>
 
                 {!showMoreExperiences && (
                   <div className="flex flex-wrap gap-2 px-2">
                     {stay.experiences_included
                       .slice(0, 5)
-                      .map((amenity, index) => (
+                      .map((experience, index) => (
                         <div key={index} className="w-[48%]">
-                          <ListItem>{amenity}</ListItem>
+                          <ListItem>{experience.name}</ListItem>
                         </div>
                       ))}
                   </div>
@@ -1619,9 +1743,9 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
                 {showMoreExperiences && (
                   <div className="flex flex-wrap gap-2 px-2">
-                    {stay.experiences_included.map((amenity, index) => (
+                    {stay.experiences_included.map((experience, index) => (
                       <div key={index} className="w-[48%]">
-                        <ListItem>{amenity}</ListItem>
+                        <ListItem>{experience.name}</ListItem>
                       </div>
                     ))}
                   </div>
@@ -1692,141 +1816,58 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
           {/* policies */}
           <Element name="policies" className={"w-full pt-20 "}>
             <h1 className="font-bold text-2xl mb-2">Policies</h1>
-            <div className="py-2 px-2 border-b border-gray-100">
-              <span className="font-semibold">Refund Policy</span>
-            </div>
 
-            {!stay.refundable && (
-              <div className="mt-2 ml-2">
-                <p>Bookings at this property is non-refundable.</p>
-              </div>
-            )}
-
-            {stay.refundable && (
-              <div className="mt-2 ml-2">
-                <p>Bookings at this property is refundable.</p>
-                <div className="mt-6">{stay.refund_policy}</div>
-              </div>
-            )}
-
-            {stay.damage_policy && (
+            {stay.cancellation_policy && (
               <div className="mt-4">
                 <div className="py-2 px-2 border-b border-gray-100">
-                  <span className="font-semibold">Damage Policy</span>
+                  <span className="font-semibold">Cancellation Policy</span>
                 </div>
 
                 <div className="mt-2 ml-2">
-                  <p>{stay.damage_policy}</p>
+                  <p className="whitespace-pre-line">
+                    {stay.cancellation_policy}
+                  </p>
                 </div>
               </div>
             )}
-
-            {stay.covid_19_compliance && (
+            {stay.cancellation_policy_by_provider && (
               <div className="mt-4">
                 <div className="py-2 px-2 border-b border-gray-100">
-                  <span className="font-semibold">Covid-19 Policy</span>
+                  <span className="font-semibold">
+                    Cancellation Policy by Provider
+                  </span>
                 </div>
 
                 <div className="mt-2 ml-2">
-                  <p>{stay.covid_19_compliance_details}</p>
+                  <p>{stay.cancellation_policy_by_provider}</p>
                 </div>
               </div>
             )}
 
-            <div className="mt-4">
-              <div className="py-2 px-2 border-b border-gray-100">
-                <span className="font-semibold">Listing Rules</span>
+            {stay.health_and_safety_policy && (
+              <div className="mt-4">
+                <div className="py-2 px-2 border-b border-gray-100">
+                  <span className="font-semibold">
+                    Health and safety policy
+                  </span>
+                </div>
 
-                <div className="flex items-center gap-6 ml-4">
-                  {stay.check_in_time && (
-                    <div className="flex items-center mt-2">
-                      <span className="font-bold mr-1 hidden sm:block">
-                        Checkin at:
-                      </span>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5 mr-1 sm:hidden text-blue-600"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
-                        />
-                      </svg>
-                      {moment(stay.check_in_time, "HH:mm:ss").format("hh:mm a")}
-                    </div>
-                  )}
-                  {stay.check_out_time && (
-                    <div className="flex items-center mt-2">
-                      <span className="font-bold mr-1 hidden sm:block">
-                        Checkout at:
-                      </span>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5 mr-1 sm:hidden text-red-600"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                        />
-                      </svg>
-                      {moment(stay.check_out_time, "HH:mm:ss").format(
-                        "hh:mm a"
-                      )}
-                    </div>
-                  )}
+                <div className="mt-2 ml-2">
+                  <p>{stay.health_and_safety_policy}</p>
                 </div>
               </div>
+            )}
+            {stay.damage_policy_by_provider && (
+              <div className="mt-4">
+                <div className="py-2 px-2 border-b border-gray-100">
+                  <span className="font-semibold">Damage policy</span>
+                </div>
 
-              <div className="mt-2 ml-2">
-                <div className="flex flex-wrap gap-4 justify-between">
-                  <div className="md:w-[48%] w-full">
-                    <ListItem>
-                      Children allowed:{" "}
-                      <span className="font-bold">
-                        {stay.children_allowed ? "yes" : "no"}
-                      </span>
-                    </ListItem>
-                  </div>
-
-                  <div className="md:w-[48%] w-full">
-                    <ListItem>
-                      Pets allowed:{" "}
-                      <span className="font-bold">
-                        {stay.pets_allowed ? "yes" : "no"}
-                      </span>
-                    </ListItem>
-                  </div>
-
-                  <div className="md:w-[48%] w-full">
-                    <ListItem>
-                      Smoking allowed:{" "}
-                      <span className="font-bold">
-                        {stay.smoking_allowed ? "yes" : "no"}
-                      </span>
-                    </ListItem>
-                  </div>
-
-                  <div className="md:w-[48%] w-full">
-                    <ListItem>
-                      Events allowed:{" "}
-                      <span className="font-bold">
-                        {stay.events_allowed ? "yes" : "no"}
-                      </span>
-                    </ListItem>
-                  </div>
+                <div className="mt-2 ml-2">
+                  <p>{stay.damage_policy_by_provider}</p>
                 </div>
               </div>
-            </div>
+            )}
           </Element>
 
           {/* reviews */}
@@ -1982,7 +2023,24 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               <div className="flex flex-col">
                 <div className="flex self-end">
                   <Price
-                    stayPrice={priceOfPlan * (numOfAdults + numOfChildren)}
+                    stayPrice={
+                      (numOfAdults === 1
+                        ? priceSingleAdultResident
+                        : priceAdultResident) *
+                        numOfAdults +
+                      (numOfAdultsNonResident === 1
+                        ? priceSingleAdultNonResident
+                        : priceAdultNonResident) *
+                        numOfAdultsNonResident +
+                      (numOfChildren === 1
+                        ? priceSingleChildResident
+                        : priceChildResident) *
+                        numOfChildren +
+                      (numOfChildrenNonResident === 1
+                        ? priceSingleChildNonResident
+                        : priceChildNonResident) *
+                        numOfChildrenNonResident
+                    }
                   ></Price>
                   <span className="mt-1">/night</span>
                 </div>
@@ -1995,7 +2053,8 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                 <div className="text-gray-600 text-sm justify-end flex flex-wrap self-end">
                   {
                     <span>
-                      {numOfAdults} {numOfAdults > 1 ? "Adults" : "Adult"}
+                      {numOfAdults}{" "}
+                      {numOfAdults > 1 ? "Resident Adults" : "Resident Adult"}
                     </span>
                   }
                   {numOfChildren > 0 && (
@@ -2003,21 +2062,34 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       <span className="font-bold mx-0.5 ">,</span>
                       <span>
                         {numOfChildren}{" "}
-                        {numOfChildren > 1 ? "Children" : "Child"}
+                        {numOfChildren > 1
+                          ? "Resident Children"
+                          : "Resident Child"}
                       </span>
                     </>
                   )}
-                  {nonResident && (
+
+                  {numOfAdultsNonResident > 0 && (
                     <>
                       <span className="font-bold mx-0.5 ">,</span>
-                      <span>Non-resident</span>
+                      <span>
+                        {numOfAdultsNonResident}{" "}
+                        {numOfAdultsNonResident > 1
+                          ? "Non-Resident Children"
+                          : "Non-Resident Child"}
+                      </span>
                     </>
                   )}
 
-                  {!nonResident && (
+                  {numOfChildrenNonResident > 0 && (
                     <>
                       <span className="font-bold mx-0.5 ">,</span>
-                      <span>Resident</span>
+                      <span>
+                        {numOfChildrenNonResident}{" "}
+                        {numOfChildrenNonResident > 1
+                          ? "Non-Resident Children"
+                          : "Non-Resident Child"}
+                      </span>
                     </>
                   )}
                 </div>
@@ -2074,251 +2146,250 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                   </div>
                 }
 
-                {guestPopup && (
-                  <div
-                    onClick={(e) => {
-                      e.stopPropagation();
+                <PopupModal
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                  showModal={guestPopup}
+                  closeModal={() => setGuestPopup(false)}
+                  // className="absolute -left-[410px] -top-[250px] px-4 py-4 !z-[99] w-[400px] bg-white shadow-lg rounded-lg h-fit"
+                  className="w-[500px] absolute top-[20%]"
+                >
+                  <Select
+                    defaultValue={currentTypeOfLodge}
+                    onChange={(value) => {
+                      setCurrentTypeOfLodge(value);
+                      setNumOfAdults(1);
+                      setNumOfAdultsNonResident(0);
+                      setNumOfChildren(0);
+                      setNumOfChildrenNonResident(0);
                     }}
-                    className="absolute -left-[410px] -top-[250px] px-4 py-4 !z-[99] w-[400px] bg-white shadow-lg rounded-lg h-fit"
-                  >
-                    <Select
-                      defaultValue={currentTypeOfLodge}
-                      onChange={(value) => {
-                        setCurrentTypeOfLodge(value);
-                        setNumOfAdults(1);
-                        setNumOfChildren(0);
-                      }}
-                      className={"text-sm outline-none border border-gray-500"}
-                      instanceId={typeOfLodge}
-                      placeholder="Type of room"
-                      options={typeOfLodge}
-                      isSearchable={true}
-                    />
+                    className={"text-sm outline-none border border-gray-500"}
+                    instanceId={typeOfLodge}
+                    placeholder="Type of room"
+                    options={typeOfLodge}
+                    isSearchable={true}
+                  />
 
-                    {currentTypeOfLodge.value === "Standard" && (
-                      <div className="text-sm text-gray-500 mt-2">
-                        This is the perfect room for you if you are looking for
-                        a simple, clean, and affordable room.
-                      </div>
-                    )}
-
-                    {currentTypeOfLodge.value === "Super Deluxe" && (
-                      <div className="text-sm text-gray-500 mt-2">
-                        This is the perfect room for you if you are looking for
-                        the very best and well decorated room this place has to
-                        offer
-                      </div>
-                    )}
-
-                    {currentTypeOfLodge.value === "Deluxe" && (
-                      <div className="text-sm text-gray-500 mt-2">
-                        This is the perfect room for you if you are looking for
-                        the best this place has to offer.
-                      </div>
-                    )}
-
-                    {currentTypeOfLodge.value === "Family Room" && (
-                      <div className="text-sm text-gray-500 mt-2">
-                        If you just want to spend sometime with the family, this
-                        is the room for you.
-                      </div>
-                    )}
-
-                    {currentTypeOfLodge.value === "Studio" && (
-                      <div className="text-sm text-gray-500 mt-2">
-                        This room normally contains a kitchen, and a living
-                        space in one room
-                      </div>
-                    )}
-
-                    {currentTypeOfLodge.value === "Double Room" && (
-                      <div className="text-sm text-gray-500 mt-2">
-                        This room is assigned to two people; normally has one
-                        double bed, or two twin beds.
-                      </div>
-                    )}
-
-                    {currentTypeOfLodge.value === "Tripple Room" && (
-                      <div className="text-sm text-gray-500 mt-2">
-                        This room is assigned to three people; normally has
-                        three beds.
-                      </div>
-                    )}
-
-                    {currentTypeOfLodge.value === "Quad Room" && (
-                      <div className="text-sm text-gray-500 mt-2">
-                        This room is assigned to four people; normally has four
-                        beds.
-                      </div>
-                    )}
-
-                    {currentTypeOfLodge.value === "King Room" && (
-                      <div className="text-sm text-gray-500 mt-2">
-                        This room usually contains a king sized bed.
-                      </div>
-                    )}
-
-                    {currentTypeOfLodge.value === "Queen Room" && (
-                      <div className="text-sm text-gray-500 mt-2">
-                        This room usually contains a queen sized bed.
-                      </div>
-                    )}
-
-                    {currentTypeOfLodge.value === "Twin Room" && (
-                      <div className="text-sm text-gray-500 mt-2">
-                        This room usually contains two small beds, each for one
-                        person.
-                      </div>
-                    )}
-
-                    <div className="flex items-center gap-0.5 mt-2">
-                      <svg
-                        className="w-4 h-4 text-gray-500"
-                        xmlns="http://www.w3.org/2000/svg"
-                        aria-hidden="true"
-                        role="img"
-                        width="1em"
-                        height="1em"
-                        preserveAspectRatio="xMidYMid meet"
-                        viewBox="0 0 36 36"
-                      >
-                        <path
-                          fill="currentColor"
-                          d="M12 16.14h-.87a8.67 8.67 0 0 0-6.43 2.52l-.24.28v8.28h4.08v-4.7l.55-.62l.25-.29a11 11 0 0 1 4.71-2.86A6.59 6.59 0 0 1 12 16.14Z"
-                        />
-                        <path
-                          fill="currentColor"
-                          d="M31.34 18.63a8.67 8.67 0 0 0-6.43-2.52a10.47 10.47 0 0 0-1.09.06a6.59 6.59 0 0 1-2 2.45a10.91 10.91 0 0 1 5 3l.25.28l.54.62v4.71h3.94v-8.32Z"
-                        />
-                        <path
-                          fill="currentColor"
-                          d="M11.1 14.19h.31a6.45 6.45 0 0 1 3.11-6.29a4.09 4.09 0 1 0-3.42 6.33Z"
-                        />
-                        <path
-                          fill="currentColor"
-                          d="M24.43 13.44a6.54 6.54 0 0 1 0 .69a4.09 4.09 0 0 0 .58.05h.19A4.09 4.09 0 1 0 21.47 8a6.53 6.53 0 0 1 2.96 5.44Z"
-                        />
-                        <circle
-                          cx="17.87"
-                          cy="13.45"
-                          r="4.47"
-                          fill="currentColor"
-                        />
-                        <path
-                          fill="currentColor"
-                          d="M18.11 20.3A9.69 9.69 0 0 0 11 23l-.25.28v6.33a1.57 1.57 0 0 0 1.6 1.54h11.49a1.57 1.57 0 0 0 1.6-1.54V23.3l-.24-.3a9.58 9.58 0 0 0-7.09-2.7Z"
-                        />
-                        <path fill="none" d="M0 0h36v36H0z" />
-                      </svg>
-                      {currentTypeOfLodge && (
-                        <span className="text-gray-600 text-sm">
-                          Maximum number of guests is {maxGuests}
-                        </span>
-                      )}
+                  {currentTypeOfLodge.value === "Standard" && (
+                    <div className="text-sm text-gray-500 mt-2">
+                      This is the perfect room for you if you are looking for a
+                      simple, clean, and affordable room.
                     </div>
+                  )}
 
-                    <div className="flex justify-between mt-6">
-                      <div className="flex flex-col text-sm text-gray-600 items-center">
-                        <span>
-                          {numOfAdults} {numOfAdults > 1 ? "Adults" : "Adult"}
-                        </span>
-                        <span>(18+)</span>
-                      </div>
-
-                      <div className="flex gap-3 items-center">
-                        <div
-                          onClick={() => {
-                            if (numOfAdults > 1) {
-                              setNumOfAdults(numOfAdults - 1);
-                            }
-                          }}
-                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
-                        >
-                          -
-                        </div>
-
-                        <div
-                          onClick={() => {
-                            if (numOfAdults + numOfChildren < maxGuests) {
-                              setNumOfAdults(numOfAdults + 1);
-                            }
-                          }}
-                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
-                        >
-                          +
-                        </div>
-                      </div>
+                  {currentTypeOfLodge.value === "Emperor Suite Room" && (
+                    <div className="text-sm text-gray-500 mt-2">
+                      This is the perfect room for you if you are looking for
+                      the very best and well decorated room this place has to
+                      offer
                     </div>
+                  )}
 
-                    <div className="flex justify-between mt-6">
-                      <div className="flex flex-col text-sm text-gray-600 items-center">
-                        <span>
-                          {numOfChildren}{" "}
-                          {numOfChildren > 1 ? "Children" : "Child"}
-                        </span>
-                        <span>(0 - 17)</span>
-                      </div>
-
-                      <div className="flex gap-3 items-center">
-                        <div
-                          onClick={() => {
-                            if (numOfChildren > 0) {
-                              setNumOfChildren(numOfChildren - 1);
-                            }
-                          }}
-                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
-                        >
-                          -
-                        </div>
-
-                        <div
-                          onClick={() => {
-                            if (numOfAdults + numOfChildren < maxGuests) {
-                              setNumOfChildren(numOfChildren + 1);
-                            }
-                          }}
-                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
-                        >
-                          +
-                        </div>
-                      </div>
+                  {currentTypeOfLodge.value === "Presidential Suite Room" && (
+                    <div className="text-sm text-gray-500 mt-2">
+                      This is the perfect room for you if you are looking for
+                      the very best and well decorated room this place has to
+                      offer
                     </div>
+                  )}
+                  {currentTypeOfLodge.value === "Executive Suite Room" && (
+                    <div className="text-sm text-gray-500 mt-2">
+                      This is the perfect room for you if you are looking for
+                      the very best and well decorated room this place has to
+                      offer
+                    </div>
+                  )}
 
-                    <div className="flex items-center gap-2 mt-3">
-                      <Checkbox
-                        checked={nonResident}
-                        onChange={() => setNonResident(!nonResident)}
-                      ></Checkbox>
-                      <span className="text-gray-600 text-sm">
-                        Non-resident
+                  {currentTypeOfLodge.value === "Deluxe" && (
+                    <div className="text-sm text-gray-500 mt-2">
+                      This is the perfect room for you if you are looking for
+                      the best this place has to offer.
+                    </div>
+                  )}
+
+                  {currentTypeOfLodge.value === "Family Room" && (
+                    <div className="text-sm text-gray-500 mt-2">
+                      If you just want to spend sometime with the family, this
+                      is the room for you.
+                    </div>
+                  )}
+
+                  <div className="flex justify-between mt-6">
+                    <div className="flex flex-col text-sm text-gray-600">
+                      <span>
+                        {numOfAdults}{" "}
+                        {numOfAdults > 1 ? "Residents Adult" : "Resident Adult"}
                       </span>
+                      <span>(18+)</span>
                     </div>
 
-                    {(numOfAdults > 1 || numOfChildren > 0) && (
+                    <div className="flex gap-3 items-center">
                       <div
-                        className="mt-2 cursor-pointer text-sm underline"
                         onClick={() => {
-                          setNumOfAdults(1);
-                          setNumOfChildren(0);
+                          if (
+                            (numOfAdults > 1 || numOfAdultsNonResident > 0) &&
+                            numOfAdults > 0
+                          ) {
+                            setNumOfAdults(numOfAdults - 1);
+                          }
                         }}
+                        className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
                       >
-                        clear data
+                        -
                       </div>
-                    )}
 
-                    <div className="flex justify-between mt-6">
-                      <div></div>
-                      <Button
+                      <div
                         onClick={() => {
-                          setGuestPopup(false);
+                          setNumOfAdults(numOfAdults + 1);
                         }}
-                        className="!bg-blue-700 !rounded-3xl"
+                        className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
                       >
-                        <span>Done</span>
-                      </Button>
+                        +
+                      </div>
                     </div>
                   </div>
-                )}
+
+                  <div className="flex justify-between mt-6">
+                    <div className="flex flex-col text-sm text-gray-600">
+                      <span>
+                        {numOfAdultsNonResident}{" "}
+                        {numOfAdultsNonResident > 1
+                          ? "Non-Residents Adult"
+                          : "Non-Resident Adult"}
+                      </span>
+                      <span>(18+)</span>
+                    </div>
+
+                    <div className="flex gap-3 items-center">
+                      <div
+                        onClick={() => {
+                          if (
+                            (numOfAdultsNonResident > 1 || numOfAdults > 0) &&
+                            numOfAdultsNonResident > 0
+                          ) {
+                            setNumOfAdultsNonResident(
+                              numOfAdultsNonResident - 1
+                            );
+                          }
+                        }}
+                        className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
+                      >
+                        -
+                      </div>
+
+                      <div
+                        onClick={() => {
+                          setNumOfAdultsNonResident(numOfAdultsNonResident + 1);
+                        }}
+                        className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
+                      >
+                        +
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between mt-6">
+                    <div className="flex flex-col text-sm text-gray-600">
+                      <span>
+                        {numOfChildren}{" "}
+                        {numOfChildren > 1
+                          ? "Resident Children"
+                          : "Resident Child"}
+                      </span>
+                      <span>(0 - 17)</span>
+                    </div>
+
+                    <div className="flex gap-3 items-center">
+                      <div
+                        onClick={() => {
+                          if (numOfChildren > 0) {
+                            setNumOfChildren(numOfChildren - 1);
+                          }
+                        }}
+                        className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
+                      >
+                        -
+                      </div>
+
+                      <div
+                        onClick={() => {
+                          setNumOfChildren(numOfChildren + 1);
+                        }}
+                        className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
+                      >
+                        +
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between mt-6">
+                    <div className="flex flex-col text-sm text-gray-600">
+                      <span>
+                        {numOfChildrenNonResident}{" "}
+                        {numOfChildrenNonResident > 1
+                          ? "Non-Resident Children"
+                          : "Non-Resident Child"}
+                      </span>
+                      <span>(0 - 17)</span>
+                    </div>
+
+                    <div className="flex gap-3 items-center">
+                      <div
+                        onClick={() => {
+                          if (numOfChildrenNonResident > 0) {
+                            setNumOfChildrenNonResident(
+                              numOfChildrenNonResident - 1
+                            );
+                          }
+                        }}
+                        className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
+                      >
+                        -
+                      </div>
+
+                      <div
+                        onClick={() => {
+                          setNumOfChildrenNonResident(
+                            numOfChildrenNonResident + 1
+                          );
+                        }}
+                        className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
+                      >
+                        +
+                      </div>
+                    </div>
+                  </div>
+
+                  {(numOfAdults > 1 ||
+                    numOfChildren > 0 ||
+                    numOfAdultsNonResident > 0 ||
+                    numOfChildrenNonResident > 0) && (
+                    <div
+                      className="mt-2 cursor-pointer text-sm underline"
+                      onClick={() => {
+                        setNumOfAdults(1);
+                        setNumOfChildren(0);
+                        setNumOfAdultsNonResident(0);
+                        setNumOfChildrenNonResident(0);
+                      }}
+                    >
+                      clear data
+                    </div>
+                  )}
+
+                  <div className="flex justify-between mt-6">
+                    <div></div>
+                    <Button
+                      onClick={() => {
+                        setGuestPopup(false);
+                      }}
+                      className="!bg-blue-700 !rounded-3xl"
+                    >
+                      <span>Done</span>
+                    </Button>
+                  </div>
+                </PopupModal>
               </div>
               <div className="flex justify-around gap-2">
                 {inCart && (
@@ -2558,6 +2629,10 @@ export async function getServerSideProps(context) {
           permanent: false,
           destination: "logout",
         },
+      };
+    } else if (error.response.status === 404) {
+      return {
+        notFound: true,
       };
     } else {
       return {

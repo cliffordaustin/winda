@@ -1079,6 +1079,19 @@ export const getServerSideProps = wrapper.getServerSideProps(
             }
           );
 
+          const transport = await axios.get(
+            `${process.env.NEXT_PUBLIC_baseURL}/transport/?min_price=${
+              query.min_price ? query.min_price : ""
+            }&max_price=${query.max_price ? query.max_price : ""}&ordering=${
+              query.ordering ? query.ordering : ""
+            }&type_of_car=${query.type_of_car ? query.type_of_car : ""}`,
+            {
+              headers: {
+                Authorization: "Token " + token,
+              },
+            }
+          );
+
           return {
             props: {
               userProfile: response.data[0],

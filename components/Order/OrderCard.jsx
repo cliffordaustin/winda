@@ -272,12 +272,22 @@ const OrderCard = ({
             }
           >
             <div className="h-full w-full relative flex-shrink-0 flex-grow-0">
-              <Image
-                className="w-full h-full"
-                layout="fill"
-                src={mainImage.image}
-                alt="Image"
-              />
+              {mainImage && (
+                <Image
+                  className="w-full h-full"
+                  layout="fill"
+                  src={mainImage.image}
+                  alt="Image"
+                />
+              )}
+              {!mainImage && (
+                <Image
+                  className="w-full h-full"
+                  layout="fill"
+                  src={sortedImages[0].image}
+                  alt="Image"
+                />
+              )}
             </div>
           </div>
           <div className={"flex-grow-0 flex-shrink-0 px-2 py-2 w-2/4 "}>

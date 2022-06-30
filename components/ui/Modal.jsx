@@ -62,7 +62,7 @@ function Modal({
             onClick={(e) => e.stopPropagation()}
             variants={container}
             className={
-              "p-4 bg-white shadow-lg mx-auto rounded-xl z-20 overflow-y-scroll relative " +
+              "p-4 bg-white shadow-lg mx-auto rounded-xl z-30 overflow-y-scroll relative " +
               className
             }
           >

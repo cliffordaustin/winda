@@ -3116,6 +3116,31 @@ export const getServerSideProps = wrapper.getServerSideProps(
             }
           );
 
+          const response = await axios.get(
+            `${process.env.NEXT_PUBLIC_baseURL}/stays/?search=${
+              query.search ? query.search : ""
+            }&type_of_stay=${
+              query.type_of_stay ? query.type_of_stay : ""
+            }&min_capacity=${
+              query.min_capacity ? query.min_capacity : ""
+            }&min_price=${query.min_price ? query.min_price : ""}&max_price=${
+              query.max_price ? query.max_price : ""
+            }&min_rooms=${query.min_rooms ? query.min_rooms : ""}&max_rooms=${
+              query.max_rooms ? query.max_rooms : ""
+            }&min_beds=${query.min_beds ? query.min_beds : ""}&max_beds=${
+              query.max_beds ? query.max_beds : ""
+            }&min_bathrooms=${
+              query.min_bathrooms ? query.min_bathrooms : ""
+            }&max_bathrooms=${
+              query.max_bathrooms ? query.min_bathrooms : ""
+            }&ordering=${query.ordering ? query.ordering : ""}`,
+            {
+              headers: {
+                Authorization: "Token " + token,
+              },
+            }
+          );
+
           return {
             props: {
               userProfile: userProfile.data[0],

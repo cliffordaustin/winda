@@ -538,12 +538,22 @@ const CartItem = ({
             }
           >
             <div className="h-full w-full relative flex-shrink-0 flex-grow-0">
-              <Image
-                className="w-full h-full"
-                layout="fill"
-                src={mainImage.image}
-                alt="Image"
-              />
+              {mainImage && (
+                <Image
+                  className="w-full h-full"
+                  layout="fill"
+                  src={mainImage.image}
+                  alt="Image"
+                />
+              )}
+              {!mainImage && (
+                <Image
+                  className="w-full h-full"
+                  layout="fill"
+                  src={sortedImages[0].image}
+                  alt="Image"
+                />
+              )}
             </div>
           </div>
           <div className={"w-2/4 px-2 pb-1 "}>

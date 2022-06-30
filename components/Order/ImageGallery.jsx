@@ -29,7 +29,22 @@ const ImageGallery = ({ images }) => {
           (scaleImages ? "scale-105" : "")
         }
       >
-        <Image layout="fill" alt="Logo" src={mainImage.image} priority></Image>
+        {mainImage && (
+          <Image
+            layout="fill"
+            alt="Logo"
+            src={mainImage.image}
+            priority
+          ></Image>
+        )}
+        {!mainImage && (
+          <Image
+            layout="fill"
+            alt="Logo"
+            src={sortedImages[0].image}
+            priority
+          ></Image>
+        )}
       </div>
       <div className="w-[40%] hidden h-full absolute right-0 md:flex flex-col rounded-tr-3xl justify-between">
         {cleanedImages.map((image, index) => (

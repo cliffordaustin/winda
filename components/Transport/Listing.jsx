@@ -47,7 +47,7 @@ function Listing({ listing, userProfile, slugIsCorrect }) {
 
   const [newPrice, setNewPrice] = useState(null);
 
-  const [liked, setLiked] = useState(false);
+  const [liked, setLiked] = useState(listing.has_user_saved);
 
   const price = () => {
     return listing.price_per_day;
@@ -99,6 +99,51 @@ function Listing({ listing, userProfile, slugIsCorrect }) {
   useEffect(() => {
     priceConversion(price());
   }, [price(), currencyToKES, priceConversionRate]);
+
+  const changeLikeState = () => {
+    if (Cookies.get("token")) {
+      setLiked(false);
+      axios
+        .delete(
+          `${process.env.NEXT_PUBLIC_baseURL}/transport/${listing.id}/delete/`,
+          {
+            headers: {
+              Authorization: `Token ${Cookies.get("token")}`,
+            },
+          }
+        )
+        .then(() => {})
+        .catch((err) => console.log(err.response));
+    } else {
+      router.push({
+        pathname: "/login",
+        query: { redirect: `${router.asPath}` },
+      });
+    }
+  };
+
+  const changeUnLikeState = () => {
+    if (Cookies.get("token")) {
+      setLiked(true);
+      axios
+        .post(
+          `${process.env.NEXT_PUBLIC_baseURL}/transport/${listing.slug}/save/`,
+          "",
+          {
+            headers: {
+              Authorization: "Token " + Cookies.get("token"),
+            },
+          }
+        )
+        .then(() => {})
+        .catch((err) => console.log(err.response));
+    } else {
+      router.push({
+        pathname: "/login",
+        query: { redirect: `${router.asPath}` },
+      });
+    }
+  };
 
   return (
     <div
@@ -161,7 +206,7 @@ function Listing({ listing, userProfile, slugIsCorrect }) {
               fill="#e63946"
               onClick={(e) => {
                 e.stopPropagation();
-                setLiked(false);
+                changeLikeState();
               }}
             >
               <path
@@ -182,7 +227,7 @@ function Listing({ listing, userProfile, slugIsCorrect }) {
               stroke="currentColor"
               onClick={(e) => {
                 e.stopPropagation();
-                setLiked(true);
+                changeUnLikeState();
               }}
             >
               <path

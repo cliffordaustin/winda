@@ -93,7 +93,7 @@ function TransportDetail({ userProfile, transport, inCart }) {
 
   const [newPrice, setNewPrice] = useState(null);
 
-  const [liked, setLiked] = useState(false);
+  const [liked, setLiked] = useState(transport.has_user_saved);
 
   const [showShare, setShowShare] = useState(false);
 
@@ -331,6 +331,51 @@ function TransportDetail({ userProfile, transport, inCart }) {
 
   const [showStartingDate, setShowStartingDate] = useState(false);
 
+  const changeLikeState = () => {
+    if (Cookies.get("token")) {
+      setLiked(false);
+      axios
+        .delete(
+          `${process.env.NEXT_PUBLIC_baseURL}/transport/${transport.id}/delete/`,
+          {
+            headers: {
+              Authorization: `Token ${Cookies.get("token")}`,
+            },
+          }
+        )
+        .then(() => {})
+        .catch((err) => console.log(err.response));
+    } else {
+      router.push({
+        pathname: "/login",
+        query: { redirect: `${router.asPath}` },
+      });
+    }
+  };
+
+  const changeUnLikeState = () => {
+    if (Cookies.get("token")) {
+      setLiked(true);
+      axios
+        .post(
+          `${process.env.NEXT_PUBLIC_baseURL}/transport/${transport.slug}/save/`,
+          "",
+          {
+            headers: {
+              Authorization: "Token " + Cookies.get("token"),
+            },
+          }
+        )
+        .then(() => {})
+        .catch((err) => console.log(err.response));
+    } else {
+      router.push({
+        pathname: "/login",
+        query: { redirect: `${router.asPath}` },
+      });
+    }
+  };
+
   return (
     <div className="relative">
       <div className="fixed top-0 w-full bg-white z-20">
@@ -564,7 +609,7 @@ function TransportDetail({ userProfile, transport, inCart }) {
                 )}
               </div>
 
-              <div className="flex absolute bg-white shadow-md px-3 rounded-3xl py-1 top-16 right-3 gap-2 items-center">
+              <div className="flex absolute bg-white shadow-md px-3 rounded-3xl py-1 top-20 md:top-0 z-10 right-3 gap-2 items-center">
                 <div className="cursor-pointer">
                   {!liked && (
                     <svg
@@ -577,7 +622,7 @@ function TransportDetail({ userProfile, transport, inCart }) {
                       stroke="currentColor"
                       onClick={(e) => {
                         e.stopPropagation();
-                        setLiked(true);
+                        changeUnLikeState();
                       }}
                     >
                       <path
@@ -598,7 +643,7 @@ function TransportDetail({ userProfile, transport, inCart }) {
                       className="cursor-pointer"
                       onClick={(e) => {
                         e.stopPropagation();
-                        setLiked(false);
+                        changeLikeState();
                       }}
                     >
                       <path

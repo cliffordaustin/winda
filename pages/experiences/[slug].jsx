@@ -71,7 +71,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
 
   const [reviewLoading, setReviewLoading] = useState(false);
 
-  const [liked, setLiked] = useState(false);
+  const [liked, setLiked] = useState(activity.has_user_saved);
 
   const [showShare, setShowShare] = useState(false);
 
@@ -357,6 +357,51 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
       ? activity.group_price_non_resident
       : activity.price;
 
+  const changeLikeState = () => {
+    if (Cookies.get("token")) {
+      setLiked(false);
+      axios
+        .delete(
+          `${process.env.NEXT_PUBLIC_baseURL}/activities/${activity.id}/delete/`,
+          {
+            headers: {
+              Authorization: `Token ${Cookies.get("token")}`,
+            },
+          }
+        )
+        .then(() => {})
+        .catch((err) => console.log(err.response));
+    } else {
+      router.push({
+        pathname: "/login",
+        query: { redirect: `${router.asPath}` },
+      });
+    }
+  };
+
+  const changeUnLikeState = () => {
+    if (Cookies.get("token")) {
+      setLiked(true);
+      axios
+        .post(
+          `${process.env.NEXT_PUBLIC_baseURL}/activities/${activity.slug}/save/`,
+          "",
+          {
+            headers: {
+              Authorization: "Token " + Cookies.get("token"),
+            },
+          }
+        )
+        .then(() => {})
+        .catch((err) => console.log(err.response));
+    } else {
+      router.push({
+        pathname: "/login",
+        query: { redirect: `${router.asPath}` },
+      });
+    }
+  };
+
   return (
     <div
       onClick={(e) => {
@@ -464,7 +509,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                       stroke="currentColor"
                       onClick={(e) => {
                         e.stopPropagation();
-                        setLiked(true);
+                        changeUnLikeState();
                       }}
                     >
                       <path
@@ -485,7 +530,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                       className="cursor-pointer"
                       onClick={(e) => {
                         e.stopPropagation();
-                        setLiked(false);
+                        changeLikeState();
                       }}
                     >
                       <path
@@ -2280,6 +2325,10 @@ export async function getServerSideProps(context) {
           permanent: false,
           destination: "logout",
         },
+      };
+    } else if (error.response.status === 404) {
+      return {
+        notFound: true,
       };
     } else {
       return {

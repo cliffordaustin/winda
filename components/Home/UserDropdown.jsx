@@ -157,6 +157,15 @@ function UserDropdown({
           <span className="font-bold">orders</span>
         </div>
 
+        <div
+          onClick={() => {
+            router.push("/saved-listings");
+          }}
+          className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2 flex justify-between items-center"
+        >
+          <span className="font-bold">Saved listings</span>
+        </div>
+
         <div className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2">
           About
         </div>
