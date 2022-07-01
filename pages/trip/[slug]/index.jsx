@@ -32,6 +32,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
   const [activityAccordion, setActivityAccordion] = useState(false);
   const [transportAccordion, setTransportAccordion] = useState(false);
   const [showAllStayDescription, setShowAllStayDescription] = useState(false);
+  const [showAllUniqueFeature, setShowAllUniqueFeature] = useState(false);
 
   const [showAllActivityDescription, setShowAllActivityDescription] =
     useState(false);
@@ -592,28 +593,29 @@ function TripDetail({ userProfile, userTrips, trip }) {
                         {trip.stay.description}
                       </p>
                     )}
-                    {!showAllStayDescription && (
-                      <div
-                        onClick={() => {
-                          setShowAllStayDescription(true);
-                        }}
-                        className="font-bold text-blue-700 flex items-center gap-0.5 cursor-pointer"
-                      >
-                        <span>Read more</span>{" "}
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-5 w-5 mt-1"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
+                    {!showAllStayDescription &&
+                      trip.stay.description.length > 500 && (
+                        <div
+                          onClick={() => {
+                            setShowAllStayDescription(true);
+                          }}
+                          className="font-bold text-blue-700 flex items-center gap-0.5 cursor-pointer"
                         >
-                          <path
-                            fillRule="evenodd"
-                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </div>
-                    )}
+                          <span>Read more</span>{" "}
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5 mt-1"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </div>
+                      )}
                     {showAllStayDescription && (
                       <div
                         onClick={() => {
@@ -638,160 +640,185 @@ function TripDetail({ userProfile, userTrips, trip }) {
                     )}
                   </div>
 
-                  <div
-                    name="amenities"
-                    className="flex flex-col md:flex-row gap-3 justify-between pt-10"
-                  >
+                  <div className={"mt-4"}>
+                    <h1 className="font-bold text-2xl mb-5">
+                      What makes this listing unique
+                    </h1>
+                    {!showAllUniqueFeature && (
+                      <p className="ml-2 font-medium">
+                        {trip.stay.unique_about_place.slice(0, 500)}
+                      </p>
+                    )}
+                    {showAllUniqueFeature && (
+                      <p className="ml-2 font-medium">
+                        {trip.stay.unique_about_place}
+                      </p>
+                    )}
+                    {!showAllUniqueFeature &&
+                      trip.stay.unique_about_place.length > 500 && (
+                        <div
+                          onClick={() => {
+                            setShowAllUniqueFeature(true);
+                          }}
+                          className="font-bold text-blue-700 flex items-center gap-0.5 cursor-pointer ml-2"
+                        >
+                          <span>Read more</span>{" "}
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5 mt-1"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </div>
+                      )}
+                    {showAllUniqueFeature && (
+                      <div
+                        onClick={() => {
+                          setShowAllUniqueFeature(false);
+                        }}
+                        className="font-bold text-blue-700 flex items-center gap-0.5 cursor-pointer ml-2"
+                      >
+                        <span>Read less</span>{" "}
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5 mt-1"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </div>
+                    )}
+                  </div>
+
+                  {trip.stay.inclusions.length > 0 && (
+                    <>
+                      <div className="mb-3 mt-4">
+                        <span className="font-bold text-lg">inclusions</span>
+                      </div>
+
+                      <div className="flex gap-2 flex-wrap">
+                        {trip.stay.inclusions.map((inclusion, index) => (
+                          <div key={index} className="w-full md:w-[48%]">
+                            <ListItem>{inclusion.name}</ListItem>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
+
+                  {trip.stay.facts.length > 0 && (
+                    <>
+                      <div className="mb-3 mt-4">
+                        <span className="font-bold text-lg">Other facts</span>
+                      </div>
+
+                      <div className="flex gap-2 flex-wrap">
+                        {trip.stay.facts.map((fact, index) => (
+                          <div key={index} className="w-full md:w-[48%]">
+                            <ListItem>{fact.name}</ListItem>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
+
+                  <div className="flex flex-col md:flex-row gap-3 justify-between pt-10">
                     <div className="w-full">
                       <div className="mb-3">
                         <span className="font-bold text-xl">Amenities</span>
                       </div>
 
                       <Amenities amenities={trip.stay}></Amenities>
+
+                      {trip.stay.other_amenities.length > 0 && (
+                        <>
+                          <div className="mb-3 mt-4">
+                            <span className="font-bold text-lg">
+                              Other amenities
+                            </span>
+                          </div>
+
+                          <div className="flex gap-2 flex-wrap">
+                            {trip.stay.other_amenities.map(
+                              (amenities, index) => (
+                                <div key={index} className="w-full md:w-[48%]">
+                                  <ListItem>{amenities}</ListItem>
+                                </div>
+                              )
+                            )}
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
 
                   <div name="policies" className={"w-full mt-8 mb-4 "}>
                     <h1 className="font-bold text-2xl mb-2">Policies</h1>
-                    <div className="py-2 px-2 border-b border-gray-100">
-                      <span className="font-semibold">Refund Policy</span>
-                    </div>
 
-                    {!trip.stay.refundable && (
-                      <div className="mt-2 ml-2">
-                        <p>Bookings at this property is non-refundable.</p>
-                      </div>
-                    )}
-
-                    {trip.stay.refundable && (
-                      <div className="mt-2 ml-2">
-                        <p>Bookings at this property is refundable.</p>
-                        <div className="mt-6">{trip.stay.refund_policy}</div>
-                      </div>
-                    )}
-
-                    {trip.stay.damage_policy && (
+                    {trip.stay.cancellation_policy && (
                       <div className="mt-4">
                         <div className="py-2 px-2 border-b border-gray-100">
-                          <span className="font-semibold">Damage Policy</span>
+                          <span className="font-semibold">
+                            Cancellation Policy
+                          </span>
                         </div>
 
                         <div className="mt-2 ml-2">
-                          <p>{trip.stay.damage_policy}</p>
+                          <p className="whitespace-pre-line">
+                            {trip.stay.cancellation_policy}
+                          </p>
                         </div>
                       </div>
                     )}
-
-                    {trip.stay.covid_19_compliance && (
+                    {trip.stay.cancellation_policy_by_provider && (
                       <div className="mt-4">
                         <div className="py-2 px-2 border-b border-gray-100">
-                          <span className="font-semibold">Covid-19 Policy</span>
+                          <span className="font-semibold">
+                            Cancellation Policy by Provider
+                          </span>
                         </div>
 
                         <div className="mt-2 ml-2">
-                          <p>{trip.stay.covid_19_compliance_details}</p>
+                          <p>{trip.stay.cancellation_policy_by_provider}</p>
                         </div>
                       </div>
                     )}
 
-                    <div className="mt-4">
-                      <div className="py-2 px-2 border-b border-gray-100">
-                        <span className="font-semibold">Listing Rules</span>
+                    {trip.stay.health_and_safety_policy && (
+                      <div className="mt-4">
+                        <div className="py-2 px-2 border-b border-gray-100">
+                          <span className="font-semibold">
+                            Health and safety policy
+                          </span>
+                        </div>
 
-                        <div className="flex items-center gap-6 ml-4">
-                          {trip.stay.check_in_time && (
-                            <div className="flex items-center mt-2">
-                              <span className="font-bold mr-1 hidden sm:block">
-                                Checkin at:
-                              </span>
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-5 w-5 mr-1 sm:hidden text-blue-600"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
-                                />
-                              </svg>
-                              {moment(
-                                trip.stay.check_in_time,
-                                "HH:mm:ss"
-                              ).format("hh:mm a")}
-                            </div>
-                          )}
-                          {trip.stay.check_out_time && (
-                            <div className="flex items-center mt-2">
-                              <span className="font-bold mr-1 hidden sm:block">
-                                Checkout at:
-                              </span>
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-5 w-5 mr-1 sm:hidden text-red-600"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                                />
-                              </svg>
-                              {moment(
-                                trip.stay.check_out_time,
-                                "HH:mm:ss"
-                              ).format("hh:mm a")}
-                            </div>
-                          )}
+                        <div className="mt-2 ml-2">
+                          <p>{trip.stay.health_and_safety_policy}</p>
                         </div>
                       </div>
+                    )}
+                    {trip.stay.damage_policy_by_provider && (
+                      <div className="mt-4">
+                        <div className="py-2 px-2 border-b border-gray-100">
+                          <span className="font-semibold">Damage policy</span>
+                        </div>
 
-                      <div className="mt-2 ml-2">
-                        <div className="flex flex-wrap gap-4 justify-between">
-                          <div className="md:w-[48%] w-full">
-                            <ListItem>
-                              Children allowed:{" "}
-                              <span className="font-bold">
-                                {trip.stay.children_allowed ? "yes" : "no"}
-                              </span>
-                            </ListItem>
-                          </div>
-
-                          <div className="md:w-[48%] w-full">
-                            <ListItem>
-                              Pets allowed:{" "}
-                              <span className="font-bold">
-                                {trip.stay.pets_allowed ? "yes" : "no"}
-                              </span>
-                            </ListItem>
-                          </div>
-
-                          <div className="md:w-[48%] w-full">
-                            <ListItem>
-                              Smoking allowed:{" "}
-                              <span className="font-bold">
-                                {trip.stay.smoking_allowed ? "yes" : "no"}
-                              </span>
-                            </ListItem>
-                          </div>
-
-                          <div className="md:w-[48%] w-full">
-                            <ListItem>
-                              Events allowed:{" "}
-                              <span className="font-bold">
-                                {trip.stay.events_allowed ? "yes" : "no"}
-                              </span>
-                            </ListItem>
-                          </div>
+                        <div className="mt-2 ml-2">
+                          <p>{trip.stay.damage_policy_by_provider}</p>
                         </div>
                       </div>
-                    </div>
+                    )}
                   </div>
 
                   <div
@@ -810,7 +837,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
               </Accordion>
             )}
 
-            {trip.activity && (
+            {/* {trip.activity && (
               <Accordion
                 accordion={activityAccordion}
                 changeStateFunc={() => {
@@ -1579,7 +1606,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
                   </div>
                 </div>
               </Accordion>
-            )}
+            )} */}
           </div>
           <div className="mt-4">
             <h1 className="text-xl font-bold mb-4">Best month to go</h1>

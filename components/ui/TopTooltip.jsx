@@ -33,7 +33,7 @@ function TopTooltip({
     <div className="relative inline-block">
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        className="h-5 w-5 cursor-pointer"
+        className="h-5 w-5 cursor-pointer text-gray-500"
         viewBox="0 0 20 20"
         fill="currentColor"
         onClick={changeTooltipState}
@@ -55,7 +55,8 @@ function TopTooltip({
             initial="hide"
             exit="exit"
             className={
-              " w-40 px-2 py-3 bg-gray-200 rounded-md !z-40 absolute top-full mt-2 -left-0.5 " +
+              // styles.tooltip +
+              " w-40 px-2 py-3 bg-gray-200 rounded-md !z-40 absolute bottom-full -right-1 mb-1.5 " +
               className
             }
           >

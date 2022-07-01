@@ -23,6 +23,8 @@ import {
   activityNumOfGuests,
 } from "../../lib/pricePlan";
 
+import { getStayPrice, getActivityPrice } from "../../lib/getTotalCartPrice";
+
 const Cart = ({
   cart,
   userProfile,
@@ -60,39 +62,51 @@ const Cart = ({
           new Date(allItemsInCart[index].to_date).getDate() -
           new Date(allItemsInCart[index].from_date).getDate();
         price +=
-          stayPriceOfPlan(
+          getStayPrice(
             allItemsInCart[index].plan,
-            allItemsInCart[index].non_resident,
-            item
-          ) *
-          (allItemsInCart[index].num_of_adults +
-            allItemsInCart[index].num_of_children) *
-          nights;
+            item,
+            allItemsInCart[index].num_of_adults,
+            allItemsInCart[index].num_of_children,
+            allItemsInCart[index].num_of_children_non_resident,
+            allItemsInCart[index].num_of_adults_non_resident
+          ) * nights;
       } else if (!Cookies.get("token") && Cookies.get("cart")) {
         const nights =
           new Date(item.to_date).getDate() - new Date(item.from_date).getDate();
         price +=
-          stayPriceOfPlan(item.plan, item.non_resident, item) *
-          (item.num_of_adults + item.num_of_children) *
-          nights;
+          getStayPrice(
+            item.plan,
+            item,
+            item.num_of_adults,
+            item.num_of_children,
+            item.num_of_children_non_resident,
+            item.num_of_adults_non_resident
+          ) * nights;
       }
     });
     activitiesCart.forEach((item, index) => {
       if (Cookies.get("token")) {
-        price +=
-          activityPriceOfPlan(
-            allItemsInActivityCart[index].pricing_type,
-            allItemsInActivityCart[index].non_resident,
-            item
-          ) *
-          activityNumOfGuests(
-            allItemsInActivityCart[index].pricing_type,
-            allItemsInActivityCart[index]
-          );
+        price += getActivityPrice(
+          allItemsInActivityCart[index].pricing_type,
+          item,
+          allItemsInActivityCart[index].number_of_people,
+          allItemsInActivityCart[index].number_of_sessions,
+          allItemsInActivityCart[index].number_of_groups,
+          allItemsInActivityCart[index].number_of_people_non_resident,
+          allItemsInActivityCart[index].number_of_sessions_non_resident,
+          allItemsInActivityCart[index].number_of_groups_non_resident
+        );
       } else if (!Cookies.get("token") && Cookies.get("cart")) {
-        price +=
-          activityPriceOfPlan(item.pricing_type, item.non_resident, item) *
-          activityNumOfGuests(item.pricing_type, item);
+        price += getActivityPrice(
+          item.pricing_type,
+          item,
+          item.number_of_people,
+          item.number_of_people_non_resident,
+          item.number_of_sessions,
+          item.number_of_sessions_non_resident,
+          item.number_of_groups,
+          item.number_of_groups_non_resident
+        );
       }
     });
     if (Cookies.get("token")) {
@@ -179,9 +193,10 @@ const Cart = ({
             {
               from_date: new Date(item.from_date),
               to_date: new Date(item.to_date),
-              non_resident: item.non_resident,
               num_of_adults: item.num_of_adults,
               num_of_children: item.num_of_children,
+              num_of_adults_non_resident: item.num_of_adults_non_resident,
+              num_of_children_non_resident: item.num_of_children_non_resident,
               plan: item.plan,
               first_name: userProfile.first_name,
               last_name: userProfile.last_name,
@@ -220,8 +235,12 @@ const Cart = ({
               non_resident: item.non_resident,
               pricing_type: item.pricing_type,
               number_of_people: item.number_of_people,
+              number_of_people_non_resident: item.number_of_people_non_resident,
               number_of_sessions: item.number_of_sessions,
+              number_of_sessions_non_resident:
+                item.number_of_sessions_non_resident,
               number_of_groups: item.number_of_groups,
+              number_of_groups_non_resident: item.number_of_groups_non_resident,
             },
             {
               headers: {
@@ -447,10 +466,15 @@ const Cart = ({
                         ? allItemsInCart[index].num_of_children
                         : item.num_of_children
                     }
-                    non_resident={
+                    num_of_children_non_resident={
                       Cookies.get("token")
-                        ? allItemsInCart[index].non_resident
-                        : item.non_resident
+                        ? allItemsInCart[index].num_of_children_non_resident
+                        : item.num_of_children_non_resident
+                    }
+                    num_of_adults_non_resident={
+                      Cookies.get("token")
+                        ? allItemsInCart[index].num_of_adults_non_resident
+                        : item.num_of_adults_non_resident
                     }
                     plan={
                       Cookies.get("token")
@@ -488,20 +512,33 @@ const Cart = ({
                       ? allItemsInActivityCart[index].number_of_people
                       : item.number_of_people
                   }
+                  number_of_people_non_resident={
+                    Cookies.get("token")
+                      ? allItemsInActivityCart[index]
+                          .number_of_people_non_resident
+                      : item.number_of_people_non_resident
+                  }
                   number_of_sessions={
                     Cookies.get("token")
                       ? allItemsInActivityCart[index].number_of_sessions
                       : item.number_of_sessions
+                  }
+                  number_of_sessions_non_resident={
+                    Cookies.get("token")
+                      ? allItemsInActivityCart[index]
+                          .number_of_sessions_non_resident
+                      : item.number_of_sessions_non_resident
                   }
                   number_of_groups={
                     Cookies.get("token")
                       ? allItemsInActivityCart[index].number_of_groups
                       : item.number_of_groups
                   }
-                  activity_non_resident={
+                  number_of_groups_non_resident={
                     Cookies.get("token")
-                      ? allItemsInActivityCart[index].non_resident
-                      : item.non_resident
+                      ? allItemsInActivityCart[index]
+                          .number_of_groups_non_resident
+                      : item.number_of_groups_non_resident
                   }
                   pricing_type={
                     Cookies.get("token")

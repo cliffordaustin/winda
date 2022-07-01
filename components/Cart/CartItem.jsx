@@ -16,6 +16,10 @@ import {
   activityNumOfGuests,
 } from "../../lib/pricePlan";
 
+import { getStayPrice, getActivityPrice } from "../../lib/getTotalCartPrice";
+import TopTooltip from "../ui/TopTooltip";
+import BottomTooltip from "../ui/BottomTooltip";
+
 const CartItem = ({
   stay,
   activity,
@@ -36,14 +40,17 @@ const CartItem = ({
   to_date,
   transportFromDate,
   number_of_people,
+  number_of_people_non_resident,
   num_of_adults,
   num_of_children,
+  num_of_children_non_resident,
+  num_of_adults_non_resident,
   plan,
-  non_resident,
 
   number_of_sessions,
+  number_of_sessions_non_resident,
   number_of_groups,
-  activity_non_resident,
+  number_of_groups_non_resident,
   pricing_type,
 
   transportPage,
@@ -74,21 +81,34 @@ const CartItem = ({
 
   const [listingIsInCart, setListingIsInCart] = useState(false);
 
+  const [showPeopleBooked, setShowPeopleBooked] = useState(false);
+
   const [removeButtonLoading, setRemoveButtonLoading] = useState(false);
 
   const [orderAgainLoading, setOrderAgainLoading] = useState(false);
 
   const price = () => {
     return stayPage
-      ? stayPriceOfPlan(
-          (plan = plan),
-          (non_resident = non_resident),
-          (stay = stay)
-        ) *
-          (num_of_adults + num_of_children)
+      ? getStayPrice(
+          plan,
+          stay,
+          num_of_adults,
+          num_of_children,
+          num_of_children_non_resident,
+          num_of_adults_non_resident
+        )
       : transportPage
       ? transportPrice
-      : activityPriceOfPlan(pricing_type, activity_non_resident, activity);
+      : getActivityPrice(
+          pricing_type,
+          activity,
+          number_of_people,
+          number_of_sessions,
+          number_of_groups,
+          number_of_people_non_resident,
+          number_of_sessions_non_resident,
+          number_of_groups_non_resident
+        );
   };
 
   const orderAgain = async (e) => {
@@ -602,21 +622,7 @@ const CartItem = ({
                       /for {numberOfDays} days
                     </span>
                   )}
-                  {activitiesPage && pricing_type === "PER PERSON" && (
-                    <span className="inline text-xs mt-1 font-semibold ml-0.5">
-                      /person
-                    </span>
-                  )}
-                  {activitiesPage && pricing_type === "PER SESSION" && (
-                    <span className="inline text-xs mt-1 font-semibold ml-0.5">
-                      /session
-                    </span>
-                  )}
-                  {activitiesPage && pricing_type === "PER GROUP" && (
-                    <span className="inline text-xs mt-1 font-semibold ml-0.5">
-                      /group
-                    </span>
-                  )}
+
                   {stayPage && (
                     <span className="inline text-xs mt-1 font-semibold ml-0.5">
                       /night
@@ -875,32 +881,107 @@ const CartItem = ({
 
             <ClientOnly>
               {!checkoutInfo && stayPage && (
-                <div className="flex items-center gap-1 text-xs mt-1 font-bold truncate flex-wrap">
-                  <span>
-                    {num_of_adults} {num_of_adults === 1 ? "Adult" : "Adults"}
-                  </span>
-                  {num_of_children > 0 && (
-                    <>
-                      <span className="font-bold text-xl -mt-3">.</span>
-                      <span>
+                <div className="flex items-center gap-1">
+                  <div className="items-center gap-1 text-xs mt-1 font-bold truncate flex-wrap">
+                    {num_of_adults > 0 && (
+                      <>
+                        {/* <span> */}
+                        {num_of_adults}{" "}
+                        {num_of_adults > 1
+                          ? "Resident Adults"
+                          : "Resident Adult"}
+                        {/* </span> */}
+                      </>
+                    )}
+                    {" - "}
+                    {num_of_children > 0 && (
+                      <>
+                        {/* <span className="font-bold ">.</span> */}
+                        {/* <span> */}
                         {num_of_children}{" "}
-                        {num_of_children === 1 ? "Child" : "Children"}
-                      </span>
-                    </>
-                  )}
-                  {non_resident && (
-                    <>
-                      <span className="font-bold text-xl -mt-3">.</span>
-                      <span>Non-resident</span>
-                    </>
-                  )}
+                        {num_of_children > 1
+                          ? "Resident Children"
+                          : "Resident Child"}
+                        {/* </span> */}
+                      </>
+                    )}
+                    {" - "}
+                    {num_of_adults_non_resident > 0 && (
+                      <>
+                        {/* <span className="font-bold ">.</span> */}
+                        {/* <span> */}
+                        {num_of_adults_non_resident}{" "}
+                        {num_of_adults_non_resident > 1
+                          ? "Non-Resident Adults"
+                          : "Non-Resident Adult"}
+                        {/* </span> */}
+                      </>
+                    )}
+                    {" - "}
+                    {num_of_children_non_resident > 0 && (
+                      <>
+                        {/* <span className="font-bold ">.</span> */}
+                        {/* <span> */}
+                        {num_of_children_non_resident}{" "}
+                        {num_of_children_non_resident > 1
+                          ? "Non-Resident Children"
+                          : "Non-Resident Child"}
+                        {/* </span> */}
+                      </>
+                    )}
+                  </div>
 
-                  {!non_resident && (
-                    <>
-                      <span className="font-bold text-xl -mt-3">.</span>
-                      <span>Resident</span>
-                    </>
-                  )}
+                  <TopTooltip
+                    showTooltip={showPeopleBooked}
+                    className="text-sm !w-[240px] font-medium !bg-white border shadow-md"
+                    changeTooltipState={() => {
+                      setShowPeopleBooked(!showPeopleBooked);
+                    }}
+                  >
+                    {num_of_adults > 0 && (
+                      <>
+                        <span>
+                          {num_of_adults}{" "}
+                          {num_of_adults > 1
+                            ? "Resident Adults"
+                            : "Resident Adult"}
+                        </span>
+                      </>
+                    )}
+                    {num_of_children > 0 && (
+                      <>
+                        {" - "}
+                        <span>
+                          {num_of_children}{" "}
+                          {num_of_children > 1
+                            ? "Resident Children"
+                            : "Resident Child"}
+                        </span>
+                      </>
+                    )}
+                    {num_of_adults_non_resident > 0 && (
+                      <>
+                        {" - "}
+                        <span>
+                          {num_of_adults_non_resident}{" "}
+                          {num_of_adults_non_resident > 1
+                            ? "Non-Resident Adults"
+                            : "Non-Resident Adult"}
+                        </span>
+                      </>
+                    )}
+                    {num_of_children_non_resident > 0 && (
+                      <>
+                        {" - "}
+                        <span>
+                          {num_of_children_non_resident}{" "}
+                          {num_of_children_non_resident > 1
+                            ? "Non-Resident Children"
+                            : "Non-Resident Child"}
+                        </span>
+                      </>
+                    )}
+                  </TopTooltip>
                 </div>
               )}
             </ClientOnly>
@@ -915,35 +996,69 @@ const CartItem = ({
 
             <ClientOnly>
               {!checkoutInfo && activitiesPage && (
-                <div className="flex items-center gap-1 text-xs mt-1 font-bold truncate flex-wrap">
-                  <span>{moment(from_date).format("MMM DD")}</span>
-                  <span className="font-bold text-xl -mt-3">.</span>
-                  <span>
-                    {pricing_type === "PER PERSON" && (
-                      <span>
-                        {number_of_people}{" "}
-                        {number_of_people > 1 ? "People" : "Person"}
-                      </span>
-                    )}
-                    {pricing_type === "PER SESSION" && (
-                      <span>
-                        {number_of_sessions}{" "}
-                        {number_of_sessions > 1 ? "Sessions" : "Session"}
-                      </span>
-                    )}
-                    {pricing_type === "PER GROUP" && (
-                      <span>
-                        {number_of_groups}{" "}
-                        {number_of_groups > 1 ? "Groups" : "Group"}
-                      </span>
-                    )}
-                  </span>
-                  <span className="font-bold text-xl -mt-3">.</span>
-                  <span>
-                    {activity_non_resident && <span>Non-resident</span>}
+                <div className="items-center gap-1 text-xs mt-1 font-bold">
+                  {/* <span>{moment(from_date).format("MMM DD")}</span>
+                  <span className="font-bold text-xl -mt-3">.</span> */}
 
-                    {!activity_non_resident && <span>Resident</span>}
+                  <span className="inline">
+                    {moment(from_date).format("MMM DD")} {" - "}
                   </span>
+                  {pricing_type === "PER PERSON" && number_of_people > 0 && (
+                    <span>
+                      {number_of_people}{" "}
+                      {number_of_people > 1 ? "Residents" : "Resident"}
+                    </span>
+                  )}
+
+                  {pricing_type === "PER SESSION" && number_of_sessions > 0 && (
+                    <span>
+                      {number_of_sessions}{" "}
+                      {number_of_sessions > 1
+                        ? "Resident Sessions"
+                        : "Resident Session"}
+                    </span>
+                  )}
+                  {pricing_type === "PER GROUP" && number_of_groups > 0 && (
+                    <span>
+                      {number_of_groups}{" "}
+                      {number_of_groups > 1
+                        ? "Resident Groups"
+                        : "Resident Group"}
+                    </span>
+                  )}
+
+                  {(number_of_people > 0 ||
+                    number_of_sessions > 0 ||
+                    number_of_groups > 0) &&
+                    "  -  "}
+
+                  {pricing_type === "PER PERSON" &&
+                    number_of_people_non_resident > 0 && (
+                      <span>
+                        {number_of_people_non_resident}{" "}
+                        {number_of_people_non_resident > 1
+                          ? "Non-Residents"
+                          : "Non-Resident"}
+                      </span>
+                    )}
+                  {pricing_type === "PER SESSION" &&
+                    number_of_sessions_non_resident > 0 && (
+                      <span>
+                        {number_of_sessions_non_resident}{" "}
+                        {number_of_sessions_non_resident > 1
+                          ? "Non-Resident Sessions"
+                          : "Non-Resident Session"}
+                      </span>
+                    )}
+                  {pricing_type === "PER GROUP" &&
+                    number_of_groups_non_resident > 0 && (
+                      <span>
+                        {number_of_groups_non_resident}{" "}
+                        {number_of_groups_non_resident > 1
+                          ? "Non-Resident Groups"
+                          : "Non-Resident Group"}
+                      </span>
+                    )}
                 </div>
               )}
             </ClientOnly>
@@ -1028,63 +1143,9 @@ const CartItem = ({
       </div>
       {stayPage && (
         <div>
-          {plan === "STANDARD" && (
-            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-sm text-white">
-              Standard
-            </div>
-          )}
-          {plan === "DELUXE" && (
-            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-sm text-white">
-              Deluxe
-            </div>
-          )}
-          {plan === "SUPER DELUXE" && (
-            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-sm text-white">
-              Super Deluxe
-            </div>
-          )}
-          {plan === "STUDIO" && (
-            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-sm text-white">
-              Studio
-            </div>
-          )}
-          {plan === "DOUBLE ROOM" && (
-            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-sm text-white">
-              Double Room
-            </div>
-          )}
-
-          {plan === "FAMILY ROOM" && (
-            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-sm text-white">
-              Family Room
-            </div>
-          )}
-
-          {plan === "TRIPPLE ROOM" && (
-            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-sm text-white">
-              Tripple Room
-            </div>
-          )}
-          {plan === "QUAD ROOM" && (
-            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-sm text-white">
-              Quad Room
-            </div>
-          )}
-          {plan === "KING ROOM" && (
-            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-sm text-white">
-              King Room
-            </div>
-          )}
-          {plan === "QUEEN ROOM" && (
-            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-sm text-white">
-              Queen Room
-            </div>
-          )}
-          {plan === "TWIN ROOM" && (
-            <div className="absolute top-1.5 left-4 z-10 px-2 rounded-md bg-blue-600 text-sm text-white">
-              Twin Room
-            </div>
-          )}
+          <div className="absolute top-1.5 left-4 z-10 capitalize px-2 rounded-md bg-blue-600 text-sm text-white">
+            {plan.toLowerCase()}
+          </div>
         </div>
       )}
       <div onClick={addToCart}>

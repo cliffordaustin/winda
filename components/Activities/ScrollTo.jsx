@@ -107,8 +107,8 @@ function ScrollTo({ guestPopup, activity }) {
           </SwiperSlide>
         )}
 
-        {(activity.equipments_provided.length > 0 ||
-          activity.equipments_required_by_user_to_bring.length > 0) && (
+        {(activity.enquipment_provided.length > 0 ||
+          activity.enquipment_required_by_user.length > 0) && (
           <SwiperSlide className="!w-auto flex cursor-pointer justify-center">
             <Link
               className="px-4 flex items-center border-b-2 border-transparent"

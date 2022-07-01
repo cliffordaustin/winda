@@ -364,10 +364,15 @@ function Navbar({
                             ? allItemsInCart[index].num_of_children
                             : item.num_of_children
                         }
-                        non_resident={
+                        num_of_children_non_resident={
                           Cookies.get("token")
-                            ? allItemsInCart[index].non_resident
-                            : item.non_resident
+                            ? allItemsInCart[index].num_of_children_non_resident
+                            : item.num_of_children_non_resident
+                        }
+                        num_of_adults_non_resident={
+                          Cookies.get("token")
+                            ? allItemsInCart[index].num_of_adults_non_resident
+                            : item.num_of_adults_non_resident
                         }
                         plan={
                           Cookies.get("token")
@@ -405,20 +410,33 @@ function Navbar({
                           ? allItemsInActivityCart[index].number_of_people
                           : item.number_of_people
                       }
+                      number_of_people_non_resident={
+                        Cookies.get("token")
+                          ? allItemsInActivityCart[index]
+                              .number_of_people_non_resident
+                          : item.number_of_people_non_resident
+                      }
                       number_of_sessions={
                         Cookies.get("token")
                           ? allItemsInActivityCart[index].number_of_sessions
                           : item.number_of_sessions
+                      }
+                      number_of_sessions_non_resident={
+                        Cookies.get("token")
+                          ? allItemsInActivityCart[index]
+                              .number_of_sessions_non_resident
+                          : item.number_of_sessions_non_resident
                       }
                       number_of_groups={
                         Cookies.get("token")
                           ? allItemsInActivityCart[index].number_of_groups
                           : item.number_of_groups
                       }
-                      activity_non_resident={
+                      number_of_groups_non_resident={
                         Cookies.get("token")
-                          ? allItemsInActivityCart[index].non_resident
-                          : item.non_resident
+                          ? allItemsInActivityCart[index]
+                              .number_of_groups_non_resident
+                          : item.number_of_groups_non_resident
                       }
                       pricing_type={
                         Cookies.get("token")

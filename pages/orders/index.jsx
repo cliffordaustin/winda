@@ -208,7 +208,12 @@ function Orders({
                         to_date={item.to_date}
                         num_of_adults={item.num_of_adults}
                         num_of_children={item.num_of_children}
-                        non_resident={item.non_resident}
+                        num_of_children_non_resident={
+                          item.num_of_children_non_resident
+                        }
+                        num_of_adults_non_resident={
+                          item.num_of_adults_non_resident
+                        }
                         plan={item.plan}
                         stayPage={true}
                         forOrder={true}
@@ -230,9 +235,17 @@ function Orders({
                       cartId={item.id}
                       from_date={item.from_date}
                       number_of_people={item.number_of_people}
+                      number_of_people_non_resident={
+                        item.number_of_people_non_resident
+                      }
                       number_of_sessions={item.number_of_sessions}
+                      number_of_sessions_non_resident={
+                        item.number_of_sessions_non_resident
+                      }
                       number_of_groups={item.number_of_groups}
-                      activity_non_resident={item.non_resident}
+                      number_of_groups_non_resident={
+                        item.number_of_groups_non_resident
+                      }
                       pricing_type={item.pricing_type}
                       activity={item.activity}
                       activitiesPage={true}

@@ -535,31 +535,9 @@ function Listing({
             )}
           </div>
 
-          {listing.type_of_stay === "LODGE" && (
-            <div className="absolute top-2 left-2 z-10 px-2 rounded-md bg-green-600 text-white">
-              Lodge
-            </div>
-          )}
-          {listing.type_of_stay === "HOUSE" && (
-            <div className="absolute top-2 left-2 z-10 px-2 rounded-md bg-green-600 text-white">
-              House
-            </div>
-          )}
-          {listing.type_of_stay === "UNIQUE SPACE" && (
-            <div className="absolute top-2 left-2 z-10 px-2 rounded-md bg-green-600 text-white">
-              Unique space
-            </div>
-          )}
-          {listing.type_of_stay === "CAMPSITE" && (
-            <div className="absolute top-2 left-2 z-10 px-2 rounded-md bg-green-600 text-white">
-              Campsite
-            </div>
-          )}
-          {listing.type_of_stay === "BOUTIQUE HOTEL" && (
-            <div className="absolute top-2 left-2 z-10 px-2 rounded-md bg-green-600 text-white">
-              Boutique hotel
-            </div>
-          )}
+          {/* <div className="absolute top-2 left-2 z-10 px-2 rounded-md text-sm capitalize bg-blue-600 text-white">
+            {listing.type_of_stay.toLowerCase()}
+          </div> */}
         </div>
       </div>
       <div
@@ -837,31 +815,9 @@ function Listing({
               </div>
             </div>
           </SecondCard>
-          {listing.type_of_stay === "LODGE" && (
-            <div className="absolute top-2 left-2 z-10 px-2 rounded-md bg-green-600 text-white">
-              Lodge
-            </div>
-          )}
-          {listing.type_of_stay === "HOUSE" && (
-            <div className="absolute top-2 left-2 z-10 px-2 rounded-md bg-green-600 text-white">
-              House
-            </div>
-          )}
-          {listing.type_of_stay === "UNIQUE SPACE" && (
-            <div className="absolute top-2 left-2 z-10 px-2 rounded-md bg-green-600 text-white">
-              Unique space
-            </div>
-          )}
-          {listing.type_of_stay === "CAMPSITE" && (
-            <div className="absolute top-2 left-2 z-10 px-2 rounded-md bg-green-600 text-white">
-              Campsite
-            </div>
-          )}
-          {listing.type_of_stay === "BOUTIQUE HOTEL" && (
-            <div className="absolute top-2 left-2 z-10 px-2 rounded-md bg-green-600 text-white">
-              Boutique hotel
-            </div>
-          )}
+          {/* <div className="absolute top-2 left-2 z-10 px-2 text-sm rounded-md capitalize bg-blue-600 text-white">
+            {listing.type_of_stay.toLowerCase()}
+          </div> */}
         </div>
       </div>
     </div>

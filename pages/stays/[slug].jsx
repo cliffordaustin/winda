@@ -472,42 +472,42 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
   };
 
   const priceAdultResident = priceOfAdultResident(
-    currentTypeOfLodge.value,
+    currentTypeOfLodge.value.toUpperCase(),
     stay
   );
 
   const priceAdultNonResident = priceOfAdultNonResident(
-    currentTypeOfLodge.value,
+    currentTypeOfLodge.value.toUpperCase(),
     stay
   );
 
   const priceChildResident = priceOfChildrenResident(
-    currentTypeOfLodge.value,
+    currentTypeOfLodge.value.toUpperCase(),
     stay
   );
 
   const priceChildNonResident = priceOfChildrenNonResident(
-    currentTypeOfLodge.value,
+    currentTypeOfLodge.value.toUpperCase(),
     stay
   );
 
   const priceSingleAdultNonResident = priceOfSingleAdultNonResident(
-    currentTypeOfLodge.value,
+    currentTypeOfLodge.value.toUpperCase(),
     stay
   );
 
   const priceSingleAdultResident = priceOfSingleAdultResident(
-    currentTypeOfLodge.value,
+    currentTypeOfLodge.value.toUpperCase(),
     stay
   );
 
   const priceSingleChildNonResident = priceOfSingleChildNonResident(
-    currentTypeOfLodge.value,
+    currentTypeOfLodge.value.toUpperCase(),
     stay
   );
 
   const priceSingleChildResident = priceOfSingleChildResident(
-    currentTypeOfLodge.value,
+    currentTypeOfLodge.value.toUpperCase(),
     stay
   );
 
@@ -967,14 +967,16 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
                       {(stay.type_of_stay !== "HOUSE" || !inCart) && (
                         <div className="text-gray-600 text-sm flex flex-wrap self-end">
-                          {
-                            <span>
-                              {numOfAdults}{" "}
-                              {numOfAdults > 1
-                                ? "Resident Adults"
-                                : "Resident Adult"}
-                            </span>
-                          }
+                          {numOfAdults > 0 && (
+                            <>
+                              <span>
+                                {numOfAdults}{" "}
+                                {numOfAdults > 1
+                                  ? "Resident Adults"
+                                  : "Resident Adult"}
+                              </span>
+                            </>
+                          )}
                           {numOfChildren > 0 && (
                             <>
                               <span className="font-bold mx-0.5 ">,</span>
@@ -993,8 +995,8 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                               <span>
                                 {numOfAdultsNonResident}{" "}
                                 {numOfAdultsNonResident > 1
-                                  ? "Non-Resident Children"
-                                  : "Non-Resident Child"}
+                                  ? "Non-Resident Adults"
+                                  : "Non-Resident Adult"}
                               </span>
                             </>
                           )}
@@ -1154,32 +1156,50 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     className="flex cursor-pointer items-center justify-between px-4 py-4 rounded-2xl mt-6 border border-gray-200"
                   >
                     <div className="font-bold">Guests</div>
-                    <div className="text-gray-600 text-sm justify-start flex flex-wrap self-start">
-                      {
-                        <span>
-                          {numOfAdults} {numOfAdults > 1 ? "Adults" : "Adult"}
-                        </span>
-                      }
+                    <div className="text-gray-600 text-sm  flex flex-wrap self-end">
+                      {numOfAdults > 0 && (
+                        <>
+                          <span>
+                            {numOfAdults}{" "}
+                            {numOfAdults > 1
+                              ? "Resident Adults"
+                              : "Resident Adult"}
+                          </span>
+                        </>
+                      )}
                       {numOfChildren > 0 && (
                         <>
                           <span className="font-bold mx-0.5 ">,</span>
                           <span>
                             {numOfChildren}{" "}
-                            {numOfChildren > 1 ? "Children" : "Child"}
+                            {numOfChildren > 1
+                              ? "Resident Children"
+                              : "Resident Child"}
                           </span>
                         </>
                       )}
-                      {nonResident && (
+
+                      {numOfAdultsNonResident > 0 && (
                         <>
                           <span className="font-bold mx-0.5 ">,</span>
-                          <span>Non-resident</span>
+                          <span>
+                            {numOfAdultsNonResident}{" "}
+                            {numOfAdultsNonResident > 1
+                              ? "Non-Resident Adults"
+                              : "Non-Resident Adult"}
+                          </span>
                         </>
                       )}
 
-                      {!nonResident && (
+                      {numOfChildrenNonResident > 0 && (
                         <>
                           <span className="font-bold mx-0.5 ">,</span>
-                          <span>Resident</span>
+                          <span>
+                            {numOfChildrenNonResident}{" "}
+                            {numOfChildrenNonResident > 1
+                              ? "Non-Resident Children"
+                              : "Non-Resident Child"}
+                          </span>
                         </>
                       )}
                     </div>
@@ -1467,14 +1487,16 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
                     {(stay.type_of_stay !== "HOUSE" || !inCart) && (
                       <div className="text-gray-600 text-sm  flex flex-wrap self-end">
-                        {
-                          <span>
-                            {numOfAdults}{" "}
-                            {numOfAdults > 1
-                              ? "Resident Adults"
-                              : "Resident Adult"}
-                          </span>
-                        }
+                        {numOfAdults > 0 && (
+                          <>
+                            <span>
+                              {numOfAdults}{" "}
+                              {numOfAdults > 1
+                                ? "Resident Adults"
+                                : "Resident Adult"}
+                            </span>
+                          </>
+                        )}
                         {numOfChildren > 0 && (
                           <>
                             <span className="font-bold mx-0.5 ">,</span>
@@ -1493,8 +1515,8 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                             <span>
                               {numOfAdultsNonResident}{" "}
                               {numOfAdultsNonResident > 1
-                                ? "Non-Resident Children"
-                                : "Non-Resident Child"}
+                                ? "Non-Resident Adults"
+                                : "Non-Resident Adult"}
                             </span>
                           </>
                         )}
@@ -1999,8 +2021,9 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
           </div>
         </div>
         {(stay.type_of_stay !== "HOUSE" || !inCart) && (
-          <div className="md:fixed hidden right-2 md:w-[42%] md:pl-2 lg:px-0 lg:w-[35%] top-20 md:block">
-            <div className="flex justify-between">
+          // className="md:fixed hidden right-2 md:w-[42%] h-full md:pl-2 lg:px-0 lg:w-[35%] top-20 md:block"
+          <div className="md:fixed hidden right-2 md:w-[42%] h-full md:pl-2 lg:px-0 lg:w-[35%] top-20 bottom-0 overflow-y-scroll md:block">
+            <div className="flex h-fit justify-between">
               {
                 <div>
                   {addToCartDate &&
@@ -2050,13 +2073,15 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     {moment(addToCartDate.to).format("MMM DD")}
                   </span>
                 )}
-                <div className="text-gray-600 text-sm justify-end flex flex-wrap self-end">
-                  {
-                    <span>
-                      {numOfAdults}{" "}
-                      {numOfAdults > 1 ? "Resident Adults" : "Resident Adult"}
-                    </span>
-                  }
+                <div className="text-gray-600 text-sm  flex flex-wrap self-end justify-end">
+                  {numOfAdults > 0 && (
+                    <>
+                      <span>
+                        {numOfAdults}{" "}
+                        {numOfAdults > 1 ? "Resident Adults" : "Resident Adult"}
+                      </span>
+                    </>
+                  )}
                   {numOfChildren > 0 && (
                     <>
                       <span className="font-bold mx-0.5 ">,</span>
@@ -2075,8 +2100,8 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       <span>
                         {numOfAdultsNonResident}{" "}
                         {numOfAdultsNonResident > 1
-                          ? "Non-Resident Children"
-                          : "Non-Resident Child"}
+                          ? "Non-Resident Adults"
+                          : "Non-Resident Adult"}
                       </span>
                     </>
                   )}
@@ -2100,13 +2125,16 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                 " h-fit w-full lg:w-fit mx-auto xl:ml-2 order-1 md:order-2 "
               }
             >
-              {
-                <DatePicker
-                  setDate={setAddToCartDate}
-                  date={addToCartDate}
-                  disableDate={new Date()}
-                ></DatePicker>
-              }
+              <div className="">
+                {
+                  <DatePicker
+                    setDate={setAddToCartDate}
+                    date={addToCartDate}
+                    disableDate={new Date()}
+                  ></DatePicker>
+                }
+              </div>
+
               {addToCartDate && (addToCartDate.from || addToCartDate.to) && (
                 <div
                   className="my-2 cursor-pointer text-sm ml-4 underline"
@@ -2117,6 +2145,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                   clear date
                 </div>
               )}
+
               <div className=" mt-4 relative">
                 {
                   <div
@@ -2391,7 +2420,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                   </div>
                 </PopupModal>
               </div>
-              <div className="flex justify-around gap-2">
+              <div className="flex justify-around gap-2 mb-24">
                 {inCart && (
                   <Button
                     onClick={() => {

@@ -31,7 +31,13 @@ import DatePicker from "../../components/ui/DatePickerOpen";
 import Checkbox from "../../components/ui/Checkbox";
 import useOnScreen from "../../lib/onScreen";
 import Modal from "../../components/ui/FullScreenMobileModal";
+import PopupModal from "../../components/ui/Modal";
 import ScrollTo from "../../components/Activities/ScrollTo";
+
+import {
+  activityPricePerPersonResident,
+  activityPricePerPersonNonResident,
+} from "../../lib/pricePlan";
 
 const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
   const GlobalStyle = createGlobalStyle`
@@ -132,15 +138,17 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
           {
             from_date: addToCartDate,
             number_of_people: numOfPeople,
+            number_of_people_non_resident: numOfPeopleNonResident,
             number_of_sessions: numOfSession,
+            number_of_sessions_non_resident: numOfSessionNonResident,
             number_of_groups: numOfGroups,
-            non_resident: nonResident,
+            number_of_groups_non_resident: numOfGroupsNonResident,
             pricing_type:
-              currentPrice.value === "Price per person"
+              currentPrice.value === "per person"
                 ? "PER PERSON"
-                : currentPrice.value === "Price per session"
+                : currentPrice.value === "per session"
                 ? "PER SESSION"
-                : currentPrice.value === "Price per group"
+                : currentPrice.value === "per group"
                 ? "PER GROUP"
                 : "PER PERSON",
           },
@@ -171,15 +179,17 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
           itemCategory: "activities",
           from_date: addToCartDate,
           number_of_people: numOfPeople,
+          number_of_people_non_resident: numOfPeopleNonResident,
           number_of_sessions: numOfSession,
+          number_of_sessions_non_resident: numOfSessionNonResident,
           number_of_groups: numOfGroups,
-          non_resident: nonResident,
+          number_of_groups_non_resident: numOfGroupsNonResident,
           pricing_type:
-            currentPrice.value === "Price per person"
+            currentPrice.value === "per person"
               ? "PER PERSON"
-              : currentPrice.value === "Price per session"
+              : currentPrice.value === "per session"
               ? "PER SESSION"
-              : currentPrice.value === "Price per group"
+              : currentPrice.value === "per group"
               ? "PER GROUP"
               : "PER PERSON",
         });
@@ -237,6 +247,8 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
   const [addToCartDate, setAddToCartDate] = useState("");
 
   const [numOfPeople, setNumOfPeople] = useState(1);
+
+  const [numOfPeopleNonResident, setNumOfPeopleNonResident] = useState(0);
 
   const [slugIsCorrect, setSlugIsCorrect] = useState(false);
 
@@ -300,9 +312,13 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
     }
   };
 
-  const [numOfSession, setNumOfSession] = useState(1);
+  const [numOfSession, setNumOfSession] = useState(0);
 
-  const [numOfGroups, setNumOfGroups] = useState(1);
+  const [numOfSessionNonResident, setNumOfSessionNonResident] = useState(0);
+
+  const [numOfGroups, setNumOfGroups] = useState(0);
+
+  const [numOfGroupsNonResident, setNumOfGroupsNonResident] = useState(0);
 
   const [priceType, setPriceType] = useState([]);
 
@@ -311,21 +327,21 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
   const [showGuestForMobilePopup, setShowGuestForMobilePopup] = useState(false);
 
   const [currentPrice, setCurrentPrice] = useState({
-    label: "Price per person",
-    value: "Price per person",
+    label: "per person",
+    value: "per person",
   });
 
   useEffect(() => {
     const availableOptions = [];
 
     if (activity.price_per_person) {
-      availableOptions.push("Price per person");
+      availableOptions.push("per person");
     }
     if (activity.price_per_session) {
-      availableOptions.push("Price per session");
+      availableOptions.push("per session");
     }
     if (activity.price_per_group) {
-      availableOptions.push("Price per group");
+      availableOptions.push("per group");
     }
 
     availableOptions.forEach((e) => {
@@ -333,29 +349,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
     });
   }, []);
 
-  const maxGuests =
-    currentPrice.value === "Price per person"
-      ? activity.max_number_of_people
-      : currentPrice.value === "Price per session"
-      ? activity.max_number_of_sessions
-      : currentPrice.value === "Price per group"
-      ? activity.max_number_of_groups
-      : "";
-
-  const priceOfPlan =
-    currentPrice.value === "Price per person" && !nonResident
-      ? activity.price
-      : currentPrice.value === "Price per person" && nonResident
-      ? activity.price_non_resident
-      : currentPrice.value === "Price per session" && !nonResident
-      ? activity.session_price
-      : currentPrice.value === "Price per session" && nonResident
-      ? activity.session_price_non_resident
-      : currentPrice.value === "Price per group" && !nonResident
-      ? activity.group_price
-      : currentPrice.value === "Price per group" && nonResident
-      ? activity.group_price_non_resident
-      : activity.price;
+  const maxGuests = activity.capacity;
 
   const changeLikeState = () => {
     if (Cookies.get("token")) {
@@ -401,6 +395,16 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
       });
     }
   };
+
+  const priceOfResident = activityPricePerPersonResident(
+    currentPrice.value.toUpperCase(),
+    activity
+  );
+
+  const priceOfNonResident = activityPricePerPersonNonResident(
+    currentPrice.value.toUpperCase(),
+    activity
+  );
 
   return (
     <div
@@ -624,12 +628,12 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                     )}
                   </div>
 
-                  <h1 className="text-sm text-gray-600 mt-2">
+                  {/* <h1 className="text-sm text-gray-600 mt-2">
                     This experience has a duration of{" "}
                     {moment
                       .duration(activity.duration_of_activity, "minutes")
                       .humanize()}
-                  </h1>
+                  </h1> */}
 
                   {activity.views > 0 && activity.views === 1 && (
                     <div className="mt-2 text-gray-600">
@@ -746,7 +750,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                   {activity.description}
                 </p>
               )}
-              {!showAllDescription && (
+              {!showAllDescription && activity.description.length > 500 && (
                 <div
                   onClick={() => {
                     setShowAllDescription(true);
@@ -802,14 +806,22 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                   <div className="flex items-center">
                     <Price
                       stayPrice={
-                        priceOfPlan *
-                        (currentPrice.value === "Price per person"
-                          ? numOfPeople
-                          : currentPrice.value === "Price per session"
-                          ? numOfSession
-                          : currentPrice.value === "Price per group"
-                          ? numOfGroups
-                          : 1)
+                        priceOfResident *
+                          (currentPrice.value === "per person"
+                            ? numOfPeople
+                            : currentPrice.value === "per session"
+                            ? numOfSession
+                            : currentPrice.value === "per group"
+                            ? numOfGroups
+                            : 1) +
+                        priceOfNonResident *
+                          (currentPrice.value === "per person"
+                            ? numOfPeopleNonResident
+                            : currentPrice.value === "per session"
+                            ? numOfSessionNonResident
+                            : currentPrice.value === "per group"
+                            ? numOfGroupsNonResident
+                            : 1)
                       }
                     ></Price>
                     {addToCartDate && (
@@ -822,36 +834,57 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                     )}
                   </div>
                   <div className="text-gray-600 text-sm justify-end flex flex-wrap self-end">
-                    {currentPrice.value === "Price per person" && (
+                    {currentPrice.value === "per person" && numOfPeople > 0 && (
                       <span>
-                        {numOfPeople} {numOfPeople > 1 ? "People" : "Person"}
+                        {numOfPeople}{" "}
+                        {numOfPeople > 1 ? "Residents" : "Resident"}
                       </span>
                     )}
-                    {currentPrice.value === "Price per session" && (
+                    {currentPrice.value === "per session" && numOfSession > 0 && (
                       <span>
                         {numOfSession}{" "}
-                        {numOfSession > 1 ? "Sessions" : "Session"}
+                        {numOfSession > 1
+                          ? "Resident Sessions"
+                          : "Resident Session"}
                       </span>
                     )}
-                    {currentPrice.value === "Price per group" && (
+                    {currentPrice.value === "per group" && numOfGroups > 0 && (
                       <span>
-                        {numOfGroups} {numOfGroups > 1 ? "Groups" : "Group"}
+                        {numOfGroups}{" "}
+                        {numOfGroups > 1 ? "Resident Groups" : "Resident Group"}
                       </span>
                     )}
 
-                    {nonResident && (
-                      <>
-                        <span className="font-bold mx-0.5 ">,</span>
-                        <span>Non-resident</span>
-                      </>
-                    )}
+                    {(numOfPeople > 0 || numOfSession > 0 || numOfGroups > 0) &&
+                      "  -  "}
 
-                    {!nonResident && (
-                      <>
-                        <span className="font-bold mx-0.5 ">,</span>
-                        <span>Resident</span>
-                      </>
-                    )}
+                    {currentPrice.value === "per person" &&
+                      numOfPeopleNonResident > 0 && (
+                        <span>
+                          {numOfPeopleNonResident}{" "}
+                          {numOfPeopleNonResident > 1
+                            ? "Non-Residents"
+                            : "Non-Resident"}
+                        </span>
+                      )}
+                    {currentPrice.value === "per session" &&
+                      numOfSessionNonResident > 0 && (
+                        <span>
+                          {numOfSessionNonResident}{" "}
+                          {numOfSessionNonResident > 1
+                            ? "Non-Resident Sessions"
+                            : "Non-Resident Session"}
+                        </span>
+                      )}
+                    {currentPrice.value === "per group" &&
+                      numOfGroupsNonResident > 0 && (
+                        <span>
+                          {numOfGroupsNonResident}{" "}
+                          {numOfGroupsNonResident > 1
+                            ? "Non-Resident Groups"
+                            : "Non-Resident Group"}
+                        </span>
+                      )}
                   </div>
                 </div>
 
@@ -946,37 +979,63 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                     className="flex cursor-pointer items-center justify-between px-4 py-4 rounded-2xl mt-6 border border-gray-200"
                   >
                     <div className="font-bold">Guests</div>
-                    <div className="text-gray-600 text-sm justify-start flex flex-wrap self-start">
-                      {currentPrice.value === "Price per person" && (
+                    <div className="text-gray-600 text-sm justify-end flex flex-wrap self-end">
+                      {currentPrice.value === "per person" && numOfPeople > 0 && (
                         <span>
-                          {numOfPeople} {numOfPeople > 1 ? "People" : "Person"}
+                          {numOfPeople}{" "}
+                          {numOfPeople > 1 ? "Residents" : "Resident"}
                         </span>
                       )}
-                      {currentPrice.value === "Price per session" && (
+                      {currentPrice.value === "per session" &&
+                        numOfSession > 0 && (
+                          <span>
+                            {numOfSession}{" "}
+                            {numOfSession > 1
+                              ? "Resident Sessions"
+                              : "Resident Session"}
+                          </span>
+                        )}
+                      {currentPrice.value === "per group" && numOfGroups > 0 && (
                         <span>
-                          {numOfSession}{" "}
-                          {numOfSession > 1 ? "Sessions" : "Session"}
-                        </span>
-                      )}
-                      {currentPrice.value === "Price per group" && (
-                        <span>
-                          {numOfGroups} {numOfGroups > 1 ? "Groups" : "Group"}
+                          {numOfGroups}{" "}
+                          {numOfGroups > 1
+                            ? "Resident Groups"
+                            : "Resident Group"}
                         </span>
                       )}
 
-                      {nonResident && (
-                        <>
-                          <span className="font-bold mx-0.5 ">,</span>
-                          <span>Non-resident</span>
-                        </>
-                      )}
+                      {(numOfPeople > 0 ||
+                        numOfSession > 0 ||
+                        numOfGroups > 0) &&
+                        "  -  "}
 
-                      {!nonResident && (
-                        <>
-                          <span className="font-bold mx-0.5 ">,</span>
-                          <span>Resident</span>
-                        </>
-                      )}
+                      {currentPrice.value === "per person" &&
+                        numOfPeopleNonResident > 0 && (
+                          <span>
+                            {numOfPeopleNonResident}{" "}
+                            {numOfPeopleNonResident > 1
+                              ? "Non-Residents"
+                              : "Non-Resident"}
+                          </span>
+                        )}
+                      {currentPrice.value === "per session" &&
+                        numOfSessionNonResident > 0 && (
+                          <span>
+                            {numOfSessionNonResident}{" "}
+                            {numOfSessionNonResident > 1
+                              ? "Non-Resident Sessions"
+                              : "Non-Resident Session"}
+                          </span>
+                        )}
+                      {currentPrice.value === "per group" &&
+                        numOfGroupsNonResident > 0 && (
+                          <span>
+                            {numOfGroupsNonResident}{" "}
+                            {numOfGroupsNonResident > 1
+                              ? "Non-Resident Groups"
+                              : "Non-Resident Group"}
+                          </span>
+                        )}
                     </div>
                   </div>
                 )}
@@ -1049,7 +1108,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                       )}
                     </div>
 
-                    {currentPrice.value === "Price per person" && (
+                    {currentPrice.value === "per person" && (
                       <div className="flex justify-between mt-6">
                         <div className="flex flex-col text-sm text-gray-600 items-center">
                           <span>
@@ -1084,7 +1143,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                       </div>
                     )}
 
-                    {currentPrice.value === "Price per session" && (
+                    {currentPrice.value === "per session" && (
                       <div className="flex justify-between mt-6">
                         <div className="flex flex-col text-sm text-gray-600 items-center">
                           <span>
@@ -1119,7 +1178,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                       </div>
                     )}
 
-                    {currentPrice.value === "Price per group" && (
+                    {currentPrice.value === "per group" && (
                       <div className="flex justify-between mt-6">
                         <div className="flex flex-col text-sm text-gray-600 items-center">
                           <span>
@@ -1153,25 +1212,21 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                       </div>
                     )}
 
-                    <div className="flex items-center gap-2 mt-3">
-                      <Checkbox
-                        checked={nonResident}
-                        onChange={() => setNonResident(!nonResident)}
-                      ></Checkbox>
-                      <span className="text-gray-600 text-sm">
-                        Non-resident
-                      </span>
-                    </div>
-
                     {(numOfPeople > 1 ||
+                      numOfPeopleNonResident > 0 ||
                       numOfSession > 0 ||
-                      numOfGroups > 0) && (
+                      numOfSessionNonResident > 0 ||
+                      numOfGroups > 0 ||
+                      numOfGroupsNonResident > 0) && (
                       <div
                         className="mt-2 cursor-pointer text-sm underline"
                         onClick={() => {
                           setNumOfPeople(1);
+                          setNumOfPeopleNonResident(0);
                           setNumOfGroups(1);
+                          setNumOfGroupsNonResident(0);
                           setNumOfSession(1);
+                          setNumOfSessionNonResident(0);
                         }}
                       >
                         clear data
@@ -1190,14 +1245,22 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                       <div className="flex items-center">
                         <Price
                           stayPrice={
-                            priceOfPlan *
-                            (currentPrice.value === "Price per person"
-                              ? numOfPeople
-                              : currentPrice.value === "Price per session"
-                              ? numOfSession
-                              : currentPrice.value === "Price per group"
-                              ? numOfGroups
-                              : 1)
+                            priceOfResident *
+                              (currentPrice.value === "per person"
+                                ? numOfPeople
+                                : currentPrice.value === "per session"
+                                ? numOfSession
+                                : currentPrice.value === "per group"
+                                ? numOfGroups
+                                : 1) +
+                            priceOfNonResident *
+                              (currentPrice.value === "per person"
+                                ? numOfPeopleNonResident
+                                : currentPrice.value === "per session"
+                                ? numOfSessionNonResident
+                                : currentPrice.value === "per group"
+                                ? numOfGroupsNonResident
+                                : 1)
                           }
                         ></Price>
                         {addToCartDate && (
@@ -1210,37 +1273,63 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                         )}
                       </div>
                       <div className="text-gray-600 text-sm justify-end flex flex-wrap self-end">
-                        {currentPrice.value === "Price per person" && (
+                        {currentPrice.value === "per person" &&
+                          numOfPeople > 0 && (
+                            <span>
+                              {numOfPeople}{" "}
+                              {numOfPeople > 1 ? "Residents" : "Resident"}
+                            </span>
+                          )}
+                        {currentPrice.value === "per session" &&
+                          numOfSession > 0 && (
+                            <span>
+                              {numOfSession}{" "}
+                              {numOfSession > 1
+                                ? "Resident Sessions"
+                                : "Resident Session"}
+                            </span>
+                          )}
+                        {currentPrice.value === "per group" && numOfGroups > 0 && (
                           <span>
-                            {numOfPeople}{" "}
-                            {numOfPeople > 1 ? "People" : "Person"}
-                          </span>
-                        )}
-                        {currentPrice.value === "Price per session" && (
-                          <span>
-                            {numOfSession}{" "}
-                            {numOfSession > 1 ? "Sessions" : "Session"}
-                          </span>
-                        )}
-                        {currentPrice.value === "Price per group" && (
-                          <span>
-                            {numOfGroups} {numOfGroups > 1 ? "Groups" : "Group"}
+                            {numOfGroups}{" "}
+                            {numOfGroups > 1
+                              ? "Resident Groups"
+                              : "Resident Group"}
                           </span>
                         )}
 
-                        {nonResident && (
-                          <>
-                            <span className="font-bold mx-0.5 ">,</span>
-                            <span>Non-resident</span>
-                          </>
-                        )}
+                        {(numOfPeople > 0 ||
+                          numOfSession > 0 ||
+                          numOfGroups > 0) &&
+                          "  -  "}
 
-                        {!nonResident && (
-                          <>
-                            <span className="font-bold mx-0.5 ">,</span>
-                            <span>Resident</span>
-                          </>
-                        )}
+                        {currentPrice.value === "per person" &&
+                          numOfPeopleNonResident > 0 && (
+                            <span>
+                              {numOfPeopleNonResident}{" "}
+                              {numOfPeopleNonResident > 1
+                                ? "Non-Residents"
+                                : "Non-Resident"}
+                            </span>
+                          )}
+                        {currentPrice.value === "per session" &&
+                          numOfSessionNonResident > 0 && (
+                            <span>
+                              {numOfSessionNonResident}{" "}
+                              {numOfSessionNonResident > 1
+                                ? "Non-Resident Sessions"
+                                : "Non-Resident Session"}
+                            </span>
+                          )}
+                        {currentPrice.value === "per group" &&
+                          numOfGroupsNonResident > 0 && (
+                            <span>
+                              {numOfGroupsNonResident}{" "}
+                              {numOfGroupsNonResident > 1
+                                ? "Non-Resident Groups"
+                                : "Non-Resident Group"}
+                            </span>
+                          )}
                       </div>
                     </div>
 
@@ -1459,42 +1548,42 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
           </div>
 
           {/* essentials */}
-          {(activity.equipments_provided.length > 0 ||
-            activity.equipments_required_by_user_to_bring.length > 0) && (
+          {(activity.enquipment_provided.length > 0 ||
+            activity.enquipment_required_by_user.length > 0) && (
             <Element
               name="essentials"
               className={"w-full order-1 md:order-2 pt-10 "}
             >
               <h1 className="font-bold text-2xl mb-2 ml-2">Essentials</h1>
 
-              {activity.equipments_provided.length > 0 && (
+              {activity.enquipment_provided.length > 0 && (
                 <h3 className="mb-2 ml-4 font-semibold">
                   The following enquipments will be provided to by this place
                 </h3>
               )}
 
               <div className="flex flex-col gap-2 px-2">
-                {activity.equipments_provided.map((enquipment, index) => (
-                  <ListItem key={index}>{enquipment}</ListItem>
+                {activity.enquipment_provided.map((enquipment, index) => (
+                  <ListItem key={index}>{enquipment.name}</ListItem>
                 ))}
               </div>
 
-              {activity.equipments_required_by_user_to_bring.length === 0 && (
+              {activity.enquipment_required_by_user.length === 0 && (
                 <h3 className="mt-2 font-medium ml-4 underline">
                   You are not required to bring extra equipment
                 </h3>
               )}
 
-              {activity.equipments_required_by_user_to_bring.length > 0 && (
+              {activity.enquipment_required_by_user.length > 0 && (
                 <h3 className="mb-2 mt-2 ml-4 font-semibold">
                   You are required to bring the following enquipments
                 </h3>
               )}
 
               <div className="flex flex-col gap-2 px-2">
-                {activity.equipments_required_by_user_to_bring.map(
+                {activity.enquipment_required_by_user.map(
                   (enquipment, index) => (
-                    <ListItem key={index}>{enquipment}</ListItem>
+                    <ListItem key={index}>{enquipment.name}</ListItem>
                   )
                 )}
               </div>
@@ -1771,7 +1860,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
           </div>
         </div>
 
-        <div className="md:fixed hidden right-2 md:w-[42%] md:pl-2 lg:px-0 lg:w-[35%] top-20 md:block">
+        <div className="md:fixed hidden right-2 md:w-[42%] h-full md:pl-2 lg:px-0 lg:w-[35%] top-20 bottom-0 overflow-y-scroll md:block">
           <div className="flex justify-between">
             {
               <div>
@@ -1786,14 +1875,22 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
               <div className="flex self-end">
                 <Price
                   stayPrice={
-                    priceOfPlan *
-                    (currentPrice.value === "Price per person"
-                      ? numOfPeople
-                      : currentPrice.value === "Price per session"
-                      ? numOfSession
-                      : currentPrice.value === "Price per group"
-                      ? numOfGroups
-                      : 1)
+                    priceOfResident *
+                      (currentPrice.value === "per person"
+                        ? numOfPeople
+                        : currentPrice.value === "per session"
+                        ? numOfSession
+                        : currentPrice.value === "per group"
+                        ? numOfGroups
+                        : 1) +
+                    priceOfNonResident *
+                      (currentPrice.value === "per person"
+                        ? numOfPeopleNonResident
+                        : currentPrice.value === "per session"
+                        ? numOfSessionNonResident
+                        : currentPrice.value === "per group"
+                        ? numOfGroupsNonResident
+                        : 1)
                   }
                 ></Price>
               </div>
@@ -1803,35 +1900,56 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                 </span>
               )}
               <div className="text-gray-600 text-sm justify-end flex flex-wrap self-end">
-                {currentPrice.value === "Price per person" && (
+                {currentPrice.value === "per person" && numOfPeople > 0 && (
                   <span>
-                    {numOfPeople} {numOfPeople > 1 ? "People" : "Person"}
+                    {numOfPeople} {numOfPeople > 1 ? "Residents" : "Resident"}
                   </span>
                 )}
-                {currentPrice.value === "Price per session" && (
+                {currentPrice.value === "per session" && numOfSession > 0 && (
                   <span>
-                    {numOfSession} {numOfSession > 1 ? "Sessions" : "Session"}
+                    {numOfSession}{" "}
+                    {numOfSession > 1
+                      ? "Resident Sessions"
+                      : "Resident Session"}
                   </span>
                 )}
-                {currentPrice.value === "Price per group" && (
+                {currentPrice.value === "per group" && numOfGroups > 0 && (
                   <span>
-                    {numOfGroups} {numOfGroups > 1 ? "Groups" : "Group"}
+                    {numOfGroups}{" "}
+                    {numOfGroups > 1 ? "Resident Groups" : "Resident Group"}
                   </span>
                 )}
 
-                {nonResident && (
-                  <>
-                    <span className="font-bold mx-0.5 ">,</span>
-                    <span>Non-resident</span>
-                  </>
-                )}
+                {(numOfPeople > 0 || numOfSession > 0 || numOfGroups > 0) &&
+                  "  -  "}
 
-                {!nonResident && (
-                  <>
-                    <span className="font-bold mx-0.5 ">,</span>
-                    <span>Resident</span>
-                  </>
-                )}
+                {currentPrice.value === "per person" &&
+                  numOfPeopleNonResident > 0 && (
+                    <span>
+                      {numOfPeopleNonResident}{" "}
+                      {numOfPeopleNonResident > 1
+                        ? "Non-Residents"
+                        : "Non-Resident"}
+                    </span>
+                  )}
+                {currentPrice.value === "per session" &&
+                  numOfSessionNonResident > 0 && (
+                    <span>
+                      {numOfSessionNonResident}{" "}
+                      {numOfSessionNonResident > 1
+                        ? "Non-Resident Sessions"
+                        : "Non-Resident Session"}
+                    </span>
+                  )}
+                {currentPrice.value === "per group" &&
+                  numOfGroupsNonResident > 0 && (
+                    <span>
+                      {numOfGroupsNonResident}{" "}
+                      {numOfGroupsNonResident > 1
+                        ? "Non-Resident Groups"
+                        : "Non-Resident Group"}
+                    </span>
+                  )}
               </div>
             </div>
           </div>
@@ -1887,86 +2005,96 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                 </div>
               }
 
-              {guestPopup && (
-                <div
-                  onClick={(e) => {
-                    e.stopPropagation();
+              <PopupModal
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+                showModal={guestPopup}
+                closeModal={() => setGuestPopup(false)}
+                // className="absolute -left-[410px] -top-[250px] px-4 py-4 !z-[99] w-[400px] bg-white shadow-lg rounded-lg h-fit"
+                className="w-[500px] absolute top-[20%]"
+              >
+                <Select
+                  defaultValue={currentPrice}
+                  onChange={(value) => {
+                    setCurrentPrice(value);
+                    setNumOfPeople(1);
+                    setNumOfPeopleNonResident(0);
+                    setNumOfGroups(0);
+                    setNumOfGroupsNonResident(0);
+                    setNumOfSession(0);
+                    setNumOfSessionNonResident(0);
                   }}
-                  className="absolute -left-[410px] -top-[200px] px-4 py-4 !z-[99] w-[400px] bg-white shadow-lg rounded-lg h-fit"
-                >
-                  <Select
-                    defaultValue={currentPrice}
-                    onChange={(value) => {
-                      setCurrentPrice(value);
-                      setNumOfPeople(1);
-                      setNumOfGroups(1);
-                      setNumOfSession(1);
-                    }}
-                    className={"text-sm outline-none border border-gray-500"}
-                    instanceId={priceType}
-                    placeholder="Type of room"
-                    options={priceType}
-                    isSearchable={true}
-                  />
+                  className={"text-sm outline-none border border-gray-500"}
+                  instanceId={priceType}
+                  placeholder="Type of room"
+                  options={priceType}
+                  isSearchable={true}
+                />
 
-                  <div className="flex items-center gap-0.5 mt-4">
-                    <svg
-                      className="w-4 h-4 text-gray-500"
-                      xmlns="http://www.w3.org/2000/svg"
-                      aria-hidden="true"
-                      role="img"
-                      width="1em"
-                      height="1em"
-                      preserveAspectRatio="xMidYMid meet"
-                      viewBox="0 0 36 36"
-                    >
-                      <path
-                        fill="currentColor"
-                        d="M12 16.14h-.87a8.67 8.67 0 0 0-6.43 2.52l-.24.28v8.28h4.08v-4.7l.55-.62l.25-.29a11 11 0 0 1 4.71-2.86A6.59 6.59 0 0 1 12 16.14Z"
-                      />
-                      <path
-                        fill="currentColor"
-                        d="M31.34 18.63a8.67 8.67 0 0 0-6.43-2.52a10.47 10.47 0 0 0-1.09.06a6.59 6.59 0 0 1-2 2.45a10.91 10.91 0 0 1 5 3l.25.28l.54.62v4.71h3.94v-8.32Z"
-                      />
-                      <path
-                        fill="currentColor"
-                        d="M11.1 14.19h.31a6.45 6.45 0 0 1 3.11-6.29a4.09 4.09 0 1 0-3.42 6.33Z"
-                      />
-                      <path
-                        fill="currentColor"
-                        d="M24.43 13.44a6.54 6.54 0 0 1 0 .69a4.09 4.09 0 0 0 .58.05h.19A4.09 4.09 0 1 0 21.47 8a6.53 6.53 0 0 1 2.96 5.44Z"
-                      />
-                      <circle
-                        cx="17.87"
-                        cy="13.45"
-                        r="4.47"
-                        fill="currentColor"
-                      />
-                      <path
-                        fill="currentColor"
-                        d="M18.11 20.3A9.69 9.69 0 0 0 11 23l-.25.28v6.33a1.57 1.57 0 0 0 1.6 1.54h11.49a1.57 1.57 0 0 0 1.6-1.54V23.3l-.24-.3a9.58 9.58 0 0 0-7.09-2.7Z"
-                      />
-                      <path fill="none" d="M0 0h36v36H0z" />
-                    </svg>
-                    {currentPrice && (
-                      <span className="text-gray-600 text-sm">
-                        Maximum number of guests is {maxGuests}
-                      </span>
-                    )}
-                  </div>
+                <div className="flex items-center gap-0.5 mt-4">
+                  <svg
+                    className="w-4 h-4 text-gray-500"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                    role="img"
+                    width="1em"
+                    height="1em"
+                    preserveAspectRatio="xMidYMid meet"
+                    viewBox="0 0 36 36"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M12 16.14h-.87a8.67 8.67 0 0 0-6.43 2.52l-.24.28v8.28h4.08v-4.7l.55-.62l.25-.29a11 11 0 0 1 4.71-2.86A6.59 6.59 0 0 1 12 16.14Z"
+                    />
+                    <path
+                      fill="currentColor"
+                      d="M31.34 18.63a8.67 8.67 0 0 0-6.43-2.52a10.47 10.47 0 0 0-1.09.06a6.59 6.59 0 0 1-2 2.45a10.91 10.91 0 0 1 5 3l.25.28l.54.62v4.71h3.94v-8.32Z"
+                    />
+                    <path
+                      fill="currentColor"
+                      d="M11.1 14.19h.31a6.45 6.45 0 0 1 3.11-6.29a4.09 4.09 0 1 0-3.42 6.33Z"
+                    />
+                    <path
+                      fill="currentColor"
+                      d="M24.43 13.44a6.54 6.54 0 0 1 0 .69a4.09 4.09 0 0 0 .58.05h.19A4.09 4.09 0 1 0 21.47 8a6.53 6.53 0 0 1 2.96 5.44Z"
+                    />
+                    <circle
+                      cx="17.87"
+                      cy="13.45"
+                      r="4.47"
+                      fill="currentColor"
+                    />
+                    <path
+                      fill="currentColor"
+                      d="M18.11 20.3A9.69 9.69 0 0 0 11 23l-.25.28v6.33a1.57 1.57 0 0 0 1.6 1.54h11.49a1.57 1.57 0 0 0 1.6-1.54V23.3l-.24-.3a9.58 9.58 0 0 0-7.09-2.7Z"
+                    />
+                    <path fill="none" d="M0 0h36v36H0z" />
+                  </svg>
+                  {currentPrice && (
+                    <span className="text-gray-600 text-sm">
+                      Maximum number of guests is {maxGuests}
+                    </span>
+                  )}
+                </div>
 
-                  {currentPrice.value === "Price per person" && (
+                {currentPrice.value === "per person" && (
+                  <>
                     <div className="flex justify-between mt-6">
                       <div className="flex flex-col text-sm text-gray-600 items-center">
                         <span>
-                          {numOfPeople} {numOfPeople > 1 ? "People" : "Person"}
+                          {numOfPeople}{" "}
+                          {numOfPeople > 1 ? "Residents" : "Resident"}
                         </span>
                       </div>
 
                       <div className="flex gap-3 items-center">
                         <div
                           onClick={() => {
-                            if (numOfPeople > 1) {
+                            if (
+                              (numOfPeople > 1 || numOfPeopleNonResident > 0) &&
+                              numOfPeople > 0
+                            ) {
                               setNumOfPeople(numOfPeople - 1);
                             }
                           }}
@@ -1987,22 +2115,27 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                         </div>
                       </div>
                     </div>
-                  )}
 
-                  {currentPrice.value === "Price per session" && (
                     <div className="flex justify-between mt-6">
                       <div className="flex flex-col text-sm text-gray-600 items-center">
                         <span>
-                          {numOfSession}{" "}
-                          {numOfSession > 1 ? "Sessions" : "Session"}
+                          {numOfPeopleNonResident}{" "}
+                          {numOfPeopleNonResident > 1
+                            ? "Non-Residents"
+                            : "Non-Resident"}
                         </span>
                       </div>
 
                       <div className="flex gap-3 items-center">
                         <div
                           onClick={() => {
-                            if (numOfSession > 0) {
-                              setNumOfSession(numOfSession - 1);
+                            if (
+                              (numOfPeopleNonResident > 1 || numOfPeople > 0) &&
+                              numOfPeopleNonResident > 0
+                            ) {
+                              setNumOfPeopleNonResident(
+                                numOfPeopleNonResident - 1
+                              );
                             }
                           }}
                           className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
@@ -2012,8 +2145,10 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
 
                         <div
                           onClick={() => {
-                            if (numOfSession < maxGuests) {
-                              setNumOfSession(numOfSession + 1);
+                            if (numOfPeopleNonResident < maxGuests) {
+                              setNumOfPeopleNonResident(
+                                numOfPeopleNonResident + 1
+                              );
                             }
                           }}
                           className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
@@ -2022,79 +2157,109 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                         </div>
                       </div>
                     </div>
-                  )}
+                  </>
+                )}
 
-                  {currentPrice.value === "Price per group" && (
-                    <div className="flex justify-between mt-6">
-                      <div className="flex flex-col text-sm text-gray-600 items-center">
-                        <span>
-                          {numOfGroups} {numOfGroups > 1 ? "Groups" : "Group"}
-                        </span>
-                      </div>
-
-                      <div className="flex gap-3 items-center">
-                        <div
-                          onClick={() => {
-                            if (numOfGroups > 0) {
-                              setNumOfGroups(numOfGroups - 1);
-                            }
-                          }}
-                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
-                        >
-                          -
-                        </div>
-
-                        <div
-                          onClick={() => {
-                            if (numOfGroups < maxGuests) {
-                              setNumOfGroups(numOfGroups + 1);
-                            }
-                          }}
-                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
-                        >
-                          +
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="flex items-center gap-2 mt-3">
-                    <Checkbox
-                      checked={nonResident}
-                      onChange={() => setNonResident(!nonResident)}
-                    ></Checkbox>
-                    <span className="text-gray-600 text-sm">Non-resident</span>
-                  </div>
-
-                  {(numOfPeople > 1 || numOfSession > 0 || numOfGroups > 0) && (
-                    <div
-                      className="mt-2 cursor-pointer text-sm underline"
-                      onClick={() => {
-                        setNumOfPeople(1);
-                        setNumOfGroups(1);
-                        setNumOfSession(1);
-                      }}
-                    >
-                      clear data
-                    </div>
-                  )}
-
+                {currentPrice.value === "per session" && (
                   <div className="flex justify-between mt-6">
-                    <div></div>
-                    <Button
-                      onClick={() => {
-                        setGuestPopup(false);
-                      }}
-                      className="!bg-blue-700 !rounded-3xl"
-                    >
-                      <span>Done</span>
-                    </Button>
+                    <div className="flex flex-col text-sm text-gray-600 items-center">
+                      <span>
+                        {numOfSession}{" "}
+                        {numOfSession > 1 ? "Sessions" : "Session"}
+                      </span>
+                    </div>
+
+                    <div className="flex gap-3 items-center">
+                      <div
+                        onClick={() => {
+                          if (numOfSession > 0) {
+                            setNumOfSession(numOfSession - 1);
+                          }
+                        }}
+                        className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
+                      >
+                        -
+                      </div>
+
+                      <div
+                        onClick={() => {
+                          if (numOfSession < maxGuests) {
+                            setNumOfSession(numOfSession + 1);
+                          }
+                        }}
+                        className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
+                      >
+                        +
+                      </div>
+                    </div>
                   </div>
+                )}
+
+                {currentPrice.value === "per group" && (
+                  <div className="flex justify-between mt-6">
+                    <div className="flex flex-col text-sm text-gray-600 items-center">
+                      <span>
+                        {numOfGroups} {numOfGroups > 1 ? "Groups" : "Group"}
+                      </span>
+                    </div>
+
+                    <div className="flex gap-3 items-center">
+                      <div
+                        onClick={() => {
+                          if (numOfGroups > 0) {
+                            setNumOfGroups(numOfGroups - 1);
+                          }
+                        }}
+                        className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
+                      >
+                        -
+                      </div>
+
+                      <div
+                        onClick={() => {
+                          if (numOfGroups < maxGuests) {
+                            setNumOfGroups(numOfGroups + 1);
+                          }
+                        }}
+                        className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
+                      >
+                        +
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {(numOfPeople > 1 || numOfSession > 0 || numOfGroups > 0) && (
+                  <div
+                    className="mt-2 cursor-pointer text-sm underline"
+                    onClick={() => {
+                      setNumOfPeople(1);
+                      setNumOfPeopleNonResident(0);
+                      setNumOfGroups(1);
+                      setNumOfGroupsNonResident(0);
+                      setNumOfSession(1);
+                      setNumOfSessionNonResident(0);
+                    }}
+                  >
+                    clear data
+                  </div>
+                )}
+
+                <div className="flex justify-between mt-6">
+                  <div></div>
+                  <Button
+                    onClick={() => {
+                      setGuestPopup(false);
+                    }}
+                    className="!bg-blue-700 !rounded-3xl"
+                  >
+                    <span>Done</span>
+                  </Button>
                 </div>
-              )}
+              </PopupModal>
             </div>
 
-            <div className="flex justify-around gap-2">
+            <div className="flex justify-around gap-2 mb-24">
               {inCart && (
                 <Button
                   onClick={() => {
