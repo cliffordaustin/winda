@@ -630,6 +630,23 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               </div>
               <div className="text-2xl font-bold">{stay.name}</div>
             </div>
+            <div className="flex flex-wrap gap-1 mt-2">
+              <div className="px-3 py-1 bg-blue-300 rounded-3xl text-xs">
+                Tented camp
+              </div>
+              <div className="px-3 py-1 bg-blue-300 rounded-3xl text-xs">
+                Romantic getaway
+              </div>
+              <div className="px-3 py-1 bg-blue-300 rounded-3xl text-xs">
+                Campsite
+              </div>
+              <div className="px-3 py-1 bg-blue-300 rounded-3xl text-xs">
+                Weekend getaway
+              </div>
+              <div className="px-3 py-1 bg-blue-300 rounded-3xl text-xs">
+                Group retreat
+              </div>
+            </div>
             <div ref={scrollToVisible} className="relative -ml-8 -mr-4">
               <ImageGallery
                 images={stay.stay_images}
@@ -711,8 +728,8 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                   ? "!fixed !w-full !top-[65px] left-0 right-0 z-[40] bg-white "
                   : "") +
                 (stay.type_of_stay === "HOUSE" && inCart
-                  ? "h-12 border-b border-gray-200 absolute top-[450px] sm:top-[510px] md:top-[560px] w-[100%] left-0 right-0 lg:px-10 px-5"
-                  : "h-12 border-b border-gray-200 absolute top-[505px] sm:top-[565px] w-[100%] left-0 right-0 lg:px-10 px-5")
+                  ? "h-12 border-b border-gray-200 w-[100%] lg:px-10 px-5"
+                  : "h-12 border-b border-gray-200 w-[100%] lg:px-10 px-5")
               }
             >
               <ScrollTo guestPopup={guestPopup} stay={stay}></ScrollTo>
@@ -720,12 +737,43 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
             {/* about */}
 
-            <div className="mt-16">
-              <h1 className="font-bold text-2xl">Quick facts</h1>
+            <div className="mt-6">
               <div className="flex">
                 <div className="flex flex-col w-full">
-                  <div className="text-gray-500 flex gap-2 text-sm truncate mt-3 flex-wrap">
-                    {stay.capacity && (
+                  <div className="text-gray-500 flex justify-between md:justify-start gap-4 md:gap-2 text-sm truncate mt-3 flex-wrap">
+                    <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center gap-1">
+                      <h1 className="font-bold text-base md:text-lg text-gray-800">
+                        Type of stay
+                      </h1>
+                      <div className="text-gray-600 capitalize">
+                        {stay.type_of_stay.toLowerCase()}
+                      </div>
+                    </div>
+                    <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center gap-1">
+                      <h1 className="font-bold text-base md:text-lg text-gray-800">
+                        Capacity
+                      </h1>
+                      <div className="text-gray-600">{stay.rooms} max</div>
+                    </div>
+                    <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center gap-1">
+                      <h1 className="font-bold text-base md:text-lg text-gray-800">
+                        Bedrooms
+                      </h1>
+                      <div className="text-gray-600">{stay.rooms} bedrooms</div>
+                    </div>
+                    <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center gap-1">
+                      <h1 className="font-bold text-base md:text-lg text-gray-800">
+                        Bathrooms
+                      </h1>
+                      <div className="text-gray-600">{stay.rooms} baths</div>
+                    </div>
+                    <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center gap-1">
+                      <h1 className="font-bold text-base md:text-lg text-gray-800">
+                        Views
+                      </h1>
+                      <div className="text-gray-600">{stay.views} views</div>
+                    </div>
+                    {/* {stay.capacity && (
                       <div className="flex items-center gap-0.5">
                         <svg
                           className="w-3 h-3"
@@ -816,18 +864,8 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                         </svg>{" "}
                         <span>{stay.bathrooms} ba</span>
                       </div>
-                    )}
+                    )} */}
                   </div>
-                  {stay.views > 0 && stay.views === 1 && (
-                    <div className="mt-2 text-gray-600">
-                      {stay.views} person has viewed this listing
-                    </div>
-                  )}
-                  {stay.views > 0 && stay.views > 1 && (
-                    <div className="mt-2 text-gray-600">
-                      {stay.views} people has viewed this listing
-                    </div>
-                  )}
 
                   {slugIsCorrect && (
                     <div className="mt-2">
@@ -1827,16 +1865,9 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
           {/* unique about place */}
 
           {/* map */}
-          <Element
-            name="map"
-            className={"w-full h-[350px] md:h-[450px] order-1 md:order-2 pt-6 "}
-          >
-            <h1 className="font-bold text-2xl mb-2 ml-2">Map</h1>
-            <Map longitude={stay.longitude} latitude={stay.latitude}></Map>
-          </Element>
 
           {/* policies */}
-          <Element name="policies" className={"w-full pt-20 "}>
+          <Element name="policies" className={"w-full pt-12 "}>
             <h1 className="font-bold text-2xl mb-2">Policies</h1>
 
             {stay.cancellation_policy && (
@@ -1890,6 +1921,13 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                 </div>
               </div>
             )}
+          </Element>
+
+          <Element
+            name="map"
+            className={"h-[350px] md:h-[450px] relative mt-12 -ml-8 -mr-4"}
+          >
+            <Map longitude={stay.longitude} latitude={stay.latitude}></Map>
           </Element>
 
           {/* reviews */}

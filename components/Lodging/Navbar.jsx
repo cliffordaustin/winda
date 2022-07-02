@@ -341,6 +341,12 @@ function Navbar({
                           ? allItemsInActivityCart[index].number_of_people
                           : item.number_of_people
                       }
+                      number_of_people_non_resident={
+                        Cookies.get("token")
+                          ? allItemsInActivityCart[index]
+                              .number_of_people_non_resident
+                          : item.number_of_people_non_resident
+                      }
                       number_of_sessions={
                         Cookies.get("token")
                           ? allItemsInActivityCart[index].number_of_sessions
@@ -362,11 +368,6 @@ function Navbar({
                           ? allItemsInActivityCart[index]
                               .number_of_groups_non_resident
                           : item.number_of_groups_non_resident
-                      }
-                      activity_non_resident={
-                        Cookies.get("token")
-                          ? allItemsInActivityCart[index].non_resident
-                          : item.non_resident
                       }
                       pricing_type={
                         Cookies.get("token")

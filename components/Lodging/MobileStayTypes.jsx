@@ -9,11 +9,35 @@ function MobileStayTypes({ handlePopup, showStayTypesPopup, screenWidth }) {
   const router = useRouter();
 
   const options = [
+    "LODGE",
     "HOUSE",
-    "CAMPSITE",
     "UNIQUE SPACE",
     "BOUTIQUE HOTEL",
-    "LODGE",
+    "CAMPSITE",
+    "TENTED CAMP",
+    "WEEKEND GETAWAY",
+    "ROMANTIC GETAWAY",
+    "GROUP GETAWAY",
+    "CONSERVANCY",
+    "NATIONAL PARK/GAME RESERVES",
+    "COZY PLACE",
+    "LAKEFRONT",
+    "BEACHFRONT",
+    "LUXURIOUS",
+    "BEAUTIFUL VIEW",
+    "OFF-GRID",
+    "ECO-STAY",
+    "QUIRKY",
+    "TRADITIONAL",
+    "MANSIONS",
+    "OVER-WATER",
+    "UNIQUE EXPERIENCES",
+    "STUNNING ARCHITECTURE",
+    "HONEYMOON SPOT",
+    "RIVERFRONT",
+    "PRIVATE HOUSE",
+    "RESORT",
+    "FARMSTAY",
   ];
 
   const [currentOptions, setCurrentOptions] = useState([]);

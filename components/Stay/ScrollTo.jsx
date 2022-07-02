@@ -128,22 +128,6 @@ function ScrollTo({ guestPopup, stay }) {
           <Link
             className="px-4 flex items-center border-b-2 border-transparent"
             activeClass="!border-b-2 !border-slate-800"
-            to="map"
-            spy={true}
-            smooth={true}
-            offset={-200}
-            duration={500}
-            onSetActive={() => {
-              slideto(2);
-            }}
-          >
-            <div>Map</div>
-          </Link>
-        </SwiperSlide>
-        <SwiperSlide className="!w-auto flex cursor-pointer justify-center">
-          <Link
-            className="px-4 flex items-center border-b-2 border-transparent"
-            activeClass="!border-b-2 !border-slate-800"
             to="policies"
             spy={true}
             smooth={true}
@@ -156,6 +140,24 @@ function ScrollTo({ guestPopup, stay }) {
             <div>Policies</div>
           </Link>
         </SwiperSlide>
+
+        <SwiperSlide className="!w-auto flex cursor-pointer justify-center">
+          <Link
+            className="px-4 flex items-center border-b-2 border-transparent"
+            activeClass="!border-b-2 !border-slate-800"
+            to="map"
+            spy={true}
+            smooth={true}
+            offset={-200}
+            duration={500}
+            onSetActive={() => {
+              slideto(2);
+            }}
+          >
+            <div>Map</div>
+          </Link>
+        </SwiperSlide>
+
         {stay.total_num_of_reviews > 0 && (
           <SwiperSlide className="!w-auto flex cursor-pointer justify-center">
             <Link
@@ -175,6 +177,7 @@ function ScrollTo({ guestPopup, stay }) {
           </SwiperSlide>
         )}
       </Swiper>
+
       <div className={"cursor-pointer " + (isEndOfSlide ? "invisible" : "")}>
         <svg
           xmlns="http://www.w3.org/2000/svg"

@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import ReactPaginate from "react-paginate";
+import { Icon } from "@iconify/react";
 
 import getToken from "../../lib/getToken";
 import getTokenFromReq from "../../lib/getTokenFromReq";
@@ -35,7 +37,17 @@ import Cookies from "js-cookie";
 import { route } from "next/dist/server/router";
 import MobileSearchModal from "../../components/Stay/MobileSearchModal";
 
-function Stays({ userProfile, longitude, latitude, stays }) {
+function Stays({
+  userProfile,
+  longitude,
+  latitude,
+  stays,
+  pageSize,
+  count,
+  nextLink,
+  previousLink,
+  totalPages,
+}) {
   const [state, setState] = useState({
     showDropdown: false,
     checkin: "",
@@ -398,6 +410,23 @@ function Stays({ userProfile, longitude, latitude, stays }) {
         },
       });
     }
+  };
+
+  const handlePageClick = (event) => {
+    // const newOffset = (event.selected * itemsPerPage) % items.length;
+    // console.log(
+    //   `User requested page number ${event.selected}, which is offset ${newOffset}`
+    // );
+    // setItemOffset(newOffset);
+
+    console.log(event.selected);
+
+    router.push({
+      query: {
+        ...router.query,
+        page: event.selected + 1,
+      },
+    });
   };
 
   return (
@@ -1650,6 +1679,21 @@ function Stays({ userProfile, longitude, latitude, stays }) {
                 </div>
               </div>
             )}
+
+            <ReactPaginate
+              breakLabel="..."
+              nextLabel={<Icon icon="bx:chevron-right" className="w-7 h-7" />}
+              onPageChange={handlePageClick}
+              pageRangeDisplayed={pageSize}
+              pageCount={totalPages}
+              previousLabel={
+                <Icon icon="bx:chevron-left" className="w-7 h-7" />
+              }
+              activeLinkClassName="bg-gray-700 text-white font-bold"
+              renderOnZeroPageCount={null}
+              containerClassName="flex gap-2 justify-center items-center mt-4"
+              pageLinkClassName="bg-white h-12 font-bold flex justify-center items-center w-12 cursor-pointer hover:border border-gray-200 rounded-full text-sm"
+            />
           </div>
         )}
       </div>
@@ -3084,7 +3128,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_baseURL}/stays/?search=${
             query.search ? query.search : ""
-          }&type_of_stay=${
+          }&page=${query.page ? query.page : 1}&type_of_stay=${
             query.type_of_stay ? query.type_of_stay : ""
           }&min_capacity=${
             query.min_capacity ? query.min_capacity : ""
@@ -3119,7 +3163,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           const response = await axios.get(
             `${process.env.NEXT_PUBLIC_baseURL}/stays/?search=${
               query.search ? query.search : ""
-            }&type_of_stay=${
+            }&page=${query.page ? query.page : 1}&type_of_stay=${
               query.type_of_stay ? query.type_of_stay : ""
             }&min_capacity=${
               query.min_capacity ? query.min_capacity : ""
@@ -3145,6 +3189,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
             props: {
               userProfile: userProfile.data[0],
               stays: response.data.results,
+              nextLink: response.data.next,
+              previousLink: response.data.previous,
+              pageSize: response.data.page_size,
+              totalPages: response.data.total_pages,
+              count: response.data.count,
             },
           };
         }
@@ -3153,6 +3202,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
           props: {
             userProfile: "",
             stays: response.data.results,
+            nextLink: response.data.next,
+            previousLink: response.data.previous,
+            pageSize: response.data.page_size,
+            totalPages: response.data.total_pages,
+            count: response.data.count,
           },
         };
       } catch (error) {
@@ -3168,6 +3222,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
             props: {
               userProfile: "",
               stays: [],
+              nextLink: "",
+              previousLink: "",
+              pageSize: 0,
+              totalPages: 0,
+              count: 0,
             },
           };
         }

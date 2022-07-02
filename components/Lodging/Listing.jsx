@@ -57,7 +57,7 @@ function Listing({
   const [newPrice, setNewPrice] = useState(null);
 
   const price = () => {
-    return listing.price;
+    return listing.single_price;
   };
 
   const priceConversion = async (price) => {
