@@ -81,7 +81,7 @@ function MobileStayTypes({ handlePopup, showStayTypesPopup, screenWidth }) {
     <>
       <div className={"flex justify-between flex-wrap"}>
         {options.map((option, index) => (
-          <label key={index} className={styles.ratingItem + " sm:!w-[48%]"}>
+          <label key={index} className={styles.ratingItem + " !w-[48%]"}>
             <Checkbox
               checked={containsOption(option)}
               value={option}

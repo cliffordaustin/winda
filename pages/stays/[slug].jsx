@@ -52,6 +52,7 @@ import {
   priceOfSingleChildResident,
   priceOfSingleChildNonResident,
 } from "../../lib/pricePlan";
+import Stays from ".";
 
 const StaysDetail = ({ userProfile, stay, inCart }) => {
   const GlobalStyle = createGlobalStyle`
@@ -741,38 +742,62 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               <div className="flex">
                 <div className="flex flex-col w-full">
                   <div className="text-gray-500 flex justify-between md:justify-start gap-4 md:gap-2 text-sm truncate mt-3 flex-wrap">
-                    <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center gap-1">
-                      <h1 className="font-bold text-base md:text-lg text-gray-800">
-                        Type of stay
-                      </h1>
-                      <div className="text-gray-600 capitalize">
-                        {stay.type_of_stay.toLowerCase()}
+                    {stay.type_of_stay && (
+                      <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center gap-1">
+                        <h1 className="font-bold text-base md:text-lg text-gray-800">
+                          Type of stay
+                        </h1>
+                        <div className="text-gray-600 capitalize">
+                          {stay.type_of_stay.toLowerCase()}
+                        </div>
                       </div>
-                    </div>
-                    <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center gap-1">
-                      <h1 className="font-bold text-base md:text-lg text-gray-800">
-                        Capacity
-                      </h1>
-                      <div className="text-gray-600">{stay.rooms} max</div>
-                    </div>
-                    <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center gap-1">
-                      <h1 className="font-bold text-base md:text-lg text-gray-800">
-                        Bedrooms
-                      </h1>
-                      <div className="text-gray-600">{stay.rooms} bedrooms</div>
-                    </div>
-                    <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center gap-1">
-                      <h1 className="font-bold text-base md:text-lg text-gray-800">
-                        Bathrooms
-                      </h1>
-                      <div className="text-gray-600">{stay.rooms} baths</div>
-                    </div>
-                    <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center gap-1">
-                      <h1 className="font-bold text-base md:text-lg text-gray-800">
-                        Views
-                      </h1>
-                      <div className="text-gray-600">{stay.views} views</div>
-                    </div>
+                    )}
+                    {stay.capacity && (
+                      <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center gap-1">
+                        <h1 className="font-bold text-base md:text-lg text-gray-800">
+                          Capacity
+                        </h1>
+                        <div className="text-gray-600">{stay.capacity} max</div>
+                      </div>
+                    )}
+                    {stay.rooms && (
+                      <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center gap-1">
+                        <h1 className="font-bold text-base md:text-lg text-gray-800">
+                          Bedrooms
+                        </h1>
+                        <div className="text-gray-600">
+                          {stay.rooms} bedrooms
+                        </div>
+                      </div>
+                    )}
+                    {stay.beds && (
+                      <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center gap-1">
+                        <h1 className="font-bold text-base md:text-lg text-gray-800">
+                          Beds
+                        </h1>
+                        <div className="text-gray-600">
+                          {stay.beds} bedrooms
+                        </div>
+                      </div>
+                    )}
+                    {stay.bathrooms && (
+                      <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center gap-1">
+                        <h1 className="font-bold text-base md:text-lg text-gray-800">
+                          Bathrooms
+                        </h1>
+                        <div className="text-gray-600">
+                          {stay.bathrooms} baths
+                        </div>
+                      </div>
+                    )}
+                    {stay.views > 0 && (
+                      <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center gap-1">
+                        <h1 className="font-bold text-base md:text-lg text-gray-800">
+                          Views
+                        </h1>
+                        <div className="text-gray-600">{stay.views} views</div>
+                      </div>
+                    )}
                     {/* {stay.capacity && (
                       <div className="flex items-center gap-0.5">
                         <svg
@@ -1603,7 +1628,8 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
             <div className="mt-10">
               {!showAllDescription && (
                 <p className="font-medium text-gray-600">
-                  {stay.description.slice(0, 500)}...
+                  {stay.description.slice(0, 500)}
+                  {stay.description.length > 500 && "..."}
                 </p>
               )}
               {showAllDescription && (
