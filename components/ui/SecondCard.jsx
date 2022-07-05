@@ -12,6 +12,7 @@ function SecondCard({
   carouselClassName = "",
   subCarouselClassName = "",
   childrenClassName = "",
+  subCarouselContainerClassName = "",
 }) {
   return (
     <div
@@ -25,7 +26,7 @@ function SecondCard({
           imageClass="rounded-bl-2xl rounded-tl-2xl"
         ></Carousel>
       </div>
-      <div className="flex-grow">
+      <div className={"w-[60%] " + subCarouselContainerClassName}>
         <div className={"mt-2 px-4 h-auto pb-2 " + subCarouselClassName}>
           {header && (
             <h1 className="font-OpenSans text-lg font-bold">{header}</h1>

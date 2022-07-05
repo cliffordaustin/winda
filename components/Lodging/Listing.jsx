@@ -560,11 +560,14 @@ function Listing({
             imagePaths={images}
             carouselClassName="min-h-[200px] !w-[45%]"
             subCarouselClassName="hidden"
+            subCarouselContainerClassName="!w-[55%]"
             className={styles.card}
           >
             <div className="relative w-full">
               <div className="flex flex-col gap-1">
-                <h1 className="text-gray-500 truncate">{listing.name}</h1>
+                <div className="text-gray-500 truncate w-[90%]">
+                  {listing.name}
+                </div>
 
                 {!currencyToKES && (
                   <h1 className={"font-bold text-xl font-OpenSans "}>

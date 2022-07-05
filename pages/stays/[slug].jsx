@@ -632,21 +632,14 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               <div className="text-2xl font-bold">{stay.name}</div>
             </div>
             <div className="flex flex-wrap gap-1 mt-2">
-              <div className="px-3 py-1 bg-blue-300 rounded-3xl text-xs">
-                Tented camp
-              </div>
-              <div className="px-3 py-1 bg-blue-300 rounded-3xl text-xs">
-                Romantic getaway
-              </div>
-              <div className="px-3 py-1 bg-blue-300 rounded-3xl text-xs">
-                Campsite
-              </div>
-              <div className="px-3 py-1 bg-blue-300 rounded-3xl text-xs">
-                Weekend getaway
-              </div>
-              <div className="px-3 py-1 bg-blue-300 rounded-3xl text-xs">
-                Group retreat
-              </div>
+              {stay.tags.map((tag, index) => (
+                <div
+                  key={index}
+                  className="px-3 py-1 bg-blue-300 rounded-3xl text-xs capitalize"
+                >
+                  {tag}
+                </div>
+              ))}
             </div>
             <div ref={scrollToVisible} className="relative -ml-8 -mr-4">
               <ImageGallery
@@ -723,14 +716,14 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
             <div
               className={
                 (!isVisible && (stay.type_of_stay !== "HOUSE" || !inCart)
-                  ? "!fixed md:!w-[56.5%] lg:!w-[63.5%]  !w-full !top-[65px] left-0 right-0 z-[40] bg-white "
+                  ? "!fixed md:!w-[56.5%] lg:!w-[63.5%]  !w-full !top-[70px] left-0 right-0 z-[10] bg-white "
                   : "") +
                 (!isVisible && stay.type_of_stay === "HOUSE" && inCart
-                  ? "!fixed !w-full !top-[65px] left-0 right-0 z-[40] bg-white "
+                  ? "!fixed !w-full !top-[70px] left-0 right-0 z-[10] bg-white "
                   : "") +
                 (stay.type_of_stay === "HOUSE" && inCart
-                  ? "h-12 border-b border-gray-200 w-[100%] lg:px-10 px-5"
-                  : "h-12 border-b border-gray-200 w-[100%] lg:px-10 px-5")
+                  ? "h-12 border-b border-gray-200 w-[100%] lg:px-10 px-5  absolute left-0 right-0 "
+                  : "h-12 border-b border-gray-200 w-[100%] lg:px-10 px-5  absolute left-0 right-0 ")
               }
             >
               <ScrollTo guestPopup={guestPopup} stay={stay}></ScrollTo>
@@ -738,12 +731,22 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
             {/* about */}
 
-            <div className="mt-6">
+            <div className="mt-14">
               <div className="flex">
                 <div className="flex flex-col w-full">
                   <div className="text-gray-500 flex justify-between md:justify-start gap-4 md:gap-2 text-sm truncate mt-3 flex-wrap">
+                    {stay.room_type && (
+                      <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center md:gap-1">
+                        <h1 className="font-bold text-base md:text-lg text-gray-800">
+                          Type of room
+                        </h1>
+                        <div className="text-gray-600 capitalize">
+                          {stay.room_type.toLowerCase()}
+                        </div>
+                      </div>
+                    )}
                     {stay.type_of_stay && (
-                      <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center gap-1">
+                      <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center md:gap-1">
                         <h1 className="font-bold text-base md:text-lg text-gray-800">
                           Type of stay
                         </h1>
@@ -753,7 +756,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       </div>
                     )}
                     {stay.capacity && (
-                      <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center gap-1">
+                      <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center md:gap-1">
                         <h1 className="font-bold text-base md:text-lg text-gray-800">
                           Capacity
                         </h1>
@@ -761,7 +764,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       </div>
                     )}
                     {stay.rooms && (
-                      <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center gap-1">
+                      <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center md:gap-1">
                         <h1 className="font-bold text-base md:text-lg text-gray-800">
                           Bedrooms
                         </h1>
@@ -771,7 +774,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       </div>
                     )}
                     {stay.beds && (
-                      <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center gap-1">
+                      <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center md:gap-1">
                         <h1 className="font-bold text-base md:text-lg text-gray-800">
                           Beds
                         </h1>
@@ -781,7 +784,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       </div>
                     )}
                     {stay.bathrooms && (
-                      <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center gap-1">
+                      <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center md:gap-1">
                         <h1 className="font-bold text-base md:text-lg text-gray-800">
                           Bathrooms
                         </h1>
@@ -791,7 +794,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       </div>
                     )}
                     {stay.views > 0 && (
-                      <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center gap-1">
+                      <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center md:gap-1">
                         <h1 className="font-bold text-base md:text-lg text-gray-800">
                           Views
                         </h1>
@@ -1738,86 +1741,39 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                 </div>
               )}
             </div>
-
-            {stay.inclusions.length > 0 && (
-              <>
-                <div className="mb-3 mt-4">
-                  <span className="font-bold text-lg">inclusions</span>
-                </div>
-
-                <div className="flex gap-2 flex-wrap">
-                  {stay.inclusions.map((inclusion, index) => (
-                    <div key={index} className="w-full md:w-[48%]">
-                      <ListItem>{inclusion.name}</ListItem>
-                    </div>
-                  ))}
-                </div>
-              </>
-            )}
-
-            {stay.facts.length > 0 && (
-              <>
-                <div className="mb-3 mt-4">
-                  <span className="font-bold text-lg">Other facts</span>
-                </div>
-
-                <div className="flex gap-2 flex-wrap">
-                  {stay.facts.map((fact, index) => (
-                    <div key={index} className="w-full md:w-[48%]">
-                      <ListItem>{fact.name}</ListItem>
-                    </div>
-                  ))}
-                </div>
-              </>
-            )}
           </Element>
 
-          {/* ammenities */}
-          <Element
-            name="amenities"
-            className="flex flex-col md:flex-row gap-3 justify-between pt-10"
-          >
-            <div className="w-full">
-              <div className="mb-3">
-                <span className="font-bold text-xl">Amenities</span>
-              </div>
-
-              <Amenities amenities={stay}></Amenities>
-
-              {stay.other_amenities.length > 0 && (
-                <>
-                  <div className="mb-3 mt-4">
-                    <span className="font-bold text-lg">Other amenities</span>
-                  </div>
-
-                  <div className="flex gap-2 flex-wrap">
-                    {stay.other_amenities.map((amenities, index) => (
-                      <div key={index} className="w-full md:w-[48%]">
-                        <ListItem>{amenities}</ListItem>
-                      </div>
-                    ))}
-                  </div>
-                </>
-              )}
-            </div>
-          </Element>
-
-          {/* Experiences */}
-          {stay.experiences_included.length > 0 && (
+          {stay.extras_included.length > 0 && (
             <Element
               name="experiences"
               className="flex flex-col md:flex-row gap-3 justify-between pt-10 "
             >
               <div className="">
-                <div className="mb-3">
-                  <span className="font-bold text-xl">
-                    Additional Experiences
-                  </span>
+                {stay.inclusions.length > 0 && (
+                  <>
+                    <div className="mb-3">
+                      <span className="font-bold text-xl">
+                        Included activities
+                      </span>
+                    </div>
+
+                    <div className="flex gap-2 flex-wrap">
+                      {stay.inclusions.map((inclusion, index) => (
+                        <div key={index} className="w-full md:w-[48%]">
+                          <ListItem>{inclusion.name}</ListItem>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                )}
+
+                <div className="mb-3 mt-4">
+                  <span className="font-bold text-lg">Extras</span>
                 </div>
 
                 {!showMoreExperiences && (
                   <div className="flex flex-wrap gap-2 px-2">
-                    {stay.experiences_included
+                    {stay.extras_included
                       .slice(0, 5)
                       .map((experience, index) => (
                         <div key={index} className="w-[48%]">
@@ -1829,7 +1785,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
                 {showMoreExperiences && (
                   <div className="flex flex-wrap gap-2 px-2">
-                    {stay.experiences_included.map((experience, index) => (
+                    {stay.extras_included.map((experience, index) => (
                       <div key={index} className="w-[48%]">
                         <ListItem>{experience.name}</ListItem>
                       </div>
@@ -1837,7 +1793,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                   </div>
                 )}
 
-                {!showMoreExperiences && stay.experiences_included.length > 5 && (
+                {!showMoreExperiences && stay.extras_included.length > 5 && (
                   <div
                     onClick={() => {
                       setShowMoreExperiences(true);
@@ -1860,7 +1816,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                   </div>
                 )}
 
-                {showMoreExperiences && stay.experiences_included.length > 5 && (
+                {showMoreExperiences && stay.extras_included.length > 5 && (
                   <div
                     onClick={() => {
                       setShowMoreExperiences(false);
@@ -1885,6 +1841,34 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               </div>
             </Element>
           )}
+
+          {/* ammenities */}
+          <Element
+            name="amenities"
+            className="flex flex-col md:flex-row gap-3 justify-between pt-10"
+          >
+            <div className="w-full">
+              <div className="mb-3">
+                <span className="font-bold text-xl">Amenities</span>
+              </div>
+
+              <Amenities amenities={stay}></Amenities>
+
+              {stay.facts.length > 0 && (
+                <div className="mt-4 ml-2">
+                  <div className="flex gap-2 flex-wrap">
+                    {stay.facts.map((fact, index) => (
+                      <div key={index} className="w-full md:w-[48%]">
+                        <ListItem>{fact.name}</ListItem>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </Element>
+
+          {/* Experiences */}
 
           {/* best describe as */}
 
@@ -2246,7 +2230,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                   showModal={guestPopup}
                   closeModal={() => setGuestPopup(false)}
                   // className="absolute -left-[410px] -top-[250px] px-4 py-4 !z-[99] w-[400px] bg-white shadow-lg rounded-lg h-fit"
-                  className="w-[500px] absolute top-[20%]"
+                  className="w-[500px] absolute z-50 top-[20%]"
                 >
                   <Select
                     defaultValue={currentTypeOfLodge}

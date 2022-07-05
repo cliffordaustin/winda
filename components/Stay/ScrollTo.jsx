@@ -92,6 +92,23 @@ function ScrollTo({ guestPopup, stay }) {
           <Link
             className="px-4 flex items-center border-b-2 border-transparent"
             activeClass="!border-b-2 !border-slate-800"
+            to="experiences"
+            spy={true}
+            smooth={true}
+            offset={-200}
+            duration={500}
+            onSetActive={() => {
+              slideto(0);
+            }}
+          >
+            <div>Experiences</div>
+          </Link>
+        </SwiperSlide>
+
+        <SwiperSlide className="!w-auto flex cursor-pointer justify-center">
+          <Link
+            className="px-4 flex items-center border-b-2 border-transparent"
+            activeClass="!border-b-2 !border-slate-800"
             to="amenities"
             spy={true}
             smooth={true}
@@ -104,25 +121,6 @@ function ScrollTo({ guestPopup, stay }) {
             <div>Amenities</div>
           </Link>
         </SwiperSlide>
-
-        {stay.experiences_included.length > 0 && (
-          <SwiperSlide className="!w-auto flex cursor-pointer justify-center">
-            <Link
-              className="px-4 flex items-center border-b-2 border-transparent"
-              activeClass="!border-b-2 !border-slate-800"
-              to="experiences"
-              spy={true}
-              smooth={true}
-              offset={-200}
-              duration={500}
-              onSetActive={() => {
-                slideto(0);
-              }}
-            >
-              <div>Experiences</div>
-            </Link>
-          </SwiperSlide>
-        )}
 
         <SwiperSlide className="!w-auto flex cursor-pointer justify-center">
           <Link
