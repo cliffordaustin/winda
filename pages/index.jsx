@@ -308,7 +308,7 @@ export default function Home({ userProfile }) {
             content="initial-scale=1.0, width=device-width"
           />
         </Head>
-        <TopBanner></TopBanner>
+        {/* <TopBanner></TopBanner> */}
 
         <div>
           {/* <div

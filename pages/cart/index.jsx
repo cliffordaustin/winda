@@ -773,14 +773,16 @@ export async function getServerSideProps(context) {
           await axios
             .get(`${process.env.NEXT_PUBLIC_baseURL}/stays/${item.slug}/`)
             .then((res) => {
+              console.log(res.data);
               cartItems.push({
                 ...res.data,
                 from_date: item.from_date,
                 to_date: item.to_date,
                 num_of_adults: item.num_of_adults,
                 num_of_children: item.num_of_children,
+                num_of_adults_non_resident: item.num_of_adults_non_resident,
+                num_of_children_non_resident: item.num_of_children_non_resident,
                 plan: item.plan,
-                non_resident: item.non_resident,
               });
             })
             .catch((err) => {
@@ -793,10 +795,15 @@ export async function getServerSideProps(context) {
               activitiesCart.push({
                 ...res.data,
                 number_of_people: item.number_of_people,
+                number_of_people_non_resident:
+                  item.number_of_people_non_resident,
                 number_of_sessions: item.number_of_sessions,
+                number_of_sessions_non_resident:
+                  item.number_of_sessions_non_resident,
                 number_of_groups: item.number_of_groups,
+                number_of_groups_non_resident:
+                  item.number_of_groups_non_resident,
                 from_date: item.from_date,
-                non_resident: item.non_resident,
                 pricing_type: item.pricing_type,
               });
             })
