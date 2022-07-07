@@ -98,6 +98,8 @@ function TripDetail({ userProfile, userTrips, trip }) {
 
   const [loading, setLoading] = useState(false);
 
+  const [showMoreExperiences, setShowMoreExperiences] = useState(false);
+
   const addToTrip = async () => {
     setLoading(true);
 
@@ -704,7 +706,9 @@ function TripDetail({ userProfile, userTrips, trip }) {
                   {trip.stay.inclusions.length > 0 && (
                     <>
                       <div className="mb-3 mt-4">
-                        <span className="font-bold text-lg">inclusions</span>
+                        <span className="font-bold text-xl">
+                          Included activities
+                        </span>
                       </div>
 
                       <div className="flex gap-2 flex-wrap">
@@ -717,20 +721,77 @@ function TripDetail({ userProfile, userTrips, trip }) {
                     </>
                   )}
 
-                  {trip.stay.facts.length > 0 && (
-                    <>
-                      <div className="mb-3 mt-4">
-                        <span className="font-bold text-lg">Other facts</span>
-                      </div>
+                  <div className="mb-3 mt-4">
+                    <span className="font-bold text-lg">Extras</span>
+                  </div>
 
-                      <div className="flex gap-2 flex-wrap">
-                        {trip.stay.facts.map((fact, index) => (
-                          <div key={index} className="w-full md:w-[48%]">
-                            <ListItem>{fact.name}</ListItem>
+                  {!showMoreExperiences && (
+                    <div className="flex flex-wrap gap-2 px-2">
+                      {trip.stay.extras_included
+                        .slice(0, 5)
+                        .map((experience, index) => (
+                          <div key={index} className="w-[48%]">
+                            <ListItem>{experience.name}</ListItem>
                           </div>
                         ))}
+                    </div>
+                  )}
+
+                  {showMoreExperiences && (
+                    <div className="flex flex-wrap gap-2 px-2">
+                      {trip.stay.extras_included.map((experience, index) => (
+                        <div key={index} className="w-[48%]">
+                          <ListItem>{experience.name}</ListItem>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {!showMoreExperiences &&
+                    trip.stay.extras_included.length > 5 && (
+                      <div
+                        onClick={() => {
+                          setShowMoreExperiences(true);
+                        }}
+                        className="font-bold text-blue-700 mt-2 flex items-center gap-0.5 cursor-pointer ml-2 mb-1"
+                      >
+                        <span>Read more</span>{" "}
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5 mt-1"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
                       </div>
-                    </>
+                    )}
+
+                  {showMoreExperiences && trip.stay.extras_included.length > 5 && (
+                    <div
+                      onClick={() => {
+                        setShowMoreExperiences(false);
+                      }}
+                      className="font-bold text-blue-700 mt-2 flex items-center gap-0.5 cursor-pointer ml-2 mb-1"
+                    >
+                      <span>Read less</span>{" "}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5 mt-1"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
                   )}
 
                   <div className="flex flex-col md:flex-row gap-3 justify-between pt-10">
@@ -741,24 +802,16 @@ function TripDetail({ userProfile, userTrips, trip }) {
 
                       <Amenities amenities={trip.stay}></Amenities>
 
-                      {trip.stay.other_amenities.length > 0 && (
-                        <>
-                          <div className="mb-3 mt-4">
-                            <span className="font-bold text-lg">
-                              Other amenities
-                            </span>
-                          </div>
-
+                      {trip.stay.facts.length > 0 && (
+                        <div className="mt-4 ml-2">
                           <div className="flex gap-2 flex-wrap">
-                            {trip.stay.other_amenities.map(
-                              (amenities, index) => (
-                                <div key={index} className="w-full md:w-[48%]">
-                                  <ListItem>{amenities}</ListItem>
-                                </div>
-                              )
-                            )}
+                            {trip.stay.facts.map((fact, index) => (
+                              <div key={index} className="w-full md:w-[48%]">
+                                <ListItem>{fact.name}</ListItem>
+                              </div>
+                            ))}
                           </div>
-                        </>
+                        </div>
                       )}
                     </div>
                   </div>

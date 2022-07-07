@@ -5,6 +5,7 @@ import { Provider } from "react-redux";
 import store, { wrapper } from "../redux/store";
 import NProgress from "nprogress";
 import Router from "next/router";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import "nprogress/nprogress.css";
 
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -22,15 +23,19 @@ Router.events.on("routeChangeError", () => NProgress.done());
 
 function MyApp({ Component, pageProps, router }) {
   return (
-    <Provider store={store.store}>
-      <motion.div
-        key={router.route}
-        animate={{ opacity: 1 }}
-        initial={{ opacity: 0 }}
-      >
-        <Component {...pageProps} />
-      </motion.div>
-    </Provider>
+    <GoogleOAuthProvider
+      clientId={process.env.NEXT_PUBLIC_GOOGLE_SOCAIL_AUTH_CLIENT_ID}
+    >
+      <Provider store={store.store}>
+        <motion.div
+          key={router.route}
+          animate={{ opacity: 1 }}
+          initial={{ opacity: 0 }}
+        >
+          <Component {...pageProps} />
+        </motion.div>
+      </Provider>
+    </GoogleOAuthProvider>
   );
 }
 

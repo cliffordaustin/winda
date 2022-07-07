@@ -37,7 +37,7 @@ function UserDropdown({
           />
         </svg>
       )}
-      {userProfile.profile_pic && (
+      {userProfile && userProfile.profile_pic && (
         <div className="relative w-7 h-7 rounded-full">
           <Image
             layout="fill"
@@ -49,7 +49,19 @@ function UserDropdown({
         </div>
       )}
 
-      {!userProfile.profile_pic && userProfile && (
+      {userProfile && !userProfile.profile_pic && userProfile.avatar_url && (
+        <div className="relative w-7 h-7 rounded-full">
+          <Image
+            layout="fill"
+            alt="profile image of a user"
+            className="object-cover rounded-full"
+            src={userProfile.avatar_url}
+            priority
+          ></Image>
+        </div>
+      )}
+
+      {!userProfile.profile_pic && userProfile && !userProfile.avatar_url && (
         <div className="relative w-7 h-7 rounded-full bg-[#303960] text-white font-bold flex items-center text-sm justify-center">
           {fullName
             .split(" ")

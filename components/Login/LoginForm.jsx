@@ -1,16 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Input from "../ui/Input";
 import Button from "../ui/Button";
 import LoadingSpinerChase from "../ui/LoadingSpinerChase";
 import * as Yup from "yup";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
+import { GoogleLogin } from "@react-oauth/google";
+import { useGoogleLogin } from "@react-oauth/google";
 
 import { useFormik } from "formik";
 
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../../redux/actions/auth";
+import { responseGoogle, failureResponseGoogle } from "../../lib/socialSignin";
+import { login, signinWithGoogle } from "../../redux/actions/auth";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+
+// const { gapi } = dynamic(import("gapi-script"), {
+//   ssr: false,
+// });
 
 export default function Login(props) {
   const [state, setState] = useState({
@@ -65,6 +73,21 @@ export default function Login(props) {
     },
   };
 
+  // const initGapi = async () => {
+  //   const gapi = await import("gapi-script").then((pack) => pack.gapi);
+  //   gapi.load("client:auth2", () => {
+  //     gapi.client.init({
+  //       clientId: process.env.NEXT_PUBLIC_GOOGLE_SOCAIL_AUTH_CLIENT_ID,
+  //       scope: "email",
+  //       plugin_name: "Auth system",
+  //     });
+  //   });
+  // };
+
+  // useEffect(() => {
+  //   initGapi();
+  // }, []);
+
   const [loading, setLoading] = useState(false);
 
   const changeShowPasswordToFalse = () => {
@@ -74,6 +97,19 @@ export default function Login(props) {
   const changeShowPasswordToTrue = () => {
     setState({ ...state, showPassword: true });
   };
+
+  const socialLogin = useGoogleLogin({
+    onSuccess: (tokenResponse) =>
+      dispatch(
+        signinWithGoogle(
+          {
+            access_token: tokenResponse.access_token,
+          },
+          router
+        )
+      ),
+    onFailure: (tokenResponse) => failureResponseGoogle(tokenResponse),
+  });
   return (
     <div className="flex flex-col relative items-center sm:px-16 md:px-6 px-6 justify-center pb-6 h-full">
       {loginError ? (
@@ -164,6 +200,7 @@ export default function Login(props) {
           <div className="flex-grow h-px bg-gray-300"></div>
         </div>
         <Button
+          onClick={socialLogin}
           type="submit"
           className="mt-8 w-full !py-3 !text-black !bg-white hover:!bg-gray-100 !border !border-gray-300 flex justify-center items-center gap-2"
         >
@@ -196,6 +233,16 @@ export default function Login(props) {
           </svg>
           <span>Sign in with Google</span>
         </Button>
+        {/* <GoogleLogin
+          clientId={process.env.NEXT_PUBLIC_GOOGLE_SOCAIL_AUTH_CLIENT_ID}
+          render={(renderProps) => (
+            
+          )}
+          onSuccess={sendGoogleResponse}
+          onFailure={failureResponseGoogle}
+          cookiePolicy={"single_host_origin"}
+        /> */}
+
         <h3 className="mt-6 font-bold text-center">
           Don&apos;t have an account?{" "}
           <Link

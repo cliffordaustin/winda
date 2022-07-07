@@ -36,6 +36,7 @@ import ThemeFilter from "../../components/Lodging/ThemeFilter";
 import Cookies from "js-cookie";
 import { route } from "next/dist/server/router";
 import MobileSearchModal from "../../components/Stay/MobileSearchModal";
+import { useGoogleOneTapLogin } from "@react-oauth/google";
 
 function Stays({
   userProfile,
@@ -88,6 +89,15 @@ function Stays({
     showFilterPopup: false,
   };
   const router = useRouter();
+
+  // useGoogleOneTapLogin({
+  //   onSuccess: (credentialResponse) => {
+  //     console.log(credentialResponse);
+  //   },
+  //   onError: () => {
+  //     console.log("Login Failed");
+  //   },
+  // });
 
   const isMounted = useRef(false);
 
@@ -1683,7 +1693,9 @@ function Stays({
             <ReactPaginate
               breakLabel="..."
               nextLabel={<Icon icon="bx:chevron-right" className="w-7 h-7" />}
+              disabledClassName="text-gray-300"
               onPageChange={handlePageClick}
+              forcePage={parseInt(router.query.page) - 1 || 0}
               pageRangeDisplayed={pageSize}
               pageCount={totalPages}
               previousLabel={

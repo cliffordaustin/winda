@@ -7,6 +7,8 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import getToken from "../lib/getToken";
 import { useRouter } from "next/router";
+import { useGoogleOneTapLogin } from "@react-oauth/google";
+import jwt_decode from "jwt-decode";
 
 import Navbar from "../components/Home/InHeaderNavbar";
 import Search from "../components/Home/Search";
@@ -74,7 +76,14 @@ export default function Home({ userProfile }) {
     showNeedADriver: false,
   };
 
-  useEffect(() => {}, []);
+  // useGoogleOneTapLogin({
+  //   onSuccess: (credentialResponse) => {
+  //     console.log(jwt_decode(credentialResponse.credential));
+  //   },
+  //   onError: () => {
+  //     console.log("Login Failed");
+  //   },
+  // });
 
   useEffect(() => {
     if (process.browser) {
