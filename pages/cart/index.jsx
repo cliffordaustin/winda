@@ -773,7 +773,6 @@ export async function getServerSideProps(context) {
           await axios
             .get(`${process.env.NEXT_PUBLIC_baseURL}/stays/${item.slug}/`)
             .then((res) => {
-              console.log(res.data);
               cartItems.push({
                 ...res.data,
                 from_date: item.from_date,

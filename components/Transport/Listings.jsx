@@ -8,7 +8,7 @@ import Cookies from "js-cookie";
 import Listing from "./Listing";
 import ClientOnly from "../ClientOnly";
 
-function Listings({ userProfile, transports }) {
+function Listings({ userProfile, transports, setCurrentListing }) {
   const [slugIsCorrect, setSlugIsCorrect] = useState(false);
 
   const router = useRouter();
@@ -44,13 +44,14 @@ function Listings({ userProfile, transports }) {
 
   return (
     <ClientOnly>
-      <div className="w-full flex px-3 md:px-6 smUpdate:justify-center md:justify-start md:ml-0 flex-wrap gap-4">
+      <div className="w-full flex px-3 md:px-2 smUpdate:justify-center md:justify-start md:ml-0 flex-wrap gap-8 sm:gap-3 xl:gap-8">
         {transports.map((transport, index) => (
           <Listing
             slugIsCorrect={slugIsCorrect}
             key={index}
             listing={transport}
             userProfile={userProfile}
+            setCurrentListing={setCurrentListing}
           ></Listing>
         ))}
       </div>

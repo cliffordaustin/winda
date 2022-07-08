@@ -19,11 +19,16 @@ import ClientOnly from "../../components/ClientOnly";
 import TransportTypes from "../../components/Transport/TransportTypes";
 import MobileTransportTypes from "../../components/Transport/MobileTransportTypes";
 import TransportCategories from "../../components/Transport/TransportCategories";
+import PopupModal from "../../components/ui/Modal";
+import Modal from "../../components/ui/FullScreenMobileModal";
 import Listings from "../../components/Transport/Listings";
 import FilterTags from "../../components/Transport/FilterTags";
 import MobileSearchModal from "../../components/Transport/MobileSearchModal";
 import Button from "../../components/ui/Button";
 import Footer from "../../components/Home/Footer";
+import Carousel from "../../components/ui/Carousel";
+import { Icon } from "@iconify/react";
+import ListItem from "../../components/ui/ListItem";
 
 const Transport = ({ userProfile, transport }) => {
   const router = useRouter();
@@ -298,6 +303,8 @@ const Transport = ({ userProfile, transport }) => {
       },
     });
   };
+
+  const [currentListing, setCurrentListing] = useState(null);
 
   return (
     <div
@@ -1042,8 +1049,195 @@ const Transport = ({ userProfile, transport }) => {
         </div>
 
         <div className="relative h-full md:h-screen overflow-y-auto md:top-56 md:px-4 md:w-[68%] lg:w-[78%]">
-          <Listings userProfile={userProfile} transports={transport}></Listings>
+          <Listings
+            setCurrentListing={setCurrentListing}
+            userProfile={userProfile}
+            transports={transport}
+          ></Listings>
         </div>
+      </div>
+
+      <div className="hidden md:block">
+        <PopupModal
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+          showModal={currentListing ? true : false}
+          closeModal={() => setCurrentListing(null)}
+          // className="absolute -left-[410px] -top-[250px] px-4 py-4 !z-[99] w-[400px] bg-white shadow-lg rounded-lg h-fit"
+          className="w-[600px] h-[600px] overflow-y-scroll absolute z-50 top-[10%]"
+        >
+          {currentListing && (
+            <>
+              <div className="h-[200px] !-ml-4 !-mr-4 !-mt-4 relative">
+                <div className="px-2 py-0.5 rounded-full text-sm z-10 bg-blue-300 absolute left-3 bottom-3">
+                  or similar
+                </div>
+                <Carousel
+                  images={currentListing.transportation_images
+                    .sort((x, y) => y.main - x.main)
+                    .map((image) => {
+                      return image.image;
+                    })}
+                  imageClass="rounded-tl-md rounded-tr-2xl"
+                ></Carousel>
+              </div>
+
+              <div className="mt-2 mb-2">
+                <div className="text-lg font-semibold w-full text-gray-700 truncate">
+                  {currentListing.vehicle_make}
+                </div>
+                <div className="text-sm ml-1 capitalize font-bold">
+                  {currentListing.type_of_car.toLowerCase()}
+                </div>
+
+                <div className="py-2 border-t border-b border-gray-400 px-2 my-2 text-sm text-gray-600 flex justify-between items-center">
+                  <div className="flex items-center gap-0.5">
+                    <Icon className="w-4 h-4" icon="carbon:user-filled" />
+                    <p>{currentListing.capacity}</p>
+                  </div>
+                  <div className="flex items-center gap-0.5">
+                    <Icon className="w-4 h-4" icon="bi:bag-fill" />
+                    <p>{currentListing.bags}</p>
+                  </div>
+                  <div className="flex items-center gap-0.5">
+                    <Icon
+                      className="w-4 h-4"
+                      icon="icon-park-solid:manual-gear"
+                    />
+                    <p className="capitalize">
+                      {currentListing.transmission.toLowerCase()}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-0.5">
+                    <Icon className="w-4 h-4" icon="ic:baseline-severe-cold" />
+                    <p className="capitalize">
+                      {currentListing.has_air_condition ? "AC" : "No AC"}
+                    </p>
+                  </div>
+                </div>
+
+                {currentListing.driver_operates_within.length > 0 && (
+                  <h1 className="font-bold text-lg mb-2">
+                    Car operates within
+                  </h1>
+                )}
+                {currentListing.driver_operates_within.map((item, index) => (
+                  <ListItem key={index}>{item.city}</ListItem>
+                ))}
+
+                {currentListing.included_in_price.length > 0 && (
+                  <h1 className="font-bold text-lg mb-2 mt-4">
+                    Included in price
+                  </h1>
+                )}
+                {currentListing.included_in_price.map((item, index) => (
+                  <ListItem key={index}>{item.included_in_price}</ListItem>
+                ))}
+
+                {currentListing.policy && (
+                  <h1 className="mt-4 font-bold">Please take note</h1>
+                )}
+
+                {currentListing.policy && (
+                  <p className="mt-2">{currentListing.policy}</p>
+                )}
+              </div>
+            </>
+          )}
+        </PopupModal>
+      </div>
+
+      <div className="md:hidden">
+        <Modal
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+          showModal={currentListing ? true : false}
+          closeModal={() => setCurrentListing(null)}
+          // className="absolute -left-[410px] -top-[250px] px-4 py-4 !z-[99] w-[400px] bg-white shadow-lg rounded-lg h-fit"
+          className="overflow-y-scroll"
+          title={"Transport detail"}
+        >
+          {currentListing && (
+            <>
+              <div className="h-[200px] relative">
+                <div className="px-2 py-0.5 rounded-full text-sm z-10 bg-blue-300 absolute left-3 bottom-3">
+                  or similar
+                </div>
+                <Carousel
+                  images={currentListing.transportation_images
+                    .sort((x, y) => y.main - x.main)
+                    .map((image) => {
+                      return image.image;
+                    })}
+                  imageClass="rounded-tl-md rounded-tr-2xl"
+                ></Carousel>
+              </div>
+
+              <div className="mt-2 mb-2 px-4">
+                <div className="text-lg font-semibold w-full text-gray-700 truncate">
+                  {currentListing.vehicle_make}
+                </div>
+                <div className="text-sm ml-1 capitalize font-bold">
+                  {currentListing.type_of_car.toLowerCase()}
+                </div>
+
+                <div className="py-2 border-t border-b border-gray-400 px-2 my-2 text-sm text-gray-600 flex justify-between items-center">
+                  <div className="flex items-center gap-0.5">
+                    <Icon className="w-4 h-4" icon="carbon:user-filled" />
+                    <p>{currentListing.capacity}</p>
+                  </div>
+                  <div className="flex items-center gap-0.5">
+                    <Icon className="w-4 h-4" icon="bi:bag-fill" />
+                    <p>{currentListing.bags}</p>
+                  </div>
+                  <div className="flex items-center gap-0.5">
+                    <Icon
+                      className="w-4 h-4"
+                      icon="icon-park-solid:manual-gear"
+                    />
+                    <p className="capitalize">
+                      {currentListing.transmission.toLowerCase()}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-0.5">
+                    <Icon className="w-4 h-4" icon="ic:baseline-severe-cold" />
+                    <p className="capitalize">
+                      {currentListing.has_air_condition ? "AC" : "No AC"}
+                    </p>
+                  </div>
+                </div>
+
+                {currentListing.driver_operates_within.length > 0 && (
+                  <h1 className="font-bold text-lg mb-2">
+                    Car operates within
+                  </h1>
+                )}
+                {currentListing.driver_operates_within.map((item, index) => (
+                  <ListItem key={index}>{item.city}</ListItem>
+                ))}
+
+                {currentListing.included_in_price.length > 0 && (
+                  <h1 className="font-bold text-lg mb-2 mt-4">
+                    Included in price
+                  </h1>
+                )}
+                {currentListing.included_in_price.map((item, index) => (
+                  <ListItem key={index}>{item.included_in_price}</ListItem>
+                ))}
+
+                {currentListing.policy && (
+                  <h1 className="mt-4 font-bold">Please take note</h1>
+                )}
+
+                {currentListing.policy && (
+                  <p className="mt-2">{currentListing.policy}</p>
+                )}
+              </div>
+            </>
+          )}
+        </Modal>
       </div>
 
       <div className="mt-12 md:hidden">
