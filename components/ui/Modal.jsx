@@ -97,7 +97,7 @@ Modal.propTypes = {
   showModal: PropTypes.bool,
   closeModal: PropTypes.func,
   className: PropTypes.string,
-  children: PropTypes.any.isRequired,
+  children: PropTypes.any,
   backdropClassName: PropTypes.string,
 };
 

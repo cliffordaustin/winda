@@ -583,10 +583,6 @@ const CartItem = ({
               </h1>
               {transportPage && (
                 <div className="flex items-center gap-2">
-                  <div
-                    className="w-2 h-2 rounded-full"
-                    style={{ backgroundColor: transport.vehicle_color }}
-                  ></div>
                   <div className="text-gray-500 flex gap-[3px] lowercase">
                     <h1>{transport.vehicle_make}</h1>
                     <span className="-mt-[5px] font-bold text-lg text-black">
@@ -710,7 +706,7 @@ const CartItem = ({
             </div>
 
             {transportPage && numberOfDays && (
-              <div className="flex gap-0.5 items-center mt-2">
+              <div className="flex items-center mt-2 gap-1">
                 <div className="w-4 h-4">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -988,7 +984,7 @@ const CartItem = ({
 
             {transportPage && (
               <div className="flex items-center gap-1 text-xs my-1 font-bold truncate flex-wrap">
-                <span className="">
+                <span className="text-sm font-bold">
                   {moment(transportFromDate).format("Do MMMM YYYY")}
                 </span>
               </div>
@@ -1113,7 +1109,9 @@ const CartItem = ({
                       : activitiesPage
                       ? router.push(`/experiences/${activity.slug}`)
                       : transportPage
-                      ? router.push(`/transport/${transport.slug}`)
+                      ? router.push(
+                          `/transport/?transportSlug=${transport.slug}`
+                        )
                       : null;
                   }}
                 >

@@ -75,10 +75,9 @@ const Search = ({
               onChange={(event) => {
                 onChange(event);
               }}
-              onBlur={() => {
-                setAutoCompleteSearch([]);
-              }}
-              on
+              // onBlur={() => {
+              //   setAutoCompleteSearch([]);
+              // }}
             ></Input>
 
             <div className="h-full w-10 mr-1 flex justify-center items-center">
@@ -116,6 +115,11 @@ const Search = ({
                 <div
                   key={index}
                   onMouseDown={(e) => {
+                    setLocation(item.place_name);
+                    setAutoCompleteSearch([]);
+                    search(item.place_name);
+                  }}
+                  onClick={(e) => {
                     setLocation(item.place_name);
                     setAutoCompleteSearch([]);
                     search(item.place_name);

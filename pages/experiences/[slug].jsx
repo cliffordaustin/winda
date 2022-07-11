@@ -628,13 +628,6 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                     )}
                   </div>
 
-                  {/* <h1 className="text-sm text-gray-600 mt-2">
-                    This experience has a duration of{" "}
-                    {moment
-                      .duration(activity.duration_of_activity, "minutes")
-                      .humanize()}
-                  </h1> */}
-
                   {activity.views > 0 && activity.views === 1 && (
                     <div className="mt-2 text-gray-600">
                       {activity.views} person has viewed this listing

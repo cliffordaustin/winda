@@ -142,6 +142,23 @@ function Navbar({
 
   const [showPopup, setShowPopup] = useState(false);
 
+  const priceOfTransportCart = (item) => {
+    let price = 0;
+    if (Cookies.get("token")) {
+      price +=
+        item.number_of_days * item.transport.price_per_day +
+        (item.user_need_a_driver
+          ? item.transport.additional_price_with_a_driver
+          : 0);
+    } else {
+      price +=
+        item.number_of_days * item.price_per_day +
+        (item.user_need_a_driver ? item.additional_price_with_a_driver : 0);
+    }
+
+    return price;
+  };
+
   return (
     <div className="relative flex items-center justify-between sm:px-8 px-6 md:px-12 lg:px-24 py-4">
       <div className="flex items-center gap-8">
@@ -262,11 +279,11 @@ function Navbar({
           {!cartLoading && (
             <div className="">
               {cart.length > 0 && (
-                <div className="mb-4 mt-2 ml-4 text-lg font-bold">
+                <div className="mb-2 mt-2 ml-4 text-lg font-bold">
                   Stays - Your Basket({cart.length})
                 </div>
               )}
-              <div className="flex flex-wrap mb-5 justify-between">
+              <div className="flex flex-wrap justify-between">
                 {cart.map((item, index) => {
                   return (
                     <div key={index} className="w-full">
@@ -318,11 +335,11 @@ function Navbar({
               </div>
 
               {activitiesCart.length > 0 && (
-                <div className="mb-4 mt-2 ml-4 text-lg font-bold">
+                <div className="mb-2 ml-4 text-lg font-bold">
                   Experiences - Your Basket({activitiesCart.length})
                 </div>
               )}
-              <div className="flex flex-wrap mb-5 justify-between">
+              <div className="flex flex-wrap justify-between">
                 {activitiesCart.map((item, index) => (
                   <div key={index} className="w-full">
                     <CartItem
@@ -382,7 +399,7 @@ function Navbar({
               </div>
 
               {transportCart.length > 0 && (
-                <div className="mb-4 mt-2 ml-4 text-lg font-bold">
+                <div className="mb-4 ml-4 text-lg font-bold">
                   Transport - Your Basket({transportCart.length})
                 </div>
               )}

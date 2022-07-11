@@ -232,7 +232,13 @@ function Listing({ listing, userProfile, slugIsCorrect, setCurrentListing }) {
 
             <Button
               onClick={() => {
-                setCurrentListing(listing);
+                // setCurrentListing(listing);
+                router.push({
+                  query: {
+                    ...router.query,
+                    transportSlug: listing.slug,
+                  },
+                });
               }}
               className="flex w-full items-center gap-1 !px-0 !py-1.5 font-bold !bg-transparent border-2 border-blue-500 !text-black"
             >

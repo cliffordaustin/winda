@@ -478,8 +478,8 @@ const Cart = ({
                     }
                     plan={
                       Cookies.get("token")
-                        ? allItemsInCart[index].plan
-                        : item.plan
+                        ? allItemsInCart[index].plan || ""
+                        : item.plan || ""
                     }
                     stayPage={true}
                   ></CartItem>

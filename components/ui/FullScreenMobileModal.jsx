@@ -114,7 +114,7 @@ Modal.propTypes = {
   showModal: PropTypes.bool,
   closeModal: PropTypes.func,
   className: PropTypes.string,
-  children: PropTypes.any.isRequired,
+  children: PropTypes.any,
   containerHeight: PropTypes.number,
   closeAllPopups: PropTypes.func,
   title: PropTypes.string,
