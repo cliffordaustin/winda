@@ -51,6 +51,10 @@ import "swiper/css/effect-creative";
 import "swiper/css";
 import TripTransportCard from "../../../../components/Order/TripTransportCard";
 import Search from "../../../../components/Trip/Search";
+import {
+  getStayPrice,
+  getActivityPrice,
+} from "../../../../lib/getTotalCartPrice";
 import BottomTooltip from "../../../../components/ui/BottomTooltip";
 import TopTooltip from "../../../../components/ui/TopTooltip";
 
@@ -96,23 +100,27 @@ function PlanTrip({
           new Date(item.to_date).getDate() - new Date(item.from_date).getDate();
         if (item.stay) {
           price +=
-            stayPriceOfPlan(item.stay_plan, item.stay_non_resident, item.stay) *
-            (item.stay_num_of_adults + item.stay_num_of_children) *
-            nights;
+            getStayPrice(
+              item.stay_plan,
+              item.stay,
+              item.stay_num_of_adults,
+              item.stay_num_of_children,
+              item.stay_num_of_children_non_resident,
+              item.stay_num_of_adults_non_resident
+            ) * (nights || 1);
         }
 
         if (item.activity) {
-          price +=
-            activityPriceOfPlan(
-              item.activity_pricing_type,
-              item.activity_non_resident,
-              item.activity
-            ) *
-            activityNumOfGuests(item.activity_pricing_type, {
-              number_of_people: item.activity_number_of_people,
-              number_of_groups: item.activity_number_of_groups,
-              number_of_sessions: item.activity_number_of_sessions,
-            });
+          price += getActivityPrice(
+            item.activity_pricing_type,
+            item.activity,
+            item.activity_number_of_people,
+            item.activity_number_of_sessions,
+            item.activity_number_of_groups,
+            item.activity_number_of_people_non_resident,
+            item.activity_number_of_sessions_non_resident,
+            item.activity_number_of_groups_non_resident
+          );
         }
 
         if (item.transport) {
@@ -766,7 +774,6 @@ function PlanTrip({
                       tripSlug={item.slug}
                       setInfoPopup={setInfoPopup}
                       setShowInfo={setShowInfo}
-                      stay
                     ></Trip>
                     {order.length - 1 !== index && (
                       <div className="flex items-center">

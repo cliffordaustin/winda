@@ -36,7 +36,9 @@ function TopTooltip({
         className="h-5 w-5 cursor-pointer text-gray-500"
         viewBox="0 0 20 20"
         fill="currentColor"
-        onClick={changeTooltipState}
+        onClick={(e) => {
+          changeTooltipState(e);
+        }}
       >
         <path
           fillRule="evenodd"

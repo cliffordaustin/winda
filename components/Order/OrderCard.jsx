@@ -9,11 +9,8 @@ import Cookies from "js-cookie";
 import ClientOnly from "../ClientOnly";
 import LoadingSpinerChase from "../ui/LoadingSpinerChase";
 import { priceConversionRateFunc } from "../../lib/PriceRate";
-import {
-  stayPriceOfPlan,
-  activityPriceOfPlan,
-  activityNumOfGuests,
-} from "../../lib/pricePlan";
+import { getStayPrice, getActivityPrice } from "../../lib/getTotalCartPrice";
+import TopTooltip from "../ui/TopTooltip";
 
 const OrderCard = ({
   stay,
@@ -42,12 +39,16 @@ const OrderCard = ({
   groupTripTransport,
   plan,
   pricing_type,
-  non_resident,
   num_of_adults,
   num_of_children,
   number_of_sessions,
   number_of_people,
   number_of_groups,
+  num_of_children_non_resident,
+  num_of_adults_non_resident,
+  number_of_people_non_resident,
+  number_of_sessions_non_resident,
+  number_of_groups_non_resident,
 
   userNeedADriver,
   numberOfDays,
@@ -66,21 +67,30 @@ const OrderCard = ({
 
   const [removeButtonLoading, setRemoveButtonLoading] = useState(false);
 
+  const [showPeopleBooked, setShowPeopleBooked] = useState(false);
+
   const price = () => {
     return stayPage
-      ? stayPriceOfPlan(
-          (plan = plan),
-          (non_resident = non_resident),
-          (stay = stay)
-        ) *
-          (num_of_adults + num_of_children)
+      ? getStayPrice(
+          plan,
+          stay,
+          num_of_adults,
+          num_of_children,
+          num_of_children_non_resident,
+          num_of_adults_non_resident
+        )
       : transportPage
       ? transportPrice
-      : activitiesPage
-      ? activityPriceOfPlan(pricing_type, non_resident, activity)
-      : groupTripTransport
-      ? transportPrice
-      : null;
+      : getActivityPrice(
+          pricing_type,
+          activity,
+          number_of_people,
+          number_of_sessions,
+          number_of_groups,
+          number_of_people_non_resident,
+          number_of_sessions_non_resident,
+          number_of_groups_non_resident
+        );
   };
 
   const itemIsInCart = async () => {
@@ -296,19 +306,12 @@ const OrderCard = ({
                 {activitiesPage ? activity.name : stayPage ? stay.name : ""}
 
                 {transportPage && (
-                  <div className="flex items-center gap-2">
-                    <div
-                      className="w-2 h-2 rounded-full"
-                      style={{ backgroundColor: transport.vehicle_color }}
-                    ></div>
-                    <div className="text-gray-500 flex gap-[3px] lowercase">
-                      <h1>{transport.vehicle_make}</h1>
-                      <span className="-mt-[5px] font-bold text-lg text-black">
-                        .
-                      </span>
-                      <h1>{transport.type_of_car}</h1>
+                  <>
+                    <div className="truncate">{transport.vehicle_make}</div>
+                    <div className="capitalize text-sm font-bold text-blue-500 truncate">
+                      {transport.type_of_car.toLowerCase()}
                     </div>
-                  </div>
+                  </>
                 )}
               </div>
               <ClientOnly>
@@ -385,19 +388,108 @@ const OrderCard = ({
 
             <ClientOnly>
               {stayPage && (
-                <div className="flex items-center gap-0.5 text-xs mb-1 font-bold truncate flex-wrap">
-                  <span>
-                    {num_of_adults} {num_of_adults === 1 ? "Adult" : "Adults"}
-                  </span>
-                  {num_of_children > 0 && (
-                    <>
-                      <span className="font-bold text-xl -mt-3">.</span>
-                      <span>
+                <div className="flex items-center gap-1">
+                  <div className="items-center gap-1 text-xs mt-1 font-bold truncate flex-wrap">
+                    {num_of_adults > 0 && (
+                      <>
+                        {/* <span> */}
+                        {num_of_adults}{" "}
+                        {num_of_adults > 1
+                          ? "Resident Adults"
+                          : "Resident Adult"}
+                        {/* </span> */}
+                      </>
+                    )}
+                    {num_of_children > 0 && (
+                      <>
+                        {" - "}
+                        {/* <span className="font-bold ">.</span> */}
+                        {/* <span> */}
                         {num_of_children}{" "}
-                        {num_of_children === 1 ? "Child" : "Children"}
-                      </span>
-                    </>
-                  )}
+                        {num_of_children > 1
+                          ? "Resident Children"
+                          : "Resident Child"}
+                        {/* </span> */}
+                      </>
+                    )}
+                    {num_of_adults_non_resident > 0 && (
+                      <>
+                        {" - "}
+                        {/* <span className="font-bold ">.</span> */}
+                        {/* <span> */}
+                        {num_of_adults_non_resident}{" "}
+                        {num_of_adults_non_resident > 1
+                          ? "Non-Resident Adults"
+                          : "Non-Resident Adult"}
+                        {/* </span> */}
+                      </>
+                    )}
+                    {num_of_children_non_resident > 0 && (
+                      <>
+                        {" - "}
+                        {/* <span className="font-bold ">.</span> */}
+                        {/* <span> */}
+                        {num_of_children_non_resident}{" "}
+                        {num_of_children_non_resident > 1
+                          ? "Non-Resident Children"
+                          : "Non-Resident Child"}
+                        {/* </span> */}
+                      </>
+                    )}
+                  </div>
+
+                  <TopTooltip
+                    showTooltip={showPeopleBooked}
+                    className="text-sm !w-[240px] font-medium !bg-white border shadow-md"
+                    changeTooltipState={(e) => {
+                      e.stopPropagation();
+                      setShowPeopleBooked(!showPeopleBooked);
+                    }}
+                  >
+                    {num_of_adults > 0 && (
+                      <>
+                        <span>
+                          {num_of_adults}{" "}
+                          {num_of_adults > 1
+                            ? "Resident Adults"
+                            : "Resident Adult"}
+                        </span>
+                      </>
+                    )}
+                    {num_of_children > 0 && (
+                      <>
+                        {" - "}
+                        <span>
+                          {num_of_children}{" "}
+                          {num_of_children > 1
+                            ? "Resident Children"
+                            : "Resident Child"}
+                        </span>
+                      </>
+                    )}
+                    {num_of_adults_non_resident > 0 && (
+                      <>
+                        {" - "}
+                        <span>
+                          {num_of_adults_non_resident}{" "}
+                          {num_of_adults_non_resident > 1
+                            ? "Non-Resident Adults"
+                            : "Non-Resident Adult"}
+                        </span>
+                      </>
+                    )}
+                    {num_of_children_non_resident > 0 && (
+                      <>
+                        {" - "}
+                        <span>
+                          {num_of_children_non_resident}{" "}
+                          {num_of_children_non_resident > 1
+                            ? "Non-Resident Children"
+                            : "Non-Resident Child"}
+                        </span>
+                      </>
+                    )}
+                  </TopTooltip>
                 </div>
               )}
             </ClientOnly>

@@ -104,11 +104,11 @@ const TripTransportCard = ({
             className="w-2 h-2 rounded-full"
             style={{ backgroundColor: transport.vehicle_color }}
           ></div>
-          <div className="text-gray-500 flex gap-[3px] lowercase">
-            <h1>{transport.vehicle_make}</h1>
+          <div className="truncate">{transport.vehicle_make}</div>
+          <div>{transport.type_of_car}</div>
+          {/* <div className="text-gray-500 inline truncate gap-[3px] lowercase">
             <span className="-mt-[5px] font-bold text-lg text-black">.</span>
-            <h1>{transport.type_of_car}</h1>
-          </div>
+          </div> */}
         </div>
 
         <div className="flex gap-1">
@@ -127,19 +127,21 @@ const TripTransportCard = ({
           <div className="text-xs mt-1">/10km</div>
         </div>
 
-        <div className="mt-1 mb-2">
-          <h1 className="font-semibold mb-1 text-sm">Car operates within</h1>
-          <div className="flex flex-wrap">
-            {transport.dropoff_city.split(",").map((city, index) => (
-              <div
-                key={index}
-                className="bg-blue-500 text-xs mt-0.5 text-white px-1 font-bold py-1 mr-1 rounded-full"
-              >
-                {city}
-              </div>
-            ))}
+        {transport.driver_operates_within.length > 0 && (
+          <div className="mt-1 mb-2">
+            <h1 className="font-semibold mb-1 text-sm">Car operates within</h1>
+            <div className="flex flex-wrap">
+              {transport.driver_operates_within.map((location, index) => (
+                <div
+                  key={index}
+                  className="bg-blue-500 text-xs mt-0.5 text-white px-1 font-bold py-1 mr-1 rounded-full"
+                >
+                  {location.city}
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="mt-2">
           <div

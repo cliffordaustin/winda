@@ -427,9 +427,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [showMoreExperiences, setShowMoreExperiences] = useState(false);
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const [nonResident, setNonResident] = useState(false);
-
   const changeLikeState = () => {
     if (Cookies.get("token")) {
       setLiked(false);

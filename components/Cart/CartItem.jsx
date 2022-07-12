@@ -889,9 +889,9 @@ const CartItem = ({
                         {/* </span> */}
                       </>
                     )}
-                    {" - "}
                     {num_of_children > 0 && (
                       <>
+                        {" - "}
                         {/* <span className="font-bold ">.</span> */}
                         {/* <span> */}
                         {num_of_children}{" "}
@@ -901,9 +901,9 @@ const CartItem = ({
                         {/* </span> */}
                       </>
                     )}
-                    {" - "}
                     {num_of_adults_non_resident > 0 && (
                       <>
+                        {" - "}
                         {/* <span className="font-bold ">.</span> */}
                         {/* <span> */}
                         {num_of_adults_non_resident}{" "}
@@ -913,9 +913,9 @@ const CartItem = ({
                         {/* </span> */}
                       </>
                     )}
-                    {" - "}
                     {num_of_children_non_resident > 0 && (
                       <>
+                        {" - "}
                         {/* <span className="font-bold ">.</span> */}
                         {/* <span> */}
                         {num_of_children_non_resident}{" "}

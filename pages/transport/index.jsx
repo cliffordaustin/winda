@@ -1203,10 +1203,17 @@ const Transport = ({ userProfile, transport }) => {
 
       <div className="hidden md:block">
         <PopupModal
-          showModal={currentListing ? true : false}
+          showModal={
+            currentListing && router.query.transportSlug ? true : false
+          }
           closeModal={() => {
             setCurrentListing(null);
-            router.back();
+            router.replace({
+              query: {
+                ...router.query,
+                transportSlug: "",
+              },
+            });
           }}
           // className="absolute -left-[410px] -top-[250px] px-4 py-4 !z-[99] w-[400px] bg-white shadow-lg rounded-lg h-fit"
           className="max-w-[600px] !top-[10%] !py-2 !pt-4 h-[600px]"
@@ -1560,10 +1567,17 @@ const Transport = ({ userProfile, transport }) => {
 
       <div className="md:hidden !relative">
         <Modal
-          showModal={currentListing ? true : false}
+          showModal={
+            currentListing && router.query.transportSlug ? true : false
+          }
           closeModal={() => {
             setCurrentListing(null);
-            router.back();
+            router.replace({
+              query: {
+                ...router.query,
+                transportSlug: "",
+              },
+            });
           }}
           // className="absolute -left-[410px] -top-[250px] px-4 py-4 !z-[99] w-[400px] bg-white shadow-lg rounded-lg h-fit"
           className="remove-scroll !overflow-y-scroll"
