@@ -153,6 +153,14 @@ const OrderCard = ({
             `${process.env.NEXT_PUBLIC_baseURL}/trip/${orderSlug}/`,
             {
               stay_id: null,
+              stay_num_of_adults: 1,
+              stay_num_of_adults_non_resident: null,
+              stay_num_of_children: null,
+              stay_num_of_children_non_resident: null,
+              stay_plan: "STANDARD",
+              from_date: null,
+              to_date: null,
+              stay_is_not_available: false,
             },
             {
               headers: {
@@ -173,6 +181,14 @@ const OrderCard = ({
             `${process.env.NEXT_PUBLIC_baseURL}/trip/${orderSlug}/`,
             {
               activity_id: null,
+              activity_number_of_people: 1,
+              activity_number_of_people_non_resident: null,
+              activity_number_of_sessions: null,
+              activity_number_of_sessions_non_resident: null,
+              activity_number_of_groups: null,
+              activity_number_of_groups_non_resident: null,
+              activity_from_date: null,
+              activity_pricing_type: "PER PERSON",
             },
             {
               headers: {
@@ -193,6 +209,10 @@ const OrderCard = ({
             `${process.env.NEXT_PUBLIC_baseURL}/trip/${orderSlug}/`,
             {
               transport_id: null,
+              transport_number_of_days: 1,
+              transport_from_date: null,
+              user_need_a_driver: false,
+              starting_point: null,
             },
             {
               headers: {
@@ -347,21 +367,7 @@ const OrderCard = ({
                       /for {numberOfDays} day
                     </span>
                   )}
-                  {activitiesPage && pricing_type === "PER PERSON" && (
-                    <span className="inline text-xs mt-1 font-semibold ml-0.5">
-                      /person
-                    </span>
-                  )}
-                  {activitiesPage && pricing_type === "PER SESSION" && (
-                    <span className="inline text-xs mt-1 font-semibold ml-0.5">
-                      /session
-                    </span>
-                  )}
-                  {activitiesPage && pricing_type === "PER GROUP" && (
-                    <span className="inline text-xs mt-1 font-semibold ml-0.5">
-                      /group
-                    </span>
-                  )}
+
                   {userNeedADriver && (
                     <div className="font-bold text-lg ml-1 -mt-1"> . </div>
                   )}
@@ -637,50 +643,63 @@ const OrderCard = ({
             )}
 
             {activitiesPage && (
-              <div className="text-gray-500 flex gap-1 text-sm truncate flex-wrap">
-                {activity.capacity && (
-                  <div className="flex items-center gap-0.5">
-                    <svg
-                      className="w-3 h-3"
-                      xmlns="http://www.w3.org/2000/svg"
-                      aria-hidden="true"
-                      role="img"
-                      width="1em"
-                      height="1em"
-                      preserveAspectRatio="xMidYMid meet"
-                      viewBox="0 0 36 36"
-                    >
-                      <path
-                        fill="currentColor"
-                        d="M12 16.14h-.87a8.67 8.67 0 0 0-6.43 2.52l-.24.28v8.28h4.08v-4.7l.55-.62l.25-.29a11 11 0 0 1 4.71-2.86A6.59 6.59 0 0 1 12 16.14Z"
-                      />
-                      <path
-                        fill="currentColor"
-                        d="M31.34 18.63a8.67 8.67 0 0 0-6.43-2.52a10.47 10.47 0 0 0-1.09.06a6.59 6.59 0 0 1-2 2.45a10.91 10.91 0 0 1 5 3l.25.28l.54.62v4.71h3.94v-8.32Z"
-                      />
-                      <path
-                        fill="currentColor"
-                        d="M11.1 14.19h.31a6.45 6.45 0 0 1 3.11-6.29a4.09 4.09 0 1 0-3.42 6.33Z"
-                      />
-                      <path
-                        fill="currentColor"
-                        d="M24.43 13.44a6.54 6.54 0 0 1 0 .69a4.09 4.09 0 0 0 .58.05h.19A4.09 4.09 0 1 0 21.47 8a6.53 6.53 0 0 1 2.96 5.44Z"
-                      />
-                      <circle
-                        cx="17.87"
-                        cy="13.45"
-                        r="4.47"
-                        fill="currentColor"
-                      />
-                      <path
-                        fill="currentColor"
-                        d="M18.11 20.3A9.69 9.69 0 0 0 11 23l-.25.28v6.33a1.57 1.57 0 0 0 1.6 1.54h11.49a1.57 1.57 0 0 0 1.6-1.54V23.3l-.24-.3a9.58 9.58 0 0 0-7.09-2.7Z"
-                      />
-                      <path fill="none" d="M0 0h36v36H0z" />
-                    </svg>
-                    <span>{activity.capacity} Guests</span>
-                  </div>
+              <div className="items-center gap-1 text-xs mt-1 font-bold">
+                {pricing_type === "PER PERSON" && number_of_people > 0 && (
+                  <span>
+                    {number_of_people}{" "}
+                    {number_of_people > 1 ? "Residents" : "Resident"}
+                  </span>
                 )}
+
+                {pricing_type === "PER SESSION" && number_of_sessions > 0 && (
+                  <span>
+                    {"  -  "}
+                    {number_of_sessions}{" "}
+                    {number_of_sessions > 1
+                      ? "Resident Sessions"
+                      : "Resident Session"}
+                  </span>
+                )}
+                {pricing_type === "PER GROUP" && number_of_groups > 0 && (
+                  <span>
+                    {"  -  "}
+                    {number_of_groups}{" "}
+                    {number_of_groups > 1
+                      ? "Resident Groups"
+                      : "Resident Group"}
+                  </span>
+                )}
+
+                {pricing_type === "PER PERSON" &&
+                  number_of_people_non_resident > 0 && (
+                    <span>
+                      {"  -  "}
+                      {number_of_people_non_resident}{" "}
+                      {number_of_people_non_resident > 1
+                        ? "Non-Residents"
+                        : "Non-Resident"}
+                    </span>
+                  )}
+                {pricing_type === "PER SESSION" &&
+                  number_of_sessions_non_resident > 0 && (
+                    <span>
+                      {"  -  "}
+                      {number_of_sessions_non_resident}{" "}
+                      {number_of_sessions_non_resident > 1
+                        ? "Non-Resident Sessions"
+                        : "Non-Resident Session"}
+                    </span>
+                  )}
+                {pricing_type === "PER GROUP" &&
+                  number_of_groups_non_resident > 0 && (
+                    <span>
+                      {"  -  "}
+                      {number_of_groups_non_resident}{" "}
+                      {number_of_groups_non_resident > 1
+                        ? "Non-Resident Groups"
+                        : "Non-Resident Group"}
+                    </span>
+                  )}
               </div>
             )}
 
@@ -713,7 +732,7 @@ const OrderCard = ({
                     : activitiesPage
                     ? router.push(`/experiences/${activity.slug}`)
                     : transportPage
-                    ? router.push(`/transport/${transport.slug}`)
+                    ? router.push(`/transport/?transportSlug=${transport.slug}`)
                     : null;
                 }}
               >

@@ -18,7 +18,13 @@ import LoadingSpinerChase from "../ui/LoadingSpinerChase";
 import Button from "../ui/Button";
 import Carousel from "../ui/Carousel";
 
-function Listing({ listing, userProfile, slugIsCorrect, setCurrentListing }) {
+function Listing({
+  listing,
+  userProfile,
+  slugIsCorrect,
+  setCurrentListing,
+  slugIsCorrectForGroupTrip,
+}) {
   const currencyToKES = useSelector((state) => state.home.currencyToKES);
 
   const router = useRouter();
@@ -78,6 +84,39 @@ function Listing({ listing, userProfile, slugIsCorrect, setCurrentListing }) {
       await axios
         .put(
           `${process.env.NEXT_PUBLIC_baseURL}/trip/${router.query.trip}/`,
+          {
+            transport_id: listing.id,
+            transport_number_of_days: 1,
+            transport_from_date: null,
+            user_need_a_driver: false,
+            starting_point: null,
+          },
+          {
+            headers: {
+              Authorization: "Token " + token,
+            },
+          }
+        )
+        .then(() => {
+          router.push({
+            pathname: `/trip/plan/${router.query.group_trip}`,
+          });
+        })
+        .catch((err) => {
+          setAddToTripLoading(false);
+        });
+    }
+  };
+
+  const addToTransportBack = async () => {
+    const token = Cookies.get("token");
+
+    setAddToTripLoading(true);
+
+    if (token) {
+      await axios
+        .put(
+          `${process.env.NEXT_PUBLIC_baseURL}/trips/${router.query.group_trip}/`,
           {
             transport_id: listing.id,
           },
@@ -319,7 +358,7 @@ function Listing({ listing, userProfile, slugIsCorrect, setCurrentListing }) {
           </div>
         )} */}
 
-          {slugIsCorrect && (
+          {slugIsCorrect && router.query.transportBack !== "1" && (
             <div className="mt-2">
               <Button
                 onClick={() => {
@@ -338,6 +377,32 @@ function Listing({ listing, userProfile, slugIsCorrect, setCurrentListing }) {
                   </div>
                 )}
               </Button>
+            </div>
+          )}
+
+          {slugIsCorrectForGroupTrip && router.query.transportBack === "1" && (
+            <div className="mt-2">
+              <div className="mt-2">
+                <Button
+                  onClick={() => {
+                    addToTransportBack();
+                  }}
+                  className="!bg-blue-500 !absolute top-0 left-0 !rounded-none !rounded-tl-md !py-1 flex gap-2 !px-1.5"
+                >
+                  <span className="text-white text-sm">
+                    Add to transport back
+                  </span>
+
+                  {addToTripLoading && (
+                    <div>
+                      <LoadingSpinerChase
+                        width={14}
+                        height={14}
+                      ></LoadingSpinerChase>
+                    </div>
+                  )}
+                </Button>
+              </div>
             </div>
           )}
         </div>

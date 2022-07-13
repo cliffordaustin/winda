@@ -187,6 +187,14 @@ function Listing({
           `${process.env.NEXT_PUBLIC_baseURL}/trip/${router.query.trip}/`,
           {
             activity_id: listing.id,
+            activity_number_of_people: 1,
+            activity_number_of_people_non_resident: null,
+            activity_number_of_sessions: null,
+            activity_number_of_sessions_non_resident: null,
+            activity_number_of_groups: null,
+            activity_number_of_groups_non_resident: null,
+            activity_from_date: null,
+            activity_pricing_type: "PER PERSON",
           },
           {
             headers: {

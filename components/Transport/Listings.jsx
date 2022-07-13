@@ -12,6 +12,7 @@ function Listings({
   userProfile,
   transports,
   setCurrentListing,
+  slugIsCorrectForGroupTrip,
   slugIsCorrect,
 }) {
   return (
@@ -20,6 +21,7 @@ function Listings({
         {transports.map((transport, index) => (
           <Listing
             slugIsCorrect={slugIsCorrect}
+            slugIsCorrectForGroupTrip={slugIsCorrectForGroupTrip}
             key={index}
             listing={transport}
             userProfile={userProfile}

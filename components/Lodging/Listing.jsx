@@ -191,6 +191,14 @@ function Listing({
           `${process.env.NEXT_PUBLIC_baseURL}/trip/${router.query.trip}/`,
           {
             stay_id: listing.id,
+            stay_num_of_adults: 1,
+            stay_num_of_adults_non_resident: null,
+            stay_num_of_children: null,
+            stay_num_of_children_non_resident: null,
+            stay_plan: "STANDARD",
+            from_date: null,
+            to_date: null,
+            stay_is_not_available: false,
           },
           {
             headers: {

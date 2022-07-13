@@ -335,6 +335,9 @@ const Transport = ({ userProfile, transport }) => {
 
   const [slugIsCorrect, setSlugIsCorrect] = useState(false);
 
+  const [slugIsCorrectForGroupTrip, setSlugIsCorrectForGroupTrip] =
+    useState(false);
+
   const checkSlug = async () => {
     const token = Cookies.get("token");
 
@@ -358,11 +361,43 @@ const Transport = ({ userProfile, transport }) => {
     }
   };
 
-  // useEffect(() => {
-  //   if (router.query.trip) {
-  //     checkSlug();
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (router.query.trip) {
+      checkSlug();
+    }
+  }, []);
+
+  const checkGroupTripSlug = async () => {
+    const token = Cookies.get("token");
+
+    if (token) {
+      await axios
+        .get(
+          `${process.env.NEXT_PUBLIC_baseURL}/trips/${router.query.group_trip}/`,
+          {
+            headers: {
+              Authorization: "Token " + token,
+            },
+          }
+        )
+        .then((res) => {
+          setSlugIsCorrectForGroupTrip(true);
+        })
+        .catch((err) => {
+          if (err.response.status === 404) {
+            setSlugIsCorrectForGroupTrip(false);
+          }
+        });
+    } else {
+      setSlugIsCorrectForGroupTrip(false);
+    }
+  };
+
+  useEffect(() => {
+    if (router.query.group_trip) {
+      checkGroupTripSlug();
+    }
+  }, []);
 
   const [addToBasketLoading, setAddToBasketLoading] = useState(false);
 
@@ -1197,6 +1232,7 @@ const Transport = ({ userProfile, transport }) => {
             userProfile={userProfile}
             transports={transport}
             slugIsCorrect={slugIsCorrect}
+            slugIsCorrectForGroupTrip={slugIsCorrectForGroupTrip}
           ></Listings>
         </div>
       </div>

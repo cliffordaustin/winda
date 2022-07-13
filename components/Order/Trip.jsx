@@ -46,6 +46,11 @@ import {
   priceOfSingleChildNonResident,
 } from "../../lib/pricePlan";
 
+import {
+  activityPricePerPersonResident,
+  activityPricePerPersonNonResident,
+} from "../../lib/pricePlan";
+
 const Trip = ({
   nights,
   index,
@@ -431,28 +436,34 @@ const Trip = ({
 
   const [numOfPeople, setNumOfPeople] = useState(1);
 
-  const [numOfSession, setNumOfSession] = useState(1);
+  const [numOfPeopleNonResident, setNumOfPeopleNonResident] = useState(0);
 
-  const [numOfGroups, setNumOfGroups] = useState(1);
+  const [numOfSession, setNumOfSession] = useState(0);
+
+  const [numOfSessionNonResident, setNumOfSessionNonResident] = useState(0);
+
+  const [numOfGroups, setNumOfGroups] = useState(0);
+
+  const [numOfGroupsNonResident, setNumOfGroupsNonResident] = useState(0);
 
   const [priceType, setPriceType] = useState([]);
 
   const [currentPrice, setCurrentPrice] = useState({
-    label: "Price per person",
-    value: "Price per person",
+    label: "per person",
+    value: "per person",
   });
 
   useEffect(() => {
     const availableOptions = [];
 
     if (trip.activity && trip.activity.price_per_person) {
-      availableOptions.push("Price per person");
+      availableOptions.push("per person");
     }
     if (trip.activity && trip.activity.price_per_session) {
-      availableOptions.push("Price per session");
+      availableOptions.push("per session");
     }
     if (trip.activity && trip.activity.price_per_group) {
-      availableOptions.push("Price per group");
+      availableOptions.push("per group");
     }
 
     availableOptions.forEach((e) => {
@@ -493,15 +504,17 @@ const Trip = ({
         `${process.env.NEXT_PUBLIC_baseURL}/trip/${trip.slug}/`,
         {
           activity_number_of_people: numOfPeople,
+          activity_number_of_people_non_resident: numOfPeopleNonResident,
           activity_number_of_sessions: numOfSession,
+          activity_number_of_sessions_non_resident: numOfSessionNonResident,
           activity_number_of_groups: numOfGroups,
-          activity_non_resident: activityNonResident,
+          activity_number_of_groups_non_resident: numOfGroupsNonResident,
           pricing_type:
-            currentPrice.value === "Price per person"
+            currentPrice.value === "per person"
               ? "PER PERSON"
-              : currentPrice.value === "Price per session"
+              : currentPrice.value === "per session"
               ? "PER SESSION"
-              : currentPrice.value === "Price per group"
+              : currentPrice.value === "per group"
               ? "PER GROUP"
               : "PER PERSON",
         },
@@ -624,75 +637,57 @@ const Trip = ({
 
   const [needADriver, setNeedADriver] = useState(trip.user_need_a_driver);
 
-  const maxGuests =
-    trip.stay &&
-    (currentTypeOfLodge.value === "Standard"
-      ? trip.stay.standard_capacity
-      : currentTypeOfLodge.value === "Deluxe"
-      ? trip.stay.deluxe_capacity
-      : currentTypeOfLodge.value === "Super Deluxe"
-      ? trip.stay.super_deluxe_capacity
-      : currentTypeOfLodge.value === "Studio"
-      ? trip.stay.studio_capacity
-      : currentTypeOfLodge.value === "Double Room"
-      ? trip.stay.double_room_capacity
-      : currentTypeOfLodge.value === "Single Room"
-      ? trip.stay.single_room_capacity
-      : currentTypeOfLodge.value === "Tripple Room"
-      ? trip.stay.tripple_room_capacity
-      : currentTypeOfLodge.value === "Quad Room"
-      ? trip.stay.quad_room_capacity
-      : currentTypeOfLodge.value === "Queen Room"
-      ? trip.stay.queen_room_capacity
-      : currentTypeOfLodge.value === "King Room"
-      ? trip.stay.king_room_capacity
-      : currentTypeOfLodge.value === "Twin Room"
-      ? trip.stay.twin_room_capacity
-      : currentTypeOfLodge.value === "Family Room"
-      ? trip.stay.family_room_capacity
-      : "");
+  const maxGuests = trip.activity && trip.activity.capacity;
 
-  if (trip.stay) {
-    const priceAdultResident = priceOfAdultResident(
-      currentTypeOfLodge.value.toUpperCase(),
-      trip.stay
-    );
+  const priceOfResident = activityPricePerPersonResident(
+    currentPrice.value.toUpperCase(),
+    trip.activity
+  );
 
-    const priceAdultNonResident = priceOfAdultNonResident(
-      currentTypeOfLodge.value.toUpperCase(),
-      trip.stay
-    );
+  const priceOfNonResident = activityPricePerPersonNonResident(
+    currentPrice.value.toUpperCase(),
+    trip.activity
+  );
 
-    const priceChildResident = priceOfChildrenResident(
-      currentTypeOfLodge.value.toUpperCase(),
-      trip.stay
-    );
+  const priceAdultResident = priceOfAdultResident(
+    currentTypeOfLodge.value.toUpperCase(),
+    trip.stay
+  );
 
-    const priceChildNonResident = priceOfChildrenNonResident(
-      currentTypeOfLodge.value.toUpperCase(),
-      trip.stay
-    );
+  const priceAdultNonResident = priceOfAdultNonResident(
+    currentTypeOfLodge.value.toUpperCase(),
+    trip.stay
+  );
 
-    const priceSingleAdultNonResident = priceOfSingleAdultNonResident(
-      currentTypeOfLodge.value.toUpperCase(),
-      trip.stay
-    );
+  const priceChildResident = priceOfChildrenResident(
+    currentTypeOfLodge.value.toUpperCase(),
+    trip.stay
+  );
 
-    const priceSingleAdultResident = priceOfSingleAdultResident(
-      currentTypeOfLodge.value.toUpperCase(),
-      trip.stay
-    );
+  const priceChildNonResident = priceOfChildrenNonResident(
+    currentTypeOfLodge.value.toUpperCase(),
+    trip.stay
+  );
 
-    const priceSingleChildNonResident = priceOfSingleChildNonResident(
-      currentTypeOfLodge.value.toUpperCase(),
-      trip.stay
-    );
+  const priceSingleAdultNonResident = priceOfSingleAdultNonResident(
+    currentTypeOfLodge.value.toUpperCase(),
+    trip.stay
+  );
 
-    const priceSingleChildResident = priceOfSingleChildResident(
-      currentTypeOfLodge.value.toUpperCase(),
-      trip.stay
-    );
-  }
+  const priceSingleAdultResident = priceOfSingleAdultResident(
+    currentTypeOfLodge.value.toUpperCase(),
+    trip.stay
+  );
+
+  const priceSingleChildNonResident = priceOfSingleChildNonResident(
+    currentTypeOfLodge.value.toUpperCase(),
+    trip.stay
+  );
+
+  const priceSingleChildResident = priceOfSingleChildResident(
+    currentTypeOfLodge.value.toUpperCase(),
+    trip.stay
+  );
 
   const priceOfPlan = stayPriceOfPlanLower(
     currentTypeOfLodge.value,
@@ -779,49 +774,25 @@ const Trip = ({
           </div>
 
           <div className="absolute top-1 right-2 flex gap-2 items-center">
-            {!state.showEdit && (
-              <div
-                onClick={() => {
-                  setState({ ...state, showEdit: true });
-                }}
-                className="w-7 h-7 cursor-pointer bg-blue-200 flex items-center justify-center rounded-full"
+            <div
+              onClick={() => {
+                changeTransport();
+              }}
+              className="w-7 h-7 cursor-pointer bg-blue-200 flex items-center justify-center rounded-full"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4 text-blue-600"
+                viewBox="0 0 20 20"
+                fill="currentColor"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 text-blue-600"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-            )}
-
-            {state.showEdit && (
-              <div
-                onClick={() => {
-                  setState({ ...state, showEdit: false });
-                }}
-                className="w-7 h-7 cursor-pointer bg-blue-200 flex items-center justify-center rounded-full"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-4 h-4 text-blue-600"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-            )}
+                <path
+                  fillRule="evenodd"
+                  d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
 
             <div
               onClick={() => {
@@ -856,103 +827,109 @@ const Trip = ({
             </div>
           </div>
 
-          {!trip.transport && (
-            <div
-              onMouseLeave={() => setState({ ...state, showNavigation: false })}
-              onMouseEnter={() => setState({ ...state, showNavigation: true })}
-            >
-              <Swiper
-                {...settings}
-                onSwiper={(swiper) => {
-                  setState({
-                    ...state,
-                    allowSlideNext: swiper.allowSlideNext,
-                  });
-                }}
-                onSlideChange={(swiper) => {
-                  setState({
-                    ...state,
-                    swiperIndex: swiper.realIndex,
-                    endOfSlide: swiper.isEnd,
-                  });
-                }}
-                className={
-                  "!w-full mt-4 relative " + (!state.showEdit ? "hidden" : "")
+          <>
+            {/* {!trip.transport && (
+              <div
+                onMouseLeave={() =>
+                  setState({ ...state, showNavigation: false })
+                }
+                onMouseEnter={() =>
+                  setState({ ...state, showNavigation: true })
                 }
               >
-                {transport.map((item, index) => {
-                  const sortedImages = item.transportation_images.sort(
-                    (x, y) => y.main - x.main
-                  );
-
-                  const images = sortedImages.map((image) => {
-                    return image.image;
-                  });
-                  return (
-                    <SwiperSlide key={index} className="!w-[240px]">
-                      <TripTransportCard
-                        tripId={tripId}
-                        images={images}
-                        transport={item}
-                        tripSlug={tripSlug}
-                      ></TripTransportCard>
-                    </SwiperSlide>
-                  );
-                })}
-
-                <motion.div
-                  variants={variants}
-                  animate={state.showNavigation ? "show" : ""}
-                  initial="hide"
-                  exit="exit"
+                <Swiper
+                  {...settings}
+                  onSwiper={(swiper) => {
+                    setState({
+                      ...state,
+                      allowSlideNext: swiper.allowSlideNext,
+                    });
+                  }}
+                  onSlideChange={(swiper) => {
+                    setState({
+                      ...state,
+                      swiperIndex: swiper.realIndex,
+                      endOfSlide: swiper.isEnd,
+                    });
+                  }}
                   className={
-                    "absolute flex cursor-pointer items-center justify-center top-2/4 z-10 left-3 -translate-y-2/4 swiper-pagination swiper-button-prev w-8 -mt-4 h-8 rounded-full bg-white shadow-lg " +
-                    (state.swiperIndex === 0 || !state.showNavigation
-                      ? "invisible"
-                      : "")
+                    "!w-full mt-4 relative " + (!state.showEdit ? "hidden" : "")
                   }
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
+                  {transport.map((item, index) => {
+                    const sortedImages = item.transportation_images.sort(
+                      (x, y) => y.main - x.main
+                    );
+
+                    const images = sortedImages.map((image) => {
+                      return image.image;
+                    });
+                    return (
+                      <SwiperSlide key={index} className="!w-[240px]">
+                        <TripTransportCard
+                          tripId={tripId}
+                          images={images}
+                          transport={item}
+                          tripSlug={tripSlug}
+                        ></TripTransportCard>
+                      </SwiperSlide>
+                    );
+                  })}
+
+                  <motion.div
+                    variants={variants}
+                    animate={state.showNavigation ? "show" : ""}
+                    initial="hide"
+                    exit="exit"
+                    className={
+                      "absolute flex cursor-pointer items-center justify-center top-2/4 z-10 left-3 -translate-y-2/4 swiper-pagination swiper-button-prev w-8 -mt-4 h-8 rounded-full bg-white shadow-lg " +
+                      (state.swiperIndex === 0 || !state.showNavigation
+                        ? "invisible"
+                        : "")
+                    }
                   >
-                    <path
-                      fillRule="evenodd"
-                      d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </motion.div>
-                <motion.div
-                  variants={variants}
-                  animate={state.showNavigation ? "show" : ""}
-                  initial="hide"
-                  exit="exit"
-                  className={
-                    "absolute cursor-pointer flex items-center justify-center top-[40%] z-10 right-3 -translate-y-2/4 swiper-pagination swiper-button-next w-8 h-8 mb-4 rounded-full bg-white shadow-lg " +
-                    (state.endOfSlide || !state.showNavigation
-                      ? "invisible"
-                      : "")
-                  }
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </motion.div>
+                  <motion.div
+                    variants={variants}
+                    animate={state.showNavigation ? "show" : ""}
+                    initial="hide"
+                    exit="exit"
+                    className={
+                      "absolute cursor-pointer flex items-center justify-center top-[40%] z-10 right-3 -translate-y-2/4 swiper-pagination swiper-button-next w-8 h-8 mb-4 rounded-full bg-white shadow-lg " +
+                      (state.endOfSlide || !state.showNavigation
+                        ? "invisible"
+                        : "")
+                    }
                   >
-                    <path
-                      fillRule="evenodd"
-                      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </motion.div>
-              </Swiper>
-            </div>
-          )}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </motion.div>
+                </Swiper>
+              </div>
+            )} */}
+          </>
         </div>
       )}
 
@@ -1005,6 +982,10 @@ const Trip = ({
             <div
               onClick={() => {
                 setEditTransportPopup(!editTransportPopup);
+                if (process.browser) {
+                  document.body.classList.add("h-screen");
+                  document.body.classList.add("overflow-y-hidden");
+                }
               }}
               className="self-start"
             >
@@ -1019,8 +1000,10 @@ const Trip = ({
               showModal={editTransportPopup}
               closeModal={() => {
                 setEditTransportPopup(false);
+                document.body.classList.remove("h-screen");
+                document.body.classList.remove("overflow-y-hidden");
               }}
-              className=""
+              className="overflow-y-screen"
               title={"Edit Transport"}
             >
               <div
@@ -1182,6 +1165,8 @@ const Trip = ({
               showModal={editTransportPopup}
               closeModal={() => {
                 setEditTransportPopup(false);
+                document.body.classList.remove("h-screen");
+                document.body.classList.remove("overflow-y-hidden");
               }}
               className="w-[600px] h-[600px] top-[10%]"
             >
@@ -1419,49 +1404,25 @@ const Trip = ({
           </div>
 
           <div className="absolute top-1 right-2 flex gap-2 items-center">
-            {!state.showStaysEdit && (
-              <div
-                onClick={() => {
-                  setState({ ...state, showStaysEdit: true });
-                }}
-                className="w-7 h-7 cursor-pointer bg-blue-200 flex items-center justify-center rounded-full"
+            <div
+              onClick={() => {
+                changeStay();
+              }}
+              className="w-7 h-7 cursor-pointer bg-blue-200 flex items-center justify-center rounded-full"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4 text-blue-600"
+                viewBox="0 0 20 20"
+                fill="currentColor"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 text-blue-600"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-            )}
-
-            {state.showStaysEdit && (
-              <div
-                onClick={() => {
-                  setState({ ...state, showStaysEdit: false });
-                }}
-                className="w-7 h-7 cursor-pointer bg-blue-200 flex items-center justify-center rounded-full"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-4 h-4 text-blue-600"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-            )}
+                <path
+                  fillRule="evenodd"
+                  d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
 
             <div
               onClick={() => {
@@ -1496,229 +1457,242 @@ const Trip = ({
             </div>
           </div>
 
-          {!trip.stay && (
-            <div
-              onMouseLeave={() => setState({ ...state, showNavigation: false })}
-              onMouseEnter={() => setState({ ...state, showNavigation: true })}
-              className={!state.showStaysEdit ? "hidden" : ""}
-            >
-              <div className="flex gap-1 mt-2">
-                <div
-                  onClick={() => {
-                    if (!containsBudgetOption(`${index}`)) {
-                      router.push({
-                        query: {
-                          ...router.query,
-                          budgeOptions:
-                            (router.query.budgeOptions
-                              ? router.query.budgeOptions + ","
-                              : "") + index,
-                          highEndOptions:
-                            router.query.highEndOptions &&
-                            router.query.highEndOptions.replace(`${index}`, ""),
-                          midRangeOptions:
-                            router.query.midRangeOptions &&
-                            router.query.midRangeOptions.replace(
-                              `${index}`,
-                              ""
-                            ),
-                        },
-                      });
-                    } else if (containsBudgetOption(`${index}`)) {
-                      router.push({
-                        query: {
-                          ...router.query,
-                          budgeOptions: router.query.budgeOptions.replace(
-                            `${index}`,
-                            ""
-                          ),
-                        },
-                      });
-                    }
-                  }}
-                  className={
-                    "py-1 px-2 rounded-3xl text-sm bg-blue-100 cursor-pointer " +
-                    (containsBudgetOption(`${index}`)
-                      ? "!bg-blue-500 !text-white"
-                      : "")
-                  }
-                >
-                  Budget
-                </div>
-                <div
-                  onClick={() => {
-                    if (!containsMidRangeOption(`${index}`)) {
-                      router.push({
-                        query: {
-                          ...router.query,
-                          midRangeOptions:
-                            (router.query.midRangeOptions
-                              ? router.query.midRangeOptions + ","
-                              : "") + index,
-
-                          highEndOptions:
-                            router.query.highEndOptions &&
-                            router.query.highEndOptions.replace(`${index}`, ""),
-                          budgeOptions:
-                            router.query.budgeOptions &&
-                            router.query.budgeOptions.replace(`${index}`, ""),
-                        },
-                      });
-                    } else if (containsMidRangeOption(`${index}`)) {
-                      router.push({
-                        query: {
-                          ...router.query,
-                          midRangeOptions: router.query.midRangeOptions.replace(
-                            `${index}`,
-                            ""
-                          ),
-                        },
-                      });
-                    }
-                  }}
-                  className={
-                    "py-1 px-2 rounded-3xl text-sm bg-blue-100 cursor-pointer " +
-                    (containsMidRangeOption(`${index}`)
-                      ? "!bg-blue-500 !text-white"
-                      : "")
-                  }
-                >
-                  Mid-range
-                </div>
-                <div
-                  onClick={() => {
-                    if (!containsHighEndOption(`${index}`)) {
-                      router.push({
-                        query: {
-                          ...router.query,
-                          highEndOptions:
-                            (router.query.highEndOptions
-                              ? router.query.highEndOptions + ","
-                              : "") + index,
-
-                          budgeOptions:
-                            router.query.budgeOptions &&
-                            router.query.budgeOptions.replace(`${index}`, ""),
-                          midRangeOptions:
-                            router.query.midRangeOptions &&
-                            router.query.midRangeOptions.replace(
-                              `${index}`,
-                              ""
-                            ),
-                        },
-                      });
-                    } else if (containsHighEndOption(`${index}`)) {
-                      router.push({
-                        query: {
-                          ...router.query,
-                          highEndOptions: router.query.highEndOptions.replace(
-                            `${index}`,
-                            ""
-                          ),
-                        },
-                      });
-                    }
-                  }}
-                  className={
-                    "py-1 px-2 rounded-3xl text-sm bg-blue-100 cursor-pointer " +
-                    (containsHighEndOption(`${index}`)
-                      ? "!bg-blue-500 !text-white"
-                      : "")
-                  }
-                >
-                  High-end
-                </div>
-              </div>
-              <Swiper
-                {...settings}
-                onSwiper={(swiper) => {
-                  setState({
-                    ...state,
-                    allowSlideNext: swiper.allowSlideNext,
-                  });
-                }}
-                onSlideChange={(swiper) => {
-                  setState({
-                    ...state,
-                    swiperIndex: swiper.realIndex,
-                    endOfSlide: swiper.isEnd,
-                  });
-                }}
-                className={"!w-full mt-4 relative"}
+          <>
+            {/* {!trip.stay && (
+              <div
+                onMouseLeave={() =>
+                  setState({ ...state, showNavigation: false })
+                }
+                onMouseEnter={() =>
+                  setState({ ...state, showNavigation: true })
+                }
+                className={!state.showStaysEdit ? "hidden" : ""}
               >
-                {stays.map((item, index) => {
-                  const sortedImages = item.stay_images.sort(
-                    (x, y) => y.main - x.main
-                  );
-
-                  const images = sortedImages.map((image) => {
-                    return image.image;
-                  });
-                  return (
-                    <SwiperSlide key={index} className="!w-[240px]">
-                      <TripStayCard
-                        tripId={tripId}
-                        tripSlug={tripSlug}
-                        images={images}
-                        stay={item}
-                      ></TripStayCard>
-                    </SwiperSlide>
-                  );
-                })}
-
-                <motion.div
-                  variants={variants}
-                  animate={state.showNavigation ? "show" : ""}
-                  initial="hide"
-                  exit="exit"
-                  className={
-                    "absolute flex cursor-pointer items-center justify-center top-2/4 z-10 left-3 -translate-y-2/4 swiper-pagination swiper-button-prev w-8 -mt-4 h-8 rounded-full bg-white shadow-lg " +
-                    (state.swiperIndex === 0 || !state.showNavigation
-                      ? "invisible"
-                      : "")
-                  }
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
+                <div className="flex gap-1 mt-2">
+                  <div
+                    onClick={() => {
+                      if (!containsBudgetOption(`${index}`)) {
+                        router.push({
+                          query: {
+                            ...router.query,
+                            budgeOptions:
+                              (router.query.budgeOptions
+                                ? router.query.budgeOptions + ","
+                                : "") + index,
+                            highEndOptions:
+                              router.query.highEndOptions &&
+                              router.query.highEndOptions.replace(
+                                `${index}`,
+                                ""
+                              ),
+                            midRangeOptions:
+                              router.query.midRangeOptions &&
+                              router.query.midRangeOptions.replace(
+                                `${index}`,
+                                ""
+                              ),
+                          },
+                        });
+                      } else if (containsBudgetOption(`${index}`)) {
+                        router.push({
+                          query: {
+                            ...router.query,
+                            budgeOptions: router.query.budgeOptions.replace(
+                              `${index}`,
+                              ""
+                            ),
+                          },
+                        });
+                      }
+                    }}
+                    className={
+                      "py-1 px-2 rounded-3xl text-sm bg-blue-100 cursor-pointer " +
+                      (containsBudgetOption(`${index}`)
+                        ? "!bg-blue-500 !text-white"
+                        : "")
+                    }
                   >
-                    <path
-                      fillRule="evenodd"
-                      d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </motion.div>
-                <motion.div
-                  variants={variants}
-                  animate={state.showNavigation ? "show" : ""}
-                  initial="hide"
-                  exit="exit"
-                  className={
-                    "absolute cursor-pointer flex items-center justify-center top-[40%] z-10 right-3 -translate-y-2/4 swiper-pagination swiper-button-next w-8 h-8 mb-4 rounded-full bg-white shadow-lg " +
-                    (state.endOfSlide || !state.showNavigation
-                      ? "invisible"
-                      : "")
-                  }
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
+                    Budget
+                  </div>
+                  <div
+                    onClick={() => {
+                      if (!containsMidRangeOption(`${index}`)) {
+                        router.push({
+                          query: {
+                            ...router.query,
+                            midRangeOptions:
+                              (router.query.midRangeOptions
+                                ? router.query.midRangeOptions + ","
+                                : "") + index,
+
+                            highEndOptions:
+                              router.query.highEndOptions &&
+                              router.query.highEndOptions.replace(
+                                `${index}`,
+                                ""
+                              ),
+                            budgeOptions:
+                              router.query.budgeOptions &&
+                              router.query.budgeOptions.replace(`${index}`, ""),
+                          },
+                        });
+                      } else if (containsMidRangeOption(`${index}`)) {
+                        router.push({
+                          query: {
+                            ...router.query,
+                            midRangeOptions:
+                              router.query.midRangeOptions.replace(
+                                `${index}`,
+                                ""
+                              ),
+                          },
+                        });
+                      }
+                    }}
+                    className={
+                      "py-1 px-2 rounded-3xl text-sm bg-blue-100 cursor-pointer " +
+                      (containsMidRangeOption(`${index}`)
+                        ? "!bg-blue-500 !text-white"
+                        : "")
+                    }
                   >
-                    <path
-                      fillRule="evenodd"
-                      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </motion.div>
-              </Swiper>
-            </div>
-          )}
+                    Mid-range
+                  </div>
+                  <div
+                    onClick={() => {
+                      if (!containsHighEndOption(`${index}`)) {
+                        router.push({
+                          query: {
+                            ...router.query,
+                            highEndOptions:
+                              (router.query.highEndOptions
+                                ? router.query.highEndOptions + ","
+                                : "") + index,
+
+                            budgeOptions:
+                              router.query.budgeOptions &&
+                              router.query.budgeOptions.replace(`${index}`, ""),
+                            midRangeOptions:
+                              router.query.midRangeOptions &&
+                              router.query.midRangeOptions.replace(
+                                `${index}`,
+                                ""
+                              ),
+                          },
+                        });
+                      } else if (containsHighEndOption(`${index}`)) {
+                        router.push({
+                          query: {
+                            ...router.query,
+                            highEndOptions: router.query.highEndOptions.replace(
+                              `${index}`,
+                              ""
+                            ),
+                          },
+                        });
+                      }
+                    }}
+                    className={
+                      "py-1 px-2 rounded-3xl text-sm bg-blue-100 cursor-pointer " +
+                      (containsHighEndOption(`${index}`)
+                        ? "!bg-blue-500 !text-white"
+                        : "")
+                    }
+                  >
+                    High-end
+                  </div>
+                </div>
+                <Swiper
+                  {...settings}
+                  onSwiper={(swiper) => {
+                    setState({
+                      ...state,
+                      allowSlideNext: swiper.allowSlideNext,
+                    });
+                  }}
+                  onSlideChange={(swiper) => {
+                    setState({
+                      ...state,
+                      swiperIndex: swiper.realIndex,
+                      endOfSlide: swiper.isEnd,
+                    });
+                  }}
+                  className={"!w-full mt-4 relative"}
+                >
+                  {stays.map((item, index) => {
+                    const sortedImages = item.stay_images.sort(
+                      (x, y) => y.main - x.main
+                    );
+
+                    const images = sortedImages.map((image) => {
+                      return image.image;
+                    });
+                    return (
+                      <SwiperSlide key={index} className="!w-[240px]">
+                        <TripStayCard
+                          tripId={tripId}
+                          tripSlug={tripSlug}
+                          images={images}
+                          stay={item}
+                        ></TripStayCard>
+                      </SwiperSlide>
+                    );
+                  })}
+
+                  <motion.div
+                    variants={variants}
+                    animate={state.showNavigation ? "show" : ""}
+                    initial="hide"
+                    exit="exit"
+                    className={
+                      "absolute flex cursor-pointer items-center justify-center top-2/4 z-10 left-3 -translate-y-2/4 swiper-pagination swiper-button-prev w-8 -mt-4 h-8 rounded-full bg-white shadow-lg " +
+                      (state.swiperIndex === 0 || !state.showNavigation
+                        ? "invisible"
+                        : "")
+                    }
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </motion.div>
+                  <motion.div
+                    variants={variants}
+                    animate={state.showNavigation ? "show" : ""}
+                    initial="hide"
+                    exit="exit"
+                    className={
+                      "absolute cursor-pointer flex items-center justify-center top-[40%] z-10 right-3 -translate-y-2/4 swiper-pagination swiper-button-next w-8 h-8 mb-4 rounded-full bg-white shadow-lg " +
+                      (state.endOfSlide || !state.showNavigation
+                        ? "invisible"
+                        : "")
+                    }
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </motion.div>
+                </Swiper>
+              </div>
+            )} */}
+          </>
         </div>
       )}
 
@@ -1842,6 +1816,10 @@ const Trip = ({
               strokeWidth="2"
               onClick={() => {
                 setShowCheckInDate(!showCheckInDate);
+                if (process.browser) {
+                  document.body.classList.add("h-screen");
+                  document.body.classList.add("overflow-y-hidden");
+                }
               }}
             >
               <path
@@ -1857,8 +1835,10 @@ const Trip = ({
               showModal={showCheckInDate}
               closeModal={() => {
                 setShowCheckInDate(false);
+                document.body.classList.remove("h-screen");
+                document.body.classList.remove("overflow-y-hidden");
               }}
-              className=""
+              className="overflow-y-screen"
               title={"Check In Date"}
             >
               <div className={""}>
@@ -1949,6 +1929,8 @@ const Trip = ({
               showModal={showCheckInDate}
               closeModal={() => {
                 setShowCheckInDate(false);
+                document.body.classList.remove("h-screen");
+                document.body.classList.remove("overflow-y-hidden");
               }}
               className="w-[500px] h-[520px] top-[10%]"
             >
@@ -2047,6 +2029,10 @@ const Trip = ({
             <div
               onClick={() => {
                 setGuestPopup(!guestPopup);
+                if (process.browser) {
+                  document.body.classList.add("h-screen");
+                  document.body.classList.add("overflow-y-hidden");
+                }
               }}
               className="px-3 cursor-pointer text-sm py-1 w-fit text-white bg-blue-500 rounded-md"
             >
@@ -2059,8 +2045,13 @@ const Trip = ({
                   e.stopPropagation();
                 }}
                 showModal={guestPopup}
-                closeModal={() => setGuestPopup(false)}
+                closeModal={() => {
+                  setGuestPopup(false);
+                  document.body.classList.remove("h-screen");
+                  document.body.classList.remove("overflow-y-hidden");
+                }}
                 title="Add guest"
+                className="overflow-y-auto"
               >
                 <div
                   onClick={(e) => {
@@ -2424,7 +2415,11 @@ const Trip = ({
                   e.stopPropagation();
                 }}
                 showModal={guestPopup}
-                closeModal={() => setGuestPopup(false)}
+                closeModal={() => {
+                  setGuestPopup(false);
+                  document.body.classList.remove("h-screen");
+                  document.body.classList.remove("overflow-y-hidden");
+                }}
                 // className="absolute -left-[410px] -top-[250px] px-4 py-4 !z-[99] w-[400px] bg-white shadow-lg rounded-lg h-fit"
                 className="w-[600px] absolute z-50 top-[20%]"
               >
@@ -2866,49 +2861,25 @@ const Trip = ({
           </div>
 
           <div className="absolute top-1 right-2 flex gap-2 items-center">
-            {!state.showActivitiesEdit && (
-              <div
-                onClick={() => {
-                  setState({ ...state, showActivitiesEdit: true });
-                }}
-                className="w-7 h-7 cursor-pointer bg-blue-200 flex items-center justify-center rounded-full"
+            <div
+              onClick={() => {
+                changeExperiences();
+              }}
+              className="w-7 h-7 cursor-pointer bg-blue-200 flex items-center justify-center rounded-full"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4 text-blue-600"
+                viewBox="0 0 20 20"
+                fill="currentColor"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 text-blue-600"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-            )}
-
-            {state.showActivitiesEdit && (
-              <div
-                onClick={() => {
-                  setState({ ...state, showActivitiesEdit: false });
-                }}
-                className="w-7 h-7 cursor-pointer bg-blue-200 flex items-center justify-center rounded-full"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-4 h-4 text-blue-600"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-            )}
+                <path
+                  fillRule="evenodd"
+                  d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
 
             <div
               onClick={() => {
@@ -2943,7 +2914,8 @@ const Trip = ({
             </div>
           </div>
 
-          {!trip.activity && (
+          <>
+            {/* {!trip.activity && (
             <div
               onMouseLeave={() => setState({ ...state, showNavigation: false })}
               onMouseEnter={() => setState({ ...state, showNavigation: true })}
@@ -3040,7 +3012,8 @@ const Trip = ({
                 </motion.div>
               </Swiper>
             </div>
-          )}
+          )} */}
+          </>
         </div>
       )}
 
@@ -3188,6 +3161,10 @@ const Trip = ({
               strokeWidth="2"
               onClick={() => {
                 setShowActivityCheckInDate(!showActivityCheckInDate);
+                if (process.browser) {
+                  document.body.classList.add("h-screen");
+                  document.body.classList.add("overflow-y-hidden");
+                }
               }}
             >
               <path
@@ -3203,6 +3180,8 @@ const Trip = ({
               showModal={showActivityCheckInDate}
               closeModal={() => {
                 setShowActivityCheckInDate(false);
+                document.body.classList.remove("h-screen");
+                document.body.classList.remove("overflow-y-hidden");
               }}
               className="max-w-[500px] max-h-[520px] top-[10%]"
             >
@@ -3280,8 +3259,11 @@ const Trip = ({
               showModal={showActivityCheckInDate}
               closeModal={() => {
                 setShowActivityCheckInDate(false);
+                document.body.classList.remove("h-screen");
+                document.body.classList.remove("overflow-y-hidden");
               }}
               title="Add a date"
+              className="overflow-y-screen"
             >
               <div className={""}>
                 <div>
@@ -3364,6 +3346,11 @@ const Trip = ({
             <div
               onClick={() => {
                 setActivityGuestPopup(!activityGuestPopup);
+
+                if (process.browser) {
+                  document.body.classList.add("h-screen");
+                  document.body.classList.add("overflow-y-hidden");
+                }
               }}
               className="px-3 cursor-pointer text-sm py-1 w-fit text-white bg-blue-500 rounded-md"
             >
@@ -3374,8 +3361,11 @@ const Trip = ({
                 showModal={activityGuestPopup}
                 closeModal={() => {
                   setActivityGuestPopup(false);
+                  document.body.classList.remove("h-screen");
+                  document.body.classList.remove("overflow-y-hidden");
                 }}
                 title="Add guests"
+                className="overflow-y-screen"
               >
                 <div
                   onClick={(e) => {
@@ -3386,14 +3376,22 @@ const Trip = ({
                   <div className="mb-2">
                     <Price
                       stayPrice={
-                        activityPriceOfPlan *
-                        (currentPrice.value === "Price per person"
-                          ? numOfPeople
-                          : currentPrice.value === "Price per session"
-                          ? numOfSession
-                          : currentPrice.value === "Price per group"
-                          ? numOfGroups
-                          : 1)
+                        priceOfResident *
+                          (currentPrice.value === "per person"
+                            ? numOfPeople
+                            : currentPrice.value === "per session"
+                            ? numOfSession
+                            : currentPrice.value === "per group"
+                            ? numOfGroups
+                            : 1) +
+                        priceOfNonResident *
+                          (currentPrice.value === "per person"
+                            ? numOfPeopleNonResident
+                            : currentPrice.value === "per session"
+                            ? numOfSessionNonResident
+                            : currentPrice.value === "per group"
+                            ? numOfGroupsNonResident
+                            : 1)
                       }
                     ></Price>
                   </div>
@@ -3402,8 +3400,11 @@ const Trip = ({
                     onChange={(value) => {
                       setCurrentPrice(value);
                       setNumOfPeople(1);
-                      setNumOfGroups(1);
-                      setNumOfSession(1);
+                      setNumOfPeopleNonResident(0);
+                      setNumOfGroups(0);
+                      setNumOfGroupsNonResident(0);
+                      setNumOfSession(0);
+                      setNumOfSessionNonResident(0);
                     }}
                     className={"text-sm outline-none border border-gray-500"}
                     instanceId={priceType}
@@ -3453,46 +3454,96 @@ const Trip = ({
                     </svg>
                     {currentPrice && (
                       <span className="text-gray-600 text-sm">
-                        Maximum number of guests is {activityMaxGuests}
+                        Maximum number of guests is {maxGuests}
                       </span>
                     )}
                   </div>
 
-                  {currentPrice.value === "Price per person" && (
-                    <div className="flex justify-between mt-6">
-                      <div className="flex flex-col text-sm text-gray-600 items-center">
-                        <span>
-                          {numOfPeople} {numOfPeople > 1 ? "People" : "Person"}
-                        </span>
-                      </div>
-
-                      <div className="flex gap-3 items-center">
-                        <div
-                          onClick={() => {
-                            if (numOfPeople > 1) {
-                              setNumOfPeople(numOfPeople - 1);
-                            }
-                          }}
-                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
-                        >
-                          -
+                  {currentPrice.value === "per person" && (
+                    <>
+                      <div className="flex justify-between mt-6">
+                        <div className="flex flex-col text-sm text-gray-600 items-center">
+                          <span>
+                            {numOfPeople}{" "}
+                            {numOfPeople > 1 ? "Residents" : "Resident"}
+                          </span>
                         </div>
 
-                        <div
-                          onClick={() => {
-                            if (numOfPeople < activityMaxGuests) {
-                              setNumOfPeople(numOfPeople + 1);
-                            }
-                          }}
-                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
-                        >
-                          +
+                        <div className="flex gap-3 items-center">
+                          <div
+                            onClick={() => {
+                              if (
+                                (numOfPeople > 1 ||
+                                  numOfPeopleNonResident > 0) &&
+                                numOfPeople > 0
+                              ) {
+                                setNumOfPeople(numOfPeople - 1);
+                              }
+                            }}
+                            className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
+                          >
+                            -
+                          </div>
+
+                          <div
+                            onClick={() => {
+                              if (numOfPeople < maxGuests) {
+                                setNumOfPeople(numOfPeople + 1);
+                              }
+                            }}
+                            className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
+                          >
+                            +
+                          </div>
                         </div>
                       </div>
-                    </div>
+
+                      <div className="flex justify-between mt-6">
+                        <div className="flex flex-col text-sm text-gray-600 items-center">
+                          <span>
+                            {numOfPeopleNonResident}{" "}
+                            {numOfPeopleNonResident > 1
+                              ? "Non-Residents"
+                              : "Non-Resident"}
+                          </span>
+                        </div>
+
+                        <div className="flex gap-3 items-center">
+                          <div
+                            onClick={() => {
+                              if (
+                                (numOfPeopleNonResident > 1 ||
+                                  numOfPeople > 0) &&
+                                numOfPeopleNonResident > 0
+                              ) {
+                                setNumOfPeopleNonResident(
+                                  numOfPeopleNonResident - 1
+                                );
+                              }
+                            }}
+                            className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
+                          >
+                            -
+                          </div>
+
+                          <div
+                            onClick={() => {
+                              if (numOfPeopleNonResident < maxGuests) {
+                                setNumOfPeopleNonResident(
+                                  numOfPeopleNonResident + 1
+                                );
+                              }
+                            }}
+                            className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
+                          >
+                            +
+                          </div>
+                        </div>
+                      </div>
+                    </>
                   )}
 
-                  {currentPrice.value === "Price per session" && (
+                  {currentPrice.value === "per session" && (
                     <div className="flex justify-between mt-6">
                       <div className="flex flex-col text-sm text-gray-600 items-center">
                         <span>
@@ -3515,7 +3566,7 @@ const Trip = ({
 
                         <div
                           onClick={() => {
-                            if (numOfSession < activityMaxGuests) {
+                            if (numOfSession < maxGuests) {
                               setNumOfSession(numOfSession + 1);
                             }
                           }}
@@ -3527,7 +3578,7 @@ const Trip = ({
                     </div>
                   )}
 
-                  {currentPrice.value === "Price per group" && (
+                  {currentPrice.value === "per group" && (
                     <div className="flex justify-between mt-6">
                       <div className="flex flex-col text-sm text-gray-600 items-center">
                         <span>
@@ -3549,7 +3600,7 @@ const Trip = ({
 
                         <div
                           onClick={() => {
-                            if (numOfGroups < activityMaxGuests) {
+                            if (numOfGroups < maxGuests) {
                               setNumOfGroups(numOfGroups + 1);
                             }
                           }}
@@ -3561,23 +3612,16 @@ const Trip = ({
                     </div>
                   )}
 
-                  <div className="flex items-center gap-2 mt-3">
-                    <Checkbox
-                      checked={activityNonResident}
-                      onChange={() =>
-                        setActivityNonResident(!activityNonResident)
-                      }
-                    ></Checkbox>
-                    <span className="text-gray-600 text-sm">Non-resident</span>
-                  </div>
-
                   {(numOfPeople > 1 || numOfSession > 0 || numOfGroups > 0) && (
                     <div
                       className="mt-2 cursor-pointer text-sm underline"
                       onClick={() => {
                         setNumOfPeople(1);
+                        setNumOfPeopleNonResident(0);
                         setNumOfGroups(1);
+                        setNumOfGroupsNonResident(0);
                         setNumOfSession(1);
+                        setNumOfSessionNonResident(0);
                       }}
                     >
                       clear data
@@ -3586,33 +3630,14 @@ const Trip = ({
 
                   <div className="flex justify-between mt-6">
                     <div></div>
-                    <div className="flex gap-2">
-                      <div
-                        onClick={() => {
-                          setActivityGuestPopup(false);
-                        }}
-                        className="!bg-white text-black border !rounded-3xl px-4 text-sm cursor-pointer py-2"
-                      >
-                        Close
-                      </div>
-                      <Button
-                        onClick={() => {
-                          updateActivityGuest();
-                        }}
-                        className="!bg-blue-700 flex gap-2 !rounded-3xl"
-                      >
-                        <span>Update</span>
-
-                        {activityGuestsLoading && (
-                          <div>
-                            <LoadingSpinerChase
-                              width={16}
-                              height={16}
-                            ></LoadingSpinerChase>
-                          </div>
-                        )}
-                      </Button>
-                    </div>
+                    <Button
+                      onClick={() => {
+                        setGuestPopup(false);
+                      }}
+                      className="!bg-blue-700 !rounded-3xl"
+                    >
+                      <span>Done</span>
+                    </Button>
                   </div>
                 </div>
               </Modal>
@@ -3623,6 +3648,8 @@ const Trip = ({
                 showModal={activityGuestPopup}
                 closeModal={() => {
                   setActivityGuestPopup(false);
+                  document.body.classList.remove("h-screen");
+                  document.body.classList.remove("overflow-y-hidden");
                 }}
                 className="max-w-[500px] max-h-[520px] top-[10%]"
               >
@@ -3635,14 +3662,22 @@ const Trip = ({
                   <div className="mb-2">
                     <Price
                       stayPrice={
-                        activityPriceOfPlan *
-                        (currentPrice.value === "Price per person"
-                          ? numOfPeople
-                          : currentPrice.value === "Price per session"
-                          ? numOfSession
-                          : currentPrice.value === "Price per group"
-                          ? numOfGroups
-                          : 1)
+                        priceOfResident *
+                          (currentPrice.value === "per person"
+                            ? numOfPeople
+                            : currentPrice.value === "per session"
+                            ? numOfSession
+                            : currentPrice.value === "per group"
+                            ? numOfGroups
+                            : 1) +
+                        priceOfNonResident *
+                          (currentPrice.value === "per person"
+                            ? numOfPeopleNonResident
+                            : currentPrice.value === "per session"
+                            ? numOfSessionNonResident
+                            : currentPrice.value === "per group"
+                            ? numOfGroupsNonResident
+                            : 1)
                       }
                     ></Price>
                   </div>
@@ -3651,8 +3686,11 @@ const Trip = ({
                     onChange={(value) => {
                       setCurrentPrice(value);
                       setNumOfPeople(1);
-                      setNumOfGroups(1);
-                      setNumOfSession(1);
+                      setNumOfPeopleNonResident(0);
+                      setNumOfGroups(0);
+                      setNumOfGroupsNonResident(0);
+                      setNumOfSession(0);
+                      setNumOfSessionNonResident(0);
                     }}
                     className={"text-sm outline-none border border-gray-500"}
                     instanceId={priceType}
@@ -3702,46 +3740,96 @@ const Trip = ({
                     </svg>
                     {currentPrice && (
                       <span className="text-gray-600 text-sm">
-                        Maximum number of guests is {activityMaxGuests}
+                        Maximum number of guests is {maxGuests}
                       </span>
                     )}
                   </div>
 
-                  {currentPrice.value === "Price per person" && (
-                    <div className="flex justify-between mt-6">
-                      <div className="flex flex-col text-sm text-gray-600 items-center">
-                        <span>
-                          {numOfPeople} {numOfPeople > 1 ? "People" : "Person"}
-                        </span>
-                      </div>
-
-                      <div className="flex gap-3 items-center">
-                        <div
-                          onClick={() => {
-                            if (numOfPeople > 1) {
-                              setNumOfPeople(numOfPeople - 1);
-                            }
-                          }}
-                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
-                        >
-                          -
+                  {currentPrice.value === "per person" && (
+                    <>
+                      <div className="flex justify-between mt-6">
+                        <div className="flex flex-col text-sm text-gray-600 items-center">
+                          <span>
+                            {numOfPeople}{" "}
+                            {numOfPeople > 1 ? "Residents" : "Resident"}
+                          </span>
                         </div>
 
-                        <div
-                          onClick={() => {
-                            if (numOfPeople < activityMaxGuests) {
-                              setNumOfPeople(numOfPeople + 1);
-                            }
-                          }}
-                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
-                        >
-                          +
+                        <div className="flex gap-3 items-center">
+                          <div
+                            onClick={() => {
+                              if (
+                                (numOfPeople > 1 ||
+                                  numOfPeopleNonResident > 0) &&
+                                numOfPeople > 0
+                              ) {
+                                setNumOfPeople(numOfPeople - 1);
+                              }
+                            }}
+                            className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
+                          >
+                            -
+                          </div>
+
+                          <div
+                            onClick={() => {
+                              if (numOfPeople < maxGuests) {
+                                setNumOfPeople(numOfPeople + 1);
+                              }
+                            }}
+                            className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
+                          >
+                            +
+                          </div>
                         </div>
                       </div>
-                    </div>
+
+                      <div className="flex justify-between mt-6">
+                        <div className="flex flex-col text-sm text-gray-600 items-center">
+                          <span>
+                            {numOfPeopleNonResident}{" "}
+                            {numOfPeopleNonResident > 1
+                              ? "Non-Residents"
+                              : "Non-Resident"}
+                          </span>
+                        </div>
+
+                        <div className="flex gap-3 items-center">
+                          <div
+                            onClick={() => {
+                              if (
+                                (numOfPeopleNonResident > 1 ||
+                                  numOfPeople > 0) &&
+                                numOfPeopleNonResident > 0
+                              ) {
+                                setNumOfPeopleNonResident(
+                                  numOfPeopleNonResident - 1
+                                );
+                              }
+                            }}
+                            className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
+                          >
+                            -
+                          </div>
+
+                          <div
+                            onClick={() => {
+                              if (numOfPeopleNonResident < maxGuests) {
+                                setNumOfPeopleNonResident(
+                                  numOfPeopleNonResident + 1
+                                );
+                              }
+                            }}
+                            className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
+                          >
+                            +
+                          </div>
+                        </div>
+                      </div>
+                    </>
                   )}
 
-                  {currentPrice.value === "Price per session" && (
+                  {currentPrice.value === "per session" && (
                     <div className="flex justify-between mt-6">
                       <div className="flex flex-col text-sm text-gray-600 items-center">
                         <span>
@@ -3764,7 +3852,7 @@ const Trip = ({
 
                         <div
                           onClick={() => {
-                            if (numOfSession < activityMaxGuests) {
+                            if (numOfSession < maxGuests) {
                               setNumOfSession(numOfSession + 1);
                             }
                           }}
@@ -3776,7 +3864,7 @@ const Trip = ({
                     </div>
                   )}
 
-                  {currentPrice.value === "Price per group" && (
+                  {currentPrice.value === "per group" && (
                     <div className="flex justify-between mt-6">
                       <div className="flex flex-col text-sm text-gray-600 items-center">
                         <span>
@@ -3798,7 +3886,7 @@ const Trip = ({
 
                         <div
                           onClick={() => {
-                            if (numOfGroups < activityMaxGuests) {
+                            if (numOfGroups < maxGuests) {
                               setNumOfGroups(numOfGroups + 1);
                             }
                           }}
@@ -3810,23 +3898,16 @@ const Trip = ({
                     </div>
                   )}
 
-                  <div className="flex items-center gap-2 mt-3">
-                    <Checkbox
-                      checked={activityNonResident}
-                      onChange={() =>
-                        setActivityNonResident(!activityNonResident)
-                      }
-                    ></Checkbox>
-                    <span className="text-gray-600 text-sm">Non-resident</span>
-                  </div>
-
                   {(numOfPeople > 1 || numOfSession > 0 || numOfGroups > 0) && (
                     <div
                       className="mt-2 cursor-pointer text-sm underline"
                       onClick={() => {
                         setNumOfPeople(1);
+                        setNumOfPeopleNonResident(0);
                         setNumOfGroups(1);
+                        setNumOfGroupsNonResident(0);
                         setNumOfSession(1);
+                        setNumOfSessionNonResident(0);
                       }}
                     >
                       clear data
@@ -3848,7 +3929,7 @@ const Trip = ({
                         onClick={() => {
                           updateActivityGuest();
                         }}
-                        className="!bg-blue-700 flex gap-2 !rounded-3xl"
+                        className="!bg-blue-700 flex gap-2 items-center !rounded-3xl"
                       >
                         <span>Update</span>
 

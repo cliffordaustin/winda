@@ -10,7 +10,6 @@ import { useRouter } from "next/router";
 
 const Destination = ({ className = "", data }) => {
   const [location, setLocation] = useState("");
-  const [currentNavState, setCurrentNavState] = useState(1);
   const [autoCompleteFromSearch, setAutoCompleteFromSearch] = useState([]);
 
   const router = useRouter();
@@ -28,25 +27,10 @@ const Destination = ({ className = "", data }) => {
 
   const searchApi = () => {
     if (location !== "") {
-      if (currentNavState === 1) {
-        router
-          .push({
-            pathname: "/trip",
-            // query: { search: location, fromOrder: "true" },
-          })
-          .then(() => {
-            router.reload();
-          });
-      } else if (currentNavState === 2) {
-        router
-          .push({
-            pathname: "/trip/experiences",
-            // query: { search: location, fromOrder: "true" },
-          })
-          .then(() => {
-            router.reload();
-          });
-      }
+      router.push({
+        pathname: "/trip",
+        query: { location: location },
+      });
     }
   };
 
@@ -56,89 +40,18 @@ const Destination = ({ className = "", data }) => {
         setLocation(autoCompleteFromSearch[0].place_name);
 
         setAutoCompleteFromSearch([]);
-
-        if (location !== "") {
-          if (currentNavState === 1) {
-            router
-              .push({
-                pathname: "/trip",
-                // query: {
-                //   search: autoCompleteFromSearch[0].place_name,
-                //   fromOrder: "true",
-                // },
-              })
-              .then(() => {
-                router.reload();
-              });
-          } else if (currentNavState === 2) {
-            router
-              .push({
-                pathname: "/trip/experiences",
-                // query: {
-                //   search: autoCompleteFromSearch[0].place_name,
-                //   fromOrder: "true",
-                // },
-              })
-              .then(() => {
-                router.reload();
-              });
-          }
-        }
       }
     }
   };
 
-  const staysSearch = () => {
-    router
-      .push({
-        pathname: "/trip",
-        // query: { search: data.location, fromOrder: "true" },
-      })
-      .then(() => {
-        router.reload();
-      });
+  const curratedTripsSearch = (event) => {
+    router.push({
+      pathname: "/trip",
+    });
   };
 
-  const experiencesSearch = () => {
-    router
-      .push({
-        pathname: "/trip/experiences",
-        // query: { search: data.location, fromOrder: "true" },
-      })
-      .then(() => {
-        router.reload();
-      });
-  };
   return (
     <div className={"px-3 py-2 " + className}>
-      <div className="flex items-center gap-4 justify-center mb-4">
-        <div
-          onClick={(event) => {
-            event.stopPropagation();
-            setCurrentNavState(1);
-          }}
-          className={
-            "cursor-pointer md:!text-base " +
-            (currentNavState === 1 ? styles.showLinkLine : styles.link)
-          }
-        >
-          Stays
-        </div>
-
-        <div
-          onClick={(event) => {
-            event.stopPropagation();
-            setCurrentNavState(2);
-          }}
-          className={
-            "cursor-pointer md:!text-base " +
-            (currentNavState === 2 ? styles.showLinkLine : styles.link)
-          }
-        >
-          Experiences
-        </div>
-      </div>
-
       <div className="w-full flex bg-white border border-gray-300 rounded-lg">
         <div className="h-full w-full relative">
           <Input
@@ -192,7 +105,7 @@ const Destination = ({ className = "", data }) => {
           ></SearchButtonClose>
         </div> */}
         <div className={"bg-white flex items-center mr-2"}>
-          <Button onClick={searchApi} className="">
+          <Button onClick={searchApi} className="!bg-blue-400">
             Search
           </Button>
         </div>
@@ -206,16 +119,10 @@ const Destination = ({ className = "", data }) => {
 
       <div className="mt-4">
         <div
-          onClick={staysSearch}
-          className="py-4 w-full border border-gray-300 pl-3 cursor-pointer rounded-lg"
+          onClick={curratedTripsSearch}
+          className="py-4 w-full border border-gray-300 text-sm font-bold pl-3 cursor-pointer rounded-lg"
         >
-          Stays
-        </div>
-        <div
-          onClick={experiencesSearch}
-          className="py-4 w-full border border-gray-300 mt-2 pl-3 cursor-pointer rounded-lg"
-        >
-          Experiences
+          All currated trips
         </div>
       </div>
     </div>
