@@ -1690,22 +1690,24 @@ function Stays({
               </div>
             )}
 
-            <ReactPaginate
-              breakLabel="..."
-              nextLabel={<Icon icon="bx:chevron-right" className="w-7 h-7" />}
-              disabledClassName="text-gray-300"
-              onPageChange={handlePageClick}
-              forcePage={parseInt(router.query.page) - 1 || 0}
-              pageRangeDisplayed={pageSize}
-              pageCount={totalPages}
-              previousLabel={
-                <Icon icon="bx:chevron-left" className="w-7 h-7" />
-              }
-              activeLinkClassName="bg-gray-700 text-white font-bold"
-              renderOnZeroPageCount={null}
-              containerClassName="flex gap-2 justify-center items-center mt-4"
-              pageLinkClassName="bg-white h-12 font-bold flex justify-center items-center w-12 cursor-pointer hover:border border-gray-200 rounded-full text-sm"
-            />
+            {stays.length > 0 && (
+              <ReactPaginate
+                breakLabel="..."
+                nextLabel={<Icon icon="bx:chevron-right" className="w-7 h-7" />}
+                disabledClassName="text-gray-300"
+                onPageChange={handlePageClick}
+                forcePage={parseInt(router.query.page) - 1 || 0}
+                pageRangeDisplayed={pageSize}
+                pageCount={totalPages}
+                previousLabel={
+                  <Icon icon="bx:chevron-left" className="w-7 h-7" />
+                }
+                activeLinkClassName="bg-gray-700 text-white font-bold"
+                renderOnZeroPageCount={null}
+                containerClassName="flex gap-2 justify-center items-center mt-4"
+                pageLinkClassName="bg-white h-12 font-bold flex justify-center items-center w-12 cursor-pointer hover:border border-gray-200 rounded-full text-sm"
+              />
+            )}
           </div>
         )}
       </div>
@@ -2327,6 +2329,10 @@ function Stays({
               onClick={() => {
                 router.push({
                   pathname: "/stays",
+                  query: {
+                    trip: router.query.trip,
+                    group_trip: router.query.group_trip,
+                  },
                 });
               }}
               className="underline cursor-pointer"
@@ -2346,7 +2352,7 @@ function Stays({
                 "!bg-gradient-to-r !px-4 from-pink-500 via-red-500 to-yellow-500 !text-white "
               }
             >
-              Show all {stays.length} stays
+              Show all {count} stays
             </Button>
           </div>
         </div>
@@ -3062,7 +3068,7 @@ function Stays({
                   "!bg-gradient-to-r !px-4 from-pink-500 via-red-500 to-yellow-500 !text-white "
                 }
               >
-                Show all {stays.length} stays
+                Show all {count} stays
               </Button>
             </div>
           </div>

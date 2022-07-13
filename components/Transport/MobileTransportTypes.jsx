@@ -12,7 +12,15 @@ function MobileTransportTypes({
 }) {
   const router = useRouter();
 
-  const options = ["LARGE 4x4", "SMALL 4x4", "VAN", "SEDAN", "SMALL CAR"];
+  const options = [
+    "LARGE 4x4",
+    "SMALL 4x4",
+    "VAN",
+    "SEDAN",
+    // "MEDIUM",
+    // "MOTORBIKE",
+    // "PICKUP TRUCK",
+  ];
 
   const [currentOptions, setCurrentOptions] = useState([]);
 

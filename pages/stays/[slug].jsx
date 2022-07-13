@@ -628,16 +628,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               </div>
               <div className="text-2xl font-bold">{stay.name}</div>
             </div>
-            <div className="flex flex-wrap gap-1 mt-2">
-              {stay.tags.map((tag, index) => (
-                <div
-                  key={index}
-                  className="px-3 py-1 bg-blue-300 rounded-3xl text-xs capitalize"
-                >
-                  {tag}
-                </div>
-              ))}
-            </div>
+
             <div ref={scrollToVisible} className="relative -ml-8 -mr-4">
               <ImageGallery
                 images={stay.stay_images}
@@ -727,9 +718,20 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               <ScrollTo guestPopup={guestPopup} stay={stay}></ScrollTo>
             </div>
 
+            <div className="flex flex-wrap gap-1 mt-16">
+              {stay.tags.map((tag, index) => (
+                <div
+                  key={index}
+                  className="px-3 py-1 bg-blue-300 rounded-3xl text-xs capitalize"
+                >
+                  {tag}
+                </div>
+              ))}
+            </div>
+
             {/* about */}
 
-            <div className="mt-14">
+            <div className="mt-4">
               <div className="flex">
                 <div className="flex flex-col w-full">
                   <div className="text-gray-500 flex justify-between md:justify-start gap-4 md:gap-2 text-sm truncate mt-3 flex-wrap">
@@ -764,11 +766,9 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     {stay.rooms && (
                       <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center md:gap-1">
                         <h1 className="font-bold text-base md:text-lg text-gray-800">
-                          Bedrooms
+                          Rooms
                         </h1>
-                        <div className="text-gray-600">
-                          {stay.rooms} bedrooms
-                        </div>
+                        <div className="text-gray-600">{stay.rooms} rooms</div>
                       </div>
                     )}
                     {stay.beds && (

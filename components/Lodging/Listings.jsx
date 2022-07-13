@@ -55,20 +55,36 @@ function Listings({
 
   return (
     <ClientOnly>
-      <div className="w-full flex flex-wrap gap-4">
-        {stays.map((stay, index) => (
-          <Listing
-            key={index}
-            listing={stay}
-            getDistance={getDistance}
-            userLatLng={userLatLng}
-            slugIsCorrect={slugIsCorrect}
-            itemsInCart={itemsInCart}
-            userProfile={userProfile}
-            itemsInOrders={itemsInOrders}
-          ></Listing>
-        ))}
-      </div>
+      {stays.length > 0 && (
+        <div className="w-full flex flex-wrap gap-4">
+          {stays.map((stay, index) => (
+            <Listing
+              key={index}
+              listing={stay}
+              getDistance={getDistance}
+              userLatLng={userLatLng}
+              slugIsCorrect={slugIsCorrect}
+              itemsInCart={itemsInCart}
+              userProfile={userProfile}
+              itemsInOrders={itemsInOrders}
+            ></Listing>
+          ))}
+        </div>
+      )}
+
+      {stays.length === 0 && (
+        <div className="flex flex-col items-center justify-center">
+          <div className="font-bold text-2xl">No result for this filter</div>
+          <div
+            onClick={() => {
+              router.back();
+            }}
+            className="text-sm font-bold cursor-pointer text-blue-400 hover:text-blue-600 transition-colors duration-200 ease-linear"
+          >
+            Go back
+          </div>
+        </div>
+      )}
       {/* {filteredStays && (
         <div className="w-full flex flex-wrap gap-4">
           {filteredStays.map((stay, index) => (
