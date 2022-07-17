@@ -17,7 +17,7 @@ function Listings({
 }) {
   return (
     <ClientOnly>
-      <div className="w-full flex px-3 md:px-2 smUpdate:justify-center md:justify-start md:ml-0 flex-wrap gap-8 sm:gap-3 xl:gap-8">
+      <div className="w-full flex px-3 md:px-0 smUpdate:justify-center md:justify-center md:ml-0 flex-wrap gap-8 sm:gap-3 xl:gap-4">
         {transports.map((transport, index) => (
           <Listing
             slugIsCorrect={slugIsCorrect}

@@ -77,11 +77,17 @@ function Listings({
           <div className="font-bold text-2xl">No result for this filter</div>
           <div
             onClick={() => {
-              router.back();
+              router.push({
+                pathname: "/stays",
+                query: {
+                  trip: router.query.trip,
+                  group_trip: router.query.group_trip,
+                },
+              });
             }}
             className="text-sm font-bold cursor-pointer text-blue-400 hover:text-blue-600 transition-colors duration-200 ease-linear"
           >
-            Go back
+            Clear filter
           </div>
         </div>
       )}

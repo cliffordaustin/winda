@@ -148,12 +148,14 @@ function Navbar({
       price +=
         item.number_of_days * item.transport.price_per_day +
         (item.user_need_a_driver
-          ? item.transport.additional_price_with_a_driver
+          ? item.transport.additional_price_with_a_driver * item.number_of_days
           : 0);
     } else {
       price +=
         item.number_of_days * item.price_per_day +
-        (item.user_need_a_driver ? item.additional_price_with_a_driver : 0);
+        (item.user_need_a_driver
+          ? item.additional_price_with_a_driver * item.number_of_days
+          : 0);
     }
 
     return price;
@@ -182,7 +184,7 @@ function Navbar({
         )}
       </div>
       <div className="flex items-center gap-2">
-        <ClientOnly>
+        {/* <ClientOnly>
           {currencyToKES && (
             <div
               className="font-bold text-xs md:text-base text-gray-700 hover:text-gray-900 cursor-pointer transition-all duration-300 ease-linear flex gap-1 items-center"
@@ -237,7 +239,7 @@ function Navbar({
               <div>KES</div>
             </div>
           )}
-        </ClientOnly>
+        </ClientOnly> */}
         <UserDropdown
           changeShowDropdown={changeShowDropdown}
           showDropdown={showDropdown}
@@ -275,191 +277,203 @@ function Navbar({
       </div>
 
       {showPopup && (
-        <div className="w-[500px] z-50 hidden md:block p-4 h-[400px] overflow-y-scroll rounded-xl bg-white shadow-xl absolute right-6 top-14">
-          {!cartLoading && (
-            <div className="">
-              {cart.length > 0 && (
-                <div className="mb-2 mt-2 ml-4 text-lg font-bold">
-                  Stays - Your Basket({cart.length})
+        <div className="w-[500px] z-50 hidden md:block h-[400px] rounded-xl bg-white shadow-xl absolute right-6 top-14">
+          <div className="h-full overflow-y-scroll">
+            {!cartLoading && (
+              <div className="p-4">
+                {cart.length > 0 && (
+                  <div className="mb-2 mt-2 ml-4 text-lg font-bold">
+                    Stays - Your Basket({cart.length})
+                  </div>
+                )}
+                <div className="flex flex-wrap justify-between">
+                  {cart.map((item, index) => {
+                    return (
+                      <div key={index} className="w-full">
+                        <CartItem
+                          cartId={
+                            Cookies.get("token")
+                              ? allItemsInCart[index].id
+                              : null
+                          }
+                          stay={item}
+                          from_date={
+                            Cookies.get("token")
+                              ? allItemsInCart[index].from_date
+                              : item.from_date
+                          }
+                          to_date={
+                            Cookies.get("token")
+                              ? allItemsInCart[index].to_date
+                              : item.to_date
+                          }
+                          num_of_adults={
+                            Cookies.get("token")
+                              ? allItemsInCart[index].num_of_adults
+                              : item.num_of_adults
+                          }
+                          num_of_children={
+                            Cookies.get("token")
+                              ? allItemsInCart[index].num_of_children
+                              : item.num_of_children
+                          }
+                          num_of_children_non_resident={
+                            Cookies.get("token")
+                              ? allItemsInCart[index]
+                                  .num_of_children_non_resident
+                              : item.num_of_children_non_resident
+                          }
+                          num_of_adults_non_resident={
+                            Cookies.get("token")
+                              ? allItemsInCart[index].num_of_adults_non_resident
+                              : item.num_of_adults_non_resident
+                          }
+                          plan={
+                            Cookies.get("token")
+                              ? allItemsInCart[index].plan
+                              : item.plan
+                          }
+                          stayPage={true}
+                        ></CartItem>
+                      </div>
+                    );
+                  })}
                 </div>
-              )}
-              <div className="flex flex-wrap justify-between">
-                {cart.map((item, index) => {
-                  return (
+
+                {activitiesCart.length > 0 && (
+                  <div className="mb-2 ml-4 text-lg font-bold">
+                    Experiences - Your Basket({activitiesCart.length})
+                  </div>
+                )}
+                <div className="flex flex-wrap justify-between">
+                  {activitiesCart.map((item, index) => (
                     <div key={index} className="w-full">
                       <CartItem
                         cartId={
-                          Cookies.get("token") ? allItemsInCart[index].id : null
+                          Cookies.get("token")
+                            ? allItemsInActivityCart[index].id
+                            : null
                         }
-                        stay={item}
                         from_date={
                           Cookies.get("token")
-                            ? allItemsInCart[index].from_date
+                            ? allItemsInActivityCart[index].from_date
                             : item.from_date
                         }
-                        to_date={
+                        number_of_people={
                           Cookies.get("token")
-                            ? allItemsInCart[index].to_date
-                            : item.to_date
+                            ? allItemsInActivityCart[index].number_of_people
+                            : item.number_of_people
                         }
-                        num_of_adults={
+                        number_of_people_non_resident={
                           Cookies.get("token")
-                            ? allItemsInCart[index].num_of_adults
-                            : item.num_of_adults
+                            ? allItemsInActivityCart[index]
+                                .number_of_people_non_resident
+                            : item.number_of_people_non_resident
                         }
-                        num_of_children={
+                        number_of_sessions={
                           Cookies.get("token")
-                            ? allItemsInCart[index].num_of_children
-                            : item.num_of_children
+                            ? allItemsInActivityCart[index].number_of_sessions
+                            : item.number_of_sessions
                         }
-                        num_of_children_non_resident={
+                        number_of_sessions_non_resident={
                           Cookies.get("token")
-                            ? allItemsInCart[index].num_of_children_non_resident
-                            : item.num_of_children_non_resident
+                            ? allItemsInActivityCart[index]
+                                .number_of_sessions_non_resident
+                            : item.number_of_sessions_non_resident
                         }
-                        num_of_adults_non_resident={
+                        number_of_groups={
                           Cookies.get("token")
-                            ? allItemsInCart[index].num_of_adults_non_resident
-                            : item.num_of_adults_non_resident
+                            ? allItemsInActivityCart[index].number_of_groups
+                            : item.number_of_groups
                         }
-                        plan={
+                        number_of_groups_non_resident={
                           Cookies.get("token")
-                            ? allItemsInCart[index].plan
-                            : item.plan
+                            ? allItemsInActivityCart[index]
+                                .number_of_groups_non_resident
+                            : item.number_of_groups_non_resident
                         }
-                        stayPage={true}
+                        pricing_type={
+                          Cookies.get("token")
+                            ? allItemsInActivityCart[index].pricing_type
+                            : item.pricing_type
+                        }
+                        activity={item}
+                        activitiesPage={true}
                       ></CartItem>
                     </div>
-                  );
-                })}
-              </div>
+                  ))}
+                </div>
 
-              {activitiesCart.length > 0 && (
-                <div className="mb-2 ml-4 text-lg font-bold">
-                  Experiences - Your Basket({activitiesCart.length})
+                {transportCart.length > 0 && (
+                  <div className="mb-4 ml-4 text-lg font-bold">
+                    Transport - Your Basket({transportCart.length})
+                  </div>
+                )}
+                <div className="flex flex-wrap mb-5 justify-between">
+                  {transportCart.map((item, index) => (
+                    <div key={index} className="w-full">
+                      <CartItem
+                        cartId={
+                          Cookies.get("token")
+                            ? allItemsInTransportCart[index].id
+                            : null
+                        }
+                        transport={item}
+                        transportPage={true}
+                        transportDistance={
+                          Cookies.get("token")
+                            ? allItemsInTransportCart[index].distance
+                            : item.distance
+                        }
+                        transportFromDate={
+                          Cookies.get("token")
+                            ? allItemsInTransportCart[index].from_date
+                            : item.from_date
+                        }
+                        numberOfDays={
+                          Cookies.get("token")
+                            ? allItemsInTransportCart[index].number_of_days
+                            : item.number_of_days
+                        }
+                        userNeedADriver={
+                          Cookies.get("token")
+                            ? allItemsInTransportCart[index].user_need_a_driver
+                            : item.user_need_a_driver
+                        }
+                        transportDestination={
+                          Cookies.get("token")
+                            ? allItemsInTransportCart[index].destination
+                            : item.destination
+                        }
+                        transportStartingPoint={
+                          Cookies.get("token")
+                            ? allItemsInTransportCart[index].starting_point
+                            : item.starting_point
+                        }
+                        transportPrice={priceOfTransportCart(
+                          Cookies.get("token")
+                            ? allItemsInTransportCart[index]
+                            : item
+                        )}
+                      ></CartItem>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {cart.length === 0 &&
+              activitiesCart.length === 0 &&
+              transportCart.length === 0 && (
+                <div className="font-bold text-2xl text-center w-full inline-block">
+                  <span>Nothing in basket</span>
                 </div>
               )}
-              <div className="flex flex-wrap justify-between">
-                {activitiesCart.map((item, index) => (
-                  <div key={index} className="w-full">
-                    <CartItem
-                      cartId={
-                        Cookies.get("token")
-                          ? allItemsInActivityCart[index].id
-                          : null
-                      }
-                      from_date={
-                        Cookies.get("token")
-                          ? allItemsInActivityCart[index].from_date
-                          : item.from_date
-                      }
-                      number_of_people={
-                        Cookies.get("token")
-                          ? allItemsInActivityCart[index].number_of_people
-                          : item.number_of_people
-                      }
-                      number_of_people_non_resident={
-                        Cookies.get("token")
-                          ? allItemsInActivityCart[index]
-                              .number_of_people_non_resident
-                          : item.number_of_people_non_resident
-                      }
-                      number_of_sessions={
-                        Cookies.get("token")
-                          ? allItemsInActivityCart[index].number_of_sessions
-                          : item.number_of_sessions
-                      }
-                      number_of_sessions_non_resident={
-                        Cookies.get("token")
-                          ? allItemsInActivityCart[index]
-                              .number_of_sessions_non_resident
-                          : item.number_of_sessions_non_resident
-                      }
-                      number_of_groups={
-                        Cookies.get("token")
-                          ? allItemsInActivityCart[index].number_of_groups
-                          : item.number_of_groups
-                      }
-                      number_of_groups_non_resident={
-                        Cookies.get("token")
-                          ? allItemsInActivityCart[index]
-                              .number_of_groups_non_resident
-                          : item.number_of_groups_non_resident
-                      }
-                      pricing_type={
-                        Cookies.get("token")
-                          ? allItemsInActivityCart[index].pricing_type
-                          : item.pricing_type
-                      }
-                      activity={item}
-                      activitiesPage={true}
-                    ></CartItem>
-                  </div>
-                ))}
-              </div>
-
-              {transportCart.length > 0 && (
-                <div className="mb-4 ml-4 text-lg font-bold">
-                  Transport - Your Basket({transportCart.length})
-                </div>
-              )}
-              <div className="flex flex-wrap mb-5 justify-between">
-                {transportCart.map((item, index) => (
-                  <div key={index} className="w-full">
-                    <CartItem
-                      cartId={
-                        Cookies.get("token")
-                          ? allItemsInTransportCart[index].id
-                          : null
-                      }
-                      transport={item}
-                      transportPage={true}
-                      transportDistance={
-                        Cookies.get("token")
-                          ? allItemsInTransportCart[index].distance
-                          : item.distance
-                      }
-                      transportFromDate={
-                        Cookies.get("token")
-                          ? allItemsInTransportCart[index].from_date
-                          : item.from_date
-                      }
-                      numberOfDays={
-                        Cookies.get("token")
-                          ? allItemsInTransportCart[index].number_of_days
-                          : item.number_of_days
-                      }
-                      userNeedADriver={
-                        Cookies.get("token")
-                          ? allItemsInTransportCart[index].user_need_a_driver
-                          : item.user_need_a_driver
-                      }
-                      transportDestination={
-                        Cookies.get("token")
-                          ? allItemsInTransportCart[index].destination
-                          : item.destination
-                      }
-                      transportStartingPoint={
-                        Cookies.get("token")
-                          ? allItemsInTransportCart[index].starting_point
-                          : item.starting_point
-                      }
-                      transportPrice={priceOfTransportCart(
-                        Cookies.get("token")
-                          ? allItemsInTransportCart[index]
-                          : item
-                      )}
-                    ></CartItem>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+          </div>
           <div
             onClick={() => {
               router.push("/cart");
             }}
-            className="fixed  top-[430px] h-12 flex items-center justify-center font-bold cursor-pointer rounded-b-xl text-white w-[500px] right-6 bg-gray-700"
+            className="absolute bottom-0 left-0 right-0 h-12 flex items-center justify-center font-bold cursor-pointer rounded-b-xl text-white w-full bg-gray-700"
           >
             View in basket
           </div>

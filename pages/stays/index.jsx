@@ -40,8 +40,6 @@ import { useGoogleOneTapLogin } from "@react-oauth/google";
 
 function Stays({
   userProfile,
-  longitude,
-  latitude,
   stays,
   pageSize,
   count,
@@ -399,38 +397,26 @@ function Stays({
   const [numOfBathroomsFilter, setNumOfBathroomsFilter] = useState(0);
 
   const filterMinPrice = () => {
-    if (minPrice) {
-      router.push({
-        query: {
-          ...router.query,
-          min_price: minPrice,
-          max_price: router.query.max_price || "",
-        },
-      });
-    }
+    router.push({
+      query: {
+        ...router.query,
+        min_price: minPrice,
+        max_price: router.query.max_price || "",
+      },
+    });
   };
 
   const filterMaxPrice = () => {
-    if (maxPrice) {
-      router.push({
-        query: {
-          ...router.query,
-          min_price: router.query.min_price || "",
-          max_price: maxPrice,
-        },
-      });
-    }
+    router.push({
+      query: {
+        ...router.query,
+        min_price: router.query.min_price || "",
+        max_price: maxPrice,
+      },
+    });
   };
 
   const handlePageClick = (event) => {
-    // const newOffset = (event.selected * itemsPerPage) % items.length;
-    // console.log(
-    //   `User requested page number ${event.selected}, which is offset ${newOffset}`
-    // );
-    // setItemOffset(newOffset);
-
-    console.log(event.selected);
-
     router.push({
       query: {
         ...router.query,
@@ -1724,7 +1710,7 @@ function Stays({
         className="md:!hidden !overflow-y-scroll"
         title="Filters"
       >
-        <div className="px-4 relative">
+        <div className="relative">
           <div className="">
             <div className="mt-2 mb-4">
               <h1 className="font-bold text-base mb-2">Price Range</h1>
@@ -1752,6 +1738,11 @@ function Stays({
                       onChange={(event) => {
                         setMinPrice(event.target.value);
                       }}
+                      onKeyPress={(event) => {
+                        if (event.key === "Enter") {
+                          event.target.blur();
+                        }
+                      }}
                       className="w-full focus:outline-none text-sm "
                     />
                   </div>
@@ -1770,6 +1761,11 @@ function Stays({
                       type="number"
                       onChange={(event) => {
                         setMaxPrice(event.target.value);
+                      }}
+                      onKeyPress={(event) => {
+                        if (event.key === "Enter") {
+                          event.target.blur();
+                        }
                       }}
                       className="w-full focus:outline-none text-sm "
                     />
@@ -2467,6 +2463,11 @@ function Stays({
                         onChange={(event) => {
                           setMinPrice(event.target.value);
                         }}
+                        onKeyPress={(event) => {
+                          if (event.key === "Enter") {
+                            event.target.blur();
+                          }
+                        }}
                         className="w-full focus:outline-none text-sm "
                       />
                     </div>
@@ -2485,6 +2486,11 @@ function Stays({
                         type="number"
                         onChange={(event) => {
                           setMaxPrice(event.target.value);
+                        }}
+                        onKeyPress={(event) => {
+                          if (event.key === "Enter") {
+                            event.target.blur();
+                          }
                         }}
                         className="w-full focus:outline-none text-sm "
                       />
@@ -3031,11 +3037,6 @@ function Stays({
 
             <hr className="-mx-4 my-6" />
 
-            <div className="text-lg font-bold mb-2 mt-2">Travel themes</div>
-            <ThemeFilter></ThemeFilter>
-
-            <hr className="-mx-4 my-6" />
-
             <div className="text-lg font-bold mb-2 mt-8">Amenities</div>
             <Amenities></Amenities>
           </div>
@@ -3049,6 +3050,10 @@ function Stays({
                 onClick={() => {
                   router.push({
                     pathname: "/stays",
+                    query: {
+                      trip: router.query.trip,
+                      group_trip: router.query.group_trip,
+                    },
                   });
                 }}
                 className="underline cursor-pointer"

@@ -198,7 +198,7 @@ function Search({
                 add={addToAdults}
                 remove={removeFromAdults}
                 guests={numOfAdults}
-                type="Adults"
+                type="Guests"
               ></Guest>
             </div>
             {/* <div className="flex flex-col items-center">

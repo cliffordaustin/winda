@@ -121,7 +121,8 @@ const Cart = ({
           price +=
             item.number_of_days * item.transport.price_per_day +
             (item.user_need_a_driver
-              ? item.transport.additional_price_with_a_driver
+              ? item.transport.additional_price_with_a_driver *
+                item.number_of_days
               : 0);
         }
       });
@@ -134,7 +135,9 @@ const Cart = ({
         } else if (item.number_of_days) {
           price +=
             item.number_of_days * item.price_per_day +
-            (item.user_need_a_driver ? item.additional_price_with_a_driver : 0);
+            (item.user_need_a_driver
+              ? item.additional_price_with_a_driver * item.number_of_days
+              : 0);
         }
       });
     }
@@ -326,7 +329,8 @@ const Cart = ({
         price +=
           item.number_of_days * item.transport.price_per_day +
           (item.user_need_a_driver
-            ? item.transport.additional_price_with_a_driver
+            ? item.transport.additional_price_with_a_driver *
+              item.number_of_days
             : 0);
       }
     } else if (!Cookies.get("token") && Cookies.get("cart")) {
@@ -337,7 +341,9 @@ const Cart = ({
       } else if (item.number_of_days) {
         price +=
           item.number_of_days * item.price_per_day +
-          (item.user_need_a_driver ? item.additional_price_with_a_driver : 0);
+          (item.user_need_a_driver
+            ? item.additional_price_with_a_driver * item.number_of_days
+            : 0);
       }
     }
     return price;
@@ -648,7 +654,7 @@ const Cart = ({
               <Button
                 onClick={() => {
                   if (Cookies.get("token")) {
-                    initializePayment(onSuccess, onClose);
+                    // if user is signed in, then check for availability of items
                   } else {
                     router.push({
                       pathname: "/login",
@@ -658,7 +664,7 @@ const Cart = ({
                 }}
                 className="w-full !py-3 flex items-center gap-2 text-lg !bg-blue-900 !text-primary-blue-200"
               >
-                <span>Continue to Check Out</span>
+                <span>Confirm availability</span>
                 <div className={" " + (!loading ? "hidden" : "")}>
                   <LoadingSpinerChase
                     width={20}

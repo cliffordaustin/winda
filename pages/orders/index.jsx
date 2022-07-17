@@ -87,7 +87,8 @@ function Orders({
         price +=
           item.number_of_days * item.transport.price_per_day +
           (item.user_need_a_driver
-            ? item.transport.additional_price_with_a_driver
+            ? item.transport.additional_price_with_a_driver *
+              item.number_of_days
             : 0);
       }
     } else if (!Cookies.get("token") && Cookies.get("cart")) {
@@ -98,7 +99,9 @@ function Orders({
       } else if (item.number_of_days) {
         price +=
           item.number_of_days * item.price_per_day +
-          (item.user_need_a_driver ? item.additional_price_with_a_driver : 0);
+          (item.user_need_a_driver
+            ? item.additional_price_with_a_driver * item.number_of_days
+            : 0);
       }
     }
     return price;

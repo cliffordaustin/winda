@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import Link from "next/link";
+import ReactPaginate from "react-paginate";
 
 import LoadingSpinerChase from "../../components/ui/LoadingSpinerChase";
 import getToken from "../../lib/getToken";
@@ -26,8 +27,17 @@ import ClientOnly from "../../components/ClientOnly";
 import { setFilteredActivities } from "../../redux/actions/activity";
 import TypeOfActivities from "../../components/Activities/ActivitiesFilterItems";
 import MobileSearchModal from "../../components/Activities/MobileSearchModal";
+import { Icon } from "@iconify/react";
 
-function Activities({ userProfile, activities }) {
+function Activities({
+  userProfile,
+  activities,
+  pageSize,
+  count,
+  nextLink,
+  previousLink,
+  totalPages,
+}) {
   const router = useRouter();
   const [state, setState] = useState({
     showDropdown: false,
@@ -336,27 +346,32 @@ function Activities({ userProfile, activities }) {
   const [mobileSearchModal, setMobileSearchModal] = useState(false);
 
   const filterMinPrice = () => {
-    if (minPrice) {
-      router.push({
-        query: {
-          ...router.query,
-          min_price: minPrice,
-          max_price: router.query.max_price || "",
-        },
-      });
-    }
+    router.push({
+      query: {
+        ...router.query,
+        min_price: minPrice,
+        max_price: router.query.max_price || "",
+      },
+    });
   };
 
   const filterMaxPrice = () => {
-    if (maxPrice) {
-      router.push({
-        query: {
-          ...router.query,
-          min_price: router.query.min_price || "",
-          max_price: maxPrice,
-        },
-      });
-    }
+    router.push({
+      query: {
+        ...router.query,
+        min_price: router.query.min_price || "",
+        max_price: maxPrice,
+      },
+    });
+  };
+
+  const handlePageClick = (event) => {
+    router.push({
+      query: {
+        ...router.query,
+        page: event.selected + 1,
+      },
+    });
   };
 
   return (
@@ -457,10 +472,82 @@ function Activities({ userProfile, activities }) {
                 setState({
                   ...state,
                   ...turnOffAllPopup,
-                  showSortPopup: !state.showSortPopup,
+                  showPricePopup: !state.showPricePopup,
                 });
               }}
               className="w-2/4 relative flex items-center justify-center transition-all duration-200 ease-linear hover:border-gray-200 rounded-xl"
+            >
+              <Icon className="w-7 h-7 text-gray-600" icon="la:funnel-dollar" />
+
+              <Popup
+                className="absolute top-full mt-2 xssMax:w-[250px] w-[338px] sm:w-[450px] xssMax:-left-44 -left-64 md:-left-10 px-2"
+                showPopup={state.showPricePopup}
+              >
+                <h1 className="font-bold text-base mb-2 text-gray-600">
+                  Price Range
+                </h1>
+                <div className="flex items-center gap-3 px-2">
+                  <div className="w-[50%] border rounded-md h-fit px-2 py-1">
+                    <span className="text-sm text-gray-500">Min price</span>
+                    <div className="flex items-center">
+                      <div className="text-sm font-bold mr-2 ">$</div>
+                      <input
+                        onBlur={() => {
+                          filterMinPrice();
+                        }}
+                        name="min-price"
+                        value={minPrice}
+                        type="number"
+                        onChange={(event) => {
+                          setMinPrice(event.target.value);
+                        }}
+                        onKeyPress={(event) => {
+                          if (event.key === "Enter") {
+                            event.target.blur();
+                          }
+                        }}
+                        className="w-full focus:outline-none text-sm "
+                      />
+                    </div>
+                  </div>
+                  <div> - </div>
+                  <div className="w-[50%] border rounded-md h-fit px-2 py-1">
+                    <span className="text-sm text-gray-500">Max price</span>
+                    <div className="flex items-center">
+                      <div className="text-sm font-bold mr-2 ">$</div>
+                      <input
+                        onBlur={() => {
+                          filterMaxPrice();
+                        }}
+                        name="max-price"
+                        value={maxPrice}
+                        type="number"
+                        onChange={(event) => {
+                          setMaxPrice(event.target.value);
+                        }}
+                        onKeyPress={(event) => {
+                          if (event.key === "Enter") {
+                            event.target.blur();
+                          }
+                        }}
+                        className="w-full focus:outline-none text-sm "
+                      />
+                    </div>
+                  </div>
+                </div>
+              </Popup>
+            </div>
+
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                setState({
+                  ...state,
+                  ...turnOffAllPopup,
+                  showSortPopup: !state.showSortPopup,
+                });
+              }}
+              className="w-2/4 flex items-center justify-center hover:border transition-all duration-200 ease-linear hover:border-gray-200 rounded-xl border"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -478,7 +565,7 @@ function Activities({ userProfile, activities }) {
               </svg>
 
               <Popup
-                className="absolute top-full mt-2 w-60 -right-6"
+                className="absolute top-full -mt-2 w-60 right-3"
                 showPopup={state.showSortPopup}
               >
                 <div
@@ -558,42 +645,6 @@ function Activities({ userProfile, activities }) {
                 </div>
               </Popup>
             </div>
-
-            <div
-              onClick={(e) => {
-                e.stopPropagation();
-                setState({
-                  ...state,
-                  ...turnOffAllPopup,
-                  showMobileFilter: true,
-                });
-              }}
-              className="w-2/4 flex items-center justify-center hover:border transition-all duration-200 ease-linear hover:border-gray-200 rounded-xl border"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
-                role="img"
-                className="w-7 h-7"
-                preserveAspectRatio="xMidYMid meet"
-                viewBox="0 0 24 24"
-              >
-                <g
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                >
-                  <circle cx="14" cy="6" r="2" />
-                  <path d="M4 6h8m4 0h4" />
-                  <circle cx="8" cy="12" r="2" />
-                  <path d="M4 12h2m4 0h10" />
-                  <circle cx="17" cy="18" r="2" />
-                  <path d="M4 18h11m4 0h1" />
-                </g>
-              </svg>
-            </div>
           </div>
         </div>
 
@@ -624,7 +675,7 @@ function Activities({ userProfile, activities }) {
           ref={searchRef}
           className="mt-1 hidden w-full md:flex items-center lg:justify-center lg:px-0 md:px-4"
         >
-          <div className="xl:w-[750px] lg:w-[70%] md:w-[80%]">
+          <div className="xl:w-[750px] lg:w-[60%] md:w-[75%]">
             <Search
               autoCompleteFromActivitySearch={autoCompleteFromActivitySearch}
               onKeyDown={keyDownActivitySearch}
@@ -687,8 +738,158 @@ function Activities({ userProfile, activities }) {
             ></Search>
           </div>
 
-          <div className="flex absolute right-2 bottom-[30px]">
+          <div className="flex absolute right-2 bottom-[25px]">
             <div
+              onClick={(event) => {
+                event.stopPropagation();
+                setState({
+                  ...state,
+                  ...turnOffAllPopup,
+                  showPricePopup: !state.showPricePopup,
+                });
+              }}
+              className="cursor-pointer w-[120px] relative rounded-md border border-gray-200 py-2 px-2 mr-1 md:mr-4 flex gap-1 items-center justify-center"
+            >
+              {!minPrice && !maxPrice && (
+                <div className="flex sm:gap-1 items-center justify-center">
+                  <span className="inline text-sm">Any price</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 mt-1"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+              )}
+              {minPrice && maxPrice && (
+                <div className="flex items-center sm:gap-2">
+                  <div className="flex items-center gap-1 text-sm">
+                    <h1>{minPrice}</h1>
+                    <div> - </div>
+                    <h1>{maxPrice}</h1>
+                  </div>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 mt-1"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+              )}
+
+              {minPrice && !maxPrice && (
+                <div className="flex items-center sm:gap-1">
+                  <div className="flex items-center text-sm">
+                    <h1>{minPrice}</h1>
+                    <div>+</div>
+                  </div>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 mt-1"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+              )}
+
+              {!minPrice && maxPrice && (
+                <div className="flex items-center sm:gap-2">
+                  <div className="flex items-center gap-1 text-sm">
+                    <h1>$0</h1>
+                    <div> - </div>
+                    <h1>{maxPrice}</h1>
+                  </div>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 mt-1"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+              )}
+              <Popup
+                className="absolute top-full mt-2 xssMax:w-[250px] w-[338px] sm:w-[450px] -left-20 sm:-left-72 px-2"
+                showPopup={state.showPricePopup}
+              >
+                <h1 className="font-bold text-base mb-2 text-gray-600">
+                  Price Range
+                </h1>
+                <div className="flex items-center gap-3 px-2">
+                  <div className="w-[50%] border rounded-md h-fit px-2 py-1">
+                    <span className="text-sm text-gray-500">Min price</span>
+                    <div className="flex items-center">
+                      <div className="text-sm font-bold mr-2 ">$</div>
+                      <input
+                        onBlur={() => {
+                          filterMinPrice();
+                        }}
+                        name="min-price"
+                        value={minPrice}
+                        type="number"
+                        onChange={(event) => {
+                          setMinPrice(event.target.value);
+                        }}
+                        onKeyPress={(event) => {
+                          if (event.key === "Enter") {
+                            event.target.blur();
+                          }
+                        }}
+                        className="w-full focus:outline-none text-sm "
+                      />
+                    </div>
+                  </div>
+                  <div> - </div>
+                  <div className="w-[50%] border rounded-md h-fit px-2 py-1">
+                    <span className="text-sm text-gray-500">Max price</span>
+                    <div className="flex items-center">
+                      <div className="text-sm font-bold mr-2 ">$</div>
+                      <input
+                        onBlur={() => {
+                          filterMaxPrice();
+                        }}
+                        name="max-price"
+                        value={maxPrice}
+                        type="number"
+                        onChange={(event) => {
+                          setMaxPrice(event.target.value);
+                        }}
+                        onKeyPress={(event) => {
+                          if (event.key === "Enter") {
+                            event.target.blur();
+                          }
+                        }}
+                        className="w-full focus:outline-none text-sm "
+                      />
+                    </div>
+                  </div>
+                </div>
+              </Popup>
+            </div>
+            {/* <div
               onClick={(e) => {
                 e.stopPropagation();
                 setState({
@@ -724,7 +925,7 @@ function Activities({ userProfile, activities }) {
               </svg>
 
               <span>filter</span>
-            </div>
+            </div> */}
             <div
               onClick={(e) => {
                 e.stopPropagation();
@@ -734,7 +935,7 @@ function Activities({ userProfile, activities }) {
                   showSortPopup: !state.showSortPopup,
                 });
               }}
-              className="w-2/4 relative border p-2 cursor-pointer flex items-center justify-center transition-all duration-200 ease-linear hover:border-gray-200 rounded-md"
+              className="w-[50px] relative border p-2 cursor-pointer flex items-center justify-center transition-all duration-200 ease-linear hover:border-gray-200 rounded-md"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -1176,7 +1377,7 @@ function Activities({ userProfile, activities }) {
       </div>
 
       <div className="relative hidden md:block ">
-        <LargeMobileModal
+        {/* <LargeMobileModal
           showModal={state.showMobileFilter}
           closeModal={() => {
             setState({
@@ -1208,6 +1409,11 @@ function Activities({ userProfile, activities }) {
                         onChange={(event) => {
                           setMinPrice(event.target.value);
                         }}
+                        onKeyPress={(event) => {
+                        if (event.key === "Enter") {
+                          event.target.blur();
+                        }
+                      }}
                         className="w-full focus:outline-none text-sm "
                       />
                     </div>
@@ -1227,6 +1433,11 @@ function Activities({ userProfile, activities }) {
                         onChange={(event) => {
                           setMaxPrice(event.target.value);
                         }}
+                        onKeyPress={(event) => {
+                        if (event.key === "Enter") {
+                          event.target.blur();
+                        }
+                      }}
                         className="w-full focus:outline-none text-sm "
                       />
                     </div>
@@ -1250,6 +1461,10 @@ function Activities({ userProfile, activities }) {
                 onClick={() => {
                   router.push({
                     pathname: "/experiences",
+                    query: {
+                      trip: router.query.trip,
+                      group_trip: router.query.group_trip,
+                    },
                   });
                 }}
                 className="underline cursor-pointer"
@@ -1269,11 +1484,11 @@ function Activities({ userProfile, activities }) {
                   "!bg-gradient-to-r !px-4 from-pink-500 via-red-500 to-yellow-500 !text-white "
                 }
               >
-                Show all {activities.length} experiences
+                Show all {count} experiences
               </Button>
             </div>
           </div>
-        </LargeMobileModal>
+        </LargeMobileModal> */}
       </div>
 
       <MobileModal
@@ -1308,6 +1523,11 @@ function Activities({ userProfile, activities }) {
                       onChange={(event) => {
                         setMinPrice(event.target.value);
                       }}
+                      onKeyPress={(event) => {
+                        if (event.key === "Enter") {
+                          event.target.blur();
+                        }
+                      }}
                       className="w-full focus:outline-none text-sm "
                     />
                   </div>
@@ -1326,6 +1546,11 @@ function Activities({ userProfile, activities }) {
                       type="number"
                       onChange={(event) => {
                         setMaxPrice(event.target.value);
+                      }}
+                      onKeyPress={(event) => {
+                        if (event.key === "Enter") {
+                          event.target.blur();
+                        }
                       }}
                       className="w-full focus:outline-none text-sm "
                     />
@@ -1350,6 +1575,10 @@ function Activities({ userProfile, activities }) {
               onClick={() => {
                 router.push({
                   pathname: "/experiences",
+                  query: {
+                    trip: router.query.trip,
+                    group_trip: router.query.group_trip,
+                  },
                 });
               }}
               className="underline cursor-pointer"
@@ -1369,7 +1598,7 @@ function Activities({ userProfile, activities }) {
                 "!bg-gradient-to-r !px-4 from-pink-500 via-red-500 to-yellow-500 !text-white "
               }
             >
-              Show all {activities.length} experiences
+              Show all {count} experiences
             </Button>
           </div>
         </div>
@@ -1405,6 +1634,25 @@ function Activities({ userProfile, activities }) {
                   ></LoadingSpinerChase>
                 </div>
               </div>
+            )}
+
+            {activities.length > 0 && (
+              <ReactPaginate
+                breakLabel="..."
+                nextLabel={<Icon icon="bx:chevron-right" className="w-7 h-7" />}
+                disabledClassName="text-gray-300"
+                onPageChange={handlePageClick}
+                forcePage={parseInt(router.query.page) - 1 || 0}
+                pageRangeDisplayed={pageSize}
+                pageCount={totalPages}
+                previousLabel={
+                  <Icon icon="bx:chevron-left" className="w-7 h-7" />
+                }
+                activeLinkClassName="bg-gray-700 text-white font-bold"
+                renderOnZeroPageCount={null}
+                containerClassName="flex gap-2 justify-center items-center mt-4"
+                pageLinkClassName="bg-white h-12 font-bold flex justify-center items-center w-12 cursor-pointer hover:border border-gray-200 rounded-full text-sm"
+              />
             )}
           </div>
         )}
@@ -1482,7 +1730,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         const activities = await axios.get(
           `${process.env.NEXT_PUBLIC_baseURL}/activities/?search=${
             query.search ? query.search : ""
-          }&min_capacity=${
+          }&page=${query.page ? query.page : 1}&min_capacity=${
             query.min_capacity ? query.min_capacity : ""
           }&type_of_activities=${
             query.type_of_stay ? query.type_of_stay : ""
@@ -1509,7 +1757,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           const activities = await axios.get(
             `${process.env.NEXT_PUBLIC_baseURL}/activities/?search=${
               query.search ? query.search : ""
-            }&min_capacity=${
+            }&page=${query.page ? query.page : 1}&min_capacity=${
               query.min_capacity ? query.min_capacity : ""
             }&type_of_activities=${
               query.type_of_stay ? query.type_of_stay : ""
@@ -1527,6 +1775,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
             props: {
               userProfile: response.data[0],
               activities: activities.data.results,
+              nextLink: activities.data.next,
+              previousLink: activities.data.previous,
+              pageSize: activities.data.page_size,
+              totalPages: activities.data.total_pages,
+              count: activities.data.count,
             },
           };
         }
@@ -1535,6 +1788,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
           props: {
             userProfile: "",
             activities: activities.data.results,
+            nextLink: activities.data.next,
+            previousLink: activities.data.previous,
+            pageSize: activities.data.page_size,
+            totalPages: activities.data.total_pages,
+            count: activities.data.count,
           },
         };
       } catch (error) {
@@ -1550,6 +1808,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
             props: {
               userProfile: "",
               activities: [],
+              nextLink: "",
+              previousLink: "",
+              pageSize: 0,
+              totalPages: 0,
+              count: 0,
             },
           };
         }

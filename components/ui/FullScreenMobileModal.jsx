@@ -101,7 +101,7 @@ function Modal({
               </svg>
             </div>
           )}
-          <div className="h-full px-4">{children}</div>
+          <div className="h-full px-4 bg-white">{children}</div>
         </motion.div>
       ) : (
         ""

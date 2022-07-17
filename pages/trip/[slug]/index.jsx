@@ -403,13 +403,16 @@ function TripDetail({ userProfile, userTrips, trip }) {
             <div className="mt-2">
               {!showAllDescription && (
                 <p className="font-medium text-gray-600">
-                  {trip.description.slice(0, 700)}...
+                  {trip.stay.description.slice(0, 500)}
+                  {trip.stay.description.length > 500 && "..."}
                 </p>
               )}
               {showAllDescription && (
-                <p className="font-medium text-gray-600">{trip.description}</p>
+                <p className="font-medium text-gray-600">
+                  {trip.stay.description}
+                </p>
               )}
-              {!showAllDescription && (
+              {!showAllDescription && trip.stay.description.length > 500 && (
                 <div
                   onClick={() => {
                     setShowAllDescription(true);

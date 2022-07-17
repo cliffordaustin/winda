@@ -84,7 +84,10 @@ const Amenities = () => {
     <>
       <div className="flex flex-wrap mb-4">
         {options.map((option, index) => (
-          <label key={index} className={styles.amenitiesItem}>
+          <label
+            key={index}
+            className={styles.amenitiesItem + " " + styles.ratingItem}
+          >
             <Checkbox
               checked={containsOption(option)}
               value={option}

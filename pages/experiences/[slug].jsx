@@ -246,9 +246,9 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
 
   const [addToCartDate, setAddToCartDate] = useState("");
 
-  const [numOfPeople, setNumOfPeople] = useState(1);
+  const [numOfPeople, setNumOfPeople] = useState(0);
 
-  const [numOfPeopleNonResident, setNumOfPeopleNonResident] = useState(0);
+  const [numOfPeopleNonResident, setNumOfPeopleNonResident] = useState(1);
 
   const [slugIsCorrect, setSlugIsCorrect] = useState(false);
 
@@ -314,11 +314,11 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
 
   const [numOfSession, setNumOfSession] = useState(0);
 
-  const [numOfSessionNonResident, setNumOfSessionNonResident] = useState(0);
+  const [numOfSessionNonResident, setNumOfSessionNonResident] = useState(1);
 
   const [numOfGroups, setNumOfGroups] = useState(0);
 
-  const [numOfGroupsNonResident, setNumOfGroupsNonResident] = useState(0);
+  const [numOfGroupsNonResident, setNumOfGroupsNonResident] = useState(1);
 
   const [priceType, setPriceType] = useState([]);
 
@@ -909,7 +909,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
               closeModal={() => {
                 setShowMobileDateModal(!showMobileDateModal);
               }}
-              className="md:!hidden"
+              className="md:!hidden overflow-y-auto"
               title="Book this experience"
             >
               <div className="px-2 mt-2">
@@ -1102,38 +1102,87 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                     </div>
 
                     {currentPrice.value === "per person" && (
-                      <div className="flex justify-between mt-6">
-                        <div className="flex flex-col text-sm text-gray-600 items-center">
-                          <span>
-                            {numOfPeople}{" "}
-                            {numOfPeople > 1 ? "People" : "Person"}
-                          </span>
-                        </div>
-
-                        <div className="flex gap-3 items-center">
-                          <div
-                            onClick={() => {
-                              if (numOfPeople > 1) {
-                                setNumOfPeople(numOfPeople - 1);
-                              }
-                            }}
-                            className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
-                          >
-                            -
+                      <>
+                        <div className="flex justify-between mt-6">
+                          <div className="flex flex-col text-sm text-gray-600 items-center">
+                            <span>
+                              {numOfPeopleNonResident}{" "}
+                              {numOfPeopleNonResident > 1
+                                ? "Non-Residents"
+                                : "Non-Resident"}
+                            </span>
                           </div>
 
-                          <div
-                            onClick={() => {
-                              if (numOfPeople < maxGuests) {
-                                setNumOfPeople(numOfPeople + 1);
-                              }
-                            }}
-                            className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
-                          >
-                            +
+                          <div className="flex gap-3 items-center">
+                            <div
+                              onClick={() => {
+                                if (
+                                  (numOfPeopleNonResident > 1 ||
+                                    numOfPeople > 0) &&
+                                  numOfPeopleNonResident > 0
+                                ) {
+                                  setNumOfPeopleNonResident(
+                                    numOfPeopleNonResident - 1
+                                  );
+                                }
+                              }}
+                              className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
+                            >
+                              -
+                            </div>
+
+                            <div
+                              onClick={() => {
+                                if (numOfPeopleNonResident < maxGuests) {
+                                  setNumOfPeopleNonResident(
+                                    numOfPeopleNonResident + 1
+                                  );
+                                }
+                              }}
+                              className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
+                            >
+                              +
+                            </div>
                           </div>
                         </div>
-                      </div>
+
+                        <div className="flex justify-between mt-6">
+                          <div className="flex flex-col text-sm text-gray-600 items-center">
+                            <span>
+                              {numOfPeople}{" "}
+                              {numOfPeople > 1 ? "Residents" : "Resident"}
+                            </span>
+                          </div>
+
+                          <div className="flex gap-3 items-center">
+                            <div
+                              onClick={() => {
+                                if (
+                                  (numOfPeople > 1 ||
+                                    numOfPeopleNonResident > 0) &&
+                                  numOfPeople > 0
+                                ) {
+                                  setNumOfPeople(numOfPeople - 1);
+                                }
+                              }}
+                              className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
+                            >
+                              -
+                            </div>
+
+                            <div
+                              onClick={() => {
+                                if (numOfPeople < maxGuests) {
+                                  setNumOfPeople(numOfPeople + 1);
+                                }
+                              }}
+                              className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
+                            >
+                              +
+                            </div>
+                          </div>
+                        </div>
+                      </>
                     )}
 
                     {currentPrice.value === "per session" && (
@@ -2076,42 +2125,6 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                     <div className="flex justify-between mt-6">
                       <div className="flex flex-col text-sm text-gray-600 items-center">
                         <span>
-                          {numOfPeople}{" "}
-                          {numOfPeople > 1 ? "Residents" : "Resident"}
-                        </span>
-                      </div>
-
-                      <div className="flex gap-3 items-center">
-                        <div
-                          onClick={() => {
-                            if (
-                              (numOfPeople > 1 || numOfPeopleNonResident > 0) &&
-                              numOfPeople > 0
-                            ) {
-                              setNumOfPeople(numOfPeople - 1);
-                            }
-                          }}
-                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
-                        >
-                          -
-                        </div>
-
-                        <div
-                          onClick={() => {
-                            if (numOfPeople < maxGuests) {
-                              setNumOfPeople(numOfPeople + 1);
-                            }
-                          }}
-                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
-                        >
-                          +
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex justify-between mt-6">
-                      <div className="flex flex-col text-sm text-gray-600 items-center">
-                        <span>
                           {numOfPeopleNonResident}{" "}
                           {numOfPeopleNonResident > 1
                             ? "Non-Residents"
@@ -2142,6 +2155,42 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                               setNumOfPeopleNonResident(
                                 numOfPeopleNonResident + 1
                               );
+                            }
+                          }}
+                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
+                        >
+                          +
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex justify-between mt-6">
+                      <div className="flex flex-col text-sm text-gray-600 items-center">
+                        <span>
+                          {numOfPeople}{" "}
+                          {numOfPeople > 1 ? "Residents" : "Resident"}
+                        </span>
+                      </div>
+
+                      <div className="flex gap-3 items-center">
+                        <div
+                          onClick={() => {
+                            if (
+                              (numOfPeople > 1 || numOfPeopleNonResident > 0) &&
+                              numOfPeople > 0
+                            ) {
+                              setNumOfPeople(numOfPeople - 1);
+                            }
+                          }}
+                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
+                        >
+                          -
+                        </div>
+
+                        <div
+                          onClick={() => {
+                            if (numOfPeople < maxGuests) {
+                              setNumOfPeople(numOfPeople + 1);
                             }
                           }}
                           className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"

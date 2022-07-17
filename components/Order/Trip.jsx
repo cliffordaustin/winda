@@ -30,7 +30,7 @@ import Dropdown from "../ui/Dropdown";
 import Select from "react-select";
 import Checkbox from "../ui/Checkbox";
 import { stayPriceOfPlanLower } from "../../lib/pricePlan";
-import Modal from "../../components/ui/FullScreenMobileModal";
+import Modal from "../../components/ui/MobileModal";
 import Price from "../Stay/Price";
 import Search from "../Trip/Search";
 import Switch from "../ui/Switch";
@@ -371,7 +371,7 @@ const Trip = ({
       price +=
         item.number_of_days * item.transport.price_per_day +
         (item.user_need_a_driver
-          ? item.transport.additional_price_with_a_driver
+          ? item.transport.additional_price_with_a_driver * item.number_of_days
           : 0);
     }
     return price;
@@ -995,7 +995,7 @@ const Trip = ({
               />
             </div>
           </div>
-          <div className="md:hidden">
+          <div className="sm:hidden">
             <Modal
               showModal={editTransportPopup}
               closeModal={() => {
@@ -1003,14 +1003,13 @@ const Trip = ({
                 document.body.classList.remove("h-screen");
                 document.body.classList.remove("overflow-y-hidden");
               }}
-              className="overflow-y-screen"
-              title={"Edit Transport"}
+              containerHeight={70}
             >
               <div
                 onClick={(e) => {
                   e.stopPropagation();
                 }}
-                className=""
+                className="bg-white overflow-y-scroll"
               >
                 <div>
                   <Search
@@ -1120,12 +1119,14 @@ const Trip = ({
                   )}
                 </div>
 
-                <div className="flex justify-between mt-3">
+                <div className="flex justify-between mt-3 mb-2">
                   <div></div>
                   <div className="flex gap-2">
                     <div
                       onClick={() => {
                         setEditTransportPopup(false);
+                        document.body.classList.remove("h-screen");
+                        document.body.classList.remove("overflow-y-hidden");
                       }}
                       className="!bg-white text-black border !rounded-3xl px-4 text-sm cursor-pointer py-2"
                     >
@@ -1160,7 +1161,7 @@ const Trip = ({
             </Modal>
           </div>
 
-          <div className="hidden md:block">
+          <div className="hidden sm:block">
             <OpenModal
               showModal={editTransportPopup}
               closeModal={() => {
@@ -1290,6 +1291,8 @@ const Trip = ({
                     <div
                       onClick={() => {
                         setEditTransportPopup(false);
+                        document.body.classList.remove("h-screen");
+                        document.body.classList.remove("overflow-y-hidden");
                       }}
                       className="!bg-white text-black border !rounded-3xl px-4 text-sm cursor-pointer py-2"
                     >
@@ -1344,7 +1347,8 @@ const Trip = ({
                     ? trip.transport_number_of_days
                     : 1) +
                 (trip.user_need_a_driver
-                  ? trip.transport.additional_price_with_a_driver
+                  ? trip.transport.additional_price_with_a_driver *
+                    trip.transport_number_of_days
                   : 0)
               }
               checkoutInfo={true}
@@ -1830,7 +1834,7 @@ const Trip = ({
             </svg>
           </div>
 
-          <div className="md:hidden">
+          <div className="sm:hidden">
             <Modal
               showModal={showCheckInDate}
               closeModal={() => {
@@ -1838,10 +1842,9 @@ const Trip = ({
                 document.body.classList.remove("h-screen");
                 document.body.classList.remove("overflow-y-hidden");
               }}
-              className="overflow-y-screen"
-              title={"Check In Date"}
+              containerHeight={70}
             >
-              <div className={""}>
+              <div className={"bg-white"}>
                 {
                   <div>
                     {addToCartDate &&
@@ -1887,6 +1890,16 @@ const Trip = ({
                 <div className="my-2 z-50 px-3 flex gap-2">
                   <Button
                     onClick={() => {
+                      setShowCheckInDate(false);
+                      document.body.classList.remove("h-screen");
+                      document.body.classList.remove("overflow-y-hidden");
+                    }}
+                    className="flex text-lg !bg-transparent border border-black !w-[40%] !py-2 !text-black"
+                  >
+                    <span className="mr-2 font-bold">Close</span>
+                  </Button>
+                  <Button
+                    onClick={() => {
                       updateDate();
                     }}
                     disabled={
@@ -1910,21 +1923,12 @@ const Trip = ({
                       </div>
                     )}
                   </Button>
-
-                  <Button
-                    onClick={() => {
-                      setShowCheckInDate(false);
-                    }}
-                    className="flex text-lg !bg-transparent border border-black !w-[40%] !py-2 !text-black"
-                  >
-                    <span className="mr-2 font-bold">Close</span>
-                  </Button>
                 </div>
               </div>
             </Modal>
           </div>
 
-          <div className="hidden md:block">
+          <div className="hidden sm:block">
             <OpenModal
               showModal={showCheckInDate}
               closeModal={() => {
@@ -1980,6 +1984,16 @@ const Trip = ({
                 <div className="my-2 z-50 px-3 flex gap-2">
                   <Button
                     onClick={() => {
+                      setShowCheckInDate(false);
+                      document.body.classList.remove("h-screen");
+                      document.body.classList.remove("overflow-y-hidden");
+                    }}
+                    className="flex text-lg !bg-transparent border border-black !w-[40%] !py-2 !text-black"
+                  >
+                    <span className="mr-2 font-bold">Close</span>
+                  </Button>
+                  <Button
+                    onClick={() => {
                       updateDate();
                     }}
                     disabled={
@@ -2002,15 +2016,6 @@ const Trip = ({
                         ></LoadingSpinerChase>
                       </div>
                     )}
-                  </Button>
-
-                  <Button
-                    onClick={() => {
-                      setShowCheckInDate(false);
-                    }}
-                    className="flex text-lg !bg-transparent border border-black !w-[40%] !py-2 !text-black"
-                  >
-                    <span className="mr-2 font-bold">Close</span>
                   </Button>
                 </div>
               </div>
@@ -2039,25 +2044,21 @@ const Trip = ({
               add a guest
             </div>
 
-            <div className="md:hidden">
+            <div className="sm:hidden">
               <Modal
-                onClick={(e) => {
-                  e.stopPropagation();
-                }}
                 showModal={guestPopup}
                 closeModal={() => {
                   setGuestPopup(false);
                   document.body.classList.remove("h-screen");
                   document.body.classList.remove("overflow-y-hidden");
                 }}
-                title="Add guest"
-                className="overflow-y-auto"
+                containerHeight={70}
               >
                 <div
                   onClick={(e) => {
                     e.stopPropagation();
                   }}
-                  className=""
+                  className="bg-white"
                 >
                   <div className="mb-2">
                     <Price
@@ -2381,6 +2382,8 @@ const Trip = ({
                       <div
                         onClick={() => {
                           setGuestPopup(false);
+                          document.body.classList.remove("h-screen");
+                          document.body.classList.remove("overflow-y-hidden");
                         }}
                         className="!bg-white text-black border !rounded-3xl px-4 text-sm cursor-pointer py-2"
                       >
@@ -2409,7 +2412,7 @@ const Trip = ({
               </Modal>
             </div>
 
-            <div className="hidden md:block">
+            <div className="hidden sm:block">
               <OpenModal
                 onClick={(e) => {
                   e.stopPropagation();
@@ -2751,6 +2754,8 @@ const Trip = ({
                       <div
                         onClick={() => {
                           setGuestPopup(false);
+                          document.body.classList.remove("h-screen");
+                          document.body.classList.remove("overflow-y-hidden");
                         }}
                         className="!bg-white text-black border !rounded-3xl px-4 text-sm cursor-pointer py-2"
                       >
@@ -3024,10 +3029,15 @@ const Trip = ({
               {trip.activity_pricing_type === "PER PERSON" && (
                 <>
                   <span className="text-gray-500 font-extrabold text-lg">
-                    {trip.activity_number_of_people}
+                    {trip.activity_number_of_people +
+                      trip.activity_number_of_people_non_resident}
                   </span>
                   <span className="text-gray-500 -mt-1.5 font-extrabold text-xs">
-                    {trip.activity_number_of_people > 1 ? "people" : "person"}
+                    {trip.activity_number_of_people +
+                      trip.activity_number_of_people_non_resident >
+                    1
+                      ? "people"
+                      : "person"}
                   </span>
                 </>
               )}
@@ -3175,7 +3185,7 @@ const Trip = ({
             </svg>
           </div>
 
-          <div className="md:block hidden">
+          <div className="sm:block hidden">
             <OpenModal
               showModal={showActivityCheckInDate}
               closeModal={() => {
@@ -3219,6 +3229,16 @@ const Trip = ({
                 <div className="my-2 z-50 px-3 flex gap-2">
                   <Button
                     onClick={() => {
+                      setShowActivityCheckInDate(false);
+                      document.body.classList.remove("h-screen");
+                      document.body.classList.remove("overflow-y-hidden");
+                    }}
+                    className="flex text-lg !bg-transparent border border-black !w-[40%] !py-2 !text-black"
+                  >
+                    <span className="mr-2 font-bold">Close</span>
+                  </Button>
+                  <Button
+                    onClick={() => {
                       updateActivityDate();
                     }}
                     disabled={!activityCheckinDate}
@@ -3240,21 +3260,12 @@ const Trip = ({
                       </div>
                     )}
                   </Button>
-
-                  <Button
-                    onClick={() => {
-                      setShowActivityCheckInDate(false);
-                    }}
-                    className="flex text-lg !bg-transparent border border-black !w-[40%] !py-2 !text-black"
-                  >
-                    <span className="mr-2 font-bold">Close</span>
-                  </Button>
                 </div>
               </div>
             </OpenModal>
           </div>
 
-          <div className="md:hidden">
+          <div className="sm:hidden">
             <Modal
               showModal={showActivityCheckInDate}
               closeModal={() => {
@@ -3262,10 +3273,9 @@ const Trip = ({
                 document.body.classList.remove("h-screen");
                 document.body.classList.remove("overflow-y-hidden");
               }}
-              title="Add a date"
-              className="overflow-y-screen"
+              containerHeight={70}
             >
-              <div className={""}>
+              <div className={"bg-white"}>
                 <div>
                   {!activityCheckinDate && (
                     <div className="text-base ml-2 mt-2 font-bold">
@@ -3299,6 +3309,16 @@ const Trip = ({
                 <div className="my-2 z-50 px-3 flex gap-2">
                   <Button
                     onClick={() => {
+                      setShowActivityCheckInDate(false);
+                      document.body.classList.remove("h-screen");
+                      document.body.classList.remove("overflow-y-hidden");
+                    }}
+                    className="flex text-lg !bg-transparent border border-black !w-[40%] !py-2 !text-black"
+                  >
+                    <span className="mr-2 font-bold">Close</span>
+                  </Button>
+                  <Button
+                    onClick={() => {
                       updateActivityDate();
                     }}
                     disabled={!activityCheckinDate}
@@ -3319,15 +3339,6 @@ const Trip = ({
                         ></LoadingSpinerChase>
                       </div>
                     )}
-                  </Button>
-
-                  <Button
-                    onClick={() => {
-                      setShowActivityCheckInDate(false);
-                    }}
-                    className="flex text-lg !bg-transparent border border-black !w-[40%] !py-2 !text-black"
-                  >
-                    <span className="mr-2 font-bold">Close</span>
                   </Button>
                 </div>
               </div>
@@ -3356,7 +3367,7 @@ const Trip = ({
             >
               add a guest
             </div>
-            <div className="md:hidden">
+            <div className="sm:hidden">
               <Modal
                 showModal={activityGuestPopup}
                 closeModal={() => {
@@ -3364,14 +3375,13 @@ const Trip = ({
                   document.body.classList.remove("h-screen");
                   document.body.classList.remove("overflow-y-hidden");
                 }}
-                title="Add guests"
-                className="overflow-y-screen"
+                containerHeight={70}
               >
                 <div
                   onClick={(e) => {
                     e.stopPropagation();
                   }}
-                  className=""
+                  className="bg-white"
                 >
                   <div className="mb-2">
                     <Price
@@ -3630,20 +3640,41 @@ const Trip = ({
 
                   <div className="flex justify-between mt-6">
                     <div></div>
-                    <Button
-                      onClick={() => {
-                        setGuestPopup(false);
-                      }}
-                      className="!bg-blue-700 !rounded-3xl"
-                    >
-                      <span>Done</span>
-                    </Button>
+                    <div className="flex gap-2">
+                      <div
+                        onClick={() => {
+                          setActivityGuestPopup(false);
+                          document.body.classList.remove("h-screen");
+                          document.body.classList.remove("overflow-y-hidden");
+                        }}
+                        className="!bg-white text-black border !rounded-3xl px-4 text-sm cursor-pointer py-2"
+                      >
+                        Close
+                      </div>
+                      <Button
+                        onClick={() => {
+                          updateActivityGuest();
+                        }}
+                        className="!bg-blue-700 flex gap-2 items-center !rounded-3xl"
+                      >
+                        <span>Update</span>
+
+                        {activityGuestsLoading && (
+                          <div>
+                            <LoadingSpinerChase
+                              width={16}
+                              height={16}
+                            ></LoadingSpinerChase>
+                          </div>
+                        )}
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </Modal>
             </div>
 
-            <div className="md:block hidden">
+            <div className="sm:block hidden">
               <OpenModal
                 showModal={activityGuestPopup}
                 closeModal={() => {
@@ -3920,6 +3951,8 @@ const Trip = ({
                       <div
                         onClick={() => {
                           setActivityGuestPopup(false);
+                          document.body.classList.remove("h-screen");
+                          document.body.classList.remove("overflow-y-hidden");
                         }}
                         className="!bg-white text-black border !rounded-3xl px-4 text-sm cursor-pointer py-2"
                       >

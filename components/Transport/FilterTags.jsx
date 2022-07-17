@@ -29,6 +29,24 @@ const FilterTags = ({}) => {
         </div>
       )}
 
+      {containsOption("MEDIUM") && (
+        <div className="bg-blue-500 text-sm mt-0.5 text-white px-2 py-1 mr-1 rounded-full">
+          Medium
+        </div>
+      )}
+
+      {containsOption("MOTORBIKE") && (
+        <div className="bg-blue-500 text-sm mt-0.5 text-white px-2 py-1 mr-1 rounded-full">
+          Motorbike
+        </div>
+      )}
+
+      {containsOption("PICKUP TRUCK") && (
+        <div className="bg-blue-500 text-sm mt-0.5 text-white px-2 py-1 mr-1 rounded-full">
+          Pickup truck
+        </div>
+      )}
+
       {containsOption("SEDAN") && (
         <div className="bg-blue-500 text-sm mt-0.5 text-white px-2 py-1 mr-1 rounded-full">
           sedan

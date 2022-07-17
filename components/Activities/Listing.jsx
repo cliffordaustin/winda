@@ -57,7 +57,7 @@ function Listing({
   const [newPrice, setNewPrice] = useState(null);
 
   const price = () => {
-    return listing.price;
+    return listing.price_non_resident;
   };
 
   const priceConversion = async (price) => {
@@ -500,7 +500,9 @@ function Listing({
         >
           <div className="relative w-full">
             <div className="flex flex-col gap-1">
-              <h1 className="text-gray-500 truncate">{listing.name}</h1>
+              <div className="text-gray-500 truncate w-[90%]">
+                {listing.name}
+              </div>
 
               {!currencyToKES && (
                 <h1 className={"font-bold text-xl font-OpenSans "}>

@@ -75,7 +75,7 @@ function Modal({
             style={{ height: (containerHeight || "80") + "%" }}
             ref={myref}
             className={
-              "py-4 bg-white shadow-lg mx-auto sm:rounded-xl rounded-t-[2rem] z-30 overflow-y-scroll relative safari-top " +
+              "py-4 bg-white shadow-lg mx-auto sm:rounded-xl rounded-t-[2rem] z-30 overflow-y-scroll remove-scroll relative safari-bottom safari-top " +
               className
             }
           >
@@ -127,7 +127,7 @@ function Modal({
                 </svg>
               </div>
             )}
-            <div className="h-full">{children}</div>
+            <div className="h-full px-3">{children}</div>
           </motion.div>
         </motion.div>
       ) : (

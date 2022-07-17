@@ -127,7 +127,8 @@ function PlanTrip({
           price +=
             item.transport_number_of_days * item.transport.price_per_day +
             (item.user_need_a_driver
-              ? item.transport.additional_price_with_a_driver
+              ? item.transport.additional_price_with_a_driver *
+                item.transport_number_of_days
               : 0);
         }
       });
@@ -1170,34 +1171,34 @@ function PlanTrip({
           </div>
         </div>
 
-        <div className="w-full md:hidden sm:flex gap-2 top-16 mt-1.5 relative">
+        <div className="md:hidden md:px-4 relative">
+          <div className="fixed top-0 w-full bg-white z-20">
+            <Navbar
+              showDropdown={state.showDropdown}
+              currentNavState={state.currentNavState}
+              userProfile={userProfile}
+              showSearchModal={() => {
+                setState({ ...state, showSearchModal: true });
+              }}
+              setCurrentNavState={(currentNavState) => {
+                setState({
+                  ...state,
+                  currentNavState: currentNavState,
+                  showCheckOutDate: false,
+                  showCheckInDate: false,
+                  showPopup: false,
+                });
+              }}
+              changeShowDropdown={() =>
+                setState({
+                  ...state,
+                  showDropdown: !state.showDropdown,
+                })
+              }
+            ></Navbar>
+          </div>
           <div className="flex relative h-full w-full">
-            <div className="fixed top-0 w-full bg-white z-20">
-              <Navbar
-                showDropdown={state.showDropdown}
-                currentNavState={state.currentNavState}
-                userProfile={userProfile}
-                showSearchModal={() => {
-                  setState({ ...state, showSearchModal: true });
-                }}
-                setCurrentNavState={(currentNavState) => {
-                  setState({
-                    ...state,
-                    currentNavState: currentNavState,
-                    showCheckOutDate: false,
-                    showCheckInDate: false,
-                    showPopup: false,
-                  });
-                }}
-                changeShowDropdown={() =>
-                  setState({
-                    ...state,
-                    showDropdown: !state.showDropdown,
-                  })
-                }
-              ></Navbar>
-            </div>
-            <div className="w-[35%] fixed hidden sm:block left-4 h-full">
+            <div className="w-[35%] sticky top-[76px] hidden sm:block left-4 h-full">
               <ClientOnly>
                 {!currencyToKES && (
                   <h1 className={"font-bold text-xl font-OpenSans "}>
@@ -1253,7 +1254,8 @@ function PlanTrip({
                 <span className="font-bold mr-1">Enquire</span>
               </Button>
             </div>
-            <div className="relative sm:right-0 h-full xsMax:w-full px-4 mx-auto xsMax:mx-0 sm:w-[62%] w-[82%] right-2/4 translate-x-2/4 sm:translate-x-0">
+            {/* relative top-20 md:w-[380px] lg:w-[420px] sm:right-0 h-full xsMax:w-full px-4 xsMax:mx-0 sm:w-[62%] w-[82%] right-2/4 translate-x-2/4 sm:translate-x-0 */}
+            <div className="relative h-full top-20 sm:right-0 xsMax:w-full mx-auto xsMax:mx-0 px-4 sm:w-[62%] w-[82%]">
               {order.length > 0 && (
                 <>
                   <div className="flex gap-1 items-center">
@@ -1729,289 +1731,6 @@ function PlanTrip({
               )} */}
               </>
 
-              {!showMap && (
-                <div
-                  onClick={() => {
-                    setShowMap(true);
-                  }}
-                  className="md:hidden top-[12px] flex items-center gap-0.5 cursor-pointer text-sm bg-blue-600 bg-opacity-90 text-white shadow-sm right-4 fixed px-2 py-1 rounded-3xl font-bold"
-                >
-                  <span>map</span>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden="true"
-                    role="img"
-                    width="1em"
-                    height="1em"
-                    preserveAspectRatio="xMidYMid meet"
-                    viewBox="0 0 24 24"
-                  >
-                    <g
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        d="m8.368 4.79l-2.736-.913A2 2 0 0 0 3 5.775v11.783a2 2 0 0 0 1.368 1.898l4 1.333a2 2 0 0 0 1.264 0l4.736-1.578a2 2 0 0 1 1.264 0l2.736.912A2 2 0 0 0 21 18.224V6.442a2 2 0 0 0-1.367-1.898l-4-1.333a2 2 0 0 0-1.265 0L9.631 4.789a2 2 0 0 1-1.264 0Z"
-                      />
-                      <path d="M9 5v16m6-18v16" />
-                    </g>
-                  </svg>
-                </div>
-              )}
-
-              {showMap && (
-                <div
-                  onClick={() => {
-                    setShowMap(false);
-                  }}
-                  className="md:hidden cursor-pointer z-40 top-[12px] flex items-center gap-0.5 text-sm bg-blue-600 bg-opacity-90 text-white shadow-sm left-4 fixed px-2 py-1 rounded-3xl font-bold"
-                >
-                  <span>hide map</span>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden="true"
-                    role="img"
-                    width="1em"
-                    height="1em"
-                    preserveAspectRatio="xMidYMid meet"
-                    viewBox="0 0 24 24"
-                  >
-                    <g
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        d="m8.368 4.79l-2.736-.913A2 2 0 0 0 3 5.775v11.783a2 2 0 0 0 1.368 1.898l4 1.333a2 2 0 0 0 1.264 0l4.736-1.578a2 2 0 0 1 1.264 0l2.736.912A2 2 0 0 0 21 18.224V6.442a2 2 0 0 0-1.367-1.898l-4-1.333a2 2 0 0 0-1.265 0L9.631 4.789a2 2 0 0 1-1.264 0Z"
-                      />
-                      <path d="M9 5v16m6-18v16" />
-                    </g>
-                  </svg>
-                </div>
-              )}
-
-              {showMap && (
-                <div className="w-full md:hidden h-[93vh] top-0 left-0 right-0 sm:flex gap-2 absolute xsMax:mb-3">
-                  <Map
-                    trips={order}
-                    startingPoint={
-                      userTrips.starting_point || startingLocationSelected.value
-                    }
-                  ></Map>
-
-                  <div className="absolute flex bottom-5 z-40 w-full justify-center">
-                    <div className="bg-white flex gap-0.5 w-fit rounded-2xl py-1">
-                      <div
-                        onClick={() => {
-                          router.push({
-                            query: {
-                              ...router.query,
-                              label:
-                                router.query.label === "show" ? "" : "show",
-                              showAll: router.query.showAll === "",
-                            },
-                          });
-                        }}
-                        className={
-                          "flex relative flex-col items-center justify-center py-1 px-1 rounded-xl transition-all duration-500 cursor-pointer " +
-                          (router.query.label === "show"
-                            ? "bg-blue-400 hover:bg-blue-500"
-                            : "hover:bg-gray-300")
-                        }
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          aria-hidden="true"
-                          role="img"
-                          width="1em"
-                          height="1em"
-                          preserveAspectRatio="xMidYMid meet"
-                          viewBox="0 0 32 32"
-                        >
-                          <path
-                            fill="currentColor"
-                            d="M16 18a5 5 0 1 1 5-5a5.006 5.006 0 0 1-5 5Zm0-8a3 3 0 1 0 3 3a3.003 3.003 0 0 0-3-3Z"
-                          />
-                          <path
-                            fill="currentColor"
-                            d="m16 30l-8.436-9.949a35.076 35.076 0 0 1-.348-.451A10.889 10.889 0 0 1 5 13a11 11 0 0 1 22 0a10.884 10.884 0 0 1-2.215 6.597l-.001.003s-.3.394-.345.447ZM8.812 18.395c.002 0 .234.308.287.374L16 26.908l6.91-8.15c.044-.055.278-.365.279-.366A8.901 8.901 0 0 0 25 13a9 9 0 1 0-18 0a8.905 8.905 0 0 0 1.813 5.395Z"
-                          />
-                        </svg>
-                        <span className="font-bold text-sm truncate">
-                          Labels
-                        </span>
-                      </div>
-                      <div
-                        onClick={() => {
-                          router.push({
-                            query: {
-                              ...router.query,
-                              stay: router.query.stay === "show" ? "" : "show",
-                              showAll: router.query.showAll === "",
-                            },
-                          });
-                        }}
-                        className={
-                          "flex relative flex-col justify-center items-center py-1 px-1 rounded-xl transition-all duration-500 cursor-pointer " +
-                          (router.query.stay === "show"
-                            ? "bg-blue-400 hover:bg-blue-500"
-                            : "hover:bg-gray-300")
-                        }
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          aria-hidden="true"
-                          role="img"
-                          width="1em"
-                          height="1em"
-                          preserveAspectRatio="xMidYMid meet"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            fill="none"
-                            stroke="currentColor"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M22 20v-7.826a4 4 0 0 0-1.253-2.908l-7.373-6.968a2 2 0 0 0-2.748 0L3.253 9.266A4 4 0 0 0 2 12.174V20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2Z"
-                          />
-                        </svg>
-                        <span className="font-bold text-sm truncate">
-                          Stays
-                        </span>
-                      </div>
-                      <div
-                        onClick={() => {
-                          router.push({
-                            query: {
-                              ...router.query,
-                              experiences:
-                                router.query.experiences === "show"
-                                  ? ""
-                                  : "show",
-                              showAll: router.query.showAll === "",
-                            },
-                          });
-                        }}
-                        className={
-                          "flex relative flex-col items-center justify-center py-1 px-1 rounded-xl transition-all duration-500 cursor-pointer " +
-                          (router.query.experiences === "show"
-                            ? "bg-blue-400 hover:bg-blue-500"
-                            : "hover:bg-gray-300")
-                        }
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          aria-hidden="true"
-                          role="img"
-                          className="w-6 h-6"
-                          preserveAspectRatio="xMidYMid meet"
-                          viewBox="0 0 24 24"
-                        >
-                          <g
-                            fill="none"
-                            stroke="currentColor"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="1"
-                          >
-                            <path d="m14.571 15.004l.858 1.845s3.857.819 3.857 2.767C19.286 21 17.57 21 17.57 21H13l-2.25-1.25" />
-                            <path d="m9.429 15.004l-.857 1.845s-3.858.819-3.858 2.767C4.714 21 6.43 21 6.43 21H8.5l2.25-1.25L13.5 18" />
-                            <path d="M3 15.926s2.143-.461 3.429-.922C7.714 8.546 11.57 9.007 12 9.007c.429 0 4.286-.461 5.571 5.997c1.286.46 3.429.922 3.429.922M12 7a2 2 0 1 0 0-4a2 2 0 0 0 0 4Z" />
-                          </g>
-                        </svg>
-                        <span className="font-bold text-sm truncate">
-                          Experiences
-                        </span>
-                      </div>
-                      <div
-                        onClick={() => {
-                          router.push({
-                            query: {
-                              ...router.query,
-                              transport:
-                                router.query.transport === "show" ? "" : "show",
-                              showAll: router.query.showAll === "",
-                            },
-                          });
-                        }}
-                        className={
-                          "flex relative flex-col items-center justify-center py-1 px-1 rounded-xl transition-all duration-500 cursor-pointer " +
-                          (router.query.transport === "show"
-                            ? "bg-blue-400 hover:bg-blue-500"
-                            : "hover:bg-gray-300")
-                        }
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          aria-hidden="true"
-                          role="img"
-                          width="1em"
-                          height="1em"
-                          preserveAspectRatio="xMidYMid meet"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            fill="currentColor"
-                            d="m20.772 10.155l-1.368-4.104A2.995 2.995 0 0 0 16.559 4H7.441a2.995 2.995 0 0 0-2.845 2.051l-1.368 4.104A2 2 0 0 0 2 12v5c0 .738.404 1.376 1 1.723V21a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-2h12v2a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-2.277A1.99 1.99 0 0 0 22 17v-5a2 2 0 0 0-1.228-1.845zM7.441 6h9.117c.431 0 .813.274.949.684L18.613 10H5.387l1.105-3.316A1 1 0 0 1 7.441 6zM5.5 16a1.5 1.5 0 1 1 .001-3.001A1.5 1.5 0 0 1 5.5 16zm13 0a1.5 1.5 0 1 1 .001-3.001A1.5 1.5 0 0 1 18.5 16z"
-                          />
-                        </svg>
-                        <span className="font-bold text-sm truncate">
-                          Transport
-                        </span>
-                      </div>
-                      <div
-                        onClick={() => {
-                          router.push({
-                            query: {
-                              label:
-                                router.query.showAll === "show" ? "" : "show",
-                              stay:
-                                router.query.showAll === "show" ? "" : "show",
-                              experiences:
-                                router.query.showAll === "show" ? "" : "show",
-                              transport:
-                                router.query.transport === "show" ? "" : "show",
-                              showAll:
-                                router.query.showAll === "show" ? "" : "show",
-                            },
-                          });
-                        }}
-                        className={
-                          "flex relative flex-col items-center justify-center py-1 px-1 rounded-xl transition-all duration-500 cursor-pointer " +
-                          (router.query.showAll === "show"
-                            ? "bg-blue-400 hover:bg-blue-500"
-                            : "hover:bg-gray-300")
-                        }
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          aria-hidden="true"
-                          role="img"
-                          width="1em"
-                          height="1em"
-                          preserveAspectRatio="xMidYMid meet"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            fill="currentColor"
-                            d="M8.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L2.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093L8.95 4.992a.252.252 0 0 1 .02-.022zm-.92 5.14l.92.92a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 1 0-1.091-1.028L9.477 9.417l-.485-.486l-.943 1.179z"
-                          />
-                        </svg>
-                        <span className="font-bold text-sm truncate">
-                          Show all
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
               <div className=" mt-4">
                 <div
                   onClick={() => {
@@ -2044,6 +1763,278 @@ function PlanTrip({
               </div>
             </div>
           </div>
+
+          {!showMap && (
+            <div
+              onClick={() => {
+                setShowMap(true);
+              }}
+              className="md:hidden top-[72px] flex items-center gap-0.5 cursor-pointer text-sm bg-blue-600 bg-opacity-90 text-white shadow-sm right-4 fixed px-2 py-1 rounded-3xl font-bold"
+            >
+              <span>map</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+                role="img"
+                width="1em"
+                height="1em"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 24 24"
+              >
+                <g
+                  fill="none"
+                  stroke="currentColor"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                >
+                  <path
+                    strokeLinecap="round"
+                    d="m8.368 4.79l-2.736-.913A2 2 0 0 0 3 5.775v11.783a2 2 0 0 0 1.368 1.898l4 1.333a2 2 0 0 0 1.264 0l4.736-1.578a2 2 0 0 1 1.264 0l2.736.912A2 2 0 0 0 21 18.224V6.442a2 2 0 0 0-1.367-1.898l-4-1.333a2 2 0 0 0-1.265 0L9.631 4.789a2 2 0 0 1-1.264 0Z"
+                  />
+                  <path d="M9 5v16m6-18v16" />
+                </g>
+              </svg>
+            </div>
+          )}
+
+          {showMap && (
+            <div
+              onClick={() => {
+                setShowMap(false);
+              }}
+              className="md:hidden cursor-pointer z-40 top-[12px] flex items-center gap-0.5 text-sm bg-blue-600 bg-opacity-90 text-white shadow-sm left-4 fixed px-2 py-1 rounded-3xl font-bold"
+            >
+              <span>hide map</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+                role="img"
+                width="1em"
+                height="1em"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 24 24"
+              >
+                <g
+                  fill="none"
+                  stroke="currentColor"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                >
+                  <path
+                    strokeLinecap="round"
+                    d="m8.368 4.79l-2.736-.913A2 2 0 0 0 3 5.775v11.783a2 2 0 0 0 1.368 1.898l4 1.333a2 2 0 0 0 1.264 0l4.736-1.578a2 2 0 0 1 1.264 0l2.736.912A2 2 0 0 0 21 18.224V6.442a2 2 0 0 0-1.367-1.898l-4-1.333a2 2 0 0 0-1.265 0L9.631 4.789a2 2 0 0 1-1.264 0Z"
+                  />
+                  <path d="M9 5v16m6-18v16" />
+                </g>
+              </svg>
+            </div>
+          )}
+
+          {showMap && (
+            <div className="w-full md:hidden h-[93vh] top-0 left-0 right-0 sm:flex gap-2 absolute xsMax:mb-3">
+              <Map
+                trips={order}
+                startingPoint={
+                  userTrips.starting_point || startingLocationSelected.value
+                }
+              ></Map>
+
+              <div className="absolute flex bottom-5 z-40 w-full justify-center">
+                <div className="bg-white flex gap-0.5 w-fit rounded-2xl py-1">
+                  <div
+                    onClick={() => {
+                      router.push({
+                        query: {
+                          ...router.query,
+                          label: router.query.label === "show" ? "" : "show",
+                          showAll: router.query.showAll === "",
+                        },
+                      });
+                    }}
+                    className={
+                      "flex relative flex-col items-center justify-center py-1 px-1 rounded-xl transition-all duration-500 cursor-pointer " +
+                      (router.query.label === "show"
+                        ? "bg-blue-400 hover:bg-blue-500"
+                        : "hover:bg-gray-300")
+                    }
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      aria-hidden="true"
+                      role="img"
+                      width="1em"
+                      height="1em"
+                      preserveAspectRatio="xMidYMid meet"
+                      viewBox="0 0 32 32"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M16 18a5 5 0 1 1 5-5a5.006 5.006 0 0 1-5 5Zm0-8a3 3 0 1 0 3 3a3.003 3.003 0 0 0-3-3Z"
+                      />
+                      <path
+                        fill="currentColor"
+                        d="m16 30l-8.436-9.949a35.076 35.076 0 0 1-.348-.451A10.889 10.889 0 0 1 5 13a11 11 0 0 1 22 0a10.884 10.884 0 0 1-2.215 6.597l-.001.003s-.3.394-.345.447ZM8.812 18.395c.002 0 .234.308.287.374L16 26.908l6.91-8.15c.044-.055.278-.365.279-.366A8.901 8.901 0 0 0 25 13a9 9 0 1 0-18 0a8.905 8.905 0 0 0 1.813 5.395Z"
+                      />
+                    </svg>
+                    <span className="font-bold text-sm truncate">Labels</span>
+                  </div>
+                  <div
+                    onClick={() => {
+                      router.push({
+                        query: {
+                          ...router.query,
+                          stay: router.query.stay === "show" ? "" : "show",
+                          showAll: router.query.showAll === "",
+                        },
+                      });
+                    }}
+                    className={
+                      "flex relative flex-col justify-center items-center py-1 px-1 rounded-xl transition-all duration-500 cursor-pointer " +
+                      (router.query.stay === "show"
+                        ? "bg-blue-400 hover:bg-blue-500"
+                        : "hover:bg-gray-300")
+                    }
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      aria-hidden="true"
+                      role="img"
+                      width="1em"
+                      height="1em"
+                      preserveAspectRatio="xMidYMid meet"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill="none"
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M22 20v-7.826a4 4 0 0 0-1.253-2.908l-7.373-6.968a2 2 0 0 0-2.748 0L3.253 9.266A4 4 0 0 0 2 12.174V20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2Z"
+                      />
+                    </svg>
+                    <span className="font-bold text-sm truncate">Stays</span>
+                  </div>
+                  <div
+                    onClick={() => {
+                      router.push({
+                        query: {
+                          ...router.query,
+                          experiences:
+                            router.query.experiences === "show" ? "" : "show",
+                          showAll: router.query.showAll === "",
+                        },
+                      });
+                    }}
+                    className={
+                      "flex relative flex-col items-center justify-center py-1 px-1 rounded-xl transition-all duration-500 cursor-pointer " +
+                      (router.query.experiences === "show"
+                        ? "bg-blue-400 hover:bg-blue-500"
+                        : "hover:bg-gray-300")
+                    }
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      aria-hidden="true"
+                      role="img"
+                      className="w-6 h-6"
+                      preserveAspectRatio="xMidYMid meet"
+                      viewBox="0 0 24 24"
+                    >
+                      <g
+                        fill="none"
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="1"
+                      >
+                        <path d="m14.571 15.004l.858 1.845s3.857.819 3.857 2.767C19.286 21 17.57 21 17.57 21H13l-2.25-1.25" />
+                        <path d="m9.429 15.004l-.857 1.845s-3.858.819-3.858 2.767C4.714 21 6.43 21 6.43 21H8.5l2.25-1.25L13.5 18" />
+                        <path d="M3 15.926s2.143-.461 3.429-.922C7.714 8.546 11.57 9.007 12 9.007c.429 0 4.286-.461 5.571 5.997c1.286.46 3.429.922 3.429.922M12 7a2 2 0 1 0 0-4a2 2 0 0 0 0 4Z" />
+                      </g>
+                    </svg>
+                    <span className="font-bold text-sm truncate">
+                      Experiences
+                    </span>
+                  </div>
+                  <div
+                    onClick={() => {
+                      router.push({
+                        query: {
+                          ...router.query,
+                          transport:
+                            router.query.transport === "show" ? "" : "show",
+                          showAll: router.query.showAll === "",
+                        },
+                      });
+                    }}
+                    className={
+                      "flex relative flex-col items-center justify-center py-1 px-1 rounded-xl transition-all duration-500 cursor-pointer " +
+                      (router.query.transport === "show"
+                        ? "bg-blue-400 hover:bg-blue-500"
+                        : "hover:bg-gray-300")
+                    }
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      aria-hidden="true"
+                      role="img"
+                      width="1em"
+                      height="1em"
+                      preserveAspectRatio="xMidYMid meet"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="m20.772 10.155l-1.368-4.104A2.995 2.995 0 0 0 16.559 4H7.441a2.995 2.995 0 0 0-2.845 2.051l-1.368 4.104A2 2 0 0 0 2 12v5c0 .738.404 1.376 1 1.723V21a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-2h12v2a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-2.277A1.99 1.99 0 0 0 22 17v-5a2 2 0 0 0-1.228-1.845zM7.441 6h9.117c.431 0 .813.274.949.684L18.613 10H5.387l1.105-3.316A1 1 0 0 1 7.441 6zM5.5 16a1.5 1.5 0 1 1 .001-3.001A1.5 1.5 0 0 1 5.5 16zm13 0a1.5 1.5 0 1 1 .001-3.001A1.5 1.5 0 0 1 18.5 16z"
+                      />
+                    </svg>
+                    <span className="font-bold text-sm truncate">
+                      Transport
+                    </span>
+                  </div>
+                  <div
+                    onClick={() => {
+                      router.push({
+                        query: {
+                          label: router.query.showAll === "show" ? "" : "show",
+                          stay: router.query.showAll === "show" ? "" : "show",
+                          experiences:
+                            router.query.showAll === "show" ? "" : "show",
+                          transport:
+                            router.query.transport === "show" ? "" : "show",
+                          showAll:
+                            router.query.showAll === "show" ? "" : "show",
+                        },
+                      });
+                    }}
+                    className={
+                      "flex relative flex-col items-center justify-center py-1 px-1 rounded-xl transition-all duration-500 cursor-pointer " +
+                      (router.query.showAll === "show"
+                        ? "bg-blue-400 hover:bg-blue-500"
+                        : "hover:bg-gray-300")
+                    }
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      aria-hidden="true"
+                      role="img"
+                      width="1em"
+                      height="1em"
+                      preserveAspectRatio="xMidYMid meet"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M8.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L2.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093L8.95 4.992a.252.252 0 0 1 .02-.022zm-.92 5.14l.92.92a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 1 0-1.091-1.028L9.477 9.417l-.485-.486l-.943 1.179z"
+                      />
+                    </svg>
+                    <span className="font-bold text-sm truncate">Show all</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         <div>
@@ -2265,14 +2256,14 @@ export async function getServerSideProps(context) {
       },
     };
   } catch (error) {
-    if (error.response.status === 401) {
+    if (error.response && error.response.status === 401) {
       return {
         redirect: {
           permanent: false,
           destination: "/login",
         },
       };
-    } else if (error.response.status === 404) {
+    } else if (error.response && error.response.status === 404) {
       return {
         notFound: true,
       };

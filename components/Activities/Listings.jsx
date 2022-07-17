@@ -52,20 +52,42 @@ function Listings({
 
   return (
     <ClientOnly>
-      <div className="w-full flex flex-wrap gap-4">
-        {activities.map((activity, index) => (
-          <Listing
-            key={index}
-            listing={activity}
-            getDistance={getDistance}
-            userLatLng={userLatLng}
-            itemsInCart={itemsInCart}
-            userProfile={userProfile}
-            slugIsCorrect={slugIsCorrect}
-            itemsInOrders={itemsInOrders}
-          ></Listing>
-        ))}
-      </div>
+      {activities.length > 0 && (
+        <div className="w-full flex flex-wrap gap-4">
+          {activities.map((activity, index) => (
+            <Listing
+              key={index}
+              listing={activity}
+              getDistance={getDistance}
+              userLatLng={userLatLng}
+              itemsInCart={itemsInCart}
+              userProfile={userProfile}
+              slugIsCorrect={slugIsCorrect}
+              itemsInOrders={itemsInOrders}
+            ></Listing>
+          ))}
+        </div>
+      )}
+
+      {activities.length === 0 && (
+        <div className="flex flex-col items-center justify-center">
+          <div className="font-bold text-2xl">No result for this filter</div>
+          <div
+            onClick={() => {
+              router.push({
+                pathname: "/experiences",
+                query: {
+                  trip: router.query.trip,
+                  group_trip: router.query.group_trip,
+                },
+              });
+            }}
+            className="text-sm font-bold cursor-pointer text-blue-400 hover:text-blue-600 transition-colors duration-200 ease-linear"
+          >
+            Clear filter
+          </div>
+        </div>
+      )}
     </ClientOnly>
   );
 }

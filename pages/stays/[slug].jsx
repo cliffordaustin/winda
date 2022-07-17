@@ -381,9 +381,9 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
     value: "Standard",
   });
 
-  const [numOfAdults, setNumOfAdults] = useState(1);
+  const [numOfAdults, setNumOfAdults] = useState(0);
 
-  const [numOfAdultsNonResident, setNumOfAdultsNonResident] = useState(0);
+  const [numOfAdultsNonResident, setNumOfAdultsNonResident] = useState(2);
 
   const [numOfChildren, setNumOfChildren] = useState(0);
 
@@ -1220,9 +1220,20 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     className="flex cursor-pointer items-center justify-between px-4 py-4 rounded-2xl mt-6 border border-gray-200"
                   >
                     <div className="font-bold">Guests</div>
-                    <div className="text-gray-600 text-sm  flex flex-wrap self-end">
+                    <div className="text-gray-600 text-sm  flex flex-wrap self-end justify-end">
+                      {numOfAdultsNonResident > 0 && (
+                        <>
+                          <span>
+                            {numOfAdultsNonResident}{" "}
+                            {numOfAdultsNonResident > 1
+                              ? "Non-Resident Adults"
+                              : "Non-Resident Adult"}
+                          </span>
+                        </>
+                      )}
                       {numOfAdults > 0 && (
                         <>
+                          <span className="font-bold mx-0.5 ">,</span>
                           <span>
                             {numOfAdults}{" "}
                             {numOfAdults > 1
@@ -1239,18 +1250,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                             {numOfChildren > 1
                               ? "Resident Children"
                               : "Resident Child"}
-                          </span>
-                        </>
-                      )}
-
-                      {numOfAdultsNonResident > 0 && (
-                        <>
-                          <span className="font-bold mx-0.5 ">,</span>
-                          <span>
-                            {numOfAdultsNonResident}{" "}
-                            {numOfAdultsNonResident > 1
-                              ? "Non-Resident Adults"
-                              : "Non-Resident Adult"}
                           </span>
                         </>
                       )}
@@ -1338,59 +1337,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       <div className="flex justify-between mt-6">
                         <div className="flex gap-1 text-sm text-gray-600">
                           <span>
-                            {numOfAdults}{" "}
-                            {numOfAdults > 1
-                              ? "Residents Adult"
-                              : "Resident Adult"}
-                          </span>
-                          <span>(18+)</span>
-                        </div>
-
-                        <div className="flex gap-3 items-center">
-                          <div
-                            onClick={() => {
-                              if (
-                                (numOfAdults > 1 ||
-                                  numOfAdultsNonResident > 0) &&
-                                numOfAdults > 0
-                              ) {
-                                setNumOfAdults(numOfAdults - 1);
-                              }
-                            }}
-                            className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
-                          >
-                            -
-                          </div>
-
-                          <div
-                            onClick={() => {
-                              setNumOfAdults(numOfAdults + 1);
-                            }}
-                            className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
-                          >
-                            +
-                          </div>
-                        </div>
-                      </div>
-
-                      {stay.conservation_or_park &&
-                        stay.conservation_or_park_price && (
-                          <div className="text-sm underline mt-1">
-                            Park/Conservation fees for{" "}
-                            <span className="font-bold">each</span> resident
-                            adult costs{" "}
-                            <Price
-                              stayPrice={stay.conservation_or_park_price}
-                              className="text-sm inline font-bold"
-                            ></Price>
-                          </div>
-                        )}
-                    </div>
-
-                    <div>
-                      <div className="flex justify-between mt-6">
-                        <div className="flex gap-1 text-sm text-gray-600">
-                          <span>
                             {numOfAdultsNonResident}{" "}
                             {numOfAdultsNonResident > 1
                               ? "Non-Residents Adult"
@@ -1450,19 +1396,23 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       <div className="flex justify-between mt-6">
                         <div className="flex gap-1 text-sm text-gray-600">
                           <span>
-                            {numOfChildren}{" "}
-                            {numOfChildren > 1
-                              ? "Resident Children"
-                              : "Resident Child"}
+                            {numOfAdults}{" "}
+                            {numOfAdults > 1
+                              ? "Residents Adult"
+                              : "Resident Adult"}
                           </span>
-                          <span>(0 - 17)</span>
+                          <span>(18+)</span>
                         </div>
 
                         <div className="flex gap-3 items-center">
                           <div
                             onClick={() => {
-                              if (numOfChildren > 0) {
-                                setNumOfChildren(numOfChildren - 1);
+                              if (
+                                (numOfAdults > 1 ||
+                                  numOfAdultsNonResident > 0) &&
+                                numOfAdults > 0
+                              ) {
+                                setNumOfAdults(numOfAdults - 1);
                               }
                             }}
                             className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
@@ -1472,7 +1422,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
                           <div
                             onClick={() => {
-                              setNumOfChildren(numOfChildren + 1);
+                              setNumOfAdults(numOfAdults + 1);
                             }}
                             className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
                           >
@@ -1480,16 +1430,15 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                           </div>
                         </div>
                       </div>
+
                       {stay.conservation_or_park &&
-                        stay.conservation_or_park_children_price && (
-                          <div className="text-sm mt-1 underline">
+                        stay.conservation_or_park_price && (
+                          <div className="text-sm underline mt-1">
                             Park/Conservation fees for{" "}
                             <span className="font-bold">each</span> resident
-                            child costs{" "}
+                            adult costs{" "}
                             <Price
-                              stayPrice={
-                                stay.conservation_or_park_children_price
-                              }
+                              stayPrice={stay.conservation_or_park_price}
                               className="text-sm inline font-bold"
                             ></Price>
                           </div>
@@ -1544,6 +1493,56 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                             <Price
                               stayPrice={
                                 stay.conservation_or_park_children_price_non_resident
+                              }
+                              className="text-sm inline font-bold"
+                            ></Price>
+                          </div>
+                        )}
+                    </div>
+
+                    <div>
+                      <div className="flex justify-between mt-6">
+                        <div className="flex gap-1 text-sm text-gray-600">
+                          <span>
+                            {numOfChildren}{" "}
+                            {numOfChildren > 1
+                              ? "Resident Children"
+                              : "Resident Child"}
+                          </span>
+                          <span>(0 - 17)</span>
+                        </div>
+
+                        <div className="flex gap-3 items-center">
+                          <div
+                            onClick={() => {
+                              if (numOfChildren > 0) {
+                                setNumOfChildren(numOfChildren - 1);
+                              }
+                            }}
+                            className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
+                          >
+                            -
+                          </div>
+
+                          <div
+                            onClick={() => {
+                              setNumOfChildren(numOfChildren + 1);
+                            }}
+                            className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
+                          >
+                            +
+                          </div>
+                        </div>
+                      </div>
+                      {stay.conservation_or_park &&
+                        stay.conservation_or_park_children_price && (
+                          <div className="text-sm mt-1 underline">
+                            Park/Conservation fees for{" "}
+                            <span className="font-bold">each</span> resident
+                            child costs{" "}
+                            <Price
+                              stayPrice={
+                                stay.conservation_or_park_children_price
                               }
                               className="text-sm inline font-bold"
                             ></Price>
@@ -1617,9 +1616,20 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     </div>
 
                     {(stay.type_of_stay !== "HOUSE" || !inCart) && (
-                      <div className="text-gray-600 text-sm  flex flex-wrap self-end">
+                      <div className="text-gray-600 text-sm flex flex-wrap self-end">
+                        {numOfAdultsNonResident > 0 && (
+                          <>
+                            <span>
+                              {numOfAdultsNonResident}{" "}
+                              {numOfAdultsNonResident > 1
+                                ? "Non-Resident Adults"
+                                : "Non-Resident Adult"}
+                            </span>
+                          </>
+                        )}
                         {numOfAdults > 0 && (
                           <>
+                            <span className="font-bold mx-0.5 ">,</span>
                             <span>
                               {numOfAdults}{" "}
                               {numOfAdults > 1
@@ -1636,18 +1646,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                               {numOfChildren > 1
                                 ? "Resident Children"
                                 : "Resident Child"}
-                            </span>
-                          </>
-                        )}
-
-                        {numOfAdultsNonResident > 0 && (
-                          <>
-                            <span className="font-bold mx-0.5 ">,</span>
-                            <span>
-                              {numOfAdultsNonResident}{" "}
-                              {numOfAdultsNonResident > 1
-                                ? "Non-Resident Adults"
-                                : "Non-Resident Adult"}
                             </span>
                           </>
                         )}
@@ -2186,9 +2184,20 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     {moment(addToCartDate.to).format("MMM DD")}
                   </span>
                 )}
-                <div className="text-gray-600 text-sm  flex flex-wrap self-end justify-end">
+                <div className="text-gray-600 text-sm flex flex-wrap self-end justify-end">
+                  {numOfAdultsNonResident > 0 && (
+                    <>
+                      <span>
+                        {numOfAdultsNonResident}{" "}
+                        {numOfAdultsNonResident > 1
+                          ? "Non-Resident Adults"
+                          : "Non-Resident Adult"}
+                      </span>
+                    </>
+                  )}
                   {numOfAdults > 0 && (
                     <>
+                      <span className="font-bold mx-0.5 ">,</span>
                       <span>
                         {numOfAdults}{" "}
                         {numOfAdults > 1 ? "Resident Adults" : "Resident Adult"}
@@ -2203,18 +2212,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                         {numOfChildren > 1
                           ? "Resident Children"
                           : "Resident Child"}
-                      </span>
-                    </>
-                  )}
-
-                  {numOfAdultsNonResident > 0 && (
-                    <>
-                      <span className="font-bold mx-0.5 ">,</span>
-                      <span>
-                        {numOfAdultsNonResident}{" "}
-                        {numOfAdultsNonResident > 1
-                          ? "Non-Resident Adults"
-                          : "Non-Resident Adult"}
                       </span>
                     </>
                   )}
@@ -2362,59 +2359,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       <div className="flex justify-between mt-6">
                         <div className="flex gap-1 text-sm text-gray-600">
                           <span>
-                            {numOfAdults}{" "}
-                            {numOfAdults > 1
-                              ? "Residents Adult"
-                              : "Resident Adult"}
-                          </span>
-                          <span>(18+)</span>
-                        </div>
-
-                        <div className="flex gap-3 items-center">
-                          <div
-                            onClick={() => {
-                              if (
-                                (numOfAdults > 1 ||
-                                  numOfAdultsNonResident > 0) &&
-                                numOfAdults > 0
-                              ) {
-                                setNumOfAdults(numOfAdults - 1);
-                              }
-                            }}
-                            className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
-                          >
-                            -
-                          </div>
-
-                          <div
-                            onClick={() => {
-                              setNumOfAdults(numOfAdults + 1);
-                            }}
-                            className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
-                          >
-                            +
-                          </div>
-                        </div>
-                      </div>
-
-                      {stay.conservation_or_park &&
-                        stay.conservation_or_park_price && (
-                          <div className="text-sm underline mt-1">
-                            Park/Conservation fees for{" "}
-                            <span className="font-bold">each</span> resident
-                            adult costs{" "}
-                            <Price
-                              stayPrice={stay.conservation_or_park_price}
-                              className="text-sm inline font-bold"
-                            ></Price>
-                          </div>
-                        )}
-                    </div>
-
-                    <div>
-                      <div className="flex justify-between mt-6">
-                        <div className="flex gap-1 text-sm text-gray-600">
-                          <span>
                             {numOfAdultsNonResident}{" "}
                             {numOfAdultsNonResident > 1
                               ? "Non-Residents Adult"
@@ -2474,19 +2418,23 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       <div className="flex justify-between mt-6">
                         <div className="flex gap-1 text-sm text-gray-600">
                           <span>
-                            {numOfChildren}{" "}
-                            {numOfChildren > 1
-                              ? "Resident Children"
-                              : "Resident Child"}
+                            {numOfAdults}{" "}
+                            {numOfAdults > 1
+                              ? "Residents Adult"
+                              : "Resident Adult"}
                           </span>
-                          <span>(0 - 17)</span>
+                          <span>(18+)</span>
                         </div>
 
                         <div className="flex gap-3 items-center">
                           <div
                             onClick={() => {
-                              if (numOfChildren > 0) {
-                                setNumOfChildren(numOfChildren - 1);
+                              if (
+                                (numOfAdults > 1 ||
+                                  numOfAdultsNonResident > 0) &&
+                                numOfAdults > 0
+                              ) {
+                                setNumOfAdults(numOfAdults - 1);
                               }
                             }}
                             className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
@@ -2496,7 +2444,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
                           <div
                             onClick={() => {
-                              setNumOfChildren(numOfChildren + 1);
+                              setNumOfAdults(numOfAdults + 1);
                             }}
                             className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
                           >
@@ -2504,16 +2452,15 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                           </div>
                         </div>
                       </div>
+
                       {stay.conservation_or_park &&
-                        stay.conservation_or_park_children_price && (
-                          <div className="text-sm mt-1 underline">
+                        stay.conservation_or_park_price && (
+                          <div className="text-sm underline mt-1">
                             Park/Conservation fees for{" "}
                             <span className="font-bold">each</span> resident
-                            child costs{" "}
+                            adult costs{" "}
                             <Price
-                              stayPrice={
-                                stay.conservation_or_park_children_price
-                              }
+                              stayPrice={stay.conservation_or_park_price}
                               className="text-sm inline font-bold"
                             ></Price>
                           </div>
@@ -2575,16 +2522,66 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                         )}
                     </div>
 
-                    {(numOfAdults > 1 ||
+                    <div>
+                      <div className="flex justify-between mt-6">
+                        <div className="flex gap-1 text-sm text-gray-600">
+                          <span>
+                            {numOfChildren}{" "}
+                            {numOfChildren > 1
+                              ? "Resident Children"
+                              : "Resident Child"}
+                          </span>
+                          <span>(0 - 17)</span>
+                        </div>
+
+                        <div className="flex gap-3 items-center">
+                          <div
+                            onClick={() => {
+                              if (numOfChildren > 0) {
+                                setNumOfChildren(numOfChildren - 1);
+                              }
+                            }}
+                            className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
+                          >
+                            -
+                          </div>
+
+                          <div
+                            onClick={() => {
+                              setNumOfChildren(numOfChildren + 1);
+                            }}
+                            className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
+                          >
+                            +
+                          </div>
+                        </div>
+                      </div>
+                      {stay.conservation_or_park &&
+                        stay.conservation_or_park_children_price && (
+                          <div className="text-sm mt-1 underline">
+                            Park/Conservation fees for{" "}
+                            <span className="font-bold">each</span> resident
+                            child costs{" "}
+                            <Price
+                              stayPrice={
+                                stay.conservation_or_park_children_price
+                              }
+                              className="text-sm inline font-bold"
+                            ></Price>
+                          </div>
+                        )}
+                    </div>
+
+                    {(numOfAdultsNonResident > 1 ||
                       numOfChildren > 0 ||
-                      numOfAdultsNonResident > 0 ||
+                      numOfAdults > 0 ||
                       numOfChildrenNonResident > 0) && (
                       <div
                         className="mt-2 cursor-pointer text-sm underline"
                         onClick={() => {
-                          setNumOfAdults(1);
+                          setNumOfAdults(0);
                           setNumOfChildren(0);
-                          setNumOfAdultsNonResident(0);
+                          setNumOfAdultsNonResident(1);
                           setNumOfChildrenNonResident(0);
                         }}
                       >

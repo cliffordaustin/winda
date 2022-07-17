@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
+import ReactPaginate from "react-paginate";
 import { FreeMode, Navigation, Thumbs } from "swiper";
 
 import getTokenFromReq from "../../lib/getTokenFromReq";
@@ -42,7 +43,15 @@ import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/thumbs";
 
-const Transport = ({ userProfile, transport }) => {
+const Transport = ({
+  userProfile,
+  transport,
+  pageSize,
+  count,
+  nextLink,
+  previousLink,
+  totalPages,
+}) => {
   const router = useRouter();
 
   const [state, setState] = useState({
@@ -60,6 +69,7 @@ const Transport = ({ userProfile, transport }) => {
     selectedTransportSearchItem: 0,
     showSortPopup: false,
     showPricePopup: false,
+    showTypeOfCar: false,
     windowSize: process.browser ? window.innerWidth : 0,
     showTransportTypesPopup: false,
     showFilterPopup: false,
@@ -94,6 +104,7 @@ const Transport = ({ userProfile, transport }) => {
     showNeedADriver: false,
     showSortPopup: false,
     showPricePopup: false,
+    showTypeOfCar: false,
     showSearchModal: false,
     showTransportTypesPopup: false,
     showFilterPopup: false,
@@ -393,6 +404,15 @@ const Transport = ({ userProfile, transport }) => {
     }
   };
 
+  const handlePageClick = (event) => {
+    router.push({
+      query: {
+        ...router.query,
+        page: event.selected + 1,
+      },
+    });
+  };
+
   useEffect(() => {
     if (router.query.group_trip) {
       checkGroupTripSlug();
@@ -485,7 +505,8 @@ const Transport = ({ userProfile, transport }) => {
   return (
     <div
       className={
-        "relative " + (currentListing ? "h-screen overflow-y-hidden" : "")
+        "relative overflow-x-hidden md:overflow-x-visible " +
+        (currentListing ? "h-screen overflow-y-hidden" : "")
       }
       onClick={() => {
         setState({
@@ -514,47 +535,17 @@ const Transport = ({ userProfile, transport }) => {
           }
         ></Navbar>
 
-        <div className="w-[90%] sm:w-[70%] mx-auto flex shadow-lg border border-gray-200 rounded-xl pl-3 h-12 md:hidden cursor-pointer">
-          <div
-            onClick={() => {
-              setMobileSearchModal(true);
-            }}
-            className="flex items-center gap-2 w-full"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-            <div className="font-bold text-sm">
-              <span>Where to?</span>
-            </div>
-          </div>
-
-          <div className="flex w-32 border rounded-xl transition-all duration-200 ease-linear self-stretch ">
+        <>
+          {/* <div className="w-[90%] sm:w-[70%] mx-auto flex shadow-lg border border-gray-200 rounded-xl pl-3 h-12 md:hidden cursor-pointer">
             <div
-              onClick={(e) => {
-                e.stopPropagation();
-                setState({
-                  ...state,
-                  ...turnOffAllPopup,
-                  showSortPopup: !state.showSortPopup,
-                });
+              onClick={() => {
+                setMobileSearchModal(true);
               }}
-              className="w-2/4 relative flex items-center justify-center transition-all duration-200 ease-linear hover:border-gray-200 rounded-xl"
+              className="flex items-center gap-2 w-full"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-7 w-7"
+                className="h-5 w-5"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -563,233 +554,271 @@ const Transport = ({ userProfile, transport }) => {
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                 />
               </svg>
-
-              <Popup
-                className="absolute top-full mt-2 w-60 -right-6"
-                showPopup={state.showSortPopup}
-              >
-                <div
-                  className={
-                    styles.listItem +
-                    (router.query.ordering === "-date_posted"
-                      ? " !bg-red-500 !text-white"
-                      : "")
-                  }
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    setState({
-                      ...state,
-                      ...turnOffAllPopup,
-                      showSortPopup: false,
-                    });
-                    if (router.query.ordering === "-date_posted") {
-                      router.push({ query: { ...router.query, ordering: "" } });
-                    } else {
-                      router.push({
-                        query: { ...router.query, ordering: "-date_posted" },
-                      });
-                    }
-                  }}
-                >
-                  Newest
-                </div>
-                <div
-                  className={
-                    styles.listItem +
-                    (router.query.ordering === "+price"
-                      ? " !bg-red-500 !text-white"
-                      : "")
-                  }
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    setState({
-                      ...state,
-                      ...turnOffAllPopup,
-                      showSortPopup: false,
-                    });
-                    if (router.query.ordering === "+price") {
-                      router.push({ query: { ...router.query, ordering: "" } });
-                    } else {
-                      router.push({
-                        query: { ...router.query, ordering: "+price" },
-                      });
-                    }
-                  }}
-                >
-                  Price(min to max)
-                </div>
-                <div
-                  className={
-                    styles.listItem +
-                    (router.query.ordering === "-price"
-                      ? " !bg-red-500 !text-white"
-                      : "")
-                  }
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    setState({
-                      ...state,
-                      ...turnOffAllPopup,
-                      showSortPopup: false,
-                    });
-                    if (router.query.ordering === "-price") {
-                      router.push({ query: { ...router.query, ordering: "" } });
-                    } else {
-                      router.push({
-                        query: { ...router.query, ordering: "-price" },
-                      });
-                    }
-                  }}
-                >
-                  Price(max to min)
-                </div>
-              </Popup>
+              <div className="font-bold text-sm">
+                <span>Where to?</span>
+              </div>
             </div>
 
-            <div
-              onClick={(e) => {
-                e.stopPropagation();
-                setState({
-                  ...state,
-                  ...turnOffAllPopup,
-                  showMobileFilter: true,
-                });
-              }}
-              className="w-2/4 flex items-center justify-center hover:border transition-all duration-200 ease-linear hover:border-gray-200 rounded-xl border"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
-                role="img"
-                className="w-7 h-7"
-                preserveAspectRatio="xMidYMid meet"
-                viewBox="0 0 24 24"
+            <div className="flex w-32 border rounded-xl transition-all duration-200 ease-linear self-stretch ">
+              <div
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setState({
+                    ...state,
+                    ...turnOffAllPopup,
+                    showSortPopup: !state.showSortPopup,
+                  });
+                }}
+                className="w-2/4 relative flex items-center justify-center transition-all duration-200 ease-linear hover:border-gray-200 rounded-xl"
               >
-                <g
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-7 w-7"
                   fill="none"
+                  viewBox="0 0 24 24"
                   stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
                   strokeWidth="2"
                 >
-                  <circle cx="14" cy="6" r="2" />
-                  <path d="M4 6h8m4 0h4" />
-                  <circle cx="8" cy="12" r="2" />
-                  <path d="M4 12h2m4 0h10" />
-                  <circle cx="17" cy="18" r="2" />
-                  <path d="M4 18h11m4 0h1" />
-                </g>
-              </svg>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4"
+                  />
+                </svg>
+
+                <Popup
+                  className="absolute top-full mt-2 w-60 -right-6"
+                  showPopup={state.showSortPopup}
+                >
+                  <div
+                    className={
+                      styles.listItem +
+                      (router.query.ordering === "-date_posted"
+                        ? " !bg-red-500 !text-white"
+                        : "")
+                    }
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      setState({
+                        ...state,
+                        ...turnOffAllPopup,
+                        showSortPopup: false,
+                      });
+                      if (router.query.ordering === "-date_posted") {
+                        router.push({
+                          query: { ...router.query, ordering: "" },
+                        });
+                      } else {
+                        router.push({
+                          query: { ...router.query, ordering: "-date_posted" },
+                        });
+                      }
+                    }}
+                  >
+                    Newest
+                  </div>
+                  <div
+                    className={
+                      styles.listItem +
+                      (router.query.ordering === "+price"
+                        ? " !bg-red-500 !text-white"
+                        : "")
+                    }
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      setState({
+                        ...state,
+                        ...turnOffAllPopup,
+                        showSortPopup: false,
+                      });
+                      if (router.query.ordering === "+price") {
+                        router.push({
+                          query: { ...router.query, ordering: "" },
+                        });
+                      } else {
+                        router.push({
+                          query: { ...router.query, ordering: "+price" },
+                        });
+                      }
+                    }}
+                  >
+                    Price(min to max)
+                  </div>
+                  <div
+                    className={
+                      styles.listItem +
+                      (router.query.ordering === "-price"
+                        ? " !bg-red-500 !text-white"
+                        : "")
+                    }
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      setState({
+                        ...state,
+                        ...turnOffAllPopup,
+                        showSortPopup: false,
+                      });
+                      if (router.query.ordering === "-price") {
+                        router.push({
+                          query: { ...router.query, ordering: "" },
+                        });
+                      } else {
+                        router.push({
+                          query: { ...router.query, ordering: "-price" },
+                        });
+                      }
+                    }}
+                  >
+                    Price(max to min)
+                  </div>
+                </Popup>
+              </div>
+
+              <div
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setState({
+                    ...state,
+                    ...turnOffAllPopup,
+                    showMobileFilter: true,
+                  });
+                }}
+                className="w-2/4 flex items-center justify-center hover:border transition-all duration-200 ease-linear hover:border-gray-200 rounded-xl border"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                  role="img"
+                  className="w-7 h-7"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 24 24"
+                >
+                  <g
+                    fill="none"
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                  >
+                    <circle cx="14" cy="6" r="2" />
+                    <path d="M4 6h8m4 0h4" />
+                    <circle cx="8" cy="12" r="2" />
+                    <path d="M4 12h2m4 0h10" />
+                    <circle cx="17" cy="18" r="2" />
+                    <path d="M4 18h11m4 0h1" />
+                  </g>
+                </svg>
+              </div>
             </div>
           </div>
-        </div>
 
-        <MobileSearchModal
-          showModal={mobileSearchModal}
-          closeModal={setMobileSearchModal}
-          pickupLocation={pickupLocation}
-          setPickupLocation={setPickupLocation}
-          destinationLocation={destinationLocation}
-          setDestinationLocation={setDestinationLocation}
-          numOfPeople={state.passengers}
-          addTraveler={() => {
-            setState({ ...state, passengers: state.passengers + 1 });
-          }}
-          removeTraveler={() => {
-            state.passengers > 0
-              ? setState({ ...state, passengers: state.passengers - 1 })
-              : null;
-          }}
-          clearNumOfPeople={() => {
-            setState({ ...state, passengers: 0 });
-          }}
-          searchFilter={apiTransportSearchResult}
-          showSearchLoader={locationLoader}
-        ></MobileSearchModal>
+          <MobileSearchModal
+            showModal={mobileSearchModal}
+            closeModal={setMobileSearchModal}
+            pickupLocation={pickupLocation}
+            setPickupLocation={setPickupLocation}
+            destinationLocation={destinationLocation}
+            setDestinationLocation={setDestinationLocation}
+            numOfPeople={state.passengers}
+            addTraveler={() => {
+              setState({ ...state, passengers: state.passengers + 1 });
+            }}
+            removeTraveler={() => {
+              state.passengers > 0
+                ? setState({ ...state, passengers: state.passengers - 1 })
+                : null;
+            }}
+            clearNumOfPeople={() => {
+              setState({ ...state, passengers: 0 });
+            }}
+            searchFilter={apiTransportSearchResult}
+            showSearchLoader={locationLoader}
+          ></MobileSearchModal>
 
-        <div
-          ref={searchRef}
-          className="mt-1 hidden w-full md:flex md:justify-center md:px-0 px-4"
-        >
-          <div className="xl:w-[750px] lg:w-[70%] md:w-[80%]">
-            <TransportSearch
-              transportDate={state.transportDate}
-              showSearchModal={state.showSearchModal}
-              apiTransportSearchResult={apiTransportSearchResult}
-              changeShowTransportDate={() => {
-                setState({
-                  ...state,
-                  ...turnOffAllPopup,
-                  showTransportDate: !state.showTransportDate,
-                  selectedTransportSearchItem: 3,
-                });
-              }}
-              setTransportDate={(date) => {
-                setState({ ...state, transportDate: date });
-              }}
-              showTransportDate={state.showTransportDate}
-              showPassengerPopup={state.showPassengerPopup}
-              changeShowPassengerPopup={() => {
-                setState({
-                  ...state,
-                  ...turnOffAllPopup,
-                  showPassengerPopup: !state.showPassengerPopup,
-                  selectedTransportSearchItem: 4,
-                });
-              }}
-              selectedTransportSearchItem={state.selectedTransportSearchItem}
-              clearTransportDate={() => {
-                setState({ ...state, transportDate: "" });
-              }}
-              clearPassengers={() => {
-                setState({ ...state, passengers: 0 });
-              }}
-              passengers={state.passengers}
-              addPassenger={() => {
-                setState({ ...state, passengers: state.passengers + 1 });
-              }}
-              removePassenger={() => {
-                state.passengers > 0
-                  ? setState({ ...state, passengers: state.passengers - 1 })
-                  : null;
-              }}
-              pickupLocation={pickupLocation}
-              onPickupLocationChange={(event) => {
-                onPickupLocationChange(event);
-              }}
-              onKeyDown={onKeyDown}
-              autoCompleteFromPickupLocationSearch={
-                autoCompleteFromPickupLocationSearch
-              }
-              clearLocationInput={() => {
-                setPickupLocation("");
-                setAutoCompleteFromPickupLocationSearch([]);
-              }}
-              locationFromPickupLocationSearch={(item) => {
-                locationFromPickupLocationSearch(item);
-              }}
-              destinationLocation={destinationLocation}
-              onDestinationLocationChange={(event) => {
-                onDestinationLocationChange(event);
-              }}
-              onDestinationSearchKeyDown={onDestinationSearchKeyDown}
-              autoCompleteFromDestinationLocationSearch={
-                autoCompleteFromDestinationLocationSearch
-              }
-              clearDestinationLocationInput={() => {
-                setDestinationLocation("");
-                setAutoCompleteFromDestinationLocationSearch([]);
-              }}
-              locationFromDestinationLocationSearch={(item) => {
-                locationFromDestinationLocationSearch(item);
-              }}
-              locationLoader={locationLoader}
-            ></TransportSearch>
-          </div>
-        </div>
+          <div
+            ref={searchRef}
+            className="mt-1 hidden w-full md:flex md:justify-center md:px-0 px-4"
+          >
+            <div className="xl:w-[750px] lg:w-[70%] md:w-[80%]">
+              <TransportSearch
+                transportDate={state.transportDate}
+                showSearchModal={state.showSearchModal}
+                apiTransportSearchResult={apiTransportSearchResult}
+                changeShowTransportDate={() => {
+                  setState({
+                    ...state,
+                    ...turnOffAllPopup,
+                    showTransportDate: !state.showTransportDate,
+                    selectedTransportSearchItem: 3,
+                  });
+                }}
+                setTransportDate={(date) => {
+                  setState({ ...state, transportDate: date });
+                }}
+                showTransportDate={state.showTransportDate}
+                showPassengerPopup={state.showPassengerPopup}
+                changeShowPassengerPopup={() => {
+                  setState({
+                    ...state,
+                    ...turnOffAllPopup,
+                    showPassengerPopup: !state.showPassengerPopup,
+                    selectedTransportSearchItem: 4,
+                  });
+                }}
+                selectedTransportSearchItem={state.selectedTransportSearchItem}
+                clearTransportDate={() => {
+                  setState({ ...state, transportDate: "" });
+                }}
+                clearPassengers={() => {
+                  setState({ ...state, passengers: 0 });
+                }}
+                passengers={state.passengers}
+                addPassenger={() => {
+                  setState({ ...state, passengers: state.passengers + 1 });
+                }}
+                removePassenger={() => {
+                  state.passengers > 0
+                    ? setState({ ...state, passengers: state.passengers - 1 })
+                    : null;
+                }}
+                pickupLocation={pickupLocation}
+                onPickupLocationChange={(event) => {
+                  onPickupLocationChange(event);
+                }}
+                onKeyDown={onKeyDown}
+                autoCompleteFromPickupLocationSearch={
+                  autoCompleteFromPickupLocationSearch
+                }
+                clearLocationInput={() => {
+                  setPickupLocation("");
+                  setAutoCompleteFromPickupLocationSearch([]);
+                }}
+                locationFromPickupLocationSearch={(item) => {
+                  locationFromPickupLocationSearch(item);
+                }}
+                destinationLocation={destinationLocation}
+                onDestinationLocationChange={(event) => {
+                  onDestinationLocationChange(event);
+                }}
+                onDestinationSearchKeyDown={onDestinationSearchKeyDown}
+                autoCompleteFromDestinationLocationSearch={
+                  autoCompleteFromDestinationLocationSearch
+                }
+                clearDestinationLocationInput={() => {
+                  setDestinationLocation("");
+                  setAutoCompleteFromDestinationLocationSearch([]);
+                }}
+                locationFromDestinationLocationSearch={(item) => {
+                  locationFromDestinationLocationSearch(item);
+                }}
+                locationLoader={locationLoader}
+              ></TransportSearch>
+            </div>
+          </div> */}
+        </>
 
         <MobileModal
           showModal={state.showMobileFilter}
@@ -826,6 +855,11 @@ const Transport = ({ userProfile, transport }) => {
                         onChange={(event) => {
                           setMinPrice(event.target.value);
                         }}
+                        onKeyPress={(event) => {
+                          if (event.key === "Enter") {
+                            event.target.blur();
+                          }
+                        }}
                         className="w-full focus:outline-none text-sm "
                       />
                     </div>
@@ -844,6 +878,11 @@ const Transport = ({ userProfile, transport }) => {
                         type="number"
                         onChange={(event) => {
                           setMaxPrice(event.target.value);
+                        }}
+                        onKeyPress={(event) => {
+                          if (event.key === "Enter") {
+                            event.target.blur();
+                          }
                         }}
                         className="w-full focus:outline-none text-sm "
                       />
@@ -897,7 +936,7 @@ const Transport = ({ userProfile, transport }) => {
           </div>
         </MobileModal>
 
-        <div className="md:flex gap-4 hidden mt-4 ml-4 sm:ml-10">
+        <div className="flex gap-2 sm:gap-4 mt-4 ml-4 sm:ml-10">
           <div
             onClick={(event) => {
               event.stopPropagation();
@@ -907,7 +946,7 @@ const Transport = ({ userProfile, transport }) => {
                 showSortPopup: !state.showSortPopup,
               });
             }}
-            className="cursor-pointer hidden relative rounded-md border border-gray-200 py-2 px-2 mr-1 md:mr-4 md:flex gap-1 items-center justify-center"
+            className="cursor-pointer relative rounded-md border border-gray-200 py-1 px-1 sm:py-2 sm:px-2 mr-1 md:mr-4 flex sm:gap-1 items-center justify-center"
           >
             <span className="block text-sm">Sort by</span>
             <svg
@@ -954,7 +993,7 @@ const Transport = ({ userProfile, transport }) => {
               <div
                 className={
                   styles.listItem +
-                  (router.query.ordering === "+price"
+                  (router.query.ordering === "+price_per_day"
                     ? " !bg-red-500 !text-white"
                     : "")
                 }
@@ -965,11 +1004,11 @@ const Transport = ({ userProfile, transport }) => {
                     ...turnOffAllPopup,
                     showSortPopup: false,
                   });
-                  if (router.query.ordering === "+price") {
+                  if (router.query.ordering === "+price_per_day") {
                     router.push({ query: { ...router.query, ordering: "" } });
                   } else {
                     router.push({
-                      query: { ...router.query, ordering: "+price" },
+                      query: { ...router.query, ordering: "+price_per_day" },
                     });
                   }
                 }}
@@ -979,7 +1018,7 @@ const Transport = ({ userProfile, transport }) => {
               <div
                 className={
                   styles.listItem +
-                  (router.query.ordering === "-price"
+                  (router.query.ordering === "-price_per_day"
                     ? " !bg-red-500 !text-white"
                     : "")
                 }
@@ -990,11 +1029,11 @@ const Transport = ({ userProfile, transport }) => {
                     ...turnOffAllPopup,
                     showSortPopup: false,
                   });
-                  if (router.query.ordering === "-price") {
+                  if (router.query.ordering === "-price_per_day") {
                     router.push({ query: { ...router.query, ordering: "" } });
                   } else {
                     router.push({
-                      query: { ...router.query, ordering: "-price" },
+                      query: { ...router.query, ordering: "-price_per_day" },
                     });
                   }
                 }}
@@ -1013,10 +1052,10 @@ const Transport = ({ userProfile, transport }) => {
                 showPricePopup: !state.showPricePopup,
               });
             }}
-            className="bg-gray-100 hidden md:block relative cursor-pointer rounded-md border border-gray-200 py-2 px-2"
+            className="bg-gray-100 block relative cursor-pointer rounded-md border border-gray-200 py-1 px-1 sm:py-2 sm:px-2"
           >
             {!minPrice && !maxPrice && (
-              <div className="flex gap-1 items-center justify-center">
+              <div className="flex sm:gap-1 items-center justify-center">
                 <span className="block text-sm">Any Prices</span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -1033,7 +1072,7 @@ const Transport = ({ userProfile, transport }) => {
               </div>
             )}
             {minPrice && maxPrice && (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center sm:gap-2">
                 <div className="flex items-center gap-1 text-sm">
                   <h1>{minPrice}</h1>
                   <div> - </div>
@@ -1055,7 +1094,7 @@ const Transport = ({ userProfile, transport }) => {
             )}
 
             {minPrice && !maxPrice && (
-              <div className="flex items-center gap-1">
+              <div className="flex items-center sm:gap-1">
                 <div className="flex items-center text-sm">
                   <h1>{minPrice}</h1>
                   <div>+</div>
@@ -1076,7 +1115,7 @@ const Transport = ({ userProfile, transport }) => {
             )}
 
             {!minPrice && maxPrice && (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center sm:gap-2">
                 <div className="flex items-center gap-1 text-sm">
                   <h1>$0</h1>
                   <div> - </div>
@@ -1097,7 +1136,7 @@ const Transport = ({ userProfile, transport }) => {
               </div>
             )}
             <Popup
-              className="absolute top-full mt-2 w-[450px] -left-10 px-2"
+              className="absolute top-full mt-2 xssMax:w-[250px] w-[338px] sm:w-[450px] -left-20 sm:-left-10 px-2"
               showPopup={state.showPricePopup}
             >
               <h1 className="font-bold text-base mb-2 text-gray-600">
@@ -1118,6 +1157,11 @@ const Transport = ({ userProfile, transport }) => {
                       onChange={(event) => {
                         setMinPrice(event.target.value);
                       }}
+                      onKeyPress={(event) => {
+                        if (event.key === "Enter") {
+                          event.target.blur();
+                        }
+                      }}
                       className="w-full focus:outline-none text-sm "
                     />
                   </div>
@@ -1137,6 +1181,11 @@ const Transport = ({ userProfile, transport }) => {
                       onChange={(event) => {
                         setMaxPrice(event.target.value);
                       }}
+                      onKeyPress={(event) => {
+                        if (event.key === "Enter") {
+                          event.target.blur();
+                        }
+                      }}
                       className="w-full focus:outline-none text-sm "
                     />
                   </div>
@@ -1145,18 +1194,45 @@ const Transport = ({ userProfile, transport }) => {
             </Popup>
           </div>
 
-          {/* <div className="hidden md:block">
-            <TransportTypes
-              handlePopup={() => {
-                setState({
-                  ...state,
-                  ...turnOffAllPopup,
-                  showTransportTypesPopup: !state.showTransportTypesPopup,
-                });
-              }}
-              showTransportTypesPopup={state.showTransportTypesPopup}
-            ></TransportTypes>
-          </div> */}
+          <div
+            onClick={(event) => {
+              event.stopPropagation();
+              setState({
+                ...state,
+                ...turnOffAllPopup,
+                showTypeOfCar: !state.showTypeOfCar,
+              });
+            }}
+            className="bg-gray-100 block md:hidden relative cursor-pointer rounded-md border border-gray-200 py-1 px-1 sm:py-2 sm:px-2"
+          >
+            <div className="flex sm:gap-1 items-center justify-center">
+              <span className="block text-sm">Types</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 mt-1"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
+
+            <Popup
+              className="absolute top-full mt-2 w-[240px] -left-36 sm:-left-14 px-2"
+              showPopup={state.showTypeOfCar}
+            >
+              <h1 className="font-bold text-base mb-2 text-gray-600">
+                Type of car
+              </h1>
+              <div>
+                <MobileTransportTypes></MobileTransportTypes>
+              </div>
+            </Popup>
+          </div>
         </div>
       </div>
 
@@ -1164,14 +1240,14 @@ const Transport = ({ userProfile, transport }) => {
         <div className="mb-2 block md:hidden mt-[150px] px-4">
           <FilterTags></FilterTags>
         </div>
-        <div className="relative hidden md:block md:w-[30%] lg:w-[20%] h-screen top-[180px] overflow-y-auto bg-white border-r border-gray-100">
+        <div className="fixed hidden md:block md:w-[30%] lg:w-[20%] h-full top-[170px] bottom-0 left-0 overflow-y-scroll bg-white border-r border-gray-100">
           <div className="px-4">
             <h1 className="my-3 font-bold text-lg">Filter results</h1>
             <div className="mb-2">
               <FilterTags></FilterTags>
             </div>
             <div className="ml-2">
-              <div className="mt-2 mb-4 md:hidden">
+              {/* <div className="mt-2 mb-4 md:hidden">
                 <h1 className="font-bold text-base mb-2">Price Range</h1>
                 <div className="flex items-center gap-3 px-2">
                   <div className="w-[50%] border rounded-md h-fit px-2 py-1">
@@ -1188,6 +1264,11 @@ const Transport = ({ userProfile, transport }) => {
                         onChange={(event) => {
                           setMinPrice(event.target.value);
                         }}
+                        onKeyPress={(event) => {
+                        if (event.key === "Enter") {
+                          event.target.blur();
+                        }
+                      }}
                         className="w-full focus:outline-none text-sm "
                       />
                     </div>
@@ -1207,26 +1288,31 @@ const Transport = ({ userProfile, transport }) => {
                         onChange={(event) => {
                           setMaxPrice(event.target.value);
                         }}
+                        onKeyPress={(event) => {
+                        if (event.key === "Enter") {
+                          event.target.blur();
+                        }
+                      }}
                         className="w-full focus:outline-none text-sm "
                       />
                     </div>
                   </div>
                 </div>
-              </div>
-
+              </div> */}
               <div className="mt-2 mb-4">
                 <span className="block font-bold text-base mb-2">
                   All car types
                 </span>
                 <MobileTransportTypes></MobileTransportTypes>
               </div>
-
-              <TransportCategories></TransportCategories>
+              {/* this is required to prevent the scrollbar from hiding the content */}
+              <div className="py-20"></div>
             </div>
           </div>
         </div>
+        {/* absolute h-full right-0 md:top-[170px] md:px-4 md:w-[68%] lg:w-[78%] */}
 
-        <div className="relative h-full md:h-screen overflow-y-auto md:top-56 md:px-4 md:w-[68%] lg:w-[78%]">
+        <div className=" md:absolute h-full right-0 top-[170px] md:px-4 w-full md:w-[68%] lg:w-[78%]">
           <Listings
             setCurrentListing={setCurrentListing}
             userProfile={userProfile}
@@ -1234,6 +1320,29 @@ const Transport = ({ userProfile, transport }) => {
             slugIsCorrect={slugIsCorrect}
             slugIsCorrectForGroupTrip={slugIsCorrectForGroupTrip}
           ></Listings>
+
+          {transport.length > 0 && (
+            <ReactPaginate
+              breakLabel="..."
+              nextLabel={<Icon icon="bx:chevron-right" className="w-7 h-7" />}
+              disabledClassName="text-gray-300"
+              onPageChange={handlePageClick}
+              forcePage={parseInt(router.query.page) - 1 || 0}
+              pageRangeDisplayed={pageSize}
+              pageCount={totalPages}
+              previousLabel={
+                <Icon icon="bx:chevron-left" className="w-7 h-7" />
+              }
+              activeLinkClassName="bg-gray-700 text-white font-bold"
+              renderOnZeroPageCount={null}
+              containerClassName="flex gap-2 justify-center items-center mt-4"
+              pageLinkClassName="bg-white h-12 font-bold flex justify-center items-center w-12 cursor-pointer hover:border border-gray-200 rounded-full text-sm"
+            />
+          )}
+
+          <div className="mt-6 -ml-10 -mr-4">
+            <Footer></Footer>
+          </div>
         </div>
       </div>
 
@@ -1556,7 +1665,8 @@ const Transport = ({ userProfile, transport }) => {
                               stayPrice={
                                 currentListing.price_per_day * numberOfDays +
                                 (needADriver
-                                  ? currentListing.additional_price_with_a_driver
+                                  ? currentListing.additional_price_with_a_driver *
+                                    numberOfDays
                                   : 0)
                               }
                               className="text-lg"
@@ -1945,7 +2055,8 @@ const Transport = ({ userProfile, transport }) => {
                               stayPrice={
                                 currentListing.price_per_day * numberOfDays +
                                 (needADriver
-                                  ? currentListing.additional_price_with_a_driver
+                                  ? currentListing.additional_price_with_a_driver *
+                                    numberOfDays
                                   : 0)
                               }
                               className="text-lg"
@@ -1989,10 +2100,6 @@ const Transport = ({ userProfile, transport }) => {
           </Swiper>
         </Modal>
       </div>
-
-      <div className="mt-12 md:hidden">
-        <Footer></Footer>
-      </div>
     </div>
   );
 };
@@ -2008,9 +2115,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
         const transport = await axios.get(
           `${process.env.NEXT_PUBLIC_baseURL}/transport/?min_price=${
             query.min_price ? query.min_price : ""
-          }&max_price=${query.max_price ? query.max_price : ""}&ordering=${
-            query.ordering ? query.ordering : ""
-          }&type_of_car=${query.type_of_car ? query.type_of_car : ""}`
+          }&page=${query.page ? query.page : 1}&max_price=${
+            query.max_price ? query.max_price : ""
+          }&ordering=${query.ordering ? query.ordering : ""}&type_of_car=${
+            query.type_of_car ? query.type_of_car : ""
+          }`
         );
 
         if (token) {
@@ -2026,9 +2135,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
           const transport = await axios.get(
             `${process.env.NEXT_PUBLIC_baseURL}/transport/?min_price=${
               query.min_price ? query.min_price : ""
-            }&max_price=${query.max_price ? query.max_price : ""}&ordering=${
-              query.ordering ? query.ordering : ""
-            }&type_of_car=${query.type_of_car ? query.type_of_car : ""}`,
+            }&page=${query.page ? query.page : 1}&max_price=${
+              query.max_price ? query.max_price : ""
+            }&ordering=${query.ordering ? query.ordering : ""}&type_of_car=${
+              query.type_of_car ? query.type_of_car : ""
+            }`,
             {
               headers: {
                 Authorization: "Token " + token,
@@ -2040,6 +2151,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
             props: {
               userProfile: response.data[0],
               transport: transport.data.results,
+              nextLink: transport.data.next,
+              previousLink: transport.data.previous,
+              pageSize: transport.data.page_size,
+              totalPages: transport.data.total_pages,
+              count: transport.data.count,
             },
           };
         }
@@ -2048,6 +2164,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
           props: {
             userProfile: "",
             transport: transport.data.results,
+            nextLink: transport.data.next,
+            previousLink: transport.data.previous,
+            pageSize: transport.data.page_size,
+            totalPages: transport.data.total_pages,
+            count: transport.data.count,
           },
         };
       } catch (error) {
@@ -2063,6 +2184,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
             props: {
               userProfile: "",
               transport: [],
+              nextLink: "",
+              previousLink: "",
+              pageSize: 0,
+              totalPages: 0,
+              count: 0,
             },
           };
         }

@@ -303,8 +303,8 @@ const Trips = ({ userProfile, recommendedTrips, userTrips }) => {
             </div>
           </div>
 
-          <div className="absolute z-[30] flex md:flex-row flex-col bottom-20 w-[95%] md:w-[700px] lg:w-[900px] left-2/4 -translate-x-2/4 h-14 bg-white rounded-lg">
-            <div className="md:w-[50%] w-full flex rounded-tr-lg md:rounded-br-lg items-center h-full rounded-tl-lg rounded-bl-lg bg-white border-r border-gray-300">
+          <div className="absolute z-[30] flex bottom-20 w-[95%] md:w-[600px] lg:w-[700px] left-2/4 -translate-x-2/4 h-14 bg-white rounded-lg">
+            <div className="w-[50%] md:w-[70%] flex rounded-tr-lg md:rounded-br-lg items-center h-full rounded-tl-lg rounded-bl-lg bg-white border-r border-gray-300">
               <Search
                 inputBoxClassName="border-0 "
                 searchClass="w-full"
@@ -314,8 +314,8 @@ const Trips = ({ userProfile, recommendedTrips, userTrips }) => {
                 search={search}
               ></Search>
             </div>
-            <div className="w-full md:w-[50%] flex">
-              <div className="w-[50%] cursor-pointer pl-3 gap-2 h-full bg-white rounded-bl-lg md:rounded-bl-0 md:rounded-tr-lg md:rounded-br-lg border-r flex items-center">
+            <div className="w-[50%] md:w-[30%] flex">
+              {/* <div className="w-[50%] cursor-pointer pl-3 gap-2 h-full bg-white rounded-bl-lg md:rounded-bl-0 md:rounded-tr-lg md:rounded-br-lg border-r flex items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-6 w-6 text-gray-500"
@@ -346,12 +346,12 @@ const Trips = ({ userProfile, recommendedTrips, userTrips }) => {
                     isSearchable={true}
                   />
                 </div>
-              </div>
+              </div> */}
               <div
                 onClick={() => {
                   setShowPricePopup(!showPricePopup);
                 }}
-                className="w-[50%] relative cursor-pointer pl-3 gap-2 h-full bg-white md:rounded-tr-lg rounded-br-lg flex items-center"
+                className="w-full relative cursor-pointer pl-3 gap-2 h-full bg-white rounded-tr-lg rounded-br-lg flex items-center"
               >
                 <Icon
                   className="w-6 h-6 text-gray-500"
@@ -359,7 +359,7 @@ const Trips = ({ userProfile, recommendedTrips, userTrips }) => {
                 />
                 <div className="text-sm text-gray-500">
                   {router.query.price === "1"
-                    ? "Budget"
+                    ? "Reasonable"
                     : router.query.price === "2"
                     ? "Mid Range"
                     : router.query.price === "3"
@@ -387,7 +387,7 @@ const Trips = ({ userProfile, recommendedTrips, userTrips }) => {
                         : " hover:bg-gray-200 transition-all duration-300 ease-linear")
                     }
                   >
-                    Budget
+                    Reasonable
                   </div>
                   <div
                     onClick={() => {
@@ -456,7 +456,7 @@ const Trips = ({ userProfile, recommendedTrips, userTrips }) => {
             >
               <SwiperSlide className="!w-fit">
                 <div className="border border-gray-100 px-2 py-2 rounded-3xl">
-                  Budget
+                  Reasonable
                 </div>
               </SwiperSlide>
               <SwiperSlide className="!w-fit">
@@ -472,7 +472,7 @@ const Trips = ({ userProfile, recommendedTrips, userTrips }) => {
 
               <SwiperSlide className="!w-fit">
                 <div className="border border-gray-100 px-3 py-2 rounded-3xl">
-                  Budget
+                  Reasonable
                 </div>
               </SwiperSlide>
               <SwiperSlide className="!w-fit">
@@ -705,7 +705,7 @@ const Trips = ({ userProfile, recommendedTrips, userTrips }) => {
                   />
                 </div>
               )}
-              {router.query.month && (
+              {/* {router.query.month && (
                 <div className="px-2 flex gap-2 items-center py-1 rounded-3xl text-white bg-green-500">
                   <span className="text-sm font-semibold">
                     {filterArrayOfObjects(months, router.query.month).length >
@@ -725,12 +725,12 @@ const Trips = ({ userProfile, recommendedTrips, userTrips }) => {
                     icon="ci:off-close"
                   />
                 </div>
-              )}
+              )} */}
               {router.query.price && (
                 <div className="px-2 flex gap-2 items-center py-1 rounded-3xl text-white bg-green-500">
                   <span className="text-sm font-semibold">
                     {router.query.price === "1"
-                      ? "Budget"
+                      ? "Reasonable"
                       : router.query.price === "2"
                       ? "Mid Range"
                       : router.query.price === "3"
