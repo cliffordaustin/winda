@@ -583,12 +583,16 @@ const CartItem = ({
               </h1>
               {transportPage && (
                 <div className="flex items-center gap-2">
-                  <div className="text-gray-500 flex gap-[3px] lowercase">
-                    <h1>{transport.vehicle_make}</h1>
+                  <div className="text-gray-500 w-full flex gap-[3px] lowercase">
+                    <div className="truncate w-[48%]">
+                      {transport.vehicle_make}
+                    </div>
                     <span className="-mt-[5px] font-bold text-lg text-black">
                       .
                     </span>
-                    <h1>{transport.type_of_car}</h1>
+                    <h1 className="truncate w-[48%]">
+                      {transport.type_of_car}
+                    </h1>
                   </div>
                 </div>
               )}

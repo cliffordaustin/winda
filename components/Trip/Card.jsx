@@ -42,28 +42,6 @@ const Card = ({
     return image.image;
   });
 
-  const [newPrice, setNewPrice] = useState(null);
-
-  const price = () => {
-    return listing.price;
-  };
-
-  const priceConversion = async (price) => {
-    if (price) {
-      if (currencyToKES && priceConversionRate) {
-        setNewPrice(priceConversionRate * price);
-      } else {
-        setNewPrice(price);
-      }
-    } else {
-      return null;
-    }
-  };
-
-  useEffect(() => {
-    priceConversion(price());
-  }, [price(), currencyToKES, priceConversionRate]);
-
   const [addToTripLoading, setAddToTripLoading] = useState(false);
 
   const [listingIsInTrip, setListingIsInTrip] = useState(false);
@@ -119,13 +97,11 @@ const Card = ({
   };
 
   const totalPrice = () => {
-    if (listing.stay && listing.activity) {
-      return listing.stay.price + listing.activity.price;
-    } else if (listing.activity && !listing.stay) {
-      return listing.activity.price;
-    } else if (listing.stay && !listing.activity) {
-      return listing.stay.price;
-    }
+    return (
+      (listing.stay ? listing.stay.price_non_resident : 0) +
+      (listing.activity ? listing.activity.price_non_resident : 0) +
+      (listing.transport ? listing.transport.price_per_day : 0)
+    );
   };
 
   return (
@@ -221,7 +197,7 @@ const Card = ({
               <Price stayPrice={totalPrice()}></Price>
             </div>
             <div className="mt-0.5 mb-1.5 font-bold">.</div>
-            <div className="mt-0.5">1 person / night</div>
+            <div className="mt-0.5">avg/night/non-resident</div>
           </div>
         </div>
 

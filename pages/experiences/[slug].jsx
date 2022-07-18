@@ -160,6 +160,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
         )
         .then(() => location.reload())
         .catch((err) => {
+          setAddToBasketLoading(false);
           console.log(err.response);
         });
     } else if (!token) {

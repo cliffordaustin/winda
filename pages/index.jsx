@@ -1497,9 +1497,9 @@ export default function Home({ userProfile }) {
       <div className="md:mt-16 mb-8 2xl:w-4/6 2xl:mx-auto">
         <Main></Main>
       </div>
-      <div className="mt-14 px-3 sm:px-6">
+      {/* <div className="mt-14 px-3 sm:px-6">
         <TeamExperience></TeamExperience>
-      </div>
+      </div> */}
       <div className="mt-14">
         <Footer></Footer>
       </div>

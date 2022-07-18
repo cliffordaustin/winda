@@ -470,7 +470,7 @@ const Transport = ({
             },
           }
         )
-        .then(() => router.back())
+        .then(() => router.reload())
         .catch((err) => {
           console.log(err.response);
         });
@@ -483,11 +483,11 @@ const Transport = ({
 
       const data = [...(cookieVal || [])];
       const exist = data.some((val) => {
-        return val.slug === transport.slug;
+        return val.slug === currentListing.slug;
       });
       if (!exist) {
         data.push({
-          slug: transport.slug,
+          slug: currentListing.slug,
           itemCategory: "transport",
           starting_point: startingDestination,
           destination: "",
@@ -497,7 +497,7 @@ const Transport = ({
           number_of_days: numberOfDays,
         });
         Cookies.set("cart", JSON.stringify(data));
-        router.back();
+        router.reload();
       }
     }
   };

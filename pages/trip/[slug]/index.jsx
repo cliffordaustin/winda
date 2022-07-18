@@ -131,6 +131,14 @@ function TripDetail({ userProfile, userTrips, trip }) {
       });
   };
 
+  const totalPrice = () => {
+    return (
+      (trip.stay ? trip.stay.price_non_resident : 0) +
+      (trip.activity ? trip.activity.price_non_resident : 0) +
+      (trip.transport ? trip.transport.price_per_day : 0)
+    );
+  };
+
   return (
     <div>
       <div className="fixed top-0 w-full bg-white z-50">
@@ -200,10 +208,13 @@ function TripDetail({ userProfile, userTrips, trip }) {
             "w-full z-10 px-2 md:hidden flex justify-between items-center fixed bottom-0 safari-bottom left-0 right-0 bg-white py-1 "
           }
         >
-          <div>
-            <span className="text-gray-600 font-bold">
-              $120 <span className="font-normal text-sm">/person/day</span>
-            </span>
+          <div className="mt-1">
+            <div className="text-sm text-gray-600 flex gap-0.5 items-center">
+              <div className="text-sm mr-0.5 font-bold">
+                <Price stayPrice={totalPrice()}></Price>
+              </div>
+              <div className="mt-0.5">avg/night/non-resident</div>
+            </div>
           </div>
 
           <div className="">
@@ -262,9 +273,12 @@ function TripDetail({ userProfile, userTrips, trip }) {
 
         <div className="px-2 md:px-6">
           <div className="mt-4">
-            <span className="text-gray-600 font-bold">
-              $120 <span className="font-normal text-sm">/person/day</span>
-            </span>
+            <div className="text-sm text-gray-600 flex gap-0.5 items-center">
+              <div className="text-sm mr-0.5 font-bold">
+                <Price stayPrice={totalPrice()}></Price>
+              </div>
+              <div className="mt-0.5">avg/night/non-resident</div>
+            </div>
           </div>
           <div className="">
             <div className="text-2xl font-bold">{trip.name}</div>

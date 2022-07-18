@@ -4,6 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import axios from "axios";
 import moment from "moment";
+import ReactPaginate from "react-paginate";
+
 import { useDispatch, useSelector } from "react-redux";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Thumbs } from "swiper";
@@ -27,7 +29,6 @@ import "swiper/css/thumbs";
 import AllTrips from "../../components/Trip/Trips";
 import Cookies from "js-cookie";
 import getToken from "../../lib/getToken";
-import Tags from "../../components/Trip/Tags";
 import ClientOnly from "../../components/ClientOnly";
 import LoadingSpinerChase from "../../components/ui/LoadingSpinerChase";
 import SingleTrip from "../../components/Trip/SingleTrip";
@@ -35,8 +36,18 @@ import SingleTrip from "../../components/Trip/SingleTrip";
 import Select from "react-select";
 import { Icon } from "@iconify/react";
 import Dropdown from "../../components/ui/Dropdown";
+import Tags from "../../components/Trip/Tags";
 
-const Trips = ({ userProfile, recommendedTrips, userTrips }) => {
+const Trips = ({
+  userProfile,
+  recommendedTrips,
+  userTrips,
+  pageSize,
+  count,
+  nextLink,
+  previousLink,
+  totalPages,
+}) => {
   const [state, setState] = useState({});
 
   const [showDropdown, changeShowDropdown] = useState(false);
@@ -224,6 +235,15 @@ const Trips = ({ userProfile, recommendedTrips, userTrips }) => {
       query: {
         ...router.query,
         location: updatedLocation,
+      },
+    });
+  };
+
+  const handlePageClick = (event) => {
+    router.push({
+      query: {
+        ...router.query,
+        page: event.selected + 1,
       },
     });
   };
@@ -435,6 +455,7 @@ const Trips = ({ userProfile, recommendedTrips, userTrips }) => {
       <div className="w-full">
         <div className="h-12 flex justify-center mt-2">
           <Tags></Tags>
+          {/* <Tags></Tags> */}
         </div>
         <div className="flex justify-between relative mt-6 h-full w-full">
           <div>
@@ -670,7 +691,7 @@ const Trips = ({ userProfile, recommendedTrips, userTrips }) => {
               {router.query.tag && (
                 <div className="px-2 py-1 flex items-center gap-2 rounded-3xl text-white bg-blue-500 mr-4">
                   <span className="text-sm font-semibold">
-                    {router.query.tag}
+                    {router.query.tag.split("_").join(" ")}
                   </span>
                   <Icon
                     onClick={() => {
@@ -761,6 +782,25 @@ const Trips = ({ userProfile, recommendedTrips, userTrips }) => {
               setShowAddToTripPopup={setShowAddToTripPopup}
               showAddToTripPopup={showAddToTripPopup}
             ></AllTrips>
+
+            {recommendedTrips.length > 0 && (
+              <ReactPaginate
+                breakLabel="..."
+                nextLabel={<Icon icon="bx:chevron-right" className="w-7 h-7" />}
+                disabledClassName="text-gray-300"
+                onPageChange={handlePageClick}
+                forcePage={parseInt(router.query.page) - 1 || 0}
+                pageRangeDisplayed={pageSize}
+                pageCount={totalPages}
+                previousLabel={
+                  <Icon icon="bx:chevron-left" className="w-7 h-7" />
+                }
+                activeLinkClassName="bg-gray-700 text-white font-bold"
+                renderOnZeroPageCount={null}
+                containerClassName="flex gap-2 justify-center items-center mt-4"
+                pageLinkClassName="bg-white h-12 font-bold flex justify-center items-center w-12 cursor-pointer hover:border border-gray-200 rounded-full text-sm"
+              />
+            )}
           </div>
         </div>
       </div>
@@ -852,6 +892,11 @@ export async function getServerSideProps(context) {
           userProfile: response.data[0],
           recommendedTrips: trips.data.results,
           userTrips: data || [],
+          nextLink: trips.data.next,
+          previousLink: trips.data.previous,
+          pageSize: trips.data.page_size,
+          totalPages: trips.data.total_pages,
+          count: trips.data.count,
         },
       };
     }
@@ -861,6 +906,11 @@ export async function getServerSideProps(context) {
         userProfile: "",
         recommendedTrips: trips.data.results,
         userTrips: [],
+        nextLink: trips.data.next,
+        previousLink: trips.data.previous,
+        pageSize: trips.data.page_size,
+        totalPages: trips.data.total_pages,
+        count: trips.data.count,
       },
     };
   } catch (error) {
@@ -877,6 +927,11 @@ export async function getServerSideProps(context) {
           userProfile: "",
           recommendedTrips: [],
           userTrips: [],
+          nextLink: "",
+          previousLink: "",
+          pageSize: 0,
+          totalPages: 0,
+          count: 0,
         },
       };
     }
