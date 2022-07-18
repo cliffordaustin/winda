@@ -9,7 +9,6 @@ import Select from "react-select";
 import { createGlobalStyle } from "styled-components";
 import moment from "moment";
 
-// import { getServerSideProps } from "../../lib/getServerSideProps";
 import Navbar from "../../components/Stay/Navbar";
 import ImageGallery from "../../components/Stay/ImageGallery";
 import Price from "../../components/Stay/Price";
