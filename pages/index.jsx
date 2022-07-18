@@ -1025,7 +1025,7 @@ export default function Home({ userProfile }) {
                 }}
                 className="flex items-center gap-4 w-36 !py-3 !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500"
               >
-                <span className="font-bold">Plan a trip</span>
+                <span className="font-bold">Curated trips</span>
               </Button>
               <Button
                 onClick={() => {
