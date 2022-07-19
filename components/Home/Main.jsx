@@ -138,6 +138,7 @@ function Main() {
               allowSlideNext: swiper.allowSlideNext,
             });
           }}
+          cssMode={true}
           onSlideChange={(swiper) => {
             console.log(swiper);
             setState({
@@ -168,7 +169,7 @@ function Main() {
                 <div
                   onClick={() => {
                     router.push({
-                      pathname: "/trips",
+                      pathname: "/trip",
                       query: {
                         tag: "cultural",
                       },
@@ -281,7 +282,7 @@ function Main() {
                 <div
                   onClick={() => {
                     router.push({
-                      pathname: "/trips",
+                      pathname: "/trip",
                       query: {
                         tag: "romantic_getaway",
                       },
