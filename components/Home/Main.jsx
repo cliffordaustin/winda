@@ -3,16 +3,21 @@ import Card from "../ui/Card";
 import styles from "../../styles/Main.module.css";
 
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper";
+import { FreeMode, Navigation, Thumbs, Mousewheel } from "swiper";
 import SwiperCore from "swiper";
 
 import "swiper/css/effect-creative";
 import "swiper/css";
 import Pagination from "./Pagination";
+import Image from "next/image";
+import Carousel from "../ui/Carousel";
+import { useRouter } from "next/router";
 
 SwiperCore.use([Navigation]);
 
 function Main() {
+  const router = useRouter();
+
   const [state, setState] = useState({
     swiperIndex: 0,
     allowSlideNext: false,
@@ -26,13 +31,13 @@ function Main() {
   });
 
   const settings = {
-    spaceBetween: 40,
+    spaceBetween: 20,
     slidesPerView: "auto",
-    speed: 600,
-    pagination: {
-      el: ".swiper-pagination",
-      clickable: true,
+    freeMode: {
+      enabled: true,
+      // sticky: true,
     },
+    mousewheel: true,
     navigation: {
       nextEl: ".swiper-button-next",
       prevEl: ".swiper-button-prev",
@@ -117,7 +122,370 @@ function Main() {
 
   return (
     <div className="w-full">
-      <div className="flex gap-4 justify-between items-center px-4 sm:px-8 md:px-12">
+      <h1 className="font-bold text-3xl font-OpenSans text-center">
+        <span className="text-gray-600">Explore on</span>{" "}
+        <span className="">winda</span>
+      </h1>
+      <div className="text-center mt-2">
+        Take a look into what winda has to offer you.
+      </div>
+      <div className="px-2 sm:px-4 mt-6">
+        <Swiper
+          {...settings}
+          onSwiper={(swiper) => {
+            setState({
+              ...state,
+              allowSlideNext: swiper.allowSlideNext,
+            });
+          }}
+          onSlideChange={(swiper) => {
+            console.log(swiper);
+            setState({
+              ...state,
+              swiperIndex: swiper.realIndex,
+            });
+          }}
+          watchSlidesProgress={true}
+          modules={[FreeMode, Navigation, Mousewheel, Thumbs]}
+          className=""
+        >
+          <SwiperSlide className="!h-[400px] sm:!h-[380px] !w-[900px] sm:!w-[1000px] md:!w-[1100px] lg:!w-[1200px] flex gap-3">
+            <div className="xsmall:w-[30%] w-[35%] sm:w-[40%] h-full relative before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+              <Carousel
+                images={["/images/home/cultural-trip.jpg"]}
+                imageClass="rounded-2xl"
+              ></Carousel>
+
+              <div className="text-white text-shadow z-30 font-black absolute top-4 left-4 text-2xl">
+                Explore the culture
+              </div>
+
+              <div className="absolute bottom-4 z-30 flex flex-col left-4">
+                <p className="text-white">
+                  Kenya has a vast and rich culture, so we created trips
+                  dedicated to exploring it.
+                </p>
+                <div
+                  onClick={() => {
+                    router.push({
+                      pathname: "/trips",
+                      query: {
+                        tag: "cultural",
+                      },
+                    });
+                  }}
+                  className="px-3 cursor-pointer font-bold text-sm py-2 w-fit bg-white text-black rounded-lg mt-2"
+                >
+                  View curated trips
+                </div>
+              </div>
+            </div>
+            <div className="xsmall:w-[70%] w-[65%] sm:w-[60%] h-full flex justify-between flex-wrap">
+              <div className="w-[48%] rounded-2xl h-[49%] p-2 !bg-gradient-to-r from-slate-600 via-slate-700 to-slate-900">
+                <div className="font-bold text-white font-Merriweather">
+                  Stays in <span>Nairobi</span>
+                </div>
+                <p className="mt-1 text-sm text-white">
+                  Nairobi is the capital of Kenya and the largest city in the
+                  country. It is full of beautiful, natural and cultural
+                  landmarks, and is a popular tourist destination. The beauty is
+                  reflected in its stays. From luxurious hotels to small
+                  bungalows, Nairobi has it all.
+                </p>
+              </div>
+              <div className="w-[48%] h-[49%] relative before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+                <Carousel
+                  images={["/images/explore-locations/nairobi.jpg"]}
+                  imageClass="rounded-2xl"
+                ></Carousel>
+
+                <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
+                  Nairobi
+                </div>
+
+                <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                  <div
+                    onClick={() => {
+                      router.push({
+                        pathname: "/stays",
+                        query: {
+                          search: "Nairobi",
+                        },
+                      });
+                    }}
+                    className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
+                  >
+                    View stays
+                  </div>
+                </div>
+              </div>
+
+              <div className="w-[48%] h-[49%] relative self-end before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+                <Carousel
+                  images={["/images/home/nairobi-experience.jpg"]}
+                  imageClass="rounded-2xl"
+                ></Carousel>
+
+                <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
+                  Nairobi
+                </div>
+
+                <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                  <div
+                    onClick={() => {
+                      router.push({
+                        pathname: "/experiences",
+                        query: {
+                          search: "Nairobi",
+                        },
+                      });
+                    }}
+                    className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
+                  >
+                    View experiences
+                  </div>
+                </div>
+              </div>
+
+              <div className="w-[48%] rounded-2xl h-[49%] self-end p-2 !bg-gradient-to-r from-slate-600 via-slate-700 to-slate-900">
+                <div className="font-bold text-white font-Merriweather">
+                  Experiences in <span>Nairobi</span>
+                </div>
+                <p className="mt-1 text-sm text-white">
+                  Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                  Nobis, inventore maxime adipisci culpa delectus accusamus
+                  ipsam quas eligendi velit impedit quo expedita hic id repellat
+                  deserunt nihil in vel veritatis. Culpa delectus accusamus
+                </p>
+              </div>
+            </div>
+          </SwiperSlide>
+
+          <SwiperSlide className="!h-[400px] sm:!h-[380px] !w-[900px] sm:!w-[1000px] md:!w-[1100px] lg:!w-[1200px] flex gap-3">
+            <div className="xsmall:w-[30%] w-[35%] sm:w-[40%] h-full relative before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+              <Carousel
+                images={["/images/home/romantic-trip.jpg"]}
+                imageClass="rounded-2xl"
+              ></Carousel>
+
+              <div className="text-white text-shadow z-30 font-black absolute top-4 left-4 text-2xl">
+                Romantic mood
+              </div>
+
+              <div className="absolute bottom-4 z-30 flex flex-col left-4">
+                <p className="text-white">
+                  The best memories are the ones you create with your perfect
+                  partner. We created curated trip meant for you to create those
+                  moments.
+                </p>
+                <div
+                  onClick={() => {
+                    router.push({
+                      pathname: "/trips",
+                      query: {
+                        tag: "romantic_getaway",
+                      },
+                    });
+                  }}
+                  className="px-3 cursor-pointer font-bold text-sm py-2 w-fit bg-white text-black rounded-lg mt-2"
+                >
+                  View curated trips
+                </div>
+              </div>
+            </div>
+            <div className="xsmall:w-[70%] w-[65%] sm:w-[60%] h-full flex justify-between flex-wrap">
+              <div className="w-[48%] rounded-2xl h-[48%] p-2 !bg-gradient-to-r from-slate-600 via-slate-700 to-slate-900">
+                <div className="font-bold text-white font-Merriweather">
+                  Stays in <span>Nakuru</span>
+                </div>
+                <p className="mt-1 text-sm text-white">
+                  Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                  Nobis, inventore maxime adipisci culpa delectus accusamus
+                  ipsam quas eligendi velit impedit quo expedita hic id repellat
+                  deserunt nihil in vel veritatis.
+                </p>
+              </div>
+              <div className="w-[48%] h-[48%] relative before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+                <Carousel
+                  images={["/images/home/nakuru.jpg"]}
+                  imageClass="rounded-2xl"
+                ></Carousel>
+
+                <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
+                  Nakuru
+                </div>
+
+                <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                  <div
+                    onClick={() => {
+                      router.push({
+                        pathname: "/stays",
+                        query: {
+                          search: "Nakuru",
+                        },
+                      });
+                    }}
+                    className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
+                  >
+                    View stays
+                  </div>
+                </div>
+              </div>
+
+              <div className="w-[48%] self-end h-[48%] relative before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+                <Carousel
+                  images={["/images/home/nakuru-experience.jpg"]}
+                  imageClass="rounded-2xl"
+                ></Carousel>
+
+                <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
+                  Nakuru
+                </div>
+
+                <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                  <div
+                    onClick={() => {
+                      router.push({
+                        pathname: "/experiences",
+                        query: {
+                          search: "Nakuru",
+                        },
+                      });
+                    }}
+                    className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
+                  >
+                    View experiences
+                  </div>
+                </div>
+              </div>
+
+              <div className="w-[48%] self-end rounded-2xl h-[48%] p-2 !bg-gradient-to-r from-slate-600 via-slate-700 to-slate-900">
+                <div className="font-bold text-white font-Merriweather">
+                  Experiences in <span>Nakuru</span>
+                </div>
+                <p className="mt-1 text-sm text-white">
+                  Ipsum dolor sit amet consectetur adipisicing elit. Nobis,
+                  inventore maxime adipisci culpa delectus accusamus ipsam quas
+                  eligendi velit impedit quo expedita hic id repellat deserunt
+                  nihil in vel veritatis. Culpa delectus accusamus.
+                </p>
+              </div>
+            </div>
+          </SwiperSlide>
+
+          <SwiperSlide className="!h-[400px] sm:!h-[380px] !w-[900px] sm:!w-[1000px] md:!w-[1100px] lg:!w-[1200px] flex gap-3">
+            <div className="xsmall:w-[30%] w-[35%] sm:w-[40%] h-full relative before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+              <Carousel
+                images={["/images/home/roadtrip.jpg"]}
+                imageClass="rounded-2xl"
+              ></Carousel>
+
+              <div className="text-white text-shadow z-30 font-black absolute top-4 left-4 text-2xl">
+                Spend time on the road
+              </div>
+
+              <div className="absolute bottom-4 z-30 flex flex-col left-4">
+                <p className="text-white">
+                  Kenya is a country to has a lot to offer. We created curated
+                  trips meant for your explore the country and enjoy your time.
+                </p>
+                <div
+                  onClick={() => {
+                    router.push({
+                      pathname: "/tag",
+                      query: {
+                        tag: "road_trip",
+                      },
+                    });
+                  }}
+                  className="px-3 cursor-pointer font-bold text-sm py-2 w-fit bg-white text-black rounded-lg mt-2"
+                >
+                  View curated trips
+                </div>
+              </div>
+            </div>
+            <div className="xsmall:w-[70%] w-[65%] sm:w-[60%] h-full flex justify-between flex-wrap">
+              <div className="w-[48%] rounded-2xl h-[48%] p-2 !bg-gradient-to-r from-slate-600 via-slate-700 to-slate-900">
+                <div className="font-bold text-white font-Merriweather">
+                  Stays in <span>Maasai Mara</span>
+                </div>
+                <p className="mt-1 text-sm text-white">
+                  Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                  Nobis, inventore maxime adipisci culpa delectus accusamus
+                  ipsam quas eligendi velit impedit quo expedita hic id repellat
+                  deserunt nihil in vel veritatis.
+                </p>
+              </div>
+              <div className="w-[48%] h-[48%] relative before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+                <Carousel
+                  images={["/images/home/stay-maasai-mara.jpg"]}
+                  imageClass="rounded-2xl"
+                ></Carousel>
+
+                <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
+                  Maasai Mara
+                </div>
+
+                <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                  <div
+                    onClick={() => {
+                      router.push({
+                        pathname: "/stays",
+                        query: {
+                          tag: "Maasai Mara, Narok",
+                        },
+                      });
+                    }}
+                    className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
+                  >
+                    View stays
+                  </div>
+                </div>
+              </div>
+
+              <div className="w-[48%] self-end h-[48%] relative before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+                <Carousel
+                  images={["/images/home/maasai-mara-loita.JPG"]}
+                  imageClass="rounded-2xl"
+                ></Carousel>
+
+                <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
+                  Maasai Mara
+                </div>
+
+                <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                  <div
+                    onClick={() => {
+                      router.push({
+                        pathname: "/experiences",
+                        query: {
+                          tag: "Maasai Mara, Narok",
+                        },
+                      });
+                    }}
+                    className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
+                  >
+                    View experiences
+                  </div>
+                </div>
+              </div>
+
+              <div className="w-[48%] self-end rounded-2xl h-[48%] p-2 !bg-gradient-to-r from-slate-600 via-slate-700 to-slate-900">
+                <div className="font-bold text-white font-Merriweather">
+                  Experiences in <span>Maasai Mara</span>
+                </div>
+                <p className="mt-1 text-sm text-white">
+                  Ipsum dolor sit amet consectetur adipisicing elit. Nobis,
+                  inventore maxime adipisci culpa delectus accusamus ipsam quas
+                  eligendi velit impedit quo expedita hic id repellat deserunt
+                  nihil in vel veritatis. Culpa delectus accusamus.
+                </p>
+              </div>
+            </div>
+          </SwiperSlide>
+        </Swiper>
+      </div>
+      {/* <div className="flex gap-4 justify-between items-center px-4 sm:px-8 md:px-12">
         <h1 className="font-bold text-2xl md:text-3xl font-OpenSans">
           Explore Categories
         </h1>
@@ -244,7 +612,7 @@ function Main() {
             </SwiperSlide>
           ))}
         </Swiper>
-      </div>
+      </div> */}
     </div>
   );
 }

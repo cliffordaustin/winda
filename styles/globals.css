@@ -256,6 +256,10 @@ body {
   top: env(safe-area-inset-top);
 }
 
+.text-shadow {
+  text-shadow: 0 0 1rem rgba(0, 0, 0, 0.7);
+}
+
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
   select,
   textarea,
