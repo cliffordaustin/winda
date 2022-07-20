@@ -879,7 +879,9 @@ export async function getServerSideProps(context) {
       );
 
       const { data } = await axios.get(
-        `${process.env.NEXT_PUBLIC_baseURL}/trips/`,
+        `${process.env.NEXT_PUBLIC_baseURL}/trips/?page=${
+          context.query.page ? context.query.page : 1
+        }`,
         {
           headers: {
             Authorization: "Token " + token,
