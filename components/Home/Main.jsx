@@ -28,6 +28,9 @@ function Main() {
     swiperExploreLocationIndex: 0,
     allowExploreLocationSlideNext: false,
     endOfExploreLocationSlide: false,
+
+    isEndOfSlide: false,
+    isBeginningOfSlide: false,
   });
 
   const settings = {
@@ -35,7 +38,6 @@ function Main() {
     slidesPerView: "auto",
     freeMode: {
       enabled: true,
-      // sticky: true,
     },
     mousewheel: true,
     navigation: {
@@ -44,16 +46,15 @@ function Main() {
     },
   };
 
-  const travelSettings = {
-    spaceBetween: 40,
+  const roomsSettings = {
+    spaceBetween: 20,
     slidesPerView: "auto",
-    pagination: {
-      el: ".swiper-travel-pagination",
-      clickable: true,
+    freeMode: {
+      enabled: true,
     },
     navigation: {
-      nextEl: ".swiper-travel-button-next",
-      prevEl: ".swiper-travel-button-prev",
+      nextEl: ".swiper-room-button-next",
+      prevEl: ".swiper-room-button-prev",
     },
   };
 
@@ -132,21 +133,6 @@ function Main() {
       <div className="px-2 sm:px-4 mt-6">
         <Swiper
           {...settings}
-          onSwiper={(swiper) => {
-            setState({
-              ...state,
-              allowSlideNext: swiper.allowSlideNext,
-            });
-          }}
-          cssMode={true}
-          onSlideChange={(swiper) => {
-            console.log(swiper);
-            setState({
-              ...state,
-              swiperIndex: swiper.realIndex,
-            });
-          }}
-          watchSlidesProgress={true}
           modules={[FreeMode, Navigation, Mousewheel, Thumbs]}
           className=""
         >
@@ -196,7 +182,7 @@ function Main() {
               </div>
               <div className="w-[48%] h-[49%] relative before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
                 <Carousel
-                  images={["/images/explore-locations/nairobi.jpg"]}
+                  images={["/images/home/nairobi.jpg"]}
                   imageClass="rounded-2xl"
                 ></Carousel>
 
@@ -433,7 +419,7 @@ function Main() {
                       router.push({
                         pathname: "/stays",
                         query: {
-                          tag: "Maasai Mara, Narok",
+                          search: "Maasai Mara, Narok",
                         },
                       });
                     }}
@@ -460,7 +446,7 @@ function Main() {
                       router.push({
                         pathname: "/experiences",
                         query: {
-                          tag: "Maasai Mara, Narok",
+                          search: "Maasai Mara, Narok",
                         },
                       });
                     }}
@@ -484,6 +470,283 @@ function Main() {
               </div>
             </div>
           </SwiperSlide>
+        </Swiper>
+      </div>
+
+      <h1 className="font-bold text-2xl font-OpenSans text-center mt-16 mb-4">
+        <span className="text-gray-600">Find stays that suits you</span>
+      </h1>
+
+      <div className="px-2">
+        <Swiper
+          {...roomsSettings}
+          modules={[FreeMode, Navigation, Thumbs]}
+          onSwiper={(swiper) => {
+            setState({
+              ...state,
+              isEndOfSlide: swiper.isEnd,
+              isBeginningOfSlide: swiper.isBeginning,
+            });
+          }}
+          onSlideChange={(swiper) => {
+            setState({
+              ...state,
+              isEndOfSlide: swiper.isEnd,
+              isBeginningOfSlide: swiper.isBeginning,
+            });
+          }}
+          className="!relative"
+        >
+          <SwiperSlide className="!h-[320px] !w-[320px]">
+            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+              <Carousel
+                images={["/images/home/lodging.jpg"]}
+                imageClass="rounded-2xl"
+              ></Carousel>
+
+              <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
+                Lodge
+              </div>
+
+              <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                <div
+                  onClick={() => {
+                    router.push({
+                      pathname: "/stays",
+                      query: {
+                        type_of_stay: "LODGE",
+                      },
+                    });
+                  }}
+                  className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
+                >
+                  View stays
+                </div>
+              </div>
+            </div>
+          </SwiperSlide>
+
+          <SwiperSlide className="!h-[320px] !w-[320px]">
+            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+              <Carousel
+                images={["/images/home/uniquespace.jpg"]}
+                imageClass="rounded-2xl"
+              ></Carousel>
+
+              <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
+                Unique spaces
+              </div>
+
+              <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                <div
+                  onClick={() => {
+                    router.push({
+                      pathname: "/stays",
+                      query: {
+                        type_of_stay: "UNIQUE SPACE",
+                      },
+                    });
+                  }}
+                  className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
+                >
+                  View stays
+                </div>
+              </div>
+            </div>
+          </SwiperSlide>
+
+          <SwiperSlide className="!h-[320px] !w-[320px]">
+            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+              <Carousel
+                images={["/images/home/campsite.jpg"]}
+                imageClass="rounded-2xl"
+              ></Carousel>
+
+              <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
+                Campsites
+              </div>
+
+              <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                <div
+                  onClick={() => {
+                    router.push({
+                      pathname: "/stays",
+                      query: {
+                        type_of_stay: "CAMPSITE",
+                      },
+                    });
+                  }}
+                  className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
+                >
+                  View stays
+                </div>
+              </div>
+            </div>
+          </SwiperSlide>
+
+          <SwiperSlide className="!h-[320px] !w-[320px]">
+            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+              <Carousel
+                images={["/images/home/campsite-tented.jpg"]}
+                imageClass="rounded-2xl"
+              ></Carousel>
+
+              <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
+                Tented camps
+              </div>
+
+              <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                <div
+                  onClick={() => {
+                    router.push({
+                      pathname: "/stays",
+                      query: {
+                        type_of_stay: "TENTED CAMP",
+                      },
+                    });
+                  }}
+                  className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
+                >
+                  View stays
+                </div>
+              </div>
+            </div>
+          </SwiperSlide>
+
+          <SwiperSlide className="!h-[320px] !w-[320px]">
+            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+              <Carousel
+                images={["/images/home/budget.jpg"]}
+                imageClass="rounded-2xl"
+              ></Carousel>
+
+              <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
+                Budget
+              </div>
+
+              <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                <div
+                  onClick={() => {
+                    router.push({
+                      pathname: "/stays",
+                      query: {
+                        pricing_type: "REASONABLE",
+                      },
+                    });
+                  }}
+                  className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
+                >
+                  View stays
+                </div>
+              </div>
+            </div>
+          </SwiperSlide>
+
+          <SwiperSlide className="!h-[320px] !w-[320px]">
+            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+              <Carousel
+                images={["/images/home/mid-range.jpg"]}
+                imageClass="rounded-2xl"
+              ></Carousel>
+
+              <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
+                Mid-Range
+              </div>
+
+              <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                <div
+                  onClick={() => {
+                    router.push({
+                      pathname: "/stays",
+                      query: {
+                        pricing_type: "MID-RANGE",
+                      },
+                    });
+                  }}
+                  className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
+                >
+                  View stays
+                </div>
+              </div>
+            </div>
+          </SwiperSlide>
+
+          <SwiperSlide className="!h-[320px] !w-[320px]">
+            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+              <Carousel
+                images={["/images/home/luxury.jpg"]}
+                imageClass="rounded-2xl"
+              ></Carousel>
+
+              <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
+                Luxurious
+              </div>
+
+              <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                <div
+                  onClick={() => {
+                    router.push({
+                      pathname: "/stays",
+                      query: {
+                        pricing_type: "HIGH-END",
+                      },
+                    });
+                  }}
+                  className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
+                >
+                  View stays
+                </div>
+              </div>
+            </div>
+          </SwiperSlide>
+
+          <div
+            className={
+              " absolute hidden md:flex h-12 w-12 z-30 left-3 top-[50%] -translate-y-2/4 items-center justify-end " +
+              (state.isBeginningOfSlide ? "invisible" : "")
+            }
+          >
+            <div className="cursor-pointer h-8 w-8 swiper-room-button-prev rounded-full border flex items-center justify-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+            </div>
+          </div>
+
+          <div
+            className={
+              " absolute hidden md:flex h-12 w-12 z-30 right-3 top-[50%] -translate-y-2/4 flex items-center " +
+              (state.isEndOfSlide ? "invisible" : "")
+            }
+          >
+            <div className="cursor-pointer h-8 w-8 swiper-room-button-next rounded-full border flex items-center justify-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </div>
+          </div>
         </Swiper>
       </div>
       {/* <div className="flex gap-4 justify-between items-center px-4 sm:px-8 md:px-12">

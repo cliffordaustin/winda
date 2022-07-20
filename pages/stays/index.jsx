@@ -3153,6 +3153,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
             query.search ? query.search : ""
           }&page=${query.page ? query.page : 1}&type_of_stay=${
             query.type_of_stay ? query.type_of_stay : ""
+          }&pricing_type=${
+            query.pricing_type ? query.pricing_type : ""
           }&min_capacity=${
             query.min_capacity ? query.min_capacity : ""
           }&min_price=${query.min_price ? query.min_price : ""}&max_price=${
@@ -3188,6 +3190,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
               query.search ? query.search : ""
             }&page=${query.page ? query.page : 1}&type_of_stay=${
               query.type_of_stay ? query.type_of_stay : ""
+            }&pricing_type=${
+              query.pricing_type ? query.pricing_type : ""
             }&min_capacity=${
               query.min_capacity ? query.min_capacity : ""
             }&min_price=${query.min_price ? query.min_price : ""}&max_price=${
