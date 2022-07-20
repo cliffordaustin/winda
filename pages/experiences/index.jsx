@@ -351,6 +351,7 @@ function Activities({
         ...router.query,
         min_price: minPrice,
         max_price: router.query.max_price || "",
+        pricing_type: "",
       },
     });
   };
@@ -361,6 +362,7 @@ function Activities({
         ...router.query,
         min_price: router.query.min_price || "",
         max_price: maxPrice,
+        pricing_type: "",
       },
     });
   };
@@ -486,6 +488,65 @@ function Activities({
                 <h1 className="font-bold text-base mb-2 text-gray-600">
                   Price Range
                 </h1>
+                <div className="flex items-center gap-3 mb-2 px-2">
+                  <div
+                    onClick={() => {
+                      router.push({
+                        query: {
+                          pricing_type: "REASONABLE",
+                          min_price: "",
+                          max_price: "",
+                        },
+                      });
+                    }}
+                    className={
+                      "px-3 py-1 border rounded-3xl text-sm font-bold cursor-pointer " +
+                      (router.query.pricing_type === "REASONABLE"
+                        ? "bg-blue-500 text-white"
+                        : "")
+                    }
+                  >
+                    Reasonable
+                  </div>
+                  <div
+                    onClick={() => {
+                      router.push({
+                        query: {
+                          pricing_type: "MID-RANGE",
+                          min_price: "",
+                          max_price: "",
+                        },
+                      });
+                    }}
+                    className={
+                      "px-3 py-1 border rounded-3xl text-sm font-bold cursor-pointer " +
+                      (router.query.pricing_type === "MID-RANGE"
+                        ? "bg-blue-500 text-white"
+                        : "")
+                    }
+                  >
+                    Mid-range
+                  </div>
+                  <div
+                    onClick={() => {
+                      router.push({
+                        query: {
+                          pricing_type: "HIGH-END",
+                          min_price: "",
+                          max_price: "",
+                        },
+                      });
+                    }}
+                    className={
+                      "px-3 py-1 border rounded-3xl text-sm font-bold cursor-pointer " +
+                      (router.query.pricing_type === "HIGH-END"
+                        ? "bg-blue-500 text-white"
+                        : "")
+                    }
+                  >
+                    Luxurious
+                  </div>
+                </div>
                 <div className="flex items-center gap-3 px-2">
                   <div className="w-[50%] border rounded-md h-fit px-2 py-1">
                     <span className="text-sm text-gray-500">Min price</span>
@@ -838,6 +899,65 @@ function Activities({
                 <h1 className="font-bold text-base mb-2 text-gray-600">
                   Price Range
                 </h1>
+                <div className="flex items-center gap-3 mb-2 px-2">
+                  <div
+                    onClick={() => {
+                      router.push({
+                        query: {
+                          pricing_type: "REASONABLE",
+                          min_price: "",
+                          max_price: "",
+                        },
+                      });
+                    }}
+                    className={
+                      "px-3 py-1 border rounded-3xl text-sm font-bold cursor-pointer " +
+                      (router.query.pricing_type === "REASONABLE"
+                        ? "bg-blue-500 text-white"
+                        : "")
+                    }
+                  >
+                    Reasonable
+                  </div>
+                  <div
+                    onClick={() => {
+                      router.push({
+                        query: {
+                          pricing_type: "MID-RANGE",
+                          min_price: "",
+                          max_price: "",
+                        },
+                      });
+                    }}
+                    className={
+                      "px-3 py-1 border rounded-3xl text-sm font-bold cursor-pointer " +
+                      (router.query.pricing_type === "MID-RANGE"
+                        ? "bg-blue-500 text-white"
+                        : "")
+                    }
+                  >
+                    Mid-range
+                  </div>
+                  <div
+                    onClick={() => {
+                      router.push({
+                        query: {
+                          pricing_type: "HIGH-END",
+                          min_price: "",
+                          max_price: "",
+                        },
+                      });
+                    }}
+                    className={
+                      "px-3 py-1 border rounded-3xl text-sm font-bold cursor-pointer " +
+                      (router.query.pricing_type === "HIGH-END"
+                        ? "bg-blue-500 text-white"
+                        : "")
+                    }
+                  >
+                    Luxurious
+                  </div>
+                </div>
                 <div className="flex items-center gap-3 px-2">
                   <div className="w-[50%] border rounded-md h-fit px-2 py-1">
                     <span className="text-sm text-gray-500">Min price</span>
@@ -1508,6 +1628,66 @@ function Activities({
             <div className="mt-2 mb-4">
               <h1 className="font-bold text-base mb-2">Price Range</h1>
 
+              <div className="flex items-center gap-3 mb-2 px-2">
+                <div
+                  onClick={() => {
+                    router.push({
+                      query: {
+                        pricing_type: "REASONABLE",
+                        min_price: "",
+                        max_price: "",
+                      },
+                    });
+                  }}
+                  className={
+                    "px-3 py-1 border rounded-3xl text-sm font-bold cursor-pointer " +
+                    (router.query.pricing_type === "REASONABLE"
+                      ? "bg-blue-500 text-white"
+                      : "")
+                  }
+                >
+                  Reasonable
+                </div>
+                <div
+                  onClick={() => {
+                    router.push({
+                      query: {
+                        pricing_type: "MID-RANGE",
+                        min_price: "",
+                        max_price: "",
+                      },
+                    });
+                  }}
+                  className={
+                    "px-3 py-1 border rounded-3xl text-sm font-bold cursor-pointer " +
+                    (router.query.pricing_type === "MID-RANGE"
+                      ? "bg-blue-500 text-white"
+                      : "")
+                  }
+                >
+                  Mid-range
+                </div>
+                <div
+                  onClick={() => {
+                    router.push({
+                      query: {
+                        pricing_type: "HIGH-END",
+                        min_price: "",
+                        max_price: "",
+                      },
+                    });
+                  }}
+                  className={
+                    "px-3 py-1 border rounded-3xl text-sm font-bold cursor-pointer " +
+                    (router.query.pricing_type === "HIGH-END"
+                      ? "bg-blue-500 text-white"
+                      : "")
+                  }
+                >
+                  Luxurious
+                </div>
+              </div>
+
               <div className="flex items-center gap-3 px-2">
                 <div className="w-[50%] border rounded-md h-fit px-2 py-1">
                   <span className="text-sm text-gray-500">Min price</span>
@@ -1732,6 +1912,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
             query.search ? query.search : ""
           }&page=${query.page ? query.page : 1}&min_capacity=${
             query.min_capacity ? query.min_capacity : ""
+          }&pricing_type=${
+            query.pricing_type ? query.pricing_type : ""
           }&type_of_activities=${
             query.type_of_stay ? query.type_of_stay : ""
           }&min_price=${query.min_price ? query.min_price : ""}&max_price=${
@@ -1759,6 +1941,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
               query.search ? query.search : ""
             }&page=${query.page ? query.page : 1}&min_capacity=${
               query.min_capacity ? query.min_capacity : ""
+            }&pricing_type=${
+              query.pricing_type ? query.pricing_type : ""
             }&type_of_activities=${
               query.type_of_stay ? query.type_of_stay : ""
             }&min_price=${query.min_price ? query.min_price : ""}&max_price=${

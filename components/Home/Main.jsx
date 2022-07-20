@@ -58,6 +58,18 @@ function Main() {
     },
   };
 
+  const exploreSettings = {
+    spaceBetween: 20,
+    slidesPerView: "auto",
+    freeMode: {
+      enabled: true,
+    },
+    navigation: {
+      nextEl: ".swiper-explore-button-next",
+      prevEl: ".swiper-explore-button-prev",
+    },
+  };
+
   const exploreLocationSettings = {
     spaceBetween: 40,
     slidesPerView: "auto",
@@ -749,6 +761,123 @@ function Main() {
           </div>
         </Swiper>
       </div>
+
+      <h1 className="font-bold text-2xl font-OpenSans text-center mt-16 mb-4">
+        <span className="text-gray-600">Explore all our services</span>
+      </h1>
+
+      <div className="px-2">
+        <Swiper
+          {...exploreSettings}
+          modules={[FreeMode, Navigation, Thumbs]}
+          className=""
+        >
+          <SwiperSlide className="!h-[320px] !w-full sm:!w-[420px] md:!w-[320px]">
+            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+              <Carousel
+                images={["/images/home/curatedtrips.jpg"]}
+                imageClass="rounded-2xl"
+              ></Carousel>
+
+              <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
+                Curated trips
+              </div>
+
+              <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                <div
+                  onClick={() => {
+                    router.push({
+                      pathname: "/trip",
+                    });
+                  }}
+                  className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
+                >
+                  View curated trips
+                </div>
+              </div>
+            </div>
+          </SwiperSlide>
+
+          <SwiperSlide className="!h-[320px] !w-full sm:!w-[420px] md:!w-[320px]">
+            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+              <Carousel
+                images={["/images/home/stays.jpg"]}
+                imageClass="rounded-2xl"
+              ></Carousel>
+
+              <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
+                Stays
+              </div>
+
+              <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                <div
+                  onClick={() => {
+                    router.push({
+                      pathname: "/stays",
+                    });
+                  }}
+                  className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
+                >
+                  View stays
+                </div>
+              </div>
+            </div>
+          </SwiperSlide>
+
+          <SwiperSlide className="!h-[320px] !w-full sm:!w-[420px] md:!w-[320px]">
+            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+              <Carousel
+                images={["/images/home/experiences.jpg"]}
+                imageClass="rounded-2xl"
+              ></Carousel>
+
+              <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
+                Experiences
+              </div>
+
+              <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                <div
+                  onClick={() => {
+                    router.push({
+                      pathname: "/experiences",
+                    });
+                  }}
+                  className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
+                >
+                  View experiences
+                </div>
+              </div>
+            </div>
+          </SwiperSlide>
+
+          <SwiperSlide className="!h-[320px] !w-full sm:!w-[420px] md:!w-[320px]">
+            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+              <Carousel
+                images={["/images/home/transport.jpg"]}
+                imageClass="rounded-2xl"
+              ></Carousel>
+
+              <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
+                Transports
+              </div>
+
+              <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                <div
+                  onClick={() => {
+                    router.push({
+                      pathname: "/transport",
+                    });
+                  }}
+                  className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
+                >
+                  View transports
+                </div>
+              </div>
+            </div>
+          </SwiperSlide>
+        </Swiper>
+      </div>
+
       {/* <div className="flex gap-4 justify-between items-center px-4 sm:px-8 md:px-12">
         <h1 className="font-bold text-2xl md:text-3xl font-OpenSans">
           Explore Categories

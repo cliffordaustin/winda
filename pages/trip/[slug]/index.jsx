@@ -473,6 +473,16 @@ function TripDetail({ userProfile, userTrips, trip }) {
             </div>
           </div>
 
+          <div className="mb-6">
+            <h1 className="text-xl font-bold mb-4">Trip highlights</h1>
+
+            <div className="flex flex-col gap-2">
+              {trip.trip_highlights.map((highlight, index) => (
+                <ListItem key={index}>{highlight.highlight}</ListItem>
+              ))}
+            </div>
+          </div>
+
           <div className="mt-10 mb-6">
             <h1 className="text-2xl font-bold mb-4">Trip overview</h1>
 
@@ -1462,22 +1472,6 @@ function TripDetail({ userProfile, userTrips, trip }) {
                 </div>
               </Accordion>
             )}
-          </div>
-          <div className="mt-4">
-            <h1 className="text-xl font-bold mb-4">Best month to go</h1>
-
-            <div className="flex flex-col gap-2">
-              {trip.months
-                .sort((a, b) => a.month - b.month)
-                .map((month, index) => (
-                  <ListItem key={index}>
-                    {filterArrayOfObjects(months, month.month.toString())
-                      .length > 0 &&
-                      filterArrayOfObjects(months, month.month.toString())[0]
-                        .label}
-                  </ListItem>
-                ))}
-            </div>
           </div>
         </div>
       </div>
