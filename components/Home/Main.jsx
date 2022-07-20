@@ -31,6 +31,8 @@ function Main() {
 
     isEndOfSlide: false,
     isBeginningOfSlide: false,
+    isEndOfExploreSlide: false,
+    isBeginningOfExploreSlide: false,
   });
 
   const settings = {
@@ -769,10 +771,24 @@ function Main() {
       <div className="px-2">
         <Swiper
           {...exploreSettings}
+          onSwiper={(swiper) => {
+            setState({
+              ...state,
+              isEndOfExploreSlide: swiper.isEnd,
+              isBeginningOfExploreSlide: swiper.isBeginning,
+            });
+          }}
+          onSlideChange={(swiper) => {
+            setState({
+              ...state,
+              isEndOfExploreSlide: swiper.isEnd,
+              isBeginningOfExploreSlide: swiper.isBeginning,
+            });
+          }}
           modules={[FreeMode, Navigation, Thumbs]}
-          className=""
+          className="!relative"
         >
-          <SwiperSlide className="!h-[320px] !w-full sm:!w-[420px] md:!w-[320px]">
+          <SwiperSlide className="!h-[320px] !w-[320px]">
             <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
               <Carousel
                 images={["/images/home/curatedtrips.jpg"]}
@@ -798,7 +814,7 @@ function Main() {
             </div>
           </SwiperSlide>
 
-          <SwiperSlide className="!h-[320px] !w-full sm:!w-[420px] md:!w-[320px]">
+          <SwiperSlide className="!h-[320px] !w-[320px]">
             <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
               <Carousel
                 images={["/images/home/stays.jpg"]}
@@ -824,7 +840,7 @@ function Main() {
             </div>
           </SwiperSlide>
 
-          <SwiperSlide className="!h-[320px] !w-full sm:!w-[420px] md:!w-[320px]">
+          <SwiperSlide className="!h-[320px] !w-[320px]">
             <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
               <Carousel
                 images={["/images/home/experiences.jpg"]}
@@ -850,7 +866,7 @@ function Main() {
             </div>
           </SwiperSlide>
 
-          <SwiperSlide className="!h-[320px] !w-full sm:!w-[420px] md:!w-[320px]">
+          <SwiperSlide className="!h-[320px] !w-[320px]">
             <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
               <Carousel
                 images={["/images/home/transport.jpg"]}
@@ -875,6 +891,54 @@ function Main() {
               </div>
             </div>
           </SwiperSlide>
+
+          <div
+            className={
+              " absolute hidden md:flex h-12 w-12 z-30 left-3 top-[50%] -translate-y-2/4 items-center justify-end " +
+              (state.isBeginningOfExploreSlide ? "invisible" : "")
+            }
+          >
+            <div className="cursor-pointer h-8 w-8 swiper-explore-button-prev rounded-full border flex items-center justify-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+            </div>
+          </div>
+
+          <div
+            className={
+              " absolute hidden md:flex h-12 w-12 z-30 right-3 top-[50%] -translate-y-2/4 items-center " +
+              (state.isEndOfExploreSlide ? "invisible" : "")
+            }
+          >
+            <div className="cursor-pointer h-8 w-8 swiper-explore-button-next rounded-full border flex items-center justify-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </div>
+          </div>
         </Swiper>
       </div>
 
