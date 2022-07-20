@@ -529,35 +529,6 @@ function Main() {
           <SwiperSlide className="!h-[320px] !w-[320px]">
             <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
               <Carousel
-                images={["/images/home/uniquespace.jpg"]}
-                imageClass="rounded-2xl"
-              ></Carousel>
-
-              <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
-                Unique spaces
-              </div>
-
-              <div className="absolute bottom-2 z-30 flex flex-col left-2">
-                <div
-                  onClick={() => {
-                    router.push({
-                      pathname: "/stays",
-                      query: {
-                        type_of_stay: "UNIQUE SPACE",
-                      },
-                    });
-                  }}
-                  className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
-                >
-                  View stays
-                </div>
-              </div>
-            </div>
-          </SwiperSlide>
-
-          <SwiperSlide className="!h-[320px] !w-[320px]">
-            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
-              <Carousel
                 images={["/images/home/campsite.jpg"]}
                 imageClass="rounded-2xl"
               ></Carousel>
@@ -602,6 +573,35 @@ function Main() {
                       pathname: "/stays",
                       query: {
                         type_of_stay: "TENTED CAMP",
+                      },
+                    });
+                  }}
+                  className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
+                >
+                  View stays
+                </div>
+              </div>
+            </div>
+          </SwiperSlide>
+
+          <SwiperSlide className="!h-[320px] !w-[320px]">
+            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+              <Carousel
+                images={["/images/home/uniquespace.jpg"]}
+                imageClass="rounded-2xl"
+              ></Carousel>
+
+              <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
+                Unique spaces
+              </div>
+
+              <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                <div
+                  onClick={() => {
+                    router.push({
+                      pathname: "/stays",
+                      query: {
+                        type_of_stay: "UNIQUE SPACE",
                       },
                     });
                   }}
@@ -726,7 +726,7 @@ function Main() {
 
           <div
             className={
-              " absolute hidden md:flex h-12 w-12 z-30 right-3 top-[50%] -translate-y-2/4 flex items-center " +
+              " absolute hidden md:flex h-12 w-12 z-30 right-3 top-[50%] -translate-y-2/4 items-center " +
               (state.isEndOfSlide ? "invisible" : "")
             }
           >
