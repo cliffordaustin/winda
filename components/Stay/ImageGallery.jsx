@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import PhotoGallery from "react-photo-gallery";
 import Image from "next/image";
 
-const ImageGallery = ({ images, stayType, className = "" }) => {
+const ImageGallery = ({ images, className = "" }) => {
   const [scaleImages, setScaleImages] = useState(false);
 
   const sortedImages = images.sort((x, y) => y.main - x.main);
@@ -71,31 +71,6 @@ const ImageGallery = ({ images, stayType, className = "" }) => {
           </div>
         ))}
       </div>
-      {stayType === "LODGE" && (
-        <div className="absolute top-2 left-6 z-10 px-2 rounded-md bg-green-600 text-white">
-          Lodge
-        </div>
-      )}
-      {stayType === "HOUSE" && (
-        <div className="absolute top-2 left-6 z-10 px-2 rounded-md bg-green-600 text-white">
-          House
-        </div>
-      )}
-      {stayType === "UNIQUE SPACE" && (
-        <div className="absolute top-2 left-6 z-10 px-2 rounded-md bg-green-600 text-white">
-          Unique space
-        </div>
-      )}
-      {stayType === "CAMPSITE" && (
-        <div className="absolute top-2 left-6 z-10 px-2 rounded-md bg-green-600 text-white">
-          Campsite
-        </div>
-      )}
-      {stayType === "BOUTIQUE HOTEL" && (
-        <div className="absolute top-2 left-6 z-10 px-2 rounded-md bg-green-600 text-white">
-          Boutique hotel
-        </div>
-      )}
     </div>
   );
 };

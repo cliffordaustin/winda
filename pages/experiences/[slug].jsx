@@ -566,7 +566,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
               </div>
             </div>
 
-            <div
+            {/* <div
               className={
                 !isVisible
                   ? "h-12 !fixed md:!w-[56.5%] lg:!w-[63.5%]  !w-full !top-[65px] left-0 right-0 z-[40] bg-white lg:px-10 px-5"
@@ -574,10 +574,10 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
               }
             >
               <ScrollTo guestPopup={guestPopup} activity={activity}></ScrollTo>
-            </div>
+            </div> */}
 
-            <div className="mt-16">
-              <h1 className="font-bold text-2xl">Quick facts</h1>
+            <div className="mt-4">
+              <h1 className="font-bold text-2xl">About</h1>
               <div className="flex">
                 <div className="flex flex-col w-full">
                   <div className="text-gray-500 flex gap-2 text-sm truncate mt-3 flex-wrap">
@@ -788,6 +788,26 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                 </div>
               )}
             </div>
+
+            {activity.facts.length > 0 && (
+              <div className="flex flex-col md:flex-row gap-3 justify-between mt-10">
+                <div className="w-full">
+                  <div className="mb-3">
+                    <span className="font-bold text-xl">Facts</span>
+                  </div>
+
+                  <div className="mt-4 ml-2">
+                    <div className="flex gap-2 flex-wrap">
+                      {activity.facts.map((fact, index) => (
+                        <div key={index} className="w-full md:w-[48%]">
+                          <ListItem>{fact.name}</ListItem>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
 
             <div
               className={
@@ -1600,7 +1620,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
 
               {activity.enquipment_provided.length > 0 && (
                 <h3 className="mb-2 ml-4 font-semibold">
-                  The following enquipments will be provided to by this place
+                  The following will be provided to by this place
                 </h3>
               )}
 
@@ -1618,7 +1638,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
 
               {activity.enquipment_required_by_user.length > 0 && (
                 <h3 className="mb-2 mt-2 ml-4 font-semibold">
-                  You are required to bring the following enquipments
+                  You are required to bring the following
                 </h3>
               )}
 
@@ -1634,16 +1654,15 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
 
           <Element
             name="map"
-            className={"w-full h-[350px] md:h-[450px] order-1 md:order-2 pt-6 "}
+            className={"h-[350px] md:h-[450px] relative mt-12 -ml-8 -mr-4 "}
           >
-            <h1 className="font-bold text-2xl mb-2 ml-2">Map</h1>
             <Map
               longitude={activity.longitude}
               latitude={activity.latitude}
             ></Map>
           </Element>
 
-          <Element name="policies" className={"w-full pt-20 "}>
+          {/* <Element name="policies" className={"w-full pt-20 "}>
             <h1 className="font-bold text-2xl mb-2">Policies</h1>
             <div className="py-2 px-2 border-b border-gray-100">
               <span className="font-semibold">Refund Policy</span>
@@ -1772,7 +1791,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                 </div>
               </div>
             </div>
-          </Element>
+          </Element> */}
 
           <Element name="reviews" className="pt-12">
             {!reviewLoading && reviews.length > 0 && (

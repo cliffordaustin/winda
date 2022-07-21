@@ -630,10 +630,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
             </div>
 
             <div ref={scrollToVisible} className="relative -ml-8 -mr-4">
-              <ImageGallery
-                images={stay.stay_images}
-                stayType={stay.type_of_stay}
-              ></ImageGallery>
+              <ImageGallery images={stay.stay_images}></ImageGallery>
 
               <div className="flex absolute bg-white px-3 rounded-3xl py-1 top-4 right-3 gap-2 items-center">
                 <div className="cursor-pointer">
@@ -704,15 +701,15 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
             <div
               className={
                 (!isVisible && (stay.type_of_stay !== "HOUSE" || !inCart)
-                  ? "!fixed md:!w-[56.5%] lg:!w-[63.5%]  !w-full !top-[70px] left-0 z-10 right-0 bg-white "
+                  ? "!fixed md:!w-[56.5%] lg:!w-[63.5%]  !w-full !top-[70px] left-0 z-10 right-0 bg-slate-100 "
                   : "") +
                 (guestPopup ? " !z-0 " : "") +
                 (!isVisible && stay.type_of_stay === "HOUSE" && inCart
-                  ? "!fixed !w-full !top-[70px] left-0 right-0 z-[10] bg-white "
+                  ? "!fixed !w-full !top-[70px] left-0 right-0 z-[10] bg-slate-100 "
                   : "") +
                 (stay.type_of_stay === "HOUSE" && inCart
-                  ? "h-12 border-b border-gray-200 w-[100%] lg:px-10 px-5  absolute left-0 right-0 "
-                  : "h-12 border-b border-gray-200 w-[100%] lg:px-10 px-5  absolute left-0 right-0 ")
+                  ? "h-12 border-b border-gray-200 w-[100%] lg:px-10 px-5 bg-slate-100 absolute left-0 right-0 "
+                  : "h-12 border-b border-gray-200 w-[100%] lg:px-10 px-5 bg-slate-100 absolute left-0 right-0 ")
               }
             >
               <ScrollTo guestPopup={guestPopup} stay={stay}></ScrollTo>
@@ -1998,7 +1995,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
           <Element
             name="map"
-            className={"h-[350px] md:h-[450px] relative mt-12 -ml-8 -mr-4"}
+            className={"h-[350px] md:h-[450px] relative pt-12 -ml-8 -mr-4"}
           >
             <Map longitude={stay.longitude} latitude={stay.latitude}></Map>
           </Element>

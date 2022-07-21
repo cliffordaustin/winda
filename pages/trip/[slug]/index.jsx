@@ -940,7 +940,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
                 </div>
 
                 <div className="mt-4 md:px-4">
-                  <h1 className="font-bold text-2xl">Quick facts</h1>
+                  <h1 className="font-bold text-2xl">About</h1>
 
                   <div className="flex flex-col w-full">
                     <div className="text-gray-500 flex gap-2 text-sm truncate mt-3 flex-wrap">
@@ -1000,12 +1000,12 @@ function TripDetail({ userProfile, userTrips, trip }) {
                     <span className="mt-1.5 text-sm">/person</span>
                   </div>
 
-                  <h1 className="text-sm text-gray-600 mt-2">
+                  {/* <h1 className="text-sm text-gray-600 mt-2">
                     This experience has a duration of{" "}
                     {moment
                       .duration(trip.activity.duration_of_activity, "minutes")
                       .humanize()}
-                  </h1>
+                  </h1> */}
 
                   <div className="mt-4">
                     {!showAllActivityDescription && (
@@ -1018,6 +1018,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
                         {trip.activity.description}
                       </p>
                     )}
+
                     {!showAllActivityDescription && (
                       <div
                         onClick={() => {
@@ -1063,6 +1064,26 @@ function TripDetail({ userProfile, userTrips, trip }) {
                       </div>
                     )}
                   </div>
+
+                  {trip.activity.facts.length > 0 && (
+                    <div className="flex flex-col md:flex-row gap-3 justify-between mt-10">
+                      <div className="w-full">
+                        <div className="mb-3">
+                          <span className="font-bold text-xl">Facts</span>
+                        </div>
+
+                        <div className="mt-4 ml-2">
+                          <div className="flex gap-2 flex-wrap">
+                            {trip.activity.facts.map((fact, index) => (
+                              <div key={index} className="w-full md:w-[48%]">
+                                <ListItem>{fact.name}</ListItem>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
 
                   {trip.activity.type_of_activities.length > 0 && (
                     <dv
@@ -1158,8 +1179,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
 
                       {trip.activity.enquipment_provided.length > 0 && (
                         <h3 className="mb-2 ml-4 font-semibold">
-                          The following enquipments will be provided to by this
-                          place
+                          The following will be provided to by this place
                         </h3>
                       )}
 
@@ -1180,7 +1200,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
 
                       {trip.activity.enquipment_required_by_user.length > 0 && (
                         <h3 className="mb-2 mt-2 ml-4 font-semibold">
-                          You are required to bring the following enquipments
+                          You are required to bring the following
                         </h3>
                       )}
 
@@ -1193,141 +1213,6 @@ function TripDetail({ userProfile, userTrips, trip }) {
                       </div>
                     </div>
                   )}
-
-                  <div className={"w-full mt-6 "}>
-                    <h1 className="font-bold text-2xl mb-2">Policies</h1>
-                    <div className="py-2 px-2 border-b border-gray-100">
-                      <span className="font-semibold">Refund Policy</span>
-                    </div>
-                    {!trip.activity.refundable && (
-                      <div className="mt-2 ml-2">
-                        <p>Bookings at this experience is non-refundable.</p>
-                      </div>
-                    )}
-
-                    {trip.activity.refundable && (
-                      <div className="mt-2 ml-2">
-                        <p>Bookings at this experience is refundable.</p>
-                        <div className="mt-6">
-                          {trip.activity.refund_policy}
-                        </div>
-                      </div>
-                    )}
-
-                    {trip.activity.damage_policy && (
-                      <div className="mt-4">
-                        <div className="py-2 px-2 border-b border-gray-100">
-                          <span className="font-semibold">Damage Policy</span>
-                        </div>
-
-                        <div className="mt-2 ml-2">
-                          <p>{trip.activity.damage_policy}</p>
-                        </div>
-                      </div>
-                    )}
-
-                    {trip.activity.covid_19_compliance && (
-                      <div className="mt-4">
-                        <div className="py-2 px-2 border-b border-gray-100">
-                          <span className="font-semibold">Covid-19 Policy</span>
-                        </div>
-
-                        <div className="mt-2 ml-2">
-                          <p>{trip.activity.covid_19_compliance_details}</p>
-                        </div>
-                      </div>
-                    )}
-
-                    <div className="mt-4">
-                      <div className="py-2 px-2 border-b border-gray-100">
-                        <span className="font-semibold">Listing Rules</span>
-
-                        <div className="flex items-center gap-6 ml-4">
-                          {trip.activity.check_in_time && (
-                            <div className="flex items-center mt-2">
-                              <span className="font-bold mr-1 hidden sm:block">
-                                Checkin at:
-                              </span>
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-5 w-5 mr-1 sm:hidden text-blue-600"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
-                                />
-                              </svg>
-                              {moment(
-                                trip.activity.check_in_time,
-                                "HH:mm:ss"
-                              ).format("hh:mm a")}
-                            </div>
-                          )}
-                          {trip.activity.check_out_time && (
-                            <div className="flex items-center mt-2">
-                              <span className="font-bold mr-1 hidden sm:block">
-                                Checkout at:
-                              </span>
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-5 w-5 mr-1 sm:hidden text-red-600"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                                />
-                              </svg>
-                              {moment(
-                                trip.activity.check_out_time,
-                                "HH:mm:ss"
-                              ).format("hh:mm a")}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="mt-2 ml-2">
-                        <div className="flex flex-wrap gap-4 justify-between">
-                          <div className="md:w-[48%] w-full">
-                            <ListItem>
-                              Children allowed:{" "}
-                              <span className="font-bold">
-                                {trip.activity.children_allowed ? "yes" : "no"}
-                              </span>
-                            </ListItem>
-                          </div>
-
-                          <div className="md:w-[48%] w-full">
-                            <ListItem>
-                              Pets allowed:{" "}
-                              <span className="font-bold">
-                                {trip.activity.pets_allowed ? "yes" : "no"}
-                              </span>
-                            </ListItem>
-                          </div>
-
-                          <div className="md:w-[48%] w-full">
-                            <ListItem>
-                              Smoking allowed:{" "}
-                              <span className="font-bold">
-                                {trip.activity.smoking_allowed ? "yes" : "no"}
-                              </span>
-                            </ListItem>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
 
                   <div
                     className="mb-6 mt-5 cursor-pointer"
