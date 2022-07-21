@@ -408,7 +408,7 @@ function Main() {
             <div className="xsmall:w-[70%] w-[65%] sm:w-[60%] h-full flex justify-between flex-wrap">
               <div className="w-[48%] rounded-2xl h-[48%] p-2 !bg-gradient-to-r from-slate-600 via-slate-700 to-slate-900">
                 <div className="font-bold text-white font-Merriweather">
-                  Stays in <span>Maasai Mara</span>
+                  Stays in <span>Narok</span>
                 </div>
                 <p className="mt-1 text-sm text-white">
                   Lorem, ipsum dolor sit amet consectetur adipisicing elit.
@@ -424,7 +424,7 @@ function Main() {
                 ></Carousel>
 
                 <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
-                  Maasai Mara
+                  Narok
                 </div>
 
                 <div className="absolute bottom-2 z-30 flex flex-col left-2">
@@ -433,7 +433,7 @@ function Main() {
                       router.push({
                         pathname: "/stays",
                         query: {
-                          search: "Maasai Mara, Narok",
+                          search: "Narok",
                         },
                       });
                     }}
@@ -451,7 +451,7 @@ function Main() {
                 ></Carousel>
 
                 <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
-                  Maasai Mara
+                  Narok
                 </div>
 
                 <div className="absolute bottom-2 z-30 flex flex-col left-2">
@@ -460,7 +460,7 @@ function Main() {
                       router.push({
                         pathname: "/experiences",
                         query: {
-                          search: "Maasai Mara, Narok",
+                          search: "Narok",
                         },
                       });
                     }}
@@ -473,7 +473,7 @@ function Main() {
 
               <div className="w-[48%] self-end rounded-2xl h-[48%] p-2 !bg-gradient-to-r from-slate-600 via-slate-700 to-slate-900">
                 <div className="font-bold text-white font-Merriweather">
-                  Experiences in <span>Maasai Mara</span>
+                  Experiences in <span>Narok</span>
                 </div>
                 <p className="mt-1 text-sm text-white">
                   Ipsum dolor sit amet consectetur adipisicing elit. Nobis,
