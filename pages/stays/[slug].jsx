@@ -586,7 +586,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       router.push({
                         pathname: "/stays",
                         query: {
-                          search: stay.country,
+                          d_search: stay.country,
                         },
                       });
                     }}
@@ -602,7 +602,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       router.push({
                         pathname: "/stays",
                         query: {
-                          search: stay.city,
+                          d_search: stay.city,
                         },
                       });
                     }}
@@ -617,7 +617,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     router.push({
                       pathname: "/stays",
                       query: {
-                        search: stay.location,
+                        d_search: stay.location,
                       },
                     });
                   }}

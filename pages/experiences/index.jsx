@@ -221,7 +221,7 @@ function Activities({
   // }, [state.windowSize]);
 
   const [activityLocation, setActivityLocation] = useState(
-    router.query.search || ""
+    router.query.search || router.query.d_search || ""
   );
 
   const [autoCompleteFromActivitySearch, setAutoCompleteFromActivitySearch] =
@@ -255,6 +255,7 @@ function Activities({
           query: {
             ...router.query,
             search: activityLocation,
+            d_search: "",
             min_capacity: state.travelers ? state.travelers : "",
           },
         })
@@ -277,7 +278,12 @@ function Activities({
           router
             .push({
               pathname: "/experiences",
-              query: { search: autoCompleteFromActivitySearch[0].place_name },
+              query: {
+                ...router.query,
+                search: autoCompleteFromActivitySearch[0].place_name,
+                d_search: "",
+                min_capacity: state.travelers ? state.travelers : "",
+              },
             })
             .then(() => {
               setShowActivityLoader(false);
@@ -1910,7 +1916,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
         const activities = await axios.get(
           `${process.env.NEXT_PUBLIC_baseURL}/activities/?search=${
             query.search ? query.search : ""
-          }&page=${query.page ? query.page : 1}&min_capacity=${
+          }&d_search=${query.d_search ? query.d_search : ""}&page=${
+            query.page ? query.page : 1
+          }&min_capacity=${
             query.min_capacity ? query.min_capacity : ""
           }&pricing_type=${
             query.pricing_type ? query.pricing_type : ""
@@ -1939,7 +1947,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
           const activities = await axios.get(
             `${process.env.NEXT_PUBLIC_baseURL}/activities/?search=${
               query.search ? query.search : ""
-            }&page=${query.page ? query.page : 1}&min_capacity=${
+            }&d_search=${query.d_search ? query.d_search : ""}&page=${
+              query.page ? query.page : 1
+            }&min_capacity=${
               query.min_capacity ? query.min_capacity : ""
             }&pricing_type=${
               query.pricing_type ? query.pricing_type : ""

@@ -103,7 +103,9 @@ function Stays({
 
   const [autoCompleteFromSearch, setAutoCompleteFromSearch] = useState([]);
 
-  const [location, setLocation] = useState(router.query.search || "");
+  const [location, setLocation] = useState(
+    router.query.search || router.query.d_search || ""
+  );
 
   const [showSearchLoader, setShowSearchLoader] = useState(false);
 
@@ -178,6 +180,7 @@ function Stays({
           query: {
             ...router.query,
             search: location,
+            d_search: "",
             min_capacity: numOfAdults > 0 ? numOfAdults : "",
           },
         })
@@ -200,7 +203,12 @@ function Stays({
           router
             .push({
               pathname: "/stays",
-              query: { search: autoCompleteFromSearch[0].place_name },
+              query: {
+                ...router.query,
+                search: autoCompleteFromSearch[0].place_name,
+                d_search: "",
+                min_capacity: numOfAdults > 0 ? numOfAdults : "",
+              },
             })
             .then(() => {
               setShowSearchLoader(false);
@@ -3265,7 +3273,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_baseURL}/stays/?search=${
             query.search ? query.search : ""
-          }&page=${query.page ? query.page : 1}&type_of_stay=${
+          }&d_search=${query.d_search ? query.d_search : ""}&page=${
+            query.page ? query.page : 1
+          }&type_of_stay=${
             query.type_of_stay ? query.type_of_stay : ""
           }&pricing_type=${
             query.pricing_type ? query.pricing_type : ""
@@ -3302,7 +3312,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
           const response = await axios.get(
             `${process.env.NEXT_PUBLIC_baseURL}/stays/?search=${
               query.search ? query.search : ""
-            }&page=${query.page ? query.page : 1}&type_of_stay=${
+            }&d_search=${query.d_search ? query.d_search : ""}&page=${
+              query.page ? query.page : 1
+            }&type_of_stay=${
               query.type_of_stay ? query.type_of_stay : ""
             }&pricing_type=${
               query.pricing_type ? query.pricing_type : ""

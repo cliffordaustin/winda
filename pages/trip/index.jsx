@@ -224,17 +224,10 @@ const Trips = ({
   };
 
   const search = (location) => {
-    let updatedLocation = location.split(",");
-    if (updatedLocation.length > 1) {
-      updatedLocation = updatedLocation[0];
-    } else {
-      updatedLocation = location;
-    }
-
     router.push({
       query: {
         ...router.query,
-        location: updatedLocation,
+        location: location,
       },
     });
   };
@@ -324,7 +317,7 @@ const Trips = ({
           </div>
 
           <div className="absolute z-[30] flex bottom-20 w-[95%] md:w-[600px] lg:w-[700px] left-2/4 -translate-x-2/4 h-14 bg-white rounded-lg">
-            <div className="w-[50%] md:w-[70%] flex rounded-tr-lg md:rounded-br-lg items-center h-full rounded-tl-lg rounded-bl-lg bg-white border-r border-gray-300">
+            <div className="w-[60%] md:w-[70%] flex rounded-tr-lg md:rounded-br-lg items-center h-full rounded-tl-lg rounded-bl-lg bg-white border-r border-gray-300">
               <Search
                 inputBoxClassName="border-0 "
                 searchClass="w-full"
@@ -334,7 +327,7 @@ const Trips = ({
                 search={search}
               ></Search>
             </div>
-            <div className="w-[50%] md:w-[30%] flex">
+            <div className="w-[40%] md:w-[30%] flex">
               {/* <div className="w-[50%] cursor-pointer pl-3 gap-2 h-full bg-white rounded-bl-lg md:rounded-bl-0 md:rounded-tr-lg md:rounded-br-lg border-r flex items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

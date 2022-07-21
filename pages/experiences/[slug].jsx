@@ -454,7 +454,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                       router.push({
                         pathname: "/experiences",
                         query: {
-                          search: activity.country,
+                          d_search: activity.country,
                         },
                       });
                     }}
@@ -470,7 +470,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                       router.push({
                         pathname: "/experiences",
                         query: {
-                          search: activity.city,
+                          d_search: activity.city,
                         },
                       });
                     }}
@@ -485,7 +485,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                     router.push({
                       pathname: "/experiences",
                       query: {
-                        search: activity.location,
+                        d_search: activity.location,
                       },
                     });
                   }}
