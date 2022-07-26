@@ -409,12 +409,14 @@ function Listing({
               {listing.location}
             </div>
             {userLatLng.latitude && userLatLng.longitude && (
-              <div className="text-gray-500 text-sm truncate mt-1">
-                {getDistance(
-                  listing.latitude,
-                  listing.longitude,
-                  userLatLng.latitude,
-                  userLatLng.longitude
+              <div className="text-black text-sm truncate mt-1">
+                {Math.round(
+                  getDistance(
+                    listing.latitude,
+                    listing.longitude,
+                    userLatLng.latitude,
+                    userLatLng.longitude
+                  )
                 ).toLocaleString()}
                 KM Away
               </div>
@@ -691,12 +693,14 @@ function Listing({
               </div>
 
               {userLatLng.latitude && userLatLng.longitude && (
-                <div className="text-gray-500 text-sm truncate mt-1">
-                  {getDistance(
-                    listing.latitude,
-                    listing.longitude,
-                    userLatLng.latitude,
-                    userLatLng.longitude
+                <div className="text-black text-sm truncate mt-1">
+                  {Math.round(
+                    getDistance(
+                      listing.latitude,
+                      listing.longitude,
+                      userLatLng.latitude,
+                      userLatLng.longitude
+                    )
                   ).toLocaleString()}
                   KM Away
                 </div>

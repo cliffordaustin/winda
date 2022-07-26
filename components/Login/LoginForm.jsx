@@ -73,21 +73,6 @@ export default function Login(props) {
     },
   };
 
-  // const initGapi = async () => {
-  //   const gapi = await import("gapi-script").then((pack) => pack.gapi);
-  //   gapi.load("client:auth2", () => {
-  //     gapi.client.init({
-  //       clientId: process.env.NEXT_PUBLIC_GOOGLE_SOCAIL_AUTH_CLIENT_ID,
-  //       scope: "email",
-  //       plugin_name: "Auth system",
-  //     });
-  //   });
-  // };
-
-  // useEffect(() => {
-  //   initGapi();
-  // }, []);
-
   const [loading, setLoading] = useState(false);
 
   const changeShowPasswordToFalse = () => {
@@ -99,7 +84,8 @@ export default function Login(props) {
   };
 
   const socialLogin = useGoogleLogin({
-    onSuccess: (tokenResponse) =>
+    onSuccess: (tokenResponse) => (
+      setLoading(true),
       dispatch(
         signinWithGoogle(
           {
@@ -107,8 +93,11 @@ export default function Login(props) {
           },
           router
         )
-      ),
-    onFailure: (tokenResponse) => failureResponseGoogle(tokenResponse),
+      )
+    ),
+    onFailure: (tokenResponse) => (
+      setLoading(false), failureResponseGoogle(tokenResponse)
+    ),
   });
   return (
     <div className="flex flex-col relative items-center sm:px-16 md:px-6 px-6 justify-center pb-6 h-full">
@@ -165,9 +154,10 @@ export default function Login(props) {
           ) : null}
           <Button
             type="submit"
+            disabled={loading}
             className={
               "mt-5 w-full px-5 flex items-center gap-2 !py-3 !bg-[#303960] hover:!bg-[#202642] !rounded-full !text-base " +
-              (loading ? "opacity-60" : "")
+              (loading ? "opacity-70 cursor-not-allowed" : "")
             }
           >
             <svg
@@ -202,7 +192,11 @@ export default function Login(props) {
         <Button
           onClick={socialLogin}
           type="submit"
-          className="mt-8 w-full !py-3 !text-black !bg-white hover:!bg-gray-100 !border !border-gray-300 flex justify-center items-center gap-2"
+          disabled={loading}
+          className={
+            "mt-8 w-full !py-3 !text-black !bg-white hover:!bg-gray-100 !border !border-gray-300 flex justify-center items-center gap-2 " +
+            (loading ? "!cursor-not-allowed" : "")
+          }
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

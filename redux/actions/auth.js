@@ -101,6 +101,11 @@ export const signup = (payload) => async (dispatch) => {
       Cookies.remove("cart");
     }
     payload.router.push(payload.router.query.redirect || "/");
+
+    // const email = Buffer.from(payload.data.email, "binary").toString("base64");
+    // payload.router.push({
+    //   pathname: `/accounts/email-confirm/${email}`,
+    // });
   } catch (error) {
     console.log(error.response.data);
 

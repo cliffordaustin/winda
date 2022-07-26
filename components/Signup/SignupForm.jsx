@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import Input from "../ui/Input";
 import Button from "../ui/Button";
+import { failureResponseGoogle } from "../../lib/socialSignin";
 import LoadingSpinerChase from "../ui/LoadingSpinerChase";
 import { useDispatch, useStore } from "react-redux";
-import { signup } from "../../redux/actions/auth";
+import { signup, signinWithGoogle } from "../../redux/actions/auth";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
+import { useGoogleLogin } from "@react-oauth/google";
 
 import * as Yup from "yup";
 
@@ -75,6 +77,23 @@ export default function Signup(props) {
   const changeShowPasswordToTrue = () => {
     setState({ ...state, showPassword: true });
   };
+
+  const socialLogin = useGoogleLogin({
+    onSuccess: (tokenResponse) => (
+      setLoading(true),
+      dispatch(
+        signinWithGoogle(
+          {
+            access_token: tokenResponse.access_token,
+          },
+          router
+        )
+      )
+    ),
+    onFailure: (tokenResponse) => (
+      setLoading(false), failureResponseGoogle(tokenResponse)
+    ),
+  });
 
   return (
     <div className="flex flex-col relative items-center sm:px-16 md:px-6 px-6 justify-center py-2 h-full">
@@ -173,10 +192,10 @@ export default function Signup(props) {
           </h3>
           <Button
             type="submit"
-            disabled={loading ? true : false}
+            disabled={loading}
             className={
               "mt-5 w-full px-5 flex items-center gap-2 !py-3 !bg-[#303960] hover:!bg-[#202642] !rounded-full !text-base " +
-              (loading ? "opacity-60" : "")
+              (loading ? "opacity-60 cursor-not-allowed" : "")
             }
           >
             <span>Register</span>
@@ -195,8 +214,13 @@ export default function Signup(props) {
           <div className="flex-grow h-px bg-gray-300"></div>
         </div>
         <Button
+          onClick={socialLogin}
           type="submit"
-          className="mt-8 w-full !py-3 !text-black !bg-white hover:!bg-gray-100 !border !border-gray-300 flex justify-center items-center gap-2"
+          disabled={loading}
+          className={
+            "mt-8 w-full !py-3 !text-black !bg-white hover:!bg-gray-100 !border !border-gray-300 flex justify-center items-center gap-2 " +
+            (loading ? "!cursor-not-allowed" : "")
+          }
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

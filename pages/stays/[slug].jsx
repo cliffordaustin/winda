@@ -1028,8 +1028,19 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
                       {(stay.type_of_stay !== "HOUSE" || !inCart) && (
                         <div className="text-gray-600 text-sm flex flex-wrap self-end">
+                          {numOfAdultsNonResident > 0 && (
+                            <>
+                              <span>
+                                {numOfAdultsNonResident}{" "}
+                                {numOfAdultsNonResident > 1
+                                  ? "Non-Resident Adults"
+                                  : "Non-Resident Adult"}
+                              </span>
+                            </>
+                          )}
                           {numOfAdults > 0 && (
                             <>
+                              <span className="font-bold mx-0.5 ">,</span>
                               <span>
                                 {numOfAdults}{" "}
                                 {numOfAdults > 1
@@ -1046,18 +1057,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                                 {numOfChildren > 1
                                   ? "Resident Children"
                                   : "Resident Child"}
-                              </span>
-                            </>
-                          )}
-
-                          {numOfAdultsNonResident > 0 && (
-                            <>
-                              <span className="font-bold mx-0.5 ">,</span>
-                              <span>
-                                {numOfAdultsNonResident}{" "}
-                                {numOfAdultsNonResident > 1
-                                  ? "Non-Resident Adults"
-                                  : "Non-Resident Adult"}
                               </span>
                             </>
                           )}
