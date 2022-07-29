@@ -45,7 +45,7 @@ const MapMakers = ({ stay }) => {
         >
           <Price
             className="text-white font-semibold text-sm font-OpenSans"
-            stayPrice={stay.price}
+            stayPrice={stay.price_non_resident}
           ></Price>
           <AnimatePresence exitBeforeEnter>
             {showPopup && (
@@ -82,7 +82,7 @@ const MapMakers = ({ stay }) => {
           >
             <Price
               className="text-white font-semibold text-sm font-OpenSans"
-              stayPrice={activeStay.price}
+              stayPrice={activeStay.price_non_resident}
             ></Price>
             <AnimatePresence exitBeforeEnter>
               <Popup

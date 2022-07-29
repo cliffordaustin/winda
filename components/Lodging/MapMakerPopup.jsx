@@ -34,7 +34,7 @@ const MapMakerPopup = ({ stay }) => {
   const [newPrice, setNewPrice] = useState();
 
   const price = () => {
-    return stay.price;
+    return stay.price_non_resident;
   };
 
   const priceConversion = async (price) => {
