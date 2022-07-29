@@ -184,7 +184,7 @@ export default function Login(props) {
             </div>
           </Button>
         </form>
-        <div className="mt-10 flex gap-4 items-center">
+        {/* <div className="mt-10 flex gap-4 items-center">
           <div className="flex-grow h-px bg-gray-300"></div>
           <div className="text-sm font-bold text-center">Or</div>
           <div className="flex-grow h-px bg-gray-300"></div>
@@ -226,16 +226,7 @@ export default function Login(props) {
             />
           </svg>
           <span>Sign in with Google</span>
-        </Button>
-        {/* <GoogleLogin
-          clientId={process.env.NEXT_PUBLIC_GOOGLE_SOCAIL_AUTH_CLIENT_ID}
-          render={(renderProps) => (
-            
-          )}
-          onSuccess={sendGoogleResponse}
-          onFailure={failureResponseGoogle}
-          cookiePolicy={"single_host_origin"}
-        /> */}
+        </Button> */}
 
         <h3 className="mt-6 font-bold text-center">
           Don&apos;t have an account?{" "}

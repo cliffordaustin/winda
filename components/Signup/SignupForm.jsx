@@ -208,7 +208,7 @@ export default function Signup(props) {
             </div>
           </Button>
         </form>
-        <div className="mt-10 flex gap-4 items-center">
+        {/* <div className="mt-10 flex gap-4 items-center">
           <div className="flex-grow h-px bg-gray-300"></div>
           <div className="text-sm font-bold text-center">Or</div>
           <div className="flex-grow h-px bg-gray-300"></div>
@@ -250,7 +250,7 @@ export default function Signup(props) {
             />
           </svg>
           <span>Sign up with Google</span>
-        </Button>
+        </Button> */}
         <h3 className="mt-6 font-bold text-center">
           Already on Winda?{" "}
           <Link
