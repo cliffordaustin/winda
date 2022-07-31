@@ -12,6 +12,7 @@ import Pagination from "./Pagination";
 import Image from "next/image";
 import Carousel from "../ui/Carousel";
 import { useRouter } from "next/router";
+import Dialogue from "./Dialogue";
 
 SwiperCore.use([Navigation]);
 
@@ -72,68 +73,7 @@ function Main() {
     },
   };
 
-  const exploreLocationSettings = {
-    spaceBetween: 40,
-    slidesPerView: "auto",
-    pagination: {
-      el: ".swiper-explore-location-pagination",
-      clickable: true,
-    },
-    navigation: {
-      nextEl: ".swiper-explore-location-button-next",
-      prevEl: ".swiper-explore-location-button-prev",
-    },
-  };
-
-  const experienceImages = [
-    { image: "/images/explore-categories/stays.jpg", header: "Stays" },
-    { image: "/images/explore-categories/transport.jpg", header: "Transport" },
-    {
-      image: "/images/explore-categories/experiences.jpg",
-      header: "Experiences",
-    },
-    {
-      image: "/images/explore-categories/curatedtrips.JPG",
-      header: "Curated Trips",
-    },
-  ];
-
-  const exploreLocationImages = [
-    { image: "/images/explore-locations/nairobi.jpg", header: "Nairobi" },
-    { image: "/images/explore-locations/nanyuki.jpg", header: "Nanyuki" },
-    {
-      image: "/images/explore-locations/lamu.jpg",
-      header: "Lamu",
-    },
-    {
-      image: "/images/explore-locations/kilifi.jpg",
-      header: "Kilifi",
-    },
-  ];
-
-  const travelImages = [
-    { image: "/images/travel-themes/campsites.jpg", header: "Campsites" },
-    {
-      image: "/images/travel-themes/weekend-getaways.jpg",
-      header: "Weekend Getaways",
-    },
-    {
-      image: "/images/travel-themes/group-family-retreats.jpeg",
-      header: "Group Family Retreats",
-    },
-    {
-      image: "/images/travel-themes/romantic-getaways.jpg",
-      header: "Romantic Getaway",
-    },
-    {
-      image: "/images/travel-themes/national-parks.JPG",
-      header: "National Park",
-    },
-    {
-      image: "/images/travel-themes/active-experiences.JPG",
-      header: "Active Experiences",
-    },
-  ];
+  const [selectedLocation, setSelectedLocation] = useState("");
 
   return (
     <div className="w-full">
@@ -182,7 +122,7 @@ function Main() {
               </div>
             </div>
             <div className="xsmall:w-[70%] w-[65%] sm:w-[60%] h-full flex justify-between flex-wrap">
-              <div className="w-[48%] rounded-2xl h-[49%] p-2 !bg-gradient-to-r from-slate-600 via-slate-700 to-slate-900">
+              <div className="w-[48%] relative rounded-2xl h-[49%] p-2 !bg-gradient-to-r from-slate-600 via-slate-700 to-slate-900">
                 <div className="font-bold text-white font-Merriweather">
                   Stays in <span>Nairobi</span>
                 </div>
@@ -190,10 +130,79 @@ function Main() {
                   Nairobi is the capital of Kenya and the largest city in the
                   country. It is full of beautiful, natural and cultural
                   landmarks, and is a popular tourist destination. The beauty is
-                  reflected in its stays. From luxurious hotels to small
-                  bungalows, Nairobi has it all.
+                  reflected in its stays.
                 </p>
+
+                <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                  <div
+                    onClick={() => {
+                      setSelectedLocation("nairobi-stays");
+                    }}
+                    className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
+                  >
+                    Show more
+                  </div>
+                </div>
               </div>
+              <Dialogue
+                isOpen={selectedLocation === "nairobi-stays"}
+                closeModal={() => {
+                  setSelectedLocation("");
+                }}
+                title="Stays in Nairobi"
+                dialogueTitleClassName="!font-bold"
+                dialoguePanelClassName="max-h-[500px] max-w-lg overflow-y-scroll remove-scroll"
+              >
+                <div className="mt-2">
+                  <p className="text-sm">
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                    Iste corrupti doloremque a ad, error distinctio optio
+                    dolorem quo ratione quis qui animi eum pariatur nulla?
+                    Quibusdam ratione facere ducimus fugit! A voluptas, placeat
+                    nulla fugiat mollitia ducimus culpa molestias velit est quis
+                    laudantium tempore vitae sequi facilis odio id quidem sunt.
+                    Praesentium porro dolorem nobis. Quam architecto harum
+                    distinctio esse? Dicta excepturi labore cupiditate atque
+                    perspiciatis repellendus quam aperiam maiores. Non
+                    consectetur iusto voluptatibus deleniti at modi adipisci a!
+                    Delectus quas assumenda pariatur sit! Quo animi adipisci
+                    fugiat cupiditate magnam. Suscipit molestiae dignissimos,
+                    ipsum quidem sit nam laboriosam nisi consequuntur vel sunt
+                    non libero obcaecati soluta perspiciatis eligendi debitis
+                    accusamus atque beatae necessitatibus ratione rerum ipsa
+                    voluptatibus odio quaerat? Alias. Odit suscipit molestias
+                    consequatur optio! Tempora quibusdam quidem, illo officiis
+                    fugiat magnam asperiores iure fuga sint eos exercitationem
+                    minus nesciunt accusamus tempore deserunt culpa tenetur rem.
+                    Quibusdam dolorum placeat excepturi! Commodi cum officiis
+                  </p>
+                </div>
+
+                <div className="fixed top-3 right-4 flex flex-col">
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedLocation("");
+                    }}
+                    className="flex cursor-pointer items-center justify-center w-7 h-7 rounded-full bg-white shadow-lg"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </Dialogue>
               <div className="w-[48%] h-[49%] relative before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
                 <Carousel
                   images={["/images/home/nairobi.jpg"]}
@@ -248,17 +257,88 @@ function Main() {
                 </div>
               </div>
 
-              <div className="w-[48%] rounded-2xl h-[49%] self-end p-2 !bg-gradient-to-r from-slate-600 via-slate-700 to-slate-900">
+              <div className="relative w-[48%] rounded-2xl h-[49%] self-end p-2 !bg-gradient-to-r from-slate-600 via-slate-700 to-slate-900">
                 <div className="font-bold text-white font-Merriweather">
                   Experiences in <span>Nairobi</span>
                 </div>
                 <p className="mt-1 text-sm text-white">
                   Lorem, ipsum dolor sit amet consectetur adipisicing elit.
                   Nobis, inventore maxime adipisci culpa delectus accusamus
-                  ipsam quas eligendi velit impedit quo expedita hic id repellat
-                  deserunt nihil in vel veritatis. Culpa delectus accusamus
+                  ipsam quas eligendi velit. culpa delectus accusamus ipsam
+                  quas.
                 </p>
+
+                <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                  <div
+                    onClick={() => {
+                      setSelectedLocation("nairobi-experiences");
+                    }}
+                    className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
+                  >
+                    Show more
+                  </div>
+                </div>
               </div>
+
+              <Dialogue
+                isOpen={selectedLocation === "nairobi-experiences"}
+                closeModal={() => {
+                  setSelectedLocation("");
+                }}
+                title="Experiences in Nairobi"
+                dialogueTitleClassName="!font-bold"
+                dialoguePanelClassName="max-h-[500px] max-w-lg overflow-y-scroll remove-scroll"
+              >
+                <div className="mt-2">
+                  <p className="text-sm">
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                    Iste corrupti doloremque a ad, error distinctio optio
+                    dolorem quo ratione quis qui animi eum pariatur nulla?
+                    Quibusdam ratione facere ducimus fugit! A voluptas, placeat
+                    nulla fugiat mollitia ducimus culpa molestias velit est quis
+                    laudantium tempore vitae sequi facilis odio id quidem sunt.
+                    Praesentium porro dolorem nobis. Quam architecto harum
+                    distinctio esse? Dicta excepturi labore cupiditate atque
+                    perspiciatis repellendus quam aperiam maiores. Non
+                    consectetur iusto voluptatibus deleniti at modi adipisci a!
+                    Delectus quas assumenda pariatur sit! Quo animi adipisci
+                    fugiat cupiditate magnam. Suscipit molestiae dignissimos,
+                    ipsum quidem sit nam laboriosam nisi consequuntur vel sunt
+                    non libero obcaecati soluta perspiciatis eligendi debitis
+                    accusamus atque beatae necessitatibus ratione rerum ipsa
+                    voluptatibus odio quaerat? Alias. Odit suscipit molestias
+                    consequatur optio! Tempora quibusdam quidem, illo officiis
+                    fugiat magnam asperiores iure fuga sint eos exercitationem
+                    minus nesciunt accusamus tempore deserunt culpa tenetur rem.
+                    Quibusdam dolorum placeat excepturi! Commodi cum officiis
+                  </p>
+                </div>
+
+                <div className="fixed top-3 right-4 flex flex-col">
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedLocation("");
+                    }}
+                    className="flex cursor-pointer items-center justify-center w-7 h-7 rounded-full bg-white shadow-lg"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </Dialogue>
             </div>
           </SwiperSlide>
 
@@ -295,17 +375,88 @@ function Main() {
               </div>
             </div>
             <div className="xsmall:w-[70%] w-[65%] sm:w-[60%] h-full flex justify-between flex-wrap">
-              <div className="w-[48%] rounded-2xl h-[48%] p-2 !bg-gradient-to-r from-slate-600 via-slate-700 to-slate-900">
+              <div className="relative w-[48%] rounded-2xl h-[48%] p-2 !bg-gradient-to-r from-slate-600 via-slate-700 to-slate-900">
                 <div className="font-bold text-white font-Merriweather">
                   Stays in <span>Nakuru</span>
                 </div>
                 <p className="mt-1 text-sm text-white">
                   Lorem, ipsum dolor sit amet consectetur adipisicing elit.
                   Nobis, inventore maxime adipisci culpa delectus accusamus
-                  ipsam quas eligendi velit impedit quo expedita hic id repellat
-                  deserunt nihil in vel veritatis.
+                  ipsam quas eligendi velit impedit. Inventore maxime adipisci
+                  culpa.
                 </p>
+
+                <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                  <div
+                    onClick={() => {
+                      setSelectedLocation("nakuru-stays");
+                    }}
+                    className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
+                  >
+                    Show more
+                  </div>
+                </div>
               </div>
+
+              <Dialogue
+                isOpen={selectedLocation === "nakuru-stays"}
+                closeModal={() => {
+                  setSelectedLocation("");
+                }}
+                title="Stays in Nakuru"
+                dialogueTitleClassName="!font-bold"
+                dialoguePanelClassName="max-h-[500px] max-w-lg overflow-y-scroll remove-scroll"
+              >
+                <div className="mt-2">
+                  <p className="text-sm">
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                    Iste corrupti doloremque a ad, error distinctio optio
+                    dolorem quo ratione quis qui animi eum pariatur nulla?
+                    Quibusdam ratione facere ducimus fugit! A voluptas, placeat
+                    nulla fugiat mollitia ducimus culpa molestias velit est quis
+                    laudantium tempore vitae sequi facilis odio id quidem sunt.
+                    Praesentium porro dolorem nobis. Quam architecto harum
+                    distinctio esse? Dicta excepturi labore cupiditate atque
+                    perspiciatis repellendus quam aperiam maiores. Non
+                    consectetur iusto voluptatibus deleniti at modi adipisci a!
+                    Delectus quas assumenda pariatur sit! Quo animi adipisci
+                    fugiat cupiditate magnam. Suscipit molestiae dignissimos,
+                    ipsum quidem sit nam laboriosam nisi consequuntur vel sunt
+                    non libero obcaecati soluta perspiciatis eligendi debitis
+                    accusamus atque beatae necessitatibus ratione rerum ipsa
+                    voluptatibus odio quaerat? Alias. Odit suscipit molestias
+                    consequatur optio! Tempora quibusdam quidem, illo officiis
+                    fugiat magnam asperiores iure fuga sint eos exercitationem
+                    minus nesciunt accusamus tempore deserunt culpa tenetur rem.
+                    Quibusdam dolorum placeat excepturi! Commodi cum officiis
+                  </p>
+                </div>
+
+                <div className="fixed top-3 right-4 flex flex-col">
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedLocation("");
+                    }}
+                    className="flex cursor-pointer items-center justify-center w-7 h-7 rounded-full bg-white shadow-lg"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </Dialogue>
               <div className="w-[48%] h-[48%] relative before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
                 <Carousel
                   images={["/images/home/nakuru.jpg"]}
@@ -360,17 +511,88 @@ function Main() {
                 </div>
               </div>
 
-              <div className="w-[48%] self-end rounded-2xl h-[48%] p-2 !bg-gradient-to-r from-slate-600 via-slate-700 to-slate-900">
+              <div className="relative w-[48%] self-end rounded-2xl h-[48%] p-2 !bg-gradient-to-r from-slate-600 via-slate-700 to-slate-900">
                 <div className="font-bold text-white font-Merriweather">
                   Experiences in <span>Nakuru</span>
                 </div>
                 <p className="mt-1 text-sm text-white">
                   Ipsum dolor sit amet consectetur adipisicing elit. Nobis,
                   inventore maxime adipisci culpa delectus accusamus ipsam quas
-                  eligendi velit impedit quo expedita hic id repellat deserunt
-                  nihil in vel veritatis. Culpa delectus accusamus.
+                  eligendi velit impedit quo. culpa delectus accusamus ipsam
+                  quas.
                 </p>
+
+                <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                  <div
+                    onClick={() => {
+                      setSelectedLocation("nakuru-experiences");
+                    }}
+                    className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
+                  >
+                    Show more
+                  </div>
+                </div>
               </div>
+
+              <Dialogue
+                isOpen={selectedLocation === "nakuru-experiences"}
+                closeModal={() => {
+                  setSelectedLocation("");
+                }}
+                title="Experiences in Nakuru"
+                dialogueTitleClassName="!font-bold"
+                dialoguePanelClassName="max-h-[500px] max-w-lg overflow-y-scroll remove-scroll"
+              >
+                <div className="mt-2">
+                  <p className="text-sm">
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                    Iste corrupti doloremque a ad, error distinctio optio
+                    dolorem quo ratione quis qui animi eum pariatur nulla?
+                    Quibusdam ratione facere ducimus fugit! A voluptas, placeat
+                    nulla fugiat mollitia ducimus culpa molestias velit est quis
+                    laudantium tempore vitae sequi facilis odio id quidem sunt.
+                    Praesentium porro dolorem nobis. Quam architecto harum
+                    distinctio esse? Dicta excepturi labore cupiditate atque
+                    perspiciatis repellendus quam aperiam maiores. Non
+                    consectetur iusto voluptatibus deleniti at modi adipisci a!
+                    Delectus quas assumenda pariatur sit! Quo animi adipisci
+                    fugiat cupiditate magnam. Suscipit molestiae dignissimos,
+                    ipsum quidem sit nam laboriosam nisi consequuntur vel sunt
+                    non libero obcaecati soluta perspiciatis eligendi debitis
+                    accusamus atque beatae necessitatibus ratione rerum ipsa
+                    voluptatibus odio quaerat? Alias. Odit suscipit molestias
+                    consequatur optio! Tempora quibusdam quidem, illo officiis
+                    fugiat magnam asperiores iure fuga sint eos exercitationem
+                    minus nesciunt accusamus tempore deserunt culpa tenetur rem.
+                    Quibusdam dolorum placeat excepturi! Commodi cum officiis
+                  </p>
+                </div>
+
+                <div className="fixed top-3 right-4 flex flex-col">
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedLocation("");
+                    }}
+                    className="flex cursor-pointer items-center justify-center w-7 h-7 rounded-full bg-white shadow-lg"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </Dialogue>
             </div>
           </SwiperSlide>
 
@@ -406,17 +628,88 @@ function Main() {
               </div>
             </div>
             <div className="xsmall:w-[70%] w-[65%] sm:w-[60%] h-full flex justify-between flex-wrap">
-              <div className="w-[48%] rounded-2xl h-[48%] p-2 !bg-gradient-to-r from-slate-600 via-slate-700 to-slate-900">
+              <div className="relative w-[48%] rounded-2xl h-[48%] p-2 !bg-gradient-to-r from-slate-600 via-slate-700 to-slate-900">
                 <div className="font-bold text-white font-Merriweather">
                   Stays in <span>Narok</span>
                 </div>
                 <p className="mt-1 text-sm text-white">
                   Lorem, ipsum dolor sit amet consectetur adipisicing elit.
                   Nobis, inventore maxime adipisci culpa delectus accusamus
-                  ipsam quas eligendi velit impedit quo expedita hic id repellat
-                  deserunt nihil in vel veritatis.
+                  ipsam quas eligendi velit impedit quo. Inventore maxime
+                  adipisci.
                 </p>
+
+                <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                  <div
+                    onClick={() => {
+                      setSelectedLocation("narok-stays");
+                    }}
+                    className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
+                  >
+                    Show more
+                  </div>
+                </div>
               </div>
+
+              <Dialogue
+                isOpen={selectedLocation === "narok-stays"}
+                closeModal={() => {
+                  setSelectedLocation("");
+                }}
+                title="Stays in Narok"
+                dialogueTitleClassName="!font-bold"
+                dialoguePanelClassName="max-h-[500px] max-w-lg overflow-y-scroll remove-scroll"
+              >
+                <div className="mt-2">
+                  <p className="text-sm">
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                    Iste corrupti doloremque a ad, error distinctio optio
+                    dolorem quo ratione quis qui animi eum pariatur nulla?
+                    Quibusdam ratione facere ducimus fugit! A voluptas, placeat
+                    nulla fugiat mollitia ducimus culpa molestias velit est quis
+                    laudantium tempore vitae sequi facilis odio id quidem sunt.
+                    Praesentium porro dolorem nobis. Quam architecto harum
+                    distinctio esse? Dicta excepturi labore cupiditate atque
+                    perspiciatis repellendus quam aperiam maiores. Non
+                    consectetur iusto voluptatibus deleniti at modi adipisci a!
+                    Delectus quas assumenda pariatur sit! Quo animi adipisci
+                    fugiat cupiditate magnam. Suscipit molestiae dignissimos,
+                    ipsum quidem sit nam laboriosam nisi consequuntur vel sunt
+                    non libero obcaecati soluta perspiciatis eligendi debitis
+                    accusamus atque beatae necessitatibus ratione rerum ipsa
+                    voluptatibus odio quaerat? Alias. Odit suscipit molestias
+                    consequatur optio! Tempora quibusdam quidem, illo officiis
+                    fugiat magnam asperiores iure fuga sint eos exercitationem
+                    minus nesciunt accusamus tempore deserunt culpa tenetur rem.
+                    Quibusdam dolorum placeat excepturi! Commodi cum officiis
+                  </p>
+                </div>
+
+                <div className="fixed top-3 right-4 flex flex-col">
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedLocation("");
+                    }}
+                    className="flex cursor-pointer items-center justify-center w-7 h-7 rounded-full bg-white shadow-lg"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </Dialogue>
               <div className="w-[48%] h-[48%] relative before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
                 <Carousel
                   images={["/images/home/stay-maasai-mara.jpg"]}
@@ -471,17 +764,87 @@ function Main() {
                 </div>
               </div>
 
-              <div className="w-[48%] self-end rounded-2xl h-[48%] p-2 !bg-gradient-to-r from-slate-600 via-slate-700 to-slate-900">
+              <div className="relative w-[48%] self-end rounded-2xl h-[48%] p-2 !bg-gradient-to-r from-slate-600 via-slate-700 to-slate-900">
                 <div className="font-bold text-white font-Merriweather">
                   Experiences in <span>Narok</span>
                 </div>
                 <p className="mt-1 text-sm text-white">
                   Ipsum dolor sit amet consectetur adipisicing elit. Nobis,
                   inventore maxime adipisci culpa delectus accusamus ipsam quas
-                  eligendi velit impedit quo expedita hic id repellat deserunt
-                  nihil in vel veritatis. Culpa delectus accusamus.
+                  eligendi velit impedit quo expedita hic id.
                 </p>
+
+                <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                  <div
+                    onClick={() => {
+                      setSelectedLocation("narok-experiences");
+                    }}
+                    className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
+                  >
+                    Show more
+                  </div>
+                </div>
               </div>
+
+              <Dialogue
+                isOpen={selectedLocation === "narok-experiences"}
+                closeModal={() => {
+                  setSelectedLocation("");
+                }}
+                title="Experiences in Narok"
+                dialogueTitleClassName="!font-bold"
+                dialoguePanelClassName="max-h-[500px] max-w-lg overflow-y-scroll remove-scroll"
+              >
+                <div className="mt-2">
+                  <p className="text-sm">
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                    Iste corrupti doloremque a ad, error distinctio optio
+                    dolorem quo ratione quis qui animi eum pariatur nulla?
+                    Quibusdam ratione facere ducimus fugit! A voluptas, placeat
+                    nulla fugiat mollitia ducimus culpa molestias velit est quis
+                    laudantium tempore vitae sequi facilis odio id quidem sunt.
+                    Praesentium porro dolorem nobis. Quam architecto harum
+                    distinctio esse? Dicta excepturi labore cupiditate atque
+                    perspiciatis repellendus quam aperiam maiores. Non
+                    consectetur iusto voluptatibus deleniti at modi adipisci a!
+                    Delectus quas assumenda pariatur sit! Quo animi adipisci
+                    fugiat cupiditate magnam. Suscipit molestiae dignissimos,
+                    ipsum quidem sit nam laboriosam nisi consequuntur vel sunt
+                    non libero obcaecati soluta perspiciatis eligendi debitis
+                    accusamus atque beatae necessitatibus ratione rerum ipsa
+                    voluptatibus odio quaerat? Alias. Odit suscipit molestias
+                    consequatur optio! Tempora quibusdam quidem, illo officiis
+                    fugiat magnam asperiores iure fuga sint eos exercitationem
+                    minus nesciunt accusamus tempore deserunt culpa tenetur rem.
+                    Quibusdam dolorum placeat excepturi! Commodi cum officiis
+                  </p>
+                </div>
+
+                <div className="fixed top-3 right-4 flex flex-col">
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedLocation("");
+                    }}
+                    className="flex cursor-pointer items-center justify-center w-7 h-7 rounded-full bg-white shadow-lg"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </Dialogue>
             </div>
           </SwiperSlide>
         </Swiper>

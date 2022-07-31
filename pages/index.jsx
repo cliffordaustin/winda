@@ -283,6 +283,7 @@ export default function Home({ userProfile }) {
           showNeedADriver: false,
           showSearchModal: false,
         });
+        setShowBookServiceDropdown(false);
       }}
     >
       {/* {store.getState().home.showTopBanner ? (
@@ -1028,7 +1029,8 @@ export default function Home({ userProfile }) {
                 <span className="font-bold">Curated trips</span>
               </Button>
               <Button
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setShowBookServiceDropdown(!showBookServiceDropdown);
                 }}
                 className="flex relative items-center gap-2 w-fit !py-3 !bg-white"
@@ -1497,9 +1499,7 @@ export default function Home({ userProfile }) {
       <div className="md:mt-16 mb-8 2xl:w-4/6 2xl:mx-auto">
         <Main></Main>
       </div>
-      {/* <div className="mt-14 px-3 sm:px-6">
-        <TeamExperience></TeamExperience>
-      </div> */}
+
       <div className="mt-14">
         <Footer></Footer>
       </div>
