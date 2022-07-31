@@ -1686,24 +1686,27 @@ function Stays({
               </div>
             )}
 
-            {stays.length > 0 && (
-              <ReactPaginate
-                breakLabel="..."
-                nextLabel={<Icon icon="bx:chevron-right" className="w-7 h-7" />}
-                disabledClassName="text-gray-300"
-                onPageChange={handlePageClick}
-                forcePage={parseInt(router.query.page) - 1 || 0}
-                pageRangeDisplayed={pageSize}
-                pageCount={totalPages}
-                previousLabel={
-                  <Icon icon="bx:chevron-left" className="w-7 h-7" />
-                }
-                activeLinkClassName="bg-gray-700 text-white font-bold"
-                renderOnZeroPageCount={null}
-                containerClassName="flex gap-2 justify-center items-center mt-4"
-                pageLinkClassName="bg-white h-12 font-bold flex justify-center items-center w-12 cursor-pointer hover:border border-gray-200 rounded-full text-sm"
-              />
-            )}
+            <div className="w-full">
+              {stays.length > 0 && (
+                <ReactPaginate
+                  breakLabel="..."
+                  nextLabel={
+                    <Icon icon="bx:chevron-right" className="w-7 h-7" />
+                  }
+                  disabledClassName="text-gray-300"
+                  onPageChange={handlePageClick}
+                  forcePage={parseInt(router.query.page) - 1 || 0}
+                  pageRangeDisplayed={pageSize}
+                  pageCount={totalPages}
+                  previousLabel={
+                    <Icon icon="bx:chevron-left" className="w-7 h-7" />
+                  }
+                  activeLinkClassName="bg-gray-700 text-white font-bold"
+                  containerClassName="flex flex-wrap gap-2 justify-center items-center mt-4"
+                  pageLinkClassName="bg-white h-8 w-8 font-bold flex justify-center items-center cursor-pointer hover:border border-gray-200 rounded-full text-sm"
+                />
+              )}
+            </div>
           </div>
         )}
       </div>

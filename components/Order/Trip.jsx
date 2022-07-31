@@ -438,7 +438,7 @@ const Trip = ({
   const [numOfPeople, setNumOfPeople] = useState(0);
 
   const [numOfPeopleNonResident, setNumOfPeopleNonResident] = useState(
-    trip.activity.min_capacity || 1
+    (trip.activity && trip.activity.min_capacity) || 1
   );
 
   const [numOfSession, setNumOfSession] = useState(0);
@@ -1098,7 +1098,7 @@ const Trip = ({
       )}
 
       {!trip.stay && !containsStayOption(`${index}`) && (
-        <div className="px-2 mt-4 relative bg-gray-100 py-1 rounded-lg">
+        <div className="flex justify-between px-2 mt-4 relative bg-gray-100 py-1 rounded-lg">
           <div className="flex gap-2">
             <div className="w-12 h-12 my-auto bg-gray-200 rounded-lg flex items-center justify-center">
               <svg
@@ -1116,20 +1116,9 @@ const Trip = ({
               </svg>
             </div>
             <div>
-              {index === 0 && (
-                <p className="text-sm font-medium">From Nairobi</p>
-              )}
-              {index > 0 && (
-                <p className="text-sm font-medium">
-                  From{" "}
-                  {order[index - 1].stay && order[index - 1].stay.location
-                    ? order[index - 1].stay.location
-                    : order[index - 1].activity &&
-                      order[index - 1].activity.location
-                    ? order[index - 1].activity.location
-                    : ""}
-                </p>
-              )}
+              <p className="text-sm font-medium text-red-500">
+                Select a stay to show location
+              </p>
               <h1 className="font-bold">Stay</h1>
 
               <h1 className="font-medium mt-2 text-sm text-red-600">
@@ -1138,7 +1127,7 @@ const Trip = ({
             </div>
           </div>
 
-          <div className="absolute top-1 right-2 flex gap-2 items-center">
+          <div className="self-start flex gap-2 items-center">
             <div
               onClick={() => {
                 changeStay();
@@ -2061,7 +2050,7 @@ const Trip = ({
       )}
 
       {!trip.activity && !containsActivityOption(`${index}`) && (
-        <div className="px-2 mt-4 relative bg-gray-100 py-1 rounded-lg">
+        <div className="flex justify-between px-2 mt-4 relative bg-gray-100 py-1 rounded-lg">
           <div className="flex gap-2">
             <div className="w-12 h-12 my-auto bg-gray-200 rounded-lg flex items-center justify-center">
               <svg
@@ -2086,29 +2075,18 @@ const Trip = ({
               </svg>
             </div>
             <div>
-              {index === 0 && (
-                <p className="text-sm font-medium">From Nairobi</p>
-              )}
-              {index > 0 && (
-                <p className="text-sm font-medium">
-                  From{" "}
-                  {order[index - 1].stay && order[index - 1].stay.location
-                    ? order[index - 1].stay.location
-                    : order[index - 1].activity &&
-                      order[index - 1].activity.location
-                    ? order[index - 1].activity.location
-                    : ""}
-                </p>
-              )}
-              <h1 className="font-bold">Activity</h1>
+              <p className="text-sm font-medium text-red-500">
+                Select an experience to show location
+              </p>
+              <h1 className="font-bold">Experience</h1>
 
               <h1 className="font-medium mt-2 text-sm text-red-600">
-                No activity added
+                No experience added
               </h1>
             </div>
           </div>
 
-          <div className="absolute top-1 right-2 flex gap-2 items-center">
+          <div className="self-start flex gap-2 items-center">
             <div
               onClick={() => {
                 changeExperiences();

@@ -292,7 +292,7 @@ function Listing({
             imagePaths={images}
             carouselClassName="h-44"
             subCarouselClassName="hidden"
-            className={styles.card + " h-[325px]"}
+            className={styles.card + " "}
           >
             <div className="flex flex-col gap-1">
               <h1 className="text-gray-500 truncate">{listing.name}</h1>
