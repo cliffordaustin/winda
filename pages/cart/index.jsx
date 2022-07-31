@@ -10,7 +10,6 @@ import Button from "../../components/ui/Button";
 import Footer from "../../components/Home/Footer";
 
 import axios from "axios";
-import { usePaystackPayment } from "react-paystack";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -144,36 +143,6 @@ const Cart = ({
     return parseFloat(price);
   };
 
-  const reference = () => {
-    let text = "";
-    const possible =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-    for (let i = 0; i < 10; i++)
-      text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-    return text;
-  };
-
-  const config = {
-    reference: reference(),
-    email: userProfile.email,
-    amount: totalPrice(),
-    publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLICK_KEY,
-    currency: "GHS",
-    embed: false,
-  };
-
-  const onClose = () => {
-    console.log("Close");
-  };
-
-  // const onSuccess = (reference) => {
-  //   console.log("success ", reference);
-  // };
-
-  const initializePayment = usePaystackPayment(config);
-
   const priceConversion = async (price) => {
     if (price) {
       if (currencyToKES && priceConversionRate) {
@@ -183,133 +152,6 @@ const Cart = ({
       }
     } else {
       return null;
-    }
-  };
-
-  const onSuccess = async (reference) => {
-    if (Cookies.get("token")) {
-      setLoading(true);
-      for (const item of allItemsInCart) {
-        await axios
-          .post(
-            `${process.env.NEXT_PUBLIC_baseURL}/stays/${item.stay.slug}/add-to-order/`,
-            {
-              from_date: new Date(item.from_date),
-              to_date: new Date(item.to_date),
-              num_of_adults: item.num_of_adults,
-              num_of_children: item.num_of_children,
-              num_of_adults_non_resident: item.num_of_adults_non_resident,
-              num_of_children_non_resident: item.num_of_children_non_resident,
-              plan: item.plan,
-              first_name: userProfile.first_name,
-              last_name: userProfile.last_name,
-              paid: true,
-            },
-            {
-              headers: {
-                Authorization: `Token ${Cookies.get("token")}`,
-              },
-            }
-          )
-          .then((res) => {
-            axios.delete(
-              `${process.env.NEXT_PUBLIC_baseURL}/user-cart/${item.id}/`,
-              {
-                headers: {
-                  Authorization: `Token ${Cookies.get("token")}`,
-                },
-              }
-            );
-          })
-          .catch((err) => {
-            console.log(err.response.data);
-            setLoading(false);
-          });
-      }
-      for (const item of allItemsInActivityCart) {
-        await axios
-          .post(
-            `${process.env.NEXT_PUBLIC_baseURL}/activities/${item.activity.slug}/add-to-order/`,
-            {
-              first_name: userProfile.first_name,
-              last_name: userProfile.last_name,
-              paid: true,
-              from_date: new Date(item.from_date),
-              non_resident: item.non_resident,
-              pricing_type: item.pricing_type,
-              number_of_people: item.number_of_people,
-              number_of_people_non_resident: item.number_of_people_non_resident,
-              number_of_sessions: item.number_of_sessions,
-              number_of_sessions_non_resident:
-                item.number_of_sessions_non_resident,
-              number_of_groups: item.number_of_groups,
-              number_of_groups_non_resident: item.number_of_groups_non_resident,
-            },
-            {
-              headers: {
-                Authorization: `Token ${Cookies.get("token")}`,
-              },
-            }
-          )
-          .then((res) => {
-            axios.delete(
-              `${process.env.NEXT_PUBLIC_baseURL}/user-activities-cart/${item.id}/`,
-              {
-                headers: {
-                  Authorization: `Token ${Cookies.get("token")}`,
-                },
-              }
-            );
-          })
-          .catch((err) => {
-            console.log(err.response);
-            setLoading(false);
-          });
-      }
-      for (const item of allItemsInTransportCart) {
-        await axios
-          .post(
-            `${process.env.NEXT_PUBLIC_baseURL}/transport/${item.transport.slug}/add-to-order/`,
-            {
-              first_name: userProfile.first_name,
-              last_name: userProfile.last_name,
-              paid: true,
-              number_of_days: item.number_of_days,
-              user_need_a_driver: item.user_need_a_driver,
-              distance: item.distance,
-              starting_point: item.starting_point,
-              destination: item.destination,
-              from_date: new Date(item.from_date),
-            },
-            {
-              headers: {
-                Authorization: `Token ${Cookies.get("token")}`,
-              },
-            }
-          )
-          .then((res) => {
-            axios.delete(
-              `${process.env.NEXT_PUBLIC_baseURL}/user-transport-cart/${item.id}/`,
-              {
-                headers: {
-                  Authorization: `Token ${Cookies.get("token")}`,
-                },
-              }
-            );
-          })
-          .catch((err) => {
-            console.log(err.response);
-            setLoading(false);
-          });
-      }
-      router.push({
-        pathname: "/orders",
-      });
-    } else if (!Cookies.get("token")) {
-      router.push({
-        pathname: "/login",
-        query: { redirect: `${router.asPath}` },
-      });
     }
   };
 

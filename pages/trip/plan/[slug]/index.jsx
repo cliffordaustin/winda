@@ -5,7 +5,6 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import Image from "next/image";
-import { usePaystackPayment } from "react-paystack";
 import * as Yup from "yup";
 import Steps from "rc-steps";
 import { motion, AnimatePresence } from "framer-motion";
@@ -255,57 +254,6 @@ function PlanTrip({
       .catch((err) => console.log(err.response));
   }, []);
 
-  const config = {
-    reference: reference(),
-    email: userProfile.email,
-    amount: price(),
-    publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLICK_KEY,
-    currency: "GHS",
-    embed: false,
-  };
-
-  const onSuccess = async (reference) => {
-    setLoading(true);
-    try {
-      for (const item of allOrders) {
-        await axios.put(
-          `${process.env.NEXT_PUBLIC_baseURL}/user-orders/${item.id}/`,
-          {
-            paid: true,
-          },
-          {
-            headers: {
-              Authorization: "Token " + Cookies.get("token"),
-            },
-          }
-        );
-      }
-      for (const item of activitiesOrders) {
-        await axios.put(
-          `${process.env.NEXT_PUBLIC_baseURL}/user-activities-orders/${item.id}/`,
-          {
-            paid: true,
-          },
-          {
-            headers: {
-              Authorization: "Token " + Cookies.get("token"),
-            },
-          }
-        );
-      }
-      router.push({
-        pathname: "/order-successfull",
-      });
-    } catch (error) {
-      setLoading(false);
-      console.log(error);
-    }
-  };
-
-  const onClose = () => {
-    console.log("closed");
-  };
-
   let nothingInOrder = "";
   let showItemsInOrder = "";
 
@@ -348,8 +296,6 @@ function PlanTrip({
     value: "Nairobi Internation Airport",
     label: "Nairobi Internation Airport",
   });
-
-  const initializePayment = usePaystackPayment(config);
 
   const locations = [
     {
@@ -1220,9 +1166,7 @@ function PlanTrip({
                 <ClientOnly>
                   <div className="flex justify-center">
                     <Button
-                      onClick={() => {
-                        initializePayment(onSuccess, onClose);
-                      }}
+                      onClick={() => {}}
                       className="w-full !py-3 flex text-lg !bg-blue-900 !text-primary-blue-200"
                     >
                       <span className="font-bold mr-1">

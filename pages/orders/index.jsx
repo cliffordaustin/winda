@@ -7,7 +7,6 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import Image from "next/image";
-import { usePaystackPayment } from "react-paystack";
 import * as Yup from "yup";
 import Steps from "rc-steps";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
