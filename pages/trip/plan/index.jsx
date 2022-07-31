@@ -42,7 +42,7 @@ const AllUserTrips = ({ userTrips, userProfile }) => {
                 }}
                 className={"cursor-pointer md:!text-base "}
               >
-                Recommended trips
+                Curated trips
               </div>
             </div>
           </div>
@@ -85,7 +85,7 @@ const AllUserTrips = ({ userTrips, userProfile }) => {
               }}
               className="text-blue-500 hover:text-blue-800 cursor-pointer"
             >
-              recommended trips
+              curated trips
             </span>
           </div>
         </div>

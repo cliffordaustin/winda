@@ -50,6 +50,7 @@ import {
   activityPricePerPersonResident,
   activityPricePerPersonNonResident,
 } from "../../lib/pricePlan";
+import Dialogue from "../Home/Dialogue";
 
 const Trip = ({
   nights,
@@ -830,110 +831,6 @@ const Trip = ({
               </svg>
             </div>
           </div>
-
-          <>
-            {/* {!trip.transport && (
-              <div
-                onMouseLeave={() =>
-                  setState({ ...state, showNavigation: false })
-                }
-                onMouseEnter={() =>
-                  setState({ ...state, showNavigation: true })
-                }
-              >
-                <Swiper
-                  {...settings}
-                  onSwiper={(swiper) => {
-                    setState({
-                      ...state,
-                      allowSlideNext: swiper.allowSlideNext,
-                    });
-                  }}
-                  onSlideChange={(swiper) => {
-                    setState({
-                      ...state,
-                      swiperIndex: swiper.realIndex,
-                      endOfSlide: swiper.isEnd,
-                    });
-                  }}
-                  className={
-                    "!w-full mt-4 relative " + (!state.showEdit ? "hidden" : "")
-                  }
-                >
-                  {transport.map((item, index) => {
-                    const sortedImages = item.transportation_images.sort(
-                      (x, y) => y.main - x.main
-                    );
-
-                    const images = sortedImages.map((image) => {
-                      return image.image;
-                    });
-                    return (
-                      <SwiperSlide key={index} className="!w-[240px]">
-                        <TripTransportCard
-                          tripId={tripId}
-                          images={images}
-                          transport={item}
-                          tripSlug={tripSlug}
-                        ></TripTransportCard>
-                      </SwiperSlide>
-                    );
-                  })}
-
-                  <motion.div
-                    variants={variants}
-                    animate={state.showNavigation ? "show" : ""}
-                    initial="hide"
-                    exit="exit"
-                    className={
-                      "absolute flex cursor-pointer items-center justify-center top-2/4 z-10 left-3 -translate-y-2/4 swiper-pagination swiper-button-prev w-8 -mt-4 h-8 rounded-full bg-white shadow-lg " +
-                      (state.swiperIndex === 0 || !state.showNavigation
-                        ? "invisible"
-                        : "")
-                    }
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </motion.div>
-                  <motion.div
-                    variants={variants}
-                    animate={state.showNavigation ? "show" : ""}
-                    initial="hide"
-                    exit="exit"
-                    className={
-                      "absolute cursor-pointer flex items-center justify-center top-[40%] z-10 right-3 -translate-y-2/4 swiper-pagination swiper-button-next w-8 h-8 mb-4 rounded-full bg-white shadow-lg " +
-                      (state.endOfSlide || !state.showNavigation
-                        ? "invisible"
-                        : "")
-                    }
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </motion.div>
-                </Swiper>
-              </div>
-            )} */}
-          </>
         </div>
       )}
 
@@ -986,10 +883,6 @@ const Trip = ({
             <div
               onClick={() => {
                 setEditTransportPopup(!editTransportPopup);
-                if (process.browser) {
-                  document.body.classList.add("h-screen");
-                  document.body.classList.add("overflow-y-hidden");
-                }
               }}
               className="self-start"
             >
@@ -999,15 +892,14 @@ const Trip = ({
               />
             </div>
           </div>
-          <div className="sm:hidden">
-            <Modal
-              showModal={editTransportPopup}
+          <div>
+            <Dialogue
+              isOpen={editTransportPopup}
               closeModal={() => {
                 setEditTransportPopup(false);
-                document.body.classList.remove("h-screen");
-                document.body.classList.remove("overflow-y-hidden");
               }}
-              containerHeight={70}
+              dialogueTitleClassName="!font-bold"
+              dialoguePanelClassName="max-h-[500px] max-w-lg overflow-y-scroll remove-scroll"
             >
               <div
                 onClick={(e) => {
@@ -1162,174 +1054,9 @@ const Trip = ({
                   </div>
                 </div>
               </div>
-            </Modal>
+            </Dialogue>
           </div>
 
-          <div className="hidden sm:block">
-            <OpenModal
-              showModal={editTransportPopup}
-              closeModal={() => {
-                setEditTransportPopup(false);
-                document.body.classList.remove("h-screen");
-                document.body.classList.remove("overflow-y-hidden");
-              }}
-              className="w-[600px] h-[600px] top-[10%]"
-            >
-              <div
-                onClick={(e) => {
-                  e.stopPropagation();
-                }}
-                className=""
-              >
-                <div>
-                  <Search
-                    location={searchLocation}
-                    setLocation={setSearchLocation}
-                  ></Search>
-                </div>
-
-                {trip.transport.driver_operates_within.length > 0 && (
-                  <div className="mt-1 mb-2">
-                    <h1 className="font-semibold mb-1 text-sm">
-                      Car operates within
-                    </h1>
-                    <div className="flex flex-wrap">
-                      {trip.transport.driver_operates_within.map(
-                        (location, index) => (
-                          <div
-                            key={index}
-                            className="bg-blue-500 text-xs mt-0.5 text-white px-1 font-bold py-1 mr-1 rounded-full"
-                          >
-                            {location.city}
-                          </div>
-                        )
-                      )}
-                    </div>
-                  </div>
-                )}
-
-                <div className="flex items-center mt-2">
-                  {/* {startingDate && (
-                  <span className="text-sm font-bold text-blue-600">
-                    {moment(startingDate).format("Do MMMM YYYY")}
-                  </span>
-                )} */}
-
-                  <span className="text-lg font-bold text-gray-600">
-                    selected a starting date
-                  </span>
-                </div>
-
-                <DatePickerSingle
-                  date={startingDate}
-                  setDate={setStartingDate}
-                  disableDate={new Date()}
-                  className="!w-[400px] !top-[46px]"
-                ></DatePickerSingle>
-
-                <div className="mb-1 font-semibold">
-                  How long do you need this car?
-                </div>
-
-                <div className="flex gap-3 items-center mt-2">
-                  <div
-                    onClick={() => {
-                      if (numberOfDays > 1) {
-                        setNumberOfDays(numberOfDays - 1);
-                      }
-                    }}
-                    className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-gray-100 shadow-lg font-bold"
-                  >
-                    -
-                  </div>
-
-                  <div className="font-bold">
-                    {numberOfDays} {numberOfDays > 1 ? "days" : "day"}
-                  </div>
-                  <div
-                    onClick={() => {
-                      setNumberOfDays(numberOfDays + 1);
-                    }}
-                    className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-gray-100 shadow-lg font-bold"
-                  >
-                    +
-                  </div>
-                </div>
-
-                <div className="mt-1 font-semibold">Do you need a driver?</div>
-                <div className="flex gap-2 items-center">
-                  <Switch
-                    switchButton={needADriver}
-                    changeSwitchButtonState={() => {
-                      setNeedADriver(!needADriver);
-                    }}
-                    switchButtonContainer="!w-[55px] !h-6"
-                    switchButtonCircle="!w-5 !h-5 !bg-blue-500"
-                    slideColorClass="!bg-blue-200"
-                  ></Switch>
-                  {!needADriver && (
-                    <div
-                      onClick={() => {
-                        setNeedADriver(true);
-                      }}
-                      className="cursor-pointer text-sm mb-1"
-                    >
-                      no
-                    </div>
-                  )}
-                  {needADriver && (
-                    <div
-                      onClick={() => {
-                        setNeedADriver(false);
-                      }}
-                      className="cursor-pointer text-sm mb-1"
-                    >
-                      yes
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex justify-between mt-3">
-                  <div></div>
-                  <div className="flex gap-2">
-                    <div
-                      onClick={() => {
-                        setEditTransportPopup(false);
-                        document.body.classList.remove("h-screen");
-                        document.body.classList.remove("overflow-y-hidden");
-                      }}
-                      className="!bg-white text-black border !rounded-3xl px-4 text-sm cursor-pointer py-2"
-                    >
-                      Close
-                    </div>
-                    <Button
-                      disabled={!startingDate || !searchLocation}
-                      onClick={() => {
-                        updateTransportInfo();
-                      }}
-                      className={
-                        "!bg-blue-700 flex gap-2 items-center !rounded-3xl " +
-                        (!startingDate || !searchLocation
-                          ? "opacity-50 cursor-not-allowed"
-                          : "")
-                      }
-                    >
-                      <span>Update</span>
-
-                      {transportEditLoading && (
-                        <div>
-                          <LoadingSpinerChase
-                            width={16}
-                            height={16}
-                          ></LoadingSpinerChase>
-                        </div>
-                      )}
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </OpenModal>
-          </div>
           <div className="mt-2">
             <OrderCard
               orderId={trip.id}
@@ -1824,10 +1551,6 @@ const Trip = ({
               strokeWidth="2"
               onClick={() => {
                 setShowCheckInDate(!showCheckInDate);
-                if (process.browser) {
-                  document.body.classList.add("h-screen");
-                  document.body.classList.add("overflow-y-hidden");
-                }
               }}
             >
               <path
@@ -1838,192 +1561,86 @@ const Trip = ({
             </svg>
           </div>
 
-          <div className="sm:hidden">
-            <Modal
-              showModal={showCheckInDate}
+          <div>
+            <Dialogue
+              isOpen={showCheckInDate}
               closeModal={() => {
                 setShowCheckInDate(false);
-                document.body.classList.remove("h-screen");
-                document.body.classList.remove("overflow-y-hidden");
               }}
-              containerHeight={70}
+              dialogueTitleClassName="!font-bold"
+              dialoguePanelClassName="max-h-[600px] max-w-lg overflow-y-scroll remove-scroll"
             >
-              <div className={"bg-white"}>
-                {
-                  <div>
-                    {addToCartDate &&
-                      !addToCartDate.from &&
-                      !addToCartDate.to && (
-                        <div className="text-xl ml-2 mt-2 font-bold">
-                          Select a date
-                        </div>
-                      )}
-                    {!addToCartDate && (
-                      <div className="text-xl ml-2 mt-2 font-bold">
-                        Select a date
-                      </div>
-                    )}
-                    {addToCartDate &&
-                      addToCartDate.from &&
-                      !addToCartDate.to && (
-                        <div className="text-xl ml-2 mt-2 font-bold">
-                          Select checkout date
-                        </div>
-                      )}
-                  </div>
-                }
-                {
-                  <DatePicker
-                    setDate={setAddToCartDate}
-                    date={addToCartDate}
-                    className="!sticky !bg-white !border-none !rounded-none"
-                    disableDate={new Date()}
-                  ></DatePicker>
-                }
-                {addToCartDate && (addToCartDate.from || addToCartDate.to) && (
-                  <div
-                    className="my-2 cursor-pointer text-sm ml-4 underline"
-                    onClick={() => {
-                      setAddToCartDate({ ...addToCartDate, from: "", to: "" });
-                    }}
-                  >
-                    clear date
+              <div>
+                {addToCartDate && !addToCartDate.from && !addToCartDate.to && (
+                  <div className="text-xl ml-2 font-bold">Select a date</div>
+                )}
+                {!addToCartDate && (
+                  <div className="text-xl ml-2 font-bold">Select a date</div>
+                )}
+                {addToCartDate && addToCartDate.from && !addToCartDate.to && (
+                  <div className="text-xl ml-2 font-bold">
+                    Select checkout date
                   </div>
                 )}
-
-                <div className="my-2 z-50 px-3 flex gap-2">
-                  <Button
-                    onClick={() => {
-                      setShowCheckInDate(false);
-                      document.body.classList.remove("h-screen");
-                      document.body.classList.remove("overflow-y-hidden");
-                    }}
-                    className="flex text-lg !bg-transparent border border-black !w-[40%] !py-2 !text-black"
-                  >
-                    <span className="mr-2 font-bold">Close</span>
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      updateDate();
-                    }}
-                    disabled={
-                      !addToCartDate || (addToCartDate && !addToCartDate.to)
-                    }
-                    className={
-                      "flex text-lg !bg-blue-600 !w-[60%] !py-2 " +
-                      (!addToCartDate || (addToCartDate && !addToCartDate.to)
-                        ? " !opacity-70 cursor-not-allowed"
-                        : "")
-                    }
-                  >
-                    <span className="mr-2 font-bold">Update</span>
-
-                    {checkInDateLoading && (
-                      <div>
-                        <LoadingSpinerChase
-                          width={18}
-                          height={18}
-                        ></LoadingSpinerChase>
-                      </div>
-                    )}
-                  </Button>
-                </div>
               </div>
-            </Modal>
-          </div>
 
-          <div className="hidden sm:block">
-            <OpenModal
-              showModal={showCheckInDate}
-              closeModal={() => {
-                setShowCheckInDate(false);
-                document.body.classList.remove("h-screen");
-                document.body.classList.remove("overflow-y-hidden");
-              }}
-              className="w-[500px] h-[520px] top-[10%]"
-            >
-              <div className={""}>
-                {
-                  <div>
-                    {addToCartDate &&
-                      !addToCartDate.from &&
-                      !addToCartDate.to && (
-                        <div className="text-xl ml-2 mt-2 font-bold">
-                          Select a date
-                        </div>
-                      )}
-                    {!addToCartDate && (
-                      <div className="text-xl ml-2 mt-2 font-bold">
-                        Select a date
-                      </div>
-                    )}
-                    {addToCartDate &&
-                      addToCartDate.from &&
-                      !addToCartDate.to && (
-                        <div className="text-xl ml-2 mt-2 font-bold">
-                          Select checkout date
-                        </div>
-                      )}
-                  </div>
-                }
-                {
-                  <DatePicker
-                    setDate={setAddToCartDate}
-                    date={addToCartDate}
-                    className="!sticky !bg-white !border-none !rounded-none"
-                    disableDate={new Date()}
-                  ></DatePicker>
-                }
-                {addToCartDate && (addToCartDate.from || addToCartDate.to) && (
-                  <div
-                    className="my-2 cursor-pointer text-sm ml-4 underline"
-                    onClick={() => {
-                      setAddToCartDate({ ...addToCartDate, from: "", to: "" });
-                    }}
-                  >
-                    clear date
-                  </div>
-                )}
-
-                <div className="my-2 z-50 px-3 flex gap-2">
-                  <Button
-                    onClick={() => {
-                      setShowCheckInDate(false);
-                      document.body.classList.remove("h-screen");
-                      document.body.classList.remove("overflow-y-hidden");
-                    }}
-                    className="flex text-lg !bg-transparent border border-black !w-[40%] !py-2 !text-black"
-                  >
-                    <span className="mr-2 font-bold">Close</span>
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      updateDate();
-                    }}
-                    disabled={
-                      !addToCartDate || (addToCartDate && !addToCartDate.to)
-                    }
-                    className={
-                      "flex text-lg !bg-blue-600 !w-[60%] !py-2 " +
-                      (!addToCartDate || (addToCartDate && !addToCartDate.to)
-                        ? " !opacity-70 cursor-not-allowed"
-                        : "")
-                    }
-                  >
-                    <span className="mr-2 font-bold">Update</span>
-
-                    {checkInDateLoading && (
-                      <div>
-                        <LoadingSpinerChase
-                          width={18}
-                          height={18}
-                        ></LoadingSpinerChase>
-                      </div>
-                    )}
-                  </Button>
+              {
+                <DatePicker
+                  setDate={setAddToCartDate}
+                  date={addToCartDate}
+                  className="!sticky !bg-white !border-none !rounded-none"
+                  disableDate={new Date()}
+                ></DatePicker>
+              }
+              {addToCartDate && (addToCartDate.from || addToCartDate.to) && (
+                <div
+                  className="my-2 cursor-pointer text-sm ml-4 underline"
+                  onClick={() => {
+                    setAddToCartDate({ ...addToCartDate, from: "", to: "" });
+                  }}
+                >
+                  clear date
                 </div>
+              )}
+
+              <div className="mt-2 z-50 px-3 flex gap-2">
+                <Button
+                  onClick={() => {
+                    setShowCheckInDate(false);
+                    document.body.classList.remove("h-screen");
+                    document.body.classList.remove("overflow-y-hidden");
+                  }}
+                  className="flex text-lg !bg-transparent border border-black !w-[40%] !py-2 !text-black"
+                >
+                  <span className="mr-2 font-bold">Close</span>
+                </Button>
+                <Button
+                  onClick={() => {
+                    updateDate();
+                  }}
+                  disabled={
+                    !addToCartDate || (addToCartDate && !addToCartDate.to)
+                  }
+                  className={
+                    "flex text-lg !bg-blue-600 !w-[60%] !py-2 " +
+                    (!addToCartDate || (addToCartDate && !addToCartDate.to)
+                      ? " !opacity-70 cursor-not-allowed"
+                      : "")
+                  }
+                >
+                  <span className="mr-2 font-bold">Update</span>
+
+                  {checkInDateLoading && (
+                    <div>
+                      <LoadingSpinerChase
+                        width={18}
+                        height={18}
+                      ></LoadingSpinerChase>
+                    </div>
+                  )}
+                </Button>
               </div>
-            </OpenModal>
+            </Dialogue>
           </div>
 
           <div className="w-full flex gap-2">
@@ -2038,25 +1655,19 @@ const Trip = ({
             <div
               onClick={() => {
                 setGuestPopup(!guestPopup);
-                if (process.browser) {
-                  document.body.classList.add("h-screen");
-                  document.body.classList.add("overflow-y-hidden");
-                }
               }}
               className="px-3 cursor-pointer text-sm py-1 w-fit text-white bg-blue-500 rounded-md"
             >
               add a guest
             </div>
 
-            <div className="sm:hidden">
-              <Modal
-                showModal={guestPopup}
+            <div>
+              <Dialogue
+                isOpen={guestPopup}
                 closeModal={() => {
                   setGuestPopup(false);
-                  document.body.classList.remove("h-screen");
-                  document.body.classList.remove("overflow-y-hidden");
                 }}
-                containerHeight={70}
+                dialoguePanelClassName="max-h-[600px] max-w-xl overflow-y-scroll remove-scroll"
               >
                 <div
                   onClick={(e) => {
@@ -2413,379 +2024,7 @@ const Trip = ({
                     </div>
                   </div>
                 </div>
-              </Modal>
-            </div>
-
-            <div className="hidden sm:block">
-              <OpenModal
-                onClick={(e) => {
-                  e.stopPropagation();
-                }}
-                showModal={guestPopup}
-                closeModal={() => {
-                  setGuestPopup(false);
-                  document.body.classList.remove("h-screen");
-                  document.body.classList.remove("overflow-y-hidden");
-                }}
-                // className="absolute -left-[410px] -top-[250px] px-4 py-4 !z-[99] w-[400px] bg-white shadow-lg rounded-lg h-fit"
-                className="w-[600px] absolute z-50 top-[20%]"
-              >
-                <div
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
-                  className=""
-                >
-                  <div className="mb-2">
-                    <Price
-                      stayPrice={
-                        (numOfAdults === 1
-                          ? priceSingleAdultResident
-                          : priceAdultResident) *
-                          numOfAdults +
-                        (numOfAdultsNonResident === 1
-                          ? priceSingleAdultNonResident
-                          : priceAdultNonResident) *
-                          numOfAdultsNonResident +
-                        (numOfChildren === 1
-                          ? priceSingleChildResident
-                          : priceChildResident) *
-                          numOfChildren +
-                        (numOfChildrenNonResident === 1
-                          ? priceSingleChildNonResident
-                          : priceChildNonResident) *
-                          numOfChildrenNonResident
-                      }
-                    ></Price>
-                  </div>
-                  <Select
-                    defaultValue={currentTypeOfLodge}
-                    onChange={(value) => {
-                      setCurrentTypeOfLodge(value);
-                      setNumOfAdults(1);
-                      setNumOfAdultsNonResident(0);
-                      setNumOfChildren(0);
-                      setNumOfChildrenNonResident(0);
-                    }}
-                    className={"text-sm outline-none border border-gray-500"}
-                    instanceId={typeOfLodge}
-                    placeholder="Type of room"
-                    options={typeOfLodge}
-                    isSearchable={true}
-                  />
-
-                  {currentTypeOfLodge.value === "Standard" && (
-                    <div className="text-sm text-gray-500 mt-2">
-                      This is the perfect room for you if you are looking for a
-                      simple, clean, and affordable room.
-                    </div>
-                  )}
-
-                  {currentTypeOfLodge.value === "Emperor Suite Room" && (
-                    <div className="text-sm text-gray-500 mt-2">
-                      This is the perfect room for you if you are looking for
-                      the very best and well decorated room this place has to
-                      offer
-                    </div>
-                  )}
-
-                  {currentTypeOfLodge.value === "Presidential Suite Room" && (
-                    <div className="text-sm text-gray-500 mt-2">
-                      This is the perfect room for you if you are looking for
-                      the very best and well decorated room this place has to
-                      offer
-                    </div>
-                  )}
-                  {currentTypeOfLodge.value === "Executive Suite Room" && (
-                    <div className="text-sm text-gray-500 mt-2">
-                      This is the perfect room for you if you are looking for
-                      the very best and well decorated room this place has to
-                      offer
-                    </div>
-                  )}
-
-                  {currentTypeOfLodge.value === "Deluxe" && (
-                    <div className="text-sm text-gray-500 mt-2">
-                      This is the perfect room for you if you are looking for
-                      the best this place has to offer.
-                    </div>
-                  )}
-
-                  {currentTypeOfLodge.value === "Family Room" && (
-                    <div className="text-sm text-gray-500 mt-2">
-                      If you just want to spend sometime with the family, this
-                      is the room for you.
-                    </div>
-                  )}
-
-                  <div>
-                    <div className="flex justify-between mt-6">
-                      <div className="flex gap-1 text-sm text-gray-600">
-                        <span>
-                          {numOfAdults}{" "}
-                          {numOfAdults > 1
-                            ? "Residents Adult"
-                            : "Resident Adult"}
-                        </span>
-                        <span>(18+)</span>
-                      </div>
-
-                      <div className="flex gap-3 items-center">
-                        <div
-                          onClick={() => {
-                            if (
-                              (numOfAdults > 1 || numOfAdultsNonResident > 0) &&
-                              numOfAdults > 0
-                            ) {
-                              setNumOfAdults(numOfAdults - 1);
-                            }
-                          }}
-                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
-                        >
-                          -
-                        </div>
-
-                        <div
-                          onClick={() => {
-                            setNumOfAdults(numOfAdults + 1);
-                          }}
-                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
-                        >
-                          +
-                        </div>
-                      </div>
-                    </div>
-
-                    {trip.stay.conservation_or_park &&
-                      trip.stay.conservation_or_park_price && (
-                        <div className="text-sm underline mt-1">
-                          Park/Conservation fees for{" "}
-                          <span className="font-bold">each</span> resident adult
-                          costs{" "}
-                          <Price
-                            stayPrice={trip.stay.conservation_or_park_price}
-                            className="text-sm inline font-bold"
-                          ></Price>
-                        </div>
-                      )}
-                  </div>
-
-                  <div>
-                    <div className="flex justify-between mt-6">
-                      <div className="flex gap-1 text-sm text-gray-600">
-                        <span>
-                          {numOfAdultsNonResident}{" "}
-                          {numOfAdultsNonResident > 1
-                            ? "Non-Residents Adult"
-                            : "Non-Resident Adult"}
-                        </span>
-                        <span>(18+)</span>
-                      </div>
-
-                      <div className="flex gap-3 items-center">
-                        <div
-                          onClick={() => {
-                            if (
-                              (numOfAdultsNonResident > 1 || numOfAdults > 0) &&
-                              numOfAdultsNonResident > 0
-                            ) {
-                              setNumOfAdultsNonResident(
-                                numOfAdultsNonResident - 1
-                              );
-                            }
-                          }}
-                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
-                        >
-                          -
-                        </div>
-
-                        <div
-                          onClick={() => {
-                            setNumOfAdultsNonResident(
-                              numOfAdultsNonResident + 1
-                            );
-                          }}
-                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
-                        >
-                          +
-                        </div>
-                      </div>
-                    </div>
-
-                    {trip.stay.conservation_or_park &&
-                      trip.stay.conservation_or_park_price_non_resident && (
-                        <div className="text-sm mt-1 underline">
-                          Park/Conservation fees for{" "}
-                          <span className="font-bold">each</span> non-resident
-                          adult costs{" "}
-                          <Price
-                            stayPrice={
-                              trip.stay.conservation_or_park_price_non_resident
-                            }
-                            className="text-sm inline font-bold"
-                          ></Price>
-                        </div>
-                      )}
-                  </div>
-
-                  <div>
-                    <div className="flex justify-between mt-6">
-                      <div className="flex gap-1 text-sm text-gray-600">
-                        <span>
-                          {numOfChildren}{" "}
-                          {numOfChildren > 1
-                            ? "Resident Children"
-                            : "Resident Child"}
-                        </span>
-                        <span>(0 - 17)</span>
-                      </div>
-
-                      <div className="flex gap-3 items-center">
-                        <div
-                          onClick={() => {
-                            if (numOfChildren > 0) {
-                              setNumOfChildren(numOfChildren - 1);
-                            }
-                          }}
-                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
-                        >
-                          -
-                        </div>
-
-                        <div
-                          onClick={() => {
-                            setNumOfChildren(numOfChildren + 1);
-                          }}
-                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
-                        >
-                          +
-                        </div>
-                      </div>
-                    </div>
-                    {trip.stay.conservation_or_park &&
-                      trip.stay.conservation_or_park_children_price && (
-                        <div className="text-sm mt-1 underline">
-                          Park/Conservation fees for{" "}
-                          <span className="font-bold">each</span> resident child
-                          costs{" "}
-                          <Price
-                            stayPrice={
-                              trip.stay.conservation_or_park_children_price
-                            }
-                            className="text-sm inline font-bold"
-                          ></Price>
-                        </div>
-                      )}
-                  </div>
-
-                  <div>
-                    <div className="flex justify-between mt-6">
-                      <div className="flex gap-1 text-sm text-gray-600">
-                        <span>
-                          {numOfChildrenNonResident}{" "}
-                          {numOfChildrenNonResident > 1
-                            ? "Non-Resident Children"
-                            : "Non-Resident Child"}
-                        </span>
-                        <span>(0 - 17)</span>
-                      </div>
-
-                      <div className="flex gap-3 items-center">
-                        <div
-                          onClick={() => {
-                            if (numOfChildrenNonResident > 0) {
-                              setNumOfChildrenNonResident(
-                                numOfChildrenNonResident - 1
-                              );
-                            }
-                          }}
-                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
-                        >
-                          -
-                        </div>
-
-                        <div
-                          onClick={() => {
-                            setNumOfChildrenNonResident(
-                              numOfChildrenNonResident + 1
-                            );
-                          }}
-                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
-                        >
-                          +
-                        </div>
-                      </div>
-                    </div>
-
-                    {trip.stay.conservation_or_park &&
-                      trip.stay
-                        .conservation_or_park_children_price_non_resident && (
-                        <div className="text-sm mt-1 underline">
-                          Park/Conservation fees for{" "}
-                          <span className="font-bold">each</span> non-resident
-                          child costs{" "}
-                          <Price
-                            stayPrice={
-                              trip.stay
-                                .conservation_or_park_children_price_non_resident
-                            }
-                            className="text-sm inline font-bold"
-                          ></Price>
-                        </div>
-                      )}
-                  </div>
-
-                  {(numOfAdults > 1 ||
-                    numOfChildren > 0 ||
-                    numOfAdultsNonResident > 0 ||
-                    numOfChildrenNonResident > 0) && (
-                    <div
-                      className="mt-2 cursor-pointer text-sm underline"
-                      onClick={() => {
-                        setNumOfAdults(1);
-                        setNumOfChildren(0);
-                        setNumOfAdultsNonResident(0);
-                        setNumOfChildrenNonResident(0);
-                      }}
-                    >
-                      clear data
-                    </div>
-                  )}
-
-                  <div className="flex justify-between mt-6">
-                    <div></div>
-                    <div className="flex gap-2">
-                      <div
-                        onClick={() => {
-                          setGuestPopup(false);
-                          document.body.classList.remove("h-screen");
-                          document.body.classList.remove("overflow-y-hidden");
-                        }}
-                        className="!bg-white text-black border !rounded-3xl px-4 text-sm cursor-pointer py-2"
-                      >
-                        Close
-                      </div>
-                      <Button
-                        onClick={() => {
-                          updateGuest();
-                        }}
-                        className="!bg-blue-700 flex gap-2 items-center !rounded-3xl"
-                      >
-                        <span>Update</span>
-
-                        {guestsLoading && (
-                          <div>
-                            <LoadingSpinerChase
-                              width={16}
-                              height={16}
-                            ></LoadingSpinerChase>
-                          </div>
-                        )}
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </OpenModal>
+              </Dialogue>
             </div>
           </div>
 
@@ -3175,10 +2414,6 @@ const Trip = ({
               strokeWidth="2"
               onClick={() => {
                 setShowActivityCheckInDate(!showActivityCheckInDate);
-                if (process.browser) {
-                  document.body.classList.add("h-screen");
-                  document.body.classList.add("overflow-y-hidden");
-                }
               }}
             >
               <path
@@ -3189,17 +2424,15 @@ const Trip = ({
             </svg>
           </div>
 
-          <div className="sm:block hidden">
-            <OpenModal
-              showModal={showActivityCheckInDate}
+          <div>
+            <Dialogue
+              isOpen={showActivityCheckInDate}
               closeModal={() => {
                 setShowActivityCheckInDate(false);
-                document.body.classList.remove("h-screen");
-                document.body.classList.remove("overflow-y-hidden");
               }}
-              className="max-w-[500px] max-h-[520px] top-[10%]"
+              dialoguePanelClassName="max-h-[600px] max-w-lg overflow-y-scroll remove-scroll"
             >
-              <div className={""}>
+              <div>
                 <div>
                   {!activityCheckinDate && (
                     <div className="text-base ml-2 mt-2 font-bold">
@@ -3266,87 +2499,7 @@ const Trip = ({
                   </Button>
                 </div>
               </div>
-            </OpenModal>
-          </div>
-
-          <div className="sm:hidden">
-            <Modal
-              showModal={showActivityCheckInDate}
-              closeModal={() => {
-                setShowActivityCheckInDate(false);
-                document.body.classList.remove("h-screen");
-                document.body.classList.remove("overflow-y-hidden");
-              }}
-              containerHeight={70}
-            >
-              <div className={"bg-white"}>
-                <div>
-                  {!activityCheckinDate && (
-                    <div className="text-base ml-2 mt-2 font-bold">
-                      Select the date you will be coming
-                    </div>
-                  )}
-                </div>
-                <DatePickerSingle
-                  setDate={(date, modifiers = {}) => {
-                    if (!modifiers.disabled) {
-                      setActivityCheckinDate(date);
-                    }
-                  }}
-                  date={activityCheckinDate}
-                  showDate={showActivityCheckInDate}
-                  className="!sticky !bg-white !border-none !rounded-none"
-                  disableDate={new Date()}
-                ></DatePickerSingle>
-
-                {activityCheckinDate && (
-                  <div
-                    className="my-2 cursor-pointer text-sm ml-4 underline"
-                    onClick={() => {
-                      setActivityCheckinDate("");
-                    }}
-                  >
-                    clear date
-                  </div>
-                )}
-
-                <div className="my-2 z-50 px-3 flex gap-2">
-                  <Button
-                    onClick={() => {
-                      setShowActivityCheckInDate(false);
-                      document.body.classList.remove("h-screen");
-                      document.body.classList.remove("overflow-y-hidden");
-                    }}
-                    className="flex text-lg !bg-transparent border border-black !w-[40%] !py-2 !text-black"
-                  >
-                    <span className="mr-2 font-bold">Close</span>
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      updateActivityDate();
-                    }}
-                    disabled={!activityCheckinDate}
-                    className={
-                      "flex text-lg !bg-blue-600 !w-[60%] !py-2 " +
-                      (!activityCheckinDate
-                        ? " !opacity-70 cursor-not-allowed"
-                        : "")
-                    }
-                  >
-                    <span className="mr-2">Update</span>
-
-                    {activityCheckInDateLoading && (
-                      <div>
-                        <LoadingSpinerChase
-                          width={18}
-                          height={18}
-                        ></LoadingSpinerChase>
-                      </div>
-                    )}
-                  </Button>
-                </div>
-              </div>
-            </Modal>
+            </Dialogue>
           </div>
 
           <div className="w-full flex gap-2">
@@ -3361,25 +2514,18 @@ const Trip = ({
             <div
               onClick={() => {
                 setActivityGuestPopup(!activityGuestPopup);
-
-                if (process.browser) {
-                  document.body.classList.add("h-screen");
-                  document.body.classList.add("overflow-y-hidden");
-                }
               }}
               className="px-3 cursor-pointer text-sm py-1 w-fit text-white bg-blue-500 rounded-md"
             >
               add a guest
             </div>
-            <div className="sm:hidden">
-              <Modal
-                showModal={activityGuestPopup}
+            <div>
+              <Dialogue
+                isOpen={activityGuestPopup}
                 closeModal={() => {
                   setActivityGuestPopup(false);
-                  document.body.classList.remove("h-screen");
-                  document.body.classList.remove("overflow-y-hidden");
                 }}
-                containerHeight={70}
+                dialoguePanelClassName="max-h-[500px] max-w-lg overflow-y-scroll remove-scroll"
               >
                 <div
                   onClick={(e) => {
@@ -3652,291 +2798,7 @@ const Trip = ({
                     </div>
                   </div>
                 </div>
-              </Modal>
-            </div>
-
-            <div className="sm:block hidden">
-              <OpenModal
-                showModal={activityGuestPopup}
-                closeModal={() => {
-                  setActivityGuestPopup(false);
-                  document.body.classList.remove("h-screen");
-                  document.body.classList.remove("overflow-y-hidden");
-                }}
-                className="max-w-[500px] max-h-[520px] top-[10%]"
-              >
-                <div
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
-                  className=""
-                >
-                  <div className="mb-2">
-                    <Price
-                      stayPrice={
-                        priceOfResident *
-                          (currentPrice.value === "per person"
-                            ? numOfPeople
-                            : currentPrice.value === "per session"
-                            ? numOfSession
-                            : currentPrice.value === "per group"
-                            ? numOfGroups
-                            : 1) +
-                        priceOfNonResident *
-                          (currentPrice.value === "per person"
-                            ? numOfPeopleNonResident
-                            : currentPrice.value === "per session"
-                            ? numOfSessionNonResident
-                            : currentPrice.value === "per group"
-                            ? numOfGroupsNonResident
-                            : 1)
-                      }
-                    ></Price>
-                  </div>
-                  <Select
-                    defaultValue={currentPrice}
-                    onChange={(value) => {
-                      setCurrentPrice(value);
-                      setNumOfPeople(1);
-                      setNumOfPeopleNonResident(0);
-                      setNumOfGroups(0);
-                      setNumOfGroupsNonResident(0);
-                      setNumOfSession(0);
-                      setNumOfSessionNonResident(0);
-                    }}
-                    className={"text-sm outline-none border border-gray-500"}
-                    instanceId={priceType}
-                    placeholder="Type of room"
-                    options={priceType}
-                    isSearchable={true}
-                  />
-
-                  <div className="flex items-center gap-2 mt-4">
-                    <div className="w-2 h-2 rounded-full bg-gray-400"></div>
-                    {currentPrice && (
-                      <>
-                        <span className="text-gray-600 block text-sm">
-                          Minimum number of guests is {minGuests}
-                        </span>
-                      </>
-                    )}
-                  </div>
-
-                  <div className="flex items-center gap-2 mt-2">
-                    <div className="w-2 h-2 rounded-full bg-gray-400"></div>
-                    {currentPrice && (
-                      <>
-                        <span className="text-gray-600 block text-sm">
-                          Maximum number of guests is {maxGuests}
-                        </span>
-                      </>
-                    )}
-                  </div>
-
-                  {currentPrice.value === "per person" && (
-                    <>
-                      <div className="flex justify-between mt-6">
-                        <div className="flex flex-col text-sm text-gray-600 items-center">
-                          <span>
-                            {numOfPeopleNonResident}{" "}
-                            {numOfPeopleNonResident > 1
-                              ? "Non-Residents"
-                              : "Non-Resident"}
-                          </span>
-                        </div>
-
-                        <div className="flex gap-3 items-center">
-                          <div
-                            onClick={() => {
-                              if (
-                                (numOfPeopleNonResident > minGuests ||
-                                  numOfPeople + numOfPeopleNonResident >
-                                    minGuests) &&
-                                numOfPeopleNonResident > 0
-                              ) {
-                                setNumOfPeopleNonResident(
-                                  numOfPeopleNonResident - 1
-                                );
-                              }
-                            }}
-                            className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
-                          >
-                            -
-                          </div>
-
-                          <div
-                            onClick={() => {
-                              if (numOfPeopleNonResident < maxGuests) {
-                                setNumOfPeopleNonResident(
-                                  numOfPeopleNonResident + 1
-                                );
-                              }
-                            }}
-                            className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
-                          >
-                            +
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="flex justify-between mt-6">
-                        <div className="flex flex-col text-sm text-gray-600 items-center">
-                          <span>
-                            {numOfPeople}{" "}
-                            {numOfPeople > 1 ? "Residents" : "Resident"}
-                          </span>
-                        </div>
-
-                        <div className="flex gap-3 items-center">
-                          <div
-                            onClick={() => {
-                              if (
-                                (numOfPeople > 1 ||
-                                  numOfPeopleNonResident > 0) &&
-                                numOfPeople + numOfPeopleNonResident > minGuests
-                              ) {
-                                setNumOfPeople(numOfPeople - 1);
-                              }
-                            }}
-                            className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
-                          >
-                            -
-                          </div>
-
-                          <div
-                            onClick={() => {
-                              if (numOfPeople < maxGuests) {
-                                setNumOfPeople(numOfPeople + 1);
-                              }
-                            }}
-                            className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
-                          >
-                            +
-                          </div>
-                        </div>
-                      </div>
-                    </>
-                  )}
-
-                  {currentPrice.value === "per session" && (
-                    <div className="flex justify-between mt-6">
-                      <div className="flex flex-col text-sm text-gray-600 items-center">
-                        <span>
-                          {numOfSession}{" "}
-                          {numOfSession > 1 ? "Sessions" : "Session"}
-                        </span>
-                      </div>
-
-                      <div className="flex gap-3 items-center">
-                        <div
-                          onClick={() => {
-                            if (numOfSession > 0) {
-                              setNumOfSession(numOfSession - 1);
-                            }
-                          }}
-                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
-                        >
-                          -
-                        </div>
-
-                        <div
-                          onClick={() => {
-                            if (numOfSession < maxGuests) {
-                              setNumOfSession(numOfSession + 1);
-                            }
-                          }}
-                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
-                        >
-                          +
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {currentPrice.value === "per group" && (
-                    <div className="flex justify-between mt-6">
-                      <div className="flex flex-col text-sm text-gray-600 items-center">
-                        <span>
-                          {numOfGroups} {numOfGroups > 1 ? "Groups" : "Group"}
-                        </span>
-                      </div>
-
-                      <div className="flex gap-3 items-center">
-                        <div
-                          onClick={() => {
-                            if (numOfGroups > 0) {
-                              setNumOfGroups(numOfGroups - 1);
-                            }
-                          }}
-                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
-                        >
-                          -
-                        </div>
-
-                        <div
-                          onClick={() => {
-                            if (numOfGroups < maxGuests) {
-                              setNumOfGroups(numOfGroups + 1);
-                            }
-                          }}
-                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
-                        >
-                          +
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {(numOfPeople > 1 || numOfSession > 0 || numOfGroups > 0) && (
-                    <div
-                      className="mt-2 cursor-pointer text-sm underline"
-                      onClick={() => {
-                        setNumOfPeople(1);
-                        setNumOfPeopleNonResident(0);
-                        setNumOfGroups(1);
-                        setNumOfGroupsNonResident(0);
-                        setNumOfSession(1);
-                        setNumOfSessionNonResident(0);
-                      }}
-                    >
-                      clear data
-                    </div>
-                  )}
-
-                  <div className="flex justify-between mt-6">
-                    <div></div>
-                    <div className="flex gap-2">
-                      <div
-                        onClick={() => {
-                          setActivityGuestPopup(false);
-                          document.body.classList.remove("h-screen");
-                          document.body.classList.remove("overflow-y-hidden");
-                        }}
-                        className="!bg-white text-black border !rounded-3xl px-4 text-sm cursor-pointer py-2"
-                      >
-                        Close
-                      </div>
-                      <Button
-                        onClick={() => {
-                          updateActivityGuest();
-                        }}
-                        className="!bg-blue-700 flex gap-2 items-center !rounded-3xl"
-                      >
-                        <span>Update</span>
-
-                        {activityGuestsLoading && (
-                          <div>
-                            <LoadingSpinerChase
-                              width={16}
-                              height={16}
-                            ></LoadingSpinerChase>
-                          </div>
-                        )}
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </OpenModal>
+              </Dialogue>
             </div>
           </div>
         </div>

@@ -15,6 +15,7 @@ import { Icon } from "@iconify/react";
 import Input from "../../../../components/ui/Input";
 import getToken from "../../../../lib/getToken";
 import getTokenFromReq from "../../../../lib/getTokenFromReq";
+import Dialogue from "../../../../components/Home/Dialogue";
 import getCart from "../../../../lib/getCart";
 import Navbar from "../../../../components/Stay/Navbar";
 import CartItem from "../../../../components/Cart/CartItem";
@@ -445,7 +446,11 @@ function PlanTrip({
 
   if (userTrips.trip && userTrips.trip.length > 0) {
     showItemsInOrder = (
-      <div className="relative">
+      <div
+        className={
+          "relative " + (showMap ? "h-screen md:h-full overflow-y-hidden" : "")
+        }
+      >
         <div className="hidden md:block md:px-4 relative">
           <div className="fixed top-0 w-full bg-white z-20">
             <Navbar
@@ -1214,179 +1219,10 @@ function PlanTrip({
                   </div>
                   <div className="mt-3 mb-4 flex items-center gap-2 text-lg font-bold">
                     <span>Your itinerary</span>
-
-                    <div>
-                      {/* <TopTooltip
-                        showTooltip={itineraryTooltip}
-                        className="text-sm !w-[240px] !font-normal"
-                        changeTooltipState={() => {
-                          setItineraryTooltip(!itineraryTooltip);
-                        }}
-                      >
-                        {order[0].starting_point && `Your trip starts at `}
-                        {order[0].starting_point && (
-                          <span className="font-bold">
-                            {order[0].starting_point},{" "}
-                          </span>
-                        )}
-                        from{" "}
-                        <span className="font-bold">
-                          {order.length > 0 &&
-                            moment(
-                              order[0].stay &&
-                                !order[0].activity &&
-                                !order[0].transport
-                                ? order[0].from_date
-                                : order[0].activity &&
-                                  !order[0].stay &&
-                                  !order[0].transport
-                                ? order[0].activity_from_date
-                                : !order[0].activity &&
-                                  !order[0].stay &&
-                                  order[0].transport
-                                ? order[0].transport_from_date
-                                : order[0].stay &&
-                                  order[0].activity &&
-                                  order[0].transport &&
-                                  order[0].activity_from_date <=
-                                    order[0].from_date &&
-                                  order[0].activity_from_date <=
-                                    order[0].transport_from_date
-                                ? order[0].activity_from_date
-                                : order[0].stay &&
-                                  order[0].activity &&
-                                  order[0].transport &&
-                                  order[0].activity_from_date >=
-                                    order[0].from_date &&
-                                  order[0].transport_from_date >=
-                                    order[0].from_date
-                                ? order[0].from_date
-                                : order[0].stay &&
-                                  order[0].activity &&
-                                  order[0].transport &&
-                                  order[0].activity_from_date >=
-                                    order[0].transport_from_date &&
-                                  order[0].from_date >=
-                                    order[0].transport_from_date
-                                ? order[0].transport_from_date
-                                : order[0].from_date
-                            ).format("MMMM Do")}{" "}
-                          to{" "}
-                          {order.length > 0 &&
-                            moment(
-                              order[order.length - 1].stay &&
-                                !order[order.length - 1].activity &&
-                                !order[order.length - 1].transport
-                                ? order[order.length - 1].to_date
-                                : !order[order.length - 1].stay &&
-                                  !order[order.length - 1].transport &&
-                                  order[order.length - 1].activity
-                                ? order[order.length - 1].activity_from_date
-                                : !order[order.length - 1].stay &&
-                                  order[order.length - 1].transport &&
-                                  !order[order.length - 1].activity
-                                ? order[order.length - 1].transport_from_date
-                                : order[order.length - 1].stay &&
-                                  order[order.length - 1].activity &&
-                                  order[order.length - 1].transport &&
-                                  order[order.length - 1].to_date >
-                                    order[order.length - 1]
-                                      .activity_from_date &&
-                                  order[order.length - 1].to_date >
-                                    order[order.length - 1].transport_from_date
-                                ? new Date(
-                                    new Date(
-                                      order[order.length - 1].from_date
-                                    ).setDate(
-                                      new Date(
-                                        order[order.length - 1].from_date
-                                      ).getDate() +
-                                        order[order.length - 1].nights
-                                    )
-                                  ).toISOString()
-                                : order[order.length - 1].stay &&
-                                  order[order.length - 1].activity &&
-                                  new Date(
-                                    order[order.length - 1].activity_from_date
-                                  ) >
-                                    new Date(
-                                      new Date(
-                                        order[order.length - 1].from_date
-                                      ).setDate(
-                                        new Date(
-                                          order[order.length - 1].from_date
-                                        ).getDate() +
-                                          order[order.length - 1].nights
-                                      )
-                                    )
-                                ? order[order.length - 1].activity_from_date
-                                : ""
-                            ).format("MMMM Do")}
-                        </span>
-                      </TopTooltip> */}
-                    </div>
                   </div>
                 </>
               )}
-              <div>
-                {/* {order.length > 0 && (
-                <>
-                  <div className="px-2 relative bg-gray-100 py-1 rounded-lg flex gap-2">
-                    <div className="w-12 h-12 my-auto bg-gray-200 rounded-lg flex items-center justify-center">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        aria-hidden="true"
-                        role="img"
-                        className="w-6 h-6 fill-current text-gray-500"
-                        preserveAspectRatio="xMidYMid meet"
-                        viewBox="0 0 16 16"
-                      >
-                        <path
-                          fill="currentColor"
-                          d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464l-.003.001l-.006.003l-.023.009a12.435 12.435 0 0 1-.397.15c-.264.095-.631.223-1.047.35c-.816.252-1.879.523-2.71.523c-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A19.626 19.626 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a19.587 19.587 0 0 0 1.349-.476l.019-.007l.004-.002h.001"
-                        />
-                      </svg>
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium">Day 1</p>
-                      <h1 className="font-bold">Starting point</h1>
-                      {userTrips.starting_point && (
-                        <h1 className="font-medium mt-2 text-sm">
-                          {userTrips.starting_point}
-                        </h1>
-                      )}
-                      {!userTrips.starting_point && (
-                        <h1 className="font-medium mt-2 text-red-500 text-sm">
-                          where are you coming from?
-                        </h1>
-                      )}
-                    </div>
 
-                    <div
-                      onClick={() => {
-                        setShowStartLocation(true);
-                      }}
-                      className="w-7 h-7 cursor-pointer bg-blue-200 flex items-center justify-center absolute top-1 right-2 rounded-full"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4 text-blue-600"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </div>
-                  </div>
-
-                  <div className="w-2/4 h-12 mt-1 border-r border-gray-400"></div>
-                </>
-              )} */}
-              </div>
               {order.map((item, index) => {
                 return (
                   <div key={index}>
@@ -1404,276 +1240,11 @@ function PlanTrip({
                     {order.length - 1 !== index && (
                       <div className="flex items-center">
                         <div className="w-[5%] h-16 border-r border-gray-400"></div>
-
-                        {/* <div className="w-fit text-sm ml-1 bg-red-700 bg-opacity-10 px-1.5 font-bold rounded-md">
-                          {moment(
-                            item.stay && !item.activity
-                              ? item.from_date
-                              : item.activity && !item.stay
-                              ? item.activity_from_date
-                              : item.stay &&
-                                item.activity &&
-                                item.activity_from_date < item.from_date
-                              ? item.activity_from_date
-                              : item.stay &&
-                                item.activity &&
-                                item.activity_from_date > item.from_date
-                              ? item.from_date
-                              : item.from_date
-                          ).format("Do")}{" "}
-                          -{" "}
-                          {moment(
-                            order[index + 1].stay && !order[index + 1].activity
-                              ? order[index + 1].from_date
-                              : order[index + 1].activity &&
-                                !order[index + 1].stay
-                              ? order[index + 1].activity_from_date
-                              : order[index + 1].stay &&
-                                order[index + 1].activity &&
-                                order[index + 1].activity_from_date <
-                                  order[index + 1].from_date
-                              ? order[index + 1].activity_from_date
-                              : order[index + 1].stay &&
-                                order[index + 1].activity &&
-                                order[index + 1].activity_from_date >
-                                  order[index + 1].from_date
-                              ? order[index + 1].from_date
-                              : order[index + 1].from_date
-                          ).format("Do MMM")}
-                        </div> */}
                       </div>
                     )}
                   </div>
                 );
               })}
-              <>
-                {/* {order.length > 0 && !userTrips.transport_back && (
-                <div>
-                  <div className="w-2/4 h-12 mt-1 border-r border-gray-400"></div>
-                  <div className="px-2 relative bg-gray-100 py-1 rounded-lg">
-                    <div className="flex gap-2">
-                      <div className="w-12 h-12 my-auto bg-gray-200 rounded-lg flex items-center justify-center">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          aria-hidden="true"
-                          role="img"
-                          className="w-6 h-6 fill-current text-gray-500"
-                          preserveAspectRatio="xMidYMid meet"
-                          viewBox="0 0 32 32"
-                        >
-                          <path
-                            fill="currentColor"
-                            d="M5 4v24h2v-8h20V4H5zm2 2h3v3h3V6h3v3h3V6h3v3h3v3h-3v3h3v3h-3v-3h-3v3h-3v-3h-3v3h-3v-3H7v-3h3V9H7V6zm3 6v3h3v-3h-3zm3 0h3V9h-3v3zm3 0v3h3v-3h-3zm3 0h3V9h-3v3z"
-                          />
-                        </svg>
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium">Finished</p>
-                        <h1 className="font-bold">Back to starting point</h1>
-                        <h1 className="font-medium mt-2 text-sm">
-                          {userTrips.starting_point ||
-                            startingLocationSelected.value}
-                        </h1>
-                        <h1 className="font-medium mt-2 text-sm text-red-600">
-                          No transportation added
-                        </h1>
-                      </div>
-
-                      {!showTransportOptionsPopup && (
-                        <div
-                          onClick={() => {
-                            setShowTransportOptionsPopup(true);
-                          }}
-                          className="w-8 h-8 cursor-pointer shadow-md bg-white flex items-center justify-center rounded-full absolute top-1 right-2"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            aria-hidden="true"
-                            role="img"
-                            className="w-6 h-6"
-                            preserveAspectRatio="xMidYMid meet"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              fill="currentColor"
-                              d="M19.4 7.34L16.66 4.6A2 2 0 0 0 14 4.53l-9 9a2 2 0 0 0-.57 1.21L4 18.91a1 1 0 0 0 .29.8A1 1 0 0 0 5 20h.09l4.17-.38a2 2 0 0 0 1.21-.57l9-9a1.92 1.92 0 0 0-.07-2.71ZM9.08 17.62l-3 .28l.27-3L12 9.32l2.7 2.7ZM16 10.68L13.32 8l1.95-2L18 8.73Z"
-                            />
-                          </svg>
-                        </div>
-                      )}
-
-                      {showTransportOptionsPopup && (
-                        <div
-                          onClick={() => {
-                            setShowTransportOptionsPopup(false);
-                          }}
-                          className="w-8 h-8 cursor-pointer shadow-md bg-white flex items-center justify-center rounded-full absolute top-1 right-2"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="w-6 h-6"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                        </div>
-                      )}
-                    </div>
-                    <div
-                      onMouseLeave={() =>
-                        setState({ ...state, showNavigation: false })
-                      }
-                      onMouseEnter={() =>
-                        setState({ ...state, showNavigation: true })
-                      }
-                    >
-                      <Swiper
-                        {...settings}
-                        onSwiper={(swiper) => {
-                          setState({
-                            ...state,
-                            allowSlideNext: swiper.allowSlideNext,
-                          });
-                        }}
-                        onSlideChange={(swiper) => {
-                          setState({
-                            ...state,
-                            swiperIndex: swiper.realIndex,
-                            endOfSlide: swiper.isEnd,
-                          });
-                        }}
-                        className={
-                          "!w-full mt-4 relative " +
-                          (!showTransportOptionsPopup ? "hidden" : "")
-                        }
-                      >
-                        {transport.map((item, index) => {
-                          const sortedImages = item.transportation_images.sort(
-                            (x, y) => y.main - x.main
-                          );
-
-                          const images = sortedImages.map((image) => {
-                            return image.image;
-                          });
-                          return (
-                            <SwiperSlide key={index} className="!w-[240px]">
-                              <TripTransportCard
-                                groupTripSlug={userTrips.slug}
-                                isGroupTripTransport={true}
-                                images={images}
-                                transport={item}
-                              ></TripTransportCard>
-                            </SwiperSlide>
-                          );
-                        })}
-
-                        <motion.div
-                          variants={variants}
-                          animate={state.showNavigation ? "show" : ""}
-                          initial="hide"
-                          exit="exit"
-                          className={
-                            "absolute flex cursor-pointer items-center justify-center top-2/4 z-10 left-3 -translate-y-2/4 swiper-pagination swiper-button-prev w-8 -mt-4 h-8 rounded-full bg-white shadow-lg " +
-                            (state.swiperIndex === 0 || !state.showNavigation
-                              ? "invisible"
-                              : "")
-                          }
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                        </motion.div>
-                        <motion.div
-                          variants={variants}
-                          animate={state.showNavigation ? "show" : ""}
-                          initial="hide"
-                          exit="exit"
-                          className={
-                            "absolute cursor-pointer flex items-center justify-center top-[40%] z-10 right-3 -translate-y-2/4 swiper-pagination swiper-button-next w-8 h-8 mb-4 rounded-full bg-white shadow-lg " +
-                            (state.endOfSlide || !state.showNavigation
-                              ? "invisible"
-                              : "")
-                          }
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                        </motion.div>
-                      </Swiper>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {order.length > 0 && userTrips.transport_back && (
-                <div>
-                  <div className="w-2/4 h-12 mt-1 border-r border-gray-400"></div>
-                  <div className="px-2 mt-1 relative bg-gray-100 py-1 rounded-lg">
-                    <div className="flex gap-2">
-                      <div className="w-12 h-12 my-auto bg-gray-200 rounded-lg flex items-center justify-center">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          aria-hidden="true"
-                          role="img"
-                          className="w-6 h-6 fill-current text-gray-500"
-                          preserveAspectRatio="xMidYMid meet"
-                          viewBox="0 0 512 512"
-                        >
-                          <path
-                            fill="currentColor"
-                            d="M39.61 196.8L74.8 96.29C88.27 57.78 124.6 32 165.4 32h181.2c40.8 0 77.1 25.78 90.6 64.29l35.2 100.51c23.2 9.6 39.6 32.5 39.6 59.2v192c0 17.7-14.3 32-32 32h-32c-17.7 0-32-14.3-32-32v-48H96v48c0 17.7-14.33 32-32 32H32c-17.67 0-32-14.3-32-32V256c0-26.7 16.36-49.6 39.61-59.2zm69.49-4.8h293.8l-26.1-74.6c-4.5-12.8-16.6-21.4-30.2-21.4H165.4c-13.6 0-25.7 8.6-30.2 21.4L109.1 192zM96 256c-17.67 0-32 14.3-32 32s14.33 32 32 32c17.7 0 32-14.3 32-32s-14.3-32-32-32zm320 64c17.7 0 32-14.3 32-32s-14.3-32-32-32s-32 14.3-32 32s14.3 32 32 32z"
-                          />
-                        </svg>
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium">Finished</p>
-                        <h1 className="font-bold">Back to starting point</h1>
-                        <h1 className="font-medium mt-2 text-sm">
-                          {userTrips.starting_point ||
-                            startingLocationSelected.value}
-                        </h1>
-                      </div>
-                    </div>
-                    <div className="mt-2">
-                      <OrderCard
-                        groupTripSlug={userTrips.slug}
-                        transport={userTrips.transport_back}
-                        transportPage={true}
-                        groupTripTransport={true}
-                        transportDistance={34009}
-                        transportDestination={"Naivasha"}
-                        transportStartingPoint={"Nairobi"}
-                        transportPrice={1200}
-                        checkoutInfo={true}
-                      ></OrderCard>
-                    </div>
-                  </div>
-                </div>
-              )} */}
-              </>
 
               <div className=" mt-4">
                 <div
@@ -1713,7 +1284,7 @@ function PlanTrip({
               onClick={() => {
                 setShowMap(true);
               }}
-              className="md:hidden top-[72px] flex items-center gap-0.5 cursor-pointer text-sm bg-blue-600 bg-opacity-90 text-white shadow-sm right-4 fixed px-2 py-1 rounded-3xl font-bold"
+              className="md:hidden top-[76px] flex items-center gap-0.5 cursor-pointer text-sm bg-blue-600 bg-opacity-90 text-white shadow-sm right-4 fixed px-2 py-1 rounded-3xl font-bold"
             >
               <span>map</span>
               <svg
@@ -1746,7 +1317,7 @@ function PlanTrip({
               onClick={() => {
                 setShowMap(false);
               }}
-              className="md:hidden cursor-pointer z-40 top-[12px] flex items-center gap-0.5 text-sm bg-blue-600 bg-opacity-90 text-white shadow-sm left-4 fixed px-2 py-1 rounded-3xl font-bold"
+              className="md:hidden cursor-pointer z-40 top-[76px] flex items-center gap-0.5 text-sm bg-blue-600 bg-opacity-90 text-white shadow-sm left-4 fixed px-2 py-1 rounded-3xl font-bold"
             >
               <span>hide map</span>
               <svg
@@ -1775,7 +1346,7 @@ function PlanTrip({
           )}
 
           {showMap && (
-            <div className="w-full md:hidden h-[93vh] top-0 left-0 right-0 sm:flex gap-2 absolute xsMax:mb-3">
+            <div className="w-full z-20 md:hidden h-[92vh] bottom-0 top-[66px] left-0 right-0 sm:flex gap-2 absolute xsMax:mb-3">
               <Map
                 trips={order}
                 startingPoint={
@@ -1982,43 +1553,41 @@ function PlanTrip({
         </div>
 
         <div>
-          <ModalPopup
-            showModal={destinationPopup}
+          <Dialogue
+            isOpen={destinationPopup}
             closeModal={() => {
               setDestinationPopup(false);
             }}
-            containerHeight={40}
-            heightVal="%"
             title="New Destination"
-            className="px-4 md:w-[500px]"
+            dialogueTitleClassName="!font-bold"
           >
             <Destination
               className="shadow-none"
               data={destinationData}
             ></Destination>
-          </ModalPopup>
+          </Dialogue>
         </div>
 
         <div>
-          <OpenModal
-            showModal={showNamePopup}
+          <Dialogue
+            isOpen={showNamePopup}
             closeModal={() => {
               setShowNamePopup(false);
             }}
-            containerHeight={80}
-            className="px-4 md:w-[500px] w-[95%] h-fit"
+            title="Edit name of trip"
+            dialogueTitleClassName="!font-bold"
           >
-            <h1 className="text-2xl mt-4 font-bold mb-4">Edit name of trip</h1>
-
-            <Input
-              name="name"
-              type="text"
-              value={nameOfTrip}
-              onChange={(event) => {
-                setNameOfTrip(event.target.value);
-              }}
-              label="Location"
-            ></Input>
+            <div className="mt-2">
+              <Input
+                name="name"
+                type="text"
+                value={nameOfTrip}
+                onChange={(event) => {
+                  setNameOfTrip(event.target.value);
+                }}
+                label="Location"
+              ></Input>
+            </div>
 
             <div>
               <Button
@@ -2043,7 +1612,7 @@ function PlanTrip({
                 )}
               </Button>
             </div>
-          </OpenModal>
+          </Dialogue>
         </div>
 
         <div className="">

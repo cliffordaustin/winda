@@ -37,6 +37,7 @@ import {
   activityPricePerPersonResident,
   activityPricePerPersonNonResident,
 } from "../../lib/pricePlan";
+import Dialogue from "../../components/Home/Dialogue";
 
 const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
   const GlobalStyle = createGlobalStyle`
@@ -2048,14 +2049,10 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                 </div>
               }
 
-              <PopupModal
-                onClick={(e) => {
-                  e.stopPropagation();
-                }}
-                showModal={guestPopup}
+              <Dialogue
+                isOpen={guestPopup}
                 closeModal={() => setGuestPopup(false)}
-                // className="absolute -left-[410px] -top-[250px] px-4 py-4 !z-[99] w-[400px] bg-white shadow-lg rounded-lg h-fit"
-                className="w-[500px] absolute top-[20%]"
+                dialoguePanelClassName="max-h-[500px] max-w-lg overflow-y-scroll remove-scroll"
               >
                 <Select
                   defaultValue={currentPrice}
@@ -2277,7 +2274,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                     <span>Done</span>
                   </Button>
                 </div>
-              </PopupModal>
+              </Dialogue>
             </div>
 
             <div className="flex justify-around gap-2 mb-24">

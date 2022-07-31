@@ -44,14 +44,14 @@ const Destination = ({ className = "", data }) => {
     }
   };
 
-  const curratedTripsSearch = (event) => {
+  const curatedTripsSearch = (event) => {
     router.push({
       pathname: "/trip",
     });
   };
 
   return (
-    <div className={"px-3 py-2 " + className}>
+    <div className={"py-2 " + className}>
       <div className="w-full flex bg-white border border-gray-300 rounded-lg">
         <div className="h-full w-full relative">
           <Input
@@ -105,7 +105,7 @@ const Destination = ({ className = "", data }) => {
           ></SearchButtonClose>
         </div> */}
         <div className={"bg-white flex items-center mr-2"}>
-          <Button onClick={searchApi} className="!bg-blue-400">
+          <Button onClick={searchApi} className="!bg-blue-500">
             Search
           </Button>
         </div>
@@ -119,10 +119,10 @@ const Destination = ({ className = "", data }) => {
 
       <div className="mt-4">
         <div
-          onClick={curratedTripsSearch}
+          onClick={curatedTripsSearch}
           className="py-4 w-full border border-gray-300 text-sm font-bold pl-3 cursor-pointer rounded-lg"
         >
-          All currated trips
+          All curated trips
         </div>
       </div>
     </div>
