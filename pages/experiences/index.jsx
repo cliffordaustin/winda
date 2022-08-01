@@ -1836,8 +1836,8 @@ function Activities({
                 }
                 activeLinkClassName="bg-gray-700 text-white font-bold"
                 renderOnZeroPageCount={null}
-                containerClassName="flex gap-2 justify-center items-center mt-4"
-                pageLinkClassName="bg-white h-12 font-bold flex justify-center items-center w-12 cursor-pointer hover:border border-gray-200 rounded-full text-sm"
+                containerClassName="flex flex-wrap gap-2 justify-center items-center mt-4"
+                pageLinkClassName="bg-white h-8 w-8 font-bold flex justify-center items-center cursor-pointer hover:border border-gray-200 rounded-full text-sm"
               />
             )}
           </div>
