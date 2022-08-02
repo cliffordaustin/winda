@@ -408,19 +408,22 @@ function Listing({
             <div className="font-bold text-sm truncate mt-1">
               {listing.location}
             </div>
-            {userLatLng.latitude && userLatLng.longitude && (
-              <div className="text-black text-sm truncate mt-1">
-                {Math.round(
-                  getDistance(
-                    listing.latitude,
-                    listing.longitude,
-                    userLatLng.latitude,
-                    userLatLng.longitude
-                  )
-                ).toLocaleString()}
-                KM Away
-              </div>
-            )}
+            {userLatLng.latitude &&
+              userLatLng.longitude &&
+              listing.latitude &&
+              listing.longitude && (
+                <div className="text-black text-sm truncate mt-1">
+                  {Math.round(
+                    getDistance(
+                      listing.latitude,
+                      listing.longitude,
+                      userLatLng.latitude,
+                      userLatLng.longitude
+                    )
+                  ).toLocaleString()}
+                  KM Away
+                </div>
+              )}
             {/* {Cookies.get("token") && router.query.fromOrder === "true" && (
             <div
               className="text-sm w-fit flex items-center bg-green-500 bg-opacity-30 px-2 py-1 text-green-700 bg-primary-red-100 font-bold p-3 rounded-md mt-2

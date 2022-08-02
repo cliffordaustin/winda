@@ -1282,7 +1282,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                         instanceId={typeOfLodge}
                         placeholder="Type of room"
                         options={typeOfLodge}
-                        isSearchable={true}
+                        isSearchable={false}
                       />
                     </div>
 
@@ -1997,6 +1997,12 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
             name="map"
             className={"h-[350px] md:h-[450px] relative pt-12 -ml-8 -mr-4"}
           >
+            <div className="px-8">
+              <div className="text-2xl font-bold">Map</div>
+              <div className="mt-1 mb-4 text-sm text-gray-600">
+                Detailed location provided after booking
+              </div>
+            </div>
             <Map longitude={stay.longitude} latitude={stay.latitude}></Map>
           </Element>
 
@@ -2080,14 +2086,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                   ></CreateReview>
                 </div>
 
-                <div>
-                  <Share
-                    showShare={showShare}
-                    type_of_stay={stay.type_of_stay}
-                    setShowShare={setShowShare}
-                  ></Share>
-                </div>
-
                 {showAllReviews && (
                   <div>
                     <AllReviews
@@ -2123,6 +2121,14 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               </div>
             )}
           </Element>
+
+          <div>
+            <Share
+              showShare={showShare}
+              type_of_stay={stay.type_of_stay}
+              setShowShare={setShowShare}
+            ></Share>
+          </div>
 
           <div className="mt-6 -ml-10 -mr-4">
             <Footer></Footer>
@@ -2300,7 +2306,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     instanceId={typeOfLodge}
                     placeholder="Type of room"
                     options={typeOfLodge}
-                    isSearchable={true}
+                    isSearchable={false}
                   />
 
                   {currentTypeOfLodge.value === "Standard" && (

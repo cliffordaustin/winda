@@ -5,11 +5,12 @@ import Input from "../../components/ui/Input";
 import Button from "../ui/Button";
 import Message from "../ui/Message";
 import styles from "../../styles/Share.module.css";
+import Dialogue from "../Home/Dialogue";
 
 const Share = ({ setShowShare, showShare, type_of_stay }) => {
-  const facebookBtn = useRef(null);
-  const twitterBtn = useRef(null);
-  const whatsappBtn = useRef(null);
+  const [facebookBtn, setFacebookBtn] = useState("");
+  const [twitterBtn, setTwitterBtn] = useState("");
+  const [whatsappBtn, setWhatsappBtn] = useState("");
 
   const [showMessage, setShowMessage] = useState(false);
   const [copyMessage, setCopyMessage] = useState("");
@@ -49,32 +50,19 @@ const Share = ({ setShowShare, showShare, type_of_stay }) => {
         : type_of_stay
     } at ${postUrl}`;
 
-    facebookBtn.current.setAttribute(
-      "href",
-      `https://www.facebook.com/sharer.php?u=${postTitle}
-      `
-    );
-    twitterBtn.current.setAttribute(
-      "href",
-      `https://twitter.com/share?text=${postTitle}
-      `
-    );
-    whatsappBtn.current.setAttribute(
-      "href",
-      `https://api.whatsapp.com/send?text=${postTitle}
-      `
-    );
+    setFacebookBtn(`https://www.facebook.com/sharer/sharer.php?u=${postTitle}`);
+    setTwitterBtn(`https://twitter.com/share?text=${postTitle}`);
+    setWhatsappBtn(`https://api.whatsapp.com/send?text=${postTitle}`);
   }, []);
 
   return (
-    <ModalPopup
-      showModal={showShare}
+    <Dialogue
+      isOpen={showShare}
       closeModal={() => {
         setShowShare(false);
       }}
-      containerHeight={300}
       title="Share"
-      className="md:w-[450px]"
+      dialogueTitleClassName="!font-bold"
     >
       <div className="px-4">
         <div className="flex items-center gap-1 px-3 py-3 rounded-md bg-gray-100 mt-4">
@@ -90,7 +78,8 @@ const Share = ({ setShowShare, showShare, type_of_stay }) => {
           <div className="font-bold">Or, Share This Home Via:</div>
           <div className="flex gap-6 justify-center items-center mt-4">
             <a
-              ref={facebookBtn}
+              rel="noreferrer"
+              href={facebookBtn}
               target="_blank"
               className="w-12 h-12 rounded-full shadow-xl bg-white flex justify-center items-center cursor-pointer"
             >
@@ -110,7 +99,8 @@ const Share = ({ setShowShare, showShare, type_of_stay }) => {
               </svg>
             </a>
             <a
-              ref={twitterBtn}
+              rel="noreferrer"
+              href={twitterBtn}
               target="_blank"
               className="w-12 h-12 rounded-full shadow-xl bg-white flex justify-center items-center cursor-pointer"
             >
@@ -130,7 +120,8 @@ const Share = ({ setShowShare, showShare, type_of_stay }) => {
             </a>
 
             <a
-              ref={whatsappBtn}
+              rel="noreferrer"
+              href={whatsappBtn}
               target="_blank"
               className="w-12 h-12 rounded-full shadow-xl bg-white flex justify-center items-center cursor-pointer"
             >
@@ -154,7 +145,7 @@ const Share = ({ setShowShare, showShare, type_of_stay }) => {
           <Message showMessage={showMessage}>Copied</Message>
         </div>
       </div>
-    </ModalPopup>
+    </Dialogue>
   );
 };
 

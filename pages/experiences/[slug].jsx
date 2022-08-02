@@ -1077,7 +1077,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                       instanceId={priceType}
                       placeholder="Type of room"
                       options={priceType}
-                      isSearchable={true}
+                      isSearchable={false}
                     />
 
                     <div className="flex items-center gap-2 mt-4">
@@ -1639,6 +1639,12 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
             name="map"
             className={"h-[350px] md:h-[450px] relative mt-12 -ml-8 -mr-4 "}
           >
+            <div className="px-8">
+              <div className="text-2xl font-bold">Map</div>
+              <div className="mt-1 mb-4 text-sm text-gray-600">
+                Detailed location provided after booking
+              </div>
+            </div>
             <Map
               longitude={activity.longitude}
               latitude={activity.latitude}
@@ -1855,14 +1861,6 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                   ></CreateReview>
                 </div>
 
-                <div>
-                  <Share
-                    showShare={showShare}
-                    type_of_stay={"EXPERIENCE"}
-                    setShowShare={setShowShare}
-                  ></Share>
-                </div>
-
                 {showAllReviews && (
                   <div>
                     <AllReviews
@@ -1898,6 +1896,14 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
               </div>
             )}
           </Element>
+
+          <div>
+            <Share
+              showShare={showShare}
+              type_of_stay={"EXPERIENCE"}
+              setShowShare={setShowShare}
+            ></Share>
+          </div>
 
           <div className="mt-6 -ml-10 -mr-4">
             <Footer></Footer>
@@ -2069,7 +2075,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                   instanceId={priceType}
                   placeholder="Type of room"
                   options={priceType}
-                  isSearchable={true}
+                  isSearchable={false}
                 />
 
                 <div className="flex items-center gap-2 mt-4">

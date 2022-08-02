@@ -1699,7 +1699,7 @@ const Trip = ({
                     instanceId={typeOfLodge}
                     placeholder="Type of room"
                     options={typeOfLodge}
-                    isSearchable={true}
+                    isSearchable={false}
                   />
 
                   {currentTypeOfLodge.value === "Standard" && (
@@ -2548,7 +2548,7 @@ const Trip = ({
                     instanceId={priceType}
                     placeholder="Type of room"
                     options={priceType}
-                    isSearchable={true}
+                    isSearchable={false}
                   />
 
                   <div className="flex items-center gap-2 mt-4">
