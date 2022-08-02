@@ -178,13 +178,17 @@ function Activities({
 
   useEffect(() => {
     const getLatLng = async () => {
-      const ip = await axios.get("https://api.ipify.org");
-      const latlng = await axios.get(`https://ipapi.co/${ip.data}/json`);
+      const latlng = await axios.get(
+        `https://ipinfo.io?token=${process.env.NEXT_PUBLIC_ipInfoToken}`
+      );
+
+      const lat = latlng.data.loc.split(",")[0];
+      const lng = latlng.data.loc.split(",")[1];
 
       setUserLatLng({
         ...userLatLng,
-        longitude: latlng.data.longitude,
-        latitude: latlng.data.latitude,
+        longitude: lat,
+        latitude: lng,
       });
     };
     getLatLng();
