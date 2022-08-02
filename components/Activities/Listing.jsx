@@ -371,19 +371,22 @@ function Listing({
           <div className="font-bold text-sm truncate mt-1">
             {listing.location}
           </div>
-          {userLatLng.latitude && userLatLng.longitude && (
-            <div className="text-black text-sm truncate mt-1">
-              {Math.round(
-                getDistance(
-                  listing.latitude,
-                  listing.longitude,
-                  userLatLng.latitude,
-                  userLatLng.longitude
-                )
-              ).toLocaleString()}
-              KM Away
-            </div>
-          )}
+          {userLatLng.latitude &&
+            userLatLng.longitude &&
+            listing.latitude &&
+            listing.longitude && (
+              <div className="text-black text-sm truncate mt-1">
+                {Math.round(
+                  getDistance(
+                    listing.latitude,
+                    listing.longitude,
+                    userLatLng.latitude,
+                    userLatLng.longitude
+                  )
+                ).toLocaleString()}
+                KM Away
+              </div>
+            )}
 
           {slugIsCorrect && (
             <div className="mt-2">
