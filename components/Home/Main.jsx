@@ -93,6 +93,7 @@ function Main() {
           <SwiperSlide className="!h-[400px] sm:!h-[380px] !w-[900px] sm:!w-[1000px] md:!w-[1100px] lg:!w-[1200px] flex gap-3">
             <div className="xsmall:w-[30%] w-[35%] sm:w-[40%] h-full relative before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-40">
               <Carousel
+                unoptimized={false}
                 images={["/images/home/cultural-trip.jpg"]}
                 imageClass="rounded-2xl"
               ></Carousel>
@@ -124,6 +125,7 @@ function Main() {
             <div className="xsmall:w-[70%] w-[65%] sm:w-[60%] h-full flex justify-between flex-wrap">
               <div className="w-[48%] relative rounded-2xl h-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-60">
                 <Carousel
+                  unoptimized={false}
                   images={["/images/home/stays-location.jpg"]}
                   imageClass="rounded-2xl"
                 ></Carousel>
@@ -218,6 +220,7 @@ function Main() {
               <div className="h-full w-[48%] flex flex-col gap-2">
                 <div className="w-full h-[49%] relative before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
                   <Carousel
+                    unoptimized={false}
                     images={["/images/home/nairobi.jpg"]}
                     imageClass="rounded-2xl"
                   ></Carousel>
@@ -244,6 +247,7 @@ function Main() {
                 </div>
                 <div className="w-full h-[49%] relative self-end before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
                   <Carousel
+                    unoptimized={false}
                     images={["/images/home/nairobi-experience.jpg"]}
                     imageClass="rounded-2xl"
                   ></Carousel>
@@ -275,6 +279,7 @@ function Main() {
           <SwiperSlide className="!h-[400px] sm:!h-[380px] !w-[900px] sm:!w-[1000px] md:!w-[1100px] lg:!w-[1200px] flex gap-3">
             <div className="xsmall:w-[30%] w-[35%] sm:w-[40%] h-full relative before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
               <Carousel
+                unoptimized={false}
                 images={["/images/home/romantic-trip.jpg"]}
                 imageClass="rounded-2xl"
               ></Carousel>
@@ -308,6 +313,7 @@ function Main() {
             <div className="xsmall:w-[70%] w-[65%] sm:w-[60%] h-full flex justify-between flex-wrap">
               <div className="w-[48%] relative rounded-2xl h-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-60">
                 <Carousel
+                  unoptimized={false}
                   images={["/images/home/naivasha.jpg"]}
                   imageClass="rounded-2xl"
                 ></Carousel>
@@ -393,6 +399,7 @@ function Main() {
               <div className="h-full w-[48%] flex flex-col gap-2">
                 <div className="w-full h-[49%] relative before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
                   <Carousel
+                    unoptimized={false}
                     images={["/images/home/nakuru.jpg"]}
                     imageClass="rounded-2xl"
                   ></Carousel>
@@ -419,6 +426,7 @@ function Main() {
                 </div>
                 <div className="w-full h-[49%] relative self-end before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
                   <Carousel
+                    unoptimized={false}
                     images={["/images/home/nakuru-experience.jpg"]}
                     imageClass="rounded-2xl"
                   ></Carousel>
@@ -450,6 +458,7 @@ function Main() {
           <SwiperSlide className="!h-[400px] sm:!h-[380px] !w-[900px] sm:!w-[1000px] md:!w-[1100px] lg:!w-[1200px] flex gap-3">
             <div className="xsmall:w-[30%] w-[35%] sm:w-[40%] h-full relative before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
               <Carousel
+                unoptimized={false}
                 images={["/images/home/roadtrip.jpg"]}
                 imageClass="rounded-2xl"
               ></Carousel>
@@ -482,6 +491,7 @@ function Main() {
             <div className="xsmall:w-[70%] w-[65%] sm:w-[60%] h-full flex justify-between flex-wrap">
               <div className="w-[48%] relative rounded-2xl h-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-60">
                 <Carousel
+                  unoptimized={false}
                   images={["/images/home/massai-mara.jpeg"]}
                   imageClass="rounded-2xl"
                 ></Carousel>
@@ -631,6 +641,7 @@ function Main() {
               <div className="h-full w-[48%] flex flex-col gap-2">
                 <div className="w-full h-[49%] relative before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
                   <Carousel
+                    unoptimized={false}
                     images={["/images/home/stay-maasai-mara.jpg"]}
                     imageClass="rounded-2xl"
                   ></Carousel>
@@ -657,6 +668,7 @@ function Main() {
                 </div>
                 <div className="w-full h-[49%] relative self-end before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
                   <Carousel
+                    unoptimized={false}
                     images={["/images/home/maasai-mara-loita.JPG"]}
                     imageClass="rounded-2xl"
                   ></Carousel>
@@ -714,6 +726,7 @@ function Main() {
           <SwiperSlide className="!h-[320px] !w-[320px]">
             <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
               <Carousel
+                unoptimized={false}
                 images={["/images/home/lodging.jpg"]}
                 imageClass="rounded-2xl"
               ></Carousel>
@@ -743,6 +756,7 @@ function Main() {
           <SwiperSlide className="!h-[320px] !w-[320px]">
             <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
               <Carousel
+                unoptimized={false}
                 images={["/images/home/campsite.jpg"]}
                 imageClass="rounded-2xl"
               ></Carousel>
@@ -772,6 +786,7 @@ function Main() {
           <SwiperSlide className="!h-[320px] !w-[320px]">
             <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
               <Carousel
+                unoptimized={false}
                 images={["/images/home/campsite-tented.jpg"]}
                 imageClass="rounded-2xl"
               ></Carousel>
@@ -801,6 +816,7 @@ function Main() {
           <SwiperSlide className="!h-[320px] !w-[320px]">
             <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
               <Carousel
+                unoptimized={false}
                 images={["/images/home/uniquespace.jpg"]}
                 imageClass="rounded-2xl"
               ></Carousel>
@@ -830,6 +846,7 @@ function Main() {
           <SwiperSlide className="!h-[320px] !w-[320px]">
             <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
               <Carousel
+                unoptimized={false}
                 images={["/images/home/budget.jpg"]}
                 imageClass="rounded-2xl"
               ></Carousel>
@@ -859,6 +876,7 @@ function Main() {
           <SwiperSlide className="!h-[320px] !w-[320px]">
             <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
               <Carousel
+                unoptimized={false}
                 images={["/images/home/mid-range.jpg"]}
                 imageClass="rounded-2xl"
               ></Carousel>
@@ -888,6 +906,7 @@ function Main() {
           <SwiperSlide className="!h-[320px] !w-[320px]">
             <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
               <Carousel
+                unoptimized={false}
                 images={["/images/home/luxury.jpg"]}
                 imageClass="rounded-2xl"
               ></Carousel>
@@ -991,6 +1010,7 @@ function Main() {
           <SwiperSlide className="!h-[320px] !w-[320px]">
             <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
               <Carousel
+                unoptimized={false}
                 images={["/images/home/curatedtrips.jpg"]}
                 imageClass="rounded-2xl"
               ></Carousel>
@@ -1017,6 +1037,7 @@ function Main() {
           <SwiperSlide className="!h-[320px] !w-[320px]">
             <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
               <Carousel
+                unoptimized={false}
                 images={["/images/home/stays.jpg"]}
                 imageClass="rounded-2xl"
               ></Carousel>
@@ -1043,6 +1064,7 @@ function Main() {
           <SwiperSlide className="!h-[320px] !w-[320px]">
             <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
               <Carousel
+                unoptimized={false}
                 images={["/images/home/experiences.jpg"]}
                 imageClass="rounded-2xl"
               ></Carousel>
@@ -1069,6 +1091,7 @@ function Main() {
           <SwiperSlide className="!h-[320px] !w-[320px]">
             <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
               <Carousel
+                unoptimized={false}
                 images={["/images/home/transport.jpg"]}
                 imageClass="rounded-2xl"
               ></Carousel>

@@ -10,7 +10,12 @@ SwiperCore.use([Navigation]);
 import "swiper/css";
 import "swiper/css/pagination";
 
-function Carousel({ imageClass = "", className = "", images }) {
+function Carousel({
+  images,
+  imageClass = "",
+  className = "",
+  unoptimized = true,
+}) {
   const settings = {
     spaceBetween: 10,
     slidesPerView: 1,
@@ -69,7 +74,7 @@ function Carousel({ imageClass = "", className = "", images }) {
               src={image}
               alt="Image Gallery"
               layout="fill"
-              unoptimized={true}
+              unoptimized={unoptimized}
             />
           </SwiperSlide>
         ))}
