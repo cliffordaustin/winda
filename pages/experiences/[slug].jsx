@@ -1810,7 +1810,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                     setFilterRateVal={setFilterRateVal}
                   ></ReviewOverview>
                   <div className="flex justify-between gap-2">
-                    <div></div>
+                    <div className="hidden md:block"></div>
                     <PopoverBox
                       btnPopover={
                         <div className="flex float-left items-center gap-1 text-blue-600 border-gray-200 cursor-pointer px-2 w-fit mt-4">
@@ -1838,7 +1838,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                           </svg>
                         </div>
                       }
-                      panelClassName="shadow-all mt-1 w-56 bg-white rounded-lg overflow-hidden"
+                      panelClassName="shadow-all w-[150px] mt-1 bg-white rounded-lg overflow-hidden"
                     >
                       <div
                         onClick={() => {
