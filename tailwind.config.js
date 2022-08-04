@@ -29,6 +29,10 @@ module.exports = {
         xsmall: { max: "350px" },
       },
 
+      boxShadow: {
+        all: "0px 0px 46px -3px rgba(0,0,0,0.1)",
+      },
+
       width: {
         325: "325px",
         500: "500px",

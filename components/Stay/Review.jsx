@@ -10,7 +10,7 @@ const Review = ({ isSafari, review }) => {
 
   const [showText, setShowText] = useState(false);
   return (
-    <div className="rounded-3xl px-6 py-2 bg-gray-100">
+    <div className="px-3 py-2">
       <div className="flex items-center gap-3">
         {review.profile_pic && (
           <div className="relative w-10 h-10 rounded-full">

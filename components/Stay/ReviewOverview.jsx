@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Rating from "../ui/Rating";
 import axios from "axios";
+import ReverseStarRating from "../ui/ReverseStarRating";
 
 const ReviewOverview = ({ reviews, filterReview, stay, setFilterRateVal }) => {
   const [isSafari, setIsSafari] = useState(false);
@@ -62,51 +63,97 @@ const ReviewOverview = ({ reviews, filterReview, stay, setFilterRateVal }) => {
   };
 
   return (
-    <div className={"px-4 bg-gray-100 py-3 rounded-3xl flex gap-4 w-full"}>
-      <div className={"flex sm:flex-row flex-col gap-4 w-full md:px-8"}>
+    <div className={"lg:px-4 py-3 flex gap-4 w-full"}>
+      <div className={"flex gap-4 w-full lg:px-8"}>
         <div className={""}>
-          <div className="flex">
-            <h1 className="font-bold text-3xl">{averageRating().toFixed(1)}</h1>
-            <p className="text-base self-end">/5</p>
-          </div>
-          <div className="text-gray-500 mt-1 text-sm md:text-base sm:whitespace-nowrap">
-            Based on {stay.total_num_of_reviews} reviews
-          </div>
-          <div className="mt-1 sm:mt-3 hidden md:block">
-            <Rating
-              fontSize={!isSafari ? 45 : 35}
-              rating={averageRating()}
-            ></Rating>
-          </div>
-          <div className="mt-1 sm:mt-3 md:hidden">
-            <Rating
-              fontSize={!isSafari ? 30 : 22}
-              rating={averageRating()}
-            ></Rating>
+          <div className="flex flex-col items-center">
+            <h1 className="font-bold text-gray-700 text-4xl font-lobster sm:text-5xl">
+              {averageRating().toFixed(1)}
+            </h1>
+            <div className="text-gray-500 mt-1 text-sm font-lobster whitespace-nowrap">
+              Out of 5
+            </div>
           </div>
         </div>
         <div className="w-full flex flex-col gap-3">
-          {rates.map((rate, index) => (
-            <div
-              onClick={() => {
-                filterReview(rate);
-                setFilterRateVal(rate);
-              }}
-              key={index}
-              className={"flex items-center gap-2 w-full cursor-pointer"}
-            >
-              <div className="whitespace-nowrap">{rate} stars</div>
-              <div className="bg-gray-300 rounded-3xl overflow-hidden py-2 w-full relative">
-                <div
-                  className={
-                    "bg-[#303960] absolute rounded-tr-3xl rounded-br-3xl top-0 py-2 left-0"
-                  }
-                  style={{ width: `${starPercentage(rate)}%` }}
-                ></div>
-              </div>
-              <div>{starPercentage(rate)}%</div>
+          <div className={"flex items-center gap-2 w-full"}>
+            <div className="whitespace-nowrap">
+              <ReverseStarRating
+                value={5}
+                className="w-4 h-4 md:w-5 md:h-5"
+              ></ReverseStarRating>
             </div>
-          ))}
+            <div className="bg-gray-300 rounded-3xl overflow-hidden py-1 w-full relative">
+              <div
+                className={"bg-[#303960] absolute top-0 py-2 left-0"}
+                style={{ width: `${starPercentage(5)}%` }}
+              ></div>
+            </div>
+          </div>
+
+          <div className={"flex items-center gap-2 w-full"}>
+            <div className="whitespace-nowrap">
+              <ReverseStarRating
+                value={4}
+                className="w-4 h-4 md:w-5 md:h-5"
+              ></ReverseStarRating>
+            </div>
+            <div className="bg-gray-300 rounded-3xl overflow-hidden py-1 w-full relative">
+              <div
+                className={"bg-[#303960] absolute top-0 py-2 left-0"}
+                style={{ width: `${starPercentage(4)}%` }}
+              ></div>
+            </div>
+          </div>
+
+          <div className={"flex items-center gap-2 w-full"}>
+            <div className="whitespace-nowrap">
+              <ReverseStarRating
+                value={3}
+                className="w-4 h-4 md:w-5 md:h-5"
+              ></ReverseStarRating>
+            </div>
+            <div className="bg-gray-300 rounded-3xl overflow-hidden py-1 w-full relative">
+              <div
+                className={"bg-[#303960] absolute top-0 py-2 left-0"}
+                style={{ width: `${starPercentage(3)}%` }}
+              ></div>
+            </div>
+          </div>
+
+          <div className={"flex items-center gap-2 w-full"}>
+            <div className="whitespace-nowrap">
+              <ReverseStarRating
+                value={2}
+                className="w-4 h-4 md:w-5 md:h-5"
+              ></ReverseStarRating>
+            </div>
+            <div className="bg-gray-300 rounded-3xl overflow-hidden py-1 w-full relative">
+              <div
+                className={"bg-[#303960] absolute top-0 py-2 left-0"}
+                style={{ width: `${starPercentage(2)}%` }}
+              ></div>
+            </div>
+          </div>
+
+          <div className={"flex items-center gap-2 w-full"}>
+            <div className="whitespace-nowrap">
+              <ReverseStarRating
+                value={1}
+                className="w-4 h-4 md:w-5 md:h-5"
+              ></ReverseStarRating>
+            </div>
+            <div className="bg-gray-300 rounded-3xl overflow-hidden py-1 w-full relative">
+              <div
+                className={"bg-[#303960] absolute top-0 py-2 left-0"}
+                style={{ width: `${starPercentage(1)}%` }}
+              ></div>
+            </div>
+          </div>
+
+          <div className="text-gray-700 font-lobster font-bold self-end text-sm">
+            {stay.total_num_of_reviews} Ratings
+          </div>
         </div>
       </div>
     </div>

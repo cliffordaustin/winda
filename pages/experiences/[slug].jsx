@@ -8,7 +8,10 @@ import { Element } from "react-scroll";
 import Select from "react-select";
 import { createGlobalStyle } from "styled-components";
 import moment from "moment";
+import ReactPaginate from "react-paginate";
+import { Icon } from "@iconify/react";
 
+import PopoverBox from "../../components/ui/Popover";
 import Navbar from "../../components/Stay/Navbar";
 import ImageGallery from "../../components/Stay/ImageGallery";
 import Price from "../../components/Stay/Price";
@@ -82,10 +85,6 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
   const [showShare, setShowShare] = useState(false);
 
   const [reviewCount, setReviewCount] = useState(0);
-
-  const [nextReview, setNextReview] = useState(null);
-
-  const [prevReview, setPrevReview] = useState(null);
 
   const [reviewPageSize, setReviewPageSize] = useState(0);
 
@@ -208,10 +207,8 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
       );
 
       setReviews(response.data.results);
-      setReviewCount(response.data.count);
+      setReviewCount(response.data.total_pages);
       setReviewPageSize(response.data.page_size);
-      setNextReview(response.data.next);
-      setPrevReview(response.data.previous);
       setReviewLoading(false);
     } catch (error) {
       setReviewLoading(false);
@@ -233,17 +230,23 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
     getReview();
   }, []);
 
-  const filterReview = async (rate) => {
+  const filterReview = async () => {
     setSpinner(true);
     const { data } = await axios.get(
-      `${process.env.NEXT_PUBLIC_baseURL}/activities/${activity.slug}/reviews/?rate=${rate}`
+      `${process.env.NEXT_PUBLIC_baseURL}/activities/${
+        activity.slug
+      }/reviews/?ordering=${
+        router.query.ordering ? router.query.ordering : ""
+      }?page=${router.query.rate_page ? router.query.rate_page : ""}`
     );
     setFilteredReviews(data.results);
-    setReviewCount(data.count);
-    setNextReview(data.next);
-    setPrevReview(data.previous);
+    setReviewCount(data.total_pages);
     setSpinner(false);
   };
+
+  useEffect(() => {
+    filterReview();
+  }, [router.query.ordering, router.query.rate_page]);
 
   const [addToCartDate, setAddToCartDate] = useState("");
 
@@ -399,6 +402,19 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
         query: { redirect: `${router.asPath}` },
       });
     }
+  };
+
+  const handlePageClick = (event) => {
+    router.push(
+      {
+        query: {
+          ...router.query,
+          rate_page: event.selected + 1,
+        },
+      },
+      undefined,
+      { scroll: false }
+    );
   };
 
   const priceOfResident = activityPricePerPersonResident(
@@ -1782,7 +1798,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
             </div>
           </Element> */}
 
-          <Element name="reviews" className="pt-12">
+          <Element name="reviews" className="pt-24">
             {!reviewLoading && reviews.length > 0 && (
               <div>
                 <div className="max-w-[750px] mb-10">
@@ -1793,87 +1809,91 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                     stay={activity}
                     setFilterRateVal={setFilterRateVal}
                   ></ReviewOverview>
-                  <div className="flex gap-2">
-                    {/* {!activity.has_user_reviewed && !activity.is_user_activity && (
-                  <div
-                    onClick={() => {
-                      const token = Cookies.get("token");
-                      if (token) {
-                        setShowCreateReview(true);
-                      } else {
-                        router.push({
-                          pathname: "/login",
-                          query: { redirect: `${router.asPath}` },
-                        });
+                  <div className="flex justify-between gap-2">
+                    <div></div>
+                    <PopoverBox
+                      btnPopover={
+                        <div className="flex float-left items-center gap-1 text-blue-600 border-gray-200 cursor-pointer px-2 w-fit mt-4">
+                          <div>
+                            Sort by{" "}
+                            {router.query.ordering === "-date_posted"
+                              ? "Most Recent"
+                              : router.query.ordering === "-rate"
+                              ? "Most Favorable"
+                              : router.query.ordering === "+rate"
+                              ? "Most Critical"
+                              : ""}
+                          </div>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </div>
                       }
-                    }}
-                    className="flex gap-1 border border-gray-200 cursor-pointer rounded-md px-2 py-2 w-fit mt-4"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth="2"
+                      panelClassName="shadow-all mt-1 w-56 bg-white rounded-lg overflow-hidden"
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                      />
-                    </svg>
-                    <div>Add Review</div>
-                  </div>
-                )} */}
-                    {filteredReviews && (
                       <div
                         onClick={() => {
-                          getReview();
-                          setFilteredReviews(null);
+                          router.push(
+                            {
+                              query: {
+                                ...router.query,
+                                ordering: "-date_posted",
+                              },
+                            },
+                            undefined,
+                            { scroll: false }
+                          );
                         }}
-                        className="flex gap-1 border border-gray-200 cursor-pointer rounded-md px-2 py-2 w-fit mt-4"
+                        className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2"
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-6 w-6"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-                          />
-                        </svg>
-                        <div>Clear Filter</div>
+                        Most Recent
                       </div>
-                    )}
+                      <div
+                        onClick={() => {
+                          router.push(
+                            {
+                              query: {
+                                ...router.query,
+                                ordering: "-rate",
+                              },
+                            },
+                            undefined,
+                            { scroll: false }
+                          );
+                        }}
+                        className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2"
+                      >
+                        Most Favorable
+                      </div>
+                      <div
+                        onClick={() => {
+                          router.push(
+                            {
+                              query: {
+                                ...router.query,
+                                ordering: "+rate",
+                              },
+                            },
+                            undefined,
+                            { scroll: false }
+                          );
+                        }}
+                        className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2"
+                      >
+                        Most Critical
+                      </div>
+                    </PopoverBox>
                   </div>
                 </div>
-
-                <div>
-                  <CreateReview
-                    show={showCreateReview}
-                    setShowCreateReview={setShowCreateReview}
-                  ></CreateReview>
-                </div>
-
-                {showAllReviews && (
-                  <div>
-                    <AllReviews
-                      showAllReviews={showAllReviews}
-                      setShowAllReviews={setShowAllReviews}
-                      next={nextReview}
-                      filterRateVal={filterRateVal}
-                      filteredReviews={filteredReviews}
-                      reviewPageSize={reviewPageSize}
-                      reviewCount={reviewCount}
-                    ></AllReviews>
-                  </div>
-                )}
 
                 <div className="mb-16">
                   <Reviews
@@ -1894,6 +1914,24 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                   color="#000"
                 ></LoadingSpinerChase>
               </div>
+            )}
+
+            {reviews.length > 0 && (
+              <ReactPaginate
+                breakLabel="..."
+                nextLabel={<Icon icon="bx:chevron-right" className="w-7 h-7" />}
+                disabledClassName="text-gray-300"
+                onPageChange={handlePageClick}
+                forcePage={parseInt(router.query.rate_page) - 1 || 0}
+                pageRangeDisplayed={reviewPageSize}
+                pageCount={reviewCount}
+                previousLabel={
+                  <Icon icon="bx:chevron-left" className="w-7 h-7" />
+                }
+                activeLinkClassName="bg-gray-700 text-white font-bold"
+                containerClassName="flex flex-wrap gap-2 justify-center items-center mt-4"
+                pageLinkClassName="bg-white h-8 w-8 font-bold flex justify-center items-center cursor-pointer hover:border border-gray-200 rounded-full text-sm"
+              />
             )}
           </Element>
 

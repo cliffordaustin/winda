@@ -27,6 +27,7 @@ import TeamExperience from "../components/Home/TeamExperience";
 import TopBanner from "../components/Home/TopBanner";
 import Popup from "../components/ui/Popup";
 import Dropdown from "../components/ui/Dropdown";
+import PopoverBox from "../components/ui/Popover";
 
 export default function Home({ userProfile }) {
   const router = useRouter();
@@ -1028,58 +1029,55 @@ export default function Home({ userProfile }) {
               >
                 <span className="font-bold">Curated trips</span>
               </Button>
-              <Button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowBookServiceDropdown(!showBookServiceDropdown);
-                }}
-                className="flex relative items-center gap-2 w-fit !py-3 !bg-white"
+
+              <PopoverBox
+                btnPopover={
+                  <>
+                    <span className="font-bold text-black text-sm">
+                      Book a service
+                    </span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 text-black"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </>
+                }
+                panelClassName="mt-2 w-56 bg-white rounded-lg overflow-hidden"
+                btnClassName="flex relative items-center gap-2 px-3 rounded-md py-3 bg-white"
               >
-                <span className="font-bold text-black">Book a service</span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 text-black"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
+                <div
+                  onClick={() => {
+                    router.push("/stays");
+                  }}
+                  className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2"
                 >
-                  <path
-                    fillRule="evenodd"
-                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </Button>
-              <div className="flex items-center">
-                <Dropdown
-                  showDropdown={showBookServiceDropdown}
-                  className="absolute left-[35%] md:left-2/4 !border-white top-full mt-2 w-56"
+                  Stays
+                </div>
+                <div
+                  onClick={() => {
+                    router.push("/experiences");
+                  }}
+                  className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2"
                 >
-                  <div
-                    onClick={() => {
-                      router.push("/stays");
-                    }}
-                    className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2"
-                  >
-                    Stays
-                  </div>
-                  <div
-                    onClick={() => {
-                      router.push("/experiences");
-                    }}
-                    className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2"
-                  >
-                    Experiences
-                  </div>
-                  <div
-                    onClick={() => {
-                      router.push("/transport");
-                    }}
-                    className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2"
-                  >
-                    Transport
-                  </div>
-                </Dropdown>
-              </div>
+                  Experiences
+                </div>
+                <div
+                  onClick={() => {
+                    router.push("/transport");
+                  }}
+                  className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2"
+                >
+                  Transport
+                </div>
+              </PopoverBox>
             </div>
           </div>
         </div>
@@ -1496,6 +1494,7 @@ export default function Home({ userProfile }) {
           </div>
         )} */}
       </div>
+
       <div className="md:mt-16 mb-8 2xl:w-4/6 2xl:mx-auto">
         <Main></Main>
       </div>

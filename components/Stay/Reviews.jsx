@@ -45,11 +45,6 @@ const Reviews = ({
             ))}
         </div>
       )}
-      {filteredReviews && filteredReviews.length === 0 && (
-        <div className="text-center text-gray-500">
-          <p className="text-base">No reviews found for this filter</p>
-        </div>
-      )}
       {spinner && (
         <div className="flex justify-center items-center">
           <LoadingSpinerChase
@@ -57,27 +52,6 @@ const Reviews = ({
             height={35}
             color="#000"
           ></LoadingSpinerChase>
-        </div>
-      )}
-      {!filteredReviews && !spinner && count > reviews.length && (
-        <div
-          onClick={() => {
-            setShowAllReviews(true);
-          }}
-          className="border border-gray-300 rounded-xl mt-4 py-3 cursor-pointer text-center font-bold"
-        >
-          Show all reviews
-        </div>
-      )}
-
-      {filteredReviews && !spinner && count > filteredReviews.length && (
-        <div
-          onClick={() => {
-            setShowAllReviews(true);
-          }}
-          className="border border-gray-300 rounded-xl mt-4 py-3 cursor-pointer text-center font-bold"
-        >
-          Show all reviews
         </div>
       )}
     </>
