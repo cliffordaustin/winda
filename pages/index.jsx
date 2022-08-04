@@ -17,16 +17,11 @@ import ActivitiesSearch from "../components/Home/ActivitiesSearch";
 import Main from "../components/Home/Main";
 import Footer from "../components/Home/Footer";
 import Button from "../components/ui/Button";
-import MobileSearchSelect from "../components/Home/MobileSearchSelect";
+
 import SearchSelect from "../components/Home/SearchSelect";
-import StickyHeader from "../components/Home/StickyHeader";
-import Input from "../components/ui/Input";
+
 import MobileModal from "../components/ui/MobileModal";
-import UserDropdown from "../components/Home/UserDropdown";
-import TeamExperience from "../components/Home/TeamExperience";
-import TopBanner from "../components/Home/TopBanner";
-import Popup from "../components/ui/Popup";
-import Dropdown from "../components/ui/Dropdown";
+
 import PopoverBox from "../components/ui/Popover";
 
 export default function Home({ userProfile }) {

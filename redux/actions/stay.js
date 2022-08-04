@@ -4,10 +4,6 @@ export const typeOfStay = (payload) => (dispatch) => {
   dispatch({ type: "TYPE_OF_STAY", payload: payload });
 };
 
-export const typeOfStayImage = (payload) => (dispatch) => {
-  dispatch({ type: "TYPE_OF_STAY_IMAGE", payload: payload });
-};
-
 export const describesHouse = (payload) => (dispatch) => {
   dispatch({ type: "DESCRIBES_HOUSE", payload: payload });
 };

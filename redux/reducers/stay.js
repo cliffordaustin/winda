@@ -1,7 +1,6 @@
 const stayState = {
   stays: [],
   typeOfStay: "lodge",
-  typeOfStayImage: "/images/travel-themes/campsites.jpg",
   describesLodge: [],
   activeStay: null,
   describesCampsite: [],
@@ -55,9 +54,6 @@ const stayReducer = (state = stayState, action) => {
 
     case "TYPE_OF_STAY":
       return { ...state, typeOfStay: action.payload };
-
-    case "TYPE_OF_STAY_IMAGE":
-      return { ...state, typeOfStayImage: action.payload };
 
     case "DESCRIBES_CAMPSITE":
       return { ...state, describesCampsite: action.payload };
