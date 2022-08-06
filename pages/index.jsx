@@ -1045,7 +1045,7 @@ export default function Home({ userProfile }) {
                     </svg>
                   </>
                 }
-                panelClassName="mt-2 w-56 bg-white rounded-lg overflow-hidden"
+                panelClassName="mt-2 w-[150px] md:w-[250px] bg-white rounded-lg overflow-hidden"
                 btnClassName="flex relative items-center gap-2 px-3 rounded-md py-3 bg-white"
               >
                 <div
