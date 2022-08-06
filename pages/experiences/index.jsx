@@ -460,7 +460,6 @@ function Activities({
                   {router.query.search.split(",")[0]}
                 </span>
               )}
-              {router.query.search && "..."}
               {Number(router.query.min_capacity) > 0 ? "," : ""}{" "}
               <span>
                 {Number(router.query.min_capacity) > 0
