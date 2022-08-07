@@ -42,6 +42,7 @@ import moment from "moment";
 import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/thumbs";
+import Dialogue from "../../components/Home/Dialogue";
 
 const Transport = ({
   userProfile,
@@ -499,6 +500,14 @@ const Transport = ({
         Cookies.set("cart", JSON.stringify(data));
         router.reload();
       }
+    }
+  };
+
+  const [swiper, setSwiper] = useState(null);
+
+  const slideto = (index) => {
+    if (swiper) {
+      swiper.slideToLoop(index);
     }
   };
 
@@ -1340,766 +1349,409 @@ const Transport = ({
             />
           )}
 
-          <div className="mt-6 -ml-10 -mr-4">
+          <div className="mt-6 md:-ml-10 md:-mr-4">
             <Footer></Footer>
           </div>
         </div>
       </div>
 
-      <div className="hidden md:block">
-        <PopupModal
-          showModal={
-            currentListing && router.query.transportSlug ? true : false
-          }
-          closeModal={() => {
-            setCurrentListing(null);
-            router.replace({
-              query: {
-                ...router.query,
-                transportSlug: "",
-              },
-            });
+      <Dialogue
+        isOpen={currentListing && router.query.transportSlug ? true : false}
+        closeModal={() => {
+          setCurrentListing(null);
+          router.replace({
+            query: {
+              ...router.query,
+              transportSlug: "",
+            },
+          });
+        }}
+        dialoguePanelClassName="h-screen !relative max-w-[600px] !rounded-none !top-[10%] !p-0 md:max-h-[600px]"
+        outsideDialogueClass="!p-0"
+      >
+        <Swiper
+          {...settings}
+          preventInteractionOnTransition={true}
+          allowTouchMove={false}
+          onSwiper={(swiper) => {
+            setSwiper(swiper);
+            setAllowSlideNext(swiper.allowSlideNext);
           }}
-          // className="absolute -left-[410px] -top-[250px] px-4 py-4 !z-[99] w-[400px] bg-white shadow-lg rounded-lg h-fit"
-          className="max-w-[600px] !top-[10%] !py-2 !pt-4 h-[600px]"
+          onSlideChange={(swiper) => setSwiperIndex(swiper.realIndex)}
+          modules={[Navigation]}
+          className="!h-full !w-full !overflow-y-scroll remove-scroll"
         >
-          <Swiper
-            {...settings}
-            preventInteractionOnTransition={true}
-            allowTouchMove={false}
-            autoHeight={true}
-            onSwiper={(swiper) => setAllowSlideNext(swiper.allowSlideNext)}
-            onSlideChange={(swiper) => setSwiperIndex(swiper.realIndex)}
-            className="!h-full !w-full !overflow-y-scroll remove-scroll"
-          >
-            <SwiperSlide className="!relative">
-              {currentListing && (
-                <>
-                  <div className="h-[200px] relative">
-                    <div className="px-2 py-0.5 rounded-full text-sm z-10 bg-blue-300 absolute left-3 bottom-3">
-                      or similar
+          <SwiperSlide className="!p-4 h-screen overflow-y-scroll">
+            {currentListing && (
+              <>
+                <div className="h-[200px] relative">
+                  <div className="px-2 py-0.5 rounded-full text-sm z-10 bg-blue-300 absolute left-3 bottom-3">
+                    or similar
+                  </div>
+                  <Carousel
+                    images={currentListing.transportation_images
+                      .sort((x, y) => y.main - x.main)
+                      .map((image) => {
+                        return image.image;
+                      })}
+                    imageClass="rounded-tl-md rounded-tr-2xl"
+                  ></Carousel>
+                </div>
+
+                <div className="mt-2 mb-2">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="text-lg font-semibold w-full text-gray-700 truncate">
+                      {currentListing.vehicle_make}
                     </div>
-                    <Carousel
-                      images={currentListing.transportation_images
-                        .sort((x, y) => y.main - x.main)
-                        .map((image) => {
-                          return image.image;
-                        })}
-                      imageClass="rounded-tl-md rounded-tr-2xl"
-                    ></Carousel>
+
+                    <div className="flex">
+                      <Price stayPrice={currentListing.price_per_day}></Price>
+                      <div className="text-xs mt-2">/day</div>
+                    </div>
                   </div>
 
-                  <div className="mt-2 mb-2">
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="text-lg font-semibold w-full text-gray-700 truncate">
-                        {currentListing.vehicle_make}
-                      </div>
-
-                      <div className="flex">
-                        <Price stayPrice={currentListing.price_per_day}></Price>
-                        <div className="text-xs mt-2">/day</div>
-                      </div>
-                    </div>
-
-                    <div className="text-sm ml-1 capitalize font-bold">
-                      {currentListing.type_of_car.toLowerCase()}
-                    </div>
-
-                    <div className="py-2 border-t border-b border-gray-400 px-2 my-2 text-sm text-gray-600 flex justify-between items-center">
-                      <div className="flex items-center gap-0.5">
-                        <Icon className="w-4 h-4" icon="carbon:user-filled" />
-                        <p>{currentListing.capacity}</p>
-                      </div>
-                      <div className="flex items-center gap-0.5">
-                        <Icon className="w-4 h-4" icon="bi:bag-fill" />
-                        <p>{currentListing.bags}</p>
-                      </div>
-                      <div className="flex items-center gap-0.5">
-                        <Icon
-                          className="w-4 h-4"
-                          icon="icon-park-solid:manual-gear"
-                        />
-                        <p className="capitalize">
-                          {currentListing.transmission.toLowerCase()}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-0.5">
-                        <Icon
-                          className="w-4 h-4"
-                          icon="ic:baseline-severe-cold"
-                        />
-                        <p className="capitalize">
-                          {currentListing.has_air_condition ? "AC" : "No AC"}
-                        </p>
-                      </div>
-                    </div>
-
-                    {currentListing.driver_operates_within.length > 0 && (
-                      <h1 className="font-bold text-lg mb-2">
-                        Car operates within
-                      </h1>
-                    )}
-                    {currentListing.driver_operates_within.map(
-                      (item, index) => (
-                        <ListItem key={index}>{item.city}</ListItem>
-                      )
-                    )}
-
-                    {currentListing.included_in_price.length > 0 && (
-                      <h1 className="font-bold text-lg mb-2 mt-4">
-                        Included in price
-                      </h1>
-                    )}
-                    {currentListing.included_in_price.map((item, index) => (
-                      <ListItem key={index}>{item.included_in_price}</ListItem>
-                    ))}
-
-                    {currentListing.policy && (
-                      <h1 className="mt-4 font-bold">Please take note</h1>
-                    )}
-
-                    {currentListing.policy && (
-                      <p className="mt-2">{currentListing.policy}</p>
-                    )}
+                  <div className="text-sm ml-1 capitalize font-bold">
+                    {currentListing.type_of_car.toLowerCase()}
                   </div>
 
+                  <div className="py-2 border-t border-b border-gray-400 px-2 my-2 text-sm text-gray-600 flex justify-between items-center">
+                    <div className="flex items-center gap-0.5">
+                      <Icon className="w-4 h-4" icon="carbon:user-filled" />
+                      <p>{currentListing.capacity}</p>
+                    </div>
+                    <div className="flex items-center gap-0.5">
+                      <Icon className="w-4 h-4" icon="bi:bag-fill" />
+                      <p>{currentListing.bags}</p>
+                    </div>
+                    <div className="flex items-center gap-0.5">
+                      <Icon
+                        className="w-4 h-4"
+                        icon="icon-park-solid:manual-gear"
+                      />
+                      <p className="capitalize">
+                        {currentListing.transmission.toLowerCase()}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-0.5">
+                      <Icon
+                        className="w-4 h-4"
+                        icon="ic:baseline-severe-cold"
+                      />
+                      <p className="capitalize">
+                        {currentListing.has_air_condition ? "AC" : "No AC"}
+                      </p>
+                    </div>
+                  </div>
+
+                  {currentListing.driver_operates_within.length > 0 && (
+                    <h1 className="font-bold text-lg mb-2">
+                      Car operates within
+                    </h1>
+                  )}
+                  {currentListing.driver_operates_within.map((item, index) => (
+                    <ListItem key={index}>{item.city}</ListItem>
+                  ))}
+
+                  {currentListing.included_in_price.length > 0 && (
+                    <h1 className="font-bold text-lg mb-2 mt-4">
+                      Included in price
+                    </h1>
+                  )}
+                  {currentListing.included_in_price.map((item, index) => (
+                    <ListItem key={index}>{item.included_in_price}</ListItem>
+                  ))}
+
+                  {currentListing.policy && (
+                    <h1 className="mt-4 font-bold">Please take note</h1>
+                  )}
+
+                  {currentListing.policy && (
+                    <p className="mt-2">{currentListing.policy}</p>
+                  )}
+                </div>
+
+                <div className="fixed top-3 left-4 flex flex-col">
                   <div
-                    className={
-                      "w-full sticky z-10 flex gap-2 bottom-10 !-mr-4 !-ml-4 !-mb-16 left-0 right-0 bg-gray-100 border-t border-gray-200 "
-                    }
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setCurrentListing(null);
+                      router.replace({
+                        query: {
+                          ...router.query,
+                          transportSlug: "",
+                        },
+                      });
+                    }}
+                    className="flex cursor-pointer items-center justify-center w-7 h-7 rounded-full bg-white shadow-lg"
                   >
-                    {slugIsCorrect && (
-                      <Button className="flex w-full items-center gap-1 !px-0 !py-1.5 font-bold !bg-blue-500 border-2 border-blue-500 !text-white">
-                        <span>Add to trip</span>
-                      </Button>
-                    )}
-                    <Button
-                      // onClick={setShowBasketPopup(true)}
-                      className={
-                        "flex w-full swiper-pagination swiper-button-next items-center gap-1 !px-0 !py-1.5 font-bold border-2 border-blue-500 " +
-                        (slugIsCorrect
-                          ? "!bg-transparent !text-black"
-                          : "!bg-blue-500 !text-white")
-                      }
-                    >
-                      <span>Add to basket</span>
-                    </Button>
-                  </div>
-                </>
-              )}
-            </SwiperSlide>
-
-            <SwiperSlide className="!w-full">
-              {currentListing && (
-                <>
-                  <div className="swiper-pagination bg-white swiper-button-prev cursor-pointer flex items-center gap-1">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6 text-blue-600"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth="2"
                     >
                       <path
-                        fillRule="evenodd"
-                        d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                        clipRule="evenodd"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M6 18L18 6M6 6l12 12"
                       />
                     </svg>
-                    <h3 className="font-bold text-blue-600">Back</h3>
-                  </div>
-
-                  <div className={"!w-full mt-8 remove-scroll"}>
-                    <div className="!mt-6 !h-full">
-                      <div
-                        onClick={() => {
-                          setShowStartingDate(false);
-                        }}
-                        className="h-full"
-                      >
-                        <SearchBar
-                          location={startingDestination}
-                          setLocation={setStartingDestination}
-                        ></SearchBar>
-
-                        <div className="mt-3 mb-3">
-                          <h1 className="font-bold mb-2">
-                            Car operates within
-                          </h1>
-                          <div className="flex flex-wrap">
-                            {currentListing.driver_operates_within.map(
-                              (location, index) => (
-                                <div
-                                  key={index}
-                                  className="bg-blue-500 text-sm mt-0.5 text-white px-2 py-1 mr-1 rounded-full"
-                                >
-                                  {location.city}
-                                </div>
-                              )
-                            )}
-                          </div>
-                        </div>
-
-                        <div className="mt-4 ml-4 relative">
-                          <div className="flex gap-1 items-center">
-                            <span className="font-bold">
-                              Select a starting date
-                            </span>
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-5 w-5 mt-0.5"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                              />
-                            </svg>
-                          </div>
-                          <div className="flex items-center gap-2 mb-3 mt-0.5">
-                            <span className="text-sm font-bold text-blue-600">
-                              {moment(startingDate).format("Do MMMM YYYY")}
-                            </span>
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              aria-hidden="true"
-                              role="img"
-                              className="h-4 w-4 text-blue-600 cursor-pointer"
-                              preserveAspectRatio="xMidYMid meet"
-                              viewBox="0 0 24 24"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setShowStartingDate(!showStartingDate);
-                              }}
-                            >
-                              <path
-                                fill="currentColor"
-                                d="M8.707 19.707L18 10.414L13.586 6l-9.293 9.293a1.003 1.003 0 0 0-.263.464L3 21l5.242-1.03c.176-.044.337-.135.465-.263zM21 7.414a2 2 0 0 0 0-2.828L19.414 3a2 2 0 0 0-2.828 0L15 4.586L19.414 9L21 7.414z"
-                              />
-                            </svg>
-                          </div>
-
-                          <DatePicker
-                            date={startingDate}
-                            setDate={setStartingDate}
-                            showDate={showStartingDate}
-                            setShowDate={setShowStartingDate}
-                            disableDate={new Date()}
-                            className="!w-[400px] !top-[46px]"
-                          ></DatePicker>
-
-                          <div className="mb-1 font-semibold">
-                            How long do you need this car?
-                          </div>
-
-                          <div className="flex gap-3 items-center mb-4 mt-2">
-                            <div
-                              onClick={() => {
-                                if (numberOfDays > 1) {
-                                  setNumberOfDays(numberOfDays - 1);
-                                }
-                              }}
-                              className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-gray-100 shadow-lg font-bold"
-                            >
-                              -
-                            </div>
-
-                            <div className="font-bold">
-                              {numberOfDays} {numberOfDays > 1 ? "days" : "day"}
-                            </div>
-                            <div
-                              onClick={() => {
-                                setNumberOfDays(numberOfDays + 1);
-                              }}
-                              className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-gray-100 shadow-lg font-bold"
-                            >
-                              +
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="mt-6 ml-4 relative">
-                          <div className="mb-1 font-semibold">
-                            Do you need a driver?
-                          </div>
-                          <div className="flex gap-2 items-center">
-                            <Switch
-                              switchButton={needADriver}
-                              changeSwitchButtonState={() => {
-                                setNeedADriver(!needADriver);
-                              }}
-                              switchButtonContainer="!w-[55px] !h-6"
-                              switchButtonCircle="!w-5 !h-5 !bg-blue-500"
-                              slideColorClass="!bg-blue-200"
-                            ></Switch>
-                            {!needADriver && (
-                              <div
-                                onClick={() => {
-                                  setNeedADriver(true);
-                                }}
-                                className="cursor-pointer text-sm"
-                              >
-                                no
-                              </div>
-                            )}
-                            {needADriver && (
-                              <div
-                                onClick={() => {
-                                  setNeedADriver(false);
-                                }}
-                                className="cursor-pointer text-sm"
-                              >
-                                yes
-                              </div>
-                            )}
-                          </div>
-                        </div>
-
-                        <div className="my-4">
-                          <div className="flex items-center justify-between">
-                            <div className="font-bold">Total cost</div>
-                            <Price
-                              stayPrice={
-                                currentListing.price_per_day * numberOfDays +
-                                (needADriver
-                                  ? currentListing.additional_price_with_a_driver *
-                                    numberOfDays
-                                  : 0)
-                              }
-                              className="text-lg"
-                            ></Price>
-                          </div>
-                        </div>
-
-                        <div className="flex justify-between items-center mt-6 gap-2">
-                          <Button
-                            onClick={() => {
-                              addToBasket();
-                            }}
-                            disabled={!startingDestination}
-                            className={
-                              "flex w-full !bg-blue-500 swiper-pagination swiper-button-next items-center gap-1 !px-0 !py-1.5 font-bold border-2 border-blue-500 " +
-                              (!startingDestination
-                                ? "opacity-50 cursor-not-allowed"
-                                : "")
-                            }
-                          >
-                            Add
-                            <div
-                              className={
-                                " " + (!addToBasketLoading ? "hidden" : "ml-2")
-                              }
-                            >
-                              <LoadingSpinerChase
-                                width={16}
-                                height={16}
-                                color="#fff"
-                              ></LoadingSpinerChase>
-                            </div>
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </>
-              )}
-            </SwiperSlide>
-          </Swiper>
-        </PopupModal>
-      </div>
-
-      <div className="md:hidden !relative">
-        <Modal
-          showModal={
-            currentListing && router.query.transportSlug ? true : false
-          }
-          closeModal={() => {
-            setCurrentListing(null);
-            router.replace({
-              query: {
-                ...router.query,
-                transportSlug: "",
-              },
-            });
-          }}
-          // className="absolute -left-[410px] -top-[250px] px-4 py-4 !z-[99] w-[400px] bg-white shadow-lg rounded-lg h-fit"
-          className="remove-scroll !overflow-y-scroll"
-          title={"Transport detail"}
-        >
-          <Swiper
-            {...settings}
-            autoHeight={true}
-            preventInteractionOnTransition={true}
-            allowTouchMove={false}
-            onSwiper={(swiper) => setAllowSlideNext(swiper.allowSlideNext)}
-            onSlideChange={(swiper) => setSwiperIndex(swiper.realIndex)}
-            className="!h-full !w-full !overflow-y-scroll remove-scroll"
-          >
-            <SwiperSlide className="">
-              {currentListing && (
-                <div className="px-3">
-                  <div className="h-[200px] relative">
-                    <div className="px-2 py-0.5 rounded-full text-sm z-10 bg-blue-300 absolute left-3 bottom-3">
-                      or similar
-                    </div>
-                    <Carousel
-                      images={currentListing.transportation_images
-                        .sort((x, y) => y.main - x.main)
-                        .map((image) => {
-                          return image.image;
-                        })}
-                      imageClass="rounded-tl-md rounded-tr-2xl"
-                    ></Carousel>
-                  </div>
-
-                  <div className="mt-2 mb-2">
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="text-lg font-semibold w-full text-gray-700 truncate">
-                        {currentListing.vehicle_make}
-                      </div>
-
-                      <div className="flex">
-                        <Price stayPrice={currentListing.price_per_day}></Price>
-                        <div className="text-xs mt-2">/day</div>
-                      </div>
-                    </div>
-
-                    <div className="text-sm ml-1 capitalize font-bold">
-                      {currentListing.type_of_car.toLowerCase()}
-                    </div>
-
-                    <div className="py-2 border-t border-b border-gray-400 px-2 my-2 text-sm text-gray-600 flex justify-between items-center">
-                      <div className="flex items-center gap-0.5">
-                        <Icon className="w-4 h-4" icon="carbon:user-filled" />
-                        <p>{currentListing.capacity}</p>
-                      </div>
-                      <div className="flex items-center gap-0.5">
-                        <Icon className="w-4 h-4" icon="bi:bag-fill" />
-                        <p>{currentListing.bags}</p>
-                      </div>
-                      <div className="flex items-center gap-0.5">
-                        <Icon
-                          className="w-4 h-4"
-                          icon="icon-park-solid:manual-gear"
-                        />
-                        <p className="capitalize">
-                          {currentListing.transmission.toLowerCase()}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-0.5">
-                        <Icon
-                          className="w-4 h-4"
-                          icon="ic:baseline-severe-cold"
-                        />
-                        <p className="capitalize">
-                          {currentListing.has_air_condition ? "AC" : "No AC"}
-                        </p>
-                      </div>
-                    </div>
-
-                    {currentListing.driver_operates_within.length > 0 && (
-                      <h1 className="font-bold text-lg mb-2">
-                        Car operates within
-                      </h1>
-                    )}
-                    {currentListing.driver_operates_within.map(
-                      (item, index) => (
-                        <ListItem key={index}>{item.city}</ListItem>
-                      )
-                    )}
-
-                    {currentListing.included_in_price.length > 0 && (
-                      <h1 className="font-bold text-lg mb-2 mt-4">
-                        Included in price
-                      </h1>
-                    )}
-                    {currentListing.included_in_price.map((item, index) => (
-                      <ListItem key={index}>{item.included_in_price}</ListItem>
-                    ))}
-
-                    {currentListing.policy && (
-                      <h1 className="mt-4 font-bold">Please take note</h1>
-                    )}
-
-                    {currentListing.policy && (
-                      <p className="mt-2">{currentListing.policy}</p>
-                    )}
-                  </div>
-
-                  <div>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Ipsa, quam dignissimos facere rerum odit fugit voluptas
-                    explicabo error voluptate blanditiis enim sunt quibusdam
-                    provident. Amet, porro. Officiis animi dolores hic? Vel est
-                    harum commodi, praesentium, ex quas hic ea cumque qui ad
-                    vero, minima nemo earum dolorem architecto sit dolores fugit
-                    voluptatibus veniam explicabo blanditiis! Delectus totam
-                    quod eius ut? Dignissimos consequatur doloribus quaerat
-                    reprehenderit? Rem perferendis quaerat doloribus rerum
-                    exercitationem iusto voluptatum culpa debitis, beatae quo,
-                    inventore quibusdam. Velit illum cum doloremque ea
-                    molestias, tempore perspiciatis labore maiores ipsa.
-                    Cupiditate illum, minima, distinctio reiciendis odio
-                    veritatis perferendis quisquam ullam velit eaque officia,
-                    incidunt odit voluptatibus est quasi illo! Tenetur harum
-                    ullam amet magni nesciunt veritatis optio ratione,
-                    aspernatur libero? Voluptates, in accusantium, modi cumque
-                    ipsa vitae beatae est unde, alias dolore aperiam amet
-                    tempora dolorem magnam porro. Harum repudiandae alias,
-                    similique hic nostrum id aperiam. Quod, doloribus quo.
-                    Error.
                   </div>
                 </div>
-              )}
 
-              <div
-                className={
-                  "w-full sticky z-10 flex gap-2 bottom-10 !-mb-16 left-0 right-0 bg-gray-100 border-t border-gray-200 "
-                }
-              >
-                {slugIsCorrect && (
-                  <Button className="flex w-full items-center gap-1 !px-0 !py-1.5 font-bold !bg-blue-500 border-2 border-blue-500 !text-white">
-                    <span>Add to trip</span>
-                  </Button>
-                )}
-                <Button
-                  // onClick={setShowBasketPopup(true)}
+                <div
                   className={
-                    "flex w-full swiper-pagination swiper-button-next items-center gap-1 !px-0 !py-1.5 font-bold border-2 border-blue-500 " +
-                    (slugIsCorrect
-                      ? "!bg-transparent !text-black"
-                      : "!bg-blue-500 !text-white")
+                    "w-full sticky z-10 flex gap-2 bottom-0 left-0 right-0 bg-gray-100 border-t border-gray-200 "
                   }
                 >
-                  <span>Add to basket</span>
-                </Button>
-              </div>
-            </SwiperSlide>
+                  {slugIsCorrect && (
+                    <Button className="flex w-full items-center gap-1 !px-0 !py-1.5 font-bold !bg-blue-500 border-2 border-blue-500 !text-white">
+                      <span>Add to trip</span>
+                    </Button>
+                  )}
+                  <Button
+                    onClick={() => {
+                      slideto(1);
+                    }}
+                    className={
+                      "flex w-full items-center gap-1 !px-0 !py-1.5 font-bold border-2 border-blue-500 " +
+                      (slugIsCorrect
+                        ? "!bg-transparent !text-black"
+                        : "!bg-blue-500 !text-white")
+                    }
+                  >
+                    <span>Add to basket</span>
+                  </Button>
+                </div>
+              </>
+            )}
+          </SwiperSlide>
 
-            <SwiperSlide className="!w-full">
-              {currentListing && (
-                <div className="px-4">
-                  <div className="swiper-pagination bg-white swiper-button-prev cursor-pointer flex items-center gap-1 mb-8">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6 text-blue-600"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
+          <SwiperSlide className="!p-4 h-screen overflow-y-scroll">
+            {currentListing && (
+              <>
+                <div
+                  onClick={() => {
+                    slideto(0);
+                  }}
+                  className="bg-white cursor-pointer flex items-center gap-1"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 text-blue-600"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  <h3 className="font-bold text-blue-600">Back</h3>
+                </div>
+
+                <div className={"!w-full mt-8 remove-scroll"}>
+                  <div className="!mt-6 !h-full">
+                    <div
+                      onClick={() => {
+                        setShowStartingDate(false);
+                      }}
+                      className="h-full"
                     >
-                      <path
-                        fillRule="evenodd"
-                        d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <h3 className="font-bold text-blue-600">Back</h3>
-                  </div>
+                      <SearchBar
+                        location={startingDestination}
+                        setLocation={setStartingDestination}
+                      ></SearchBar>
 
-                  <div className={"!w-full mt-6 remove-scroll"}>
-                    <div className="!mt-6 !h-full">
-                      <div
-                        onClick={() => {
-                          setShowStartingDate(false);
-                        }}
-                        className="h-full"
-                      >
-                        <SearchBar
-                          location={startingDestination}
-                          setLocation={setStartingDestination}
-                        ></SearchBar>
-
-                        <div className="mt-3 mb-3">
-                          <h1 className="font-bold mb-2">
-                            Car operates within
-                          </h1>
-                          <div className="flex flex-wrap">
-                            {currentListing.driver_operates_within.map(
-                              (location, index) => (
-                                <div
-                                  key={index}
-                                  className="bg-blue-500 text-sm mt-0.5 text-white px-2 py-1 mr-1 rounded-full"
-                                >
-                                  {location.city}
-                                </div>
-                              )
-                            )}
-                          </div>
-                        </div>
-
-                        <div className="mt-4 ml-4 relative">
-                          <div className="flex gap-1 items-center">
-                            <span className="font-bold">
-                              Select a starting date
-                            </span>
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-5 w-5 mt-0.5"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                              />
-                            </svg>
-                          </div>
-                          <div className="flex items-center gap-2 mb-3 mt-0.5">
-                            <span className="text-sm font-bold text-blue-600">
-                              {moment(startingDate).format("Do MMMM YYYY")}
-                            </span>
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              aria-hidden="true"
-                              role="img"
-                              className="h-4 w-4 text-blue-600 cursor-pointer"
-                              preserveAspectRatio="xMidYMid meet"
-                              viewBox="0 0 24 24"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setShowStartingDate(!showStartingDate);
-                              }}
-                            >
-                              <path
-                                fill="currentColor"
-                                d="M8.707 19.707L18 10.414L13.586 6l-9.293 9.293a1.003 1.003 0 0 0-.263.464L3 21l5.242-1.03c.176-.044.337-.135.465-.263zM21 7.414a2 2 0 0 0 0-2.828L19.414 3a2 2 0 0 0-2.828 0L15 4.586L19.414 9L21 7.414z"
-                              />
-                            </svg>
-                          </div>
-
-                          <DatePicker
-                            date={startingDate}
-                            setDate={setStartingDate}
-                            showDate={showStartingDate}
-                            setShowDate={setShowStartingDate}
-                            disableDate={new Date()}
-                            className="!w-[400px] !top-[46px]"
-                          ></DatePicker>
-
-                          <div className="mb-1 font-semibold">
-                            How long do you need this car?
-                          </div>
-
-                          <div className="flex gap-3 items-center mb-4 mt-2">
-                            <div
-                              onClick={() => {
-                                if (numberOfDays > 1) {
-                                  setNumberOfDays(numberOfDays - 1);
-                                }
-                              }}
-                              className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-gray-100 shadow-lg font-bold"
-                            >
-                              -
-                            </div>
-
-                            <div className="font-bold">
-                              {numberOfDays} {numberOfDays > 1 ? "days" : "day"}
-                            </div>
-                            <div
-                              onClick={() => {
-                                setNumberOfDays(numberOfDays + 1);
-                              }}
-                              className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-gray-100 shadow-lg font-bold"
-                            >
-                              +
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="mt-6 ml-4 relative">
-                          <div className="mb-1 font-semibold">
-                            Do you need a driver?
-                          </div>
-                          <div className="flex gap-2 items-center">
-                            <Switch
-                              switchButton={needADriver}
-                              changeSwitchButtonState={() => {
-                                setNeedADriver(!needADriver);
-                              }}
-                              switchButtonContainer="!w-[55px] !h-6"
-                              switchButtonCircle="!w-5 !h-5 !bg-blue-500"
-                              slideColorClass="!bg-blue-200"
-                            ></Switch>
-                            {!needADriver && (
+                      <div className="mt-3 mb-3">
+                        <h1 className="font-bold mb-2">Car operates within</h1>
+                        <div className="flex flex-wrap">
+                          {currentListing.driver_operates_within.map(
+                            (location, index) => (
                               <div
-                                onClick={() => {
-                                  setNeedADriver(true);
-                                }}
-                                className="cursor-pointer text-sm"
+                                key={index}
+                                className="bg-blue-500 text-sm mt-0.5 text-white px-2 py-1 mr-1 rounded-full"
                               >
-                                no
+                                {location.city}
                               </div>
-                            )}
-                            {needADriver && (
-                              <div
-                                onClick={() => {
-                                  setNeedADriver(false);
-                                }}
-                                className="cursor-pointer text-sm"
-                              >
-                                yes
-                              </div>
-                            )}
-                          </div>
+                            )
+                          )}
                         </div>
+                      </div>
 
-                        <div className="my-4">
-                          <div className="flex items-center justify-between">
-                            <div className="font-bold">Total cost</div>
-                            <Price
-                              stayPrice={
-                                currentListing.price_per_day * numberOfDays +
-                                (needADriver
-                                  ? currentListing.additional_price_with_a_driver *
-                                    numberOfDays
-                                  : 0)
-                              }
-                              className="text-lg"
-                            ></Price>
-                          </div>
+                      <div className="mt-4 ml-4 relative">
+                        <div className="flex gap-1 items-center">
+                          <span className="font-bold">
+                            Select a starting date
+                          </span>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5 mt-0.5"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                            />
+                          </svg>
                         </div>
-
-                        <div className="flex justify-between items-center mt-6 gap-2">
-                          <Button
-                            onClick={() => {
-                              addToBasket();
+                        <div className="flex items-center gap-2 mb-3 mt-0.5">
+                          <span className="text-sm font-bold text-blue-600">
+                            {moment(startingDate).format("Do MMMM YYYY")}
+                          </span>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            aria-hidden="true"
+                            role="img"
+                            className="h-4 w-4 text-blue-600 cursor-pointer"
+                            preserveAspectRatio="xMidYMid meet"
+                            viewBox="0 0 24 24"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setShowStartingDate(!showStartingDate);
                             }}
-                            disabled={!startingDestination}
+                          >
+                            <path
+                              fill="currentColor"
+                              d="M8.707 19.707L18 10.414L13.586 6l-9.293 9.293a1.003 1.003 0 0 0-.263.464L3 21l5.242-1.03c.176-.044.337-.135.465-.263zM21 7.414a2 2 0 0 0 0-2.828L19.414 3a2 2 0 0 0-2.828 0L15 4.586L19.414 9L21 7.414z"
+                            />
+                          </svg>
+                        </div>
+
+                        <DatePicker
+                          date={startingDate}
+                          setDate={setStartingDate}
+                          showDate={showStartingDate}
+                          setShowDate={setShowStartingDate}
+                          disableDate={new Date()}
+                          className="!w-[400px] !top-[46px]"
+                        ></DatePicker>
+
+                        <div className="mb-1 font-semibold">
+                          How long do you need this car?
+                        </div>
+
+                        <div className="flex gap-3 items-center mb-4 mt-2">
+                          <div
+                            onClick={() => {
+                              if (numberOfDays > 1) {
+                                setNumberOfDays(numberOfDays - 1);
+                              }
+                            }}
+                            className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-gray-100 shadow-lg font-bold"
+                          >
+                            -
+                          </div>
+
+                          <div className="font-bold">
+                            {numberOfDays} {numberOfDays > 1 ? "days" : "day"}
+                          </div>
+                          <div
+                            onClick={() => {
+                              setNumberOfDays(numberOfDays + 1);
+                            }}
+                            className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-gray-100 shadow-lg font-bold"
+                          >
+                            +
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="mt-6 ml-4 relative">
+                        <div className="mb-1 font-semibold">
+                          Do you need a driver?
+                        </div>
+                        <div className="flex gap-2 items-center">
+                          <Switch
+                            switchButton={needADriver}
+                            changeSwitchButtonState={() => {
+                              setNeedADriver(!needADriver);
+                            }}
+                            switchButtonContainer="!w-[55px] !h-6"
+                            switchButtonCircle="!w-5 !h-5 !bg-blue-500"
+                            slideColorClass="!bg-blue-200"
+                          ></Switch>
+                          {!needADriver && (
+                            <div
+                              onClick={() => {
+                                setNeedADriver(true);
+                              }}
+                              className="cursor-pointer text-sm"
+                            >
+                              no
+                            </div>
+                          )}
+                          {needADriver && (
+                            <div
+                              onClick={() => {
+                                setNeedADriver(false);
+                              }}
+                              className="cursor-pointer text-sm"
+                            >
+                              yes
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="my-4">
+                        <div className="flex items-center justify-between">
+                          <div className="font-bold">Total cost</div>
+                          <Price
+                            stayPrice={
+                              currentListing.price_per_day * numberOfDays +
+                              (needADriver
+                                ? currentListing.additional_price_with_a_driver *
+                                  numberOfDays
+                                : 0)
+                            }
+                            className="text-lg"
+                          ></Price>
+                        </div>
+                      </div>
+
+                      <div className="w-full sticky z-10 flex gap-2 bottom-10 left-0 right-0 bg-gray-100 border-t border-gray-200">
+                        <Button
+                          onClick={() => {
+                            addToBasket();
+                          }}
+                          disabled={!startingDestination}
+                          className={
+                            "flex w-full !bg-blue-500 swiper-pagination swiper-button-next items-center gap-1 !px-0 !py-1.5 font-bold border-2 border-blue-500 " +
+                            (!startingDestination
+                              ? "opacity-50 cursor-not-allowed"
+                              : "")
+                          }
+                        >
+                          Add
+                          <div
                             className={
-                              "flex w-full !bg-blue-500 swiper-pagination swiper-button-next items-center gap-1 !px-0 !py-1.5 font-bold border-2 border-blue-500 " +
-                              (!startingDestination
-                                ? "opacity-50 cursor-not-allowed"
-                                : "")
+                              " " + (!addToBasketLoading ? "hidden" : "ml-2")
                             }
                           >
-                            Add
-                            <div
-                              className={
-                                " " + (!addToBasketLoading ? "hidden" : "ml-2")
-                              }
-                            >
-                              <LoadingSpinerChase
-                                width={16}
-                                height={16}
-                                color="#fff"
-                              ></LoadingSpinerChase>
-                            </div>
-                          </Button>
-                        </div>
+                            <LoadingSpinerChase
+                              width={16}
+                              height={16}
+                              color="#fff"
+                            ></LoadingSpinerChase>
+                          </div>
+                        </Button>
                       </div>
                     </div>
                   </div>
                 </div>
-              )}
-            </SwiperSlide>
-          </Swiper>
-        </Modal>
-      </div>
+              </>
+            )}
+          </SwiperSlide>
+        </Swiper>
+      </Dialogue>
     </div>
   );
 };

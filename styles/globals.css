@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 #nprogress .bar {
-  @apply !bg-red-500 !h-1.5;
+  @apply !bg-blue-600 !h-1.5;
 }
 
 .ql-container.ql-snow {
