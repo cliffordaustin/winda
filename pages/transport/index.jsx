@@ -1463,7 +1463,30 @@ const Transport = ({
                   )}
 
                   {currentListing.policy && (
-                    <p className="mt-2">{currentListing.policy}</p>
+                    // <p className="mt-2">{currentListing.policy}</p>
+                    <p className="mt-2">
+                      Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                      Reiciendis ad sunt assumenda voluptate aliquam, totam quas
+                      similique. Eum quod ex iusto totam repellat doloribus
+                      dignissimos quas maxime. Minima, cumque error? Labore
+                      voluptates incidunt alias numquam dignissimos ut autem
+                      earum nihil, iure porro recusandae eius fugit eaque
+                      dolorum esse tempore necessitatibus, sint pariatur
+                      laboriosam! Incidunt, quia adipisci! Cumque odit ea
+                      excepturi? Nostrum beatae distinctio nam magnam voluptates
+                      quasi autem, facere possimus perspiciatis esse natus ut
+                      doloribus atque, ratione officia earum placeat et suscipit
+                      temporibus rem in quibusdam saepe? Ab, repellat similique?
+                      Omnis et consectetur libero adipisci iste laboriosam
+                      excepturi praesentium optio sequi voluptatum obcaecati
+                      illum hic pariatur recusandae natus eum ducimus autem,
+                      porro beatae. Totam ullam, voluptatum nemo necessitatibus
+                      minus modi! Architecto recusandae temporibus eaque nam
+                      reiciendis voluptatum a iusto numquam nesciunt quas dicta
+                      harum at qui veritatis, sapiente laboriosam velit
+                      officiis? Animi tempora sunt voluptatum rem et eius amet
+                      qui?
+                    </p>
                   )}
                 </div>
 
