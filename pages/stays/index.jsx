@@ -1745,7 +1745,10 @@ function Stays({
                     router.push({
                       query: {
                         ...router.query,
-                        pricing_type: "REASONABLE",
+                        pricing_type:
+                          router.query.pricing_type === "REASONABLE"
+                            ? ""
+                            : "REASONABLE",
                         min_price: "",
                         max_price: "",
                       },
@@ -1765,7 +1768,10 @@ function Stays({
                     router.push({
                       query: {
                         ...router.query,
-                        pricing_type: "MID-RANGE",
+                        pricing_type:
+                          router.query.pricing_type === "MID-RANGE"
+                            ? ""
+                            : "MID-RANGE",
                         min_price: "",
                         max_price: "",
                       },
@@ -1785,7 +1791,10 @@ function Stays({
                     router.push({
                       query: {
                         ...router.query,
-                        pricing_type: "HIGH-END",
+                        pricing_type:
+                          router.query.pricing_type === "HIGH-END"
+                            ? ""
+                            : "HIGH-END",
                         min_price: "",
                         max_price: "",
                       },
@@ -2525,7 +2534,10 @@ function Stays({
                       router.push({
                         query: {
                           ...router.query,
-                          pricing_type: "REASONABLE",
+                          pricing_type:
+                            router.query.pricing_type === "REASONABLE"
+                              ? ""
+                              : "REASONABLE",
                           min_price: "",
                           max_price: "",
                         },
@@ -2545,7 +2557,10 @@ function Stays({
                       router.push({
                         query: {
                           ...router.query,
-                          pricing_type: "MID-RANGE",
+                          pricing_type:
+                            router.query.pricing_type === "MID-RANGE"
+                              ? ""
+                              : "MID-RANGE",
                           min_price: "",
                           max_price: "",
                         },
@@ -2565,7 +2580,10 @@ function Stays({
                       router.push({
                         query: {
                           ...router.query,
-                          pricing_type: "HIGH-END",
+                          pricing_type:
+                            router.query.pricing_type === "HIGH-END"
+                              ? ""
+                              : "HIGH-END",
                           min_price: "",
                           max_price: "",
                         },
