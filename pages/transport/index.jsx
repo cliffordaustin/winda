@@ -513,10 +513,7 @@ const Transport = ({
 
   return (
     <div
-      className={
-        "relative overflow-x-hidden md:overflow-x-visible " +
-        (currentListing ? "h-screen overflow-y-hidden" : "")
-      }
+      className={"relative overflow-x-hidden md:overflow-x-visible "}
       onClick={() => {
         setState({
           ...state,
@@ -1466,7 +1463,30 @@ const Transport = ({
                   )}
 
                   {currentListing.policy && (
-                    <p className="mt-2">{currentListing.policy}</p>
+                    // <p className="mt-2">{currentListing.policy}</p>
+                    <p>
+                      Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                      Voluptate recusandae voluptas magni porro nemo excepturi
+                      maxime, cumque atque unde nesciunt quisquam labore
+                      perspiciatis architecto consequuntur ratione molestias,
+                      incidunt alias! Vitae! Dolorum placeat exercitationem
+                      mollitia eum rerum? Amet accusantium vitae reprehenderit
+                      accusamus doloremque molestiae fugit sed quaerat ipsa. Quo
+                      quasi dignissimos, optio similique vero reprehenderit,
+                      voluptas enim ipsam autem sit asperiores. Nisi animi
+                      perspiciatis quasi nobis illum nulla, est quia quos fuga
+                      recusandae odio debitis, voluptas qui, nihil ea quibusdam
+                      modi culpa. Ullam voluptatibus quas inventore vel, ad
+                      quibusdam aliquam nihil! Repellendus facere dolorum cum
+                      eos nemo totam debitis sint. Perferendis itaque nam,
+                      libero quia quod amet error laborum veniam tempore quidem
+                      quisquam dignissimos illum alias nostrum harum magni, ex
+                      eos! Deleniti, reprehenderit adipisci voluptates ea porro
+                      quaerat nobis, non placeat saepe, voluptate repellat
+                      aspernatur. Eaque cupiditate cumque animi necessitatibus,
+                      in minima omnis adipisci itaque, fuga non nemo est
+                      molestiae molestias.
+                    </p>
                   )}
                 </div>
 
@@ -1503,7 +1523,7 @@ const Transport = ({
 
                 <div
                   className={
-                    "w-full sticky z-10 flex gap-2 bottom-0 left-0 right-0 bg-gray-100 border-t border-gray-200 "
+                    "w-full z-10 flex gap-2 bottom-0 left-0 right-0 bg-gray-100 border-t border-gray-200 "
                   }
                 >
                   {slugIsCorrect && (
