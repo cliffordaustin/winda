@@ -1523,7 +1523,7 @@ const Transport = ({
 
                 <div
                   className={
-                    "w-full z-10 flex gap-2 bottom-0 left-0 right-0 bg-gray-100 border-t border-gray-200 "
+                    "w-full z-10 flex gap-2 sticky bottom-0 safari-bottom-padding bg-gray-100 border-t border-gray-200 "
                   }
                 >
                   {slugIsCorrect && (
