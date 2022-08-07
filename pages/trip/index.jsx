@@ -37,6 +37,7 @@ import Select from "react-select";
 import { Icon } from "@iconify/react";
 import Dropdown from "../../components/ui/Dropdown";
 import Tags from "../../components/Trip/Tags";
+import Dialogue from "../../components/Home/Dialogue";
 
 const Trips = ({
   userProfile,
@@ -798,15 +799,16 @@ const Trips = ({
         </div>
       </div>
 
-      <Modal
-        showModal={showAddToTripPopup}
+      <Dialogue
+        isOpen={showAddToTripPopup}
         closeModal={() => {
           setShowAddToTripPopup(false);
         }}
-        title="add to a trip"
-        className="!overflow-y-scroll max-w-[500px] !h-[700px]"
+        title="Add to Trip"
+        dialogueTitleClassName="!font-bold"
+        dialoguePanelClassName="!overflow-y-scroll !p-4 max-h-[500px] max-w-lg"
       >
-        <div className="px-4 mt-2 h-full relative">
+        <div className="h-full relative">
           {userTrips.map((trip, index) => {
             return (
               <SingleTrip
@@ -842,7 +844,7 @@ const Trips = ({
             </Button>
           </div>
         </div>
-      </Modal>
+      </Dialogue>
 
       <div className="mt-20">
         <Footer></Footer>

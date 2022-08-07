@@ -19,7 +19,7 @@ function UserDropdown({
   return (
     <PopoverBox
       btnClassName="relative flex items-center gap-1 px-1 py-1 bg-gray-100 rounded-3xl cursor-pointer"
-      panelClassName="bg-white rounded-xl shadow-md -left-40 mt-2 w-56"
+      panelClassName="bg-white rounded-xl shadow-md -left-40 mt-2 w-56 overflow-hidden"
       btnPopover={
         <>
           {!userProfile && (
@@ -186,7 +186,7 @@ function UserDropdown({
       {userProfile && (
         <Link href="/logout">
           <a>
-            <div className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2 mb-2">
+            <div className="hover:bg-gray-100 text-base transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2 mb-2">
               Logout
             </div>
           </a>
