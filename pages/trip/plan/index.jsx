@@ -60,7 +60,7 @@ const AllUserTrips = ({ userTrips, userProfile }) => {
         </div>
       </div>
       {userTrips.length > 0 && (
-        <>
+        <div className="px-2">
           <div className="mt-20 font-bold text-2xl text-center">Your trips</div>
           <div className="!overflow-y-scroll max-w-[500px] bg-white shadow-lg border rounded-2xl mt-4 mx-auto !max-h-[600px]">
             <div className="px-4 my-2 h-full relative">
@@ -69,7 +69,7 @@ const AllUserTrips = ({ userTrips, userProfile }) => {
               })}
             </div>
           </div>
-        </>
+        </div>
       )}
 
       {userTrips.length === 0 && (

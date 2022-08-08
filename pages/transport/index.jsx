@@ -511,6 +511,41 @@ const Transport = ({
     }
   };
 
+  const [addToTripLoading, setAddToTripLoading] = useState(false);
+
+  const addToTrip = async () => {
+    const token = Cookies.get("token");
+
+    setAddToTripLoading(true);
+
+    if (token) {
+      await axios
+        .put(
+          `${process.env.NEXT_PUBLIC_baseURL}/trip/${router.query.trip}/`,
+          {
+            transport_id: currentListing.id,
+            transport_number_of_days: 1,
+            transport_from_date: null,
+            user_need_a_driver: false,
+            starting_point: null,
+          },
+          {
+            headers: {
+              Authorization: "Token " + token,
+            },
+          }
+        )
+        .then(() => {
+          router.push({
+            pathname: `/trip/plan/${router.query.group_trip}`,
+          });
+        })
+        .catch((err) => {
+          setAddToTripLoading(false);
+        });
+    }
+  };
+
   return (
     <div
       className={"relative overflow-x-hidden md:overflow-x-visible "}
@@ -1504,8 +1539,21 @@ const Transport = ({
                   }
                 >
                   {slugIsCorrect && (
-                    <Button className="flex w-full items-center gap-1 !px-0 !py-1.5 font-bold !bg-blue-500 border-2 border-blue-500 !text-white">
+                    <Button
+                      onClick={() => {
+                        addToTrip();
+                      }}
+                      className="flex w-full items-center gap-1 !px-0 !py-1.5 font-bold !bg-blue-500 border-2 border-blue-500 !text-white"
+                    >
                       <span>Add to trip</span>
+                      {addToTripLoading && (
+                        <div>
+                          <LoadingSpinerChase
+                            width={14}
+                            height={14}
+                          ></LoadingSpinerChase>
+                        </div>
+                      )}
                     </Button>
                   )}
                   <Button

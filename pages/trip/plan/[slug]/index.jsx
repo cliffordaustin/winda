@@ -393,23 +393,21 @@ function PlanTrip({
             })
           }
         ></Navbar>
-        <div className="flex flex-col items-center justify-center mt-24">
-          <p className="font-bold text-xl">
-            You have no item in your order. Checkout;
-          </p>
-          <div className="flex gap-2 mt-2">
-            <Link href="/stays">
-              <a>
-                <Button>Stays</Button>
-              </a>
-            </Link>
-            <Link href="/experiences">
-              <a>
-                <Button>Experiences</Button>
-              </a>
-            </Link>
+
+        <p className="mt-20 text-base font-bold text-center px-4">
+          You have no item in this trip.{" "}
+          <div className="inline">
+            Please check out our{" "}
+            <span
+              onClick={() => {
+                router.push("/trip");
+              }}
+              className="text-blue-500 hover:text-blue-800 cursor-pointer"
+            >
+              curated trips
+            </span>
           </div>
-        </div>
+        </p>
       </>
     );
   }
