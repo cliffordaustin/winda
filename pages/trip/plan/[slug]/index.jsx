@@ -263,14 +263,14 @@ function PlanTrip({
   const [order, setOrder] = useState([]);
 
   const setAllOrders = () => {
-    let orderFormatted = [];
-    if (userTrips.trip) {
-      orderFormatted = userTrips.trip.sort((a, b) => {
-        return new Date(a.from_date) - new Date(b.from_date);
-      });
-    }
+    // let orderFormatted = [];
+    // if (userTrips.trip) {
+    //   orderFormatted = userTrips.trip.sort((a, b) => {
+    //     return new Date(a.from_date) - new Date(b.from_date);
+    //   });
+    // }
 
-    setOrder(orderFormatted);
+    setOrder(userTrips.trip);
   };
 
   const [showMap, setShowMap] = useState(false);
