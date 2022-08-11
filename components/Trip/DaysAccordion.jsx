@@ -3,12 +3,14 @@ import PropTypes from "prop-types";
 import Accordion from "../ui/Accordion";
 
 const DaysAccordion = ({ children, title, showAccordionByDefault = false }) => {
-  const [activeAccordion, setActiveAccordion] = useState(false);
+  const [activeAccordion, setActiveAccordion] = useState(
+    showAccordionByDefault
+  );
   return (
     <>
       <Accordion
         title={title}
-        accordion={showAccordionByDefault ? true : activeAccordion}
+        accordion={activeAccordion}
         changeStateFunc={() => {
           setActiveAccordion(!activeAccordion);
         }}
