@@ -61,27 +61,37 @@ const Cart = ({
         const nights =
           new Date(allItemsInCart[index].to_date).getDate() -
           new Date(allItemsInCart[index].from_date).getDate();
-        price +=
-          getStayPrice(
-            allItemsInCart[index].plan,
-            item,
-            allItemsInCart[index].num_of_adults,
-            allItemsInCart[index].num_of_children,
-            allItemsInCart[index].num_of_children_non_resident,
-            allItemsInCart[index].num_of_adults_non_resident
-          ) * nights;
+
+        if (!allItemsInCart[index].stay.per_house) {
+          price +=
+            getStayPrice(
+              allItemsInCart[index].plan,
+              item,
+              allItemsInCart[index].num_of_adults,
+              allItemsInCart[index].num_of_children,
+              allItemsInCart[index].num_of_children_non_resident,
+              allItemsInCart[index].num_of_adults_non_resident
+            ) * nights;
+        } else if (allItemsInCart[index].stay.per_house) {
+          price += allItemsInCart[index].stay.per_house_price * nights;
+        }
       } else if (!Cookies.get("token") && Cookies.get("cart")) {
         const nights =
           new Date(item.to_date).getDate() - new Date(item.from_date).getDate();
-        price +=
-          getStayPrice(
-            item.plan,
-            item,
-            item.num_of_adults,
-            item.num_of_children,
-            item.num_of_children_non_resident,
-            item.num_of_adults_non_resident
-          ) * nights;
+
+        if (!item.per_house) {
+          price +=
+            getStayPrice(
+              item.plan,
+              item,
+              item.num_of_adults,
+              item.num_of_children,
+              item.num_of_children_non_resident,
+              item.num_of_adults_non_resident
+            ) * nights;
+        } else if (item.per_house) {
+          price += item.per_house_price * nights;
+        }
       }
     });
     activitiesCart.forEach((item, index) => {

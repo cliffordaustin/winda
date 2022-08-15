@@ -57,7 +57,21 @@ function Listing({
   const [newPrice, setNewPrice] = useState(null);
 
   const price = () => {
-    return listing.price_non_resident || listing.price;
+    return (
+      listing.price_non_resident ||
+      listing.price ||
+      listing.per_house_price ||
+      listing.deluxe_price_non_resident ||
+      listing.deluxe_price ||
+      listing.family_room_price_non_resident ||
+      listing.family_room_price ||
+      listing.executive_suite_room_price_non_resident ||
+      listing.executive_suite_room_price ||
+      listing.presidential_suite_room_price_non_resident ||
+      listing.presidential_suite_room_price ||
+      listing.emperor_suite_room_price_non_resident ||
+      listing.emperor_suite_room_price
+    );
   };
 
   const priceConversion = async (price) => {

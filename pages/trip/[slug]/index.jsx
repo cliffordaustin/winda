@@ -150,9 +150,10 @@ function TripDetail({ userProfile, userTrips, trip }) {
 
   const totalPrice = () => {
     return (
-      (trip.stay ? trip.stay.price_non_resident : 0) +
-      (trip.activity ? trip.activity.price_non_resident : 0) +
-      (trip.transport ? trip.transport.price_per_day : 0)
+      ((trip.stay ? trip.stay.price_non_resident : 0) +
+        (trip.activity ? trip.activity.price_non_resident : 0) +
+        (trip.transport ? trip.transport.price_per_day : 0)) *
+      (trip.total_number_of_days ? trip.total_number_of_days : 1)
     );
   };
 
@@ -409,7 +410,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
               <div className="w-[25%] flex flex-col justify-center items-center border-r">
                 <span className="font-bold text-xs font-SourceSans">DAYS</span>
                 <h1 className="font-bold text-gray-800 !text-base sm:!text-2xl md:!text-4xl !font-serif">
-                  3
+                  {trip.total_number_of_days}
                 </h1>
               </div>
 
@@ -621,6 +622,24 @@ function TripDetail({ userProfile, userTrips, trip }) {
               </div>
             </div>
 
+            <div className="flex flex-col gap-4 mb-6">
+              <div className="flex gap-3 md:gap-6">
+                <span className="font-bold">Starting location</span>
+                <span> - </span>
+                <span>
+                  {trip.starting_location}, {trip.country}
+                </span>
+              </div>
+
+              <div className="flex gap-3 md:gap-6 mt-1">
+                <span className="font-bold">Finish location</span>
+                <span> - </span>
+                <span>
+                  {trip.ending_location}, {trip.country}
+                </span>
+              </div>
+            </div>
+
             <div className="mb-6">
               <h1 className="font-bold text-2xl text-gray-700 font-OpenSans mb-2">
                 Trip highlights
@@ -651,49 +670,15 @@ function TripDetail({ userProfile, userTrips, trip }) {
             </div>
 
             <div className="mt-4">
-              <DaysAccordion title={"Day 1"} showAccordionByDefault={true}>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure
-                facilis ducimus necessitatibus quam corporis quis consequuntur,
-                ut ab id aperiam explicabo. Perferendis porro facilis sequi
-                maiores voluptatem doloribus odio sit! Corporis, animi
-                exercitationem asperiores laborum vero perferendis ipsa eum
-                nesciunt sunt consectetur, dolores suscipit error earum
-                praesentium eligendi voluptas, deserunt voluptatem totam.
-                Aliquid, beatae aliquam? Dolores sapiente consequatur voluptatum
-                itaque! Illo nemo rem tenetur repudiandae cum nulla nisi
-                necessitatibus dignissimos ab ipsum est voluptatem in architecto
-                nihil optio, dolore mollitia! Fuga nulla commodi tenetur tempore
-                rem harum quisquam molestiae mollitia?
-              </DaysAccordion>
-              <DaysAccordion title={"Day 2"}>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure
-                facilis ducimus necessitatibus quam corporis quis consequuntur,
-                ut ab id aperiam explicabo. Perferendis porro facilis sequi
-                maiores voluptatem doloribus odio sit! Corporis, animi
-                exercitationem asperiores laborum vero perferendis ipsa eum
-                nesciunt sunt consectetur, dolores suscipit error earum
-                praesentium eligendi voluptas, deserunt voluptatem totam.
-                Aliquid, beatae aliquam? Dolores sapiente consequatur voluptatum
-                itaque! Illo nemo rem tenetur repudiandae cum nulla nisi
-                necessitatibus dignissimos ab ipsum est voluptatem in architecto
-                nihil optio, dolore mollitia! Fuga nulla commodi tenetur tempore
-                rem harum quisquam molestiae mollitia?
-              </DaysAccordion>
-
-              <DaysAccordion title={"Day 3"}>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure
-                facilis ducimus necessitatibus quam corporis quis consequuntur,
-                ut ab id aperiam explicabo. Perferendis porro facilis sequi
-                maiores voluptatem doloribus odio sit! Corporis, animi
-                exercitationem asperiores laborum vero perferendis ipsa eum
-                nesciunt sunt consectetur, dolores suscipit error earum
-                praesentium eligendi voluptas, deserunt voluptatem totam.
-                Aliquid, beatae aliquam? Dolores sapiente consequatur voluptatum
-                itaque! Illo nemo rem tenetur repudiandae cum nulla nisi
-                necessitatibus dignissimos ab ipsum est voluptatem in architecto
-                nihil optio, dolore mollitia! Fuga nulla commodi tenetur tempore
-                rem harum quisquam molestiae mollitia?
-              </DaysAccordion>
+              {trip.itineraries.map((itinerary, index) => (
+                <DaysAccordion
+                  key={index}
+                  title={itinerary.day}
+                  showAccordionByDefault={index === 0 ? true : false}
+                >
+                  {itinerary.description}
+                </DaysAccordion>
+              ))}
             </div>
           </Element>
 
@@ -860,53 +845,15 @@ function TripDetail({ userProfile, userTrips, trip }) {
               Frequently asked questions
             </div>
 
-            <DaysAccordion
-              title={"What is the best season to go?"}
-              showAccordionByDefault={true}
-            >
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure
-              facilis ducimus necessitatibus quam corporis quis consequuntur, ut
-              ab id aperiam explicabo. Perferendis porro facilis sequi maiores
-              voluptatem doloribus odio sit! Corporis, animi exercitationem
-              asperiores laborum vero perferendis ipsa eum nesciunt sunt
-              consectetur, dolores suscipit error earum praesentium eligendi
-              voluptas, deserunt voluptatem totam. Aliquid, beatae aliquam?
-              Dolores sapiente consequatur voluptatum itaque! Illo nemo rem
-              tenetur repudiandae cum nulla nisi necessitatibus dignissimos ab
-              ipsum est voluptatem in architecto nihil optio, dolore mollitia!
-              Fuga nulla commodi tenetur tempore rem harum quisquam molestiae
-              mollitia?
-            </DaysAccordion>
-
-            <DaysAccordion title={"Is there a refund?"}>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure
-              facilis ducimus necessitatibus quam corporis quis consequuntur, ut
-              ab id aperiam explicabo. Perferendis porro facilis sequi maiores
-              voluptatem doloribus odio sit! Corporis, animi exercitationem
-              asperiores laborum vero perferendis ipsa eum nesciunt sunt
-              consectetur, dolores suscipit error earum praesentium eligendi
-              voluptas, deserunt voluptatem totam. Aliquid, beatae aliquam?
-              Dolores sapiente consequatur voluptatum itaque! Illo nemo rem
-              tenetur repudiandae cum nulla nisi necessitatibus dignissimos ab
-              ipsum est voluptatem in architecto nihil optio, dolore mollitia!
-              Fuga nulla commodi tenetur tempore rem harum quisquam molestiae
-              mollitia?
-            </DaysAccordion>
-
-            <DaysAccordion title={"Can I edit this trip?"}>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure
-              facilis ducimus necessitatibus quam corporis quis consequuntur, ut
-              ab id aperiam explicabo. Perferendis porro facilis sequi maiores
-              voluptatem doloribus odio sit! Corporis, animi exercitationem
-              asperiores laborum vero perferendis ipsa eum nesciunt sunt
-              consectetur, dolores suscipit error earum praesentium eligendi
-              voluptas, deserunt voluptatem totam. Aliquid, beatae aliquam?
-              Dolores sapiente consequatur voluptatum itaque! Illo nemo rem
-              tenetur repudiandae cum nulla nisi necessitatibus dignissimos ab
-              ipsum est voluptatem in architecto nihil optio, dolore mollitia!
-              Fuga nulla commodi tenetur tempore rem harum quisquam molestiae
-              mollitia?
-            </DaysAccordion>
+            {trip.faqs.map((faq, index) => (
+              <DaysAccordion
+                key={index}
+                title={faq.question}
+                showAccordionByDefault={index === 0 ? true : false}
+              >
+                {faq.answer}
+              </DaysAccordion>
+            ))}
           </Element>
         </div>
       </div>
@@ -922,7 +869,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
         }}
         dialoguePanelClassName="max-h-[500px] max-w-xl overflow-y-scroll remove-scroll !p-4"
       >
-        <div className="mt-4 md:px-4">
+        <div className="md:px-4">
           <h1 className="font-bold text-2xl">Quick facts</h1>
           <div className="flex">
             <div className="flex flex-col w-full">
@@ -1314,7 +1261,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
         }}
         dialoguePanelClassName="max-h-[500px] max-w-xl overflow-y-scroll remove-scroll !p-4"
       >
-        <div className="mt-4 md:px-4">
+        <div className="md:px-4">
           <h1 className="font-bold text-2xl">About</h1>
 
           <div className="flex flex-col w-full">
@@ -1574,7 +1521,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
         }}
         dialoguePanelClassName="max-h-[500px] max-w-xl overflow-y-scroll remove-scroll !p-4"
       >
-        <div className="mt-4 md:px-4">
+        <div className="md:px-4">
           <div className="flex items-center gap-2">
             <h1 className="font-bold capitalize text-xl">
               {trip.transport.vehicle_make.toLowerCase()}

@@ -98,7 +98,7 @@ function PlanTrip({
       userTrips.trip.forEach((item, index) => {
         const nights =
           new Date(item.to_date).getDate() - new Date(item.from_date).getDate();
-        if (item.stay) {
+        if (item.stay && !item.stay.per_house) {
           price +=
             getStayPrice(
               item.stay_plan,
@@ -108,6 +108,10 @@ function PlanTrip({
               item.stay_num_of_children_non_resident,
               item.stay_num_of_adults_non_resident
             ) * (nights || 1);
+        }
+
+        if (item.stay && item.stay.per_house) {
+          price += item.stay.per_house_price * nights;
         }
 
         if (item.activity) {
