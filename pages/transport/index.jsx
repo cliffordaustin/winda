@@ -1670,8 +1670,7 @@ const Transport = ({
               !selectedFlightStartingLocation || !selectedFlightDestination
             }
             className={
-              "h-10 w-full flex items-center justify-center bottom-0 mt-3 left-0 right-0 " +
-              (router.query.flight ? "bg-blue-500 " : "bg-red-400 ") +
+              "h-10 w-full flex items-center justify-center bottom-0 mt-3 left-0 right-0 bg-blue-500 " +
               (selectedFlightStartingLocation &&
               selectedFlightStartingLocation.value &&
               selectedFlightDestination &&
