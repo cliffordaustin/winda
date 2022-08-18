@@ -12,6 +12,7 @@ import Button from "../ui/Button";
 import Carousel from "../ui/Carousel";
 import Dropdown from "../ui/Dropdown";
 import Price from "../Stay/Price";
+import { checkFlightPrice } from "../../lib/flightLocations";
 
 const Card = ({
   listing,
@@ -78,6 +79,7 @@ const Card = ({
           stay_id: listing.stay ? listing.stay.id : null,
           activity_id: listing.activity ? listing.activity.id : null,
           transport_id: listing.transport ? listing.transport.id : null,
+          flight_id: listing.flight ? listing.flight.id : null,
         },
         {
           headers: {
@@ -98,9 +100,17 @@ const Card = ({
 
   const totalPrice = () => {
     return (
-      (listing.stay ? listing.stay.price_non_resident : 0) +
-      (listing.activity ? listing.activity.price_non_resident : 0) +
-      (listing.transport ? listing.transport.price_per_day : 0)
+      ((listing.stay ? listing.stay.price_non_resident : 0) +
+        (listing.activity ? listing.activity.price_non_resident : 0) +
+        (listing.transport ? listing.transport.price_per_day : 0)) *
+        (listing.total_number_of_days ? listing.total_number_of_days : 1) +
+      (listing.flight
+        ? checkFlightPrice(
+            listing.flight.starting_point,
+            listing.flight.destination
+          )
+        : 0) *
+        (listing.flight ? listing.flight.number_of_people : 1)
     );
   };
 
@@ -189,6 +199,26 @@ const Card = ({
               </div>
             </div>
           )}
+
+          {listing.flight && (
+            <div className="flex items-center mt-2 gap-1">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-5 h-5 text-gray-500"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill="currentColor"
+                  d="M3.414 13.778L2 15.192l4.949 2.121l2.122 4.95l1.414-1.414l-.707-3.536L13.091 14l3.61 7.704l1.339-1.339l-1.19-10.123l2.828-2.829a2 2 0 1 0-2.828-2.828l-2.903 2.903L3.824 6.297L2.559 7.563l7.644 3.67l-3.253 3.253l-3.536-.708z"
+                />
+              </svg>
+              <div className="text-sm w-full lowercase truncate">
+                from {listing.flight.starting_point} to{" "}
+                {listing.flight.destination}
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="mt-1 mb-10 xl:mb-0">
@@ -225,6 +255,7 @@ const Card = ({
                       transport_id: listing.transport
                         ? listing.transport.id
                         : null,
+                      flight_id: listing.flight ? listing.flight.id : null,
                     });
                     setShowAddToTripPopup(!showAddToTripPopup);
                   } else {

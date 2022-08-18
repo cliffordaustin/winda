@@ -199,6 +199,7 @@ const Trips = ({
             stay_id: selectedData.stay_id,
             activity_id: selectedData.activity_id,
             transport_id: selectedData.transport_id,
+            flight_id: selectedData.flight_id,
           },
           {
             headers: {
@@ -806,7 +807,7 @@ const Trips = ({
         }}
         title="Add to Trip"
         dialogueTitleClassName="!font-bold"
-        dialoguePanelClassName="!overflow-y-scroll !p-4 max-h-[500px] max-w-lg"
+        dialoguePanelClassName="!overflow-y-scroll !p-4 max-h-[500px] !max-w-lg"
       >
         <div className="h-full relative">
           {userTrips.map((trip, index) => {

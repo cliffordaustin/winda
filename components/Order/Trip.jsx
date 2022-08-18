@@ -34,6 +34,11 @@ import Modal from "../../components/ui/MobileModal";
 import Price from "../Stay/Price";
 import Search from "../Trip/Search";
 import Switch from "../ui/Switch";
+import {
+  startingLocationOptions,
+  destinationLocationOptions,
+  checkFlightPrice,
+} from "../../lib/flightLocations";
 
 import {
   priceOfAdultResident,
@@ -592,14 +597,25 @@ const Trip = ({
       });
   };
 
-  const changeTransport = () => {
-    router.push({
-      pathname: "/transport",
-      query: {
-        trip: trip.slug,
-        group_trip: router.query.slug,
-      },
-    });
+  const changeTransport = (type = "") => {
+    if (trip.flight) {
+      router.push({
+        pathname: "/transport",
+        query: {
+          trip: trip.slug,
+          group_trip: router.query.slug,
+          flight: trip.flight.slug,
+        },
+      });
+    } else {
+      router.push({
+        pathname: "/transport",
+        query: {
+          trip: trip.slug,
+          group_trip: router.query.slug,
+        },
+      });
+    }
   };
 
   const changeStay = () => {
@@ -622,6 +638,30 @@ const Trip = ({
     });
   };
 
+  const updateFlight = () => {
+    const token = Cookies.get("token");
+    setUpdateFlightLoading(true);
+
+    axios
+      .put(
+        `${process.env.NEXT_PUBLIC_baseURL}/flights/${trip.flight.slug}/`,
+        {
+          starting_point: selectedFlightStartingLocation.value,
+          destination: selectedFlightDestination.value,
+          number_of_people: numberOfPeopleInFlight,
+        },
+        {
+          headers: {
+            Authorization: "Token " + token,
+          },
+        }
+      )
+      .then(() => router.reload())
+      .catch((err) => {
+        setUpdateFlightLoading(false);
+      });
+  };
+
   const [numberOfDays, setNumberOfDays] = useState(
     trip.transport_number_of_days
   );
@@ -632,7 +672,29 @@ const Trip = ({
 
   const [editTransportPopup, setEditTransportPopup] = useState(false);
 
+  const [editFlightPopup, setEditFlightPopup] = useState(false);
+
+  const [updateFlightLoading, setUpdateFlightLoading] = useState(false);
+
   const [transportEditLoading, setTransportEditLoading] = useState(false);
+
+  const [numberOfPeopleInFlight, setNumberOfPeopleInFlight] = useState(
+    trip.flight && trip.flight.number_of_people
+  );
+
+  const [selectedFlightStartingLocation, setSelectedFlightStartingLocation] =
+    useState({
+      value: "Nairobi",
+      label: "Nairobi",
+    });
+
+  const [selectedFlightDestination, setSelectedFlightDestination] =
+    useState(null);
+
+  const flightPrice = checkFlightPrice(
+    selectedFlightStartingLocation ? selectedFlightStartingLocation.value : "",
+    selectedFlightDestination ? selectedFlightDestination.value : ""
+  );
 
   const [searchLocation, setSearchLocation] = useState(
     trip.starting_point || ""
@@ -728,7 +790,7 @@ const Trip = ({
 
   return (
     <div className="border relative border-gray-200 px-2 py-2 rounded-lg">
-      {!trip.transport && !containsTransportOption(`${index}`) && (
+      {!trip.transport && !trip.flight && (
         <div className="px-2 mt-1 relative bg-gray-100 py-1 rounded-lg">
           <div className="flex gap-2">
             <div className="w-12 h-12 my-auto bg-gray-200 rounded-lg flex items-center justify-center">
@@ -1091,6 +1153,208 @@ const Trip = ({
               changeTransport();
             }}
             className="px-3 cursor-pointer text-sm py-1 w-fit text-black border bg-white rounded-md"
+          >
+            Change
+          </div>
+        </div>
+      )}
+
+      {trip.flight && (
+        <div className="px-2 mt-1 relative bg-gray-100 py-1 rounded-lg">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-12 h-12 my-auto bg-gray-200 rounded-lg flex items-center justify-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-6 h-6 text-gray-500"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M3.414 13.778L2 15.192l4.949 2.121l2.122 4.95l1.414-1.414l-.707-3.536L13.091 14l3.61 7.704l1.339-1.339l-1.19-10.123l2.828-2.829a2 2 0 1 0-2.828-2.828l-2.903 2.903L3.824 6.297L2.559 7.563l7.644 3.67l-3.253 3.253l-3.536-.708z"
+                  />
+                </svg>
+              </div>
+              <div>
+                {trip.flight.starting_point && (
+                  <p className="text-sm font-medium">
+                    From {trip.flight.starting_point}
+                  </p>
+                )}
+                {!trip.flight.starting_point && (
+                  <p className="text-sm font-medium text-red-500">
+                    No starting location chosen
+                  </p>
+                )}
+
+                <h1 className="font-bold">
+                  Flight for {trip.flight.number_of_people}{" "}
+                  {trip.flight.number_of_people > 1 ? "people" : "person"}
+                </h1>
+
+                {trip.flight.destination && (
+                  <p className="text-sm font-medium">
+                    To {trip.flight.destination}
+                  </p>
+                )}
+                {!trip.flight.destination && (
+                  <p className="text-sm font-medium text-red-500">
+                    No starting location chosen
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <Dialogue
+              isOpen={editFlightPopup}
+              closeModal={() => {
+                setEditFlightPopup(false);
+              }}
+              dialoguePanelClassName="h-[85vh] relative overflow-y-scroll remove-scroll !relative max-w-[550px] !p-4 !top-[10%] md:max-h-[370px]"
+              outsideDialogueClass="!p-3"
+              title={"Edit flight details"}
+              dialogueTitleClassName="!font-bold !text-xl"
+            >
+              <div className="flex flex-col w-full mt-3">
+                <Select
+                  defaultValue={selectedFlightStartingLocation}
+                  onChange={(value) => {
+                    setSelectedFlightStartingLocation(value);
+                  }}
+                  className={"text-sm outline-none border border-gray-500 "}
+                  instanceId={startingLocationOptions}
+                  placeholder="Select a starting location"
+                  options={startingLocationOptions}
+                  isSearchable={true}
+                />
+
+                <div className="w-[50%] h-[30px] flex flex-col gap-1.5">
+                  <div className="h-[46%] w-full border-r border-gray-400"></div>
+                  <div className="h-[8%] relative flex items-center justify-end">
+                    <Icon
+                      icon="bxs:plane"
+                      className="text-gray-400 w-3 h-3 absolute -right-1.5 rotate-180"
+                    />
+                  </div>
+                  <div className="h-[46%] w-full border-r border-gray-400"></div>
+                </div>
+                <Select
+                  defaultValue={selectedFlightDestination}
+                  onChange={(value) => {
+                    setSelectedFlightDestination(value);
+                  }}
+                  className={"text-sm outline-none border border-gray-500 "}
+                  instanceId={destinationLocationOptions}
+                  placeholder="Select a destination"
+                  options={destinationLocationOptions}
+                  isSearchable={true}
+                />
+              </div>
+
+              <div className="mb-2 mt-4 font-bold">Number of passengers</div>
+              <div className="flex items-center gap-2 ">
+                <div
+                  onClick={() => {
+                    if (numberOfPeopleInFlight > 1) {
+                      setNumberOfPeopleInFlight(numberOfPeopleInFlight - 1);
+                    }
+                  }}
+                  className="w-8 h-8 rounded-full cursor-pointer border flex items-center justify-center shadow-lg font-bold"
+                >
+                  {" "}
+                  -{" "}
+                </div>
+
+                <div className="text-sm font-bold">
+                  {numberOfPeopleInFlight}{" "}
+                  {numberOfPeopleInFlight > 1 ? "People" : "Person"}
+                </div>
+                <div
+                  onClick={() => {
+                    setNumberOfPeopleInFlight(numberOfPeopleInFlight + 1);
+                  }}
+                  className="w-8 h-8 rounded-full cursor-pointer border flex items-center justify-center shadow-lg font-bold"
+                >
+                  +
+                </div>
+              </div>
+
+              {flightPrice && (
+                <div className="mt-4 text-gray-700 text-sm">
+                  The flight from{" "}
+                  <span className="font-semibold">
+                    {selectedFlightStartingLocation &&
+                      selectedFlightStartingLocation.value}{" "}
+                  </span>
+                  to{" "}
+                  <span className="font-semibold">
+                    {selectedFlightDestination &&
+                      selectedFlightDestination.value}{" "}
+                  </span>
+                  with{" "}
+                  <span className="font-semibold">
+                    {numberOfPeopleInFlight}{" "}
+                    {numberOfPeopleInFlight > 1 ? "people" : "person"}
+                  </span>{" "}
+                  will cost{" "}
+                  <span className="font-semibold">
+                    <Price
+                      stayPrice={flightPrice * numberOfPeopleInFlight}
+                      className="!text-sm inline"
+                    ></Price>
+                  </span>
+                </div>
+              )}
+
+              <button
+                onClick={() => {
+                  updateFlight();
+                }}
+                disabled={
+                  !selectedFlightStartingLocation || !selectedFlightDestination
+                }
+                className={
+                  "bg-blue-500 h-10 w-full flex items-center justify-center bottom-0 mt-3 left-0 right-0 " +
+                  (selectedFlightStartingLocation &&
+                  selectedFlightStartingLocation.value &&
+                  selectedFlightDestination &&
+                  selectedFlightDestination.value
+                    ? "cursor-pointer"
+                    : "cursor-not-allowed opacity-50")
+                }
+              >
+                <span className="font-semibold text-sm text-white">Update</span>
+                <div
+                  className={" " + (!updateFlightLoading ? "hidden" : "ml-2")}
+                >
+                  <LoadingSpinerChase
+                    width={16}
+                    height={16}
+                    color="#fff"
+                  ></LoadingSpinerChase>
+                </div>
+              </button>
+            </Dialogue>
+
+            <div
+              onClick={() => {
+                setEditFlightPopup(!editFlightPopup);
+              }}
+              className="self-start"
+            >
+              <Icon
+                className="cursor-pointer w-6 h-6 text-gray-600"
+                icon="akar-icons:edit"
+              />
+            </div>
+          </div>
+
+          <div
+            onClick={() => {
+              changeTransport("flight");
+            }}
+            className="px-3 mt-3 cursor-pointer text-sm py-1 w-fit text-black border bg-white rounded-md"
           >
             Change
           </div>
@@ -1477,6 +1741,8 @@ const Trip = ({
               orderId={trip.id}
               orderDays={trip.days}
               plan={trip.stay_plan}
+              from_date={trip.from_date}
+              to_date={trip.to_date}
               itemType="order"
               stayPage={true}
               num_of_children_non_resident={
@@ -1656,104 +1922,385 @@ const Trip = ({
                 closeModal={() => {
                   setGuestPopup(false);
                 }}
-                dialoguePanelClassName="max-h-[600px] max-w-xl overflow-y-scroll remove-scroll"
+                dialoguePanelClassName={
+                  "max-h-[600px] overflow-y-scroll remove-scroll " +
+                  (trip.stay.per_house ? "!max-w-sm" : "!max-w-xl")
+                }
               >
-                <div
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
-                  className="bg-white"
-                >
-                  <div className="mb-2">
-                    <Price
-                      stayPrice={
-                        (numOfAdults === 1
-                          ? priceSingleAdultResident
-                          : priceAdultResident) *
-                          numOfAdults +
-                        (numOfAdultsNonResident === 1
-                          ? priceSingleAdultNonResident
-                          : priceAdultNonResident) *
-                          numOfAdultsNonResident +
-                        (numOfChildren === 1
-                          ? priceSingleChildResident
-                          : priceChildResident) *
-                          numOfChildren +
-                        (numOfChildrenNonResident === 1
-                          ? priceSingleChildNonResident
-                          : priceChildNonResident) *
-                          numOfChildrenNonResident
-                      }
-                    ></Price>
-                  </div>
-                  <Select
-                    defaultValue={currentTypeOfLodge}
-                    onChange={(value) => {
-                      setCurrentTypeOfLodge(value);
-                      setNumOfAdults(1);
-                      setNumOfAdultsNonResident(0);
-                      setNumOfChildren(0);
-                      setNumOfChildrenNonResident(0);
+                {!trip.stay.per_house && (
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation();
                     }}
-                    className={"text-sm outline-none border border-gray-500"}
-                    instanceId={typeOfLodge}
-                    placeholder="Type of room"
-                    options={typeOfLodge}
-                    isSearchable={false}
-                  />
-
-                  {currentTypeOfLodge.value === "Standard" && (
-                    <div className="text-sm text-gray-500 mt-2">
-                      This is the perfect room for you if you are looking for a
-                      simple, clean, and affordable room.
+                    className="bg-white"
+                  >
+                    <div className="mb-2">
+                      <Price
+                        stayPrice={
+                          (numOfAdults === 1
+                            ? priceSingleAdultResident
+                            : priceAdultResident) *
+                            numOfAdults +
+                          (numOfAdultsNonResident === 1
+                            ? priceSingleAdultNonResident
+                            : priceAdultNonResident) *
+                            numOfAdultsNonResident +
+                          (numOfChildren === 1
+                            ? priceSingleChildResident
+                            : priceChildResident) *
+                            numOfChildren +
+                          (numOfChildrenNonResident === 1
+                            ? priceSingleChildNonResident
+                            : priceChildNonResident) *
+                            numOfChildrenNonResident
+                        }
+                      ></Price>
                     </div>
-                  )}
+                    <Select
+                      defaultValue={currentTypeOfLodge}
+                      onChange={(value) => {
+                        setCurrentTypeOfLodge(value);
+                        setNumOfAdults(1);
+                        setNumOfAdultsNonResident(0);
+                        setNumOfChildren(0);
+                        setNumOfChildrenNonResident(0);
+                      }}
+                      className={"text-sm outline-none border border-gray-500"}
+                      instanceId={typeOfLodge}
+                      placeholder="Type of room"
+                      options={typeOfLodge}
+                      isSearchable={false}
+                    />
 
-                  {currentTypeOfLodge.value === "Emperor Suite Room" && (
-                    <div className="text-sm text-gray-500 mt-2">
-                      This is the perfect room for you if you are looking for
-                      the very best and well decorated room this place has to
-                      offer
-                    </div>
-                  )}
+                    {currentTypeOfLodge.value === "Standard" && (
+                      <div className="text-sm text-gray-500 mt-2">
+                        This is the perfect room for you if you are looking for
+                        a simple, clean, and affordable room.
+                      </div>
+                    )}
 
-                  {currentTypeOfLodge.value === "Presidential Suite Room" && (
-                    <div className="text-sm text-gray-500 mt-2">
-                      This is the perfect room for you if you are looking for
-                      the very best and well decorated room this place has to
-                      offer
-                    </div>
-                  )}
-                  {currentTypeOfLodge.value === "Executive Suite Room" && (
-                    <div className="text-sm text-gray-500 mt-2">
-                      This is the perfect room for you if you are looking for
-                      the very best and well decorated room this place has to
-                      offer
-                    </div>
-                  )}
+                    {currentTypeOfLodge.value === "Emperor Suite Room" && (
+                      <div className="text-sm text-gray-500 mt-2">
+                        This is the perfect room for you if you are looking for
+                        the very best and well decorated room this place has to
+                        offer
+                      </div>
+                    )}
 
-                  {currentTypeOfLodge.value === "Deluxe" && (
-                    <div className="text-sm text-gray-500 mt-2">
-                      This is the perfect room for you if you are looking for
-                      the best this place has to offer.
-                    </div>
-                  )}
+                    {currentTypeOfLodge.value === "Presidential Suite Room" && (
+                      <div className="text-sm text-gray-500 mt-2">
+                        This is the perfect room for you if you are looking for
+                        the very best and well decorated room this place has to
+                        offer
+                      </div>
+                    )}
+                    {currentTypeOfLodge.value === "Executive Suite Room" && (
+                      <div className="text-sm text-gray-500 mt-2">
+                        This is the perfect room for you if you are looking for
+                        the very best and well decorated room this place has to
+                        offer
+                      </div>
+                    )}
 
-                  {currentTypeOfLodge.value === "Family Room" && (
-                    <div className="text-sm text-gray-500 mt-2">
-                      If you just want to spend sometime with the family, this
-                      is the room for you.
-                    </div>
-                  )}
+                    {currentTypeOfLodge.value === "Deluxe" && (
+                      <div className="text-sm text-gray-500 mt-2">
+                        This is the perfect room for you if you are looking for
+                        the best this place has to offer.
+                      </div>
+                    )}
 
-                  <div>
+                    {currentTypeOfLodge.value === "Family Room" && (
+                      <div className="text-sm text-gray-500 mt-2">
+                        If you just want to spend sometime with the family, this
+                        is the room for you.
+                      </div>
+                    )}
+
+                    <div>
+                      <div className="flex justify-between mt-6">
+                        <div className="flex gap-1 text-sm text-gray-600">
+                          <span>
+                            {numOfAdults}{" "}
+                            {numOfAdults > 1
+                              ? "Residents Adult"
+                              : "Resident Adult"}
+                          </span>
+                          <span>(18+)</span>
+                        </div>
+
+                        <div className="flex gap-3 items-center">
+                          <div
+                            onClick={() => {
+                              if (
+                                (numOfAdults > 1 ||
+                                  numOfAdultsNonResident > 0) &&
+                                numOfAdults > 0
+                              ) {
+                                setNumOfAdults(numOfAdults - 1);
+                              }
+                            }}
+                            className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
+                          >
+                            -
+                          </div>
+
+                          <div
+                            onClick={() => {
+                              setNumOfAdults(numOfAdults + 1);
+                            }}
+                            className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
+                          >
+                            +
+                          </div>
+                        </div>
+                      </div>
+
+                      {trip.stay.conservation_or_park &&
+                        trip.stay.conservation_or_park_price && (
+                          <div className="text-sm underline mt-1">
+                            Park/Conservation fees for{" "}
+                            <span className="font-bold">each</span> resident
+                            adult costs{" "}
+                            <Price
+                              stayPrice={trip.stay.conservation_or_park_price}
+                              className="text-sm inline font-bold"
+                            ></Price>
+                          </div>
+                        )}
+                    </div>
+
+                    <div>
+                      <div className="flex justify-between mt-6">
+                        <div className="flex gap-1 text-sm text-gray-600">
+                          <span>
+                            {numOfAdultsNonResident}{" "}
+                            {numOfAdultsNonResident > 1
+                              ? "Non-Residents Adult"
+                              : "Non-Resident Adult"}
+                          </span>
+                          <span>(18+)</span>
+                        </div>
+
+                        <div className="flex gap-3 items-center">
+                          <div
+                            onClick={() => {
+                              if (
+                                (numOfAdultsNonResident > 1 ||
+                                  numOfAdults > 0) &&
+                                numOfAdultsNonResident > 0
+                              ) {
+                                setNumOfAdultsNonResident(
+                                  numOfAdultsNonResident - 1
+                                );
+                              }
+                            }}
+                            className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
+                          >
+                            -
+                          </div>
+
+                          <div
+                            onClick={() => {
+                              setNumOfAdultsNonResident(
+                                numOfAdultsNonResident + 1
+                              );
+                            }}
+                            className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
+                          >
+                            +
+                          </div>
+                        </div>
+                      </div>
+
+                      {trip.stay.conservation_or_park &&
+                        trip.stay.conservation_or_park_price_non_resident && (
+                          <div className="text-sm mt-1 underline">
+                            Park/Conservation fees for{" "}
+                            <span className="font-bold">each</span> non-resident
+                            adult costs{" "}
+                            <Price
+                              stayPrice={
+                                trip.stay
+                                  .conservation_or_park_price_non_resident
+                              }
+                              className="text-sm inline font-bold"
+                            ></Price>
+                          </div>
+                        )}
+                    </div>
+
+                    <div>
+                      <div className="flex justify-between mt-6">
+                        <div className="flex gap-1 text-sm text-gray-600">
+                          <span>
+                            {numOfChildren}{" "}
+                            {numOfChildren > 1
+                              ? "Resident Children"
+                              : "Resident Child"}
+                          </span>
+                          <span>(0 - 17)</span>
+                        </div>
+
+                        <div className="flex gap-3 items-center">
+                          <div
+                            onClick={() => {
+                              if (numOfChildren > 0) {
+                                setNumOfChildren(numOfChildren - 1);
+                              }
+                            }}
+                            className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
+                          >
+                            -
+                          </div>
+
+                          <div
+                            onClick={() => {
+                              setNumOfChildren(numOfChildren + 1);
+                            }}
+                            className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
+                          >
+                            +
+                          </div>
+                        </div>
+                      </div>
+                      {trip.stay.conservation_or_park &&
+                        trip.stay.conservation_or_park_children_price && (
+                          <div className="text-sm mt-1 underline">
+                            Park/Conservation fees for{" "}
+                            <span className="font-bold">each</span> resident
+                            child costs{" "}
+                            <Price
+                              stayPrice={
+                                trip.stay.conservation_or_park_children_price
+                              }
+                              className="text-sm inline font-bold"
+                            ></Price>
+                          </div>
+                        )}
+                    </div>
+
+                    <div>
+                      <div className="flex justify-between mt-6">
+                        <div className="flex gap-1 text-sm text-gray-600">
+                          <span>
+                            {numOfChildrenNonResident}{" "}
+                            {numOfChildrenNonResident > 1
+                              ? "Non-Resident Children"
+                              : "Non-Resident Child"}
+                          </span>
+                          <span>(0 - 17)</span>
+                        </div>
+
+                        <div className="flex gap-3 items-center">
+                          <div
+                            onClick={() => {
+                              if (numOfChildrenNonResident > 0) {
+                                setNumOfChildrenNonResident(
+                                  numOfChildrenNonResident - 1
+                                );
+                              }
+                            }}
+                            className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
+                          >
+                            -
+                          </div>
+
+                          <div
+                            onClick={() => {
+                              setNumOfChildrenNonResident(
+                                numOfChildrenNonResident + 1
+                              );
+                            }}
+                            className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
+                          >
+                            +
+                          </div>
+                        </div>
+                      </div>
+
+                      {trip.stay.conservation_or_park &&
+                        trip.stay
+                          .conservation_or_park_children_price_non_resident && (
+                          <div className="text-sm mt-1 underline">
+                            Park/Conservation fees for{" "}
+                            <span className="font-bold">each</span> non-resident
+                            child costs{" "}
+                            <Price
+                              stayPrice={
+                                trip.stay
+                                  .conservation_or_park_children_price_non_resident
+                              }
+                              className="text-sm inline font-bold"
+                            ></Price>
+                          </div>
+                        )}
+                    </div>
+
+                    {(numOfAdults > 1 ||
+                      numOfChildren > 0 ||
+                      numOfAdultsNonResident > 0 ||
+                      numOfChildrenNonResident > 0) && (
+                      <div
+                        className="mt-2 cursor-pointer text-sm underline"
+                        onClick={() => {
+                          setNumOfAdults(1);
+                          setNumOfChildren(0);
+                          setNumOfAdultsNonResident(0);
+                          setNumOfChildrenNonResident(0);
+                        }}
+                      >
+                        clear data
+                      </div>
+                    )}
+
                     <div className="flex justify-between mt-6">
+                      <div></div>
+                      <div className="flex gap-2">
+                        <div
+                          onClick={() => {
+                            setGuestPopup(false);
+                            document.body.classList.remove("h-screen");
+                            document.body.classList.remove("overflow-y-hidden");
+                          }}
+                          className="!bg-white text-black border !rounded-3xl px-4 text-sm cursor-pointer py-2"
+                        >
+                          Close
+                        </div>
+                        <Button
+                          onClick={() => {
+                            updateGuest();
+                          }}
+                          className="!bg-blue-700 flex gap-2 items-center !rounded-3xl"
+                        >
+                          <span>Update</span>
+
+                          {guestsLoading && (
+                            <div>
+                              <LoadingSpinerChase
+                                width={16}
+                                height={16}
+                              ></LoadingSpinerChase>
+                            </div>
+                          )}
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {trip.stay.per_house && (
+                  <div>
+                    <div className="flex items-center mb-4 text-sm gap-2 text-gray-600">
+                      <Icon icon="akar-icons:people-group" />
+                      <span>
+                        Maximum number of guests allowed is{" "}
+                        <span className="font-bold">{trip.stay.capacity}</span>
+                      </span>
+                    </div>
+                    <div className="flex justify-between mt-2">
                       <div className="flex gap-1 text-sm text-gray-600">
                         <span>
-                          {numOfAdults}{" "}
-                          {numOfAdults > 1
-                            ? "Residents Adult"
-                            : "Resident Adult"}
+                          {numOfAdults} {numOfAdults > 1 ? "Adults" : "Adult"}
                         </span>
                         <span>(18+)</span>
                       </div>
@@ -1762,7 +2309,7 @@ const Trip = ({
                         <div
                           onClick={() => {
                             if (
-                              (numOfAdults > 1 || numOfAdultsNonResident > 0) &&
+                              (numOfAdults > 1 || numOfAdults > 0) &&
                               numOfAdults > 0
                             ) {
                               setNumOfAdults(numOfAdults - 1);
@@ -1775,63 +2322,12 @@ const Trip = ({
 
                         <div
                           onClick={() => {
-                            setNumOfAdults(numOfAdults + 1);
-                          }}
-                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
-                        >
-                          +
-                        </div>
-                      </div>
-                    </div>
-
-                    {trip.stay.conservation_or_park &&
-                      trip.stay.conservation_or_park_price && (
-                        <div className="text-sm underline mt-1">
-                          Park/Conservation fees for{" "}
-                          <span className="font-bold">each</span> resident adult
-                          costs{" "}
-                          <Price
-                            stayPrice={trip.stay.conservation_or_park_price}
-                            className="text-sm inline font-bold"
-                          ></Price>
-                        </div>
-                      )}
-                  </div>
-
-                  <div>
-                    <div className="flex justify-between mt-6">
-                      <div className="flex gap-1 text-sm text-gray-600">
-                        <span>
-                          {numOfAdultsNonResident}{" "}
-                          {numOfAdultsNonResident > 1
-                            ? "Non-Residents Adult"
-                            : "Non-Resident Adult"}
-                        </span>
-                        <span>(18+)</span>
-                      </div>
-
-                      <div className="flex gap-3 items-center">
-                        <div
-                          onClick={() => {
                             if (
-                              (numOfAdultsNonResident > 1 || numOfAdults > 0) &&
-                              numOfAdultsNonResident > 0
+                              numOfAdults + numOfChildren <
+                              trip.stay.capacity
                             ) {
-                              setNumOfAdultsNonResident(
-                                numOfAdultsNonResident - 1
-                              );
+                              setNumOfAdults(numOfAdults + 1);
                             }
-                          }}
-                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
-                        >
-                          -
-                        </div>
-
-                        <div
-                          onClick={() => {
-                            setNumOfAdultsNonResident(
-                              numOfAdultsNonResident + 1
-                            );
                           }}
                           className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
                         >
@@ -1840,30 +2336,11 @@ const Trip = ({
                       </div>
                     </div>
 
-                    {trip.stay.conservation_or_park &&
-                      trip.stay.conservation_or_park_price_non_resident && (
-                        <div className="text-sm mt-1 underline">
-                          Park/Conservation fees for{" "}
-                          <span className="font-bold">each</span> non-resident
-                          adult costs{" "}
-                          <Price
-                            stayPrice={
-                              trip.stay.conservation_or_park_price_non_resident
-                            }
-                            className="text-sm inline font-bold"
-                          ></Price>
-                        </div>
-                      )}
-                  </div>
-
-                  <div>
                     <div className="flex justify-between mt-6">
                       <div className="flex gap-1 text-sm text-gray-600">
                         <span>
                           {numOfChildren}{" "}
-                          {numOfChildren > 1
-                            ? "Resident Children"
-                            : "Resident Child"}
+                          {numOfChildren > 1 ? "Children" : "Child"}
                         </span>
                         <span>(0 - 17)</span>
                       </div>
@@ -1882,7 +2359,12 @@ const Trip = ({
 
                         <div
                           onClick={() => {
-                            setNumOfChildren(numOfChildren + 1);
+                            if (
+                              numOfAdults + numOfChildren <
+                              trip.stay.capacity
+                            ) {
+                              setNumOfChildren(numOfChildren + 1);
+                            }
                           }}
                           className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
                         >
@@ -1890,129 +2372,8 @@ const Trip = ({
                         </div>
                       </div>
                     </div>
-                    {trip.stay.conservation_or_park &&
-                      trip.stay.conservation_or_park_children_price && (
-                        <div className="text-sm mt-1 underline">
-                          Park/Conservation fees for{" "}
-                          <span className="font-bold">each</span> resident child
-                          costs{" "}
-                          <Price
-                            stayPrice={
-                              trip.stay.conservation_or_park_children_price
-                            }
-                            className="text-sm inline font-bold"
-                          ></Price>
-                        </div>
-                      )}
                   </div>
-
-                  <div>
-                    <div className="flex justify-between mt-6">
-                      <div className="flex gap-1 text-sm text-gray-600">
-                        <span>
-                          {numOfChildrenNonResident}{" "}
-                          {numOfChildrenNonResident > 1
-                            ? "Non-Resident Children"
-                            : "Non-Resident Child"}
-                        </span>
-                        <span>(0 - 17)</span>
-                      </div>
-
-                      <div className="flex gap-3 items-center">
-                        <div
-                          onClick={() => {
-                            if (numOfChildrenNonResident > 0) {
-                              setNumOfChildrenNonResident(
-                                numOfChildrenNonResident - 1
-                              );
-                            }
-                          }}
-                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
-                        >
-                          -
-                        </div>
-
-                        <div
-                          onClick={() => {
-                            setNumOfChildrenNonResident(
-                              numOfChildrenNonResident + 1
-                            );
-                          }}
-                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
-                        >
-                          +
-                        </div>
-                      </div>
-                    </div>
-
-                    {trip.stay.conservation_or_park &&
-                      trip.stay
-                        .conservation_or_park_children_price_non_resident && (
-                        <div className="text-sm mt-1 underline">
-                          Park/Conservation fees for{" "}
-                          <span className="font-bold">each</span> non-resident
-                          child costs{" "}
-                          <Price
-                            stayPrice={
-                              trip.stay
-                                .conservation_or_park_children_price_non_resident
-                            }
-                            className="text-sm inline font-bold"
-                          ></Price>
-                        </div>
-                      )}
-                  </div>
-
-                  {(numOfAdults > 1 ||
-                    numOfChildren > 0 ||
-                    numOfAdultsNonResident > 0 ||
-                    numOfChildrenNonResident > 0) && (
-                    <div
-                      className="mt-2 cursor-pointer text-sm underline"
-                      onClick={() => {
-                        setNumOfAdults(1);
-                        setNumOfChildren(0);
-                        setNumOfAdultsNonResident(0);
-                        setNumOfChildrenNonResident(0);
-                      }}
-                    >
-                      clear data
-                    </div>
-                  )}
-
-                  <div className="flex justify-between mt-6">
-                    <div></div>
-                    <div className="flex gap-2">
-                      <div
-                        onClick={() => {
-                          setGuestPopup(false);
-                          document.body.classList.remove("h-screen");
-                          document.body.classList.remove("overflow-y-hidden");
-                        }}
-                        className="!bg-white text-black border !rounded-3xl px-4 text-sm cursor-pointer py-2"
-                      >
-                        Close
-                      </div>
-                      <Button
-                        onClick={() => {
-                          updateGuest();
-                        }}
-                        className="!bg-blue-700 flex gap-2 items-center !rounded-3xl"
-                      >
-                        <span>Update</span>
-
-                        {guestsLoading && (
-                          <div>
-                            <LoadingSpinerChase
-                              width={16}
-                              height={16}
-                            ></LoadingSpinerChase>
-                          </div>
-                        )}
-                      </Button>
-                    </div>
-                  </div>
-                </div>
+                )}
               </Dialogue>
             </div>
           </div>

@@ -34,6 +34,7 @@ import { reorder } from "../../../../lib/random";
 import Modal from "../../../../components/ui/MobileModal";
 import OpenModal from "../../../../components/ui/Modal";
 import TripOverview from "../../../../components/Order/TripOverview";
+import { checkFlightPrice } from "../../../../lib/flightLocations";
 import Popup from "../../../../components/ui/Popup";
 import moment from "moment";
 import OrderCard from "../../../../components/Order/OrderCard";
@@ -98,7 +99,7 @@ function PlanTrip({
       userTrips.trip.forEach((item, index) => {
         const nights =
           new Date(item.to_date).getDate() - new Date(item.from_date).getDate();
-        if (item.stay) {
+        if (item.stay && !item.stay.per_house) {
           price +=
             getStayPrice(
               item.stay_plan,
@@ -108,6 +109,10 @@ function PlanTrip({
               item.stay_num_of_children_non_resident,
               item.stay_num_of_adults_non_resident
             ) * (nights || 1);
+        }
+
+        if (item.stay && item.stay.per_house) {
+          price += item.stay.per_house_price * (nights || 1);
         }
 
         if (item.activity) {
@@ -130,6 +135,14 @@ function PlanTrip({
               ? item.transport.additional_price_with_a_driver *
                 item.transport_number_of_days
               : 0);
+        }
+
+        if (item.flight) {
+          price +=
+            checkFlightPrice(
+              item.flight.starting_point,
+              item.flight.destination
+            ) * item.flight.number_of_people;
         }
       });
     return parseFloat(price);

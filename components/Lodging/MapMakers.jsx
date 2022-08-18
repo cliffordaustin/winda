@@ -31,6 +31,42 @@ const MapMakers = ({ stay }) => {
     },
   };
 
+  const price = () => {
+    return (
+      stay.price_non_resident ||
+      stay.price ||
+      stay.per_house_price ||
+      stay.deluxe_price_non_resident ||
+      stay.deluxe_price ||
+      stay.family_room_price_non_resident ||
+      stay.family_room_price ||
+      stay.executive_suite_room_price_non_resident ||
+      stay.executive_suite_room_price ||
+      stay.presidential_suite_room_price_non_resident ||
+      stay.presidential_suite_room_price ||
+      stay.emperor_suite_room_price_non_resident ||
+      stay.emperor_suite_room_price
+    );
+  };
+
+  const activeStayPrice = () => {
+    return (
+      activeStay.price_non_resident ||
+      activeStay.price ||
+      activeStay.per_house_price ||
+      activeStay.deluxe_price_non_resident ||
+      activeStay.deluxe_price ||
+      activeStay.family_room_price_non_resident ||
+      activeStay.family_room_price ||
+      activeStay.executive_suite_room_price_non_resident ||
+      activeStay.executive_suite_room_price ||
+      activeStay.presidential_suite_room_price_non_resident ||
+      activeStay.presidential_suite_room_price ||
+      activeStay.emperor_suite_room_price_non_resident ||
+      activeStay.emperor_suite_room_price
+    );
+  };
+
   return (
     <div>
       <Marker longitude={stay.longitude} latitude={stay.latitude}>
@@ -45,7 +81,7 @@ const MapMakers = ({ stay }) => {
         >
           <Price
             className="text-white font-semibold text-sm font-OpenSans"
-            stayPrice={stay.price_non_resident}
+            stayPrice={price()}
           ></Price>
           <AnimatePresence exitBeforeEnter>
             {showPopup && (
@@ -82,7 +118,7 @@ const MapMakers = ({ stay }) => {
           >
             <Price
               className="text-white font-semibold text-sm font-OpenSans"
-              stayPrice={activeStay.price_non_resident}
+              stayPrice={activeStayPrice()}
             ></Price>
             <AnimatePresence exitBeforeEnter>
               <Popup

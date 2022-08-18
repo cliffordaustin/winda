@@ -86,6 +86,7 @@ function Listing({
           `${process.env.NEXT_PUBLIC_baseURL}/trip/${router.query.trip}/`,
           {
             transport_id: listing.id,
+            flight_id: null,
             transport_number_of_days: 1,
             transport_from_date: null,
             user_need_a_driver: false,
@@ -98,9 +99,29 @@ function Listing({
           }
         )
         .then(() => {
-          router.push({
-            pathname: `/trip/plan/${router.query.group_trip}`,
-          });
+          if (router.query.flight) {
+            axios
+              .delete(
+                `${process.env.NEXT_PUBLIC_baseURL}/flights/${router.query.flight}/`,
+                {
+                  headers: {
+                    Authorization: "Token " + token,
+                  },
+                }
+              )
+              .then(() => {
+                router.push({
+                  pathname: `/trip/plan/${router.query.group_trip}`,
+                });
+              })
+              .catch((err) => {
+                setAddToTripLoading(false);
+              });
+          } else {
+            router.push({
+              pathname: `/trip/plan/${router.query.group_trip}`,
+            });
+          }
         })
         .catch((err) => {
           setAddToTripLoading(false);

@@ -7,6 +7,7 @@ import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import ReactPaginate from "react-paginate";
 import { FreeMode, Navigation, Thumbs } from "swiper";
+import Select from "react-select";
 
 import getTokenFromReq from "../../lib/getTokenFromReq";
 import Navbar from "../../components/Lodging/Navbar";
@@ -31,6 +32,11 @@ import SearchBar from "../../components/Trip/Search";
 import Button from "../../components/ui/Button";
 import Footer from "../../components/Home/Footer";
 import Carousel from "../../components/ui/Carousel";
+import {
+  startingLocationOptions,
+  destinationLocationOptions,
+  checkFlightPrice,
+} from "../../lib/flightLocations";
 import { Icon } from "@iconify/react";
 import ListItem from "../../components/ui/ListItem";
 import Price from "../../components/Stay/Price";
@@ -434,6 +440,22 @@ const Transport = ({
 
   const [showStartingDate, setShowStartingDate] = useState(false);
 
+  const [flightPopup, setFlightPopup] = useState(false);
+
+  const [selectedFlightStartingLocation, setSelectedFlightStartingLocation] =
+    useState({
+      value: "Nairobi",
+      label: "Nairobi",
+    });
+
+  const [selectedFlightDestination, setSelectedFlightDestination] =
+    useState(null);
+
+  const flightPrice = checkFlightPrice(
+    selectedFlightStartingLocation ? selectedFlightStartingLocation.value : "",
+    selectedFlightDestination ? selectedFlightDestination.value : ""
+  );
+
   const [allowSlideNext, setAllowSlideNext] = useState(false);
   const [swiperIndex, setSwiperIndex] = useState(0);
 
@@ -448,57 +470,94 @@ const Transport = ({
     },
   };
 
-  const addToBasket = async () => {
+  const addToBasket = async (type = "") => {
     const token = Cookies.get("token");
 
     setAddToBasketLoading(true);
 
-    if (token) {
-      axios
-        .post(
-          `${process.env.NEXT_PUBLIC_baseURL}/transport/${currentListing.slug}/add-to-cart/`,
-          {
+    if (type === "flight") {
+      if (token) {
+        axios
+          .post(
+            `${process.env.NEXT_PUBLIC_baseURL}/flights/`,
+            {
+              starting_point: selectedFlightStartingLocation.value,
+              destination: selectedFlightDestination.value,
+              number_of_people: numberOfPeopleInFlight,
+            },
+            {
+              headers: {
+                Authorization: "Token " + token,
+              },
+            }
+          )
+          .then(() => router.reload())
+          .catch((err) => {});
+      } else if (!token) {
+        let cookieVal = Cookies.get("cart");
+
+        if (cookieVal !== undefined) {
+          cookieVal = JSON.parse(cookieVal);
+        }
+
+        const data = [...(cookieVal || [])];
+        data.push({
+          itemCategory: "flight",
+          starting_point: selectedFlightStartingLocation.value,
+          destination: selectedFlightDestination.value,
+          number_of_people: numberOfPeopleInFlight,
+        });
+        Cookies.set("cart", JSON.stringify(data));
+        router.reload();
+      }
+    } else {
+      if (token) {
+        axios
+          .post(
+            `${process.env.NEXT_PUBLIC_baseURL}/transport/${currentListing.slug}/add-to-cart/`,
+            {
+              starting_point: startingDestination,
+              destination: "",
+              distance: 0,
+              user_need_a_driver: needADriver,
+              from_date: startingDate,
+              number_of_days: numberOfDays,
+            },
+            {
+              headers: {
+                Authorization: "Token " + token,
+              },
+            }
+          )
+          .then(() => router.reload())
+          .catch((err) => {
+            console.log(err.response);
+          });
+      } else if (!token) {
+        let cookieVal = Cookies.get("cart");
+
+        if (cookieVal !== undefined) {
+          cookieVal = JSON.parse(cookieVal);
+        }
+
+        const data = [...(cookieVal || [])];
+        const exist = data.some((val) => {
+          return val.slug === currentListing.slug;
+        });
+        if (!exist) {
+          data.push({
+            slug: currentListing.slug,
+            itemCategory: "transport",
             starting_point: startingDestination,
             destination: "",
             distance: 0,
             user_need_a_driver: needADriver,
             from_date: startingDate,
             number_of_days: numberOfDays,
-          },
-          {
-            headers: {
-              Authorization: "Token " + token,
-            },
-          }
-        )
-        .then(() => router.reload())
-        .catch((err) => {
-          console.log(err.response);
-        });
-    } else if (!token) {
-      let cookieVal = Cookies.get("cart");
-
-      if (cookieVal !== undefined) {
-        cookieVal = JSON.parse(cookieVal);
-      }
-
-      const data = [...(cookieVal || [])];
-      const exist = data.some((val) => {
-        return val.slug === currentListing.slug;
-      });
-      if (!exist) {
-        data.push({
-          slug: currentListing.slug,
-          itemCategory: "transport",
-          starting_point: startingDestination,
-          destination: "",
-          distance: 0,
-          user_need_a_driver: needADriver,
-          from_date: startingDate,
-          number_of_days: numberOfDays,
-        });
-        Cookies.set("cart", JSON.stringify(data));
-        router.reload();
+          });
+          Cookies.set("cart", JSON.stringify(data));
+          router.reload();
+        }
       }
     }
   };
@@ -513,36 +572,108 @@ const Transport = ({
 
   const [addToTripLoading, setAddToTripLoading] = useState(false);
 
-  const addToTrip = async () => {
+  const [numberOfPeopleInFlight, setNumberOfPeopleInFlight] = useState(1);
+
+  const addToTrip = async (type = "") => {
     const token = Cookies.get("token");
 
     setAddToTripLoading(true);
 
-    if (token) {
-      await axios
-        .put(
-          `${process.env.NEXT_PUBLIC_baseURL}/trip/${router.query.trip}/`,
-          {
-            transport_id: currentListing.id,
-            transport_number_of_days: 1,
-            transport_from_date: null,
-            user_need_a_driver: false,
-            starting_point: null,
-          },
-          {
-            headers: {
-              Authorization: "Token " + token,
+    if (type === "flight") {
+      if (token) {
+        axios
+          .post(
+            `${process.env.NEXT_PUBLIC_baseURL}/flights/`,
+            {
+              starting_point: selectedFlightStartingLocation.value,
+              destination: selectedFlightDestination.value,
+              number_of_people: numberOfPeopleInFlight,
             },
-          }
-        )
-        .then(() => {
-          router.push({
-            pathname: `/trip/plan/${router.query.group_trip}`,
+            {
+              headers: {
+                Authorization: "Token " + token,
+              },
+            }
+          )
+          .then((res) => {
+            axios
+              .put(
+                `${process.env.NEXT_PUBLIC_baseURL}/trip/${router.query.trip}/`,
+                {
+                  transport_id: null,
+                  flight_id: res.data.id,
+                  // transport_number_of_days: 1,
+                  transport_from_date: null,
+                  user_need_a_driver: false,
+                  starting_point: null,
+                },
+                {
+                  headers: {
+                    Authorization: "Token " + token,
+                  },
+                }
+              )
+              .then(() => {
+                router.push({
+                  pathname: `/trip/plan/${router.query.group_trip}`,
+                });
+              })
+              .catch((err) => {
+                setAddToTripLoading(false);
+              });
+          })
+          .catch((err) => {
+            setAddToTripLoading(false);
           });
-        })
-        .catch((err) => {
-          setAddToTripLoading(false);
-        });
+      }
+    } else {
+      if (token) {
+        await axios
+          .put(
+            `${process.env.NEXT_PUBLIC_baseURL}/trip/${router.query.trip}/`,
+            {
+              transport_id: currentListing.id,
+              flight_id: null,
+              transport_number_of_days: 1,
+              transport_from_date: null,
+              user_need_a_driver: false,
+              starting_point: null,
+            },
+            {
+              headers: {
+                Authorization: "Token " + token,
+              },
+            }
+          )
+          .then(() => {
+            if (router.query.flight) {
+              axios
+                .delete(
+                  `${process.env.NEXT_PUBLIC_baseURL}/flights/${router.query.flight}/`,
+                  {
+                    headers: {
+                      Authorization: "Token " + token,
+                    },
+                  }
+                )
+                .then(() => {
+                  router.push({
+                    pathname: `/trip/plan/${router.query.group_trip}`,
+                  });
+                })
+                .catch((err) => {
+                  setAddToTripLoading(false);
+                });
+            } else {
+              router.push({
+                pathname: `/trip/plan/${router.query.group_trip}`,
+              });
+            }
+          })
+          .catch((err) => {
+            setAddToTripLoading(false);
+          });
+      }
     }
   };
 
@@ -1348,6 +1479,18 @@ const Transport = ({
               </div>
               {/* this is required to prevent the scrollbar from hiding the content */}
               <div className="py-20"></div>
+
+              <div className="fixed bottom-2 md:w-[30%] lg:w-[20%] flex items-center justify-center left-0 right-0 p-2 w-full">
+                <Button
+                  onClick={() => {
+                    setFlightPopup(true);
+                  }}
+                  className="flex items-center gap-2 !w-full !py-3 !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500"
+                >
+                  <span className="font-bold">Book for a flight</span>
+                  <Icon icon="fa6-solid:plane" />
+                </Button>
+              </div>
             </div>
           </div>
         </div>
@@ -1386,6 +1529,168 @@ const Transport = ({
           </div>
         </div>
       </div>
+
+      <Dialogue
+        isOpen={flightPopup}
+        closeModal={() => {
+          setFlightPopup(false);
+        }}
+        dialoguePanelClassName="h-[85vh] relative overflow-y-scroll remove-scroll !relative max-w-[550px] !p-4 !top-[10%] md:max-h-[370px]"
+        outsideDialogueClass="!p-3"
+        title={"Book for a flight"}
+        dialogueTitleClassName="!font-bold !text-xl"
+      >
+        <div className="flex flex-col w-full mt-3">
+          <Select
+            defaultValue={selectedFlightStartingLocation}
+            onChange={(value) => {
+              setSelectedFlightStartingLocation(value);
+            }}
+            className={"text-sm outline-none border border-gray-500 "}
+            instanceId={startingLocationOptions}
+            placeholder="Select a starting location"
+            options={startingLocationOptions}
+            isSearchable={true}
+          />
+
+          <div className="w-[50%] h-[30px] flex flex-col gap-1.5">
+            <div className="h-[46%] w-full border-r border-gray-400"></div>
+            <div className="h-[8%] relative flex items-center justify-end">
+              <Icon
+                icon="bxs:plane"
+                className="text-gray-400 w-3 h-3 absolute -right-1.5 rotate-180"
+              />
+            </div>
+            <div className="h-[46%] w-full border-r border-gray-400"></div>
+          </div>
+          <Select
+            defaultValue={selectedFlightDestination}
+            onChange={(value) => {
+              setSelectedFlightDestination(value);
+            }}
+            className={"text-sm outline-none border border-gray-500 "}
+            instanceId={destinationLocationOptions}
+            placeholder="Select a destination"
+            options={destinationLocationOptions}
+            isSearchable={true}
+          />
+        </div>
+
+        <div className="mb-2 mt-4 font-bold">Number of passengers</div>
+        <div className="flex items-center gap-2 ">
+          <div
+            onClick={() => {
+              if (numberOfPeopleInFlight > 1) {
+                setNumberOfPeopleInFlight(numberOfPeopleInFlight - 1);
+              }
+            }}
+            className="w-8 h-8 rounded-full cursor-pointer border flex items-center justify-center shadow-lg font-bold"
+          >
+            {" "}
+            -{" "}
+          </div>
+
+          <div className="text-sm font-bold">
+            {numberOfPeopleInFlight}{" "}
+            {numberOfPeopleInFlight > 1 ? "People" : "Person"}
+          </div>
+          <div
+            onClick={() => {
+              setNumberOfPeopleInFlight(numberOfPeopleInFlight + 1);
+            }}
+            className="w-8 h-8 rounded-full cursor-pointer border flex items-center justify-center shadow-lg font-bold"
+          >
+            +
+          </div>
+        </div>
+
+        {flightPrice && (
+          <div className="mt-4 text-gray-700 text-sm">
+            The flight from{" "}
+            <span className="font-semibold">
+              {selectedFlightStartingLocation &&
+                selectedFlightStartingLocation.value}{" "}
+            </span>
+            to{" "}
+            <span className="font-semibold">
+              {selectedFlightDestination && selectedFlightDestination.value}{" "}
+            </span>
+            with{" "}
+            <span className="font-semibold">
+              {numberOfPeopleInFlight}{" "}
+              {numberOfPeopleInFlight > 1 ? "people" : "person"}
+            </span>{" "}
+            will cost{" "}
+            <span className="font-semibold">
+              <Price
+                stayPrice={flightPrice * numberOfPeopleInFlight}
+                className="!text-sm inline"
+              ></Price>
+            </span>
+          </div>
+        )}
+
+        <div className="flex gap-2">
+          {slugIsCorrect && !router.query.flight && (
+            <button
+              onClick={() => {
+                addToTrip("flight");
+              }}
+              disabled={
+                !selectedFlightStartingLocation || !selectedFlightDestination
+              }
+              className={
+                "bg-blue-500 h-10 w-full flex items-center justify-center bottom-0 mt-3 left-0 right-0 " +
+                (selectedFlightStartingLocation &&
+                selectedFlightStartingLocation.value &&
+                selectedFlightDestination &&
+                selectedFlightDestination.value
+                  ? "cursor-pointer"
+                  : "cursor-not-allowed opacity-50")
+              }
+            >
+              <span className="font-semibold text-sm text-white">
+                Add to trip
+              </span>
+              <div className={" " + (!addToTripLoading ? "hidden" : "ml-2")}>
+                <LoadingSpinerChase
+                  width={16}
+                  height={16}
+                  color="#fff"
+                ></LoadingSpinerChase>
+              </div>
+            </button>
+          )}
+
+          <button
+            onClick={() => {
+              addToBasket("flight");
+            }}
+            disabled={
+              !selectedFlightStartingLocation || !selectedFlightDestination
+            }
+            className={
+              "h-10 w-full flex items-center justify-center bottom-0 mt-3 left-0 right-0 " +
+              (router.query.flight ? "bg-blue-500 " : "bg-red-400 ") +
+              (selectedFlightStartingLocation &&
+              selectedFlightStartingLocation.value &&
+              selectedFlightDestination &&
+              selectedFlightDestination.value
+                ? "cursor-pointer"
+                : "cursor-not-allowed opacity-50")
+            }
+          >
+            <span className="font-semibold text-sm text-white">Book now</span>
+            <div className={" " + (!addToBasketLoading ? "hidden" : "ml-2")}>
+              <LoadingSpinerChase
+                width={16}
+                height={16}
+                color="#fff"
+              ></LoadingSpinerChase>
+            </div>
+          </button>
+        </div>
+      </Dialogue>
 
       <Dialogue
         isOpen={currentListing && router.query.transportSlug ? true : false}

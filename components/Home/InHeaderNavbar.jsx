@@ -48,10 +48,20 @@ function Navbar({
       }
     );
 
+    const flightCart = await axios.get(
+      `${process.env.NEXT_PUBLIC_baseURL}/flights`,
+      {
+        headers: {
+          Authorization: `Token ${Cookies.get("token")}`,
+        },
+      }
+    );
+
     const totalNumberOfItemsInCart =
       stayCart.data.results.length +
       activityCart.data.results.length +
-      transportCart.data.results.length;
+      transportCart.data.results.length +
+      flightCart.data.results.length;
 
     setNumberOfItemsInCart(totalNumberOfItemsInCart);
   };

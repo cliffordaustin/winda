@@ -96,6 +96,22 @@ export const signup = (payload) => async (dispatch) => {
             .catch((err) => {
               console.log(err.response);
             });
+        } else if (item.itemCategory === "flight") {
+          await axios
+            .post(
+              `${process.env.NEXT_PUBLIC_baseURL}/flights/`,
+              {
+                starting_point: item.starting_point,
+                destination: item.destination,
+                number_of_people: item.number_of_people,
+              },
+              {
+                headers: {
+                  Authorization: "Token " + response.data.key,
+                },
+              }
+            )
+            .catch((err) => {});
         }
       }
       Cookies.remove("cart");
@@ -207,6 +223,22 @@ export const login = (payload) => async (dispatch) => {
             .catch((err) => {
               console.log(err.response);
             });
+        } else if (item.itemCategory === "flight") {
+          await axios
+            .post(
+              `${process.env.NEXT_PUBLIC_baseURL}/flights/`,
+              {
+                starting_point: item.starting_point,
+                destination: item.destination,
+                number_of_people: item.number_of_people,
+              },
+              {
+                headers: {
+                  Authorization: "Token " + response.data.key,
+                },
+              }
+            )
+            .catch((err) => {});
         }
       }
       Cookies.remove("cart");
@@ -317,6 +349,22 @@ export const signinWithGoogle = (payload, router) => async (dispatch) => {
             .catch((err) => {
               console.log(err.response);
             });
+        } else if (item.itemCategory === "flight") {
+          await axios
+            .post(
+              `${process.env.NEXT_PUBLIC_baseURL}/flights/`,
+              {
+                starting_point: item.starting_point,
+                destination: item.destination,
+                number_of_people: item.number_of_people,
+              },
+              {
+                headers: {
+                  Authorization: "Token " + response.data.key,
+                },
+              }
+            )
+            .catch((err) => {});
         }
       }
       Cookies.remove("cart");

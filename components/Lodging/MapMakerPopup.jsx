@@ -34,7 +34,21 @@ const MapMakerPopup = ({ stay }) => {
   const [newPrice, setNewPrice] = useState();
 
   const price = () => {
-    return stay.price_non_resident;
+    return (
+      stay.price_non_resident ||
+      stay.price ||
+      stay.per_house_price ||
+      stay.deluxe_price_non_resident ||
+      stay.deluxe_price ||
+      stay.family_room_price_non_resident ||
+      stay.family_room_price ||
+      stay.executive_suite_room_price_non_resident ||
+      stay.executive_suite_room_price ||
+      stay.presidential_suite_room_price_non_resident ||
+      stay.presidential_suite_room_price ||
+      stay.emperor_suite_room_price_non_resident ||
+      stay.emperor_suite_room_price
+    );
   };
 
   const priceConversion = async (price) => {
