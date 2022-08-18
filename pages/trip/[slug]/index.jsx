@@ -881,9 +881,11 @@ function TripDetail({ userProfile, userTrips, trip }) {
                   <h1 className="mb-1 font-bold text-gray-700 font-OpenSans text-2xl">
                     Transport
                   </h1>
-                  <span className="text-sm capitalize">
-                    {trip.transport.type_of_car.toLowerCase()}
-                  </span>
+                  {trip.transport.type_of_car && (
+                    <span className="text-sm capitalize">
+                      {trip.transport.type_of_car.toLowerCase()}
+                    </span>
+                  )}
 
                   <div
                     onClick={() => {
@@ -1635,16 +1637,20 @@ function TripDetail({ userProfile, userTrips, trip }) {
               <Price stayPrice={transportPrice()}></Price>
               <span className="mt-1.5 text-sm">/per day</span>
             </div>
-            <div className="flex items-center gap-2">
-              <h1 className="font-bold capitalize text-xl">
-                {trip.transport.vehicle_make.toLowerCase()}
-              </h1>
-            </div>
+            {trip.transport.vehicle_make && (
+              <div className="flex items-center gap-2">
+                <h1 className="font-bold capitalize text-xl">
+                  {trip.transport.vehicle_make.toLowerCase()}
+                </h1>
+              </div>
+            )}
 
             <div className="mt-2 mb-2">
-              <div className="text-sm ml-1 capitalize font-bold">
-                {trip.transport.type_of_car.toLowerCase()}
-              </div>
+              {trip.transport.type_of_car && (
+                <div className="text-sm ml-1 capitalize font-bold">
+                  {trip.transport.type_of_car.toLowerCase()}
+                </div>
+              )}
 
               <div className="py-2 border-t border-b border-gray-400 px-2 my-2 text-sm text-gray-600 flex justify-between items-center">
                 <div className="flex items-center gap-0.5">
@@ -1655,15 +1661,17 @@ function TripDetail({ userProfile, userTrips, trip }) {
                   <Icon className="w-4 h-4" icon="bi:bag-fill" />
                   <p>{trip.transport.bags}</p>
                 </div>
-                <div className="flex items-center gap-0.5">
-                  <Icon
-                    className="w-4 h-4"
-                    icon="icon-park-solid:manual-gear"
-                  />
-                  <p className="capitalize">
-                    {trip.transport.transmission.toLowerCase()}
-                  </p>
-                </div>
+                {trip.transport.transmission && (
+                  <div className="flex items-center gap-0.5">
+                    <Icon
+                      className="w-4 h-4"
+                      icon="icon-park-solid:manual-gear"
+                    />
+                    <p className="capitalize">
+                      {trip.transport.transmission.toLowerCase()}
+                    </p>
+                  </div>
+                )}
                 <div className="flex items-center gap-0.5">
                   <Icon className="w-4 h-4" icon="ic:baseline-severe-cold" />
                   <p className="capitalize">
