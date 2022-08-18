@@ -155,7 +155,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
       ((trip.stay ? trip.stay.price_non_resident : 0) +
         (trip.activity ? trip.activity.price_non_resident : 0) +
         (trip.transport ? trip.transport.price_per_day : 0)) *
-        (trip.total_number_of_days ? trip.total_number_of_days : 1) +
+        1 +
       (trip.flight
         ? checkFlightPrice(trip.flight.starting_point, trip.flight.destination)
         : 0) *

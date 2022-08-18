@@ -103,7 +103,7 @@ const Card = ({
       ((listing.stay ? listing.stay.price_non_resident : 0) +
         (listing.activity ? listing.activity.price_non_resident : 0) +
         (listing.transport ? listing.transport.price_per_day : 0)) *
-        (listing.total_number_of_days ? listing.total_number_of_days : 1) +
+        1 +
       (listing.flight
         ? checkFlightPrice(
             listing.flight.starting_point,
