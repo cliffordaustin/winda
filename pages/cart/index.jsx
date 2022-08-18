@@ -14,6 +14,8 @@ import Cookies from "js-cookie";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Image from "next/image";
+
+import { checkFlightPrice } from "../../lib/flightLocations";
 import LoadingSpinerChase from "../../components/ui/LoadingSpinerChase";
 import ClientOnly from "../../components/ClientOnly";
 import {
@@ -24,12 +26,14 @@ import {
 
 import { getStayPrice, getActivityPrice } from "../../lib/getTotalCartPrice";
 import PopoverBox from "../../components/ui/Popover";
+import FlightItem from "../../components/Cart/FlightItem";
 
 const Cart = ({
   cart,
   userProfile,
   allItemsInCart,
   activitiesCart,
+  flightCart,
   allItemsInActivityCart,
   transportCart,
   allItemsInTransportCart,
@@ -119,6 +123,13 @@ const Cart = ({
         );
       }
     });
+
+    flightCart.forEach((item, index) => {
+      price +=
+        checkFlightPrice(item.starting_point, item.destination) *
+        item.number_of_people;
+    });
+
     if (Cookies.get("token")) {
       allItemsInTransportCart.forEach((item) => {
         if (!item.number_of_days) {
@@ -205,7 +216,8 @@ const Cart = ({
   if (
     cart.length === 0 &&
     activitiesCart.length === 0 &&
-    transportCart.length === 0
+    transportCart.length === 0 &&
+    flightCart.length === 0
   ) {
     nothingInCart = (
       <div>
@@ -313,7 +325,8 @@ const Cart = ({
   if (
     cart.length > 0 ||
     activitiesCart.length > 0 ||
-    transportCart.length > 0
+    transportCart.length > 0 ||
+    flightCart.length > 0
   ) {
     showCartItems = (
       <div>
@@ -515,6 +528,20 @@ const Cart = ({
             ))}
           </div>
 
+          {flightCart.length > 0 && (
+            <div className="mb-4 mt-2 ml-4 text-lg font-bold">
+              Flight - Your Basket({flightCart.length})
+            </div>
+          )}
+
+          <div className="flex flex-wrap mb-5 justify-between">
+            {flightCart.map((item, index) => (
+              <div key={index} className="md:w-[50%] w-full">
+                <FlightItem flight={item}></FlightItem>
+              </div>
+            ))}
+          </div>
+
           <div className="px-2 mt-6 mb-12 ml-auto md:w-[50%]">
             <ClientOnly>
               <div className={styles.priceTotal}>
@@ -641,6 +668,15 @@ export async function getServerSideProps(context) {
         }
       );
 
+      const flightCart = await axios.get(
+        `${process.env.NEXT_PUBLIC_baseURL}/flights/`,
+        {
+          headers: {
+            Authorization: "Token " + token,
+          },
+        }
+      );
+
       const newCart = [];
 
       data.results.forEach((result) => {
@@ -664,16 +700,19 @@ export async function getServerSideProps(context) {
           userProfile: response.data[0],
           cart: newCart,
           activitiesCart: newActivitiesCart,
+          flightCart: [],
           allItemsInActivityCart: activitiesCart.data.results,
           allItemsInCart: data.results,
           transportCart: newTransportCart,
           allItemsInTransportCart: transportCart.data.results,
+          flightCart: flightCart.data.results,
         },
       };
     } else if (cart) {
       const cartItems = [];
       const activitiesCart = [];
       const transportCart = [];
+      const flightCart = [];
 
       cart = JSON.parse(decodeURIComponent(cart));
 
@@ -735,6 +774,14 @@ export async function getServerSideProps(context) {
             .catch((err) => {
               console.log(err.response);
             });
+        } else if (item.itemCategory === "flight") {
+          if (item.starting_point && item.destination) {
+            flightCart.push({
+              starting_point: item.starting_point,
+              destination: item.destination,
+              number_of_people: item.number_of_people,
+            });
+          }
         }
       }
 
@@ -744,6 +791,7 @@ export async function getServerSideProps(context) {
           userProfile: "",
           activitiesCart: activitiesCart,
           transportCart: transportCart,
+          flightCart: flightCart,
           allItemsInActivityCart: [],
           allItemsInCart: [],
           allItemsInTransportCart: [],
@@ -757,6 +805,7 @@ export async function getServerSideProps(context) {
         cart: [],
         activitiesCart: [],
         transportCart: [],
+        flightCart: [],
         allItemsInActivityCart: [],
         allItemsInCart: [],
         allItemsInTransportCart: [],
@@ -777,6 +826,7 @@ export async function getServerSideProps(context) {
           cart: [],
           activitiesCart: [],
           transportCart: [],
+          flightCart: [],
           allItemsInActivityCart: [],
           allItemsInTransportCart: [],
         },

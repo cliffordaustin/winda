@@ -57,7 +57,7 @@ function Listing({
   const [newPrice, setNewPrice] = useState(null);
 
   const price = () => {
-    return listing.price_non_resident;
+    return listing.price_non_resident || listing.price;
   };
 
   const priceConversion = async (price) => {

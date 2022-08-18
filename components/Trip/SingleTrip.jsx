@@ -40,6 +40,7 @@ const SingleTrip = ({ trip, isRecommendedPage, selectedData }) => {
             stay_id: selectedData.stay_id,
             activity_id: selectedData.activity_id,
             transport_id: selectedData.transport_id,
+            flight_id: selectedData.flight_id,
           },
           {
             headers: {

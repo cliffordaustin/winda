@@ -1876,63 +1876,65 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               )}
             </div>
 
-            <div className={"pt-10 " + (reviews.length > 0 ? "" : "")}>
-              <h1 className="font-bold text-2xl mb-5">
-                What makes this listing unique
-              </h1>
-              {!showAllUniqueFeature && (
-                <p className="ml-2 font-medium">
-                  {stay.unique_about_place.slice(0, 500)}
-                </p>
-              )}
-              {showAllUniqueFeature && (
-                <p className="ml-2 font-medium">{stay.unique_about_place}</p>
-              )}
-              {!showAllUniqueFeature && stay.unique_about_place.length > 500 && (
-                <div
-                  onClick={() => {
-                    setShowAllUniqueFeature(true);
-                  }}
-                  className="font-bold text-blue-700 flex items-center gap-0.5 cursor-pointer ml-2"
-                >
-                  <span>Read more</span>{" "}
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 mt-1"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
+            {stay.unique_about_place && (
+              <div className={"pt-10 " + (reviews.length > 0 ? "" : "")}>
+                <h1 className="font-bold text-2xl mb-5">
+                  What makes this listing unique
+                </h1>
+                {!showAllUniqueFeature && (
+                  <p className="ml-2 font-medium">
+                    {stay.unique_about_place.slice(0, 500)}
+                  </p>
+                )}
+                {showAllUniqueFeature && (
+                  <p className="ml-2 font-medium">{stay.unique_about_place}</p>
+                )}
+                {!showAllUniqueFeature && stay.unique_about_place.length > 500 && (
+                  <div
+                    onClick={() => {
+                      setShowAllUniqueFeature(true);
+                    }}
+                    className="font-bold text-blue-700 flex items-center gap-0.5 cursor-pointer ml-2"
                   >
-                    <path
-                      fillRule="evenodd"
-                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-              )}
-              {showAllUniqueFeature && (
-                <div
-                  onClick={() => {
-                    setShowAllUniqueFeature(false);
-                  }}
-                  className="font-bold text-blue-700 flex items-center gap-0.5 cursor-pointer ml-2"
-                >
-                  <span>Read less</span>{" "}
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 mt-1"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
+                    <span>Read more</span>{" "}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 mt-1"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                )}
+                {showAllUniqueFeature && (
+                  <div
+                    onClick={() => {
+                      setShowAllUniqueFeature(false);
+                    }}
+                    className="font-bold text-blue-700 flex items-center gap-0.5 cursor-pointer ml-2"
                   >
-                    <path
-                      fillRule="evenodd"
-                      d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-              )}
-            </div>
+                    <span>Read less</span>{" "}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 mt-1"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                )}
+              </div>
+            )}
           </Element>
 
           {stay.extras_included.length > 0 && (

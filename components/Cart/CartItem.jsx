@@ -520,7 +520,7 @@ const CartItem = ({
     : activity.activity_images.sort((x, y) => y.main - x.main);
   let mainImage = sortedImages.find((image) => image.main);
   return (
-    <div className="relative px-2 mb-6">
+    <div className="relative px-2 mb-3">
       <div
         className="cursor-pointer"
         onClick={() => {
