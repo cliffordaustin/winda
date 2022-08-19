@@ -253,14 +253,17 @@ export default function Signup(props) {
         </Button> */}
         <h3 className="mt-6 font-bold text-center">
           Already on Winda?{" "}
-          <Link
-            href={{
-              pathname: "/login",
-              query: { redirect: `${router.query.redirect || "/"}` },
+          <div
+            onClick={() => {
+              router.replace({
+                pathname: "/login",
+                query: { redirect: `${router.query.redirect || "/"}` },
+              });
             }}
+            className="text-blue-500 inline cursor-pointer"
           >
-            <a className="text-blue-500">Login</a>
-          </Link>
+            Login
+          </div>
         </h3>
       </div>
     </div>

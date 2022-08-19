@@ -7,9 +7,10 @@ function PopoverBox({
   btnPopover,
   btnClassName = "",
   panelClassName = "",
+  popoverClassName = "",
 }) {
   return (
-    <Popover className="relative">
+    <Popover className={"relative " + popoverClassName}>
       <Popover.Button className={"outline-none " + btnClassName}>
         {btnPopover}
       </Popover.Button>

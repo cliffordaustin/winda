@@ -34,6 +34,7 @@ const ImageGallery = ({ images }) => {
             layout="fill"
             alt="Logo"
             src={mainImage.image}
+            objectFit="cover"
             priority
           ></Image>
         )}
@@ -42,6 +43,7 @@ const ImageGallery = ({ images }) => {
             layout="fill"
             alt="Logo"
             src={sortedImages[0].image}
+            objectFit="cover"
             priority
           ></Image>
         )}
@@ -55,7 +57,13 @@ const ImageGallery = ({ images }) => {
               (scaleImages ? "scale-[1.03]" : "")
             }
           >
-            <Image layout="fill" alt="Logo" src={image} priority></Image>
+            <Image
+              layout="fill"
+              alt=""
+              objectFit="cover"
+              src={image}
+              priority
+            ></Image>
           </div>
         ))}
       </div>

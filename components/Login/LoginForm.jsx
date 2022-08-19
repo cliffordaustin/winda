@@ -230,14 +230,17 @@ export default function Login(props) {
 
         <h3 className="mt-6 font-bold text-center">
           Don&apos;t have an account?{" "}
-          <Link
-            href={{
-              pathname: "/signup",
-              query: { redirect: `${router.query.redirect || "/"}` },
+          <div
+            onClick={() => {
+              router.replace({
+                pathname: "/signup",
+                query: { redirect: `${router.query.redirect || "/"}` },
+              });
             }}
+            className="text-blue-500 inline cursor-pointer"
           >
-            <a className="text-blue-500">Sign up</a>
-          </Link>
+            Sign up
+          </div>
         </h3>
       </div>
     </div>

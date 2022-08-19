@@ -116,7 +116,7 @@ export const signup = (payload) => async (dispatch) => {
       }
       Cookies.remove("cart");
     }
-    payload.router.push(payload.router.query.redirect || "/");
+    payload.router.replace(payload.router.query.redirect || "/");
 
     // const email = Buffer.from(payload.data.email, "binary").toString("base64");
     // payload.router.push({
@@ -244,7 +244,7 @@ export const login = (payload) => async (dispatch) => {
       Cookies.remove("cart");
     }
 
-    payload.router.push(payload.router.query.redirect || "/");
+    payload.router.replace(payload.router.query.redirect || "/");
     dispatch({
       type: "CHANGE_LOGIN_ERROR_FALSE",
     });

@@ -40,6 +40,7 @@ const ImageGallery = ({ images, className = "" }) => {
             layout="fill"
             alt="Logo"
             src={mainImage.image}
+            objectFit="cover"
             priority
           ></Image>
         )}
@@ -48,6 +49,7 @@ const ImageGallery = ({ images, className = "" }) => {
             layout="fill"
             alt="Logo"
             src={sortedImages[0].image}
+            objectFit="cover"
             priority
           ></Image>
         )}
@@ -67,7 +69,13 @@ const ImageGallery = ({ images, className = "" }) => {
               (otherImages.length === 1 ? " !h-full" : "")
             }
           >
-            <Image layout="fill" alt="Logo" src={image} priority></Image>
+            <Image
+              objectFit="cover"
+              layout="fill"
+              alt="Logo"
+              src={image}
+              priority
+            ></Image>
           </div>
         ))}
       </div>

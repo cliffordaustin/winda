@@ -238,11 +238,11 @@ const Card = ({
                 pathname: `/trip/${listing.slug}`,
               });
             }}
-            className="w-[40%] !px-0 !bg-transparent border border-gray-400 !text-black font-bold"
+            className="w-full !px-0 !bg-transparent font-bold !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white"
           >
             view trip
           </Button>
-          <div className="w-[58%] relative">
+          {/* <div className="w-[58%] relative">
             <Button
               onClick={() => {
                 if (Cookies.get("token")) {
@@ -299,7 +299,7 @@ const Card = ({
                 </svg>
               )}
             </Button>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
