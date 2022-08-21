@@ -32,6 +32,7 @@ import { Icon } from "@iconify/react";
 function Activities({
   userProfile,
   activities,
+  allactivities,
   pageSize,
   count,
   nextLink,
@@ -187,8 +188,8 @@ function Activities({
 
       setUserLatLng({
         ...userLatLng,
-        longitude: lat,
-        latitude: lng,
+        longitude: lng,
+        latitude: lat,
       });
     };
     getLatLng();
@@ -213,16 +214,15 @@ function Activities({
     return d;
   }
 
-  // useEffect(() => {
-  //   if (state.windowSize >= 768) {
-  //     setState({
-  //       ...state,
-  //       showSearchModal: false,
-  //       showMobileFilter: false,
-  //     });
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [state.windowSize]);
+  useEffect(() => {
+    if (process.browser) {
+      window.onresize = () => {
+        if (window.innerWidth >= 1024) {
+          setMobileMap(false);
+        }
+      };
+    }
+  }, []);
 
   const [activityLocation, setActivityLocation] = useState(
     router.query.search || router.query.d_search || ""
@@ -388,7 +388,7 @@ function Activities({
 
   return (
     <div
-      className="overflow-x-hidden"
+      className="relative"
       onClick={() => {
         setState({
           ...state,
@@ -1042,43 +1042,7 @@ function Activities({
                 </div>
               </Popup>
             </div>
-            {/* <div
-              onClick={(e) => {
-                e.stopPropagation();
-                setState({
-                  ...state,
-                  ...turnOffAllPopup,
-                  showMobileFilter: true,
-                });
-              }}
-              className="flex items-center bg-gray-100 px-4 gap-1 cursor-pointer justify-center mr-1 transition-all duration-200 ease-linear hover:border-gray-600 border-gray-400 rounded-md border"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
-                role="img"
-                className="w-5 h-5"
-                preserveAspectRatio="xMidYMid meet"
-                viewBox="0 0 24 24"
-              >
-                <g
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                >
-                  <circle cx="14" cy="6" r="2" />
-                  <path d="M4 6h8m4 0h4" />
-                  <circle cx="8" cy="12" r="2" />
-                  <path d="M4 12h2m4 0h10" />
-                  <circle cx="17" cy="18" r="2" />
-                  <path d="M4 18h11m4 0h1" />
-                </g>
-              </svg>
 
-              <span>filter</span>
-            </div> */}
             <div
               onClick={(e) => {
                 e.stopPropagation();
@@ -1188,462 +1152,7 @@ function Activities({
             </div>
           </div>
         </div>
-
-        <div>
-          {/* <ClientOnly>
-          {currencyToKES && (
-            <div
-              className="text-xs md:text-base absolute md:right-12 right-6 bottom-7 font-bold text-gray-700 hover:text-gray-900 cursor-pointer transition-all duration-300 ease-linear flex items-center"
-              onClick={() => {
-                dispatch({
-                  type: "CHANGE_CURRENCY_TO_DOLLAR_FALSE",
-                });
-              }}
-            >
-              <div>USD</div>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-3 w-3 md:h-4 md:w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
-                />
-              </svg>
-              <div>KES</div>
-            </div>
-          )}
-          {!currencyToKES && (
-            <div
-              className="text-xs md:text-base absolute md:right-12 right-6 bottom-7 font-bold text-gray-700 hover:text-gray-900 cursor-pointer transition-all duration-300 ease-linear flex md:gap-1 items-center"
-              onClick={() => {
-                dispatch({
-                  type: "CHANGE_CURRENCY_TO_DOLLAR_TRUE",
-                });
-              }}
-            >
-              <div>KES</div>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-3 w-3 md:h-4 md:w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
-                />
-              </svg>
-              <div>USD</div>
-            </div>
-          )}
-        </ClientOnly> */}
-        </div>
-
-        <div>
-          {/* <div
-            onClick={(event) => {
-              event.stopPropagation();
-              setState({
-                ...state,
-                ...turnOffAllPopup,
-                showSortPopup: !state.showSortPopup,
-              });
-            }}
-            className="cursor-pointer relative rounded-md border border-gray-200 py-2 px-2 mr-1 md:mr-4 flex gap-1 items-center justify-center"
-          >
-            <span className="block">Sort by</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 mt-1"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                clipRule="evenodd"
-              />
-            </svg>
-            <Popup
-              className="absolute top-full mt-2 w-60 left-0"
-              showPopup={state.showSortPopup}
-            >
-              <div
-                className={
-                  styles.listItem +
-                  (router.query.ordering === "-date_posted"
-                    ? " !bg-red-500 !text-white"
-                    : "")
-                }
-                onClick={(event) => {
-                  event.stopPropagation();
-                  setState({
-                    ...state,
-                    ...turnOffAllPopup,
-                    showSortPopup: false,
-                  });
-                  if (router.query.ordering) {
-                    router.push({ query: { ...router.query, ordering: "" } });
-                  } else {
-                    router.push({
-                      query: { ...router.query, ordering: "-date_posted" },
-                    });
-                  }
-                }}
-              >
-                Newest
-              </div>
-              <div
-                className={
-                  styles.listItem +
-                  (router.query.ordering === "+price"
-                    ? " !bg-red-500 !text-white"
-                    : "")
-                }
-                onClick={(event) => {
-                  event.stopPropagation();
-                  setState({
-                    ...state,
-                    ...turnOffAllPopup,
-                    showSortPopup: false,
-                  });
-                  if (router.query.ordering) {
-                    router.push({ query: { ...router.query, ordering: "" } });
-                  } else {
-                    router.push({
-                      query: { ...router.query, ordering: "+price" },
-                    });
-                  }
-                }}
-              >
-                Price(min to max)
-              </div>
-              <div
-                className={
-                  styles.listItem +
-                  (router.query.ordering === "-price"
-                    ? " !bg-red-500 !text-white"
-                    : "")
-                }
-                onClick={(event) => {
-                  event.stopPropagation();
-                  setState({
-                    ...state,
-                    ...turnOffAllPopup,
-                    showSortPopup: false,
-                  });
-                  if (router.query.ordering) {
-                    router.push({ query: { ...router.query, ordering: "" } });
-                  } else {
-                    router.push({
-                      query: { ...router.query, ordering: "-price" },
-                    });
-                  }
-                }}
-              >
-                Price(max to min)
-              </div>
-            </Popup>
-          </div>
-
-          <div
-            onClick={(event) => {
-              event.stopPropagation();
-              setState({
-                ...state,
-                ...turnOffAllPopup,
-                showPricePopup: !state.showPricePopup,
-              });
-            }}
-            className="bg-gray-100 hidden md:block relative cursor-pointer rounded-md border border-gray-200 py-2 px-2"
-          >
-            {!minPrice && !maxPrice && (
-              <div className="flex gap-1 items-center justify-center">
-                <span className="block">Any Prices</span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 mt-1"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-            )}
-            {minPrice && maxPrice && (
-              <div className="flex items-center gap-2">
-                <div className="flex items-center gap-1">
-                  <h1>{minPrice.value}</h1>
-                  <div> - </div>
-                  <h1>{maxPrice.value}</h1>
-                </div>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 mt-1"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-            )}
-
-            {minPrice && !maxPrice && (
-              <div className="flex items-center gap-1">
-                <div className="flex items-center">
-                  <h1>{minPrice.value}</h1>
-                  <div>+</div>
-                </div>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 mt-1"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-            )}
-
-            {!minPrice && maxPrice && (
-              <div className="flex items-center gap-2">
-                <div className="flex items-center gap-1">
-                  <h1>KES0</h1>
-                  <div> - </div>
-                  <h1>{maxPrice.value}</h1>
-                </div>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 mt-1"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-            )}
-            <Popup
-              className="absolute top-full mt-2 w-[450px] -left-10 px-2"
-              showPopup={state.showPricePopup}
-            >
-              <h1 className="font-bold text-base mb-2 text-gray-600">
-                Price Range
-              </h1>
-              <PriceFilter
-                setMinPriceSelected={setMinSelected}
-                setMaxPriceSelected={setMaxSelected}
-                minPriceInstanceId="minPrice"
-                maxPriceInstanceId="maxPrice"
-                minPriceSelected={minPrice}
-                maxPriceSelected={maxPrice}
-              ></PriceFilter>
-            </Popup>
-          </div>
-
-          <div
-            onClick={(event) => {
-              event.stopPropagation();
-              setState({
-                ...state,
-                ...turnOffAllPopup,
-                showFilterPopup: !state.showFilterPopup,
-                showMobileFilter: true,
-              });
-            }}
-            className="bg-gray-100 relative cursor-pointer rounded-md border border-gray-200 py-2 px-2 flex gap-1 items-center justify-center"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
-              />
-            </svg>
-            <span className="block">Filters</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 mt-1"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                clipRule="evenodd"
-              />
-            </svg>
-            <Popup
-              className="hidden md:block absolute top-full mt-2 max-h-[500px] w-[500px] -left-32 lg:left-[-15rem] xl:-left-44 px-4 overflow-scroll"
-              showPopup={state.showFilterPopup}
-            >
-              <div className="lg:hidden">
-                <div className="mt-2 mb-4 md:hidden">
-                  <h1 className="font-bold text-base mb-2">Price Range</h1>
-                  <PriceFilter
-                    setMinPriceSelected={setMinSelected}
-                    setMaxPriceSelected={setMaxSelected}
-                    minPriceInstanceId="minPrice"
-                    maxPriceInstanceId="maxPrice"
-                    minPriceSelected={minPrice}
-                    maxPriceSelected={maxPrice}
-                  ></PriceFilter>
-                </div>
-              </div>
-
-              <div className="text-lg font-bold mb-2 mt-2">Activities</div>
-              <TypeOfActivities></TypeOfActivities>
-            </Popup>
-          </div> */}
-        </div>
       </div>
-
-      <div className="relative hidden md:block ">
-        {/* <LargeMobileModal
-          showModal={state.showMobileFilter}
-          closeModal={() => {
-            setState({
-              ...state,
-              ...turnOffAllPopup,
-              showMobileFilter: false,
-            });
-          }}
-          className="!overflow-y-scroll !relative max-w-[600px] !h-[500px]"
-          title="Filters"
-        >
-          <div className="px-4 relative">
-            <div>
-              <div className="mt-2 mb-4">
-                <h1 className="font-bold text-base mb-2">Price Range</h1>
-
-                <div className="flex items-center gap-3 px-10">
-                  <div className="w-[50%] border rounded-md h-fit px-2 py-1">
-                    <span className="text-sm text-gray-500">Min price</span>
-                    <div className="flex items-center">
-                      <div className="text-sm font-bold mr-2 ">$</div>
-                      <input
-                        onBlur={() => {
-                          filterMinPrice();
-                        }}
-                        name="min-price"
-                        value={minPrice}
-                        type="number"
-                        onChange={(event) => {
-                          setMinPrice(event.target.value);
-                        }}
-                        onKeyPress={(event) => {
-                        if (event.key === "Enter") {
-                          event.target.blur();
-                        }
-                      }}
-                        className="w-full focus:outline-none text-sm "
-                      />
-                    </div>
-                  </div>
-                  <div> - </div>
-                  <div className="w-[50%] border rounded-md h-fit px-2 py-1">
-                    <span className="text-sm text-gray-500">Max price</span>
-                    <div className="flex items-center">
-                      <div className="text-sm font-bold mr-2 ">$</div>
-                      <input
-                        onBlur={() => {
-                          filterMaxPrice();
-                        }}
-                        name="max-price"
-                        value={maxPrice}
-                        type="number"
-                        onChange={(event) => {
-                          setMaxPrice(event.target.value);
-                        }}
-                        onKeyPress={(event) => {
-                        if (event.key === "Enter") {
-                          event.target.blur();
-                        }
-                      }}
-                        className="w-full focus:outline-none text-sm "
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <hr className="-mx-4 my-6" />
-
-            <div className="text-lg font-bold mb-2 mt-2">Activities</div>
-            <TypeOfActivities></TypeOfActivities>
-          </div>
-          <div
-            className={
-              "w-full sticky z-10 px-2 py-2 bottom-0 safari-bottom left-0 right-0 bg-gray-100 border-t border-gray-200 "
-            }
-          >
-            <div className="flex justify-between items-center gap-2">
-              <div
-                onClick={() => {
-                  router.push({
-                    pathname: "/experiences",
-                    query: {
-                      trip: router.query.trip,
-                      group_trip: router.query.group_trip,
-                    },
-                  });
-                }}
-                className="underline cursor-pointer"
-              >
-                Clear all
-              </div>
-
-              <Button
-                onClick={() => {
-                  setState({
-                    ...state,
-                    ...turnOffAllPopup,
-                    showMobileFilter: false,
-                  });
-                }}
-                className={
-                  "!bg-gradient-to-r !px-4 from-pink-500 via-red-500 to-yellow-500 !text-white "
-                }
-              >
-                Show all {count} experiences
-              </Button>
-            </div>
-          </div>
-        </LargeMobileModal> */}
-      </div>
-
       <MobileModal
         showModal={state.showMobileFilter}
         closeModal={() => {
@@ -1829,63 +1338,62 @@ function Activities({
         </div>
       </MobileModal>
 
-      <div className="mt-[146px] md:mt-[142px] lg:mt-[188px]  flex relative h-full overflow-y-scroll">
-        <div className={"hidden lg:block w-2/4 px-4 h-[78vh] relative"}>
-          <Map activities={activities}></Map>
-        </div>
+      {!mobileMap && (
+        <div className="mt-[170px] w-full">
+          <div className="flex gap-2 px-4">
+            <div className="lg:w-[40%] xl:w-[50%] hidden lg:block px-2 h-[78vh] mt-0 sticky top-[170px]">
+              <Map activities={allactivities}></Map>
+            </div>
+            <div className="lg:w-[60%] xl:w-[50%] w-full md:pl-4">
+              <Listings
+                getDistance={getDistanceFromLatLonInKm}
+                userLatLng={userLatLng}
+                itemsInCart={itemsInCart}
+                itemsInOrders={itemsInOrders}
+                userProfile={userProfile}
+                activities={activities}
+              ></Listings>
 
-        {!mobileMap && (
-          <div
-            className={
-              "px-4 md:mt-10 lg:mt-0 relative lg:h-[80vh] w-2/4 lgMax:w-full lg:overflow-y-scroll " +
-              (filterStayLoading ? "!overflow-y-hidden !h-[70vh]" : "")
-            }
-          >
-            <Listings
-              getDistance={getDistanceFromLatLonInKm}
-              userLatLng={userLatLng}
-              itemsInCart={itemsInCart}
-              itemsInOrders={itemsInOrders}
-              userProfile={userProfile}
-              activities={activities}
-            ></Listings>
-            {filterStayLoading && (
-              <div className="bg-white bg-opacity-50 lg:h-[70vh] lg:overflow-y-scroll absolute w-full top-0 bottom-0 right-0 left-0 z-10">
-                <div className="flex items-center justify-center h-full">
-                  <LoadingSpinerChase
-                    width={30}
-                    height={30}
-                    color="#000"
-                  ></LoadingSpinerChase>
+              {filterStayLoading && (
+                <div className="bg-white bg-opacity-50 lg:h-[70vh] lg:overflow-y-scroll absolute w-full top-0 bottom-0 right-0 left-0 z-10">
+                  <div className="flex items-center justify-center h-full">
+                    <LoadingSpinerChase
+                      width={30}
+                      height={30}
+                      color="#000"
+                    ></LoadingSpinerChase>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {activities.length > 0 && (
-              <ReactPaginate
-                breakLabel="..."
-                nextLabel={<Icon icon="bx:chevron-right" className="w-7 h-7" />}
-                disabledClassName="text-gray-300"
-                onPageChange={handlePageClick}
-                forcePage={parseInt(router.query.page) - 1 || 0}
-                pageRangeDisplayed={pageSize}
-                pageCount={totalPages}
-                previousLabel={
-                  <Icon icon="bx:chevron-left" className="w-7 h-7" />
-                }
-                activeLinkClassName="bg-gray-700 text-white font-bold"
-                renderOnZeroPageCount={null}
-                containerClassName="flex flex-wrap gap-2 justify-center items-center mt-4"
-                pageLinkClassName="bg-white h-8 w-8 font-bold flex justify-center items-center cursor-pointer hover:border border-gray-200 rounded-full text-sm"
-              />
-            )}
+              {activities.length > 0 && (
+                <ReactPaginate
+                  breakLabel="..."
+                  nextLabel={
+                    <Icon icon="bx:chevron-right" className="w-7 h-7" />
+                  }
+                  disabledClassName="text-gray-300"
+                  onPageChange={handlePageClick}
+                  forcePage={parseInt(router.query.page) - 1 || 0}
+                  pageRangeDisplayed={pageSize}
+                  pageCount={totalPages}
+                  previousLabel={
+                    <Icon icon="bx:chevron-left" className="w-7 h-7" />
+                  }
+                  activeLinkClassName="bg-gray-700 text-white font-bold"
+                  renderOnZeroPageCount={null}
+                  containerClassName="flex flex-wrap gap-2 justify-center items-center mt-4"
+                  pageLinkClassName="bg-white h-8 w-8 font-bold flex justify-center items-center cursor-pointer hover:border border-gray-200 rounded-full text-sm"
+                />
+              )}
+            </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
-      {state.windowSize < 768 && mobileMap && (
-        <div className={"h-[80vh]"}>
-          <Map activities={activities}></Map>
+      {mobileMap && (
+        <div className={"h-[83vh] mt-[140px]"}>
+          <Map activities={allactivities}></Map>
         </div>
       )}
 
@@ -1968,6 +1476,20 @@ export const getServerSideProps = wrapper.getServerSideProps(
           }&ordering=${query.ordering ? query.ordering : ""}`
         );
 
+        const allactivities = await axios.get(
+          `${process.env.NEXT_PUBLIC_baseURL}/all-activities/?search=${
+            query.search ? query.search : ""
+          }&d_search=${query.d_search ? query.d_search : ""}&min_capacity=${
+            query.min_capacity ? query.min_capacity : ""
+          }&pricing_type=${
+            query.pricing_type ? query.pricing_type : ""
+          }&type_of_activities=${
+            query.type_of_stay ? query.type_of_stay : ""
+          }&min_price=${query.min_price ? query.min_price : ""}&max_price=${
+            query.max_price ? query.max_price : ""
+          }&ordering=${query.ordering ? query.ordering : ""}`
+        );
+
         // await context.dispatch({
         //   type: "SET_ACTIVITIES",
         //   payload: response.data.results,
@@ -2008,6 +1530,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
             props: {
               userProfile: response.data[0],
               activities: activities.data.results,
+              allactivities: allactivities.data.results,
               nextLink: activities.data.next,
               previousLink: activities.data.previous,
               pageSize: activities.data.page_size,
@@ -2021,6 +1544,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           props: {
             userProfile: "",
             activities: activities.data.results,
+            allactivities: allactivities.data.results,
             nextLink: activities.data.next,
             previousLink: activities.data.previous,
             pageSize: activities.data.page_size,
@@ -2041,6 +1565,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
             props: {
               userProfile: "",
               activities: [],
+              allactivities: [],
               nextLink: "",
               previousLink: "",
               pageSize: 0,

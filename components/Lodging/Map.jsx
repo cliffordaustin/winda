@@ -10,16 +10,16 @@ function MapBox({ stays }) {
   const activeStay = useSelector((state) => state.stay.activeStay);
 
   const [viewState, setViewState] = React.useState({
-    longitude: stays.length > 0 ? stays[0].longitude : 36.8172449,
-    latitude: stays.length > 0 ? stays[0].latitude : -1.2832533,
-    zoom: 7,
+    longitude: 36.8172449,
+    latitude: -1.2832533,
+    zoom: 5,
   });
 
   const GlobalStyle = createGlobalStyle`
   .mapboxgl-map {
     -webkit-mask-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC);
     @media (min-width: 1024px) {
-      border-radius: 1.5rem !important;
+      border-radius: 0.8rem !important;
     }
   }
   .mapboxgl-popup-content {

@@ -72,17 +72,14 @@ const MapMakers = ({ stay }) => {
       <Marker longitude={stay.longitude} latitude={stay.latitude}>
         <div
           className={
-            "px-2 py-1 -z-10 rounded-md bg-blue-600 relative after:!border-t-blue-600 " +
+            "px-2 py-1 -z-10 rounded-md bg-white border relative after:!border-t-white " +
             styles.tooltip
           }
           onMouseEnter={() => setShowPopup(true)}
           onMouseLeave={() => setShowPopup(false)}
           onClick={() => setShowPopup(!showPopup)}
         >
-          <Price
-            className="text-white font-semibold text-sm font-OpenSans"
-            stayPrice={price()}
-          ></Price>
+          <Price className="text-black !text-sm" stayPrice={price()}></Price>
           <AnimatePresence exitBeforeEnter>
             {showPopup && (
               <Popup

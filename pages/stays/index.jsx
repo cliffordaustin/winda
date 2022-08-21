@@ -45,6 +45,7 @@ function Stays({
   count,
   nextLink,
   previousLink,
+  allStays,
   totalPages,
 }) {
   const [state, setState] = useState({
@@ -238,61 +239,6 @@ function Stays({
 
   const currencyToKES = useSelector((state) => state.home.currencyToKES);
 
-  // useEffect(() => {
-  //   if (isFirstRender.current) {
-  //     isFirstRender.current = false;
-  //   } else {
-  //     dispatch(setFilteredStays(router));
-  //   }
-  // }, [router.query.min_price, router.query.max_price, router.query.ordering]);
-
-  // useEffect(() => {
-  //   const minPriceFilterFormat = router.query.min_price
-  //     ? "KES" + router.query.min_price.replace("000", "k")
-  //     : "";
-
-  //   const minPriceFilterFormatObject = router.query.min_price
-  //     ? {
-  //         value: minPriceFilterFormat,
-  //         label: minPriceFilterFormat,
-  //       }
-  //     : "";
-
-  //   const maxPriceFilterFormat = router.query.max_price
-  //     ? "KES" + router.query.max_price.replace("000", "k")
-  //     : "";
-
-  //   const maxPriceFilterFormatObject = router.query.max_price
-  //     ? {
-  //         value: maxPriceFilterFormat,
-  //         label: maxPriceFilterFormat,
-  //       }
-  //     : "";
-
-  //   setMinSelected(minPriceFilterFormatObject);
-  //   setMaxSelected(maxPriceFilterFormatObject);
-  // }, [router.query.min_price, router.query.max_price]);
-
-  // useEffect(() => {
-  //   if (minPrice || maxPrice || minRoom || maxRoom) {
-  //     const maxPriceSelect = maxPrice
-  //       ? maxPrice.value.replace("KES", "").replace("k", "000")
-  //       : "";
-  //     const minPriceSelect = minPrice
-  //       ? minPrice.value.replace("KES", "").replace("k", "000")
-  //       : "";
-  //     router.push({
-  //       query: {
-  //         ...router.query,
-  //         min_price: minPriceSelect,
-  //         max_price: maxPriceSelect,
-  //         min_rooms: minRoom,
-  //         max_rooms: maxRoom,
-  //       },
-  //     });
-  //   }
-  // }, [minPrice, maxPrice, minRoom, maxRoom]);
-
   const priceConversionRate = async () => {
     try {
       const response = await fetch(
@@ -318,26 +264,18 @@ function Stays({
 
   useEffect(() => {
     if (process.browser) {
-      setState({
-        ...state,
-        windowSize: window.innerWidth,
-      });
+      window.onresize = () => {
+        if (window.innerWidth >= 1024) {
+          setMobileMap(false);
+        }
+      };
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const [userLatLng, setUserLatLng] = useState({
     latitude: null,
     longitude: null,
   });
-
-  // useEffect(() => {
-  //   if (process.browser) {
-  //     window.onresize = function () {
-  //       setState({ ...state, windowSize: window.innerWidth });
-  //     };
-  //   }
-  // }, []);
 
   useEffect(() => {
     const getLatLng = async () => {
@@ -350,8 +288,8 @@ function Stays({
 
       setUserLatLng({
         ...userLatLng,
-        longitude: lat,
-        latitude: lng,
+        longitude: lng,
+        latitude: lat,
       });
     };
     getLatLng();
@@ -1657,39 +1595,34 @@ function Stays({
         </div>
       </div>
 
-      <div className="mt-[146px] md:mt-[142px] lg:mt-[188px] flex relative h-full overflow-y-scroll">
-        <div className={"hidden lg:block w-2/4 px-4 h-[75vh] relative"}>
-          <Map stays={stays}></Map>
-        </div>
+      {!mobileMap && (
+        <div className="mt-[170px] w-full">
+          <div className="flex gap-2 px-4">
+            <div className="lg:w-[40%] xl:w-[50%] hidden lg:block px-2 h-[78vh] mt-0 sticky top-[170px]">
+              <Map stays={allStays}></Map>
+            </div>
+            <div className="lg:w-[60%] xl:w-[50%] w-full md:pl-4">
+              <Listings
+                getDistance={getDistanceFromLatLonInKm}
+                userLatLng={userLatLng}
+                itemsInCart={itemsInCart}
+                itemsInOrders={itemsInOrders}
+                stays={stays}
+                userProfile={userProfile}
+              ></Listings>
 
-        {!mobileMap && (
-          <div
-            className={
-              "px-4 md:mt-10 lg:mt-0 relative lg:h-[75vh] w-2/4 lgMax:w-full lg:overflow-y-scroll " +
-              (filterStayLoading ? "!overflow-y-hidden !h-[75vh]" : "")
-            }
-          >
-            <Listings
-              getDistance={getDistanceFromLatLonInKm}
-              userLatLng={userLatLng}
-              itemsInCart={itemsInCart}
-              itemsInOrders={itemsInOrders}
-              stays={stays}
-              userProfile={userProfile}
-            ></Listings>
-            {filterStayLoading && (
-              <div className="bg-white bg-opacity-50 lg:h-[70vh] lg:overflow-y-scroll absolute w-full top-0 bottom-0 right-0 left-0 z-10">
-                <div className="flex items-center justify-center h-full">
-                  <LoadingSpinerChase
-                    width={30}
-                    height={30}
-                    color="#000"
-                  ></LoadingSpinerChase>
+              {filterStayLoading && (
+                <div className="bg-white bg-opacity-50 lg:h-[70vh] lg:overflow-y-scroll absolute w-full top-0 bottom-0 right-0 left-0 z-10">
+                  <div className="flex items-center justify-center h-full">
+                    <LoadingSpinerChase
+                      width={30}
+                      height={30}
+                      color="#000"
+                    ></LoadingSpinerChase>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            <div className="w-full">
               {stays.length > 0 && (
                 <ReactPaginate
                   breakLabel="..."
@@ -1705,14 +1638,15 @@ function Stays({
                     <Icon icon="bx:chevron-left" className="w-7 h-7" />
                   }
                   activeLinkClassName="bg-gray-700 text-white font-bold"
+                  renderOnZeroPageCount={null}
                   containerClassName="flex flex-wrap gap-2 justify-center items-center mt-4"
                   pageLinkClassName="bg-white h-8 w-8 font-bold flex justify-center items-center cursor-pointer hover:border border-gray-200 rounded-full text-sm"
                 />
               )}
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       <MobileModal
         showModal={state.showMobileFilter}
@@ -2442,74 +2376,6 @@ function Stays({
         </div>
       </MobileModal>
 
-      <div>
-        {/* {state.windowSize < 768 && (
-          <MobileModal
-            showModal={state.showMobileFilter}
-            closeModal={() => {
-              setState({
-                ...state,
-                ...turnOffAllPopup,
-                showMobileFilter: false,
-              });
-            }}
-            className="md:!hidden !overflow-y-scroll"
-            title="All Filters"
-          >
-            <div className="px-4">
-              <div className="lg:hidden">
-                <div className="mt-2 mb-4 md:hidden">
-                  <h1 className="font-bold text-base mb-2">Price Range</h1>
-                  <PriceFilter
-                    setMinPriceSelected={setMinSelected}
-                    setMaxPriceSelected={setMaxSelected}
-                    minPriceInstanceId="minPrice"
-                    maxPriceInstanceId="maxPrice"
-                    minPriceSelected={minPrice}
-                    maxPriceSelected={maxPrice}
-                  ></PriceFilter>
-                </div>
-
-                <div className="mt-2 mb-4">
-                  <h1 className="font-bold text-base mb-2">Rooms</h1>
-
-                  <RoomFilter
-                    setMinRoomSelected={setminRoomSelected}
-                    setMaxRoomSelected={setmaxRoomSelected}
-                    minRoomInstanceId="minRoom"
-                    maxRoomInstanceId="maxRoom"
-                    minRoomSelected={minRoom}
-                    maxRoomSelected={maxRoom}
-                  ></RoomFilter>
-                </div>
-
-                <div className="mt-2 mb-4">
-                  <span className="block font-bold text-base mb-2">
-                    All stay types
-                  </span>
-                  <MobileStayTypes
-                    handlePopup={() => {
-                      setState({
-                        ...state,
-                        ...turnOffAllPopup,
-                        showStayTypesPopup: !state.showStayTypesPopup,
-                      });
-                    }}
-                    showStayTypesPopup={state.showStayTypesPopup}
-                  ></MobileStayTypes>
-                </div>
-              </div>
-
-              <div className="text-lg font-bold mb-2 mt-2">Travel themes</div>
-              <ThemeFilter></ThemeFilter>
-
-              <div className="text-lg font-bold mb-2 mt-8">Amenities</div>
-              <Amenities></Amenities>
-            </div>
-          </MobileModal>
-        )} */}
-      </div>
-
       <div className="relative hidden md:block ">
         <LargeMobileModal
           showModal={state.showMobileFilter}
@@ -3233,8 +3099,8 @@ function Stays({
       </div>
 
       {mobileMap && (
-        <div className={"h-[82vh] md:hidden"}>
-          <Map stays={stays}></Map>
+        <div className={"h-[83vh] mt-[140px]"}>
+          <Map stays={allStays}></Map>
         </div>
       )}
 
@@ -3324,10 +3190,27 @@ export const getServerSideProps = wrapper.getServerSideProps(
           }&ordering=${query.ordering ? query.ordering : ""}`
         );
 
-        // await context.dispatch({
-        //   type: "SET_STAYS",
-        //   payload: response.data.results,
-        // });
+        const allStays = await axios.get(
+          `${process.env.NEXT_PUBLIC_baseURL}/stays/?search=${
+            query.search ? query.search : ""
+          }&d_search=${query.d_search ? query.d_search : ""}&type_of_stay=${
+            query.type_of_stay ? query.type_of_stay : ""
+          }&pricing_type=${
+            query.pricing_type ? query.pricing_type : ""
+          }&min_capacity=${
+            query.min_capacity ? query.min_capacity : ""
+          }&min_price=${query.min_price ? query.min_price : ""}&max_price=${
+            query.max_price ? query.max_price : ""
+          }&min_rooms=${query.min_rooms ? query.min_rooms : ""}&max_rooms=${
+            query.max_rooms ? query.max_rooms : ""
+          }&min_beds=${query.min_beds ? query.min_beds : ""}&max_beds=${
+            query.max_beds ? query.max_beds : ""
+          }&min_bathrooms=${
+            query.min_bathrooms ? query.min_bathrooms : ""
+          }&max_bathrooms=${
+            query.max_bathrooms ? query.min_bathrooms : ""
+          }&ordering=${query.ordering ? query.ordering : ""}`
+        );
 
         if (token) {
           const userProfile = await axios.get(
@@ -3372,6 +3255,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
             props: {
               userProfile: userProfile.data[0],
               stays: response.data.results,
+              allStays: allStays.data.results,
               nextLink: response.data.next,
               previousLink: response.data.previous,
               pageSize: response.data.page_size,
@@ -3385,6 +3269,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           props: {
             userProfile: "",
             stays: response.data.results,
+            allStays: allStays.data.results,
             nextLink: response.data.next,
             previousLink: response.data.previous,
             pageSize: response.data.page_size,
@@ -3408,6 +3293,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
               nextLink: "",
               previousLink: "",
               pageSize: 0,
+              allStays: [],
               totalPages: 0,
               count: 0,
             },

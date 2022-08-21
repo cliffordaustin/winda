@@ -266,7 +266,7 @@ function Listing({
       onMouseLeave={() => {
         dispatch(setActiveActivity(null));
       }}
-      className="w-full xsMax:!w-full mdMax:!w-47p lgMax:!w-[31.5%] xl:!w-47p !relative select-none"
+      className="w-full sm:!w-[31.5%] lg:!w-[47%] xl:!w-[47%] !relative select-none"
     >
       <div
         onClick={() => {
@@ -282,7 +282,7 @@ function Listing({
             router.push(`experiences/${listing.slug}`);
           }
         }}
-        className="lgMax:block lg:hidden xl:block relative"
+        className="relative"
       >
         <Card
           imagePaths={images}
@@ -308,7 +308,7 @@ function Listing({
             )}
           </div>
           <div className="text-gray-500 flex gap-1 text-sm truncate mt-1 flex-wrap">
-            {listing.capacity && (
+            {listing.min_capacity && (
               <div className="flex items-center gap-0.5">
                 <svg
                   className="w-3 h-3"
@@ -343,7 +343,7 @@ function Listing({
                   />
                   <path fill="none" d="M0 0h36v36H0z" />
                 </svg>
-                <span>{listing.capacity} Guests</span>
+                <span>Minimum of {listing.min_capacity} Guests</span>
               </div>
             )}
             {listing.rooms && (
@@ -481,7 +481,7 @@ function Listing({
         </div>
       </div>
 
-      <div
+      {/* <div
         onClick={() => {
           if (router.query.trip) {
             router.push({
@@ -664,31 +664,6 @@ function Listing({
               </div>
             )}
 
-            {/* <div className="flex items-center gap-1 mt-2">
-              <div className={!isSafari ? "-mb-0.5" : "-mb-1"}>
-                <Badge
-                  className={
-                    listing.rating >= 4.5
-                      ? "!bg-green-700"
-                      : listing.rating >= 4
-                      ? "!bg-green-600"
-                      : listing.rating >= 3.5
-                      ? "!bg-green-500"
-                      : listing.rating >= 3
-                      ? "!bg-yellow-500"
-                      : "!bg-red-500"
-                  }
-                >
-                  {listing.rating}
-                </Badge>
-              </div>
-              <Rating
-                rating={listing.rating}
-                fontSize={!isSafari ? 25 : 16}
-              ></Rating>
-              <div className="font-medium text-sm">({listing.numRating})</div>
-            </div> */}
-
             <div className="absolute flex z-10 items-center justify-center gap-0.5 top-0 right-0">
               {liked && (
                 <svg
@@ -735,7 +710,7 @@ function Listing({
             </div>
           </div>
         </SecondCard>
-      </div>
+      </div> */}
     </div>
   );
 }

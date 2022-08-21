@@ -6,6 +6,9 @@ import Card from "../ui/Card";
 import styles from "../../styles/Listing.module.css";
 import Rating from "../ui/Rating";
 import Badge from "../ui/Badge";
+import Price from "../Stay/Price";
+import Button from "../ui/Button";
+import { useRouter } from "next/router";
 
 const MapMakerPopup = ({ activity }) => {
   const [isSafari, setIsSafari] = useState(false);
@@ -15,6 +18,8 @@ const MapMakerPopup = ({ activity }) => {
   const priceConversionRate = useSelector(
     (state) => state.stay.priceConversionRate
   );
+
+  const router = useRouter();
 
   useEffect(() => {
     if (process.browser) {
@@ -34,7 +39,7 @@ const MapMakerPopup = ({ activity }) => {
   const [newPrice, setNewPrice] = useState();
 
   const price = () => {
-    return activity.price;
+    return activity.price_non_resident;
   };
 
   const priceConversion = async (price) => {
@@ -59,47 +64,37 @@ const MapMakerPopup = ({ activity }) => {
         imagePaths={images}
         carouselClassName="h-28"
         subCarouselClassName="hidden"
+        childrenClass="!mt-2"
         className={styles.card + " !shadow-sm"}
       >
         <div className="flex flex-col gap-1">
           <h1 className="text-gray-500 text-sm truncate">{activity.name}</h1>
-          {!currencyToKES && (
-            <h1 className={"font-bold text-xl font-OpenSans "}>
-              {price() ? "$" + Math.ceil(price()).toLocaleString() : "No data"}
-            </h1>
-          )}
-          {currencyToKES && (
-            <h1 className={"font-bold text-xl font-OpenSans "}>
-              {price()
-                ? "KES" + Math.ceil(newPrice).toLocaleString()
-                : "No data"}
-            </h1>
-          )}
+          <Price stayPrice={activity.price_non_resident}></Price>
         </div>
         <div className="font-bold text-sm truncate mt-1">
           {activity.location}
         </div>
-        {/* <div className="flex items-center gap-1 mt-2">
-          <div className={!isSafari ? "-mb-0.5" : "-mb-1"}>
-            <Badge
-              className={
-                stay.rating >= 4.5
-                  ? "!bg-green-700"
-                  : stay.rating >= 4
-                  ? "!bg-green-600"
-                  : stay.rating >= 3.5
-                  ? "!bg-green-500"
-                  : stay.rating >= 3
-                  ? "!bg-yellow-500"
-                  : "!bg-red-500"
+
+        <div className="mt-1">
+          <Button
+            onClick={() => {
+              if (router.query.trip) {
+                router.push({
+                  pathname: `experiences/${activity.slug}`,
+                  query: {
+                    trip: router.query.trip,
+                    group_trip: router.query.group_trip,
+                  },
+                });
+              } else {
+                router.push(`experiences/${activity.slug}`);
               }
-            >
-              {stay.rating}
-            </Badge>
-          </div>
-          <Rating rating={stay.rating} fontSize={!isSafari ? 25 : 16}></Rating>
-          <div className="font-medium text-sm">({stay.numRating})</div>
-        </div> */}
+            }}
+            className="!py-1.5 !w-full !bg-white !border !border-gray-300 !text-black !font-bold"
+          >
+            View
+          </Button>
+        </div>
       </Card>
     </div>
   );

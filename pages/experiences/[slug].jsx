@@ -1096,27 +1096,31 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                       isSearchable={false}
                     />
 
-                    <div className="flex items-center gap-2 mt-4">
-                      <div className="w-2 h-2 rounded-full bg-gray-400"></div>
-                      {currentPrice && (
-                        <>
-                          <span className="text-gray-600 block text-sm">
-                            Minimum number of guests is {minGuests}
-                          </span>
-                        </>
-                      )}
-                    </div>
+                    {minGuests && (
+                      <div className="flex items-center gap-2 mt-4">
+                        <div className="w-2 h-2 rounded-full bg-gray-400"></div>
+                        {currentPrice && (
+                          <>
+                            <span className="text-gray-600 block text-sm">
+                              Minimum number of guests is {minGuests}
+                            </span>
+                          </>
+                        )}
+                      </div>
+                    )}
 
-                    <div className="flex items-center gap-2 mt-2">
-                      <div className="w-2 h-2 rounded-full bg-gray-400"></div>
-                      {currentPrice && (
-                        <>
-                          <span className="text-gray-600 block text-sm">
-                            Maximum number of guests is {maxGuests}
-                          </span>
-                        </>
-                      )}
-                    </div>
+                    {maxGuests && (
+                      <div className="flex items-center gap-2 mt-2">
+                        <div className="w-2 h-2 rounded-full bg-gray-400"></div>
+                        {currentPrice && (
+                          <>
+                            <span className="text-gray-600 block text-sm">
+                              Maximum number of guests is {maxGuests}
+                            </span>
+                          </>
+                        )}
+                      </div>
+                    )}
 
                     {currentPrice.value === "per person" && (
                       <>
@@ -1151,7 +1155,13 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
 
                             <div
                               onClick={() => {
-                                if (numOfPeopleNonResident < maxGuests) {
+                                if (maxGuests) {
+                                  if (numOfPeopleNonResident < maxGuests) {
+                                    setNumOfPeopleNonResident(
+                                      numOfPeopleNonResident + 1
+                                    );
+                                  }
+                                } else {
                                   setNumOfPeopleNonResident(
                                     numOfPeopleNonResident + 1
                                   );
@@ -1191,7 +1201,11 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
 
                             <div
                               onClick={() => {
-                                if (numOfPeople < maxGuests) {
+                                if (maxGuests) {
+                                  if (numOfPeople < maxGuests) {
+                                    setNumOfPeople(numOfPeople + 1);
+                                  }
+                                } else {
                                   setNumOfPeople(numOfPeople + 1);
                                 }
                               }}
@@ -1227,9 +1241,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
 
                           <div
                             onClick={() => {
-                              if (numOfSession < maxGuests) {
-                                setNumOfSession(numOfSession + 1);
-                              }
+                              setNumOfSession(numOfSession + 1);
                             }}
                             className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
                           >
@@ -1261,9 +1273,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
 
                           <div
                             onClick={() => {
-                              if (numOfGroups < maxGuests) {
-                                setNumOfGroups(numOfGroups + 1);
-                              }
+                              setNumOfGroups(numOfGroups + 1);
                             }}
                             className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
                           >
@@ -1282,8 +1292,8 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                       <div
                         className="mt-2 cursor-pointer text-sm underline"
                         onClick={() => {
-                          setNumOfPeople(1);
-                          setNumOfPeopleNonResident(0);
+                          setNumOfPeople(0);
+                          setNumOfPeopleNonResident(minGuests || 1);
                           setNumOfGroups(1);
                           setNumOfGroupsNonResident(0);
                           setNumOfSession(1);
@@ -2116,27 +2126,31 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                   isSearchable={false}
                 />
 
-                <div className="flex items-center gap-2 mt-4">
-                  <div className="w-2 h-2 rounded-full bg-gray-400"></div>
-                  {currentPrice && (
-                    <>
-                      <span className="text-gray-600 block text-sm">
-                        Minimum number of guests is {minGuests}
-                      </span>
-                    </>
-                  )}
-                </div>
+                {minGuests && (
+                  <div className="flex items-center gap-2 mt-4">
+                    <div className="w-2 h-2 rounded-full bg-gray-400"></div>
+                    {currentPrice && (
+                      <>
+                        <span className="text-gray-600 block text-sm">
+                          Minimum number of guests is {minGuests}
+                        </span>
+                      </>
+                    )}
+                  </div>
+                )}
 
-                <div className="flex items-center gap-2 mt-2">
-                  <div className="w-2 h-2 rounded-full bg-gray-400"></div>
-                  {currentPrice && (
-                    <>
-                      <span className="text-gray-600 block text-sm">
-                        Maximum number of guests is {maxGuests}
-                      </span>
-                    </>
-                  )}
-                </div>
+                {maxGuests && (
+                  <div className="flex items-center gap-2 mt-2">
+                    <div className="w-2 h-2 rounded-full bg-gray-400"></div>
+                    {currentPrice && (
+                      <>
+                        <span className="text-gray-600 block text-sm">
+                          Maximum number of guests is {maxGuests}
+                        </span>
+                      </>
+                    )}
+                  </div>
+                )}
 
                 {currentPrice.value === "per person" && (
                   <>
@@ -2171,7 +2185,13 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
 
                         <div
                           onClick={() => {
-                            if (numOfPeopleNonResident < maxGuests) {
+                            if (maxGuests) {
+                              if (numOfPeopleNonResident < maxGuests) {
+                                setNumOfPeopleNonResident(
+                                  numOfPeopleNonResident + 1
+                                );
+                              }
+                            } else {
                               setNumOfPeopleNonResident(
                                 numOfPeopleNonResident + 1
                               );
@@ -2209,7 +2229,11 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
 
                         <div
                           onClick={() => {
-                            if (numOfPeople < maxGuests) {
+                            if (maxGuests) {
+                              if (numOfPeople < maxGuests) {
+                                setNumOfPeople(numOfPeople + 1);
+                              }
+                            } else {
                               setNumOfPeople(numOfPeople + 1);
                             }
                           }}
@@ -2245,9 +2269,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
 
                       <div
                         onClick={() => {
-                          if (numOfSession < maxGuests) {
-                            setNumOfSession(numOfSession + 1);
-                          }
+                          setNumOfSession(numOfSession + 1);
                         }}
                         className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
                       >
@@ -2279,9 +2301,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
 
                       <div
                         onClick={() => {
-                          if (numOfGroups < maxGuests) {
-                            setNumOfGroups(numOfGroups + 1);
-                          }
+                          setNumOfGroups(numOfGroups + 1);
                         }}
                         className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
                       >
@@ -2295,8 +2315,8 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                   <div
                     className="mt-2 cursor-pointer text-sm underline"
                     onClick={() => {
-                      setNumOfPeople(1);
-                      setNumOfPeopleNonResident(0);
+                      setNumOfPeople(0);
+                      setNumOfPeopleNonResident(minGuests || 1);
                       setNumOfGroups(1);
                       setNumOfGroupsNonResident(0);
                       setNumOfSession(1);
