@@ -644,7 +644,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
                   </div>
                 </div>
 
-                <div className="w-full flex justify-between bg-white fixed bottom-0 left-0 right-0 px-3 py-2">
+                <div className="w-full md:hidden z-40 flex justify-between bg-white fixed bottom-0 left-0 right-0 px-3 py-2">
                   <div className="flex flex-col gap-1">
                     <div className="font-bold text-sm">Starting date</div>
                     <div
