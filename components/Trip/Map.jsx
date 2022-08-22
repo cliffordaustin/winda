@@ -57,19 +57,26 @@ function MapBox({ trip }) {
         onMove={(evt) => setViewport(evt.viewState)}
         mapStyle="mapbox://styles/mapbox/streets-v9"
       >
-        <Marker longitude={trip.stay.longitude} latitude={trip.stay.latitude}>
-          <Icon icon="fluent:bed-24-filled" className="w-6 h-6 text-gray-800" />
-        </Marker>
+        {trip.stay && (
+          <Marker longitude={trip.stay.longitude} latitude={trip.stay.latitude}>
+            <Icon
+              icon="fluent:bed-24-filled"
+              className="w-6 h-6 text-gray-800"
+            />
+          </Marker>
+        )}
 
-        <Marker
-          longitude={trip.activity.longitude}
-          latitude={trip.activity.latitude}
-        >
-          <Icon
-            icon="fa6-solid:person-hiking"
-            className="w-6 h-6 text-gray-800"
-          />
-        </Marker>
+        {trip.activity && (
+          <Marker
+            longitude={trip.activity.longitude}
+            latitude={trip.activity.latitude}
+          >
+            <Icon
+              icon="fa6-solid:person-hiking"
+              className="w-6 h-6 text-gray-800"
+            />
+          </Marker>
+        )}
       </Map>
       <div
         id="distance"
