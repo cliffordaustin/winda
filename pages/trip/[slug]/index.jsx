@@ -173,17 +173,17 @@ function TripDetail({ userProfile, userTrips, trip }) {
     return image.image;
   });
 
-  const staySortedImages = trip.stay.stay_images.sort(
-    (x, y) => y.main - x.main
-  );
+  const staySortedImages = trip.stay
+    ? trip.stay.stay_images.sort((x, y) => y.main - x.main)
+    : [];
 
   const stayImages = staySortedImages.map((image) => {
     return image.image;
   });
 
-  const activitySortedImages = trip.activity.activity_images.sort(
-    (x, y) => y.main - x.main
-  );
+  const activitySortedImages = trip.activity
+    ? trip.activity.activity_images.sort((x, y) => y.main - x.main)
+    : [];
 
   const activityImages = activitySortedImages.map((image) => {
     return image.image;
