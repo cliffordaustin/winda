@@ -263,6 +263,8 @@ function TripDetail({ userProfile, userTrips, trip }) {
     }
   };
 
+  const [showDatePopup, setShowDatePopup] = useState(false);
+
   return (
     <div className="relative">
       <div className="fixed top-0 w-full bg-white z-50">
@@ -580,7 +582,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
                           className="!text-base sm:!text-xl md:!text-3xl"
                           stayPrice={totalPrice()}
                         ></Price>
-                        <span className="mt-3">/person</span>
+                        <span className="mt-1 md:mt-3">/person</span>
                       </div>
                       {/* <div className="mt-0.5">avg/night/non-resident</div> */}
                     </div>
@@ -598,7 +600,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
                     <span className="font-bold text-xs font-SourceSans">
                       WITHIN
                     </span>
-                    <h1 className="font-bold text-gray-800 !text-base sm:!text-lg md:!text-xl">
+                    <h1 className="font-bold text-gray-800 !text-sm sm:!text-lg md:!text-xl">
                       {trip.countries_covered &&
                         trip.countries_covered.map((country, index) => {
                           if (index === trip.countries_covered.length - 1) {
@@ -616,86 +618,6 @@ function TripDetail({ userProfile, userTrips, trip }) {
                     {trip.name}
                   </div>
                 </div>
-
-                {/* <div className="flex mt-4">
-              <div className="w-6 ">
-                <div className="h-3 w-3 border rounded-full mx-auto"></div>
-                <div className="w-3 h-[70%] border-r"></div>
-                <div className="h-3 w-3 rounded-full mx-auto border"></div>
-              </div>
-              <div className="">
-                {trip.stay && (
-                  <div className="flex items-center gap-1">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      aria-hidden="true"
-                      role="img"
-                      width="1em"
-                      height="1em"
-                      preserveAspectRatio="xMidYMid meet"
-                      viewBox="0 0 16 16"
-                    >
-                      <g fill="currentColor" fillRule="evenodd">
-                        <path d="M2 13.5V7h1v6.5a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5V7h1v6.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5zm11-11V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z" />
-                        <path d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207L1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z" />
-                      </g>
-                    </svg>
-                    <span className="text-sm">{trip.stay.name}</span>
-                  </div>
-                )}
-
-                {trip.activity && (
-                  <div className="flex items-center mt-2 gap-1">
-                    <Icon
-                      icon="fa6-solid:person-hiking"
-                      className="w-5 h-5 text-gray-600"
-                    />
-
-                    <span className="text-sm">{trip.activity.name}</span>
-                  </div>
-                )}
-                {trip.transport && (
-                  <div className="flex items-center mt-2 gap-1">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      aria-hidden="true"
-                      role="img"
-                      className="w-5 h-5"
-                      preserveAspectRatio="xMidYMid meet"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        fill="currentColor"
-                        d="M6 9a.749.749 0 1 1-1.498 0A.749.749 0 0 1 6 9Zm4.749.749a.749.749 0 1 0 0-1.498a.749.749 0 0 0 0 1.498ZM3.034 6.074L3.044 6H2.5a.5.5 0 0 1 0-1h.673l.162-1.256A2 2 0 0 1 5.32 2h5.36a2 2 0 0 1 1.984 1.747L12.823 5h.677a.5.5 0 0 1 0 1h-.549l.01.072A1.5 1.5 0 0 1 14 7.5v3a1.5 1.5 0 0 1-1.5 1.5h-.003v1.25a.75.75 0 1 1-1.5 0V12H5v1.25a.75.75 0 0 1-1.5 0V12A1.5 1.5 0 0 1 2 10.5v-3a1.5 1.5 0 0 1 1.034-1.426Zm1.293-2.202L4.052 6h7.891l-.272-2.127A1 1 0 0 0 10.68 3H5.32a1 1 0 0 0-.992.872ZM12.5 11a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h9Z"
-                      />
-                    </svg>
-                    <span className="text-sm lowercase">
-                      {trip.transport.type_of_car}
-                    </span>
-                  </div>
-                )}
-
-                {trip.flight && (
-                  <div className="flex items-center mt-2 gap-1">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-5 h-5 text-gray-500"
-                      preserveAspectRatio="xMidYMid meet"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        fill="currentColor"
-                        d="M3.414 13.778L2 15.192l4.949 2.121l2.122 4.95l1.414-1.414l-.707-3.536L13.091 14l3.61 7.704l1.339-1.339l-1.19-10.123l2.828-2.829a2 2 0 1 0-2.828-2.828l-2.903 2.903L3.824 6.297L2.559 7.563l7.644 3.67l-3.253 3.253l-3.536-.708z"
-                      />
-                    </svg>
-                    <div className="text-sm">
-                      From {trip.flight.starting_point} to{" "}
-                      {trip.flight.destination}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div> */}
 
                 <div className="flex flex-col gap-4 mb-6 mt-4">
                   <div className="flex gap-3 md:gap-3">
@@ -722,59 +644,52 @@ function TripDetail({ userProfile, userTrips, trip }) {
                   </div>
                 </div>
 
-                {/* <div className="mt-4 hidden md:block">
-              <Button
-                onClick={() => {
-                  if (Cookies.get("token")) {
-                    if (userTrips.length > 0) {
-                      setShowAddToTripPopup(!showAddToTripPopup);
-                    } else {
-                      addToTrip();
-                    }
-                  } else {
-                    router.push({
-                      pathname: "/login",
-                      query: {
-                        redirect: router.asPath,
-                      },
-                    });
-                  }
-                }}
-                className="!bg-blue-500 !px-6"
-              >
-                <span>Add to trip</span>
-
-                <div
-                  className={
-                    " " +
-                    (loading && !showAddToTripPopup ? "ml-1.5 " : " hidden")
-                  }
-                >
-                  <LoadingSpinerChase
-                    width={13}
-                    height={13}
-                    color="white"
-                  ></LoadingSpinerChase>
+                <div className="w-full flex justify-between bg-white fixed bottom-0 left-0 right-0 px-3 py-2">
+                  <div className="flex flex-col gap-1">
+                    <div className="font-bold text-sm">Starting date</div>
+                    <div
+                      onClick={() => {
+                        setShowDatePopup(true);
+                      }}
+                      className="text-sm text-gray-600 underline cursor-pointer"
+                    >
+                      {moment(startDate).format("Do MMM YYYY")}
+                    </div>
+                  </div>
+                  <Button
+                    onClick={() => {
+                      router.push({
+                        query: {
+                          ...router.query,
+                          starting_date: moment(startDate).format("YYYY-MM-D"),
+                          guests: guest,
+                          checkout_page: 1,
+                        },
+                      });
+                    }}
+                    className="flex w-fit items-center gap-1 !px-2 !py-0.5 font-bold !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white"
+                  >
+                    <span>Book trip</span>
+                  </Button>
                 </div>
 
-                {userTrips.length > 0 && (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
-                    />
-                  </svg>
-                )}
-              </Button>
-            </div> */}
+                <Dialogue
+                  isOpen={showDatePopup}
+                  closeModal={() => {
+                    setShowDatePopup(false);
+                  }}
+                  title="Select starting date"
+                  dialogueTitleClassName="!font-bold"
+                  dialoguePanelClassName="!overflow-y-scroll md:hidden !p-4 max-h-[500px] !max-w-lg"
+                >
+                  <div className="w-full">
+                    <DatePicker
+                      date={startDate}
+                      setDate={setStartDate}
+                      disableDate={new Date()}
+                    ></DatePicker>
+                  </div>
+                </Dialogue>
 
                 <div className="mt-10 mb-6">
                   <h1 className="font-bold text-2xl text-gray-700 font-OpenSans">
@@ -1625,26 +1540,6 @@ function TripDetail({ userProfile, userTrips, trip }) {
                   )}
                 </div>
 
-                {trip.activity.facts.length > 0 && (
-                  <div className="flex flex-col md:flex-row gap-3 justify-between mt-10">
-                    <div className="w-full">
-                      <div className="mb-3">
-                        <span className="font-bold text-xl">Facts</span>
-                      </div>
-
-                      <div className="mt-4 ml-2">
-                        <div className="flex gap-2 flex-wrap">
-                          {trip.activity.facts.map((fact, index) => (
-                            <div key={index} className="w-full md:w-[48%]">
-                              <ListItem>{fact.name}</ListItem>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
                 {trip.activity.type_of_activities.length > 0 && (
                   <dv
                     name="experiences"
@@ -1914,7 +1809,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
         </>
       )}
       {router.query.checkout_page === "1" && (
-        <div className="mt-[100px] max-w-[1080px] mx-auto">
+        <div className="mt-[80px] md:mt-[100px] max-w-[1080px] mx-auto">
           <div className="flex gap-4 px-4">
             <div className="md:w-[40%] px-2 hidden md:block h-[90vh] mt-0 sticky top-[80px]">
               <div
@@ -1958,14 +1853,33 @@ function TripDetail({ userProfile, userTrips, trip }) {
                 <div className="mt-6 flex flex-col items-center gap-6">
                   {trip.stay && (
                     <div className="text-gray-600 flex items-center w-full justify-between">
-                      <div className="flex gap-1.5 items-center">
-                        <span>{trip.stay.name}</span>
+                      <div className="flex gap-1.5 items-center w-[75%]">
+                        <span className="truncate">{trip.stay.name}</span>
                         <PopoverBox
                           btnPopover={<Icon icon="bx:help-circle" />}
                           btnClassName="flex items-center justify-center"
-                          panelClassName="bg-white"
+                          panelClassName="bg-gray-100 rounded-lg p-2 bottom-[100%] -left-[10px] w-[180px]"
                         >
-                          <div>this is the stay</div>
+                          <div className="text-sm text-gray-500">
+                            <span>
+                              This is a{" "}
+                              <span className="lowercase">
+                                {trip.stay.type_of_stay
+                                  ? trip.stay.type_of_stay
+                                  : "stay"}
+                              </span>{" "}
+                              in{" "}
+                              <span className="lowercase">
+                                {trip.stay.location}
+                                {""}
+                                {trip.stay.location && trip.stay.country
+                                  ? ", "
+                                  : ""}{" "}
+                                {trip.stay.country}
+                              </span>{" "}
+                              .You will be staying here for 2 nights
+                            </span>
+                          </div>
                         </PopoverBox>
                       </div>
 
@@ -1973,18 +1887,33 @@ function TripDetail({ userProfile, userTrips, trip }) {
                     </div>
                   )}
 
-                  {/* <div className="h-[0.6px] w-[40%] bg-gray-400"></div> */}
-
                   {trip.activity && (
                     <div className="text-gray-600 flex items-center w-full justify-between">
-                      <div className="flex gap-1.5 items-center">
-                        <span>{trip.activity.name}</span>
+                      <div className="flex gap-1.5 items-center w-[75%]">
+                        <span className="truncate">{trip.activity.name}</span>
                         <PopoverBox
                           btnPopover={<Icon icon="bx:help-circle" />}
                           btnClassName="flex items-center justify-center"
-                          panelClassName="bg-white"
+                          panelClassName="bg-gray-100 rounded-lg p-2 bottom-[100%] -left-[10px] w-[180px]"
                         >
-                          <div>this is the experience</div>
+                          <div className="text-sm text-gray-500">
+                            <span>
+                              This is an activity in{" "}
+                              <span className="lowercase">
+                                {trip.activity.location}
+                                {""}
+                                {trip.activity.location && trip.activity.country
+                                  ? ", "
+                                  : ""}{" "}
+                                {trip.activity.country}
+                              </span>{" "}
+                              .You will be coming with{" "}
+                              {Number(router.query.guests)}{" "}
+                              {Number(router.query.guests) > 1
+                                ? "guests"
+                                : "guest"}{" "}
+                            </span>
+                          </div>
                         </PopoverBox>
                       </div>
 
@@ -1995,25 +1924,30 @@ function TripDetail({ userProfile, userTrips, trip }) {
                     </div>
                   )}
 
-                  {/* <div className="h-[0.4px] w-[40%] bg-gray-400"></div> */}
-
                   {trip.transport && (
                     <div className="text-gray-600 flex items-center w-full justify-between">
-                      <div className="flex gap-1.5 items-center">
+                      <div className="flex gap-1.5 items-center w-[70%]">
                         {trip.transport.vehicle_make && (
-                          <div className="flex items-center gap-2">
-                            <h1 className="capitalize">
-                              {trip.transport.vehicle_make.toLowerCase()}
-                            </h1>
-                          </div>
+                          <span className="truncate capitalize">
+                            {trip.transport.vehicle_make.toLowerCase()}
+                          </span>
                         )}
 
                         <PopoverBox
                           btnPopover={<Icon icon="bx:help-circle" />}
                           btnClassName="flex items-center justify-center"
-                          panelClassName="bg-white"
+                          panelClassName="bg-gray-100 rounded-lg p-2 bottom-[100%] -left-[10px] w-[180px]"
                         >
-                          <div>this is the transport</div>
+                          <div className="text-sm text-gray-500">
+                            <span>
+                              This is your transport.{" "}
+                              {trip.transport.type_of_car && (
+                                <span className="lowercase">
+                                  It is a {trip.transport.type_of_car} car
+                                </span>
+                              )}
+                            </span>
+                          </div>
                         </PopoverBox>
                       </div>
 
@@ -2042,6 +1976,41 @@ function TripDetail({ userProfile, userTrips, trip }) {
             </div>
 
             <div className="md:w-[60%] w-full md:pl-4">
+              <div
+                onClick={() => {
+                  router.back();
+                }}
+                className="flex gap-1 mb-3 md:hidden font-bold cursor-pointer items-center text-black"
+              >
+                <Icon className="w-6 h-6" icon="bx:chevron-left" />
+                <span>Back</span>
+              </div>
+              <div className="flex md:hidden h-28 gap-2">
+                <div className="relative h-full bg-gray-300 w-32 rounded-xl overflow-hidden">
+                  <Image
+                    layout="fill"
+                    objectFit="cover"
+                    src={tripImages[0]}
+                    alt="Main image of trip"
+                  ></Image>
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <h1 className="font-bold">{trip.name}</h1>
+                  <p className="mt-0.5 text-sm text-gray-600 flex items-center gap-1">
+                    <Icon icon="akar-icons:clock" /> {trip.total_number_of_days}{" "}
+                    days trip
+                  </p>
+                  {trip.starting_location && (
+                    <p className="mt-0.5 text-sm text-gray-600 flex items-center gap-1">
+                      Starting from {trip.starting_location}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div className="h-[0.4px] w-[100%] my-4 bg-gray-400 md:hidden"></div>
+
               <h1 className="font-bold text-2xl mb-4 font-OpenSans">
                 Book trip
               </h1>
@@ -2226,6 +2195,139 @@ function TripDetail({ userProfile, userTrips, trip }) {
                   </div>
                 </div>
 
+                <div className="md:hidden">
+                  <div className="h-[0.6px] w-full bg-gray-500 mt-10 mb-4"></div>
+                  <h1 className="font-bold text-2xl font-OpenSans">
+                    Trip breakdown
+                  </h1>
+
+                  <div className="mt-6 flex flex-col items-center gap-6">
+                    {trip.stay && (
+                      <div className="text-gray-600 flex items-center w-full justify-between">
+                        <div className="flex gap-1.5 items-center w-[75%]">
+                          <span className="truncate">{trip.stay.name}</span>
+                          <PopoverBox
+                            btnPopover={<Icon icon="bx:help-circle" />}
+                            btnClassName="flex items-center justify-center"
+                            panelClassName="bg-gray-100 rounded-lg p-2 bottom-[100%] -right-[80px] w-[180px]"
+                          >
+                            <div className="text-sm text-gray-500">
+                              <span>
+                                This is a{" "}
+                                <span className="lowercase">
+                                  {trip.stay.type_of_stay
+                                    ? trip.stay.type_of_stay
+                                    : "stay"}
+                                </span>{" "}
+                                in{" "}
+                                <span className="lowercase">
+                                  {trip.stay.location}
+                                  {""}
+                                  {trip.stay.location && trip.stay.country
+                                    ? ", "
+                                    : ""}{" "}
+                                  {trip.stay.country}
+                                </span>{" "}
+                                .You will be staying here for 2 nights
+                              </span>
+                            </div>
+                          </PopoverBox>
+                        </div>
+
+                        <div className="text-sm font-bold">2 nights</div>
+                      </div>
+                    )}
+
+                    {trip.activity && (
+                      <div className="text-gray-600 flex items-center w-full justify-between">
+                        <div className="flex gap-1.5 items-center">
+                          <span>{trip.activity.name}</span>
+                          <PopoverBox
+                            btnPopover={<Icon icon="bx:help-circle" />}
+                            btnClassName="flex items-center justify-center"
+                            panelClassName="bg-gray-100 rounded-lg p-2 bottom-[100%] -right-[80px] w-[180px]"
+                          >
+                            <div className="text-sm text-gray-500">
+                              <span>
+                                This is an activity in{" "}
+                                <span className="lowercase">
+                                  {trip.activity.location}
+                                  {""}
+                                  {trip.activity.location &&
+                                  trip.activity.country
+                                    ? ", "
+                                    : ""}{" "}
+                                  {trip.activity.country}
+                                </span>{" "}
+                                .You will be coming with{" "}
+                                {Number(router.query.guests)}{" "}
+                                {Number(router.query.guests) > 1
+                                  ? "guests"
+                                  : "guest"}{" "}
+                              </span>
+                            </div>
+                          </PopoverBox>
+                        </div>
+
+                        <div className="text-sm font-bold">
+                          {Number(router.query.guests)}{" "}
+                          {Number(router.query.guests) > 1 ? "guests" : "guest"}
+                        </div>
+                      </div>
+                    )}
+
+                    {trip.transport && (
+                      <div className="text-gray-600 flex items-center w-full justify-between">
+                        <div className="flex gap-1.5 items-center w-[70%]">
+                          {trip.transport.vehicle_make && (
+                            <span className="truncate capitalize">
+                              {trip.transport.vehicle_make.toLowerCase()}
+                            </span>
+                          )}
+
+                          <PopoverBox
+                            btnPopover={<Icon icon="bx:help-circle" />}
+                            btnClassName="flex items-center justify-center"
+                            panelClassName="bg-gray-100 rounded-lg p-2 bottom-[100%] -right-[80px] w-[180px]"
+                          >
+                            <div className="text-sm text-gray-500">
+                              <span>
+                                This is your transport.{" "}
+                                {trip.transport.type_of_car && (
+                                  <span className="lowercase">
+                                    It is a {trip.transport.type_of_car} car
+                                  </span>
+                                )}
+                              </span>
+                            </div>
+                          </PopoverBox>
+                        </div>
+
+                        <div className="text-sm font-bold">
+                          {trip.transport.type_of_car && (
+                            <div className="text-sm ml-1 capitalize font-bold">
+                              {trip.transport.type_of_car.toLowerCase()}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="h-[0.4px] w-[100%] bg-gray-400"></div>
+
+                    <div className="text-gray-600 flex items-center w-full justify-between">
+                      <div className="flex gap-1.5 items-center">
+                        Total price
+                      </div>
+
+                      <Price
+                        className="!text-base !font-bold"
+                        stayPrice={totalPrice() * Number(router.query.guests)}
+                      ></Price>
+                    </div>
+                  </div>
+                </div>
+
                 <Dialogue
                   isOpen={showMessage}
                   closeModal={() => {
@@ -2280,7 +2382,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
                     onClick={() => {
                       bookTrip();
                     }}
-                    className="flex w-[150px] mt-3 items-center gap-1 !px-0 !py-3 font-bold !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white"
+                    className="flex w-[150px] mt-3 mb-3 items-center gap-1 !px-0 !py-3 font-bold !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white"
                   >
                     <span>Request to book</span>
 

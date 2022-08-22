@@ -36,12 +36,16 @@ const Price = ({ stayPrice, className = "" }) => {
     <ClientOnly>
       {!currencyToKES && (
         <h1 className={"font-bold text-xl font-OpenSans " + className}>
-          {stayPrice ? "$" + Math.ceil(stayPrice).toLocaleString() : "No data"}
+          {stayPrice >= 0
+            ? "$" + Math.ceil(stayPrice).toLocaleString()
+            : "No data"}
         </h1>
       )}
       {currencyToKES && (
         <h1 className={"font-bold text-xl font-OpenSans " + className}>
-          {stayPrice ? "KES" + Math.ceil(newPrice).toLocaleString() : "No data"}
+          {stayPrice >= 0
+            ? "KES" + Math.ceil(newPrice).toLocaleString()
+            : "No data"}
         </h1>
       )}
     </ClientOnly>

@@ -69,7 +69,12 @@ const MapMakerPopup = ({ activity }) => {
       >
         <div className="flex flex-col gap-1">
           <h1 className="text-gray-500 text-sm truncate">{activity.name}</h1>
-          <Price stayPrice={activity.price_non_resident}></Price>
+          {activity.price_non_resident ? (
+            <Price stayPrice={activity.price_non_resident}></Price>
+          ) : null}
+          {!activity.price_non_resident && (
+            <span className="font-bold text-xl font-OpenSans">Free</span>
+          )}
         </div>
         <div className="font-bold text-sm truncate mt-1">
           {activity.location}

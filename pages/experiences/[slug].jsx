@@ -427,6 +427,27 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
     activity
   );
 
+  const priceCalc = () => {
+    return (
+      priceOfResident *
+        (currentPrice.value === "per person"
+          ? numOfPeople
+          : currentPrice.value === "per session"
+          ? numOfSession
+          : currentPrice.value === "per group"
+          ? numOfGroups
+          : 1) +
+      priceOfNonResident *
+        (currentPrice.value === "per person"
+          ? numOfPeopleNonResident
+          : currentPrice.value === "per session"
+          ? numOfSessionNonResident
+          : currentPrice.value === "per group"
+          ? numOfGroupsNonResident
+          : 1)
+    );
+  };
+
   return (
     <div
       onClick={(e) => {
@@ -586,16 +607,6 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                 </svg>
               </div>
             </div>
-
-            {/* <div
-              className={
-                !isVisible
-                  ? "h-12 !fixed md:!w-[56.5%] lg:!w-[63.5%]  !w-full !top-[65px] left-0 right-0 z-[40] bg-white lg:px-10 px-5"
-                  : "h-12 border-b border-gray-200 absolute top-[505px] sm:top-[565px] w-[100%] left-0 right-0 lg:px-10 px-5"
-              }
-            >
-              <ScrollTo guestPopup={guestPopup} activity={activity}></ScrollTo>
-            </div> */}
 
             <div className="mt-4">
               <h1 className="font-bold text-2xl">About</h1>
@@ -810,26 +821,6 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
               )}
             </div>
 
-            {activity.facts.length > 0 && (
-              <div className="flex flex-col md:flex-row gap-3 justify-between mt-10">
-                <div className="w-full">
-                  <div className="mb-3">
-                    <span className="font-bold text-xl">Facts</span>
-                  </div>
-
-                  <div className="mt-4 ml-2">
-                    <div className="flex gap-2 flex-wrap">
-                      {activity.facts.map((fact, index) => (
-                        <div key={index} className="w-full md:w-[48%]">
-                          <ListItem>{fact.name}</ListItem>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
             <div
               className={
                 "w-full z-10 px-2 md:hidden fixed bottom-0 safari-bottom left-0 right-0 bg-white py-1 "
@@ -838,26 +829,14 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
               <div className="flex justify-between items-center gap-2">
                 <div className="flex flex-col">
                   <div className="flex items-center">
-                    <Price
-                      stayPrice={
-                        priceOfResident *
-                          (currentPrice.value === "per person"
-                            ? numOfPeople
-                            : currentPrice.value === "per session"
-                            ? numOfSession
-                            : currentPrice.value === "per group"
-                            ? numOfGroups
-                            : 1) +
-                        priceOfNonResident *
-                          (currentPrice.value === "per person"
-                            ? numOfPeopleNonResident
-                            : currentPrice.value === "per session"
-                            ? numOfSessionNonResident
-                            : currentPrice.value === "per group"
-                            ? numOfGroupsNonResident
-                            : 1)
-                      }
-                    ></Price>
+                    {priceCalc() ? (
+                      <Price stayPrice={priceCalc()}></Price>
+                    ) : null}
+                    {!priceCalc() ? (
+                      <span className="font-bold text-xl font-OpenSans">
+                        Free
+                      </span>
+                    ) : null}
                     {addToCartDate && (
                       <div className="mx-1 mb-1 font-bold">.</div>
                     )}
@@ -1314,26 +1293,14 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                   <div className="flex justify-between items-center gap-2">
                     <div className="flex flex-col">
                       <div className="flex items-center">
-                        <Price
-                          stayPrice={
-                            priceOfResident *
-                              (currentPrice.value === "per person"
-                                ? numOfPeople
-                                : currentPrice.value === "per session"
-                                ? numOfSession
-                                : currentPrice.value === "per group"
-                                ? numOfGroups
-                                : 1) +
-                            priceOfNonResident *
-                              (currentPrice.value === "per person"
-                                ? numOfPeopleNonResident
-                                : currentPrice.value === "per session"
-                                ? numOfSessionNonResident
-                                : currentPrice.value === "per group"
-                                ? numOfGroupsNonResident
-                                : 1)
-                          }
-                        ></Price>
+                        {priceCalc() ? (
+                          <Price stayPrice={priceCalc()}></Price>
+                        ) : null}
+                        {!priceCalc() ? (
+                          <span className="font-bold text-xl font-OpenSans">
+                            Free
+                          </span>
+                        ) : null}
                         {addToCartDate && (
                           <div className="mx-1 mb-1 font-bold">.</div>
                         )}
@@ -1432,7 +1399,6 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
             </Modal>
           </Element>
 
-          {/* experiences */}
           {activity.type_of_activities.length > 0 && (
             <Element
               name="experiences"
@@ -1618,7 +1584,6 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
             </div> */}
           </div>
 
-          {/* essentials */}
           {(activity.enquipment_provided.length > 0 ||
             activity.enquipment_required_by_user.length > 0) && (
             <Element
@@ -1676,137 +1641,6 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
               latitude={activity.latitude}
             ></Map>
           </Element>
-
-          {/* <Element name="policies" className={"w-full pt-20 "}>
-            <h1 className="font-bold text-2xl mb-2">Policies</h1>
-            <div className="py-2 px-2 border-b border-gray-100">
-              <span className="font-semibold">Refund Policy</span>
-            </div>
-            {!activity.refundable && (
-              <div className="mt-2 ml-2">
-                <p>Bookings at this experience is non-refundable.</p>
-              </div>
-            )}
-
-            {activity.refundable && (
-              <div className="mt-2 ml-2">
-                <p>Bookings at this experience is refundable.</p>
-                <div className="mt-6">{activity.refund_policy}</div>
-              </div>
-            )}
-
-            {activity.damage_policy && (
-              <div className="mt-4">
-                <div className="py-2 px-2 border-b border-gray-100">
-                  <span className="font-semibold">Damage Policy</span>
-                </div>
-
-                <div className="mt-2 ml-2">
-                  <p>{activity.damage_policy}</p>
-                </div>
-              </div>
-            )}
-
-            {activity.covid_19_compliance && (
-              <div className="mt-4">
-                <div className="py-2 px-2 border-b border-gray-100">
-                  <span className="font-semibold">Covid-19 Policy</span>
-                </div>
-
-                <div className="mt-2 ml-2">
-                  <p>{activity.covid_19_compliance_details}</p>
-                </div>
-              </div>
-            )}
-
-            <div className="mt-4">
-              <div className="py-2 px-2 border-b border-gray-100">
-                <span className="font-semibold">Listing Rules</span>
-
-                <div className="flex items-center gap-6 ml-4">
-                  {activity.check_in_time && (
-                    <div className="flex items-center mt-2">
-                      <span className="font-bold mr-1 hidden sm:block">
-                        Checkin at:
-                      </span>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5 mr-1 sm:hidden text-blue-600"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
-                        />
-                      </svg>
-                      {moment(activity.check_in_time, "HH:mm:ss").format(
-                        "hh:mm a"
-                      )}
-                    </div>
-                  )}
-                  {activity.check_out_time && (
-                    <div className="flex items-center mt-2">
-                      <span className="font-bold mr-1 hidden sm:block">
-                        Checkout at:
-                      </span>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5 mr-1 sm:hidden text-red-600"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                        />
-                      </svg>
-                      {moment(activity.check_out_time, "HH:mm:ss").format(
-                        "hh:mm a"
-                      )}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="mt-2 ml-2">
-                <div className="flex flex-wrap gap-4 justify-between">
-                  <div className="md:w-[48%] w-full">
-                    <ListItem>
-                      Children allowed:{" "}
-                      <span className="font-bold">
-                        {activity.children_allowed ? "yes" : "no"}
-                      </span>
-                    </ListItem>
-                  </div>
-
-                  <div className="md:w-[48%] w-full">
-                    <ListItem>
-                      Pets allowed:{" "}
-                      <span className="font-bold">
-                        {activity.pets_allowed ? "yes" : "no"}
-                      </span>
-                    </ListItem>
-                  </div>
-
-                  <div className="md:w-[48%] w-full">
-                    <ListItem>
-                      Smoking allowed:{" "}
-                      <span className="font-bold">
-                        {activity.smoking_allowed ? "yes" : "no"}
-                      </span>
-                    </ListItem>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Element> */}
 
           <Element name="reviews" className="pt-24">
             {!reviewLoading && reviews.length > 0 && (
@@ -1971,26 +1805,10 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
             }
             <div className="flex flex-col">
               <div className="flex self-end">
-                <Price
-                  stayPrice={
-                    priceOfResident *
-                      (currentPrice.value === "per person"
-                        ? numOfPeople
-                        : currentPrice.value === "per session"
-                        ? numOfSession
-                        : currentPrice.value === "per group"
-                        ? numOfGroups
-                        : 1) +
-                    priceOfNonResident *
-                      (currentPrice.value === "per person"
-                        ? numOfPeopleNonResident
-                        : currentPrice.value === "per session"
-                        ? numOfSessionNonResident
-                        : currentPrice.value === "per group"
-                        ? numOfGroupsNonResident
-                        : 1)
-                  }
-                ></Price>
+                {priceCalc() ? <Price stayPrice={priceCalc()}></Price> : null}
+                {!priceCalc() ? (
+                  <span className="font-bold text-xl font-OpenSans">Free</span>
+                ) : null}
               </div>
               {addToCartDate && (
                 <span className="text-gray-600 text-sm font-bold self-end">

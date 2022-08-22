@@ -42,10 +42,16 @@ const MapMakers = ({ activity }) => {
           onMouseLeave={() => setShowPopup(false)}
           onClick={() => setShowPopup(!showPopup)}
         >
-          <Price
-            className="text-black !text-sm"
-            stayPrice={activity.price_non_resident}
-          ></Price>
+          {activity.price_non_resident ? (
+            <Price
+              className="text-black !text-sm"
+              stayPrice={activity.price_non_resident}
+            ></Price>
+          ) : null}
+          {!activity.price_non_resident && (
+            <span className="text-black !text-sm font-bold">Free</span>
+          )}
+
           <AnimatePresence exitBeforeEnter>
             {showPopup && (
               <Popup
@@ -82,10 +88,17 @@ const MapMakers = ({ activity }) => {
               styles.tooltip
             }
           >
-            <Price
-              className="text-white font-semibold text-sm font-OpenSans"
-              stayPrice={activeActivity.price_non_resident}
-            ></Price>
+            {activeActivity.price_non_resident ? (
+              <Price
+                className="text-white font-semibold text-sm font-OpenSans"
+                stayPrice={activeActivity.price_non_resident}
+              ></Price>
+            ) : null}
+            {!activeActivity.price_non_resident && (
+              <span className="text-white font-semibold text-sm font-OpenSans">
+                Free
+              </span>
+            )}
 
             <AnimatePresence exitBeforeEnter>
               <Popup

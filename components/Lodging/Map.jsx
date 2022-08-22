@@ -58,10 +58,11 @@ function MapBox({ stays }) {
         width="100%"
         height="100%"
         mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_API_KEY}
+        minZoom={3}
+        maxZoom={10}
         {...viewState}
         onMove={(evt) => setViewState(evt.viewState)}
         mapStyle="mapbox://styles/mapbox/streets-v9"
-        // mapStyle="mapbox://styles/cliffaustin/cl0psgnss008714n29bmcpx68"
       >
         {markers}
       </Map>

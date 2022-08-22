@@ -27,6 +27,7 @@ import {
 import { getStayPrice, getActivityPrice } from "../../lib/getTotalCartPrice";
 import PopoverBox from "../../components/ui/Popover";
 import FlightItem from "../../components/Cart/FlightItem";
+import Price from "../../components/Stay/Price";
 
 const Cart = ({
   cart,
@@ -543,25 +544,11 @@ const Cart = ({
           </div>
 
           <div className="px-2 mt-6 mb-12 ml-auto md:w-[50%]">
-            <ClientOnly>
-              <div className={styles.priceTotal}>
-                <div className="font-bold">Price Total</div>
-                {!currencyToKES && (
-                  <h1 className={"font-bold text-xl font-OpenSans "}>
-                    {totalPrice()
-                      ? "$" + Math.ceil(totalPrice()).toLocaleString()
-                      : "No data"}
-                  </h1>
-                )}
-                {currencyToKES && (
-                  <h1 className={"font-bold text-xl font-OpenSans "}>
-                    {totalPrice()
-                      ? "KES" + Math.ceil(newPrice).toLocaleString()
-                      : "No data"}
-                  </h1>
-                )}
-              </div>
-            </ClientOnly>
+            <div className={styles.priceTotal}>
+              <div className="font-bold">Price Total</div>
+
+              <Price stayPrice={totalPrice()}></Price>
+            </div>
 
             <ClientOnly>
               {!Cookies.get("token") && (
