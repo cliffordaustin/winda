@@ -691,68 +691,70 @@ function TripDetail({ userProfile, userTrips, trip }) {
                   </div>
                 </Dialogue>
 
-                <div className="mt-10 mb-6">
-                  <h1 className="font-bold text-2xl text-gray-700 font-OpenSans">
-                    About this trip
-                  </h1>
-                  <div className="mt-2">
-                    {!showAllDescription && (
-                      <p className="font-medium text-gray-600">
-                        {trip.stay.description.slice(0, 500)}
-                        {trip.stay.description.length > 500 && "..."}
-                      </p>
-                    )}
-                    {showAllDescription && (
-                      <p className="font-medium text-gray-600">
-                        {trip.stay.description}
-                      </p>
-                    )}
-                    {!showAllDescription && trip.stay.description.length > 500 && (
-                      <div
-                        onClick={() => {
-                          setShowAllDescription(true);
-                        }}
-                        className="font-bold text-blue-700 flex items-center gap-0.5 cursor-pointer"
-                      >
-                        <span>Read more</span>{" "}
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-5 w-5 mt-1"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
+                {trip.description && (
+                  <div className="mt-10 mb-6">
+                    <h1 className="font-bold text-2xl text-gray-700 font-OpenSans">
+                      About this trip
+                    </h1>
+                    <div className="mt-2">
+                      {!showAllDescription && (
+                        <p className="font-medium text-gray-600">
+                          {trip.description.slice(0, 500)}
+                          {trip.description.length > 500 && "..."}
+                        </p>
+                      )}
+                      {showAllDescription && (
+                        <p className="font-medium text-gray-600">
+                          {trip.description}
+                        </p>
+                      )}
+                      {!showAllDescription && trip.description.length > 500 && (
+                        <div
+                          onClick={() => {
+                            setShowAllDescription(true);
+                          }}
+                          className="font-bold text-blue-700 flex items-center gap-0.5 cursor-pointer"
                         >
-                          <path
-                            fillRule="evenodd"
-                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </div>
-                    )}
-                    {showAllDescription && (
-                      <div
-                        onClick={() => {
-                          setShowAllDescription(false);
-                        }}
-                        className="font-bold text-blue-700 flex items-center gap-0.5 cursor-pointer"
-                      >
-                        <span>Read less</span>{" "}
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-5 w-5 mt-1"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
+                          <span>Read more</span>{" "}
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5 mt-1"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </div>
+                      )}
+                      {showAllDescription && (
+                        <div
+                          onClick={() => {
+                            setShowAllDescription(false);
+                          }}
+                          className="font-bold text-blue-700 flex items-center gap-0.5 cursor-pointer"
                         >
-                          <path
-                            fillRule="evenodd"
-                            d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </div>
-                    )}
+                          <span>Read less</span>{" "}
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5 mt-1"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
+                )}
 
                 {trip.essential_information && (
                   <div className="mb-6">
@@ -1957,6 +1959,34 @@ function TripDetail({ userProfile, userTrips, trip }) {
                             {trip.transport.type_of_car.toLowerCase()}
                           </div>
                         )}
+                      </div>
+                    </div>
+                  )}
+
+                  {trip.flight && (
+                    <div className="text-gray-600 flex items-center w-full justify-between">
+                      <div className="flex gap-1.5 items-center w-[70%]">
+                        Flight transfer
+                        <PopoverBox
+                          btnPopover={<Icon icon="bx:help-circle" />}
+                          btnClassName="flex items-center justify-center"
+                          panelClassName="bg-gray-100 rounded-lg p-2 bottom-[100%] -left-[10px] w-[180px]"
+                        >
+                          <div className="text-sm text-gray-500">
+                            <span>
+                              This is your flight from{" "}
+                              {trip.flight.starting_point} to{" "}
+                              {trip.flight.destination}
+                            </span>
+                          </div>
+                        </PopoverBox>
+                      </div>
+
+                      <div className="text-sm font-bold">
+                        {Number(router.query.guests)}{" "}
+                        {Number(router.query.guests) > 1
+                          ? "passengers"
+                          : "passenger"}
                       </div>
                     </div>
                   )}
