@@ -249,6 +249,34 @@ const UserTrips = ({ userTrips, userProfile }) => {
                         </div>
                       )}
 
+                      {trip.trip.flight && (
+                        <div className="text-gray-600 flex items-center w-full justify-between">
+                          <div className="flex gap-1.5 items-center w-[70%]">
+                            Flight transfer
+                            <PopoverBox
+                              btnPopover={<Icon icon="bx:help-circle" />}
+                              btnClassName="flex items-center justify-center"
+                              panelClassName="bg-gray-100 rounded-lg p-2 bottom-[100%] -right-[80px] w-[180px]"
+                            >
+                              <div className="text-sm text-gray-500">
+                                <span>
+                                  This is your flight from{" "}
+                                  {trip.trip.flight.starting_point} to{" "}
+                                  {trip.trip.flight.destination}
+                                </span>
+                              </div>
+                            </PopoverBox>
+                          </div>
+
+                          <div className="text-sm font-bold">
+                            {trip.guests + trip.non_residents}{" "}
+                            {trip.guests + trip.non_residents > 1
+                              ? "passengers"
+                              : "passenger"}
+                          </div>
+                        </div>
+                      )}
+
                       <div className="h-[0.4px] w-[100%] bg-gray-400"></div>
 
                       {trip.message && (
