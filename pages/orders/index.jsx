@@ -1,43 +1,15 @@
-import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
-import { useFormik } from "formik";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
-import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import Image from "next/image";
-import * as Yup from "yup";
-import Steps from "rc-steps";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import "rc-steps/assets/index.css";
 
-import Input from "../../components/ui/Input";
 import getToken from "../../lib/getToken";
-import getTokenFromReq from "../../lib/getTokenFromReq";
-import getCart from "../../lib/getCart";
 import Navbar from "../../components/Stay/Navbar";
 import CartItem from "../../components/Cart/CartItem";
-import Button from "../../components/ui/Button";
-import styles from "../../styles/Cart.module.css";
-import OrderItem from "../../components/Cart/OrderItem";
-import ModalPopup from "../../components/ui/ModalPopup";
-import Map from "../../components/Order/Map";
-import { priceConversionRateFunc } from "../../lib/PriceRate";
-import ClientOnly from "../../components/ClientOnly";
-import LoadingSpinerChase from "../../components/ui/LoadingSpinerChase";
-import OrderItemActivities from "../../components/Cart/OrderItemActivities";
-import ResponsiveModal from "../../components/ui/ResponsiveModal";
-import Destination from "../../components/Order/Destination";
-import { reorder } from "../../lib/random";
-import Modal from "../../components/ui/MobileModal";
-import TripOverview from "../../components/Order/TripOverview";
-import Popup from "../../components/ui/Popup";
-import moment from "moment";
-import OrderCard from "../../components/Order/OrderCard";
-import Trip from "../../components/Order/Trip";
-import TransportTrip from "../../components/Order/TransportTrip";
 import Footer from "../../components/Home/Footer";
+import Dialogue from "../../components/Home/Dialogue";
 
 function Orders({
   userProfile,
@@ -53,25 +25,6 @@ function Orders({
     showPopup: false,
     showSearchModal: false,
   });
-
-  const currencyToKES = useSelector((state) => state.home.currencyToKES);
-  const priceConversionRate = useSelector(
-    (state) => state.stay.priceConversionRate
-  );
-
-  const [newPrice, setNewPrice] = useState(null);
-
-  const priceConversion = async (price) => {
-    if (price) {
-      if (currencyToKES && priceConversionRate) {
-        setNewPrice(priceConversionRate * price);
-      } else {
-        setNewPrice(price);
-      }
-    } else {
-      return null;
-    }
-  };
 
   const priceOfTransportCart = (item) => {
     let price = 0;
@@ -105,6 +58,8 @@ function Orders({
     }
     return price;
   };
+
+  const router = useRouter();
 
   return (
     <>
@@ -281,6 +236,38 @@ function Orders({
                   </div>
                 ))}
               </div>
+
+              <Dialogue
+                isOpen={router.query.show_checkout_message === "1"}
+                closeModal={() => {
+                  router.replace(
+                    {
+                      query: {
+                        ...router.query,
+                        show_checkout_message: "0",
+                      },
+                    },
+                    undefined,
+                    { shallow: true }
+                  );
+                }}
+                dialoguePanelClassName="!max-w-md !h-[230px]"
+                title={"Thank you for booking with Winda!"}
+                dialogueTitleClassName="!font-bold text-xl !font-OpenSans mb-3"
+              >
+                <div>
+                  We’ll get back to you via your email -{" "}
+                  <span className="font-bold">{userProfile.email}</span> in{" "}
+                  <span className="font-bold">24 hours</span> with confirmation
+                  details plus a payment link to complete your booking.
+                </div>
+
+                <div className="mt-6">
+                  Wherever you go, go with your heart. 🦒
+                </div>
+
+                <div></div>
+              </Dialogue>
             </div>
 
             <Footer></Footer>

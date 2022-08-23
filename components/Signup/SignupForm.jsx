@@ -186,10 +186,10 @@ export default function Signup(props) {
               {formik.errors.password1}
             </span>
           ) : null}
-          <h3 className="mt-3 font-bold">
+          {/* <h3 className="mt-3 font-bold">
             By clicking Register, you agree to the job finder{" "}
             <span className="text-blue-500">Terms and condition</span>
-          </h3>
+          </h3> */}
           <Button
             type="submit"
             disabled={loading}

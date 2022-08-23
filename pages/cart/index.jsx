@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import CartItem from "../../components/Cart/CartItem";
 import Navbar from "../../components/Stay/Navbar";
 import getToken from "../../lib/getToken";
 import getCart from "../../lib/getCart";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import styles from "../../styles/Cart.module.css";
 import Button from "../../components/ui/Button";
 import Footer from "../../components/Home/Footer";
@@ -18,11 +17,6 @@ import Image from "next/image";
 import { checkFlightPrice } from "../../lib/flightLocations";
 import LoadingSpinerChase from "../../components/ui/LoadingSpinerChase";
 import ClientOnly from "../../components/ClientOnly";
-import {
-  stayPriceOfPlan,
-  activityPriceOfPlan,
-  activityNumOfGuests,
-} from "../../lib/pricePlan";
 
 import { getStayPrice, getActivityPrice } from "../../lib/getTotalCartPrice";
 import PopoverBox from "../../components/ui/Popover";
@@ -51,13 +45,6 @@ const Cart = ({
     showPopup: false,
     showSearchModal: false,
   });
-
-  const currencyToKES = useSelector((state) => state.home.currencyToKES);
-  const priceConversionRate = useSelector(
-    (state) => state.stay.priceConversionRate
-  );
-
-  const [newPrice, setNewPrice] = useState(null);
 
   const totalPrice = () => {
     let price = 0;
@@ -166,18 +153,6 @@ const Cart = ({
     return parseFloat(price);
   };
 
-  const priceConversion = async (price) => {
-    if (price) {
-      if (currencyToKES && priceConversionRate) {
-        setNewPrice(priceConversionRate * price);
-      } else {
-        setNewPrice(price);
-      }
-    } else {
-      return null;
-    }
-  };
-
   let showCartItems = "";
   let nothingInCart = "";
 
@@ -212,6 +187,48 @@ const Cart = ({
       }
     }
     return price;
+  };
+
+  const checkout = async () => {
+    setLoading(true);
+    for (const item of allItemsInCart) {
+      await axios
+        .post(
+          `${process.env.NEXT_PUBLIC_baseURL}/stays/${item.stay.slug}/add-to-order/`,
+          {
+            first_name: userProfile.first_name || "",
+            last_name: userProfile.last_name || "",
+          },
+          {
+            headers: {
+              Authorization: `Token ${Cookies.get("token")}`,
+            },
+          }
+        )
+        .then((res) => {
+          console.log("Responsee ", res.data);
+          axios.delete(
+            `${process.env.NEXT_PUBLIC_baseURL}/user-cart/${item.id}/`,
+            {
+              headers: {
+                Authorization: `Token ${Cookies.get("token")}`,
+              },
+            }
+          );
+        })
+        .catch((err) => {
+          setLoading(false);
+        });
+    }
+
+    router.push({
+      pathname: "/orders/",
+      query: {
+        show_checkout_message: "1",
+      },
+    });
+
+    setLoading(false);
   };
 
   if (
@@ -571,7 +588,7 @@ const Cart = ({
               <Button
                 onClick={() => {
                   if (Cookies.get("token")) {
-                    // if user is signed in, then check for availability of items
+                    checkout();
                   } else {
                     router.push({
                       pathname: "/login",
@@ -581,7 +598,7 @@ const Cart = ({
                 }}
                 className="w-full !py-3 flex items-center gap-2 text-lg !bg-blue-900 !text-primary-blue-200"
               >
-                <span>Confirm availability</span>
+                <span>Book trip</span>
                 <div className={" " + (!loading ? "hidden" : "")}>
                   <LoadingSpinerChase
                     width={20}
@@ -597,10 +614,6 @@ const Cart = ({
       </div>
     );
   }
-
-  useEffect(() => {
-    priceConversion(totalPrice());
-  }, [totalPrice(), currencyToKES, priceConversionRate]);
 
   return (
     <div>

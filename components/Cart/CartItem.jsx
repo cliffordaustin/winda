@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import Link from "next/link";
+
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,15 +10,10 @@ import ClientOnly from "../ClientOnly";
 import LoadingSpinerChase from "../ui/LoadingSpinerChase";
 import { priceConversionRateFunc } from "../../lib/PriceRate";
 import moment from "moment";
-import {
-  stayPriceOfPlan,
-  activityPriceOfPlan,
-  activityNumOfGuests,
-} from "../../lib/pricePlan";
 
 import { getStayPrice, getActivityPrice } from "../../lib/getTotalCartPrice";
 import TopTooltip from "../ui/TopTooltip";
-import BottomTooltip from "../ui/BottomTooltip";
+
 import Price from "../Stay/Price";
 
 const CartItem = ({
