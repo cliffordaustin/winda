@@ -42,6 +42,7 @@ function SigninLayout({
             alt="Image of a car and a lion"
             src={imagePath}
             className="object-cover rounded-tr-3xl rounded-br-3xl lg:rounded-3xl -z-10"
+            unoptimized={true}
             priority
           ></Image>
         </div>

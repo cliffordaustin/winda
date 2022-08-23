@@ -43,6 +43,8 @@ function UserDropdown({
                 alt="profile image of a user"
                 className="object-cover rounded-full"
                 src={userProfile.profile_pic}
+                unoptimized={true}
+                objectFit="cover"
                 priority
               ></Image>
             </div>
@@ -55,6 +57,8 @@ function UserDropdown({
                 alt="profile image of a user"
                 className="object-cover rounded-full"
                 src={userProfile.avatar_url}
+                unoptimized={true}
+                objectFit="cover"
                 priority
               ></Image>
             </div>
@@ -120,14 +124,11 @@ function UserDropdown({
       {isHomePage && (
         <div
           onClick={() => {
-            router.push("/trip/plan");
+            router.push("/trip/user-trips");
           }}
           className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2 flex justify-between items-center"
         >
-          <span className="font-bold text-base">trips</span>
-          <div className="h-5 w-5 p-1 text-white text-sm rounded-full bg-[#303960] flex items-center justify-center">
-            {numberOfTrips}
-          </div>
+          <span className="font-bold text-base">your trips</span>
         </div>
       )}
 
@@ -147,14 +148,11 @@ function UserDropdown({
       {!isHomePage && (
         <div
           onClick={() => {
-            router.push("/trip/plan");
+            router.push("/trip/user-trips");
           }}
           className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2 flex justify-between items-center"
         >
-          <span className="font-bold text-base">trips</span>
-          <div className="h-5 w-5 p-1 text-white rounded-full text-xs bg-[#303960] flex items-center justify-center">
-            {numberOfTrips}
-          </div>
+          <span className="font-bold text-base">your trips</span>
         </div>
       )}
 

@@ -313,6 +313,7 @@ const OrderCard = ({
                   className="w-full h-full"
                   layout="fill"
                   src={mainImage.image}
+                  unoptimized={true}
                   alt="Image"
                 />
               )}
@@ -321,6 +322,7 @@ const OrderCard = ({
                   className="w-full h-full"
                   layout="fill"
                   src={sortedImages[0].image}
+                  unoptimized={true}
                   alt="Image"
                 />
               )}

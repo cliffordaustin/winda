@@ -261,40 +261,11 @@ const Trips = ({
           </div>
 
           <div className="flex items-center gap-3">
-            <Button
-              onClick={() => {
-                if (Cookies.get("token")) {
-                  router.push("/trip/plan");
-                } else {
-                  router.push({
-                    pathname: "/login",
-                    query: {
-                      redirect: "/trip/plan",
-                    },
-                  });
-                }
-              }}
-              className="!px-1 !py-1 !bg-blue-600"
-            >
-              my trip
-            </Button>
-
             <UserDropdown
               userProfile={userProfile}
-              changeShowDropdown={() => {
-                changeShowDropdown(!showDropdown);
-              }}
-              showDropdown={showDropdown}
               numberOfTrips={userTrips.length}
             ></UserDropdown>
           </div>
-          <ClientOnly>
-            {Cookies.get("token") && (
-              <div className="bg-white shadow-md absolute text-sm font-bold top-[15%] right-[90px] sm:right-[126px] w-5 h-5 rounded-full flex items-center justify-center">
-                {userTrips.length}
-              </div>
-            )}
-          </ClientOnly>
         </div>
       </div>
 
@@ -914,7 +885,7 @@ export async function getServerSideProps(context) {
       return {
         redirect: {
           permanent: false,
-          destination: "logout",
+          destination: "/logout",
         },
       };
     } else {

@@ -608,6 +608,18 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
               </div>
             </div>
 
+            <div className="flex flex-wrap gap-1 mt-2">
+              {activity.tags &&
+                activity.tags.map((tag, index) => (
+                  <div
+                    key={index}
+                    className="px-3 py-1 bg-blue-300 rounded-3xl text-xs capitalize"
+                  >
+                    {tag}
+                  </div>
+                ))}
+            </div>
+
             <div className="mt-4">
               <h1 className="font-bold text-2xl">About</h1>
               <div className="flex">
@@ -2388,7 +2400,7 @@ export async function getServerSideProps(context) {
       return {
         redirect: {
           permanent: false,
-          destination: "logout",
+          destination: "/logout",
         },
       };
     } else if (error.response.status === 404) {

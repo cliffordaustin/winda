@@ -99,23 +99,11 @@ const Card = ({
   };
 
   const totalPrice = () => {
-    return (
-      ((listing.stay ? listing.stay.price_non_resident : 0) +
-        (listing.activity ? listing.activity.price_non_resident : 0) +
-        (listing.transport ? listing.transport.price_per_day : 0)) *
-        1 +
-      (listing.flight
-        ? checkFlightPrice(
-            listing.flight.starting_point,
-            listing.flight.destination
-          )
-        : 0) *
-        (listing.flight ? listing.flight.number_of_people : 1)
-    );
+    return listing.price_non_resident || listing.price;
   };
 
   return (
-    <div className="border flex overflow-hidden stepWebkitSetting flex-col h-[520px] xl:flex-row w-full md:w-[48%] bg-white xl:h-[300px] mb-6 shadow-md rounded-2xl">
+    <div className="border flex overflow-hidden stepWebkitSetting flex-col h-[500px] xl:flex-row w-full md:w-[48%] bg-white xl:h-[265px] mb-6 shadow-md rounded-2xl">
       <div className="xl:w-[320px] h-[230px] xl:h-full">
         <Carousel
           images={images}
@@ -124,8 +112,7 @@ const Card = ({
       </div>
 
       <div className="px-3 py-2 xl:w-[200px] flex-grow relative">
-        <div className="text-sm text-gray-600">Kenya</div>
-        <div className="text-base text-gray-700">{listing.name}</div>
+        <div className="text-base text-gray-700 font-bold">{listing.name}</div>
 
         <p className="mt-2 text-sm text-gray-500">
           {listing.description && listing.description.substring(0, 80)}...

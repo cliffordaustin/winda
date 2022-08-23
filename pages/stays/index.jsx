@@ -3191,7 +3191,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         );
 
         const allStays = await axios.get(
-          `${process.env.NEXT_PUBLIC_baseURL}/stays/?search=${
+          `${process.env.NEXT_PUBLIC_baseURL}/all-stays/?search=${
             query.search ? query.search : ""
           }&d_search=${query.d_search ? query.d_search : ""}&type_of_stay=${
             query.type_of_stay ? query.type_of_stay : ""
@@ -3282,7 +3282,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           return {
             redirect: {
               permanent: false,
-              destination: "logout",
+              destination: "/logout",
             },
           };
         } else {

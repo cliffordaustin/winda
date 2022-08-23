@@ -1002,6 +1002,7 @@ export default function Home({ userProfile }) {
             objectFit="cover"
             src="/images/header-image.jpeg"
             sizes="380"
+            unoptimized={true}
             alt="Image Gallery"
             priority
           />
@@ -1533,7 +1534,7 @@ export async function getServerSideProps(context) {
       return {
         redirect: {
           permanent: false,
-          destination: "logout",
+          destination: "/logout",
         },
       };
     } else {
