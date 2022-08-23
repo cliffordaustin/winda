@@ -596,6 +596,7 @@ export default function Home({ userProfile }) {
             objectPosition={"bottom"}
             sizes="380"
             alt="Image of samburu man looking at a vast landscape"
+            unoptimized={true}
             priority
           />
 
@@ -737,7 +738,7 @@ export async function getServerSideProps(context) {
       return {
         redirect: {
           permanent: false,
-          destination: "logout",
+          destination: "/logout",
         },
       };
     } else {

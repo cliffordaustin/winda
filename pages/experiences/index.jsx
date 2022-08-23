@@ -1557,7 +1557,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           return {
             redirect: {
               permanent: false,
-              destination: "logout",
+              destination: "/logout",
             },
           };
         } else {

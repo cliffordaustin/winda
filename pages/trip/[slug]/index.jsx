@@ -153,16 +153,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
   };
 
   const totalPrice = () => {
-    return (
-      ((trip.stay ? trip.stay.price_non_resident : 0) +
-        (trip.activity ? trip.activity.price_non_resident : 0) +
-        (trip.transport ? trip.transport.price_per_day : 0)) *
-        1 +
-      (trip.flight
-        ? checkFlightPrice(trip.flight.starting_point, trip.flight.destination)
-        : 0) *
-        (trip.flight ? trip.flight.number_of_people : 1)
-    );
+    return trip.price_non_resident || trip.price;
   };
 
   const tripSortedImages = trip.single_trip_images.sort(
@@ -189,38 +180,11 @@ function TripDetail({ userProfile, userTrips, trip }) {
     return image.image;
   });
 
-  const stayPrice = () => {
-    return (
-      trip.stay &&
-      (trip.stay.price_non_resident ||
-        trip.stay.price ||
-        trip.stay.per_house_price ||
-        trip.stay.deluxe_price_non_resident ||
-        trip.stay.deluxe_price ||
-        trip.stay.family_room_price_non_resident ||
-        trip.stay.family_room_price ||
-        trip.stay.executive_suite_room_price_non_resident ||
-        trip.stay.executive_suite_room_price ||
-        trip.stay.presidential_suite_room_price_non_resident ||
-        trip.stay.presidential_suite_room_price ||
-        trip.stay.emperor_suite_room_price_non_resident ||
-        trip.stay.emperor_suite_room_price)
-    );
-  };
-
-  const activityPrice = () => {
-    return (
-      (trip.activity && trip.activity.price_non_resident) || trip.activity.price
-    );
-  };
-
-  const transportPrice = () => {
-    return trip.transport && trip.transport.price_per_day;
-  };
-
   const [startDate, setStartDate] = useState(new Date());
 
-  const [guest, setGuest] = useState(1);
+  const [guest, setGuest] = useState(0);
+
+  const [nonResidentGuest, setNonResidentGuest] = useState(1);
 
   const [showMap, setShowMap] = useState(false);
 
@@ -239,7 +203,12 @@ function TripDetail({ userProfile, userTrips, trip }) {
           `${process.env.NEXT_PUBLIC_baseURL}/trip/${router.query.slug}/create-booked-trip/`,
           {
             starting_date: router.query.starting_date,
-            guests: Number(router.query.guests),
+            guests: Number(router.query.guests)
+              ? Number(router.query.guests)
+              : null,
+            non_residents: Number(router.query.non_resident)
+              ? Number(router.query.non_resident)
+              : null,
             message: message,
           },
           {
@@ -256,7 +225,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
           setLoading(false);
         });
     } else {
-      router.replace({
+      router.push({
         pathname: "/login",
         query: { redirect: `${router.asPath}` },
       });
@@ -283,24 +252,6 @@ function TripDetail({ userProfile, userTrips, trip }) {
           </div>
 
           <div className="flex items-center gap-3">
-            {/* <Button
-              onClick={() => {
-                if (Cookies.get("token")) {
-                  router.push("/trip/plan");
-                } else {
-                  router.push({
-                    pathname: "/login",
-                    query: {
-                      redirect: "/trip/plan",
-                    },
-                  });
-                }
-              }}
-              className="!px-1 !py-1 !bg-blue-600"
-            >
-              <span>my trip</span>
-            </Button> */}
-
             <UserDropdown
               userProfile={userProfile}
               changeShowDropdown={() => {
@@ -310,13 +261,6 @@ function TripDetail({ userProfile, userTrips, trip }) {
               numberOfTrips={userTrips.length}
             ></UserDropdown>
           </div>
-          {/* <ClientOnly>
-            {Cookies.get("token") && (
-              <div className="bg-white shadow-md absolute text-sm font-bold top-[15%] right-[90px] sm:right-[126px] w-5 h-5 rounded-full flex items-center justify-center">
-                {userTrips.length}
-              </div>
-            )}
-          </ClientOnly> */}
         </div>
       </div>
       {router.query.checkout_page !== "1" && (
@@ -329,147 +273,12 @@ function TripDetail({ userProfile, userTrips, trip }) {
                 className="md:!h-[540px] !h-[300px]"
               ></ImageGallery>
             </div>
-
-            {/* <div
-              className={
-                "w-full z-10 px-2 md:hidden flex justify-between items-center fixed bottom-0 safari-bottom left-0 right-0 bg-white py-1 "
-              }
-            >
-              <div className="w-full">
-                <Button
-                  onClick={() => {
-                    if (Cookies.get("token")) {
-                      if (userTrips.length > 0) {
-                        setShowAddToTripPopup(!showAddToTripPopup);
-                      } else {
-                        addToTrip();
-                      }
-                    } else {
-                      router.push({
-                        pathname: "/login",
-                        query: {
-                          redirect: router.asPath,
-                        },
-                      });
-                    }
-                  }}
-                  className="!bg-blue-500 !px-6 !py-3 !w-full"
-                >
-                  <span>Add to trip</span>
-
-                  <div
-                    className={
-                      " " +
-                      (loading && !showAddToTripPopup ? "ml-1.5 " : " hidden")
-                    }
-                  >
-                    <LoadingSpinerChase
-                      width={13}
-                      height={13}
-                      color="white"
-                    ></LoadingSpinerChase>
-                  </div>
-
-                  {userTrips.length > 0 && (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
-                      />
-                    </svg>
-                  )}
-                </Button>
-              </div>
-            </div> */}
           </div>
           <div className="flex gap-4 px-4">
-            <div className="md:w-[30%] hidden md:block h-[90vh] mt-0 sticky top-[80px]">
-              <div className="w-full h-[250px] mt-4">
+            <div className="md:w-[40%] lg:w-[30%] hidden md:block h-[90vh] mt-0 sticky top-[70px]">
+              <div className="w-full h-[200px] mt-4">
                 <MapBox trip={trip}></MapBox>
               </div>
-
-              {/* <div className="flex flex-col gap-2 mt-8">
-            <ReactScrollLink
-              activeClass="border-l-8"
-              to="overview"
-              spy={true}
-              smooth={true}
-              offset={-200}
-              duration={500}
-              className="w-full px-2 flex gap-3 cursor-pointer hover:bg-gray-100 py-3 transition-all duration-200 ease-linear"
-            >
-              <Icon
-                icon="openmoji:overview"
-                className="w-5 h-5 text-gray-600"
-              />
-              <h1 className="text-sm font-bold">Overview</h1>
-            </ReactScrollLink>
-
-            <ReactScrollLink
-              activeClass="border-l-8"
-              to="gallery"
-              spy={true}
-              smooth={true}
-              offset={-200}
-              duration={500}
-              className="w-full px-2 flex gap-3 cursor-pointer hover:bg-gray-100 py-3 transition-all duration-200 ease-linear"
-            >
-              <Icon icon="subway:menu" className="w-5 h-5 text-gray-600" />
-              <h1 className="text-sm font-bold">Gallery</h1>
-            </ReactScrollLink>
-
-            <ReactScrollLink
-              activeClass="border-l-8"
-              to="itinerary"
-              spy={true}
-              smooth={true}
-              offset={-200}
-              duration={500}
-              className="w-full px-2 flex gap-3 cursor-pointer hover:bg-gray-100 py-3 transition-all duration-200 ease-linear"
-            >
-              <Icon icon="akar-icons:map" className="w-5 h-5 text-gray-600" />
-              <h1 className="text-sm font-bold">Itinerary</h1>
-            </ReactScrollLink>
-
-            <ReactScrollLink
-              activeClass="border-l-8"
-              to="inclusions"
-              spy={true}
-              smooth={true}
-              offset={-200}
-              duration={500}
-              className="w-full px-2 flex gap-3 cursor-pointer hover:bg-gray-100 py-3 transition-all duration-200 ease-linear"
-            >
-              <Icon icon="bi:check-all" className="w-5 h-5 text-gray-600" />
-              <h1 className="text-sm font-bold">Inclusions</h1>
-            </ReactScrollLink>
-
-            {trip.faqs.length > 0 && (
-              <ReactScrollLink
-                activeClass="border-l-8"
-                to="faq"
-                spy={true}
-                smooth={true}
-                offset={-200}
-                duration={500}
-                className="w-full px-2 flex gap-3 cursor-pointer hover:bg-gray-100 py-3 transition-all duration-200 ease-linear"
-              >
-                <Icon
-                  icon="fa-solid:question-circle"
-                  className="w-5 h-5 text-gray-600"
-                />
-                <h1 className="text-sm font-bold">FAQ</h1>
-              </ReactScrollLink>
-            )}
-          </div> */}
 
               <div className="flex flex-col items-center border border-gray-300 rounded-md mt-4">
                 <PopoverBox
@@ -504,7 +313,46 @@ function TripDetail({ userProfile, userTrips, trip }) {
                 <div className="h-[1px] w-[90%] bg-gray-300"></div>
                 <div className="px-2 py-2 flex items-center justify-between w-full rounded-xl cursor-pointer transition-all duration-300">
                   <div className="flex flex-col gap-0.5">
-                    <span className="text-sm font-bold self-start">Guests</span>
+                    <span className="text-sm font-bold self-start">
+                      Non-resident guest
+                    </span>
+                    <span className="text-sm text-gray-500">
+                      {nonResidentGuest}{" "}
+                      {nonResidentGuest > 1
+                        ? "Non-resident guests"
+                        : "Non-resident guest"}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-2 ">
+                    <div
+                      onClick={() => {
+                        if (guest + nonResidentGuest > 1) {
+                          setNonResidentGuest(nonResidentGuest - 1);
+                        }
+                      }}
+                      className="w-7 h-7 rounded-full cursor-pointer border flex items-center justify-center focus:shadow-inner font-bold"
+                    >
+                      {" "}
+                      -{" "}
+                    </div>
+
+                    <div
+                      onClick={() => {
+                        setNonResidentGuest(nonResidentGuest + 1);
+                      }}
+                      className="w-7 h-7 rounded-full cursor-pointer border flex items-center justify-center focus:shadow-inner font-bold"
+                    >
+                      +
+                    </div>
+                  </div>
+                </div>
+                <div className="h-[1px] w-[90%] bg-gray-300"></div>
+                <div className="px-2 py-2 flex items-center justify-between w-full rounded-xl cursor-pointer transition-all duration-300">
+                  <div className="flex flex-col gap-0.5">
+                    <span className="text-sm font-bold self-start">
+                      Resident guests
+                    </span>
                     <span className="text-sm text-gray-500">
                       {guest} {guest > 1 ? "guests" : "guest"}
                     </span>
@@ -513,7 +361,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
                   <div className="flex items-center gap-2 ">
                     <div
                       onClick={() => {
-                        if (guest > 1) {
+                        if (guest + nonResidentGuest > 1) {
                           setGuest(guest - 1);
                         }
                       }}
@@ -536,20 +384,55 @@ function TripDetail({ userProfile, userTrips, trip }) {
               </div>
 
               <div className="flex items-center justify-between mt-4">
-                <div className="text-sm text-gray-800 flex gap-1 items-center">
+                <div className="text-sm text-gray-800 flex gap-0.5 items-center">
                   <Price
-                    className="!text-base !font-medium"
+                    className="!text-sm !font-bold"
                     stayPrice={totalPrice()}
                   ></Price>
 
                   <div> x </div>
-                  <div className="!text-base">
+                  <div className="!text-sm">
+                    {nonResidentGuest}{" "}
+                    {nonResidentGuest > 1
+                      ? "Non-resident guests"
+                      : "Non-resident guest"}
+                  </div>
+                </div>
+                <Price
+                  className="!text-sm !font-bold"
+                  stayPrice={totalPrice() * nonResidentGuest}
+                ></Price>
+              </div>
+
+              <div className="flex items-center justify-between mt-2">
+                <div className="text-sm text-gray-800 flex gap-0.5 items-center">
+                  <Price
+                    className="!text-sm !font-bold"
+                    stayPrice={trip.price}
+                  ></Price>
+
+                  <div> x </div>
+                  <div className="!text-sm">
                     {guest} {guest > 1 ? "guests" : "guest"}
                   </div>
                 </div>
                 <Price
-                  className="!text-base !font-bold"
-                  stayPrice={totalPrice() * guest}
+                  className="!text-sm !font-bold"
+                  stayPrice={trip.price * guest}
+                ></Price>
+              </div>
+
+              <div className="h-[0.4px] w-[100%] my-2 bg-gray-400"></div>
+
+              <div className="flex items-center justify-between">
+                <div className="text-sm text-gray-800 font-bold flex gap-0.5 items-center">
+                  Total
+                </div>
+                <Price
+                  className="!text-sm !font-bold"
+                  stayPrice={
+                    trip.price * guest + totalPrice() * nonResidentGuest
+                  }
                 ></Price>
               </div>
 
@@ -560,6 +443,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
                       ...router.query,
                       starting_date: moment(startDate).format("YYYY-MM-D"),
                       guests: guest,
+                      non_resident: nonResidentGuest,
                       checkout_page: 1,
                     },
                   });
@@ -569,10 +453,10 @@ function TripDetail({ userProfile, userTrips, trip }) {
                 <span>Book trip</span>
               </Button>
             </div>
-            <div className="md:w-[70%] w-full md:pl-4">
+            <div className="md:w-[60%] lg:w-[70%] w-full md:pl-4">
               <Element name="overview" className="md:px-0 relative">
                 <div className="h-16 w-full bg-gray-50 flex ">
-                  <div className="w-[30%] flex flex-col justify-center items-center border-r">
+                  <div className="w-[60%] flex flex-col justify-center items-center border-r">
                     <span className="font-bold text-xs font-SourceSans">
                       FROM
                     </span>
@@ -582,33 +466,18 @@ function TripDetail({ userProfile, userTrips, trip }) {
                           className="!text-base sm:!text-xl md:!text-3xl"
                           stayPrice={totalPrice()}
                         ></Price>
-                        <span className="mt-1 md:mt-3">/person</span>
+                        <span className="mt-1 md:mt-3">
+                          /person/non-resident
+                        </span>
                       </div>
-                      {/* <div className="mt-0.5">avg/night/non-resident</div> */}
                     </div>
                   </div>
-                  <div className="w-[25%] flex flex-col justify-center items-center border-r">
+                  <div className="w-[40%] flex flex-col justify-center items-center">
                     <span className="font-bold text-xs font-SourceSans">
                       DAYS
                     </span>
                     <h1 className="font-bold text-gray-800 !text-base sm:!text-xl md:!text-3xl">
                       {trip.total_number_of_days}
-                    </h1>
-                  </div>
-
-                  <div className="w-[45%] flex flex-col justify-center items-center">
-                    <span className="font-bold text-xs font-SourceSans">
-                      WITHIN
-                    </span>
-                    <h1 className="font-bold text-gray-800 !text-sm sm:!text-lg md:!text-xl">
-                      {trip.countries_covered &&
-                        trip.countries_covered.map((country, index) => {
-                          if (index === trip.countries_covered.length - 1) {
-                            return country;
-                          } else {
-                            return country + ", ";
-                          }
-                        })}
                     </h1>
                   </div>
                 </div>
@@ -696,6 +565,14 @@ function TripDetail({ userProfile, userTrips, trip }) {
                     <h1 className="font-bold text-2xl text-gray-700 font-OpenSans">
                       About this trip
                     </h1>
+                  </div>
+                )}
+
+                <div className="mt-10 mb-6">
+                  <h1 className="font-bold text-2xl text-gray-700 font-OpenSans">
+                    About this trip
+                  </h1>
+                  {trip.description && (
                     <div className="mt-2">
                       {!showAllDescription && (
                         <p className="font-medium text-gray-600">
@@ -753,8 +630,8 @@ function TripDetail({ userProfile, userTrips, trip }) {
                         </div>
                       )}
                     </div>
-                  </div>
-                )}
+                  )}
+                </div>
 
                 {trip.essential_information && (
                   <div className="mb-6">
@@ -1021,10 +898,6 @@ function TripDetail({ userProfile, userTrips, trip }) {
               dialoguePanelClassName="max-h-[500px] max-w-xl overflow-y-scroll remove-scroll !p-4"
             >
               <div className="md:px-4">
-                <div className="mb-2 flex">
-                  <Price stayPrice={stayPrice()}></Price>
-                  <span className="mt-1 text-sm">/non-resident/night</span>
-                </div>
                 <h1 className="font-bold text-2xl">Quick facts</h1>
                 <div className="flex">
                   <div className="flex flex-col w-full">
@@ -1426,10 +1299,6 @@ function TripDetail({ userProfile, userTrips, trip }) {
               dialoguePanelClassName="max-h-[500px] max-w-xl overflow-y-scroll remove-scroll !p-4"
             >
               <div className="md:px-4">
-                <div className="mb-2 flex">
-                  <Price stayPrice={activityPrice()}></Price>
-                  <span className="mt-1.5 text-sm">/non-resident</span>
-                </div>
                 <h1 className="font-bold text-2xl">About</h1>
 
                 <div className="flex flex-col w-full">
@@ -1677,13 +1546,9 @@ function TripDetail({ userProfile, userTrips, trip }) {
               closeModal={() => {
                 setShowMoreTransport(false);
               }}
-              dialoguePanelClassName="max-h-[500px] max-w-xl overflow-y-scroll remove-scroll !p-4"
+              dialoguePanelClassName="max-h-[400px] max-w-lg overflow-y-scroll remove-scroll !p-4"
             >
               <div className="md:px-4">
-                <div className="mb-2 flex">
-                  <Price stayPrice={transportPrice()}></Price>
-                  <span className="mt-1.5 text-sm">/per day</span>
-                </div>
                 {trip.transport.vehicle_make && (
                   <div className="flex items-center gap-2">
                     <h1 className="font-bold capitalize text-xl">
@@ -1730,11 +1595,6 @@ function TripDetail({ userProfile, userTrips, trip }) {
                     </div>
                   </div>
 
-                  {trip.transport.driver_operates_within.length > 0 && (
-                    <h1 className="font-bold text-lg mb-2">
-                      Car operates within
-                    </h1>
-                  )}
                   {trip.transport.driver_operates_within.map((item, index) => (
                     <ListItem key={index}>{item.city}</ListItem>
                   ))}
@@ -1830,6 +1690,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
                       layout="fill"
                       objectFit="cover"
                       src={tripImages[0]}
+                      unoptimized={true}
                       alt="Main image of trip"
                     ></Image>
                   </div>
@@ -1885,7 +1746,9 @@ function TripDetail({ userProfile, userTrips, trip }) {
                         </PopoverBox>
                       </div>
 
-                      <div className="text-sm font-bold">2 nights</div>
+                      <div className="text-sm font-bold">
+                        {trip.nights} nights
+                      </div>
                     </div>
                   )}
 
@@ -1910,8 +1773,11 @@ function TripDetail({ userProfile, userTrips, trip }) {
                                 {trip.activity.country}
                               </span>{" "}
                               .You will be coming with{" "}
-                              {Number(router.query.guests)}{" "}
-                              {Number(router.query.guests) > 1
+                              {Number(router.query.guests) +
+                                Number(router.query.non_resident)}{" "}
+                              {Number(router.query.guests) +
+                                Number(router.query.non_resident) >
+                              1
                                 ? "guests"
                                 : "guest"}{" "}
                             </span>
@@ -1920,8 +1786,13 @@ function TripDetail({ userProfile, userTrips, trip }) {
                       </div>
 
                       <div className="text-sm font-bold">
-                        {Number(router.query.guests)}{" "}
-                        {Number(router.query.guests) > 1 ? "guests" : "guest"}
+                        {Number(router.query.guests) +
+                          Number(router.query.non_resident)}{" "}
+                        {Number(router.query.guests) +
+                          Number(router.query.non_resident) >
+                        1
+                          ? "guests"
+                          : "guest"}
                       </div>
                     </div>
                   )}
@@ -1983,8 +1854,11 @@ function TripDetail({ userProfile, userTrips, trip }) {
                       </div>
 
                       <div className="text-sm font-bold">
-                        {Number(router.query.guests)}{" "}
-                        {Number(router.query.guests) > 1
+                        {Number(router.query.guests) +
+                          Number(router.query.non_resident)}{" "}
+                        {Number(router.query.guests) +
+                          Number(router.query.non_resident) >
+                        1
                           ? "passengers"
                           : "passenger"}
                       </div>
@@ -1997,8 +1871,11 @@ function TripDetail({ userProfile, userTrips, trip }) {
                     <div className="flex gap-1.5 items-center">Total price</div>
 
                     <Price
-                      className="!text-base !font-bold"
-                      stayPrice={totalPrice() * Number(router.query.guests)}
+                      className="!text-sm !font-bold"
+                      stayPrice={
+                        trip.price * Number(router.query.guests) +
+                        totalPrice() * Number(router.query.non_resident)
+                      }
                     ></Price>
                   </div>
                 </div>
@@ -2021,6 +1898,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
                     layout="fill"
                     objectFit="cover"
                     src={tripImages[0]}
+                    unoptimized={true}
                     alt="Main image of trip"
                   ></Image>
                 </div>
@@ -2091,71 +1969,82 @@ function TripDetail({ userProfile, userTrips, trip }) {
 
                 <div className="flex items-center justify-between mt-8">
                   <div className="flex flex-col gap-2">
-                    <div className="font-bold">Guests</div>
+                    <div className="font-bold">Non-resident guests</div>
                     <div className="text-sm text-gray-600">
-                      {Number(router.query.guests)}{" "}
-                      {Number(router.query.guests) > 1 ? "guests" : "guest"}
+                      {Number(router.query.non_resident)}{" "}
+                      {Number(router.query.non_resident) > 1
+                        ? "Non-resident guests"
+                        : "Non-resident guest"}
                     </div>
                   </div>
-
-                  {/* <PopoverBox
-                    btnPopover={
-                      <div className="w-9 h-9 rounded-full cursor-pointer border-transparent border flex items-center justify-center hover:border-gray-200 hover:shadow-lg transition-all duration-300 ease-linear">
-                        <Icon className="w-5 h-5" icon="clarity:pencil-solid" />
-                      </div>
-                    }
-                    btnClassName=""
-                    popoverClassName="flex items-center justify-center"
-                    panelClassName="h-fit py-2 px-2 !w-fit rounded-lg bg-white right-0 border shadow-lg top-full mt-1"
-                  >
-                    <div className="w-full">
-                      <div className="flex items-center gap-2 ">
-                        <div
-                          onClick={() => {
-                            if (Number(router.query.guests) > 1) {
-                              router.replace(
-                                {
-                                  query: {
-                                    ...router.query,
-                                    guests: Number(router.query.guests) - 1,
-                                  },
-                                },
-                                undefined,
-                                { shallow: true }
-                              );
-                            }
-                          }}
-                          className="w-10 h-10 text-base rounded-full cursor-pointer border flex items-center justify-center focus:shadow-inner font-bold"
-                        >
-                          {" "}
-                          -{" "}
-                        </div>
-
-                        <div
-                          onClick={() => {
-                            router.replace(
-                              {
-                                query: {
-                                  ...router.query,
-                                  guests: Number(router.query.guests) + 1,
-                                },
-                              },
-                              undefined,
-                              { shallow: true }
-                            );
-                          }}
-                          className="w-10 h-10 text-base rounded-full cursor-pointer border flex items-center justify-center focus:shadow-inner font-bold"
-                        >
-                          +
-                        </div>
-                      </div>
-                    </div>
-                  </PopoverBox> */}
 
                   <div className="flex items-center gap-2 ">
                     <div
                       onClick={() => {
-                        if (Number(router.query.guests) > 1) {
+                        if (
+                          Number(router.query.non_resident) +
+                            Number(router.query.guests) >
+                          1
+                        ) {
+                          router.replace(
+                            {
+                              query: {
+                                ...router.query,
+                                non_resident:
+                                  Number(router.query.non_resident) - 1,
+                              },
+                            },
+                            undefined,
+                            { shallow: true }
+                          );
+                        }
+                      }}
+                      className="w-9 h-9 text-base rounded-full cursor-pointer border flex items-center justify-center focus:shadow-inner font-bold"
+                    >
+                      {" "}
+                      -{" "}
+                    </div>
+
+                    <div
+                      onClick={() => {
+                        router.replace(
+                          {
+                            query: {
+                              ...router.query,
+                              non_resident:
+                                Number(router.query.non_resident) + 1,
+                            },
+                          },
+                          undefined,
+                          { shallow: true }
+                        );
+                      }}
+                      className="w-9 h-9 text-base rounded-full cursor-pointer border flex items-center justify-center focus:shadow-inner font-bold"
+                    >
+                      +
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between mt-8">
+                  <div className="flex flex-col gap-2">
+                    <div className="font-bold">Resident guests</div>
+                    <div className="text-sm text-gray-600">
+                      {Number(router.query.guests)}{" "}
+                      {Number(router.query.guests) > 1
+                        ? "Resident guests"
+                        : "Resident guest"}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 ">
+                    <div
+                      onClick={() => {
+                        if (
+                          Number(router.query.non_resident) +
+                            Number(router.query.guests) >
+                          1
+                        ) {
                           router.replace(
                             {
                               query: {
@@ -2264,7 +2153,9 @@ function TripDetail({ userProfile, userTrips, trip }) {
                           </PopoverBox>
                         </div>
 
-                        <div className="text-sm font-bold">2 nights</div>
+                        <div className="text-sm font-bold">
+                          {trip.nights} nights
+                        </div>
                       </div>
                     )}
 
@@ -2290,8 +2181,11 @@ function TripDetail({ userProfile, userTrips, trip }) {
                                   {trip.activity.country}
                                 </span>{" "}
                                 .You will be coming with{" "}
-                                {Number(router.query.guests)}{" "}
-                                {Number(router.query.guests) > 1
+                                {Number(router.query.guests) +
+                                  Number(router.query.non_resident)}{" "}
+                                {Number(router.query.guests) +
+                                  Number(router.query.non_resident) >
+                                1
                                   ? "guests"
                                   : "guest"}{" "}
                               </span>
@@ -2300,8 +2194,13 @@ function TripDetail({ userProfile, userTrips, trip }) {
                         </div>
 
                         <div className="text-sm font-bold">
-                          {Number(router.query.guests)}{" "}
-                          {Number(router.query.guests) > 1 ? "guests" : "guest"}
+                          {Number(router.query.guests) +
+                            Number(router.query.non_resident)}{" "}
+                          {Number(router.query.guests) +
+                            Number(router.query.non_resident) >
+                          1
+                            ? "guests"
+                            : "guest"}
                         </div>
                       </div>
                     )}
@@ -2343,6 +2242,37 @@ function TripDetail({ userProfile, userTrips, trip }) {
                       </div>
                     )}
 
+                    {trip.flight && (
+                      <div className="text-gray-600 flex items-center w-full justify-between">
+                        <div className="flex gap-1.5 items-center w-[70%]">
+                          Flight transfer
+                          <PopoverBox
+                            btnPopover={<Icon icon="bx:help-circle" />}
+                            btnClassName="flex items-center justify-center"
+                            panelClassName="bg-gray-100 rounded-lg p-2 bottom-[100%] -right-[80px] w-[180px]"
+                          >
+                            <div className="text-sm text-gray-500">
+                              <span>
+                                This is your flight from{" "}
+                                {trip.flight.starting_point} to{" "}
+                                {trip.flight.destination}
+                              </span>
+                            </div>
+                          </PopoverBox>
+                        </div>
+
+                        <div className="text-sm font-bold">
+                          {Number(router.query.guests) +
+                            Number(router.query.non_resident)}{" "}
+                          {Number(router.query.guests) +
+                            Number(router.query.non_resident) >
+                          1
+                            ? "passengers"
+                            : "passenger"}
+                        </div>
+                      </div>
+                    )}
+
                     <div className="h-[0.4px] w-[100%] bg-gray-400"></div>
 
                     <div className="text-gray-600 flex items-center w-full justify-between">
@@ -2351,8 +2281,11 @@ function TripDetail({ userProfile, userTrips, trip }) {
                       </div>
 
                       <Price
-                        className="!text-base !font-bold"
-                        stayPrice={totalPrice() * Number(router.query.guests)}
+                        className="!text-sm !font-bold"
+                        stayPrice={
+                          trip.price * Number(router.query.guests) +
+                          totalPrice() * Number(router.query.non_resident)
+                        }
                       ></Price>
                     </div>
                   </div>
@@ -2402,10 +2335,40 @@ function TripDetail({ userProfile, userTrips, trip }) {
                   closeModal={() => {
                     setShowCheckoutResponseModal(false);
                   }}
-                  dialoguePanelClassName="!max-w-md !h-[400px]"
+                  dialoguePanelClassName="!max-w-md !h-[265px]"
                   title={"Thanks for booking this trip"}
                   dialogueTitleClassName="!font-bold text-xl !font-OpenSans mb-3"
-                ></Dialogue>
+                >
+                  <div>
+                    We will get back to you via your email -{" "}
+                    <span className="font-bold underline">
+                      {userProfile.email}
+                    </span>
+                    , in less than <span className="font-bold">24 hours</span>
+                  </div>
+
+                  <div className="mt-8">In the meantime,</div>
+
+                  <div className="flex gap-2 w-full">
+                    <Button
+                      onClick={() => {
+                        router.replace("/trip");
+                      }}
+                      className="flex w-[60%] mt-3 mb-3 items-center gap-1 !px-0 !py-3 font-bold !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white"
+                    >
+                      <span>Checkout other curated trips</span>
+                    </Button>
+
+                    <Button
+                      onClick={() => {
+                        router.replace("/trip/user-trips");
+                      }}
+                      className="flex w-[40%] mt-3 mb-3 items-center gap-1 !px-0 !py-3 font-bold !bg-transparent hover:!bg-gray-200 !border !border-gray-400 !text-black"
+                    >
+                      <span>View your trips</span>
+                    </Button>
+                  </div>
+                </Dialogue>
 
                 <div className="mt-8">
                   <Button
@@ -2484,7 +2447,7 @@ export async function getServerSideProps(context) {
       return {
         redirect: {
           permanent: false,
-          destination: "/login",
+          destination: "/logout",
         },
       };
     } else if (error.response.status === 404) {

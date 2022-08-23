@@ -561,6 +561,8 @@ const CartItem = ({
                   className="w-full h-full"
                   layout="fill"
                   src={mainImage.image}
+                  unoptimized={true}
+                  objectFit="cover"
                   alt="Image"
                 />
               )}
@@ -569,6 +571,8 @@ const CartItem = ({
                   className="w-full h-full"
                   layout="fill"
                   src={sortedImages[0].image}
+                  unoptimized={true}
+                  objectFit="cover"
                   alt="Image"
                 />
               )}

@@ -272,6 +272,7 @@ const Cart = ({
                 className="w-full h-full rounded-xl"
                 layout="fill"
                 src="/images/nocart-illustration.jpeg"
+                unoptimized={true}
                 alt="Image"
               ></Image>
             </div>
@@ -816,7 +817,7 @@ export async function getServerSideProps(context) {
       return {
         redirect: {
           permanent: false,
-          destination: "logout",
+          destination: "/logout",
         },
       };
     } else {

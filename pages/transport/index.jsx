@@ -1702,7 +1702,7 @@ const Transport = ({
             },
           });
         }}
-        dialoguePanelClassName="h-[85vh] !relative max-w-[600px] !top-[10%] !p-0 md:max-h-[600px]"
+        dialoguePanelClassName="h-[85vh] !relative max-w-[600px] !top-[10%] !p-0 md:max-h-[550px]"
         outsideDialogueClass="!p-3"
       >
         <Swiper
@@ -1778,15 +1778,6 @@ const Transport = ({
                       </p>
                     </div>
                   </div>
-
-                  {currentListing.driver_operates_within.length > 0 && (
-                    <h1 className="font-bold text-lg mb-2">
-                      Car operates within
-                    </h1>
-                  )}
-                  {currentListing.driver_operates_within.map((item, index) => (
-                    <ListItem key={index}>{item.city}</ListItem>
-                  ))}
 
                   {currentListing.included_in_price.length > 0 && (
                     <h1 className="font-bold text-lg mb-2 mt-4">
@@ -1914,22 +1905,6 @@ const Transport = ({
                         location={startingDestination}
                         setLocation={setStartingDestination}
                       ></SearchBar>
-
-                      <div className="mt-3 mb-3">
-                        <h1 className="font-bold mb-2">Car operates within</h1>
-                        <div className="flex flex-wrap">
-                          {currentListing.driver_operates_within.map(
-                            (location, index) => (
-                              <div
-                                key={index}
-                                className="bg-blue-500 text-sm mt-0.5 text-white px-2 py-1 mr-1 rounded-full"
-                              >
-                                {location.city}
-                              </div>
-                            )
-                          )}
-                        </div>
-                      </div>
 
                       <div className="mt-4 ml-4 relative">
                         <div className="flex gap-1 items-center">
@@ -2177,7 +2152,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           return {
             redirect: {
               permanent: false,
-              destination: "logout",
+              destination: "/logout",
             },
           };
         } else {

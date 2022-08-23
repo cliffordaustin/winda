@@ -729,14 +729,15 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
             </div>
 
             <div className="flex flex-wrap gap-1 mt-16">
-              {stay.tags.map((tag, index) => (
-                <div
-                  key={index}
-                  className="px-3 py-1 bg-blue-300 rounded-3xl text-xs capitalize"
-                >
-                  {tag}
-                </div>
-              ))}
+              {stay.tags &&
+                stay.tags.map((tag, index) => (
+                  <div
+                    key={index}
+                    className="px-3 py-1 bg-blue-300 rounded-3xl text-xs capitalize"
+                  >
+                    {tag}
+                  </div>
+                ))}
             </div>
 
             {/* about */}
@@ -3125,7 +3126,7 @@ export async function getServerSideProps(context) {
       return {
         redirect: {
           permanent: false,
-          destination: "logout",
+          destination: "/logout",
         },
       };
     } else if (error.response.status === 404) {

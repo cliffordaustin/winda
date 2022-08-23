@@ -41,6 +41,7 @@ const ImageGallery = ({ images, className = "" }) => {
             alt="Logo"
             src={mainImage.image}
             objectFit="cover"
+            unoptimized={true}
             priority
           ></Image>
         )}
@@ -50,6 +51,7 @@ const ImageGallery = ({ images, className = "" }) => {
             alt="Logo"
             src={sortedImages[0].image}
             objectFit="cover"
+            unoptimized={true}
             priority
           ></Image>
         )}
@@ -74,6 +76,7 @@ const ImageGallery = ({ images, className = "" }) => {
               layout="fill"
               alt="Logo"
               src={image}
+              unoptimized={true}
               priority
             ></Image>
           </div>
