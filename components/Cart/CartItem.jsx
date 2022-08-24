@@ -3,12 +3,12 @@ import PropTypes from "prop-types";
 
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import axios from "axios";
 import Cookies from "js-cookie";
 import ClientOnly from "../ClientOnly";
 import LoadingSpinerChase from "../ui/LoadingSpinerChase";
-import { priceConversionRateFunc } from "../../lib/PriceRate";
+
 import moment from "moment";
 
 import { getStayPrice, getActivityPrice } from "../../lib/getTotalCartPrice";
@@ -18,6 +18,7 @@ import Price from "../Stay/Price";
 
 const CartItem = ({
   stay,
+  order,
   activity,
   checkoutInfo,
   cartIndex,
@@ -59,29 +60,13 @@ const CartItem = ({
   numberOfDays,
   forOrder,
 }) => {
-  const currencyToKES = useSelector((state) => state.home.currencyToKES);
-  const activeItem = useSelector((state) => state.order.activeItem);
-  const priceConversionRate = useSelector(
-    (state) => state.stay.priceConversionRate
-  );
-
   const dispatch = useDispatch();
 
   const router = useRouter();
 
-  const [newPrice, setNewPrice] = useState(null);
-
-  const [cartLoading, setCartLoading] = useState(false);
-
-  const [cartAdded, setCartAdded] = useState(false);
-
-  const [listingIsInCart, setListingIsInCart] = useState(false);
-
   const [showPeopleBooked, setShowPeopleBooked] = useState(false);
 
   const [removeButtonLoading, setRemoveButtonLoading] = useState(false);
-
-  const [orderAgainLoading, setOrderAgainLoading] = useState(false);
 
   const price = () => {
     return stayPage && !stay.per_house
@@ -107,251 +92,6 @@ const CartItem = ({
           number_of_sessions_non_resident,
           number_of_groups_non_resident
         );
-  };
-
-  const orderAgain = async (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-
-    setOrderAgainLoading(true);
-
-    if (stayPage) {
-      await axios
-        .post(
-          `${process.env.NEXT_PUBLIC_baseURL}/stays/${stay.slug}/add-to-order/`,
-          {
-            first_name: userProfile.first_name || "",
-            last_name: userProfile.last_name || "",
-          },
-          {
-            headers: {
-              Authorization: `Token ${Cookies.get("token")}`,
-            },
-          }
-        )
-        .then((res) => {
-          router.push({
-            pathname: "/orders",
-            query: { stays_id: 0, activities_id: null },
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-          setOrderAgainLoading(false);
-        });
-    } else if (activitiesPage) {
-      await axios
-        .post(
-          `${process.env.NEXT_PUBLIC_baseURL}/activities/${activity.slug}/add-to-order/`,
-          {
-            first_name: userProfile.first_name || "",
-            last_name: userProfile.last_name || "",
-          },
-          {
-            headers: {
-              Authorization: `Token ${Cookies.get("token")}`,
-            },
-          }
-        )
-        .then((res) => {
-          router.push({
-            pathname: "/orders",
-            query: { stays_id: null, activities_id: 0 },
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-          setOrderAgainLoading(false);
-        });
-    } else if (transportPage) {
-      await axios
-        .post(
-          `${process.env.NEXT_PUBLIC_baseURL}/transport/${transport.slug}/add-to-order/`,
-          {
-            first_name: userProfile.first_name || "",
-            last_name: userProfile.last_name || "",
-            distance: transportDistance,
-            starting_point: transportStartingPoint,
-            destination: transportDestination,
-          },
-          {
-            headers: {
-              Authorization: `Token ${Cookies.get("token")}`,
-            },
-          }
-        )
-        .then((res) => {
-          router.push({
-            pathname: "/orders",
-            query: {
-              stay: "show",
-              experiences: "show",
-            },
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-          setOrderAgainLoading(false);
-        });
-    }
-  };
-
-  const addToCart = async (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-
-    const token = Cookies.get("token");
-
-    if (!listingIsInCart) {
-      setCartLoading(true);
-
-      if (stayPage) {
-        await axios
-          .post(
-            `${process.env.NEXT_PUBLIC_baseURL}/stays/${stay.slug}/add-to-cart/`,
-            {},
-            {
-              headers: {
-                Authorization: "Token " + token,
-              },
-            }
-          )
-          .then(() => {
-            setCartLoading(false);
-            setCartAdded(true);
-          })
-          .catch((err) => {
-            console.log(err.response);
-          });
-      } else if (activitiesPage) {
-        await axios
-          .post(
-            `${process.env.NEXT_PUBLIC_baseURL}/activities/${activity.slug}/add-to-cart/`,
-            {},
-            {
-              headers: {
-                Authorization: "Token " + token,
-              },
-            }
-          )
-          .then(() => {
-            setCartLoading(false);
-            setCartAdded(true);
-          })
-          .catch((err) => {
-            console.log(err.response);
-          });
-      } else if (transportPage) {
-        await axios
-          .post(
-            `${process.env.NEXT_PUBLIC_baseURL}/transport/${transport.slug}/add-to-cart/`,
-            {
-              distance: transportDistance,
-              starting_point: transportStartingPoint,
-              destination: transportDestination,
-            },
-            {
-              headers: {
-                Authorization: "Token " + token,
-              },
-            }
-          )
-          .then(() => {
-            setCartLoading(false);
-            setCartAdded(true);
-          })
-          .catch((err) => {
-            console.log(err.response);
-          });
-      }
-
-      location.reload();
-    } else if (listingIsInCart) {
-      router.push({
-        pathname: "/cart",
-      });
-    }
-  };
-
-  const itemIsInCart = async () => {
-    let exist = false;
-    let activitiesCartExist = false;
-
-    if (stayPage) {
-      const cart = await axios.get(
-        `${process.env.NEXT_PUBLIC_baseURL}/user-cart/`,
-        {
-          headers: {
-            Authorization: "Token " + Cookies.get("token"),
-          },
-        }
-      );
-
-      exist = cart.data.results.some((val) => {
-        return val.stay.slug === stay.slug;
-      });
-    } else if (activitiesPage) {
-      const activitiesCart = await axios.get(
-        `${process.env.NEXT_PUBLIC_baseURL}/user-activities-cart/`,
-        {
-          headers: {
-            Authorization: "Token " + Cookies.get("token"),
-          },
-        }
-      );
-
-      activitiesCartExist = activitiesCart.data.results.some((val) => {
-        return val.activity.slug === activity.slug;
-      });
-    } else if (transportPage) {
-      const transportCart = await axios.get(
-        `${process.env.NEXT_PUBLIC_baseURL}/user-transport-cart/`,
-        {
-          headers: {
-            Authorization: "Token " + Cookies.get("token"),
-          },
-        }
-      );
-
-      transportCartExist = transportCart.data.results.some((val) => {
-        return val.transport.slug === transport.slug;
-      });
-    }
-
-    setListingIsInCart(exist || transportCartExist);
-  };
-
-  useEffect(() => {
-    priceConversionRateFunc(dispatch);
-  }, []);
-
-  useEffect(() => {
-    if (orderSuccessfull) {
-      itemIsInCart();
-    }
-  }, []);
-
-  const setCartId = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-
-    if (stayPage) {
-      setInfoPopup(false);
-      router
-        .push({ query: { stays_id: cartIndex, activities_id: null } })
-        .then(() => {
-          setInfoPopup(true);
-        });
-    } else if (activitiesPage) {
-      setInfoPopup(false);
-      router
-        .push({ query: { activities_id: cartIndex, stays_id: null } })
-        .then(() => {
-          setInfoPopup(true);
-        });
-    }
-
-    setShowInfo(true);
   };
 
   const removeCart = async (e) => {
@@ -493,21 +233,6 @@ const CartItem = ({
     }
   };
 
-  const priceConversion = async (price) => {
-    if (price) {
-      if (currencyToKES && priceConversionRate) {
-        setNewPrice(priceConversionRate * price);
-      } else {
-        setNewPrice(price);
-      }
-    } else {
-      return null;
-    }
-  };
-
-  useEffect(() => {
-    priceConversion(price());
-  }, [price(), currencyToKES, priceConversionRate]);
   const sortedImages = stayPage
     ? stay.stay_images.sort((x, y) => y.main - x.main)
     : transportPage
@@ -586,13 +311,13 @@ const CartItem = ({
               {transportPage && (
                 <div className="flex items-center gap-2">
                   <div className="text-gray-500 w-full flex gap-[3px] lowercase">
-                    <div className="truncate w-[48%]">
+                    <div className="truncate max-w-[48%]">
                       {transport.vehicle_make}
                     </div>
                     <span className="-mt-[5px] font-bold text-lg text-black">
                       .
                     </span>
-                    <h1 className="truncate w-[48%]">
+                    <h1 className="truncate max-w-[48%]">
                       {transport.type_of_car}
                     </h1>
                   </div>
@@ -645,58 +370,6 @@ const CartItem = ({
                   </ClientOnly>
                 </div>
               </ClientOnly>
-            </div>
-
-            <div>
-              {/* {transportPage && !numberOfDays && (
-              <div className="flex mt-1">
-                <div className="w-5 h-full flex flex-col justify-center self-center">
-                  <div>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      aria-hidden="true"
-                      role="img"
-                      className="w-4 h-4"
-                      preserveAspectRatio="xMidYMid meet"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                      />
-                    </svg>
-                  </div>
-                  <div className="w-[45%] h-[15px] border-r border-gray-400"></div>
-                  <div>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      aria-hidden="true"
-                      role="img"
-                      className="w-4 h-4"
-                      preserveAspectRatio="xMidYMid meet"
-                      viewBox="0 0 32 32"
-                    >
-                      <path
-                        fill="currentColor"
-                        d="M16 18a5 5 0 1 1 5-5a5.006 5.006 0 0 1-5 5Zm0-8a3 3 0 1 0 3 3a3.003 3.003 0 0 0-3-3Z"
-                      />
-                      <path
-                        fill="currentColor"
-                        d="m16 30l-8.436-9.949a35.076 35.076 0 0 1-.348-.451A10.889 10.889 0 0 1 5 13a11 11 0 0 1 22 0a10.884 10.884 0 0 1-2.215 6.597l-.001.003s-.3.394-.345.447ZM8.812 18.395c.002 0 .234.308.287.374L16 26.908l6.91-8.15c.044-.055.278-.365.279-.366A8.901 8.901 0 0 0 25 13a9 9 0 1 0-18 0a8.905 8.905 0 0 0 1.813 5.395Z"
-                      />
-                    </svg>
-                  </div>
-                </div>
-                <div className="flex flex-col gap-2 overflow-hidden">
-                  <div className="truncate">{transportStartingPoint}</div>
-                  <div className="truncate">{transportDestination}</div>
-                </div>
-              </div>
-            )} */}
             </div>
 
             {transportPage && numberOfDays && (
@@ -785,7 +458,7 @@ const CartItem = ({
             </div>
 
             <ClientOnly>
-              {!checkoutInfo && stayPage && (
+              {stayPage && (
                 <div className="flex items-center gap-1 text-xs mt-1 font-bold truncate flex-wrap">
                   <span>
                     {moment(from_date).format("MMM DD")} -{" "}
@@ -802,7 +475,7 @@ const CartItem = ({
             </ClientOnly>
 
             <ClientOnly>
-              {!checkoutInfo && stayPage && stay.per_house && (
+              {stayPage && stay.per_house && (
                 <div className="flex items-center gap-1">
                   <div className="items-center gap-1 text-xs mt-1 font-bold truncate flex-wrap">
                     {num_of_adults > 0 && (
@@ -854,7 +527,7 @@ const CartItem = ({
                   </TopTooltip>
                 </div>
               )}
-              {!checkoutInfo && stayPage && !stay.per_house && (
+              {stayPage && !stay.per_house && (
                 <div className="flex items-center gap-1">
                   <div className="items-center gap-1 text-xs mt-1 font-bold truncate flex-wrap">
                     {num_of_adults > 0 && (
@@ -970,7 +643,7 @@ const CartItem = ({
             )}
 
             <ClientOnly>
-              {!checkoutInfo && activitiesPage && (
+              {activitiesPage && (
                 <div className="items-center gap-1 text-xs mt-1 font-bold">
                   {/* <span>{moment(from_date).format("MMM DD")}</span>
                   <span className="font-bold text-xl -mt-3">.</span> */}
@@ -1038,29 +711,13 @@ const CartItem = ({
               )}
             </ClientOnly>
 
-            {checkoutInfo && (
-              <div className="font-bold text-sm truncate mt-1">
-                Order for {orderDays} days
-              </div>
-            )}
-
             <div
               className={
                 "flex " + (itemType === "order" ? "gap-2" : "flex-col")
               }
             >
-              {checkoutInfo && (
-                <div
-                  className="text-sm w-fit bg-blue-400 bg-opacity-30 px-2 py-1 text-blue-500 font-bold p-3 rounded-md mt-2
-          "
-                  onClick={setCartId}
-                >
-                  Edit detail
-                </div>
-              )}
-
               <div className="flex gap-2">
-                {!orderSuccessfull && !forOrder && (
+                {!forOrder && (
                   <div
                     className="text-sm w-fit flex items-center bg-red-400 bg-opacity-30 px-2 py-1 text-red-500 font-bold p-3 rounded-md mt-2
           "
@@ -1097,112 +754,47 @@ const CartItem = ({
                   <span className="">View</span>
                 </div>
               </div>
-
-              {orderSuccessfull && (
-                <div
-                  className="text-sm w-fit flex items-center bg-green-500 bg-opacity-30 px-2 py-1 text-green-700 bg-primary-red-100 font-bold p-3 rounded-md mt-2
-          "
-                  onClick={orderAgain}
-                >
-                  <span className="mr-1">Order again</span>
-                  <div className={" " + (!orderAgainLoading ? "hidden" : "")}>
-                    <LoadingSpinerChase
-                      width={13}
-                      height={13}
-                      color="green"
-                    ></LoadingSpinerChase>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         </div>
       </div>
-      {stayPage && (
-        <div>
-          <div className="absolute top-1.5 left-4 z-10 capitalize px-2 rounded-md bg-blue-600 text-sm text-white">
-            {plan.toLowerCase()}
+      <ClientOnly>
+        {stayPage && !forOrder && (
+          <div>
+            <div className="absolute top-1.5 left-4 z-10 capitalize px-2 rounded-md bg-blue-600 text-sm text-white">
+              {plan && plan.toLowerCase()}
+            </div>
           </div>
+        )}
+      </ClientOnly>
+
+      {forOrder && (
+        <div>
+          {order.reviewing && (
+            <div className="absolute top-1.5 left-4 w-fit px-1 rounded-md font-bold text-sm py-0.5 bg-yellow-500">
+              Reviewing
+            </div>
+          )}
+
+          {order.email_sent && (
+            <div className="absolute top-1.5 left-4 w-fit px-1 rounded-md font-bold text-sm py-0.5 bg-yellow-500">
+              Email sent
+            </div>
+          )}
+
+          {order.cancelled && (
+            <div className="absolute top-1.5 left-4 text-white  w-fit px-1 rounded-md font-bold text-sm py-0.5 bg-red-500">
+              Cancelled
+            </div>
+          )}
+
+          {order.paid && (
+            <div className="absolute top-1.5 left-4 w-fit px-1 rounded-md font-bold text-sm py-0.5 bg-green-500">
+              Paid
+            </div>
+          )}
         </div>
       )}
-      <div onClick={addToCart}>
-        {orderSuccessfull && (
-          <div className="p-2 bg-blue-100 cursor-pointer absolute top-1 right-1 flex items-center justify-center rounded-full">
-            {!cartLoading && !cartAdded && (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 cursor-pointer"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                />
-              </svg>
-            )}
-            {!cartLoading && cartAdded && (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 cursor-pointer"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            )}
-            {cartLoading && (
-              <LoadingSpinerChase
-                width={15}
-                height={15}
-                color="#000"
-              ></LoadingSpinerChase>
-            )}
-          </div>
-        )}
-
-        {orderSuccessfull && !listingIsInCart && !cartLoading && !cartAdded && (
-          <div className="absolute top-1.5 right-1.5 cursor-pointer">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 cursor-pointer"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </div>
-        )}
-
-        {orderSuccessfull && listingIsInCart && !cartLoading && !cartAdded && (
-          <div className="absolute top-1.5 right-1.5 cursor-pointer">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 cursor-pointer text-blue-900"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-              <path
-                fillRule="evenodd"
-                d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </div>
-        )}
-      </div>
     </div>
   );
 };

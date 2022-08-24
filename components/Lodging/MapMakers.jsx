@@ -114,7 +114,7 @@ const MapMakers = ({ stay }) => {
             }
           >
             <Price
-              className="text-white font-semibold text-sm font-OpenSans"
+              className="text-white !font-semibold !text-sm"
               stayPrice={activeStayPrice()}
             ></Price>
             <AnimatePresence exitBeforeEnter>

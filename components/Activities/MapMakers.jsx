@@ -90,7 +90,7 @@ const MapMakers = ({ activity }) => {
           >
             {activeActivity.price_non_resident ? (
               <Price
-                className="text-white font-semibold text-sm font-OpenSans"
+                className="text-white !font-semibold !text-sm font-OpenSans"
                 stayPrice={activeActivity.price_non_resident}
               ></Price>
             ) : null}

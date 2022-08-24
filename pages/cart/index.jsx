@@ -198,6 +198,13 @@ const Cart = ({
           {
             first_name: userProfile.first_name || "",
             last_name: userProfile.last_name || "",
+            from_date: item.from_date,
+            to_date: item.to_date,
+            num_of_adults: item.num_of_adults,
+            num_of_children: item.num_of_children,
+            num_of_adults_non_resident: item.num_of_adults_non_resident,
+            num_of_children_non_resident: item.num_of_children_non_resident,
+            plan: item.plan,
           },
           {
             headers: {
@@ -206,7 +213,6 @@ const Cart = ({
           }
         )
         .then((res) => {
-          console.log("Responsee ", res.data);
           axios.delete(
             `${process.env.NEXT_PUBLIC_baseURL}/user-cart/${item.id}/`,
             {
@@ -220,9 +226,96 @@ const Cart = ({
           setLoading(false);
         });
     }
+    for (const item of allItemsInActivityCart) {
+      await axios
+        .post(
+          `${process.env.NEXT_PUBLIC_baseURL}/activities/${item.activity.slug}/add-to-order/`,
+          {
+            first_name: userProfile.first_name || "",
+            last_name: userProfile.last_name || "",
+            from_date: item.from_date,
+            number_of_people: item.number_of_people,
+            number_of_people_non_resident: item.number_of_people_non_resident,
+            number_of_sessions: item.number_of_sessions,
+            number_of_sessions_non_resident:
+              item.number_of_sessions_non_resident,
+            number_of_groups: item.number_of_groups,
+            number_of_groups_non_resident: item.number_of_groups_non_resident,
+            pricing_type: item.pricing_type,
+          },
+          {
+            headers: {
+              Authorization: `Token ${Cookies.get("token")}`,
+            },
+          }
+        )
+        .then((res) => {
+          axios.delete(
+            `${process.env.NEXT_PUBLIC_baseURL}/user-activities-cart/${item.id}/`,
+            {
+              headers: {
+                Authorization: `Token ${Cookies.get("token")}`,
+              },
+            }
+          );
+        })
+        .catch((err) => {
+          setLoading(false);
+        });
+    }
+    for (const item of allItemsInTransportCart) {
+      await axios
+        .post(
+          `${process.env.NEXT_PUBLIC_baseURL}/transport/${item.transport.slug}/add-to-order/`,
+          {
+            first_name: userProfile.first_name || "",
+            last_name: userProfile.last_name || "",
+            starting_point: item.starting_point,
+            user_need_a_driver: item.user_need_a_driver,
+            from_date: item.from_date,
+            number_of_days: item.number_of_days,
+          },
+          {
+            headers: {
+              Authorization: `Token ${Cookies.get("token")}`,
+            },
+          }
+        )
+        .then((res) => {
+          axios.delete(
+            `${process.env.NEXT_PUBLIC_baseURL}/user-transport-cart/${item.id}/`,
+            {
+              headers: {
+                Authorization: `Token ${Cookies.get("token")}`,
+              },
+            }
+          );
+        })
+        .catch((err) => {
+          setLoading(false);
+        });
+    }
+    for (const item of flightCart) {
+      await axios
+        .put(
+          `${process.env.NEXT_PUBLIC_baseURL}/flights/${item.slug}/`,
+          {
+            user_has_ordered: true,
+          },
+          {
+            headers: {
+              Authorization: `Token ${Cookies.get("token")}`,
+            },
+          }
+        )
+        .then(() => {})
+        .catch((err) => {
+          setLoading(false);
+        });
+    }
 
     router.push({
-      pathname: "/orders/",
+      pathname: "/orders",
       query: {
         show_checkout_message: "1",
       },
@@ -701,7 +794,6 @@ export async function getServerSideProps(context) {
           userProfile: response.data[0],
           cart: newCart,
           activitiesCart: newActivitiesCart,
-          flightCart: [],
           allItemsInActivityCart: activitiesCart.data.results,
           allItemsInCart: data.results,
           transportCart: newTransportCart,

@@ -7,7 +7,7 @@ import Price from "../../components/Stay/Price";
 import LoadingSpinerChase from "../ui/LoadingSpinerChase";
 import { checkFlightPrice } from "../../lib/flightLocations";
 
-function FlightItem({ flight }) {
+function FlightItem({ flight, forOrder }) {
   const [removeButtonLoading, setRemoveButtonLoading] = useState(false);
 
   const removeCart = async () => {
@@ -70,6 +70,34 @@ function FlightItem({ flight }) {
           </div>
         </div>
       </div>
+
+      {forOrder && (
+        <div>
+          {flight.reviewing && (
+            <div className="absolute top-1.5 left-4 w-fit px-1 rounded-md font-bold text-sm py-0.5 bg-yellow-500">
+              Reviewing
+            </div>
+          )}
+
+          {flight.email_sent && (
+            <div className="absolute top-1.5 left-4 w-fit px-1 rounded-md font-bold text-sm py-0.5 bg-yellow-500">
+              Email sent
+            </div>
+          )}
+
+          {flight.cancelled && (
+            <div className="absolute top-1.5 left-4 text-white  w-fit px-1 rounded-md font-bold text-sm py-0.5 bg-red-500">
+              Cancelled
+            </div>
+          )}
+
+          {flight.paid && (
+            <div className="absolute top-1.5 left-4 w-fit px-1 rounded-md font-bold text-sm py-0.5 bg-green-500">
+              Paid
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

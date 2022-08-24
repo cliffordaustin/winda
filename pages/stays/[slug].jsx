@@ -385,7 +385,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
     value: "Standard",
   });
 
-  const [numOfAdults, setNumOfAdults] = useState(0);
+  const [numOfAdults, setNumOfAdults] = useState(stay.per_house ? 1 : 0);
 
   const [numOfAdultsInHome, setNumOfAdultsInHome] = useState(1);
 
@@ -404,33 +404,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
   const [showDateForMobilePopup, setShowDateForMobilePopup] = useState(true);
 
   const [showGuestForMobilePopup, setShowGuestForMobilePopup] = useState(false);
-
-  // const maxGuests =
-  //   currentTypeOfLodge.value === "Standard"
-  //     ? stay.standard_capacity
-  //     : currentTypeOfLodge.value === "Deluxe"
-  //     ? stay.deluxe_capacity
-  //     : currentTypeOfLodge.value === "Super Deluxe"
-  //     ? stay.super_deluxe_capacity
-  //     : currentTypeOfLodge.value === "Studio"
-  //     ? stay.studio_capacity
-  //     : currentTypeOfLodge.value === "Double Room"
-  //     ? stay.double_room_capacity
-  //     : currentTypeOfLodge.value === "Single Room"
-  //     ? stay.single_room_capacity
-  //     : currentTypeOfLodge.value === "Tripple Room"
-  //     ? stay.tripple_room_capacity
-  //     : currentTypeOfLodge.value === "Quad Room"
-  //     ? stay.quad_room_capacity
-  //     : currentTypeOfLodge.value === "Queen Room"
-  //     ? stay.queen_room_capacity
-  //     : currentTypeOfLodge.value === "King Room"
-  //     ? stay.king_room_capacity
-  //     : currentTypeOfLodge.value === "Twin Room"
-  //     ? stay.twin_room_capacity
-  //     : currentTypeOfLodge.value === "Family Room"
-  //     ? stay.family_room_capacity
-  //     : "";
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [showMoreExperiences, setShowMoreExperiences] = useState(false);
@@ -1086,524 +1059,438 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                 className="md:!hidden overflow-y-auto"
                 title="Book this stay"
               >
-                {!stay.per_house && (
-                  <div className="px-2 mt-2">
-                    {!showDateForMobilePopup && (
-                      <div
-                        onClick={() => {
-                          setShowDateForMobilePopup(true);
-                          setShowGuestForMobilePopup(false);
-                        }}
-                        className="cursor-pointer flex items-center justify-between px-4 py-4 rounded-2xl mt-6 border border-gray-200"
-                      >
-                        <div className="font-bold">Date</div>
-                        {addToCartDate &&
-                          addToCartDate.from &&
-                          addToCartDate.to && (
-                            <span className="text-sm font-bold mt-1.5">
-                              {moment(addToCartDate.from).format("MMM DD")} -{" "}
-                              {moment(addToCartDate.to).format("MMM DD")}
-                            </span>
-                          )}
-                        {((addToCartDate && !addToCartDate.to) ||
-                          !addToCartDate) && (
-                          <div className="text-sm text-gray-500">
-                            Add a date +
-                          </div>
-                        )}
-                      </div>
-                    )}
+                <div className="px-2 mt-2">
+                  {!showDateForMobilePopup && (
+                    <div
+                      onClick={() => {
+                        setShowDateForMobilePopup(true);
+                        setShowGuestForMobilePopup(false);
+                      }}
+                      className="cursor-pointer flex items-center justify-between px-4 py-4 rounded-2xl mt-6 border border-gray-200"
+                    >
+                      <div className="font-bold">Date</div>
+                      {addToCartDate && addToCartDate.from && addToCartDate.to && (
+                        <span className="text-sm font-bold mt-1.5">
+                          {moment(addToCartDate.from).format("MMM DD")} -{" "}
+                          {moment(addToCartDate.to).format("MMM DD")}
+                        </span>
+                      )}
+                      {((addToCartDate && !addToCartDate.to) ||
+                        !addToCartDate) && (
+                        <div className="text-sm text-gray-500">
+                          Add a date +
+                        </div>
+                      )}
+                    </div>
+                  )}
 
-                    {showDateForMobilePopup && (
-                      <div
-                        className={
-                          " h-full bg-white py-2 border border-gray-200 rounded-2xl w-full mx-auto xl:ml-2 order-1 md:order-2 "
-                        }
-                      >
-                        {addToCartDate &&
-                          !addToCartDate.from &&
-                          !addToCartDate.to && (
-                            <div className="text-lg ml-4 font-bold">
-                              Select a date
-                            </div>
-                          )}
-                        {!addToCartDate && (
+                  {showDateForMobilePopup && (
+                    <div
+                      className={
+                        " h-full bg-white py-2 border border-gray-200 rounded-2xl w-full mx-auto xl:ml-2 order-1 md:order-2 "
+                      }
+                    >
+                      {addToCartDate &&
+                        !addToCartDate.from &&
+                        !addToCartDate.to && (
                           <div className="text-lg ml-4 font-bold">
                             Select a date
                           </div>
                         )}
-                        {addToCartDate &&
-                          addToCartDate.from &&
-                          !addToCartDate.to && (
-                            <div className="text-lg ml-4 font-bold">
-                              Select checkout date
-                            </div>
-                          )}
-                        <DatePicker
-                          setDate={setAddToCartDate}
-                          date={addToCartDate}
-                          disableDate={new Date()}
-                        ></DatePicker>
-                        {addToCartDate &&
-                          (addToCartDate.from || addToCartDate.to) && (
-                            <div
-                              className="mb-2 cursor-pointer text-sm ml-4 underline"
-                              onClick={() => {
-                                setAddToCartDate({
-                                  ...addToCartDate,
-                                  from: "",
-                                  to: "",
-                                });
-                              }}
-                            >
-                              clear date
-                            </div>
-                          )}
-                      </div>
-                    )}
-
-                    {!showGuestForMobilePopup && (
-                      <div
-                        onClick={() => {
-                          setShowGuestForMobilePopup(true);
-                          setShowDateForMobilePopup(false);
-                        }}
-                        className="flex cursor-pointer items-center justify-between px-4 py-4 rounded-2xl mt-6 border border-gray-200"
-                      >
-                        <div className="font-bold">Guests</div>
-                        <div className="text-gray-600 text-sm  flex flex-wrap self-end justify-end">
-                          {numOfAdultsNonResident > 0 && (
-                            <>
-                              <span>
-                                {numOfAdultsNonResident}{" "}
-                                {numOfAdultsNonResident > 1
-                                  ? "Non-Resident Adults"
-                                  : "Non-Resident Adult"}
-                              </span>
-                            </>
-                          )}
-                          {numOfAdults > 0 && (
-                            <>
-                              <span className="font-bold mx-0.5 ">,</span>
-                              <span>
-                                {numOfAdults}{" "}
-                                {numOfAdults > 1
-                                  ? "Resident Adults"
-                                  : "Resident Adult"}
-                              </span>
-                            </>
-                          )}
-                          {numOfChildren > 0 && (
-                            <>
-                              <span className="font-bold mx-0.5 ">,</span>
-                              <span>
-                                {numOfChildren}{" "}
-                                {numOfChildren > 1
-                                  ? "Resident Children"
-                                  : "Resident Child"}
-                              </span>
-                            </>
-                          )}
-
-                          {numOfChildrenNonResident > 0 && (
-                            <>
-                              <span className="font-bold mx-0.5 ">,</span>
-                              <span>
-                                {numOfChildrenNonResident}{" "}
-                                {numOfChildrenNonResident > 1
-                                  ? "Non-Resident Children"
-                                  : "Non-Resident Child"}
-                              </span>
-                            </>
-                          )}
+                      {!addToCartDate && (
+                        <div className="text-lg ml-4 font-bold">
+                          Select a date
                         </div>
-                      </div>
-                    )}
-
-                    {showGuestForMobilePopup && (
-                      <div className="px-4 mt-4 py-4 bg-white border border-gray-200 rounded-2xl w-full">
-                        <div>
-                          <Select
-                            defaultValue={currentTypeOfLodge}
-                            onChange={(value) => {
-                              setCurrentTypeOfLodge(value);
-                              setNumOfAdults(1);
-                              setNumOfChildren(0);
-                            }}
-                            className={
-                              "text-sm outline-none border border-gray-500 "
-                            }
-                            instanceId={typeOfLodge}
-                            placeholder="Type of room"
-                            options={typeOfLodge}
-                            isSearchable={false}
-                          />
-                        </div>
-
-                        {currentTypeOfLodge.value === "Standard" && (
-                          <div className="text-sm text-gray-500 mt-2">
-                            This is the perfect room for you if you are looking
-                            for a simple, clean, and affordable room.
+                      )}
+                      {addToCartDate &&
+                        addToCartDate.from &&
+                        !addToCartDate.to && (
+                          <div className="text-lg ml-4 font-bold">
+                            Select checkout date
                           </div>
                         )}
-
-                        {currentTypeOfLodge.value === "Emperor Suite Room" && (
-                          <div className="text-sm text-gray-500 mt-2">
-                            This is the perfect room for you if you are looking
-                            for the very best and well decorated room this place
-                            has to offer
-                          </div>
-                        )}
-
-                        {currentTypeOfLodge.value ===
-                          "Presidential Suite Room" && (
-                          <div className="text-sm text-gray-500 mt-2">
-                            This is the perfect room for you if you are looking
-                            for the very best and well decorated room this place
-                            has to offer
-                          </div>
-                        )}
-                        {currentTypeOfLodge.value ===
-                          "Executive Suite Room" && (
-                          <div className="text-sm text-gray-500 mt-2">
-                            This is the perfect room for you if you are looking
-                            for the very best and well decorated room this place
-                            has to offer
-                          </div>
-                        )}
-
-                        {currentTypeOfLodge.value === "Deluxe" && (
-                          <div className="text-sm text-gray-500 mt-2">
-                            This is the perfect room for you if you are looking
-                            for the best this place has to offer.
-                          </div>
-                        )}
-
-                        {currentTypeOfLodge.value === "Family Room" && (
-                          <div className="text-sm text-gray-500 mt-2">
-                            If you just want to spend sometime with the family,
-                            this is the room for you.
-                          </div>
-                        )}
-
-                        <div>
-                          <div className="flex justify-between mt-6">
-                            <div className="flex gap-1 text-sm text-gray-600">
-                              <span>
-                                {numOfAdultsNonResident}{" "}
-                                {numOfAdultsNonResident > 1
-                                  ? "Non-Residents Adult"
-                                  : "Non-Resident Adult"}
-                              </span>
-                              <span>(18+)</span>
-                            </div>
-
-                            <div className="flex gap-3 items-center">
-                              <div
-                                onClick={() => {
-                                  if (
-                                    (numOfAdultsNonResident > 1 ||
-                                      numOfAdults > 0) &&
-                                    numOfAdultsNonResident > 0
-                                  ) {
-                                    setNumOfAdultsNonResident(
-                                      numOfAdultsNonResident - 1
-                                    );
-                                  }
-                                }}
-                                className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
-                              >
-                                -
-                              </div>
-
-                              <div
-                                onClick={() => {
-                                  setNumOfAdultsNonResident(
-                                    numOfAdultsNonResident + 1
-                                  );
-                                }}
-                                className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
-                              >
-                                +
-                              </div>
-                            </div>
-                          </div>
-
-                          {stay.conservation_or_park &&
-                            stay.conservation_or_park_price_non_resident && (
-                              <div className="text-sm mt-1 underline">
-                                Park/Conservation fees for{" "}
-                                <span className="font-bold">each</span>{" "}
-                                non-resident adult costs{" "}
-                                <Price
-                                  stayPrice={
-                                    stay.conservation_or_park_price_non_resident
-                                  }
-                                  className="text-sm inline font-bold"
-                                ></Price>
-                              </div>
-                            )}
-                        </div>
-
-                        <div>
-                          <div className="flex justify-between mt-6">
-                            <div className="flex gap-1 text-sm text-gray-600">
-                              <span>
-                                {numOfAdults}{" "}
-                                {numOfAdults > 1
-                                  ? "Residents Adult"
-                                  : "Resident Adult"}
-                              </span>
-                              <span>(18+)</span>
-                            </div>
-
-                            <div className="flex gap-3 items-center">
-                              <div
-                                onClick={() => {
-                                  if (
-                                    (numOfAdults > 1 ||
-                                      numOfAdultsNonResident > 0) &&
-                                    numOfAdults > 0
-                                  ) {
-                                    setNumOfAdults(numOfAdults - 1);
-                                  }
-                                }}
-                                className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
-                              >
-                                -
-                              </div>
-
-                              <div
-                                onClick={() => {
-                                  setNumOfAdults(numOfAdults + 1);
-                                }}
-                                className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
-                              >
-                                +
-                              </div>
-                            </div>
-                          </div>
-
-                          {stay.conservation_or_park &&
-                            stay.conservation_or_park_price && (
-                              <div className="text-sm underline mt-1">
-                                Park/Conservation fees for{" "}
-                                <span className="font-bold">each</span> resident
-                                adult costs{" "}
-                                <Price
-                                  stayPrice={stay.conservation_or_park_price}
-                                  className="text-sm inline font-bold"
-                                ></Price>
-                              </div>
-                            )}
-                        </div>
-
-                        <div>
-                          <div className="flex justify-between mt-6">
-                            <div className="flex gap-1 text-sm text-gray-600">
-                              <span>
-                                {numOfChildrenNonResident}{" "}
-                                {numOfChildrenNonResident > 1
-                                  ? "Non-Resident Children"
-                                  : "Non-Resident Child"}
-                              </span>
-                              <span>(0 - 17)</span>
-                            </div>
-
-                            <div className="flex gap-3 items-center">
-                              <div
-                                onClick={() => {
-                                  if (numOfChildrenNonResident > 0) {
-                                    setNumOfChildrenNonResident(
-                                      numOfChildrenNonResident - 1
-                                    );
-                                  }
-                                }}
-                                className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
-                              >
-                                -
-                              </div>
-
-                              <div
-                                onClick={() => {
-                                  setNumOfChildrenNonResident(
-                                    numOfChildrenNonResident + 1
-                                  );
-                                }}
-                                className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
-                              >
-                                +
-                              </div>
-                            </div>
-                          </div>
-
-                          {stay.conservation_or_park &&
-                            stay.conservation_or_park_children_price_non_resident && (
-                              <div className="text-sm mt-1 underline">
-                                Park/Conservation fees for{" "}
-                                <span className="font-bold">each</span>{" "}
-                                non-resident child costs{" "}
-                                <Price
-                                  stayPrice={
-                                    stay.conservation_or_park_children_price_non_resident
-                                  }
-                                  className="text-sm inline font-bold"
-                                ></Price>
-                              </div>
-                            )}
-                        </div>
-
-                        <div>
-                          <div className="flex justify-between mt-6">
-                            <div className="flex gap-1 text-sm text-gray-600">
-                              <span>
-                                {numOfChildren}{" "}
-                                {numOfChildren > 1
-                                  ? "Resident Children"
-                                  : "Resident Child"}
-                              </span>
-                              <span>(0 - 17)</span>
-                            </div>
-
-                            <div className="flex gap-3 items-center">
-                              <div
-                                onClick={() => {
-                                  if (numOfChildren > 0) {
-                                    setNumOfChildren(numOfChildren - 1);
-                                  }
-                                }}
-                                className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
-                              >
-                                -
-                              </div>
-
-                              <div
-                                onClick={() => {
-                                  setNumOfChildren(numOfChildren + 1);
-                                }}
-                                className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
-                              >
-                                +
-                              </div>
-                            </div>
-                          </div>
-                          {stay.conservation_or_park &&
-                            stay.conservation_or_park_children_price && (
-                              <div className="text-sm mt-1 underline">
-                                Park/Conservation fees for{" "}
-                                <span className="font-bold">each</span> resident
-                                child costs{" "}
-                                <Price
-                                  stayPrice={
-                                    stay.conservation_or_park_children_price
-                                  }
-                                  className="text-sm inline font-bold"
-                                ></Price>
-                              </div>
-                            )}
-                        </div>
-
-                        {(numOfAdults > 1 ||
-                          numOfChildren > 0 ||
-                          numOfAdultsNonResident > 0 ||
-                          numOfChildrenNonResident > 0) && (
+                      <DatePicker
+                        setDate={setAddToCartDate}
+                        date={addToCartDate}
+                        disableDate={new Date()}
+                      ></DatePicker>
+                      {addToCartDate &&
+                        (addToCartDate.from || addToCartDate.to) && (
                           <div
-                            className="mt-2 cursor-pointer text-sm underline"
+                            className="mb-2 cursor-pointer text-sm ml-4 underline"
                             onClick={() => {
-                              setNumOfAdults(1);
-                              setNumOfChildren(0);
-                              setNumOfAdultsNonResident(0);
-                              setNumOfChildrenNonResident(0);
+                              setAddToCartDate({
+                                ...addToCartDate,
+                                from: "",
+                                to: "",
+                              });
                             }}
                           >
-                            clear data
+                            clear date
                           </div>
                         )}
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {stay.per_house && (
-                  <div>
-                    <div className="flex items-center mb-4 text-sm gap-2 text-gray-600">
-                      <Icon icon="akar-icons:people-group" />
-                      <span>
-                        Maximum number of guests allowed is{" "}
-                        <span className="font-bold">{stay.capacity}</span>
-                      </span>
                     </div>
-                    <div className="flex justify-between mt-2">
-                      <div className="flex gap-1 text-sm text-gray-600">
-                        <span>
-                          {numOfAdults} {numOfAdults > 1 ? "Adults" : "Adult"}
-                        </span>
-                        <span>(18+)</span>
-                      </div>
+                  )}
 
-                      <div className="flex gap-3 items-center">
-                        <div
-                          onClick={() => {
-                            if (
-                              (numOfAdults > 1 || numOfAdults > 0) &&
-                              numOfAdults > 0
-                            ) {
-                              setNumOfAdults(numOfAdults - 1);
-                            }
-                          }}
-                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
-                        >
-                          -
-                        </div>
+                  {!showGuestForMobilePopup && (
+                    <div
+                      onClick={() => {
+                        setShowGuestForMobilePopup(true);
+                        setShowDateForMobilePopup(false);
+                      }}
+                      className="flex cursor-pointer items-center justify-between px-4 py-4 rounded-2xl mt-6 border border-gray-200"
+                    >
+                      <div className="font-bold">Guests</div>
+                      <div className="text-gray-600 text-sm  flex flex-wrap self-end justify-end">
+                        {numOfAdultsNonResident > 0 && (
+                          <>
+                            <span>
+                              {numOfAdultsNonResident}{" "}
+                              {numOfAdultsNonResident > 1
+                                ? "Non-Resident Adults"
+                                : "Non-Resident Adult"}
+                            </span>
+                          </>
+                        )}
+                        {numOfAdults > 0 && (
+                          <>
+                            <span className="font-bold mx-0.5 ">,</span>
+                            <span>
+                              {numOfAdults}{" "}
+                              {numOfAdults > 1
+                                ? "Resident Adults"
+                                : "Resident Adult"}
+                            </span>
+                          </>
+                        )}
+                        {numOfChildren > 0 && (
+                          <>
+                            <span className="font-bold mx-0.5 ">,</span>
+                            <span>
+                              {numOfChildren}{" "}
+                              {numOfChildren > 1
+                                ? "Resident Children"
+                                : "Resident Child"}
+                            </span>
+                          </>
+                        )}
 
-                        <div
-                          onClick={() => {
-                            if (numOfAdults + numOfChildren < stay.capacity) {
-                              setNumOfAdults(numOfAdults + 1);
-                            }
-                          }}
-                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
-                        >
-                          +
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex justify-between mt-6">
-                      <div className="flex gap-1 text-sm text-gray-600">
-                        <span>
-                          {numOfChildren}{" "}
-                          {numOfChildren > 1 ? "Children" : "Child"}
-                        </span>
-                        <span>(0 - 17)</span>
-                      </div>
-
-                      <div className="flex gap-3 items-center">
-                        <div
-                          onClick={() => {
-                            if (numOfChildren > 0) {
-                              setNumOfChildren(numOfChildren - 1);
-                            }
-                          }}
-                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
-                        >
-                          -
-                        </div>
-
-                        <div
-                          onClick={() => {
-                            if (numOfAdults + numOfChildren < stay.capacity) {
-                              setNumOfChildren(numOfChildren + 1);
-                            }
-                          }}
-                          className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
-                        >
-                          +
-                        </div>
+                        {numOfChildrenNonResident > 0 && (
+                          <>
+                            <span className="font-bold mx-0.5 ">,</span>
+                            <span>
+                              {numOfChildrenNonResident}{" "}
+                              {numOfChildrenNonResident > 1
+                                ? "Non-Resident Children"
+                                : "Non-Resident Child"}
+                            </span>
+                          </>
+                        )}
                       </div>
                     </div>
-                  </div>
-                )}
+                  )}
+
+                  {showGuestForMobilePopup && (
+                    <div className="px-4 mt-4 py-4 bg-white border border-gray-200 rounded-2xl w-full">
+                      <div>
+                        <Select
+                          defaultValue={currentTypeOfLodge}
+                          onChange={(value) => {
+                            setCurrentTypeOfLodge(value);
+                            setNumOfAdults(1);
+                            setNumOfChildren(0);
+                          }}
+                          className={
+                            "text-sm outline-none border border-gray-500 "
+                          }
+                          instanceId={typeOfLodge}
+                          placeholder="Type of room"
+                          options={typeOfLodge}
+                          isSearchable={false}
+                        />
+                      </div>
+
+                      {currentTypeOfLodge.value === "Standard" && (
+                        <div className="text-sm text-gray-500 mt-2">
+                          This is the perfect room for you if you are looking
+                          for a simple, clean, and affordable room.
+                        </div>
+                      )}
+
+                      {currentTypeOfLodge.value === "Emperor Suite Room" && (
+                        <div className="text-sm text-gray-500 mt-2">
+                          This is the perfect room for you if you are looking
+                          for the very best and well decorated room this place
+                          has to offer
+                        </div>
+                      )}
+
+                      {currentTypeOfLodge.value ===
+                        "Presidential Suite Room" && (
+                        <div className="text-sm text-gray-500 mt-2">
+                          This is the perfect room for you if you are looking
+                          for the very best and well decorated room this place
+                          has to offer
+                        </div>
+                      )}
+                      {currentTypeOfLodge.value === "Executive Suite Room" && (
+                        <div className="text-sm text-gray-500 mt-2">
+                          This is the perfect room for you if you are looking
+                          for the very best and well decorated room this place
+                          has to offer
+                        </div>
+                      )}
+
+                      {currentTypeOfLodge.value === "Deluxe" && (
+                        <div className="text-sm text-gray-500 mt-2">
+                          This is the perfect room for you if you are looking
+                          for the best this place has to offer.
+                        </div>
+                      )}
+
+                      {currentTypeOfLodge.value === "Family Room" && (
+                        <div className="text-sm text-gray-500 mt-2">
+                          If you just want to spend sometime with the family,
+                          this is the room for you.
+                        </div>
+                      )}
+
+                      <div>
+                        <div className="flex justify-between mt-6">
+                          <div className="flex gap-1 text-sm text-gray-600">
+                            <span>
+                              {numOfAdultsNonResident}{" "}
+                              {numOfAdultsNonResident > 1
+                                ? "Non-Residents Adult"
+                                : "Non-Resident Adult"}
+                            </span>
+                            <span>(18+)</span>
+                          </div>
+
+                          <div className="flex gap-3 items-center">
+                            <div
+                              onClick={() => {
+                                if (
+                                  (numOfAdultsNonResident > 1 ||
+                                    numOfAdults > 0) &&
+                                  numOfAdultsNonResident > 0
+                                ) {
+                                  setNumOfAdultsNonResident(
+                                    numOfAdultsNonResident - 1
+                                  );
+                                }
+                              }}
+                              className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
+                            >
+                              -
+                            </div>
+
+                            <div
+                              onClick={() => {
+                                setNumOfAdultsNonResident(
+                                  numOfAdultsNonResident + 1
+                                );
+                              }}
+                              className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
+                            >
+                              +
+                            </div>
+                          </div>
+                        </div>
+
+                        {stay.conservation_or_park &&
+                          stay.conservation_or_park_price_non_resident && (
+                            <div className="text-sm mt-1 underline">
+                              Park/Conservation fees for{" "}
+                              <span className="font-bold">each</span>{" "}
+                              non-resident adult costs{" "}
+                              <Price
+                                stayPrice={
+                                  stay.conservation_or_park_price_non_resident
+                                }
+                                className="!text-sm inline"
+                              ></Price>
+                            </div>
+                          )}
+                      </div>
+
+                      <div>
+                        <div className="flex justify-between mt-6">
+                          <div className="flex gap-1 text-sm text-gray-600">
+                            <span>
+                              {numOfAdults}{" "}
+                              {numOfAdults > 1
+                                ? "Residents Adult"
+                                : "Resident Adult"}
+                            </span>
+                            <span>(18+)</span>
+                          </div>
+
+                          <div className="flex gap-3 items-center">
+                            <div
+                              onClick={() => {
+                                if (
+                                  (numOfAdults > 1 ||
+                                    numOfAdultsNonResident > 0) &&
+                                  numOfAdults > 0
+                                ) {
+                                  setNumOfAdults(numOfAdults - 1);
+                                }
+                              }}
+                              className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
+                            >
+                              -
+                            </div>
+
+                            <div
+                              onClick={() => {
+                                setNumOfAdults(numOfAdults + 1);
+                              }}
+                              className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
+                            >
+                              +
+                            </div>
+                          </div>
+                        </div>
+
+                        {stay.conservation_or_park &&
+                          stay.conservation_or_park_price && (
+                            <div className="text-sm underline mt-1">
+                              Park/Conservation fees for{" "}
+                              <span className="font-bold">each</span> resident
+                              adult costs{" "}
+                              <Price
+                                stayPrice={stay.conservation_or_park_price}
+                                className="!text-sm inline"
+                              ></Price>
+                            </div>
+                          )}
+                      </div>
+
+                      <div>
+                        <div className="flex justify-between mt-6">
+                          <div className="flex gap-1 text-sm text-gray-600">
+                            <span>
+                              {numOfChildrenNonResident}{" "}
+                              {numOfChildrenNonResident > 1
+                                ? "Non-Resident Children"
+                                : "Non-Resident Child"}
+                            </span>
+                            <span>(0 - 17)</span>
+                          </div>
+
+                          <div className="flex gap-3 items-center">
+                            <div
+                              onClick={() => {
+                                if (numOfChildrenNonResident > 0) {
+                                  setNumOfChildrenNonResident(
+                                    numOfChildrenNonResident - 1
+                                  );
+                                }
+                              }}
+                              className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
+                            >
+                              -
+                            </div>
+
+                            <div
+                              onClick={() => {
+                                setNumOfChildrenNonResident(
+                                  numOfChildrenNonResident + 1
+                                );
+                              }}
+                              className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
+                            >
+                              +
+                            </div>
+                          </div>
+                        </div>
+
+                        {stay.conservation_or_park &&
+                          stay.conservation_or_park_children_price_non_resident && (
+                            <div className="text-sm mt-1 underline">
+                              Park/Conservation fees for{" "}
+                              <span className="font-bold">each</span>{" "}
+                              non-resident child costs{" "}
+                              <Price
+                                stayPrice={
+                                  stay.conservation_or_park_children_price_non_resident
+                                }
+                                className="!text-sm inline"
+                              ></Price>
+                            </div>
+                          )}
+                      </div>
+
+                      <div>
+                        <div className="flex justify-between mt-6">
+                          <div className="flex gap-1 text-sm text-gray-600">
+                            <span>
+                              {numOfChildren}{" "}
+                              {numOfChildren > 1
+                                ? "Resident Children"
+                                : "Resident Child"}
+                            </span>
+                            <span>(0 - 17)</span>
+                          </div>
+
+                          <div className="flex gap-3 items-center">
+                            <div
+                              onClick={() => {
+                                if (numOfChildren > 0) {
+                                  setNumOfChildren(numOfChildren - 1);
+                                }
+                              }}
+                              className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center  bg-white shadow-lg text-gray-600"
+                            >
+                              -
+                            </div>
+
+                            <div
+                              onClick={() => {
+                                setNumOfChildren(numOfChildren + 1);
+                              }}
+                              className="w-8 h-8 rounded-full flex items-center cursor-pointer justify-center bg-white shadow-lg text-gray-600"
+                            >
+                              +
+                            </div>
+                          </div>
+                        </div>
+                        {stay.conservation_or_park &&
+                          stay.conservation_or_park_children_price && (
+                            <div className="text-sm mt-1 underline">
+                              Park/Conservation fees for{" "}
+                              <span className="font-bold">each</span> resident
+                              child costs{" "}
+                              <Price
+                                stayPrice={
+                                  stay.conservation_or_park_children_price
+                                }
+                                className="!text-sm inline"
+                              ></Price>
+                            </div>
+                          )}
+                      </div>
+
+                      {(numOfAdults > 1 ||
+                        numOfChildren > 0 ||
+                        numOfAdultsNonResident > 0 ||
+                        numOfChildrenNonResident > 0) && (
+                        <div
+                          className="mt-2 cursor-pointer text-sm underline"
+                          onClick={() => {
+                            setNumOfAdults(1);
+                            setNumOfChildren(0);
+                            setNumOfAdultsNonResident(0);
+                            setNumOfChildrenNonResident(0);
+                          }}
+                        >
+                          clear data
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
 
                 <div
                   className={
@@ -1759,10 +1646,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     <div className="flex gap-3 items-center">
                       <div
                         onClick={() => {
-                          if (
-                            (numOfAdults > 1 || numOfAdults > 0) &&
-                            numOfAdults > 0
-                          ) {
+                          if (numOfAdults > 1) {
                             setNumOfAdults(numOfAdults - 1);
                           }
                         }}
@@ -1773,7 +1657,11 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
                       <div
                         onClick={() => {
-                          if (numOfAdults + numOfChildren < stay.capacity) {
+                          if (stay.capacity) {
+                            if (numOfAdults + numOfChildren < stay.capacity) {
+                              setNumOfAdults(numOfAdults + 1);
+                            }
+                          } else {
                             setNumOfAdults(numOfAdults + 1);
                           }
                         }}
@@ -1807,7 +1695,11 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
                       <div
                         onClick={() => {
-                          if (numOfAdults + numOfChildren < stay.capacity) {
+                          if (stay.capacity) {
+                            if (numOfAdults + numOfChildren < stay.capacity) {
+                              setNumOfChildren(numOfChildren + 1);
+                            }
+                          } else {
                             setNumOfChildren(numOfChildren + 1);
                           }
                         }}
@@ -2617,7 +2509,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                               stayPrice={
                                 stay.conservation_or_park_price_non_resident
                               }
-                              className="text-sm inline font-bold"
+                              className="!text-sm inline"
                             ></Price>
                           </div>
                         )}
@@ -2670,7 +2562,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                             adult costs{" "}
                             <Price
                               stayPrice={stay.conservation_or_park_price}
-                              className="text-sm inline font-bold"
+                              className="!text-sm inline"
                             ></Price>
                           </div>
                         )}
@@ -2725,7 +2617,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                               stayPrice={
                                 stay.conservation_or_park_children_price_non_resident
                               }
-                              className="text-sm inline font-bold"
+                              className="!text-sm inline"
                             ></Price>
                           </div>
                         )}
@@ -2775,7 +2667,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                               stayPrice={
                                 stay.conservation_or_park_children_price
                               }
-                              className="text-sm inline font-bold"
+                              className="!text-sm inline"
                             ></Price>
                           </div>
                         )}
@@ -2831,10 +2723,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       <div className="flex gap-3 items-center">
                         <div
                           onClick={() => {
-                            if (
-                              (numOfAdults > 1 || numOfAdults > 0) &&
-                              numOfAdults > 0
-                            ) {
+                            if (numOfAdults > 1) {
                               setNumOfAdults(numOfAdults - 1);
                             }
                           }}
@@ -2845,7 +2734,11 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
                         <div
                           onClick={() => {
-                            if (numOfAdults + numOfChildren < stay.capacity) {
+                            if (stay.capacity) {
+                              if (numOfAdults + numOfChildren < stay.capacity) {
+                                setNumOfAdults(numOfAdults + 1);
+                              }
+                            } else {
                               setNumOfAdults(numOfAdults + 1);
                             }
                           }}
@@ -2879,7 +2772,11 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
                         <div
                           onClick={() => {
-                            if (numOfAdults + numOfChildren < stay.capacity) {
+                            if (stay.capacity) {
+                              if (numOfAdults + numOfChildren < stay.capacity) {
+                                setNumOfChildren(numOfChildren + 1);
+                              }
+                            } else {
                               setNumOfChildren(numOfChildren + 1);
                             }
                           }}

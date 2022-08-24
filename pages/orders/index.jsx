@@ -10,12 +10,14 @@ import Navbar from "../../components/Stay/Navbar";
 import CartItem from "../../components/Cart/CartItem";
 import Footer from "../../components/Home/Footer";
 import Dialogue from "../../components/Home/Dialogue";
+import FlightItem from "../../components/Cart/FlightItem";
 
 function Orders({
   userProfile,
   stayOrders,
   activitiesOrders,
   transportOrders,
+  flightCart,
 }) {
   const [state, setState] = useState({
     showDropdown: false,
@@ -66,7 +68,8 @@ function Orders({
       <div>
         {stayOrders.length === 0 &&
           activitiesOrders.length === 0 &&
-          transportOrders.length === 0 && (
+          transportOrders.length === 0 &&
+          flightCart.length === 0 && (
             <div>
               <Navbar
                 showDropdown={state.showDropdown}
@@ -123,7 +126,8 @@ function Orders({
       <div>
         {(stayOrders.length > 0 ||
           activitiesOrders.length > 0 ||
-          transportOrders.length > 0) && (
+          transportOrders.length > 0 ||
+          flightCart.length > 0) && (
           <div>
             <Navbar
               showDropdown={state.showDropdown}
@@ -162,6 +166,7 @@ function Orders({
                       <CartItem
                         cartId={item.id}
                         stay={item.stay}
+                        order={item}
                         from_date={item.from_date}
                         to_date={item.to_date}
                         num_of_adults={item.num_of_adults}
@@ -191,6 +196,7 @@ function Orders({
                   <div key={index} className="md:w-[50%] w-full">
                     <CartItem
                       cartId={item.id}
+                      order={item}
                       from_date={item.from_date}
                       number_of_people={item.number_of_people}
                       number_of_people_non_resident={
@@ -224,6 +230,7 @@ function Orders({
                     <CartItem
                       cartId={item.id}
                       transport={item.transport}
+                      order={item}
                       transportPage={true}
                       transportDistance={item.distance}
                       transportFromDate={item.from_date}
@@ -232,8 +239,21 @@ function Orders({
                       transportDestination={item.destination}
                       transportStartingPoint={item.starting_point}
                       transportPrice={priceOfTransportCart(item)}
-                      forOrder={true}
                     ></CartItem>
+                  </div>
+                ))}
+              </div>
+
+              {flightCart.length > 0 && (
+                <div className="mb-4 mt-2 ml-4 text-lg font-bold">
+                  Flight - Your Basket({flightCart.length})
+                </div>
+              )}
+
+              <div className="flex flex-wrap mb-5 justify-between">
+                {flightCart.map((item, index) => (
+                  <div key={index} className="md:w-[50%] w-full">
+                    <FlightItem flight={item} forOrder={true}></FlightItem>
                   </div>
                 ))}
               </div>
@@ -295,7 +315,7 @@ export async function getServerSideProps(context) {
     );
 
     const { data } = await axios.get(
-      `${process.env.NEXT_PUBLIC_baseURL}/user-orders/paid/`,
+      `${process.env.NEXT_PUBLIC_baseURL}/user-orders/`,
       {
         headers: {
           Authorization: "Token " + token,
@@ -304,7 +324,7 @@ export async function getServerSideProps(context) {
     );
 
     const activitiesOrders = await axios.get(
-      `${process.env.NEXT_PUBLIC_baseURL}/user-activities-orders/paid/`,
+      `${process.env.NEXT_PUBLIC_baseURL}/user-activities-orders/`,
       {
         headers: {
           Authorization: "Token " + token,
@@ -313,7 +333,16 @@ export async function getServerSideProps(context) {
     );
 
     const transportOrders = await axios.get(
-      `${process.env.NEXT_PUBLIC_baseURL}/user-transport-orders/paid/`,
+      `${process.env.NEXT_PUBLIC_baseURL}/user-transport-orders/`,
+      {
+        headers: {
+          Authorization: "Token " + token,
+        },
+      }
+    );
+
+    const flightCart = await axios.get(
+      `${process.env.NEXT_PUBLIC_baseURL}/user-flight-orders/`,
       {
         headers: {
           Authorization: "Token " + token,
@@ -327,6 +356,7 @@ export async function getServerSideProps(context) {
         stayOrders: data.results,
         activitiesOrders: activitiesOrders.data.results,
         transportOrders: transportOrders.data.results,
+        flightCart: flightCart.data.results,
       },
     };
   } catch (error) {
@@ -345,6 +375,7 @@ export async function getServerSideProps(context) {
           activitiesOrders: [],
           transportOrders: [],
           stayOrders: [],
+          flightCart: [],
         },
       };
     }
