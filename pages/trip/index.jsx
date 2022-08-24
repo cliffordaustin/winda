@@ -244,7 +244,7 @@ const Trips = ({
   };
 
   return (
-    <div>
+    <>
       <div className="fixed top-0 w-full bg-white z-50">
         <div className="bg-white sm:px-12 px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-8">
@@ -269,10 +269,10 @@ const Trips = ({
         </div>
       </div>
 
-      <div>
+      <div className="">
         <div className="w-full h-500 relative before:absolute before:h-full before:w-full before:bg-black before:z-20 before:opacity-60">
           <Image
-            className={"sm:w-full md:w-full"}
+            className={"w-full md:w-full"}
             layout="fill"
             objectFit="cover"
             src="/images/trip-header-image.jpg"
@@ -281,7 +281,7 @@ const Trips = ({
             priority
           />
 
-          <div className="absolute flex flex-col items-center justify-center top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 z-20 w-fit px-6 md:px-0">
+          <div className="absolute flex flex-col items-center justify-center top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 z-20 w-full px-6 md:px-0">
             <div>
               <h1 className="font-black font-SourceSans mb-2 text-3xl sm:text-4xl md:text-5xl xl:text-7xl text-white uppercase text-center">
                 A Trip building experience
@@ -290,7 +290,7 @@ const Trips = ({
           </div>
 
           <div className="absolute z-[30] flex bottom-20 w-[95%] md:w-[600px] lg:w-[700px] left-2/4 -translate-x-2/4 h-14 bg-white rounded-lg">
-            <div className="w-[60%] md:w-[70%] flex rounded-tr-lg md:rounded-br-lg items-center h-full rounded-tl-lg rounded-bl-lg bg-white border-r border-gray-300">
+            <div className="w-[60%] md:w-[70%] flex md:rounded-tr-lg md:rounded-br-lg items-center h-full rounded-tl-lg rounded-bl-lg bg-white border-r border-gray-300">
               <Search
                 inputBoxClassName="border-0 "
                 searchClass="w-full"
@@ -301,38 +301,6 @@ const Trips = ({
               ></Search>
             </div>
             <div className="w-[40%] md:w-[30%] flex">
-              {/* <div className="w-[50%] cursor-pointer pl-3 gap-2 h-full bg-white rounded-bl-lg md:rounded-bl-0 md:rounded-tr-lg md:rounded-br-lg border-r flex items-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-gray-500"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                  />
-                </svg>
-                <div className="w-full">
-                  <Select
-                    defaultValue={selectedMonth}
-                    onChange={(value) => {
-                      setSelectedMonth(value);
-                      router.push({
-                        query: { ...router.query, month: value.value },
-                      });
-                    }}
-                    className={"text-sm w-full outline-none border-none "}
-                    instanceId={months}
-                    placeholder="Select a month"
-                    options={months}
-                    isSearchable={true}
-                  />
-                </div>
-              </div> */}
               <div
                 onClick={() => {
                   setShowPricePopup(!showPricePopup);
@@ -421,237 +389,8 @@ const Trips = ({
       <div className="w-full">
         <div className="h-12 flex justify-center mt-2">
           <Tags></Tags>
-          {/* <Tags></Tags> */}
         </div>
-        <div className="flex justify-between relative mt-6 h-full w-full">
-          <div>
-            {/* <div
-            className={
-              "sticky w-[35%] hidden md:block overflow-y-scroll top-[74px] h-screen border-r border-gray-200 px-4 "
-            }
-          >
-            <h1 className="mb-2 font-bold text-lg">Filter based on</h1>
-            <Swiper
-              {...settings}
-              slidesPerView={4}
-              freeMode={true}
-              watchSlidesProgress={true}
-              onSwiper={(swiper) => setAllowSlideNext(swiper.allowSlideNext)}
-              onSlideChange={(swiper) => setSwiperIndex(swiper.realIndex)}
-              modules={[FreeMode, Navigation, Thumbs]}
-              className="!w-full relative"
-            >
-              <SwiperSlide className="!w-fit">
-                <div className="border border-gray-100 px-2 py-2 rounded-3xl">
-                  Reasonable
-                </div>
-              </SwiperSlide>
-              <SwiperSlide className="!w-fit">
-                <div className="border border-gray-100 px-3 py-2 rounded-3xl">
-                  Couples
-                </div>
-              </SwiperSlide>
-              <SwiperSlide className="!w-fit">
-                <div className="border border-gray-100 px-3 py-2 rounded-3xl">
-                  Family
-                </div>
-              </SwiperSlide>
-
-              <SwiperSlide className="!w-fit">
-                <div className="border border-gray-100 px-3 py-2 rounded-3xl">
-                  Reasonable
-                </div>
-              </SwiperSlide>
-              <SwiperSlide className="!w-fit">
-                <div className="border border-gray-100 px-3 py-2 rounded-3xl">
-                  Couples
-                </div>
-              </SwiperSlide>
-              <SwiperSlide className="!w-fit">
-                <div className="border border-gray-100 px-3 py-2 rounded-3xl">
-                  Family
-                </div>
-              </SwiperSlide>
-
-              <div
-                className={
-                  "absolute hidden md:flex cursor-pointer select-none items-center justify-center top-[20%] z-50 left-2 -translate-y-2/4 swiper-pagination swiper-button-prev " +
-                  (swiperIndex === 0 ? "invisible" : "")
-                }
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-8 w-8"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-              <div
-                className={
-                  "absolute hidden cursor-pointer md:flex select-none items-center justify-center top-[20%] z-50 right-2 -translate-y-2/4 swiper-pagination swiper-button-next " +
-                  (!allowSlideNext ? "invisible" : "")
-                }
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-8 w-8"
-                  viewBox="0 0 20 20"
-                  fill="black"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-            </Swiper>
-
-            <div
-              onClick={(event) => {
-                event.stopPropagation();
-              }}
-              className={"w-full !py-2 !justify-between relative "}
-            >
-              <div className="font-bold text-sm">Location</div>
-              <Input
-                placeholder="Where to?"
-                type="text"
-                name="location"
-                value={location}
-                className={"!w-full !bg-white mt-1"}
-                autoComplete="off"
-                onChange={(event) => {
-                  onChange(event);
-                }}
-                onKeyPress={onKeyDown}
-              ></Input>
-              <div
-                className={
-                  "absolute top-[65%] right-3 -translate-y-2/4 " +
-                  (location ? "block" : "hidden")
-                }
-              >
-                <SearchButtonClose
-                  onClick={() => {
-                    setLocation("");
-                    setAutoComplete([]);
-                  }}
-                ></SearchButtonClose>
-              </div>
-
-              {autoComplete.length > 0 && (
-                <div className="absolute top-full left-0 z-30 rounded-b-xl w-full md:w-[350px] py-2 bg-white">
-                  {autoComplete.map((item, index) => (
-                    <div
-                      key={index}
-                      onClick={() => locationFromSearch(item)}
-                      className="flex items-center gap-6 hover:bg-gray-100 transition-all duration-300 ease-linear cursor-pointer px-4 py-3"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5"
-                        fill="currentColor"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <span className="truncate">{item.place_name}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            <div className="flex gap-4">
-              <div className="relative w-full">
-                <div
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setShowDate(!showDate);
-                  }}
-                  className={
-                    "relative !w-full mt-2 border rounded-md px-2 border-gray-200 !py-2 !justify-between "
-                  }
-                >
-                  <div className="font-bold text-sm mb-2">Date</div>
-                  <div className="text-sm text-gray-400">
-                    {date ? moment(date).format("MMM Do") : "Add date"}
-                  </div>
-                  <div
-                    className={
-                      "absolute top-2/4 right-3 -translate-y-2/4 " +
-                      (date ? "block" : "hidden")
-                    }
-                  >
-                    <SearchButtonClose
-                      onClick={() => {
-                        setDate("");
-                      }}
-                    ></SearchButtonClose>
-                  </div>
-                </div>
-                <div className={" " + (!showDate ? "hidden" : "")}>
-                  <DatePicker
-                    setDate={(date, modifiers = {}) => {
-                      if (!modifiers.disabled) {
-                        setDate(date);
-                      }
-                    }}
-                    date={date}
-                    showDate={showDate}
-                    className="!top-20 w-full lg:!w-[380px] "
-                    disableDate={new Date()}
-                  ></DatePicker>
-                </div>
-              </div>
-
-              <div className="relative w-full">
-                <div
-                  className={
-                    "relative !w-full mt-2 border rounded-md px-2 border-gray-200 !py-2 !justify-between "
-                  }
-                >
-                  <div className="font-bold text-sm mb-2">travellers</div>
-
-                  <div className="flex gap-3 items-center">
-                    <div
-                      onClick={() => {
-                        if (travellers > 1) {
-                          setTravellers(travellers - 1);
-                        }
-                      }}
-                      className="w-6 h-6 rounded-full flex items-center cursor-pointer justify-center  bg-white border border-gray-300 shadow-sm text-sm"
-                    >
-                      -
-                    </div>
-
-                    <div className="text-sm">
-                      {travellers} {travellers > 1 ? "People" : "Person"}
-                    </div>
-                    <div
-                      onClick={() => {
-                        setTravellers(travellers + 1);
-                      }}
-                      className="w-6 h-6 rounded-full flex items-center cursor-pointer justify-center bg-white border border-gray-300 shadow-sm text-sm"
-                    >
-                      +
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> */}
-          </div>
+        <div className="flex justify-between relative mt-3 h-full w-full">
           <div className="h-full mx-auto w-full px-4 xl:w-[1300px] lg:w-[900px] ">
             <div className="flex items-center flex-wrap gap-2 mb-4">
               {router.query.tag && (
@@ -692,27 +431,7 @@ const Trips = ({
                   />
                 </div>
               )}
-              {/* {router.query.month && (
-                <div className="px-2 flex gap-2 items-center py-1 rounded-3xl text-white bg-green-500">
-                  <span className="text-sm font-semibold">
-                    {filterArrayOfObjects(months, router.query.month).length >
-                      0 &&
-                      filterArrayOfObjects(months, router.query.month)[0].label}
-                  </span>
-                  <Icon
-                    onClick={() => {
-                      router.push({
-                        query: {
-                          ...router.query,
-                          month: "",
-                        },
-                      });
-                    }}
-                    className="cursor-pointer"
-                    icon="ci:off-close"
-                  />
-                </div>
-              )} */}
+
               {router.query.price && (
                 <div className="px-2 flex gap-2 items-center py-1 rounded-3xl text-white bg-green-500">
                   <span className="text-sm font-semibold">
@@ -821,7 +540,7 @@ const Trips = ({
       <div className="mt-20">
         <Footer></Footer>
       </div>
-    </div>
+    </>
   );
 };
 

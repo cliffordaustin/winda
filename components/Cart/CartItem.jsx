@@ -69,6 +69,7 @@ const CartItem = ({
   const [removeButtonLoading, setRemoveButtonLoading] = useState(false);
 
   const price = () => {
+    const nights = new Date(to_date).getDate() - new Date(from_date).getDate();
     return stayPage && !stay.per_house
       ? getStayPrice(
           plan,
@@ -77,7 +78,7 @@ const CartItem = ({
           num_of_children,
           num_of_children_non_resident,
           num_of_adults_non_resident
-        )
+        ) * nights
       : stayPage && stay.per_house
       ? stay.per_house_price
       : transportPage
@@ -277,11 +278,6 @@ const CartItem = ({
                     </span>
                   )}
 
-                  {stayPage && (
-                    <span className="inline text-xs mt-1 font-semibold ml-0.5">
-                      /night
-                    </span>
-                  )}
                   {userNeedADriver && (
                     <div className="font-bold text-lg ml-1.5 -mt-1 mr-0.5">
                       {" "}

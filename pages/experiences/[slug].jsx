@@ -1963,7 +1963,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
               <Dialogue
                 isOpen={guestPopup}
                 closeModal={() => setGuestPopup(false)}
-                dialoguePanelClassName="max-h-[500px] max-w-md overflow-y-scroll remove-scroll"
+                dialoguePanelClassName="max-h-[500px] !max-w-md overflow-y-scroll remove-scroll"
               >
                 <Select
                   defaultValue={currentPrice}
