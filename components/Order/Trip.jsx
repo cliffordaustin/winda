@@ -2647,7 +2647,10 @@ const Trip = ({
               )}
 
               {!trip.activity_number_of_people && (
-                <Icon icon="iconoir:yoga" className="w-6 h-6 text-gray-500" />
+                <Icon
+                  icon="fa6-solid:person-hiking"
+                  className="w-6 h-6 text-gray-500"
+                />
               )}
             </div>
             <div>

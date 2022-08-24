@@ -565,73 +565,67 @@ function TripDetail({ userProfile, userTrips, trip }) {
                     <h1 className="font-bold text-2xl text-gray-700 font-OpenSans">
                       About this trip
                     </h1>
+                    {trip.description && (
+                      <div className="mt-2">
+                        {!showAllDescription && (
+                          <p className="font-medium text-gray-600">
+                            {trip.description.slice(0, 500)}
+                            {trip.description.length > 500 && "..."}
+                          </p>
+                        )}
+                        {showAllDescription && (
+                          <p className="font-medium text-gray-600">
+                            {trip.description}
+                          </p>
+                        )}
+                        {!showAllDescription && trip.description.length > 500 && (
+                          <div
+                            onClick={() => {
+                              setShowAllDescription(true);
+                            }}
+                            className="font-bold text-blue-700 flex items-center gap-0.5 cursor-pointer"
+                          >
+                            <span>Read more</span>{" "}
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-5 w-5 mt-1"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                          </div>
+                        )}
+                        {showAllDescription && (
+                          <div
+                            onClick={() => {
+                              setShowAllDescription(false);
+                            }}
+                            className="font-bold text-blue-700 flex items-center gap-0.5 cursor-pointer"
+                          >
+                            <span>Read less</span>{" "}
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-5 w-5 mt-1"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                 )}
-
-                <div className="mt-10 mb-6">
-                  <h1 className="font-bold text-2xl text-gray-700 font-OpenSans">
-                    About this trip
-                  </h1>
-                  {trip.description && (
-                    <div className="mt-2">
-                      {!showAllDescription && (
-                        <p className="font-medium text-gray-600">
-                          {trip.description.slice(0, 500)}
-                          {trip.description.length > 500 && "..."}
-                        </p>
-                      )}
-                      {showAllDescription && (
-                        <p className="font-medium text-gray-600">
-                          {trip.description}
-                        </p>
-                      )}
-                      {!showAllDescription && trip.description.length > 500 && (
-                        <div
-                          onClick={() => {
-                            setShowAllDescription(true);
-                          }}
-                          className="font-bold text-blue-700 flex items-center gap-0.5 cursor-pointer"
-                        >
-                          <span>Read more</span>{" "}
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5 mt-1"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                        </div>
-                      )}
-                      {showAllDescription && (
-                        <div
-                          onClick={() => {
-                            setShowAllDescription(false);
-                          }}
-                          className="font-bold text-blue-700 flex items-center gap-0.5 cursor-pointer"
-                        >
-                          <span>Read less</span>{" "}
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5 mt-1"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
 
                 {trip.essential_information && (
                   <div className="mb-6">
@@ -1229,62 +1223,48 @@ function TripDetail({ userProfile, userTrips, trip }) {
                   </div>
                 </div>
 
-                <div name="policies" className={"w-full mt-8 mb-4 "}>
+                <div className={"w-full mt-8 mb-4 "}>
                   <h1 className="font-bold text-2xl mb-2">Policies</h1>
 
-                  {trip.stay.cancellation_policy && (
-                    <div className="mt-4">
-                      <div className="py-2 px-2 border-b border-gray-100">
-                        <span className="font-semibold">
-                          Cancellation Policy
-                        </span>
-                      </div>
-
-                      <div className="mt-2 ml-2">
-                        <p className="whitespace-pre-line">
-                          {trip.stay.cancellation_policy}
-                        </p>
-                      </div>
+                  <div className="mt-4">
+                    <div className="py-2 px-2 border-b border-gray-100">
+                      <span className="font-semibold">Cancellation Policy</span>
                     </div>
-                  )}
-                  {trip.stay.cancellation_policy_by_provider && (
-                    <div className="mt-4">
-                      <div className="py-2 px-2 border-b border-gray-100">
-                        <span className="font-semibold">
-                          Cancellation Policy by Provider
-                        </span>
-                      </div>
 
-                      <div className="mt-2 ml-2">
-                        <p>{trip.stay.cancellation_policy_by_provider}</p>
-                      </div>
+                    <div className="mt-2 ml-2 flex flex-col gap-2">
+                      <ListItem>
+                        You should have CV-19 travel insurance
+                      </ListItem>
                     </div>
-                  )}
+                  </div>
 
-                  {trip.stay.health_and_safety_policy && (
-                    <div className="mt-4">
-                      <div className="py-2 px-2 border-b border-gray-100">
-                        <span className="font-semibold">
-                          Health and safety policy
-                        </span>
-                      </div>
-
-                      <div className="mt-2 ml-2">
-                        <p>{trip.stay.health_and_safety_policy}</p>
-                      </div>
+                  <div className="mt-4">
+                    <div className="py-2 px-2 border-b border-gray-100">
+                      <span className="font-semibold">
+                        Health and safety policy
+                      </span>
                     </div>
-                  )}
-                  {trip.stay.damage_policy_by_provider && (
-                    <div className="mt-4">
-                      <div className="py-2 px-2 border-b border-gray-100">
-                        <span className="font-semibold">Damage policy</span>
-                      </div>
 
-                      <div className="mt-2 ml-2">
-                        <p>{trip.stay.damage_policy_by_provider}</p>
-                      </div>
+                    <div className="mt-2 ml-2 flex flex-col gap-2">
+                      <ListItem>
+                        This property is compliant with Winda.guide&apos;s CV-19
+                        requirements
+                      </ListItem>
                     </div>
-                  )}
+                  </div>
+
+                  <div className="mt-4">
+                    <div className="py-2 px-2 border-b border-gray-100">
+                      <span className="font-semibold">Damage policy</span>
+                    </div>
+
+                    <div className="mt-2 ml-2 flex flex-col gap-2">
+                      <ListItem>
+                        The guest is liable for any damages caused by them
+                        during their stay.
+                      </ListItem>
+                    </div>
+                  </div>
                 </div>
               </div>
             </Dialogue>
@@ -1536,6 +1516,37 @@ function TripDetail({ userProfile, userTrips, trip }) {
                     </div>
                   </div>
                 )}
+
+                <div className={"w-full mt-8 mb-4 "}>
+                  <h1 className="font-bold text-2xl mb-2">Policies</h1>
+
+                  <div className="mt-4">
+                    <div className="py-2 px-2 border-b border-gray-100">
+                      <span className="font-semibold">Cancellation Policy</span>
+                    </div>
+
+                    <div className="mt-2 ml-2 flex flex-col gap-2">
+                      <ListItem>
+                        You should have CV-19 travel insurance
+                      </ListItem>
+                    </div>
+                  </div>
+
+                  <div className="mt-4">
+                    <div className="py-2 px-2 border-b border-gray-100">
+                      <span className="font-semibold">
+                        Health and safety policy
+                      </span>
+                    </div>
+
+                    <div className="mt-2 ml-2 flex flex-col gap-2">
+                      <ListItem>
+                        This activity is compliant with Winda.guide&apos;s CV-19
+                        requirements
+                      </ListItem>
+                    </div>
+                  </div>
+                </div>
               </div>
             </Dialogue>
           )}
@@ -1595,10 +1606,6 @@ function TripDetail({ userProfile, userTrips, trip }) {
                     </div>
                   </div>
 
-                  {trip.transport.driver_operates_within.map((item, index) => (
-                    <ListItem key={index}>{item.city}</ListItem>
-                  ))}
-
                   {trip.transport.included_in_price.length > 0 && (
                     <h1 className="font-bold text-lg mb-2 mt-4">
                       Included in price
@@ -1608,13 +1615,38 @@ function TripDetail({ userProfile, userTrips, trip }) {
                     <ListItem key={index}>{item.included_in_price}</ListItem>
                   ))}
 
-                  {trip.transport.policy && (
-                    <h1 className="mt-4 font-bold">Please take note</h1>
-                  )}
+                  <div className={"w-full mt-4 mb-4 "}>
+                    <h1 className="font-bold text-2xl mb-2">Policies</h1>
 
-                  {trip.transport.policy && (
-                    <p className="mt-2">{trip.transport.policy}</p>
-                  )}
+                    <div className="mt-4">
+                      <div className="py-2 px-2 border-b border-gray-100">
+                        <span className="font-semibold">
+                          Cancellation Policy
+                        </span>
+                      </div>
+
+                      <div className="mt-2 ml-2 flex flex-col gap-2">
+                        <ListItem>
+                          You should have CV-19 travel insurance
+                        </ListItem>
+                      </div>
+                    </div>
+
+                    <div className="mt-4">
+                      <div className="py-2 px-2 border-b border-gray-100">
+                        <span className="font-semibold">
+                          Health and safety policy
+                        </span>
+                      </div>
+
+                      <div className="mt-2 ml-2 flex flex-col gap-2">
+                        <ListItem>
+                          This activity is compliant with Winda.guide&apos;s
+                          CV-19 requirements
+                        </ListItem>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </Dialogue>

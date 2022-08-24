@@ -12,61 +12,80 @@ function FlightItem({ flight, forOrder }) {
 
   const removeCart = async () => {
     const token = Cookies.get("token");
+    const cart = Cookies.get("cart");
 
     setRemoveButtonLoading(true);
-    await axios
-      .delete(`${process.env.NEXT_PUBLIC_baseURL}/flights/${flight.slug}/`, {
-        headers: {
-          Authorization: "Token " + token,
-        },
-      })
-      .then(() => {
-        location.reload();
-      })
-      .catch((err) => {
-        console.log(err.response.data);
-        setRemoveButtonLoading(false);
-      });
+    if (token) {
+      await axios
+        .delete(`${process.env.NEXT_PUBLIC_baseURL}/flights/${flight.slug}/`, {
+          headers: {
+            Authorization: "Token " + token,
+          },
+        })
+        .then(() => {
+          location.reload();
+        })
+        .catch((err) => {
+          console.log(err.response.data);
+          setRemoveButtonLoading(false);
+        });
+    } else if (cart) {
+      const cart = JSON.parse(decodeURIComponent(Cookies.get("cart")));
+      const newCart = [];
+
+      newCart = cart.filter((el) => el.slug !== flight.slug);
+      Cookies.set("cart", JSON.stringify(newCart));
+      location.reload();
+    }
   };
   return (
     <div className="relative px-2 mb-3">
-      <div className="flex gap-2 h-fit px-2 py-2 w-full rounded-md shadow-md border">
-        <div className="h-16 w-20 flex justify-center items-center bg-gray-200 rounded-md">
-          <Icon icon="fa:plane" className="text-gray-600 w-8 h-8" />
-        </div>
+      <div className="flex gap-2 h-fit px-2 py-2 justify-between w-full rounded-md border">
         <div>
-          <div className="mb-2">
-            <Price
-              stayPrice={
-                checkFlightPrice(flight.starting_point, flight.destination) *
-                flight.number_of_people
-              }
-              className=""
-            ></Price>
+          <div className="flex items-center gap-1">
+            <div className="font-bold">{flight.starting_point}</div>
+            <div> - </div>
+            <div className="font-bold">{flight.destination}</div>
           </div>
-          <div className="flex flex-col gap-1">
-            <div className="text-sm font-bold">{flight.starting_point}</div>
-            <div className="text-sm font-bold">{flight.destination}</div>
-          </div>
-
-          <div className="text-sm font-bold mt-2">
-            {flight.number_of_people}{" "}
-            {flight.number_of_people > 1 ? "People" : "Person"}
-          </div>
-
-          <div
-            className="text-sm w-fit cursor-pointer flex items-center bg-red-400 bg-opacity-30 px-2 py-1 text-red-500 font-bold p-3 rounded-md mt-2
-          "
-            onClick={removeCart}
-          >
-            <span className="mr-1">Remove</span>
-            <div className={" " + (!removeButtonLoading ? "hidden" : "")}>
-              <LoadingSpinerChase
-                width={13}
-                height={13}
-                color="red"
-              ></LoadingSpinerChase>
+          <div>
+            <div className="text-sm text-gray-800 mt-2">
+              {flight.number_of_people}{" "}
+              {flight.number_of_people > 1 ? "Passengers" : "Passenger"}
             </div>
+
+            <div
+              className="text-sm w-fit cursor-pointer flex items-center bg-red-400 bg-opacity-30 px-2 py-1 text-red-500 font-bold p-3 rounded-md mt-2
+          "
+              onClick={removeCart}
+            >
+              <span className="mr-1">Remove</span>
+              <div className={" " + (!removeButtonLoading ? "hidden" : "")}>
+                <LoadingSpinerChase
+                  width={13}
+                  height={13}
+                  color="red"
+                ></LoadingSpinerChase>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="mb-2 flex flex-col self-start">
+          <Price
+            stayPrice={
+              checkFlightPrice(
+                flight.starting_point,
+                flight.destination,
+                flight.flight_types
+              ) * flight.number_of_people
+            }
+            className="self-end"
+          ></Price>
+
+          <div className="self-end text-sm text-gray-500">
+            <span className="capitalize">
+              {flight.flight_types && flight.flight_types.toLowerCase()}
+            </span>{" "}
+            flight
           </div>
         </div>
       </div>
@@ -74,25 +93,25 @@ function FlightItem({ flight, forOrder }) {
       {forOrder && (
         <div>
           {flight.reviewing && (
-            <div className="absolute top-1.5 left-4 w-fit px-1 rounded-md font-bold text-sm py-0.5 bg-yellow-500">
+            <div className="absolute bottom-1.5 right-4 w-fit px-1 rounded-md font-bold text-sm py-0.5 bg-yellow-500">
               Reviewing
             </div>
           )}
 
           {flight.email_sent && (
-            <div className="absolute top-1.5 left-4 w-fit px-1 rounded-md font-bold text-sm py-0.5 bg-yellow-500">
+            <div className="absolute bottom-1.5 right-4 w-fit px-1 rounded-md font-bold text-sm py-0.5 bg-yellow-500">
               Email sent
             </div>
           )}
 
           {flight.cancelled && (
-            <div className="absolute top-1.5 left-4 text-white  w-fit px-1 rounded-md font-bold text-sm py-0.5 bg-red-500">
+            <div className="absolute bottom-1.5 right-4 text-white  w-fit px-1 rounded-md font-bold text-sm py-0.5 bg-red-500">
               Cancelled
             </div>
           )}
 
           {flight.paid && (
-            <div className="absolute top-1.5 left-4 w-fit px-1 rounded-md font-bold text-sm py-0.5 bg-green-500">
+            <div className="absolute bottom-1.5 right-4 w-fit px-1 rounded-md font-bold text-sm py-0.5 bg-green-500">
               Paid
             </div>
           )}

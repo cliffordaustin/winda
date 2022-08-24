@@ -1638,6 +1638,33 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
             </Element>
           )}
 
+          <Element name="policies" className={"w-full pt-12 "}>
+            <h1 className="font-bold text-2xl mb-2">Policies</h1>
+
+            <div className="mt-4">
+              <div className="py-2 px-2 border-b border-gray-100">
+                <span className="font-semibold">Cancellation Policy</span>
+              </div>
+
+              <div className="mt-2 ml-2 flex flex-col gap-2">
+                <ListItem>You should have CV-19 travel insurance</ListItem>
+              </div>
+            </div>
+
+            <div className="mt-4">
+              <div className="py-2 px-2 border-b border-gray-100">
+                <span className="font-semibold">Health and safety policy</span>
+              </div>
+
+              <div className="mt-2 ml-2 flex flex-col gap-2">
+                <ListItem>
+                  This activity is compliant with Winda.guide&apos;s CV-19
+                  requirements
+                </ListItem>
+              </div>
+            </div>
+          </Element>
+
           <Element
             name="map"
             className={"h-[350px] md:h-[450px] relative mt-12 -ml-8 -mr-4 "}

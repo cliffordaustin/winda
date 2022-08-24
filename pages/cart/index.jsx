@@ -114,8 +114,11 @@ const Cart = ({
 
     flightCart.forEach((item, index) => {
       price +=
-        checkFlightPrice(item.starting_point, item.destination) *
-        item.number_of_people;
+        checkFlightPrice(
+          item.starting_point,
+          item.destination,
+          item.flight_types
+        ) * item.number_of_people;
     });
 
     if (Cookies.get("token")) {
@@ -354,6 +357,7 @@ const Cart = ({
               showDropdown: !state.showDropdown,
             })
           }
+          showCart={false}
         ></Navbar>
         <div className="px-4 xl:w-[1100px] mx-auto sm:px-16 md:px-12 lg:px-16">
           <div className="mb-8 mt-4 ml-4 text-xl font-bold">
@@ -464,6 +468,7 @@ const Cart = ({
               showDropdown: !state.showDropdown,
             })
           }
+          showCart={false}
         ></Navbar>
         <div className="px-2 xl:w-[1100px] mx-auto sm:px-16 md:px-12 lg:px-16">
           {cart.length > 0 && (
@@ -870,9 +875,11 @@ export async function getServerSideProps(context) {
         } else if (item.itemCategory === "flight") {
           if (item.starting_point && item.destination) {
             flightCart.push({
+              slug: item.slug,
               starting_point: item.starting_point,
               destination: item.destination,
               number_of_people: item.number_of_people,
+              flight_types: item.flight_types,
             });
           }
         }
@@ -905,7 +912,7 @@ export async function getServerSideProps(context) {
       },
     };
   } catch (error) {
-    if (error.response.status === 401) {
+    if (error.response && error.response.status === 401) {
       return {
         redirect: {
           permanent: false,

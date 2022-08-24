@@ -12,6 +12,7 @@ import { useRouter } from "next/router";
 import ClientOnly from "../ClientOnly";
 import { getItemsInBasket } from "../../lib/getItemsInBasket";
 import CartItem from "../Cart/CartItem";
+import FlightItem from "../Cart/FlightItem";
 
 function Navbar({
   showDropdown,
@@ -117,6 +118,8 @@ function Navbar({
 
   const [transportCart, setTransportCart] = useState([]);
 
+  const [flightsCart, setFlightsCart] = useState([]);
+
   const [allItemsInActivityCart, setAllItemsInActivityCart] = useState([]);
 
   const [allItemsInTransportCart, setAllItemsInTransportCart] = useState([]);
@@ -133,6 +136,7 @@ function Navbar({
       allItemsInActivityCart,
       allItemsInCart,
       transportCart,
+      flightCart,
       allItemsInTransportCart,
     } = await getItemsInBasket();
 
@@ -141,6 +145,7 @@ function Navbar({
     setAllItemsInActivityCart(allItemsInActivityCart);
     setAllItemsInCart(allItemsInCart);
     setTransportCart(transportCart);
+    setFlightsCart(flightCart);
     setAllItemsInTransportCart(allItemsInTransportCart);
 
     setCartLoading(false);
@@ -194,62 +199,6 @@ function Navbar({
         )}
       </div>
       <div className="flex items-center gap-2">
-        {/* <ClientOnly>
-          {currencyToKES && (
-            <div
-              className="font-bold text-xs md:text-base text-gray-700 hover:text-gray-900 cursor-pointer transition-all duration-300 ease-linear flex gap-1 items-center"
-              onClick={() => {
-                dispatch({
-                  type: "CHANGE_CURRENCY_TO_DOLLAR_FALSE",
-                });
-              }}
-            >
-              <div>KES</div>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
-                />
-              </svg>
-              <div>USD</div>
-            </div>
-          )}
-          {!currencyToKES && (
-            <div
-              className="font-bold text-xs md:text-base text-gray-700 hover:text-gray-900 cursor-pointer transition-all duration-300 ease-linear flex gap-1 items-center"
-              onClick={() => {
-                dispatch({
-                  type: "CHANGE_CURRENCY_TO_DOLLAR_TRUE",
-                });
-              }}
-            >
-              <div>USD</div>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
-                />
-              </svg>
-              <div>KES</div>
-            </div>
-          )}
-        </ClientOnly> */}
         <UserDropdown
           changeShowDropdown={changeShowDropdown}
           showDropdown={showDropdown}
@@ -469,11 +418,26 @@ function Navbar({
                     </div>
                   ))}
                 </div>
+
+                {flightsCart.length > 0 && (
+                  <div className="mb-4 mt-2 ml-4 text-lg font-bold">
+                    Flight - Your Basket({flightsCart.length})
+                  </div>
+                )}
+
+                <div className="flex flex-wrap mb-5 justify-between">
+                  {flightsCart.map((item, index) => (
+                    <div key={index} className="w-full">
+                      <FlightItem flight={item}></FlightItem>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
             {cart.length === 0 &&
               activitiesCart.length === 0 &&
-              transportCart.length === 0 && (
+              transportCart.length === 0 &&
+              flightsCart.length === 0 && (
                 <div className="font-bold text-2xl text-center w-full inline-block">
                   <span>Nothing in basket</span>
                 </div>

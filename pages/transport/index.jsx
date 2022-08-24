@@ -3,31 +3,23 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
-import Link from "next/link";
+
 import { Swiper, SwiperSlide } from "swiper/react";
 import ReactPaginate from "react-paginate";
-import { FreeMode, Navigation, Thumbs } from "swiper";
+import { Navigation } from "swiper";
 import Select from "react-select";
+import { v4 as uuidv4 } from "uuid";
 
 import getTokenFromReq from "../../lib/getTokenFromReq";
 import Navbar from "../../components/Lodging/Navbar";
 import { wrapper } from "../../redux/store";
-import TransportSearch from "../../components/Home/TransportSearch";
 import Popup from "../../components/ui/Popup";
-import PriceFilter from "../../components/Lodging/PriceFilter";
-import TypeOfActivities from "../../components/Activities/ActivitiesFilterItems";
 import styles from "../../styles/Lodging.module.css";
 import MobileModal from "../../components/ui/FullScreenMobileModal";
-import SearchSelect from "../../components/Home/SearchSelect";
-import ClientOnly from "../../components/ClientOnly";
-import TransportTypes from "../../components/Transport/TransportTypes";
 import MobileTransportTypes from "../../components/Transport/MobileTransportTypes";
 import TransportCategories from "../../components/Transport/TransportCategories";
-import PopupModal from "../../components/ui/Modal";
-import Modal from "../../components/ui/FullScreenMobileModal";
 import Listings from "../../components/Transport/Listings";
 import FilterTags from "../../components/Transport/FilterTags";
-import MobileSearchModal from "../../components/Transport/MobileSearchModal";
 import SearchBar from "../../components/Trip/Search";
 import Button from "../../components/ui/Button";
 import Footer from "../../components/Home/Footer";
@@ -36,6 +28,7 @@ import {
   startingLocationOptions,
   destinationLocationOptions,
   checkFlightPrice,
+  flightTypes,
 } from "../../lib/flightLocations";
 import { Icon } from "@iconify/react";
 import ListItem from "../../components/ui/ListItem";
@@ -254,25 +247,6 @@ const Transport = ({
 
   const [mobileSearchModal, setMobileSearchModal] = useState(false);
 
-  // useEffect(() => {
-  //   if (minPrice || maxPrice) {
-  //     const maxPriceSelect = maxPrice
-  //       ? maxPrice.value.replace("KES", "").replace("k", "000")
-  //       : "";
-  //     const minPriceSelect = minPrice
-  //       ? minPrice.value.replace("KES", "").replace("k", "000")
-  //       : "";
-
-  //     router.push({
-  //       query: {
-  //         ...router.query,
-  //         min_price: minPriceSelect,
-  //         max_price: maxPriceSelect,
-  //       },
-  //     });
-  //   }
-  // }, [minPrice, maxPrice]);
-
   const priceConversionRate = async () => {
     try {
       const response = await fetch(
@@ -312,24 +286,6 @@ const Transport = ({
         });
     }
   }, [router.query.transportSlug]);
-
-  // useEffect(() => {
-  //   if (process.browser) {
-  //     setState({
-  //       ...state,
-  //       windowSize: window.innerWidth,
-  //     });
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-
-  // useEffect(() => {
-  //   if (process.browser) {
-  //     window.onresize = function () {
-  //       setState({ ...state, windowSize: window.innerWidth });
-  //     };
-  //   }
-  // }, []);
 
   const filterMinPrice = () => {
     router.push({
@@ -448,12 +404,18 @@ const Transport = ({
       label: "Nairobi",
     });
 
+  const [selectedFlightType, setSelectedFlightType] = useState({
+    value: "ONE WAY",
+    label: "One way",
+  });
+
   const [selectedFlightDestination, setSelectedFlightDestination] =
     useState(null);
 
   const flightPrice = checkFlightPrice(
     selectedFlightStartingLocation ? selectedFlightStartingLocation.value : "",
-    selectedFlightDestination ? selectedFlightDestination.value : ""
+    selectedFlightDestination ? selectedFlightDestination.value : "",
+    selectedFlightType ? selectedFlightType.value : ""
   );
 
   const [allowSlideNext, setAllowSlideNext] = useState(false);
@@ -484,6 +446,7 @@ const Transport = ({
               starting_point: selectedFlightStartingLocation.value,
               destination: selectedFlightDestination.value,
               number_of_people: numberOfPeopleInFlight,
+              flight_types: selectedFlightType.value,
             },
             {
               headers: {
@@ -503,9 +466,11 @@ const Transport = ({
         const data = [...(cookieVal || [])];
         data.push({
           itemCategory: "flight",
+          slug: uuidv4(),
           starting_point: selectedFlightStartingLocation.value,
           destination: selectedFlightDestination.value,
           number_of_people: numberOfPeopleInFlight,
+          flight_types: selectedFlightType.value,
         });
         Cookies.set("cart", JSON.stringify(data));
         router.reload();
@@ -588,6 +553,7 @@ const Transport = ({
               starting_point: selectedFlightStartingLocation.value,
               destination: selectedFlightDestination.value,
               number_of_people: numberOfPeopleInFlight,
+              flight_types: selectedFlightType.value,
             },
             {
               headers: {
@@ -1250,7 +1216,7 @@ const Transport = ({
         closeModal={() => {
           setFlightPopup(false);
         }}
-        dialoguePanelClassName="h-[85vh] relative overflow-y-scroll remove-scroll !relative max-w-[550px] !p-4 !top-[10%] md:max-h-[370px]"
+        dialoguePanelClassName="h-[85vh] relative overflow-y-scroll remove-scroll !relative max-w-[550px] !p-4 !top-[10%] md:max-h-[420px]"
         outsideDialogueClass="!p-3"
         title={"Book for a flight"}
         dialogueTitleClassName="!font-bold !text-xl"
@@ -1287,6 +1253,20 @@ const Transport = ({
             instanceId={destinationLocationOptions}
             placeholder="Select a destination"
             options={destinationLocationOptions}
+            isSearchable={true}
+          />
+        </div>
+
+        <div className="mt-5">
+          <Select
+            defaultValue={selectedFlightType}
+            onChange={(value) => {
+              setSelectedFlightType(value);
+            }}
+            className={"text-sm outline-none border border-gray-500 "}
+            instanceId={flightTypes}
+            placeholder="Select flight type"
+            options={flightTypes}
             isSearchable={true}
           />
         </div>
@@ -1502,14 +1482,37 @@ const Transport = ({
                   {currentListing.included_in_price.map((item, index) => (
                     <ListItem key={index}>{item.included_in_price}</ListItem>
                   ))}
+                </div>
 
-                  {currentListing.policy && (
-                    <h1 className="mt-4 font-bold">Please take note</h1>
-                  )}
+                <div className={"w-full mt-2 "}>
+                  <h1 className="font-bold text-lg">Policies</h1>
 
-                  {currentListing.policy && (
-                    <p className="mt-2">{currentListing.policy}</p>
-                  )}
+                  <div className="mt-2">
+                    <div className="py-2 px-2 border-b border-gray-100">
+                      <span className="font-semibold">Cancellation Policy</span>
+                    </div>
+
+                    <div className="mt-2 ml-2 flex flex-col gap-2">
+                      <ListItem>
+                        You should have CV-19 travel insurance
+                      </ListItem>
+                    </div>
+                  </div>
+
+                  <div className="mt-4">
+                    <div className="py-2 px-2 border-b border-gray-100">
+                      <span className="font-semibold">
+                        Health and safety policy
+                      </span>
+                    </div>
+
+                    <div className="mt-2 ml-2 flex flex-col gap-2">
+                      <ListItem>
+                        This transport is compliant with Winda.guide&apos;s
+                        CV-19 requirements
+                      </ListItem>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="fixed top-3 left-4 flex flex-col">

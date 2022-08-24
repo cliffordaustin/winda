@@ -12,15 +12,17 @@ import UserDropdown from "../Home/UserDropdown";
 import ClientOnly from "../ClientOnly";
 import { getItemsInBasket } from "../../lib/getItemsInBasket";
 import CartItem from "../Cart/CartItem";
+import FlightItem from "../Cart/FlightItem";
 
 function Navbar({
   showDropdown,
   changeShowDropdown,
   currentNavState,
   setCurrentNavState,
-  showSearchOptions = true,
   userProfile,
   showSearchModal,
+  showSearchOptions = true,
+  showCart = true,
 }) {
   const currencyToKES = useSelector((state) => state.home.currencyToKES);
 
@@ -118,6 +120,8 @@ function Navbar({
 
   const [transportCart, setTransportCart] = useState([]);
 
+  const [flightsCart, setFlightsCart] = useState([]);
+
   const [allItemsInActivityCart, setAllItemsInActivityCart] = useState([]);
 
   const [allItemsInTransportCart, setAllItemsInTransportCart] = useState([]);
@@ -134,6 +138,7 @@ function Navbar({
       allItemsInActivityCart,
       allItemsInCart,
       transportCart,
+      flightCart,
       allItemsInTransportCart,
     } = await getItemsInBasket();
 
@@ -142,6 +147,7 @@ function Navbar({
     setAllItemsInActivityCart(allItemsInActivityCart);
     setAllItemsInCart(allItemsInCart);
     setTransportCart(transportCart);
+    setFlightsCart(flightCart);
     setAllItemsInTransportCart(allItemsInTransportCart);
 
     setCartLoading(false);
@@ -207,89 +213,9 @@ function Navbar({
             ></SearchSelect>
           </div>
         )}
-        {/* <div
-          onClick={(e) => {
-            e.stopPropagation();
-            showSearchModal();
-          }}
-          className={"mx-6 w-[350px] hidden lg:block cursor-pointer "}
-        >
-          <div className="flex items-center justify-center gap-2 !px-2 !py-2 !bg-gray-100 w-full rounded-full text-center ml-1 font-bold">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 text-red-600"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path d="M9 9a2 2 0 114 0 2 2 0 01-4 0z" />
-              <path
-                fillRule="evenodd"
-                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a4 4 0 00-3.446 6.032l-2.261 2.26a1 1 0 101.414 1.415l2.261-2.261A4 4 0 1011 5z"
-                clipRule="evenodd"
-              />
-            </svg>
-            <div>Nairobi</div>
-          </div>
-        </div> */}
       </div>
 
       <div className="flex justify-center items-center gap-4 text-xs lg:text-base">
-        {/* <ClientOnly>
-          {currencyToKES && (
-            <div
-              className="font-bold text-gray-700 hover:text-gray-900 cursor-pointer transition-all duration-300 ease-linear flex gap-1 items-center"
-              onClick={() => {
-                dispatch({
-                  type: "CHANGE_CURRENCY_TO_DOLLAR_FALSE",
-                });
-              }}
-            >
-              <div>KES</div>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
-                />
-              </svg>
-              <div>USD</div>
-            </div>
-          )}
-          {!currencyToKES && (
-            <div
-              className="font-bold text-gray-700 hover:text-gray-900 cursor-pointer transition-all duration-300 ease-linear flex gap-1 items-center"
-              onClick={() => {
-                dispatch({
-                  type: "CHANGE_CURRENCY_TO_DOLLAR_TRUE",
-                });
-              }}
-            >
-              <div>USD</div>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
-                />
-              </svg>
-              <div>KES</div>
-            </div>
-          )}
-        </ClientOnly> */}
         <div className="flex items-center gap-2">
           <UserDropdown
             changeShowDropdown={changeShowDropdown}
@@ -299,7 +225,7 @@ function Navbar({
             numberOfTrips={trips.length}
           ></UserDropdown>
 
-          {
+          {showCart && (
             <div
               onClick={() => {
                 setShowPopup(!showPopup);
@@ -326,7 +252,7 @@ function Navbar({
                 </div>
               )}
             </div>
-          }
+          )}
         </div>
       </div>
 
@@ -513,11 +439,26 @@ function Navbar({
                     </div>
                   ))}
                 </div>
+
+                {flightsCart.length > 0 && (
+                  <div className="mb-4 mt-2 ml-4 text-lg font-bold">
+                    Flight - Your Basket({flightsCart.length})
+                  </div>
+                )}
+
+                <div className="flex flex-wrap mb-5 justify-between">
+                  {flightsCart.map((item, index) => (
+                    <div key={index} className="w-full">
+                      <FlightItem flight={item}></FlightItem>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
             {cart.length === 0 &&
               activitiesCart.length === 0 &&
-              transportCart.length === 0 && (
+              transportCart.length === 0 &&
+              flightsCart.length === 0 && (
                 <div className="font-bold text-2xl text-center w-full inline-block">
                   <span>Nothing in basket</span>
                 </div>

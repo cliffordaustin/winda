@@ -65,6 +65,7 @@
     "swiper": "^8.0.6",
     "use-places-autocomplete": "^1.11.0",
     "use-supercluster": "^0.4.0",
+    "uuid": "^8.3.2",
     "yup": "^0.32.11"
   },
   "devDependencies": {

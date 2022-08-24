@@ -102,102 +102,26 @@ const CartItem = ({
 
     setRemoveButtonLoading(true);
 
-    if (!checkoutInfo) {
-      if (token) {
-        if (stayPage) {
-          await axios
-            .delete(`${process.env.NEXT_PUBLIC_baseURL}/user-cart/${cartId}/`, {
-              headers: {
-                Authorization: "Token " + token,
-              },
-            })
-            .then(() => {
-              location.reload();
-            })
-            .catch((err) => {
-              console.log(err.response.data);
-              setRemoveButtonLoading(false);
-            });
-        } else if (activitiesPage) {
-          console.log("remove cart");
-          await axios
-            .delete(
-              `${process.env.NEXT_PUBLIC_baseURL}/user-activities-cart/${cartId}/`,
-              {
-                headers: {
-                  Authorization: "Token " + token,
-                },
-              }
-            )
-            .then(() => {
-              location.reload();
-            })
-            .catch((err) => {
-              console.log(err.response.data);
-              setRemoveButtonLoading(false);
-            });
-        } else if (transportPage) {
-          await axios
-            .delete(
-              `${process.env.NEXT_PUBLIC_baseURL}/user-transport-cart/${cartId}/`,
-              {
-                headers: {
-                  Authorization: "Token " + token,
-                },
-              }
-            )
-            .then(() => {
-              location.reload();
-            })
-            .catch((err) => {
-              console.log(err.response.data);
-              setRemoveButtonLoading(false);
-            });
-        }
-      } else if (Cookies.get("cart")) {
-        const cart = JSON.parse(decodeURIComponent(Cookies.get("cart")));
-
-        const newCart = [];
-
-        if (stayPage) {
-          newCart = cart.filter((el) => el.slug !== stay.slug);
-        } else if (activitiesPage) {
-          newCart = cart.filter((el) => el.slug !== activity.slug);
-        } else if (transportPage) {
-          newCart = cart.filter((el) => el.slug !== transport.slug);
-        }
-
-        Cookies.set("cart", JSON.stringify(newCart));
-
-        location.reload();
-      }
-    } else if (checkoutInfo) {
+    if (token) {
       if (stayPage) {
         await axios
-          .put(
-            `${process.env.NEXT_PUBLIC_baseURL}/user-orders/${orderId}/`,
-            {
-              stay_id: null,
+          .delete(`${process.env.NEXT_PUBLIC_baseURL}/user-cart/${cartId}/`, {
+            headers: {
+              Authorization: "Token " + token,
             },
-            {
-              headers: {
-                Authorization: "Token " + token,
-              },
-            }
-          )
+          })
           .then(() => {
-            router.reload();
+            location.reload();
           })
           .catch((err) => {
             console.log(err.response.data);
+            setRemoveButtonLoading(false);
           });
       } else if (activitiesPage) {
+        console.log("remove cart");
         await axios
-          .put(
-            `${process.env.NEXT_PUBLIC_baseURL}/user-orders/${orderId}/`,
-            {
-              activities_id: null,
-            },
+          .delete(
+            `${process.env.NEXT_PUBLIC_baseURL}/user-activities-cart/${cartId}/`,
             {
               headers: {
                 Authorization: "Token " + token,
@@ -205,18 +129,16 @@ const CartItem = ({
             }
           )
           .then(() => {
-            router.reload();
+            location.reload();
           })
           .catch((err) => {
             console.log(err.response.data);
+            setRemoveButtonLoading(false);
           });
       } else if (transportPage) {
         await axios
-          .put(
-            `${process.env.NEXT_PUBLIC_baseURL}/user-orders/${orderId}/`,
-            {
-              transport_id: null,
-            },
+          .delete(
+            `${process.env.NEXT_PUBLIC_baseURL}/user-transport-cart/${cartId}/`,
             {
               headers: {
                 Authorization: "Token " + token,
@@ -224,12 +146,29 @@ const CartItem = ({
             }
           )
           .then(() => {
-            router.reload();
+            location.reload();
           })
           .catch((err) => {
             console.log(err.response.data);
+            setRemoveButtonLoading(false);
           });
       }
+    } else if (Cookies.get("cart")) {
+      const cart = JSON.parse(decodeURIComponent(Cookies.get("cart")));
+
+      const newCart = [];
+
+      if (stayPage) {
+        newCart = cart.filter((el) => el.slug !== stay.slug);
+      } else if (activitiesPage) {
+        newCart = cart.filter((el) => el.slug !== activity.slug);
+      } else if (transportPage) {
+        newCart = cart.filter((el) => el.slug !== transport.slug);
+      }
+
+      Cookies.set("cart", JSON.stringify(newCart));
+
+      location.reload();
     }
   };
 

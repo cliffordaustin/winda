@@ -104,6 +104,7 @@ export const signup = (payload) => async (dispatch) => {
                 starting_point: item.starting_point,
                 destination: item.destination,
                 number_of_people: item.number_of_people,
+                flight_types: item.flight_types,
               },
               {
                 headers: {
@@ -231,6 +232,7 @@ export const login = (payload) => async (dispatch) => {
                 starting_point: item.starting_point,
                 destination: item.destination,
                 number_of_people: item.number_of_people,
+                flight_types: item.flight_types,
               },
               {
                 headers: {
@@ -357,6 +359,7 @@ export const signinWithGoogle = (payload, router) => async (dispatch) => {
                 starting_point: item.starting_point,
                 destination: item.destination,
                 number_of_people: item.number_of_people,
+                flight_types: item.flight_types,
               },
               {
                 headers: {
