@@ -264,6 +264,7 @@ const Trips = ({
             <UserDropdown
               userProfile={userProfile}
               numberOfTrips={userTrips.length}
+              isHomePage={true}
             ></UserDropdown>
           </div>
         </div>

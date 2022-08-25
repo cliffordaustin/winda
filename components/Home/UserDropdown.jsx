@@ -116,9 +116,6 @@ function UserDropdown({
           className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2 flex justify-between items-center"
         >
           <span className="font-bold text-base">cart</span>
-          <div className="h-5 w-5 p-1 text-white text-sm rounded-full bg-[#303960] flex items-center justify-center">
-            {numberOfItemsInCart}
-          </div>
         </div>
       )}
       {isHomePage && (
@@ -140,9 +137,6 @@ function UserDropdown({
           className="hover:bg-gray-100 transition-colors duration-300 md:hidden cursor-pointer ease-in-out px-2 py-2 flex justify-between items-center"
         >
           <span className="font-bold text-base">cart</span>
-          <div className="h-5 w-5 p-1 text-white text-xs rounded-full bg-[#303960] flex items-center justify-center">
-            {numberOfItemsInCart}
-          </div>
         </div>
       )}
       {!isHomePage && (

@@ -1,52 +1,32 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function Footer() {
+  const router = useRouter();
   return (
-    <div className="bg-gray-100 flex flex-col py-8 tablet:items-center justify-center px-5 lg:px-0 tablet:px-10">
-      <div className="w-full flex justify-center">
-        <Link href="/">
-          <a className="font-lobster text-xl relative w-32 h-24 cursor-pointer mb-10">
-            <Image
-              layout="fill"
-              alt="Logo"
-              src="/images/winda_logo/vertical-blue-font.png"
-              priority
-            ></Image>
-          </a>
-        </Link>
-      </div>
-      <div className="flex tablet:flex-row tablet:justify-center flex-col flex-wrap tablet:gap-5 gap-10 laptop:px-0 laptop:w-full">
-        <div className="tablet:w-45p laptop:w-23p">
-          <h1 className="font-bold md:mb-8 mb-2">Support</h1>
-          <h3>Contact us</h3>
-          <h3>Support - help center</h3>
-          <h3>Blog</h3>
-          <h3>Safety</h3>
-          <h3>Report an issue</h3>
+    <div className="bg-gray-100 mt-6 flex flex-col md:flex-row justify-center items-center gap-2 md:justify-between py-4 border-t px-4 md:px-8">
+      <div className="flex gap-3 items-center justify-center flex-wrap">
+        <div className="text-gray-900 cursor-pointer hover:text-blue-700 hover:underline transition-all duration-100 ease-linear">
+          Policies
         </div>
-
-        <div className="tablet:w-45p laptop:w-23p">
-          <h1 className="font-bold md:mb-8 mb-2">Partners</h1>
-          <h3>List with us today!</h3>
-          <h3>Partner resources</h3>
-          <h3>COVID-19 recommendations</h3>
+        <div className="text-gray-900 cursor-pointer hover:text-blue-700 hover:underline transition-all duration-100 ease-linear">
+          Safety
         </div>
-        <div className="tablet:w-45p laptop:w-23p">
-          <h1 className="font-bold md:mb-8 mb-2">Community</h1>
-          <h3>Guidelines</h3>
-          <h3>Terms & Conditions</h3>
-          <h3>Privacy Policy</h3>
+        <div className="text-gray-900 cursor-pointer hover:text-blue-700 hover:underline transition-all duration-100 ease-linear">
+          Support
         </div>
-        <div className="tablet:w-45p laptop:w-23p">
-          <h1 className="font-bold md:mb-8 mb-2">About</h1>
-          <h3>Newsroom</h3>
-          <h3>Developers</h3>
-          <h3>Careers</h3>
+        <div
+          className="text-gray-900 cursor-pointer hover:text-blue-700 hover:underline transition-all duration-100 ease-linear"
+          onClick={() => {
+            router.push("/contact-us");
+          }}
+        >
+          Contact us
         </div>
       </div>
-      <div className="flex gap-4 self-center mt-10">
+      <div className="flex gap-4 self-center">
         <svg
           className="social-icon"
           xmlns="http://www.w3.org/2000/svg"

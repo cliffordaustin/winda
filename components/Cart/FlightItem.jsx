@@ -47,27 +47,58 @@ function FlightItem({ flight, forOrder }) {
             <div> - </div>
             <div className="font-bold">{flight.destination}</div>
           </div>
+
           <div>
             <div className="text-sm text-gray-800 mt-2">
               {flight.number_of_people}{" "}
               {flight.number_of_people > 1 ? "Passengers" : "Passenger"}
             </div>
 
-            <div
-              className="text-sm w-fit cursor-pointer flex items-center bg-red-400 bg-opacity-30 px-2 py-1 text-red-500 font-bold p-3 rounded-md mt-2
+            {!forOrder && (
+              <div
+                className="text-sm w-fit cursor-pointer flex items-center bg-red-400 bg-opacity-30 px-2 py-1 text-red-500 font-bold p-3 rounded-md mt-2
           "
-              onClick={removeCart}
-            >
-              <span className="mr-1">Remove</span>
-              <div className={" " + (!removeButtonLoading ? "hidden" : "")}>
-                <LoadingSpinerChase
-                  width={13}
-                  height={13}
-                  color="red"
-                ></LoadingSpinerChase>
+                onClick={removeCart}
+              >
+                <span className="mr-1">Remove</span>
+                <div className={" " + (!removeButtonLoading ? "hidden" : "")}>
+                  <LoadingSpinerChase
+                    width={13}
+                    height={13}
+                    color="red"
+                  ></LoadingSpinerChase>
+                </div>
               </div>
-            </div>
+            )}
           </div>
+
+          {forOrder && (
+            <div>
+              {flight.reviewing && (
+                <div className="w-fit px-1 rounded-md mt-2 font-bold text-sm py-0.5 bg-yellow-500">
+                  Reviewing
+                </div>
+              )}
+
+              {flight.email_sent && (
+                <div className="w-fit px-1 rounded-md mt-2 font-bold text-sm py-0.5 bg-yellow-500">
+                  Email sent
+                </div>
+              )}
+
+              {flight.cancelled && (
+                <div className="text-white  w-fit px-1 rounded-md mt-2 font-bold text-sm py-0.5 bg-red-500">
+                  Cancelled
+                </div>
+              )}
+
+              {flight.paid && (
+                <div className="w-fit px-1 rounded-md mt-2 font-bold text-sm py-0.5 bg-green-500">
+                  Paid
+                </div>
+              )}
+            </div>
+          )}
         </div>
         <div className="mb-2 flex flex-col self-start">
           <Price
@@ -89,34 +120,6 @@ function FlightItem({ flight, forOrder }) {
           </div>
         </div>
       </div>
-
-      {forOrder && (
-        <div>
-          {flight.reviewing && (
-            <div className="absolute bottom-1.5 right-4 w-fit px-1 rounded-md font-bold text-sm py-0.5 bg-yellow-500">
-              Reviewing
-            </div>
-          )}
-
-          {flight.email_sent && (
-            <div className="absolute bottom-1.5 right-4 w-fit px-1 rounded-md font-bold text-sm py-0.5 bg-yellow-500">
-              Email sent
-            </div>
-          )}
-
-          {flight.cancelled && (
-            <div className="absolute bottom-1.5 right-4 text-white  w-fit px-1 rounded-md font-bold text-sm py-0.5 bg-red-500">
-              Cancelled
-            </div>
-          )}
-
-          {flight.paid && (
-            <div className="absolute bottom-1.5 right-4 w-fit px-1 rounded-md font-bold text-sm py-0.5 bg-green-500">
-              Paid
-            </div>
-          )}
-        </div>
-      )}
     </div>
   );
 }

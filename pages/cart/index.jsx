@@ -376,6 +376,7 @@ const Cart = ({
             <div className="text-center mt-4 font-bold">
               No item in here. Don&apos;t worry.
             </div>
+
             <PopoverBox
               btnPopover={
                 <div className="flex gap-1 items-center justify-center text-blue-800 hover:text-blue-900 transition-all duration-300">
@@ -433,7 +434,6 @@ const Cart = ({
             </PopoverBox>
           </div>
         </div>
-        <Footer></Footer>
       </div>
     );
   }
@@ -708,16 +708,19 @@ const Cart = ({
             </div>
           </div>
         </div>
-
-        <Footer></Footer>
       </div>
     );
   }
 
   return (
-    <div>
-      {showCartItems}
-      {nothingInCart}
+    <div className="relative">
+      <div className="mb-24">
+        {showCartItems}
+        {nothingInCart}
+      </div>
+      <div className="fixed left-0 right-0 bottom-0">
+        <Footer></Footer>
+      </div>
     </div>
   );
 };

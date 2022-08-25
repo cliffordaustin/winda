@@ -41,6 +41,7 @@ import {
   activityPricePerPersonNonResident,
 } from "../../lib/pricePlan";
 import Dialogue from "../../components/Home/Dialogue";
+import Head from "next/head";
 
 const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
   const GlobalStyle = createGlobalStyle`
@@ -457,6 +458,11 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
         "" + (showMobileDateModal ? " !overflow-y-hidden h-screen" : "")
       }
     >
+      <Head>
+        <title>{activity.name}</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
+
       <GlobalStyle></GlobalStyle>
       <div className="fixed top-0 w-full bg-white z-20">
         <Navbar

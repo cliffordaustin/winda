@@ -1365,7 +1365,6 @@ function Activities({
                   </div>
                 </div>
               )}
-
               {activities.length > 0 && (
                 <ReactPaginate
                   breakLabel="..."

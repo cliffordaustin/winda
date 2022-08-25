@@ -64,7 +64,7 @@ function Orders({
   const router = useRouter();
 
   return (
-    <>
+    <div className="relative">
       <div>
         {stayOrders.length === 0 &&
           activitiesOrders.length === 0 &&
@@ -118,12 +118,11 @@ function Orders({
                   </Link>
                 </div>
               </div>
-              <Footer></Footer>
             </div>
           )}
       </div>
 
-      <div>
+      <div className="mb-24">
         {(stayOrders.length > 0 ||
           activitiesOrders.length > 0 ||
           transportOrders.length > 0 ||
@@ -290,12 +289,14 @@ function Orders({
                 <div></div>
               </Dialogue>
             </div>
-
-            <Footer></Footer>
           </div>
         )}
       </div>
-    </>
+
+      <div className="fixed left-0 right-0 bottom-0">
+        <Footer></Footer>
+      </div>
+    </div>
   );
 }
 

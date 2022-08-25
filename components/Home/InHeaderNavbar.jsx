@@ -15,8 +15,10 @@ function Navbar({
   currentNavState,
   setCurrentNavState,
   userProfile,
-  showSearchOptions = true,
   isHomePage,
+  showSearchOptions = true,
+  className = "",
+  logoImage = "/images/winda_logo/horizontal-white-font.png",
 }) {
   const [numberOfItemsInCart, setNumberOfItemsInCart] = useState(0);
 
@@ -102,15 +104,15 @@ function Navbar({
     getItemsInTrip();
   }, []);
   return (
-    <div className="flex items-center justify-between sm:px-12 px-6 md:px-24 py-4">
+    <div
+      className={
+        "flex items-center justify-between sm:px-12 px-6 md:px-24 py-4 " +
+        className
+      }
+    >
       <Link href="/">
         <a className="relative w-28 h-9 cursor-pointer">
-          <Image
-            layout="fill"
-            alt="Logo"
-            src="/images/winda_logo/horizontal-white-font.png"
-            priority
-          ></Image>
+          <Image layout="fill" alt="Logo" src={logoImage} priority></Image>
         </a>
       </Link>
       {showSearchOptions && !isHomePage && (
