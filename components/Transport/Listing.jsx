@@ -208,22 +208,7 @@ function Listing({
   };
 
   return (
-    <div
-      onClick={() => {
-        // if (router.query.trip) {
-        //   router.push({
-        //     pathname: `transport/${listing.slug}`,
-        //     query: {
-        //       trip: router.query.trip,
-        //       group_trip: router.query.group_trip,
-        //     },
-        //   });
-        // } else {
-        //   router.push(`transport/${listing.slug}`);
-        // }
-      }}
-      className="smMax:!w-full mdMax:!w-[48%] md:!w-[47%] lg:!w-[48%] xl:!w-[31%] !relative select-none"
-    >
+    <div className="smMax:!w-full mdMax:!w-[48%] md:!w-[47%] lg:!w-[48%] xl:!w-[31%] !relative select-none">
       <div
         className={styles.card + " w-full rounded-md overflow-hidden bg-white"}
       >
@@ -286,13 +271,8 @@ function Listing({
           </div>
 
           <div className="flex gap-2 mt-4">
-            {/* <Button className="flex w-full items-center gap-1 !px-0 !py-1.5 font-bold !bg-blue-500 !text-white">
-              <span>Add to basket</span>
-            </Button> */}
-
             <Button
               onClick={() => {
-                // setCurrentListing(listing);
                 router.push({
                   pathname: "/transport",
                   query: {

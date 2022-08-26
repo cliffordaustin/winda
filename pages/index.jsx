@@ -19,6 +19,7 @@ import SearchSelect from "../components/Home/SearchSelect";
 import MobileModal from "../components/ui/MobileModal";
 
 import PopoverBox from "../components/ui/Popover";
+import Link from "next/link";
 
 export default function Home({ userProfile }) {
   const router = useRouter();
@@ -296,14 +297,13 @@ export default function Home({ userProfile }) {
               </h1>
             </div>
             <div className="flex gap-2">
-              <Button
-                onClick={() => {
-                  router.push("/trip");
-                }}
-                className="flex items-center gap-4 w-36 !py-3 !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500"
-              >
-                <span className="font-bold">Curated trips</span>
-              </Button>
+              <Link href="/trip">
+                <a>
+                  <Button className="flex items-center gap-4 w-36 !py-3 !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500">
+                    <span className="font-bold">Curated trips</span>
+                  </Button>
+                </a>
+              </Link>
 
               <PopoverBox
                 btnPopover={
@@ -328,30 +328,29 @@ export default function Home({ userProfile }) {
                 panelClassName="mt-2 w-[150px] text-left md:w-[250px] bg-white rounded-lg overflow-hidden"
                 btnClassName="flex relative items-center gap-2 px-3 rounded-md py-3 bg-white"
               >
-                <div
-                  onClick={() => {
-                    router.push("/stays");
-                  }}
-                  className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2"
-                >
-                  Stays
-                </div>
-                <div
-                  onClick={() => {
-                    router.push("/experiences");
-                  }}
-                  className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2"
-                >
-                  Experiences
-                </div>
-                <div
-                  onClick={() => {
-                    router.push("/transport");
-                  }}
-                  className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2"
-                >
-                  Transport
-                </div>
+                <Link href="/stays">
+                  <a>
+                    <div className="hover:bg-gray-100 text-gray-700 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2">
+                      Stays
+                    </div>
+                  </a>
+                </Link>
+
+                <Link href="/experiences">
+                  <a>
+                    <div className="hover:bg-gray-100 text-gray-700 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2">
+                      Experiences
+                    </div>
+                  </a>
+                </Link>
+
+                <Link href="/transport">
+                  <a>
+                    <div className="hover:bg-gray-100 text-gray-700 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2">
+                      Transport
+                    </div>
+                  </a>
+                </Link>
               </PopoverBox>
             </div>
           </div>

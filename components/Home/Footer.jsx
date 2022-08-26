@@ -17,14 +17,14 @@ export default function Footer() {
         <div className="text-gray-900 cursor-pointer hover:text-blue-700 hover:underline transition-all duration-100 ease-linear">
           Support
         </div>
-        <div
-          className="text-gray-900 cursor-pointer hover:text-blue-700 hover:underline transition-all duration-100 ease-linear"
-          onClick={() => {
-            router.push("/contact-us");
-          }}
-        >
-          Contact us
-        </div>
+
+        <Link href="/contact-us">
+          <a>
+            <div className="text-gray-900 cursor-pointer hover:text-blue-700 hover:underline transition-all duration-100 ease-linear">
+              Contact us
+            </div>
+          </a>
+        </Link>
       </div>
       <div className="flex gap-4 self-center">
         <svg

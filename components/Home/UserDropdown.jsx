@@ -109,71 +109,63 @@ function UserDropdown({
       )}
       {!userProfile && <hr className="" />}
       {isHomePage && (
-        <div
-          onClick={() => {
-            router.push("/cart");
-          }}
-          className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2 flex justify-between items-center"
-        >
-          <span className="font-bold text-base">cart</span>
-        </div>
+        <Link href="/cart">
+          <a>
+            <div className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2 flex justify-between items-center">
+              <span className="font-bold text-base">cart</span>
+            </div>
+          </a>
+        </Link>
       )}
       {isHomePage && (
-        <div
-          onClick={() => {
-            router.push("/trip/user-trips");
-          }}
-          className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2 flex justify-between items-center"
-        >
-          <span className="font-bold text-base">your trips</span>
-        </div>
+        <Link href="/trip/user-trips">
+          <a>
+            <div className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2 flex justify-between items-center">
+              <span className="font-bold text-base">your trips</span>
+            </div>
+          </a>
+        </Link>
       )}
 
       {!isHomePage && (
-        <div
-          onClick={() => {
-            router.push("/cart");
-          }}
-          className="hover:bg-gray-100 transition-colors duration-300 md:hidden cursor-pointer ease-in-out px-2 py-2 flex justify-between items-center"
-        >
-          <span className="font-bold text-base">cart</span>
-        </div>
+        <Link href="/cart">
+          <a>
+            <div className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2 flex justify-between items-center">
+              <span className="font-bold text-base">cart</span>
+            </div>
+          </a>
+        </Link>
       )}
       {!isHomePage && (
-        <div
-          onClick={() => {
-            router.push("/trip/user-trips");
-          }}
-          className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2 flex justify-between items-center"
-        >
-          <span className="font-bold text-base">your trips</span>
-        </div>
+        <Link href="/trip/user-trips">
+          <a>
+            <div className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2 flex justify-between items-center">
+              <span className="font-bold text-base">your trips</span>
+            </div>
+          </a>
+        </Link>
       )}
 
-      <div
-        onClick={() => {
-          router.push("/orders");
-        }}
-        className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2 flex justify-between items-center"
-      >
-        <span className="font-bold text-base">orders</span>
-      </div>
+      <Link href="/orders">
+        <a>
+          <div className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2 flex justify-between items-center">
+            <span className="font-bold text-base">orders</span>
+          </div>
+        </a>
+      </Link>
 
-      <div
-        onClick={() => {
-          router.push("/saved-listings");
-        }}
-        className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2 flex justify-between items-center"
-      >
-        <span className="font-bold text-base">Saved listings</span>
-      </div>
+      <Link href="/saved-listings">
+        <a>
+          <div className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2 flex justify-between items-center">
+            <span className="font-bold text-base">Saved listings</span>
+          </div>
+        </a>
+      </Link>
 
       <div className="hover:bg-gray-100 text-base transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2">
         About
       </div>
-      <div className="hover:bg-gray-100 text-base transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2">
-        Terms of use
-      </div>
+
       {userProfile && <hr className="" />}
       {userProfile && (
         <Link href="/logout">

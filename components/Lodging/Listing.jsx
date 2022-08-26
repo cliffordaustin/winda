@@ -286,288 +286,23 @@ function Listing({
       }}
       className="w-full sm:!w-[31.5%] lg:!w-[47%] xl:!w-[47%] !relative select-none"
     >
-      <div
-        onClick={() => {
-          if (router.query.trip) {
-            router.push({
-              pathname: `stays/${listing.slug}`,
-              query: {
-                trip: router.query.trip,
-                group_trip: router.query.group_trip,
-              },
-            });
-          } else {
-            router.push(`stays/${listing.slug}`);
-          }
-        }}
+      <Link
+        href={
+          router.query.trip
+            ? `/stays/${listing.slug}?${router.query.trip}?${router.query.group_trip}`
+            : `/stays/${listing.slug}`
+        }
       >
-        <div className="relative">
-          <Card
-            imagePaths={images}
-            carouselClassName="h-44"
-            subCarouselClassName="hidden"
-            className={styles.card + " "}
-          >
-            <div className="flex flex-col gap-1">
-              <h1 className="text-gray-500 truncate">{listing.name}</h1>
-              {!currencyToKES && (
-                <h1 className={"font-bold text-xl font-OpenSans "}>
-                  {price()
-                    ? "$" + Math.ceil(price()).toLocaleString()
-                    : "No data"}
-                </h1>
-              )}
-              {currencyToKES && (
-                <h1 className={"font-bold text-xl font-OpenSans "}>
-                  {price()
-                    ? "KES" + Math.ceil(newPrice).toLocaleString()
-                    : "No data"}
-                </h1>
-              )}
-            </div>
-            <div className="text-gray-500 flex gap-1 text-sm truncate mt-1 flex-wrap">
-              {listing.capacity && (
-                <div className="flex items-center gap-0.5">
-                  <svg
-                    className="w-3 h-3"
-                    xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden="true"
-                    role="img"
-                    width="1em"
-                    height="1em"
-                    preserveAspectRatio="xMidYMid meet"
-                    viewBox="0 0 36 36"
-                  >
-                    <path
-                      fill="currentColor"
-                      d="M12 16.14h-.87a8.67 8.67 0 0 0-6.43 2.52l-.24.28v8.28h4.08v-4.7l.55-.62l.25-.29a11 11 0 0 1 4.71-2.86A6.59 6.59 0 0 1 12 16.14Z"
-                    />
-                    <path
-                      fill="currentColor"
-                      d="M31.34 18.63a8.67 8.67 0 0 0-6.43-2.52a10.47 10.47 0 0 0-1.09.06a6.59 6.59 0 0 1-2 2.45a10.91 10.91 0 0 1 5 3l.25.28l.54.62v4.71h3.94v-8.32Z"
-                    />
-                    <path
-                      fill="currentColor"
-                      d="M11.1 14.19h.31a6.45 6.45 0 0 1 3.11-6.29a4.09 4.09 0 1 0-3.42 6.33Z"
-                    />
-                    <path
-                      fill="currentColor"
-                      d="M24.43 13.44a6.54 6.54 0 0 1 0 .69a4.09 4.09 0 0 0 .58.05h.19A4.09 4.09 0 1 0 21.47 8a6.53 6.53 0 0 1 2.96 5.44Z"
-                    />
-                    <circle
-                      cx="17.87"
-                      cy="13.45"
-                      r="4.47"
-                      fill="currentColor"
-                    />
-                    <path
-                      fill="currentColor"
-                      d="M18.11 20.3A9.69 9.69 0 0 0 11 23l-.25.28v6.33a1.57 1.57 0 0 0 1.6 1.54h11.49a1.57 1.57 0 0 0 1.6-1.54V23.3l-.24-.3a9.58 9.58 0 0 0-7.09-2.7Z"
-                    />
-                    <path fill="none" d="M0 0h36v36H0z" />
-                  </svg>
-                  <span>{listing.capacity} Guests</span>
-                </div>
-              )}
-              {listing.rooms && (
-                <div className="flex items-center gap-0.5">
-                  <svg
-                    className="w-3 h-3"
-                    xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden="true"
-                    role="img"
-                    width="1em"
-                    height="1em"
-                    preserveAspectRatio="xMidYMid meet"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      fill="currentColor"
-                      d="M5 5v14a1 1 0 0 0 1 1h3v-2H7V6h2V4H6a1 1 0 0 0-1 1zm14.242-.97l-8-2A1 1 0 0 0 10 3v18a.998.998 0 0 0 1.242.97l8-2A1 1 0 0 0 20 19V5a1 1 0 0 0-.758-.97zM15 12.188a1.001 1.001 0 0 1-2 0v-.377a1 1 0 1 1 2 .001v.376z"
-                    />
-                  </svg>
-
-                  <span>{listing.rooms} rm</span>
-                </div>
-              )}
-            </div>
-            <div className="font-bold text-sm truncate mt-1">
-              {listing.location}
-            </div>
-            {userLatLng.latitude &&
-              userLatLng.longitude &&
-              listing.latitude &&
-              listing.longitude && (
-                <div className="text-black text-sm truncate mt-1">
-                  {Math.round(
-                    getDistance(
-                      listing.latitude,
-                      listing.longitude,
-                      userLatLng.latitude,
-                      userLatLng.longitude
-                    )
-                  ).toLocaleString()}
-                  KM Away
-                </div>
-              )}
-            {/* {Cookies.get("token") && router.query.fromOrder === "true" && (
-            <div
-              className="text-sm w-fit flex items-center bg-green-500 bg-opacity-30 px-2 py-1 text-green-700 bg-primary-red-100 font-bold p-3 rounded-md mt-2
-          "
-              onClick={(e) => {
-                if (!listingIsInOrder) {
-                  addToTrip(e);
-                } else if (listingIsInOrder) {
-                  e.stopPropagation();
-                  router.push({
-                    pathname: "/orders",
-                    query: {
-                      stay: "show",
-                      experiences: "show",
-                    },
-                  });
-                }
-              }}
+        <a>
+          <div className="relative">
+            <Card
+              imagePaths={images}
+              carouselClassName="h-44"
+              subCarouselClassName="hidden"
+              className={styles.card + " "}
             >
-              {!listingIsInOrder && <span className="mr-1">Add to trip</span>}
-              {listingIsInOrder && (
-                <span className="mr-1">View in your trip</span>
-              )}
-              <div className={" " + (!addToTripLoading ? "hidden" : "")}>
-                <LoadingSpinerChase
-                  width={13}
-                  height={13}
-                  color="green"
-                ></LoadingSpinerChase>
-              </div>
-            </div>
-          )} */}
-            {/* <div className="flex items-center gap-1 mt-2">
-            <div className={!isSafari ? "-mb-0.5" : "-mb-1"}>
-              <Badge
-                className={
-                  listing.rating >= 4.5
-                    ? "!bg-green-700"
-                    : listing.rating >= 4
-                    ? "!bg-green-600"
-                    : listing.rating >= 3.5
-                    ? "!bg-green-500"
-                    : listing.rating >= 3
-                    ? "!bg-yellow-500"
-                    : "!bg-red-500"
-                }
-              >
-                {listing.rating}
-              </Badge>
-            </div>
-            <Rating
-              rating={listing.rating}
-              fontSize={!isSafari ? 25 : 16}
-            ></Rating>
-            <div className="font-medium text-sm">({listing.numRating})</div>
-          </div> */}
-
-            {slugIsCorrect && (
-              <div className="mt-2">
-                <Button
-                  onClick={() => {
-                    addToTrip();
-                  }}
-                  className="!bg-blue-500 !py-1 flex gap-2 !px-1.5"
-                >
-                  <span className="text-white text-sm">Add to trip</span>
-
-                  {addToTripLoading && (
-                    <div>
-                      <LoadingSpinerChase
-                        width={14}
-                        height={14}
-                      ></LoadingSpinerChase>
-                    </div>
-                  )}
-                </Button>
-              </div>
-            )}
-          </Card>
-          <div className="absolute rounded-3xl mt-2 mr-2 flex z-10 items-center justify-center gap-0.5 top-0 right-0">
-            {liked && (
-              <svg
-                width="28px"
-                height="28px"
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-8 w-8 py-1 rounded-3xl hover:bg-gray-200 cursor-pointer"
-                viewBox="0 0 20 20"
-                fill="#e63946"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  changeLikeState();
-                }}
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            )}
-            {!liked && (
-              <svg
-                width="28px"
-                height="28px"
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-8 w-8 py-1 rounded-3xl hover:bg-gray-200 cursor-pointer"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  changeUnLikeState();
-                }}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                />
-              </svg>
-            )}
-          </div>
-
-          {/* <div className="absolute top-2 left-2 z-10 px-2 rounded-md text-sm capitalize bg-blue-600 text-white">
-            {listing.type_of_stay.toLowerCase()}
-          </div> */}
-        </div>
-      </div>
-      {/* <div
-        onClick={() => {
-          if (router.query.trip) {
-            router.push({
-              pathname: `stays/${listing.slug}`,
-              query: {
-                trip: router.query.trip,
-                group_trip: router.query.group_trip,
-              },
-            });
-          } else {
-            router.push(`stays/${listing.slug}`);
-          }
-        }}
-      >
-        <div className="lgMax:hidden lg:block xl:hidden relative">
-          <SecondCard
-            imagePaths={images}
-            carouselClassName="min-h-[200px] !w-[45%]"
-            subCarouselClassName="hidden"
-            subCarouselContainerClassName="!w-[55%]"
-            className={styles.card}
-          >
-            <div className="relative w-full">
               <div className="flex flex-col gap-1">
-                <div className="text-gray-500 truncate w-[90%]">
-                  {listing.name}
-                </div>
-
+                <h1 className="text-gray-500 truncate">{listing.name}</h1>
                 {!currencyToKES && (
                   <h1 className={"font-bold text-xl font-OpenSans "}>
                     {price()
@@ -648,26 +383,26 @@ function Listing({
                     <span>{listing.rooms} rm</span>
                   </div>
                 )}
-
-                
               </div>
               <div className="font-bold text-sm truncate mt-1">
                 {listing.location}
               </div>
-
-              {userLatLng.latitude && userLatLng.longitude && (
-                <div className="text-black text-sm truncate mt-1">
-                  {Math.round(
-                    getDistance(
-                      listing.latitude,
-                      listing.longitude,
-                      userLatLng.latitude,
-                      userLatLng.longitude
-                    )
-                  ).toLocaleString()}
-                  KM Away
-                </div>
-              )}
+              {userLatLng.latitude &&
+                userLatLng.longitude &&
+                listing.latitude &&
+                listing.longitude && (
+                  <div className="text-black text-sm truncate mt-1">
+                    {Math.round(
+                      getDistance(
+                        listing.latitude,
+                        listing.longitude,
+                        userLatLng.latitude,
+                        userLatLng.longitude
+                      )
+                    ).toLocaleString()}
+                    KM Away
+                  </div>
+                )}
 
               {slugIsCorrect && (
                 <div className="mt-2">
@@ -690,57 +425,55 @@ function Listing({
                   </Button>
                 </div>
               )}
-              
+            </Card>
+          </div>
+        </a>
+      </Link>
 
-              <div className="absolute flex z-10 bg-white items-center justify-center top-0 right-0">
-                {liked && (
-                  <svg
-                    width="28px"
-                    height="28px"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-8 w-8 py-1 rounded-3xl hover:bg-gray-200 cursor-pointer"
-                    viewBox="0 0 20 20"
-                    fill="#e63946"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      changeLikeState();
-                    }}
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                )}
-                {!liked && (
-                  <svg
-                    width="28px"
-                    height="28px"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-8 w-8 py-1 rounded-3xl hover:bg-gray-200 cursor-pointer"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      changeUnLikeState();
-                    }}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                    />
-                  </svg>
-                )}
-              </div>
-            </div>
-          </SecondCard>
-          
-        </div>
-      </div> */}
+      <div className="absolute rounded-3xl mt-2 mr-2 flex z-10 items-center justify-center gap-0.5 top-0 right-0">
+        {liked && (
+          <svg
+            width="28px"
+            height="28px"
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-8 w-8 py-1 rounded-3xl hover:bg-gray-200 cursor-pointer"
+            viewBox="0 0 20 20"
+            fill="#e63946"
+            onClick={(e) => {
+              e.stopPropagation();
+              changeLikeState();
+            }}
+          >
+            <path
+              fillRule="evenodd"
+              d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+              clipRule="evenodd"
+            />
+          </svg>
+        )}
+        {!liked && (
+          <svg
+            width="28px"
+            height="28px"
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-8 w-8 py-1 rounded-3xl hover:bg-gray-200 cursor-pointer"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            onClick={(e) => {
+              e.stopPropagation();
+              changeUnLikeState();
+            }}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+            />
+          </svg>
+        )}
+      </div>
     </div>
   );
 }

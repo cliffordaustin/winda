@@ -13,6 +13,7 @@ import Image from "next/image";
 import Carousel from "../ui/Carousel";
 import { useRouter } from "next/router";
 import Dialogue from "./Dialogue";
+import Link from "next/link";
 
 SwiperCore.use([Navigation]);
 
@@ -106,19 +107,13 @@ function Main() {
                   Kenya has a vast and rich culture, so we created trips
                   dedicated to exploring it.
                 </p>
-                <div
-                  onClick={() => {
-                    router.push({
-                      pathname: "/trip",
-                      query: {
-                        tag: "cultural",
-                      },
-                    });
-                  }}
-                  className="px-3 cursor-pointer font-bold text-sm py-2 w-fit bg-white text-black rounded-lg mt-2"
-                >
-                  View curated trips
-                </div>
+                <Link href="/trip?tag=cultural">
+                  <a>
+                    <div className="px-3 cursor-pointer font-bold text-sm py-2 w-fit bg-white text-black rounded-lg mt-2">
+                      View curated trips
+                    </div>
+                  </a>
+                </Link>
               </div>
             </div>
             <div className="xsmall:w-[70%] w-[65%] sm:w-[60%] h-full flex justify-between flex-wrap">
@@ -226,21 +221,15 @@ function Main() {
                     Stays in Nairobi
                   </div>
 
-                  <div className="absolute bottom-2 z-30 flex flex-col left-2">
-                    <div
-                      onClick={() => {
-                        router.push({
-                          pathname: "/stays",
-                          query: {
-                            search: "Nairobi",
-                          },
-                        });
-                      }}
-                      className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
-                    >
-                      View stays
-                    </div>
-                  </div>
+                  <Link href="/stays?search=Nairobi">
+                    <a>
+                      <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                        <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
+                          View stays
+                        </div>
+                      </div>
+                    </a>
+                  </Link>
                 </div>
                 <div className="w-full h-[49%] relative self-end before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
                   <Carousel
@@ -252,21 +241,15 @@ function Main() {
                     Experiences in Nairobi
                   </div>
 
-                  <div className="absolute bottom-2 z-30 flex flex-col left-2">
-                    <div
-                      onClick={() => {
-                        router.push({
-                          pathname: "/experiences",
-                          query: {
-                            search: "Nairobi",
-                          },
-                        });
-                      }}
-                      className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
-                    >
-                      View experiences
-                    </div>
-                  </div>
+                  <Link href="/experiences?search=Nairobi">
+                    <a>
+                      <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                        <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
+                          View experiences
+                        </div>
+                      </div>
+                    </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -289,19 +272,13 @@ function Main() {
                   partner. We created curated trip meant for you to create those
                   moments.
                 </p>
-                <div
-                  onClick={() => {
-                    router.push({
-                      pathname: "/trip",
-                      query: {
-                        tag: "romantic_getaway",
-                      },
-                    });
-                  }}
-                  className="px-3 cursor-pointer font-bold text-sm py-2 w-fit bg-white text-black rounded-lg mt-2"
-                >
-                  View curated trips
-                </div>
+                <Link href="/trip?tag=romantic_getaway">
+                  <a>
+                    <div className="px-3 cursor-pointer font-bold text-sm py-2 w-fit bg-white text-black rounded-lg mt-2">
+                      View curated trips
+                    </div>
+                  </a>
+                </Link>
               </div>
             </div>
 
@@ -401,21 +378,15 @@ function Main() {
                     Stays in Naivasha
                   </div>
 
-                  <div className="absolute bottom-2 z-30 flex flex-col left-2">
-                    <div
-                      onClick={() => {
-                        router.push({
-                          pathname: "/stays",
-                          query: {
-                            search: "Naivasha",
-                          },
-                        });
-                      }}
-                      className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
-                    >
-                      View stays
-                    </div>
-                  </div>
+                  <Link href="/stays?search=Naivasha">
+                    <a>
+                      <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                        <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
+                          View stays
+                        </div>
+                      </div>
+                    </a>
+                  </Link>
                 </div>
                 <div className="w-full h-[49%] relative self-end before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
                   <Carousel
@@ -427,21 +398,15 @@ function Main() {
                     Experiences in Naivasha
                   </div>
 
-                  <div className="absolute bottom-2 z-30 flex flex-col left-2">
-                    <div
-                      onClick={() => {
-                        router.push({
-                          pathname: "/experiences",
-                          query: {
-                            search: "Naivasha",
-                          },
-                        });
-                      }}
-                      className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
-                    >
-                      View experiences
-                    </div>
-                  </div>
+                  <Link href="/experiences?search=Naivasha">
+                    <a>
+                      <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                        <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
+                          View experiences
+                        </div>
+                      </div>
+                    </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -463,19 +428,14 @@ function Main() {
                   Kenya is a country to has a lot to offer. We created curated
                   trips meant for your explore the country and enjoy your time.
                 </p>
-                <div
-                  onClick={() => {
-                    router.push({
-                      pathname: "/tag",
-                      query: {
-                        tag: "road_trip",
-                      },
-                    });
-                  }}
-                  className="px-3 cursor-pointer font-bold text-sm py-2 w-fit bg-white text-black rounded-lg mt-2"
-                >
-                  View curated trips
-                </div>
+
+                <Link href="/trip?tag=road_trip">
+                  <a>
+                    <div className="px-3 cursor-pointer font-bold text-sm py-2 w-fit bg-white text-black rounded-lg mt-2">
+                      View curated trips
+                    </div>
+                  </a>
+                </Link>
               </div>
             </div>
 
@@ -639,21 +599,15 @@ function Main() {
                     Stays in Massai Mara
                   </div>
 
-                  <div className="absolute bottom-2 z-30 flex flex-col left-2">
-                    <div
-                      onClick={() => {
-                        router.push({
-                          pathname: "/stays",
-                          query: {
-                            search: "Massai Mara",
-                          },
-                        });
-                      }}
-                      className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
-                    >
-                      View stays
-                    </div>
-                  </div>
+                  <Link href="/stays?search=Massai Mara">
+                    <a>
+                      <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                        <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
+                          View stays
+                        </div>
+                      </div>
+                    </a>
+                  </Link>
                 </div>
                 <div className="w-full h-[49%] relative self-end before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
                   <Carousel
@@ -665,21 +619,15 @@ function Main() {
                     Experiences in Massai Mara
                   </div>
 
-                  <div className="absolute bottom-2 z-30 flex flex-col left-2">
-                    <div
-                      onClick={() => {
-                        router.push({
-                          pathname: "/experiences",
-                          query: {
-                            search: "Massai Mara",
-                          },
-                        });
-                      }}
-                      className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
-                    >
-                      View experiences
-                    </div>
-                  </div>
+                  <Link href="/experiences?search=Massai Mara">
+                    <a>
+                      <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                        <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
+                          View experiences
+                        </div>
+                      </div>
+                    </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -722,21 +670,15 @@ function Main() {
                 Lodge
               </div>
 
-              <div className="absolute bottom-2 z-30 flex flex-col left-2">
-                <div
-                  onClick={() => {
-                    router.push({
-                      pathname: "/stays",
-                      query: {
-                        type_of_stay: "LODGE",
-                      },
-                    });
-                  }}
-                  className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
-                >
-                  View stays
-                </div>
-              </div>
+              <Link href="/stays?type_of_stay=LODGE">
+                <a>
+                  <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                    <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
+                      View stays
+                    </div>
+                  </div>
+                </a>
+              </Link>
             </div>
           </SwiperSlide>
 
@@ -751,21 +693,15 @@ function Main() {
                 Campsites
               </div>
 
-              <div className="absolute bottom-2 z-30 flex flex-col left-2">
-                <div
-                  onClick={() => {
-                    router.push({
-                      pathname: "/stays",
-                      query: {
-                        type_of_stay: "CAMPSITE",
-                      },
-                    });
-                  }}
-                  className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
-                >
-                  View stays
-                </div>
-              </div>
+              <Link href="/stays?type_of_stay=CAMPSITE">
+                <a>
+                  <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                    <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
+                      View stays
+                    </div>
+                  </div>
+                </a>
+              </Link>
             </div>
           </SwiperSlide>
 
@@ -780,21 +716,15 @@ function Main() {
                 Tented camps
               </div>
 
-              <div className="absolute bottom-2 z-30 flex flex-col left-2">
-                <div
-                  onClick={() => {
-                    router.push({
-                      pathname: "/stays",
-                      query: {
-                        type_of_stay: "TENTED CAMP",
-                      },
-                    });
-                  }}
-                  className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
-                >
-                  View stays
-                </div>
-              </div>
+              <Link href="/stays?type_of_stay=TENTED CAMP">
+                <a>
+                  <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                    <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
+                      View stays
+                    </div>
+                  </div>
+                </a>
+              </Link>
             </div>
           </SwiperSlide>
 
@@ -809,21 +739,15 @@ function Main() {
                 Unique spaces
               </div>
 
-              <div className="absolute bottom-2 z-30 flex flex-col left-2">
-                <div
-                  onClick={() => {
-                    router.push({
-                      pathname: "/stays",
-                      query: {
-                        type_of_stay: "UNIQUE SPACE",
-                      },
-                    });
-                  }}
-                  className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
-                >
-                  View stays
-                </div>
-              </div>
+              <Link href="/stays?type_of_stay=UNIQUE SPACE">
+                <a>
+                  <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                    <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
+                      View stays
+                    </div>
+                  </div>
+                </a>
+              </Link>
             </div>
           </SwiperSlide>
 
@@ -838,21 +762,15 @@ function Main() {
                 Budget
               </div>
 
-              <div className="absolute bottom-2 z-30 flex flex-col left-2">
-                <div
-                  onClick={() => {
-                    router.push({
-                      pathname: "/stays",
-                      query: {
-                        pricing_type: "REASONABLE",
-                      },
-                    });
-                  }}
-                  className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
-                >
-                  View stays
-                </div>
-              </div>
+              <Link href="/stays?pricing_type=REASONABLE">
+                <a>
+                  <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                    <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
+                      View stays
+                    </div>
+                  </div>
+                </a>
+              </Link>
             </div>
           </SwiperSlide>
 
@@ -867,21 +785,15 @@ function Main() {
                 Mid-Range
               </div>
 
-              <div className="absolute bottom-2 z-30 flex flex-col left-2">
-                <div
-                  onClick={() => {
-                    router.push({
-                      pathname: "/stays",
-                      query: {
-                        pricing_type: "MID-RANGE",
-                      },
-                    });
-                  }}
-                  className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
-                >
-                  View stays
-                </div>
-              </div>
+              <Link href="/stays?pricing_type=MID-RANGE">
+                <a>
+                  <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                    <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
+                      View stays
+                    </div>
+                  </div>
+                </a>
+              </Link>
             </div>
           </SwiperSlide>
 
@@ -896,21 +808,15 @@ function Main() {
                 Luxurious
               </div>
 
-              <div className="absolute bottom-2 z-30 flex flex-col left-2">
-                <div
-                  onClick={() => {
-                    router.push({
-                      pathname: "/stays",
-                      query: {
-                        pricing_type: "HIGH-END",
-                      },
-                    });
-                  }}
-                  className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
-                >
-                  View stays
-                </div>
-              </div>
+              <Link href="/stays?pricing_type=HIGH-END">
+                <a>
+                  <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                    <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
+                      View stays
+                    </div>
+                  </div>
+                </a>
+              </Link>
             </div>
           </SwiperSlide>
 
@@ -999,18 +905,15 @@ function Main() {
                 Curated trips
               </div>
 
-              <div className="absolute bottom-2 z-30 flex flex-col left-2">
-                <div
-                  onClick={() => {
-                    router.push({
-                      pathname: "/trip",
-                    });
-                  }}
-                  className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
-                >
-                  View curated trips
-                </div>
-              </div>
+              <Link href="/trip">
+                <a>
+                  <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                    <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
+                      View curated trips
+                    </div>
+                  </div>
+                </a>
+              </Link>
             </div>
           </SwiperSlide>
 
@@ -1025,18 +928,15 @@ function Main() {
                 Stays
               </div>
 
-              <div className="absolute bottom-2 z-30 flex flex-col left-2">
-                <div
-                  onClick={() => {
-                    router.push({
-                      pathname: "/stays",
-                    });
-                  }}
-                  className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
-                >
-                  View stays
-                </div>
-              </div>
+              <Link href="/stays">
+                <a>
+                  <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                    <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
+                      View stays
+                    </div>
+                  </div>
+                </a>
+              </Link>
             </div>
           </SwiperSlide>
 
@@ -1051,18 +951,15 @@ function Main() {
                 Experiences
               </div>
 
-              <div className="absolute bottom-2 z-30 flex flex-col left-2">
-                <div
-                  onClick={() => {
-                    router.push({
-                      pathname: "/experiences",
-                    });
-                  }}
-                  className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
-                >
-                  View experiences
-                </div>
-              </div>
+              <Link href="/experiences">
+                <a>
+                  <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                    <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
+                      View experiences
+                    </div>
+                  </div>
+                </a>
+              </Link>
             </div>
           </SwiperSlide>
 
@@ -1077,18 +974,15 @@ function Main() {
                 Transports
               </div>
 
-              <div className="absolute bottom-2 z-30 flex flex-col left-2">
-                <div
-                  onClick={() => {
-                    router.push({
-                      pathname: "/transport",
-                    });
-                  }}
-                  className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
-                >
-                  View transports
-                </div>
-              </div>
+              <Link href="/transport">
+                <a>
+                  <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                    <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
+                      View transports
+                    </div>
+                  </div>
+                </a>
+              </Link>
             </div>
           </SwiperSlide>
 

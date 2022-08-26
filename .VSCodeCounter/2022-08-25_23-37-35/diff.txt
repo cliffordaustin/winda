@@ -1,0 +1,118 @@
+Date : 2022-08-25 23:37:35
+Directory : /Users/clifford/Codings/winda-test
+Total : 56 files,  -1213 codes, -3475 comments, -58 blanks, all -4746 lines
+
+Languages
++------------------+------------+------------+------------+------------+------------+
+| language         | files      | code       | comment    | blank      | total      |
++------------------+------------+------------+------------+------------+------------+
+| JavaScript       |          4 |        146 |          0 |          6 |        152 |
+| JSON             |          3 |         18 |          0 |          0 |         18 |
+| XML              |          1 |         -4 |          0 |          0 |         -4 |
+| JavaScript React |         48 |     -1,373 |     -3,475 |        -64 |     -4,912 |
++------------------+------------+------------+------------+------------+------------+
+
+Directories
++-----------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                        | files      | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                           |         56 |     -1,213 |     -3,475 |        -58 |     -4,746 |
+| components                                                                  |         29 |       -458 |       -408 |          5 |       -861 |
+| components/Activities                                                       |          3 |       -159 |        -45 |         -7 |       -211 |
+| components/Cart                                                             |          2 |       -284 |        -49 |        -11 |       -344 |
+| components/Home                                                             |          4 |       -133 |          0 |          3 |       -130 |
+| components/Lodging                                                          |          5 |       -159 |       -223 |         -1 |       -383 |
+| components/Login                                                            |          1 |          3 |          0 |          0 |          3 |
+| components/Order                                                            |          3 |        261 |          0 |         19 |        280 |
+| components/SigninLayout                                                     |          1 |          1 |          0 |          0 |          1 |
+| components/Signup                                                           |          1 |         -1 |          4 |          0 |          3 |
+| components/Stay                                                             |          3 |         42 |        -80 |          4 |        -34 |
+| components/Transport                                                        |          1 |         17 |        -15 |         -1 |          1 |
+| components/Trip                                                             |          4 |        -47 |          0 |         -1 |        -48 |
+| components/ui                                                               |          1 |          1 |          0 |          0 |          1 |
+| lib                                                                         |          2 |         71 |          0 |          5 |         76 |
+| pages                                                                       |         20 |       -891 |     -3,067 |        -68 |     -4,026 |
+| pages/cart                                                                  |          1 |        148 |         -1 |          6 |        153 |
+| pages/contact-us                                                            |          1 |         84 |          2 |         13 |         99 |
+| pages/experiences                                                           |          2 |         39 |       -633 |          1 |       -593 |
+| pages/map-test                                                              |          1 |        -10 |          0 |         -3 |        -13 |
+| pages/order-successfull                                                     |          1 |       -149 |          0 |        -15 |       -164 |
+| pages/orders                                                                |          1 |         16 |          0 |          4 |         20 |
+| pages/saved-listings                                                        |          1 |        -31 |          0 |          2 |        -29 |
+| pages/stays                                                                 |          2 |        -26 |       -880 |        -23 |       -929 |
+| pages/transport                                                             |          2 |     -1,357 |       -648 |       -127 |     -2,132 |
+| pages/trip                                                                  |          5 |        645 |       -128 |         65 |        582 |
+| pages/trip/[slug]                                                           |          1 |        743 |         -9 |         64 |        798 |
+| pages/trip/experiences                                                      |          1 |       -491 |          0 |        -50 |       -541 |
+| pages/trip/plan                                                             |          1 |          8 |          0 |          1 |          9 |
+| pages/trip/plan/[slug]                                                      |          1 |          8 |          0 |          1 |          9 |
+| pages/trip/user-trips                                                       |          1 |        413 |        161 |         50 |        624 |
+| pages/trips                                                                 |          1 |         56 |          0 |          9 |         65 |
+| pages/trips/[slug]                                                          |          1 |         56 |          0 |          9 |         65 |
+| public                                                                      |          2 |         -3 |          0 |          0 |         -3 |
+| redux                                                                       |          1 |         51 |          0 |          0 |         51 |
+| redux/actions                                                               |          1 |         51 |          0 |          0 |         51 |
++-----------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-----------------------------------------------------------------------------+------------------+------------+------------+------------+------------+
+| filename                                                                    | language         | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------+------------------+------------+------------+------------+------------+
+| /Users/clifford/Codings/winda-test/components/Activities/Listing.jsx        | JavaScript React |       -190 |        -24 |        -10 |       -224 |
+| /Users/clifford/Codings/winda-test/components/Activities/MapMakerPopup.jsx  | JavaScript React |         19 |        -21 |          2 |          0 |
+| /Users/clifford/Codings/winda-test/components/Activities/MapMakers.jsx      | JavaScript React |         12 |          0 |          1 |         13 |
+| /Users/clifford/Codings/winda-test/components/Cart/CartItem.jsx             | JavaScript React |       -400 |        -49 |        -25 |       -474 |
+| /Users/clifford/Codings/winda-test/components/Cart/FlightItem.jsx           | JavaScript React |        116 |          0 |         14 |        130 |
+| /Users/clifford/Codings/winda-test/components/Home/Footer.jsx               | JavaScript React |        -20 |          0 |          0 |        -20 |
+| /Users/clifford/Codings/winda-test/components/Home/InHeaderNavbar.jsx       | JavaScript React |         11 |          0 |          1 |         12 |
+| /Users/clifford/Codings/winda-test/components/Home/Main.jsx                 | JavaScript React |       -107 |          0 |          1 |       -106 |
+| /Users/clifford/Codings/winda-test/components/Home/UserDropdown.jsx         | JavaScript React |        -17 |          0 |          1 |        -16 |
+| /Users/clifford/Codings/winda-test/components/Lodging/Listing.jsx           | JavaScript React |       -198 |       -145 |         -7 |       -350 |
+| /Users/clifford/Codings/winda-test/components/Lodging/Map.jsx               | JavaScript React |          2 |         -1 |          0 |          1 |
+| /Users/clifford/Codings/winda-test/components/Lodging/MapMakerPopup.jsx     | JavaScript React |         14 |        -21 |          2 |         -5 |
+| /Users/clifford/Codings/winda-test/components/Lodging/MapMakers.jsx         | JavaScript React |         -3 |          0 |          0 |         -3 |
+| /Users/clifford/Codings/winda-test/components/Lodging/Navbar.jsx            | JavaScript React |         26 |        -56 |          4 |        -26 |
+| /Users/clifford/Codings/winda-test/components/Login/LoginForm.jsx           | JavaScript React |          3 |          0 |          0 |          3 |
+| /Users/clifford/Codings/winda-test/components/Order/ImageGallery.jsx        | JavaScript React |         11 |          0 |          0 |         11 |
+| /Users/clifford/Codings/winda-test/components/Order/OrderCard.jsx           | JavaScript React |          2 |          0 |          0 |          2 |
+| /Users/clifford/Codings/winda-test/components/Order/Trip.jsx                | JavaScript React |        248 |          0 |         19 |        267 |
+| /Users/clifford/Codings/winda-test/components/SigninLayout/SigninLayout.jsx | JavaScript React |          1 |          0 |          0 |          1 |
+| /Users/clifford/Codings/winda-test/components/Signup/SignupForm.jsx         | JavaScript React |         -1 |          4 |          0 |          3 |
+| /Users/clifford/Codings/winda-test/components/Stay/ImageGallery.jsx         | JavaScript React |         11 |          0 |          0 |         11 |
+| /Users/clifford/Codings/winda-test/components/Stay/Navbar.jsx               | JavaScript React |         27 |        -80 |          4 |        -49 |
+| /Users/clifford/Codings/winda-test/components/Stay/Price.jsx                | JavaScript React |          4 |          0 |          0 |          4 |
+| /Users/clifford/Codings/winda-test/components/Transport/Listing.jsx         | JavaScript React |         17 |        -15 |         -1 |          1 |
+| /Users/clifford/Codings/winda-test/components/Trip/Card.jsx                 | JavaScript React |        -57 |          0 |         -1 |        -58 |
+| /Users/clifford/Codings/winda-test/components/Trip/Map.jsx                  | JavaScript React |          7 |          0 |          0 |          7 |
+| /Users/clifford/Codings/winda-test/components/Trip/SingleTrip.jsx           | JavaScript React |          1 |          0 |          0 |          1 |
+| /Users/clifford/Codings/winda-test/components/Trip/Tags.jsx                 | JavaScript React |          2 |          0 |          0 |          2 |
+| /Users/clifford/Codings/winda-test/components/ui/Popover.jsx                | JavaScript React |          1 |          0 |          0 |          1 |
+| /Users/clifford/Codings/winda-test/lib/flightLocations.js                   | JavaScript       |         49 |          0 |          4 |         53 |
+| /Users/clifford/Codings/winda-test/lib/getItemsInBasket.js                  | JavaScript       |         22 |          0 |          1 |         23 |
+| /Users/clifford/Codings/winda-test/package-lock.json                        | JSON             |         16 |          0 |          0 |         16 |
+| /Users/clifford/Codings/winda-test/package.json                             | JSON             |          1 |          0 |          0 |          1 |
+| /Users/clifford/Codings/winda-test/pages/_app.js                            | JavaScript       |         24 |          0 |          1 |         25 |
+| /Users/clifford/Codings/winda-test/pages/cart/index.jsx                     | JavaScript React |        148 |         -1 |          6 |        153 |
+| /Users/clifford/Codings/winda-test/pages/contact-us/index.jsx               | JavaScript React |         84 |          2 |         13 |         99 |
+| /Users/clifford/Codings/winda-test/pages/experiences/[slug].jsx             | JavaScript React |         20 |       -141 |          4 |       -117 |
+| /Users/clifford/Codings/winda-test/pages/experiences/index.jsx              | JavaScript React |         19 |       -492 |         -3 |       -476 |
+| /Users/clifford/Codings/winda-test/pages/index.jsx                          | JavaScript React |       -330 |       -779 |         -1 |     -1,110 |
+| /Users/clifford/Codings/winda-test/pages/map-test/index.jsx                 | JavaScript React |        -10 |          0 |         -3 |        -13 |
+| /Users/clifford/Codings/winda-test/pages/order-successfull/index.jsx        | JavaScript React |       -149 |          0 |        -15 |       -164 |
+| /Users/clifford/Codings/winda-test/pages/orders/index.jsx                   | JavaScript React |         16 |          0 |          4 |         20 |
+| /Users/clifford/Codings/winda-test/pages/saved-listings/index.jsx           | JavaScript React |        -31 |          0 |          2 |        -29 |
+| /Users/clifford/Codings/winda-test/pages/stays/[slug].jsx                   | JavaScript React |        -36 |       -150 |        -10 |       -196 |
+| /Users/clifford/Codings/winda-test/pages/stays/index.jsx                    | JavaScript React |         10 |       -730 |        -13 |       -733 |
+| /Users/clifford/Codings/winda-test/pages/transport/[slug].jsx               | JavaScript React |     -1,654 |       -334 |       -141 |     -2,129 |
+| /Users/clifford/Codings/winda-test/pages/transport/index.jsx                | JavaScript React |        297 |       -314 |         14 |         -3 |
+| /Users/clifford/Codings/winda-test/pages/trip/[slug]/index.jsx              | JavaScript React |        743 |         -9 |         64 |        798 |
+| /Users/clifford/Codings/winda-test/pages/trip/experiences/index.jsx         | JavaScript React |       -491 |          0 |        -50 |       -541 |
+| /Users/clifford/Codings/winda-test/pages/trip/index.jsx                     | JavaScript React |        -28 |       -280 |          0 |       -308 |
+| /Users/clifford/Codings/winda-test/pages/trip/plan/[slug]/index.jsx         | JavaScript React |          8 |          0 |          1 |          9 |
+| /Users/clifford/Codings/winda-test/pages/trip/user-trips/index.jsx          | JavaScript React |        413 |        161 |         50 |        624 |
+| /Users/clifford/Codings/winda-test/pages/trips/[slug]/index.jsx             | JavaScript React |         56 |          0 |          9 |         65 |
+| /Users/clifford/Codings/winda-test/public/site.webmanifest                  | JSON             |          1 |          0 |          0 |          1 |
+| /Users/clifford/Codings/winda-test/public/vercel.svg                        | XML              |         -4 |          0 |          0 |         -4 |
+| /Users/clifford/Codings/winda-test/redux/actions/auth.js                    | JavaScript       |         51 |          0 |          0 |         51 |
+| Total                                                                       |                  |     -1,213 |     -3,475 |        -58 |     -4,746 |
++-----------------------------------------------------------------------------+------------------+------------+------------+------------+------------+

@@ -5,15 +5,11 @@ import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import axios from "axios";
 
-import LoadingSpinerChase from "../ui/LoadingSpinerChase";
-import styles from "../../styles/Listing.module.css";
-import ItemCard from "../ui/SecondCard";
 import Button from "../ui/Button";
 import Carousel from "../ui/Carousel";
-import Dropdown from "../ui/Dropdown";
 import Price from "../Stay/Price";
-import { checkFlightPrice } from "../../lib/flightLocations";
 import { Icon } from "@iconify/react";
+import Link from "next/link";
 
 const Card = ({
   listing,
@@ -204,74 +200,13 @@ const Card = ({
         </div>
 
         <div className="flex mt-0.5 justify-between absolute bottom-2 w-full right-0 px-2">
-          <Button
-            onClick={() => {
-              router.push({
-                pathname: `/trip/${listing.slug}`,
-              });
-            }}
-            className="w-full !px-0 !bg-transparent font-bold !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white"
-          >
-            view trip
-          </Button>
-          {/* <div className="w-[58%] relative">
-            <Button
-              onClick={() => {
-                if (Cookies.get("token")) {
-                  if (userTrips.length > 0) {
-                    setSelectedData({
-                      stay_id: listing.stay ? listing.stay.id : null,
-                      activity_id: listing.activity
-                        ? listing.activity.id
-                        : null,
-                      transport_id: listing.transport
-                        ? listing.transport.id
-                        : null,
-                      flight_id: listing.flight ? listing.flight.id : null,
-                    });
-                    setShowAddToTripPopup(!showAddToTripPopup);
-                  } else {
-                    addToTrip();
-                  }
-                } else {
-                  router.push({
-                    pathname: "/login",
-                    query: {
-                      redirect: router.asPath,
-                    },
-                  });
-                }
-              }}
-              className="flex w-full items-center gap-1 !px-0 !py-2 font-bold !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white"
-            >
-              <span>Add to trip</span>
-
-              <div className={" " + (!loading ? "hidden" : " ml-1")}>
-                <LoadingSpinerChase
-                  width={13}
-                  height={13}
-                  color="white"
-                ></LoadingSpinerChase>
-              </div>
-
-              {userTrips.length > 0 && (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
-                  />
-                </svg>
-              )}
-            </Button>
-          </div> */}
+          <Link href={`/trip/${listing.slug}`}>
+            <a className="w-full">
+              <Button className="w-full !px-0 !bg-transparent font-bold !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white">
+                view trip
+              </Button>
+            </a>
+          </Link>
         </div>
       </div>
     </div>
