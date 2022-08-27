@@ -289,7 +289,7 @@ function Listing({
       <Link
         href={
           router.query.trip
-            ? `/stays/${listing.slug}?${router.query.trip}?${router.query.group_trip}`
+            ? `/stays/${listing.slug}?${router.query.trip}&${router.query.group_trip}`
             : `/stays/${listing.slug}`
         }
       >
