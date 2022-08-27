@@ -2,10 +2,10 @@ import React from "react";
 import styles from "../../styles/Checkbox.module.css";
 import PropTypes from "prop-types";
 
-function Checkbox({ checked, value, onChange }) {
+function Checkbox({ checked, value, onChange, hideInput = false }) {
   return (
     <div>
-      <label className={styles.checkboxLabel}>
+      <label className={styles.checkboxLabel + (hideInput ? " !hidden" : "")}>
         <input
           type="checkbox"
           value={value}
@@ -14,7 +14,7 @@ function Checkbox({ checked, value, onChange }) {
           id="checkbox"
           readOnly
         />
-        <span className={styles.checkboxCustom}></span>
+        {!hideInput && <span className={styles.checkboxCustom}></span>}
       </label>
     </div>
   );

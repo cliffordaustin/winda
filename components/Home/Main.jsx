@@ -272,7 +272,7 @@ function Main() {
                   partner. We created curated trip meant for you to create those
                   moments.
                 </p>
-                <Link href="/trip?tag=romantic_getaway">
+                <Link href="/trip?tag=romantic">
                   <a>
                     <div className="px-3 cursor-pointer font-bold text-sm py-2 w-fit bg-white text-black rounded-lg mt-2">
                       View curated trips

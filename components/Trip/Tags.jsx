@@ -1,5 +1,5 @@
 // Import Swiper React components
-import { useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Thumbs } from "swiper";
 import { Icon } from "@iconify/react";
@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/thumbs";
+import Checkbox from "../ui/Checkbox";
 
 const Tags = () => {
   const settings = {
@@ -19,6 +20,46 @@ const Tags = () => {
     },
   };
   const router = useRouter();
+
+  const [currentOptions, setCurrentOptions] = useState([]);
+
+  const handleCheck = (event) => {
+    var updatedList = [...currentOptions];
+    if (event.target.checked) {
+      updatedList = [...currentOptions, event.target.value];
+      const allOptions = updatedList
+        .toString()
+        .replace("[", "") // remove [
+        .replace("]", "") // remove ]
+        .trim(); // remove all white space
+
+      router.push({ query: { ...router.query, tag: allOptions } });
+    } else {
+      updatedList.splice(currentOptions.indexOf(event.target.value), 1);
+
+      const allOptions = updatedList
+        .toString()
+        .replace("[", "") // remove [
+        .replace("]", "") // remove ]
+        .trim(); // remove all white space
+
+      router.push({ query: { ...router.query, tag: allOptions } });
+    }
+    setCurrentOptions(updatedList);
+  };
+
+  useEffect(() => {
+    if (router.query.tag) {
+      setCurrentOptions(router.query.tag.split(","));
+    } else {
+      setCurrentOptions([]);
+    }
+  }, [router.query.tag]);
+
+  const containsOption = (option) => {
+    return currentOptions.includes(option);
+  };
+
   return (
     <div className="w-[100%] relative sm:!w-[80%] lg:!w-[80%] h-full flex items-center">
       <Swiper
@@ -26,279 +67,711 @@ const Tags = () => {
         slidesPerView={"auto"}
         freeMode={true}
         watchSlidesProgress={true}
-        onSlideChange={() => console.log("slide change")}
-        onSwiper={(swiper) => console.log(swiper)}
+        onSlideChange={() => {}}
+        onSwiper={(swiper) => {}}
         modules={[FreeMode, Navigation, Thumbs]}
-        className={"!w-full !h-full relative "}
+        className={"!w-full relative "}
       >
-        <SwiperSlide
-          onClick={() => {
-            router.push({
-              query: {
-                ...router.query,
-                tag: "honeymoon",
-              },
-            });
-          }}
-          className="!w-fit flex cursor-pointer justify-center px-4 border-b-2 flex-col items-center border-transparent"
-        >
-          <Icon className="w-7 h-7" icon="emojione-monotone:wedding" />
-          <div className="text-sm">Honeymoon</div>
-          <div
+        <SwiperSlide className="!w-fit flex justify-center flex-col items-center">
+          <label
             className={
-              "w-[50%] h-1 mt-0.5 " +
-              (router.query.tag === "honeymoon" ? "bg-black" : "")
+              "flex flex-col items-center justify-center px-2 cursor-pointer"
             }
-          ></div>
-        </SwiperSlide>
-        <SwiperSlide
-          onClick={() => {
-            router.push({
-              query: {
-                ...router.query,
-                tag: "cultural",
-              },
-            });
-          }}
-          className="!w-fit flex cursor-pointer justify-center px-4 border-b-2 flex-col items-center border-transparent"
-        >
-          <Icon className="w-7 h-7" icon="carbon:agriculture-analytics" />
-          <div className="text-sm">Cultural</div>
-          <div
-            className={
-              "w-[50%] h-1 mt-0.5 " +
-              (router.query.tag === "cultural" ? "bg-black" : "")
-            }
-          ></div>
-        </SwiperSlide>
-        <SwiperSlide
-          onClick={() => {
-            router.push({
-              query: {
-                ...router.query,
-                tag: "game",
-              },
-            });
-          }}
-          className="!w-fit flex cursor-pointer justify-center px-4 border-b-2 flex-col items-center border-transparent"
-        >
-          <Icon className="w-7 h-7" icon="icon-park-outline:game-emoji" />
-          <div className="text-sm">Game</div>
-          <div
-            className={
-              "w-[50%] h-1 mt-0.5 " +
-              (router.query.tag === "game" ? "bg-black" : "")
-            }
-          ></div>
+          >
+            <Checkbox
+              checked={containsOption("weekend_getaway")}
+              value={"weekend_getaway"}
+              onChange={handleCheck}
+              hideInput={true}
+            ></Checkbox>
+
+            <Icon className="w-6 h-6" icon="bi:calendar-week" />
+            <div className="text-sm">Weekend getaway</div>
+            <div
+              className={
+                "w-[20px] rounded-full h-1 mt-0.5 " +
+                (containsOption("weekend_getaway") ? "bg-gray-700" : "")
+              }
+            ></div>
+          </label>
         </SwiperSlide>
 
-        <SwiperSlide
-          onClick={() => {
-            router.push({
-              query: {
-                ...router.query,
-                tag: "weekend_getaway",
-              },
-            });
-          }}
-          className="!w-fit flex cursor-pointer justify-center px-4 border-b-2 flex-col items-center border-transparent"
-        >
-          <Icon className="w-7 h-7" icon="bi:calendar-week" />
-          <div className="text-sm">Weekend getaway</div>
-          <div
+        <SwiperSlide className="!w-fit flex justify-center flex-col items-center">
+          <label
             className={
-              "w-[50%] h-1 mt-0.5 " +
-              (router.query.tag === "weekend_getaway" ? "bg-black" : "")
+              "flex flex-col items-center justify-center px-2 cursor-pointer"
             }
-          ></div>
-        </SwiperSlide>
-        <SwiperSlide
-          onClick={() => {
-            router.push({
-              query: {
-                ...router.query,
-                tag: "road_trip",
-              },
-            });
-          }}
-          className="!w-fit flex cursor-pointer justify-center px-4 border-b-2 flex-col items-center border-transparent"
-        >
-          <Icon className="w-7 h-7" icon="bx:trip" />
-          <div className="text-sm">Road trip</div>
-          <div
-            className={
-              "w-[50%] h-1 mt-0.5 " +
-              (router.query.tag === "road_trip" ? "bg-black" : "")
-            }
-          ></div>
+          >
+            <Checkbox
+              checked={containsOption("day_trips")}
+              value={"day_trips"}
+              onChange={handleCheck}
+              hideInput={true}
+            ></Checkbox>
+
+            <Icon className="w-6 h-6" icon="fluent:clipboard-day-20-regular" />
+            <div className="text-sm">Day trips</div>
+            <div
+              className={
+                "w-[20px] rounded-full h-1 mt-0.5 " +
+                (containsOption("day_trips") ? "bg-gray-700" : "")
+              }
+            ></div>
+          </label>
         </SwiperSlide>
 
-        <SwiperSlide
-          onClick={() => {
-            router.push({
-              query: {
-                ...router.query,
-                tag: "hiking",
-              },
-            });
-          }}
-          className="!w-fit flex cursor-pointer justify-center px-4 border-b-2 flex-col items-center border-transparent"
-        >
-          <Icon className="w-7 h-7" icon="bx:trip" />
-          <div className="text-sm">Hiking</div>
-          <div
+        <SwiperSlide className="!w-fit flex justify-center flex-col items-center">
+          <label
             className={
-              "w-[50%] h-1 mt-0.5 " +
-              (router.query.tag === "hiking" ? "bg-black" : "")
+              "flex flex-col items-center justify-center px-2 cursor-pointer"
             }
-          ></div>
+          >
+            <Checkbox
+              checked={containsOption("family")}
+              value={"family"}
+              onChange={handleCheck}
+              hideInput={true}
+            ></Checkbox>
+
+            <Icon className="w-6 h-6" icon="carbon:pedestrian-family" />
+            <div className="text-sm">Family</div>
+            <div
+              className={
+                "w-[20px] rounded-full h-1 mt-0.5 " +
+                (containsOption("family") ? "bg-gray-700" : "")
+              }
+            ></div>
+          </label>
         </SwiperSlide>
 
-        <SwiperSlide
-          onClick={() => {
-            router.push({
-              query: {
-                ...router.query,
-                tag: "beach",
-              },
-            });
-          }}
-          className="!w-fit flex cursor-pointer justify-center px-4 border-b-2 flex-col items-center border-transparent"
-        >
-          <Icon className="w-7 h-7" icon="cil:beach-access" />
-          <div className="text-sm">Beach</div>
-          <div
+        <SwiperSlide className="!w-fit flex justify-center flex-col items-center">
+          <label
             className={
-              "w-[50%] h-1 mt-0.5 " +
-              (router.query.tag === "beach" ? "bg-black" : "")
+              "flex flex-col items-center justify-center px-2 cursor-pointer"
             }
-          ></div>
+          >
+            <Checkbox
+              checked={containsOption("groups")}
+              value={"groups"}
+              onChange={handleCheck}
+              hideInput={true}
+            ></Checkbox>
+
+            <Icon className="w-6 h-6" icon="akar-icons:people-group" />
+            <div className="text-sm">Group getaway</div>
+            <div
+              className={
+                "w-[20px] rounded-full h-1 mt-0.5 " +
+                (containsOption("groups") ? "bg-gray-700" : "")
+              }
+            ></div>
+          </label>
         </SwiperSlide>
 
-        <SwiperSlide
-          onClick={() => {
-            router.push({
-              query: {
-                ...router.query,
-                tag: "romantic_getaway",
-              },
-            });
-          }}
-          className="!w-fit flex cursor-pointer justify-center px-4 border-b-2 flex-col items-center border-transparent"
-        >
-          <Icon className="w-7 h-7" icon="icon-park:oval-love" />
-          <div className="text-sm">Romantic getaway</div>
-          <div
+        <SwiperSlide className="!w-fit flex justify-center flex-col items-center">
+          <label
             className={
-              "w-[50%] h-1 mt-0.5 " +
-              (router.query.tag === "romantic_getaway" ? "bg-black" : "")
+              "flex flex-col items-center justify-center px-2 cursor-pointer"
             }
-          ></div>
+          >
+            <Checkbox
+              checked={containsOption("romantic")}
+              value={"romantic"}
+              onChange={handleCheck}
+              hideInput={true}
+            ></Checkbox>
+
+            <Icon className="w-6 h-6" icon="icon-park-outline:oval-love-two" />
+            <div className="text-sm">Romantic</div>
+            <div
+              className={
+                "w-[20px] rounded-full h-1 mt-0.5 " +
+                (containsOption("romantic") ? "bg-gray-700" : "")
+              }
+            ></div>
+          </label>
         </SwiperSlide>
 
-        <SwiperSlide
-          onClick={() => {
-            router.push({
-              query: {
-                ...router.query,
-                tag: "camping",
-              },
-            });
-          }}
-          className="!w-fit flex cursor-pointer justify-center px-4 border-b-2 flex-col items-center border-transparent"
-        >
-          <Icon className="w-7 h-7" icon="carbon:campsite" />
-          <div className="text-sm">Camping</div>
-          <div
+        <SwiperSlide className="!w-fit flex justify-center flex-col items-center">
+          <label
             className={
-              "w-[50%] h-1 mt-0.5 " +
-              (router.query.tag === "camping" ? "bg-black" : "")
+              "flex flex-col items-center justify-center px-2 cursor-pointer"
             }
-          ></div>
+          >
+            <Checkbox
+              checked={containsOption("beach")}
+              value={"beach"}
+              onChange={handleCheck}
+              hideInput={true}
+            ></Checkbox>
+
+            <Icon className="w-6 h-6" icon="fluent:beach-16-regular" />
+            <div className="text-sm">Beach</div>
+            <div
+              className={
+                "w-[20px] rounded-full h-1 mt-0.5 " +
+                (containsOption("beach") ? "bg-gray-700" : "")
+              }
+            ></div>
+          </label>
         </SwiperSlide>
 
-        <SwiperSlide
-          onClick={() => {
-            router.push({
-              query: {
-                ...router.query,
-                tag: "active",
-              },
-            });
-          }}
-          className="!w-fit flex cursor-pointer justify-center px-4 border-b-2 flex-col items-center border-transparent"
-        >
-          <Icon className="w-7 h-7" icon="icon-park-twotone:gymnastics" />
-          <div className="text-sm">Active</div>
-          <div
+        <SwiperSlide className="!w-fit flex justify-center flex-col items-center">
+          <label
             className={
-              "w-[50%] h-1 mt-0.5 " +
-              (router.query.tag === "active" ? "bg-black" : "")
+              "flex flex-col items-center justify-center px-2 cursor-pointer"
             }
-          ></div>
+          >
+            <Checkbox
+              checked={containsOption("unconventional_safaris")}
+              value={"unconventional_safaris"}
+              onChange={handleCheck}
+              hideInput={true}
+            ></Checkbox>
+
+            <Icon className="w-6 h-6" icon="tabler:brand-safari" />
+            <div className="text-sm">Unconventional Safaris</div>
+            <div
+              className={
+                "w-[20px] rounded-full h-1 mt-0.5 " +
+                (containsOption("unconventional_safaris") ? "bg-gray-700" : "")
+              }
+            ></div>
+          </label>
         </SwiperSlide>
 
-        <SwiperSlide
-          onClick={() => {
-            router.push({
-              query: {
-                ...router.query,
-                tag: "cylcing",
-              },
-            });
-          }}
-          className="!w-fit flex cursor-pointer justify-center px-4 border-b-2 flex-col items-center border-transparent"
-        >
-          <Icon className="w-7 h-7" icon="bx:cycling" />
-          <div className="text-sm">Cylcing</div>
-          <div
+        <SwiperSlide className="!w-fit flex justify-center flex-col items-center">
+          <label
             className={
-              "w-[50%] h-1 mt-0.5 " +
-              (router.query.tag === "cylcing" ? "bg-black" : "")
+              "flex flex-col items-center justify-center px-2 cursor-pointer"
             }
-          ></div>
+          >
+            <Checkbox
+              checked={containsOption("walking_hiking")}
+              value={"walking_hiking"}
+              onChange={handleCheck}
+              hideInput={true}
+            ></Checkbox>
+
+            <Icon className="w-6 h-6" icon="la:hiking" />
+            <div className="text-sm">Walking/Hiking</div>
+            <div
+              className={
+                "w-[20px] rounded-full h-1 mt-0.5 " +
+                (containsOption("walking_hiking") ? "bg-gray-700" : "")
+              }
+            ></div>
+          </label>
         </SwiperSlide>
 
-        <SwiperSlide
-          onClick={() => {
-            router.push({
-              query: {
-                ...router.query,
-                tag: "lake",
-              },
-            });
-          }}
-          className="!w-fit flex cursor-pointer justify-center px-4 border-b-2 flex-col items-center border-transparent"
-        >
-          <Icon className="w-7 h-7" icon="fa6-solid:water" />
-          <div className="text-sm">Lake</div>
-          <div
+        <SwiperSlide className="!w-fit flex justify-center flex-col items-center">
+          <label
             className={
-              "w-[50%] h-1 mt-0.5 " +
-              (router.query.tag === "lake" ? "bg-black" : "")
+              "flex flex-col items-center justify-center px-2 cursor-pointer"
             }
-          ></div>
+          >
+            <Checkbox
+              checked={containsOption("road_trip")}
+              value={"road_trip"}
+              onChange={handleCheck}
+              hideInput={true}
+            ></Checkbox>
+
+            <Icon className="w-6 h-6" icon="bx:trip" />
+            <div className="text-sm">Road trip</div>
+            <div
+              className={
+                "w-[20px] rounded-full h-1 mt-0.5 " +
+                (containsOption("road_trip") ? "bg-gray-700" : "")
+              }
+            ></div>
+          </label>
         </SwiperSlide>
 
-        <SwiperSlide
-          onClick={() => {
-            router.push({
-              query: {
-                ...router.query,
-                tag: "walking",
-              },
-            });
-          }}
-          className="!w-fit flex cursor-pointer justify-center px-4 border-b-2 flex-col items-center border-transparent"
-        >
-          <Icon className="w-7 h-7" icon="healthicons:exercise-walking" />
-          <div className="text-sm">Walking</div>
-          <div
+        <SwiperSlide className="!w-fit flex justify-center flex-col items-center">
+          <label
             className={
-              "w-[50%] h-1 mt-0.5 " +
-              (router.query.tag === "walking" ? "bg-black" : "")
+              "flex flex-col items-center justify-center px-2 cursor-pointer"
             }
-          ></div>
+          >
+            <Checkbox
+              checked={containsOption("park_conservancies")}
+              value={"park_conservancies"}
+              onChange={handleCheck}
+              hideInput={true}
+            ></Checkbox>
+
+            <Icon className="w-6 h-6" icon="emojione-monotone:national-park" />
+            <div className="text-sm">Park & conservancies</div>
+            <div
+              className={
+                "w-[20px] rounded-full h-1 mt-0.5 " +
+                (containsOption("park_conservancies") ? "bg-gray-700" : "")
+              }
+            ></div>
+          </label>
+        </SwiperSlide>
+
+        <SwiperSlide className="!w-fit flex justify-center flex-col items-center">
+          <label
+            className={
+              "flex flex-col items-center justify-center px-2 cursor-pointer"
+            }
+          >
+            <Checkbox
+              checked={containsOption("day_game_drives")}
+              value={"day_game_drives"}
+              onChange={handleCheck}
+              hideInput={true}
+            ></Checkbox>
+
+            <Icon className="w-6 h-6" icon="icon-park-outline:game-emoji" />
+            <div className="text-sm">Day game drives</div>
+            <div
+              className={
+                "w-[20px] rounded-full h-1 mt-0.5 " +
+                (containsOption("day_game_drives") ? "bg-gray-700" : "")
+              }
+            ></div>
+          </label>
+        </SwiperSlide>
+
+        <SwiperSlide className="!w-fit flex justify-center flex-col items-center">
+          <label
+            className={
+              "flex flex-col items-center justify-center px-2 cursor-pointer"
+            }
+          >
+            <Checkbox
+              checked={containsOption("wellness")}
+              value={"wellness"}
+              onChange={handleCheck}
+              hideInput={true}
+            ></Checkbox>
+
+            <Icon className="w-6 h-6" icon="iconoir:yoga" />
+            <div className="text-sm">Wellness</div>
+            <div
+              className={
+                "w-[20px] rounded-full h-1 mt-0.5 " +
+                (containsOption("wellness") ? "bg-gray-700" : "")
+              }
+            ></div>
+          </label>
+        </SwiperSlide>
+
+        <SwiperSlide className="!w-fit flex justify-center flex-col items-center">
+          <label
+            className={
+              "flex flex-col items-center justify-center px-2 cursor-pointer"
+            }
+          >
+            <Checkbox
+              checked={containsOption("cultural")}
+              value={"cultural"}
+              onChange={handleCheck}
+              hideInput={true}
+            ></Checkbox>
+
+            <Icon className="w-6 h-6" icon="carbon:agriculture-analytics" />
+            <div className="text-sm">Cultural</div>
+            <div
+              className={
+                "w-[20px] rounded-full h-1 mt-0.5 " +
+                (containsOption("cultural") ? "bg-gray-700" : "")
+              }
+            ></div>
+          </label>
+        </SwiperSlide>
+
+        <SwiperSlide className="!w-fit flex justify-center flex-col items-center">
+          <label
+            className={
+              "flex flex-col items-center justify-center px-2 cursor-pointer"
+            }
+          >
+            <Checkbox
+              checked={containsOption("sustainable")}
+              value={"sustainable"}
+              onChange={handleCheck}
+              hideInput={true}
+            ></Checkbox>
+
+            <Icon
+              className="w-6 h-6"
+              icon="icon-park-outline:green-new-energy"
+            />
+            <div className="text-sm">Sustainable safari</div>
+            <div
+              className={
+                "w-[20px] rounded-full h-1 mt-0.5 " +
+                (containsOption("sustainable") ? "bg-gray-700" : "")
+              }
+            ></div>
+          </label>
+        </SwiperSlide>
+
+        <SwiperSlide className="!w-fit flex justify-center flex-col items-center">
+          <label
+            className={
+              "flex flex-col items-center justify-center px-2 cursor-pointer"
+            }
+          >
+            <Checkbox
+              checked={containsOption("culinary")}
+              value={"culinary"}
+              onChange={handleCheck}
+              hideInput={true}
+            ></Checkbox>
+
+            <Icon className="w-6 h-6" icon="tabler:tools-kitchen-2" />
+            <div className="text-sm">Culinary</div>
+            <div
+              className={
+                "w-[20px] rounded-full h-1 mt-0.5 " +
+                (containsOption("culinary") ? "bg-gray-700" : "")
+              }
+            ></div>
+          </label>
+        </SwiperSlide>
+
+        <SwiperSlide className="!w-fit flex justify-center flex-col items-center">
+          <label
+            className={
+              "flex flex-col items-center justify-center px-2 cursor-pointer"
+            }
+          >
+            <Checkbox
+              checked={containsOption("community_owned")}
+              value={"community_owned"}
+              onChange={handleCheck}
+              hideInput={true}
+            ></Checkbox>
+
+            <Icon className="w-6 h-6" icon="majesticons:community-line" />
+            <div className="text-sm">Community owned</div>
+            <div
+              className={
+                "w-[20px] rounded-full h-1 mt-0.5 " +
+                (containsOption("community_owned") ? "bg-gray-700" : "")
+              }
+            ></div>
+          </label>
+        </SwiperSlide>
+
+        <SwiperSlide className="!w-fit flex justify-center flex-col items-center">
+          <label
+            className={
+              "flex flex-col items-center justify-center px-2 cursor-pointer"
+            }
+          >
+            <Checkbox
+              checked={containsOption("off_grid")}
+              value={"off_grid"}
+              onChange={handleCheck}
+              hideInput={true}
+            ></Checkbox>
+
+            <Icon className="w-6 h-6" icon="ic:outline-emoji-nature" />
+            <div className="text-sm">Off-grid</div>
+            <div
+              className={
+                "w-[20px] rounded-full h-1 mt-0.5 " +
+                (containsOption("off_grid") ? "bg-gray-700" : "")
+              }
+            ></div>
+          </label>
+        </SwiperSlide>
+
+        <SwiperSlide className="!w-fit flex justify-center flex-col items-center">
+          <label
+            className={
+              "flex flex-col items-center justify-center px-2 cursor-pointer"
+            }
+          >
+            <Checkbox
+              checked={containsOption("night_game_drives")}
+              value={"night_game_drives"}
+              onChange={handleCheck}
+              hideInput={true}
+            ></Checkbox>
+
+            <Icon className="w-6 h-6" icon="fontisto:night-clear" />
+            <div className="text-sm">Night game drives</div>
+            <div
+              className={
+                "w-[20px] rounded-full h-1 mt-0.5 " +
+                (containsOption("night_game_drives") ? "bg-gray-700" : "")
+              }
+            ></div>
+          </label>
+        </SwiperSlide>
+
+        <SwiperSlide className="!w-fit flex justify-center flex-col items-center">
+          <label
+            className={
+              "flex flex-col items-center justify-center px-2 cursor-pointer"
+            }
+          >
+            <Checkbox
+              checked={containsOption("solo_getaway")}
+              value={"solo_getaway"}
+              onChange={handleCheck}
+              hideInput={true}
+            ></Checkbox>
+
+            <Icon className="w-6 h-6" icon="akar-icons:person" />
+            <div className="text-sm">Solo getaway</div>
+            <div
+              className={
+                "w-[20px] rounded-full h-1 mt-0.5 " +
+                (containsOption("solo_getaway") ? "bg-gray-700" : "")
+              }
+            ></div>
+          </label>
+        </SwiperSlide>
+
+        <SwiperSlide className="!w-fit flex justify-center flex-col items-center">
+          <label
+            className={
+              "flex flex-col items-center justify-center px-2 cursor-pointer"
+            }
+          >
+            <Checkbox
+              checked={containsOption("shopping")}
+              value={"shopping"}
+              onChange={handleCheck}
+              hideInput={true}
+            ></Checkbox>
+
+            <Icon className="w-6 h-6" icon="akar-icons:shopping-bag" />
+            <div className="text-sm">Shopping</div>
+            <div
+              className={
+                "w-[20px] rounded-full h-1 mt-0.5 " +
+                (containsOption("shopping") ? "bg-gray-700" : "")
+              }
+            ></div>
+          </label>
+        </SwiperSlide>
+
+        <SwiperSlide className="!w-fit flex justify-center flex-col items-center">
+          <label
+            className={
+              "flex flex-col items-center justify-center px-2 cursor-pointer"
+            }
+          >
+            <Checkbox
+              checked={containsOption("art")}
+              value={"art"}
+              onChange={handleCheck}
+              hideInput={true}
+            ></Checkbox>
+
+            <Icon className="w-6 h-6" icon="emojione-monotone:artist-palette" />
+            <div className="text-sm">Art</div>
+            <div
+              className={
+                "w-[20px] rounded-full h-1 mt-0.5 " +
+                (containsOption("art") ? "bg-gray-700" : "")
+              }
+            ></div>
+          </label>
+        </SwiperSlide>
+
+        <SwiperSlide className="!w-fit flex justify-center flex-col items-center">
+          <label
+            className={
+              "flex flex-col items-center justify-center px-2 cursor-pointer"
+            }
+          >
+            <Checkbox
+              checked={containsOption("watersports")}
+              value={"watersports"}
+              onChange={handleCheck}
+              hideInput={true}
+            ></Checkbox>
+
+            <Icon className="w-6 h-6" icon="ic:baseline-surfing" />
+            <div className="text-sm">Watersports</div>
+            <div
+              className={
+                "w-[20px] rounded-full h-1 mt-0.5 " +
+                (containsOption("watersports") ? "bg-gray-700" : "")
+              }
+            ></div>
+          </label>
+        </SwiperSlide>
+
+        <SwiperSlide className="!w-fit flex justify-center flex-col items-center">
+          <label
+            className={
+              "flex flex-col items-center justify-center px-2 cursor-pointer"
+            }
+          >
+            <Checkbox
+              checked={containsOption("sailing")}
+              value={"sailing"}
+              onChange={handleCheck}
+              hideInput={true}
+            ></Checkbox>
+
+            <Icon className="w-6 h-6" icon="ic:outline-sailing" />
+            <div className="text-sm">Sailing</div>
+            <div
+              className={
+                "w-[20px] rounded-full h-1 mt-0.5 " +
+                (containsOption("sailing") ? "bg-gray-700" : "")
+              }
+            ></div>
+          </label>
+        </SwiperSlide>
+
+        <SwiperSlide className="!w-fit flex justify-center flex-col items-center">
+          <label
+            className={
+              "flex flex-col items-center justify-center px-2 cursor-pointer"
+            }
+          >
+            <Checkbox
+              checked={containsOption("all_female")}
+              value={"all_female"}
+              onChange={handleCheck}
+              hideInput={true}
+            ></Checkbox>
+
+            <Icon className="w-6 h-6" icon="la:female" />
+            <div className="text-sm">All-female</div>
+            <div
+              className={
+                "w-[20px] rounded-full h-1 mt-0.5 " +
+                (containsOption("all_female") ? "bg-gray-700" : "")
+              }
+            ></div>
+          </label>
+        </SwiperSlide>
+
+        <SwiperSlide className="!w-fit flex justify-center flex-col items-center">
+          <label
+            className={
+              "flex flex-col items-center justify-center px-2 cursor-pointer"
+            }
+          >
+            <Checkbox
+              checked={containsOption("luxury")}
+              value={"luxury"}
+              onChange={handleCheck}
+              hideInput={true}
+            ></Checkbox>
+
+            <Icon className="w-6 h-6" icon="cil:diamond" />
+            <div className="text-sm">Luxury</div>
+            <div
+              className={
+                "w-[20px] rounded-full h-1 mt-0.5 " +
+                (containsOption("luxury") ? "bg-gray-700" : "")
+              }
+            ></div>
+          </label>
+        </SwiperSlide>
+
+        <SwiperSlide className="!w-fit flex justify-center flex-col items-center">
+          <label
+            className={
+              "flex flex-col items-center justify-center px-2 cursor-pointer"
+            }
+          >
+            <Checkbox
+              checked={containsOption("budget")}
+              value={"budget"}
+              onChange={handleCheck}
+              hideInput={true}
+            ></Checkbox>
+
+            <Icon className="w-6 h-6" icon="tabler:report-money" />
+            <div className="text-sm">Budget</div>
+            <div
+              className={
+                "w-[20px] rounded-full h-1 mt-0.5 " +
+                (containsOption("budget") ? "bg-gray-700" : "")
+              }
+            ></div>
+          </label>
+        </SwiperSlide>
+
+        <SwiperSlide className="!w-fit flex justify-center flex-col items-center">
+          <label
+            className={
+              "flex flex-col items-center justify-center px-2 cursor-pointer"
+            }
+          >
+            <Checkbox
+              checked={containsOption("mid_range")}
+              value={"mid_range"}
+              onChange={handleCheck}
+              hideInput={true}
+            ></Checkbox>
+
+            <Icon
+              className="w-6 h-6"
+              icon="material-symbols:price-change-outline-sharp"
+            />
+            <div className="text-sm">Mid-range</div>
+            <div
+              className={
+                "w-[20px] rounded-full h-1 mt-0.5 " +
+                (containsOption("mid_range") ? "bg-gray-700" : "")
+              }
+            ></div>
+          </label>
+        </SwiperSlide>
+
+        <SwiperSlide className="!w-fit flex justify-center flex-col items-center">
+          <label
+            className={
+              "flex flex-col items-center justify-center px-2 cursor-pointer"
+            }
+          >
+            <Checkbox
+              checked={containsOption("short_getaways")}
+              value={"short_getaways"}
+              onChange={handleCheck}
+              hideInput={true}
+            ></Checkbox>
+
+            <Icon className="w-6 h-6" icon="entypo:time-slot" />
+            <div className="text-sm">Short getaway</div>
+            <div
+              className={
+                "w-[20px] rounded-full h-1 mt-0.5 " +
+                (containsOption("short_getaways") ? "bg-gray-700" : "")
+              }
+            ></div>
+          </label>
+        </SwiperSlide>
+
+        <SwiperSlide className="!w-fit flex justify-center flex-col items-center">
+          <label
+            className={
+              "flex flex-col items-center justify-center px-2 cursor-pointer"
+            }
+          >
+            <Checkbox
+              checked={containsOption("lake")}
+              value={"lake"}
+              onChange={handleCheck}
+              hideInput={true}
+            ></Checkbox>
+
+            <Icon className="w-6 h-6" icon="iconoir:sea-and-sun" />
+            <div className="text-sm">Lakes</div>
+            <div
+              className={
+                "w-[20px] rounded-full h-1 mt-0.5 " +
+                (containsOption("lake") ? "bg-gray-700" : "")
+              }
+            ></div>
+          </label>
         </SwiperSlide>
       </Swiper>
       <div

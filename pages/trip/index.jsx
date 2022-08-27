@@ -243,6 +243,36 @@ const Trips = ({
     });
   };
 
+  const [currentOptions, setCurrentOptions] = useState([]);
+
+  const handleUnCheck = (value) => {
+    var updatedList = [...currentOptions];
+
+    updatedList.splice(currentOptions.indexOf(value), 1);
+
+    const allOptions = updatedList
+      .toString()
+      .replace("[", "") // remove [
+      .replace("]", "") // remove ]
+      .trim(); // remove all white space
+
+    router.push({ query: { ...router.query, tag: allOptions } });
+
+    setCurrentOptions(updatedList);
+  };
+
+  useEffect(() => {
+    if (router.query.tag) {
+      setCurrentOptions(router.query.tag.split(","));
+    } else {
+      setCurrentOptions([]);
+    }
+  }, [router.query.tag]);
+
+  const containsOption = (option) => {
+    return currentOptions.includes(option);
+  };
+
   return (
     <>
       <div className="fixed top-0 w-full bg-white z-50">
@@ -391,28 +421,29 @@ const Trips = ({
         <div className="h-12 flex justify-center mt-2">
           <Tags></Tags>
         </div>
-        <div className="flex justify-between relative mt-3 h-full w-full">
+        <div className="flex justify-between relative mt-7 h-full w-full">
           <div className="h-full mx-auto w-full px-4 xl:w-[1300px] lg:w-[900px] ">
             <div className="flex items-center flex-wrap gap-2 mb-4">
-              {router.query.tag && (
-                <div className="px-2 py-1 flex items-center gap-2 rounded-3xl text-white bg-blue-500 mr-4">
-                  <span className="text-sm font-semibold">
-                    {router.query.tag.split("_").join(" ")}
-                  </span>
-                  <Icon
-                    onClick={() => {
-                      router.push({
-                        query: {
-                          ...router.query,
-                          tag: "",
-                        },
-                      });
-                    }}
-                    className="cursor-pointer"
-                    icon="ci:off-close"
-                  />
-                </div>
-              )}
+              <div className="flex items-center flex-wrap">
+                {currentOptions.map((option, index) => (
+                  <div
+                    key={index}
+                    className="px-2 py-1 flex items-center gap-2 rounded-3xl text-white bg-blue-500 mr-2"
+                  >
+                    <span className="text-sm font-semibold">
+                      {option.split("_").join(" ")}
+                    </span>
+                    <Icon
+                      onClick={() => {
+                        handleUnCheck(option);
+                      }}
+                      className="cursor-pointer"
+                      icon="ci:off-close"
+                    />
+                  </div>
+                ))}
+              </div>
+
               {router.query.location && (
                 <div className="px-2 flex gap-2 items-center py-1 rounded-3xl text-white bg-green-500">
                   <span className="text-sm font-semibold">
