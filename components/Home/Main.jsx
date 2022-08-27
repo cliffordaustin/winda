@@ -596,10 +596,10 @@ function Main() {
                   ></Carousel>
 
                   <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
-                    Stays in Massai Mara
+                    Stays in Maasai Mara
                   </div>
 
-                  <Link href="/stays?search=Massai Mara">
+                  <Link href="/stays?search=Maasai Mara">
                     <a>
                       <div className="absolute bottom-2 z-30 flex flex-col left-2">
                         <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
@@ -616,10 +616,10 @@ function Main() {
                   ></Carousel>
 
                   <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
-                    Experiences in Massai Mara
+                    Experiences in Maasai Mara
                   </div>
 
-                  <Link href="/experiences?search=Massai Mara">
+                  <Link href="/experiences?search=Maasai Mara">
                     <a>
                       <div className="absolute bottom-2 z-30 flex flex-col left-2">
                         <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
@@ -971,14 +971,14 @@ function Main() {
               ></Carousel>
 
               <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
-                Transports
+                Transport
               </div>
 
               <Link href="/transport">
                 <a>
                   <div className="absolute bottom-2 z-30 flex flex-col left-2">
                     <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
-                      View transports
+                      View transport
                     </div>
                   </div>
                 </a>
