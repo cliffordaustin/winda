@@ -246,7 +246,7 @@ function Activities({
   };
 
   const locationFromActivitySearch = (item) => {
-    setActivityLocation(item.place_name);
+    setActivityLocation(item);
     setAutoCompleteFromActivitySearch([]);
   };
 

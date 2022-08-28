@@ -42,6 +42,7 @@ import {
 } from "../../lib/pricePlan";
 import Dialogue from "../../components/Home/Dialogue";
 import Head from "next/head";
+import Link from "next/link";
 
 const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
   const GlobalStyle = createGlobalStyle`
@@ -1654,6 +1655,14 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
 
               <div className="mt-2 ml-2 flex flex-col gap-2">
                 <ListItem>You should have CV-19 travel insurance</ListItem>
+                <ListItem>
+                  See the full cancellation policy more{" "}
+                  <Link href="/policies">
+                    <a>
+                      <div className="text-blue-500 underline inline">here</div>
+                    </a>
+                  </Link>
+                </ListItem>
               </div>
             </div>
 
@@ -1664,8 +1673,13 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
 
               <div className="mt-2 ml-2 flex flex-col gap-2">
                 <ListItem>
-                  This activity is compliant with Winda.guide&apos;s CV-19
-                  requirements
+                  This property is compliant with Winda.guide&apos;s CV-19
+                  requirements. More{" "}
+                  <Link href="/safety">
+                    <a>
+                      <div className="text-blue-500 underline inline">here</div>
+                    </a>
+                  </Link>
                 </ListItem>
               </div>
             </div>

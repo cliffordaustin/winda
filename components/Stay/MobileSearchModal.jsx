@@ -6,6 +6,7 @@ import DatePicker from "../ui/DatePickerRange";
 import Button from "../ui/Button";
 import SearchSelect from "../Home/SearchSelect";
 import LoadingSpinerChase from "../ui/LoadingSpinerChase";
+import PopularLocationsDropdown from "../Lodging/PopularLocationsDropdown";
 
 function MobileSearchModal({
   showModal,
@@ -24,6 +25,7 @@ function MobileSearchModal({
   const [showDate, setShowDate] = useState(false);
   const [showGuests, setShowGuests] = useState(false);
   const [showSearch, setShowSearch] = useState(true);
+  const [showLocation, setShowLocation] = useState(false);
   return (
     <Modal
       showModal={showModal}
@@ -58,12 +60,28 @@ function MobileSearchModal({
         )}
 
         {showSearch && (
-          <div className="px-3 py-2 cursor-pointer border border-gray-200 rounded-2xl shadow-lg bg-white w-full">
+          <div className="px-3 py-2 relative cursor-pointer border border-gray-200 rounded-2xl shadow-lg bg-white w-full">
             <h1 className="text-xl font-bold mb-2">Where to?</h1>
 
-            <div className="mt-4">
-              <Search location={search} setLocation={setSearch}></Search>
+            <div
+              onClick={(e) => {
+                setShowLocation(!showLocation);
+              }}
+              className="mt-4"
+            >
+              <Search
+                handlePropagation={() => {}}
+                location={search}
+                setLocation={setSearch}
+              ></Search>
             </div>
+
+            {showLocation && !search && (
+              <PopularLocationsDropdown
+                setLocation={setSearch}
+                className="-mt-1.5"
+              ></PopularLocationsDropdown>
+            )}
           </div>
         )}
 

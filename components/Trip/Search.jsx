@@ -13,6 +13,9 @@ const Search = ({
   autoCompleteClassName = "",
   inputBoxClassName = "",
   searchClass = "",
+  handlePropagation = (event) => {
+    event.stopPropagation();
+  },
   search = () => {},
 }) => {
   const [autoCompleteSearch, setAutoCompleteSearch] = useState([]);
@@ -35,7 +38,7 @@ const Search = ({
         <div className="relative">
           <div
             onClick={(event) => {
-              event.stopPropagation();
+              handlePropagation(event);
             }}
             className={
               "w-full flex items-center !py-3 stepWebkitSetting border border-gray-200 rounded-md " +
@@ -75,9 +78,6 @@ const Search = ({
               onChange={(event) => {
                 onChange(event);
               }}
-              // onBlur={() => {
-              //   setAutoCompleteSearch([]);
-              // }}
             ></Input>
 
             <div className="h-full w-10 mr-1 flex justify-center items-center">

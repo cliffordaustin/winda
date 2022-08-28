@@ -42,6 +42,7 @@ import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/thumbs";
 import Dialogue from "../../components/Home/Dialogue";
+import Link from "next/link";
 
 const Transport = ({
   userProfile,
@@ -1496,6 +1497,16 @@ const Transport = ({
                       <ListItem>
                         You should have CV-19 travel insurance
                       </ListItem>
+                      <ListItem>
+                        See the full cancellation policy more{" "}
+                        <Link href="/policies">
+                          <a>
+                            <div className="text-blue-500 underline inline">
+                              here
+                            </div>
+                          </a>
+                        </Link>
+                      </ListItem>
                     </div>
                   </div>
 
@@ -1509,7 +1520,14 @@ const Transport = ({
                     <div className="mt-2 ml-2 flex flex-col gap-2">
                       <ListItem>
                         This transport is compliant with Winda.guide&apos;s
-                        CV-19 requirements
+                        CV-19 requirements. More
+                        <Link href="/safety">
+                          <a>
+                            <div className="text-blue-500 underline inline">
+                              here
+                            </div>
+                          </a>
+                        </Link>
                       </ListItem>
                     </div>
                   </div>

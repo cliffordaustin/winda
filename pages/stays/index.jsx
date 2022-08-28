@@ -168,7 +168,7 @@ function Stays({
   }, []);
 
   const locationFromSearch = (item) => {
-    setLocation(item.place_name);
+    setLocation(item);
     setAutoCompleteFromSearch([]);
   };
 

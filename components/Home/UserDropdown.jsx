@@ -162,9 +162,13 @@ function UserDropdown({
         </a>
       </Link>
 
-      <div className="hover:bg-gray-100 text-base transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2">
-        About
-      </div>
+      <Link href="/about-us">
+        <a>
+          <div className="hover:bg-gray-100 text-base transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2">
+            About
+          </div>
+        </a>
+      </Link>
 
       {userProfile && <hr className="" />}
       {userProfile && (

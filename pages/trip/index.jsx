@@ -1,26 +1,16 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import Link from "next/link";
 import Image from "next/image";
 import axios from "axios";
-import moment from "moment";
 import ReactPaginate from "react-paginate";
 
-import { useDispatch, useSelector } from "react-redux";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { FreeMode, Navigation, Thumbs } from "swiper";
+import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import Search from "../../components/Trip/Search";
 import Footer from "../../components/Home/Footer";
-
-import { wrapper } from "../../redux/store";
-import styles from "../../styles/StyledLink.module.css";
 import UserDropdown from "../../components/Home/UserDropdown";
 import Button from "../../components/ui/Button";
-import Input from "../../components/ui/Input";
-import SearchButtonClose from "../../components/Home/SearchButtonClose";
-import DatePicker from "../../components/ui/DatePicker";
-import Modal from "../../components/ui/LargeFullscreenPopup";
+
 import { getRecommendeTripUrl } from "../../lib/url";
 
 import "swiper/css";
@@ -29,15 +19,14 @@ import "swiper/css/thumbs";
 import AllTrips from "../../components/Trip/Trips";
 import Cookies from "js-cookie";
 import getToken from "../../lib/getToken";
-import ClientOnly from "../../components/ClientOnly";
 import LoadingSpinerChase from "../../components/ui/LoadingSpinerChase";
 import SingleTrip from "../../components/Trip/SingleTrip";
 
-import Select from "react-select";
 import { Icon } from "@iconify/react";
 import Dropdown from "../../components/ui/Dropdown";
 import Tags from "../../components/Trip/Tags";
 import Dialogue from "../../components/Home/Dialogue";
+import PopularLocationsDropdown from "../../components/Lodging/PopularLocationsDropdown";
 
 const Trips = ({
   userProfile,
@@ -49,12 +38,6 @@ const Trips = ({
   previousLink,
   totalPages,
 }) => {
-  const [state, setState] = useState({});
-
-  const [showDropdown, changeShowDropdown] = useState(false);
-
-  const [currentNavState, setCurrentNavState] = useState(1);
-
   const dispatch = useDispatch();
 
   const [location, setLocation] = useState("");
@@ -85,86 +68,13 @@ const Trips = ({
     }
   };
 
-  const settings = {
-    spaceBetween: 10,
-    pagination: {
-      el: ".swiper-pagination",
-      clickable: true,
-    },
-    navigation: {
-      nextEl: ".swiper-button-next",
-      prevEl: ".swiper-button-prev",
-    },
-  };
-
-  const [thumbsSwiper, setThumbsSwiper] = useState(null);
-  const [allowSlideNext, setAllowSlideNext] = useState(false);
-  const [swiperIndex, setSwiperIndex] = useState(0);
-
-  const [date, setDate] = useState("");
-
-  const [showDate, setShowDate] = useState(false);
-
-  const [travellers, setTravellers] = useState(1);
-
   const [showAddToTripPopup, setShowAddToTripPopup] = useState(false);
 
   const [selectedData, setSelectedData] = useState(null);
 
   const [addToYourNewTripLoading, setAddToYourNewTripLoading] = useState(false);
 
-  const [selectedMonth, setSelectedMonth] = useState("");
-
-  const months = [
-    {
-      label: "January",
-      value: "1",
-    },
-    {
-      label: "February",
-      value: "2",
-    },
-    {
-      label: "March",
-      value: "3",
-    },
-    {
-      label: "April",
-      value: "4",
-    },
-    {
-      label: "May",
-      value: "5",
-    },
-    {
-      label: "June",
-      value: "6",
-    },
-    {
-      label: "July",
-      value: "7",
-    },
-    {
-      label: "August",
-      value: "8",
-    },
-    {
-      label: "September",
-      value: "9",
-    },
-    {
-      label: "October",
-      value: "10",
-    },
-    {
-      label: "November",
-      value: "11",
-    },
-    {
-      label: "December",
-      value: "12",
-    },
-  ];
+  const [showLocation, setShowLocation] = useState(false);
 
   const priceConversionRate = async () => {
     try {
@@ -221,10 +131,6 @@ const Trips = ({
 
   const [showPricePopup, setShowPricePopup] = useState(false);
 
-  const filterArrayOfObjects = (array, value) => {
-    return array.filter((obj) => obj.value === value);
-  };
-
   const search = (location) => {
     router.push({
       query: {
@@ -269,12 +175,12 @@ const Trips = ({
     }
   }, [router.query.tag]);
 
-  const containsOption = (option) => {
-    return currentOptions.includes(option);
-  };
-
   return (
-    <>
+    <div
+      onClick={() => {
+        setShowLocation(false);
+      }}
+    >
       <div className="fixed top-0 w-full bg-white z-50">
         <div className="bg-white sm:px-12 px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-8">
@@ -321,15 +227,29 @@ const Trips = ({
           </div>
 
           <div className="absolute z-[30] flex bottom-20 w-[95%] md:w-[600px] lg:w-[700px] left-2/4 -translate-x-2/4 h-14 bg-white rounded-lg">
-            <div className="w-[60%] md:w-[70%] flex md:rounded-tr-lg md:rounded-br-lg items-center h-full rounded-tl-lg rounded-bl-lg bg-white border-r border-gray-300">
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowLocation(!showLocation);
+              }}
+              className="w-[60%] relative md:w-[70%] flex md:rounded-tr-lg md:rounded-br-lg items-center h-full rounded-tl-lg rounded-bl-lg bg-white border-r border-gray-300"
+            >
               <Search
                 inputBoxClassName="border-0 "
                 searchClass="w-full"
                 location={location}
+                handlePropagation={() => {}}
                 placeholder="Search for a place"
                 setLocation={setLocation}
                 search={search}
               ></Search>
+
+              {showLocation && !location && (
+                <PopularLocationsDropdown
+                  setLocation={setLocation}
+                  className="-mt-1.5"
+                ></PopularLocationsDropdown>
+              )}
             </div>
             <div className="w-[40%] md:w-[30%] flex">
               <div
@@ -572,7 +492,7 @@ const Trips = ({
       <div className="mt-20">
         <Footer></Footer>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -1,14 +1,13 @@
 import React, { useState } from "react";
-import moment from "moment";
 
 import Input from "../ui/Input";
 import Button from "../ui/Button";
 import styles from "../../styles/Search.module.css";
-import DatePicker from "../ui/DatePicker";
 import Popup from "../ui/Popup";
 import SearchButtonClose from "./SearchButtonClose";
 import Guest from "./Guest";
 import LoadingSpinerChase from "../ui/LoadingSpinerChase";
+import PopularLocationsDropdown from "../Lodging/PopularLocationsDropdown";
 
 function Search({
   location,
@@ -82,7 +81,7 @@ function Search({
             {autoCompleteFromSearch.map((item, index) => (
               <div
                 key={index}
-                onClick={() => locationFromSearch(item)}
+                onClick={() => locationFromSearch(item.place_name)}
                 className="flex items-center gap-6 hover:bg-gray-100 transition-all duration-300 ease-linear cursor-pointer px-4 py-3"
               >
                 <svg
@@ -100,6 +99,12 @@ function Search({
               </div>
             ))}
           </div>
+        )}
+
+        {selectedSearchItem === 1 && !location && (
+          <PopularLocationsDropdown
+            setLocation={locationFromSearch}
+          ></PopularLocationsDropdown>
         )}
       </div>
 

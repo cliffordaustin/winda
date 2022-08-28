@@ -136,9 +136,6 @@ function Navbar({
   );
 }
 
-Navbar.propTypes = {
-  showDropdown: PropTypes.bool.isRequired,
-  changeShowDropdown: PropTypes.func.isRequired,
-};
+Navbar.propTypes = {};
 
 export default Navbar;

@@ -8,15 +8,29 @@ export default function Footer() {
   return (
     <div className="bg-gray-100 mt-6 flex flex-col md:flex-row justify-center items-center gap-2 md:justify-between py-4 border-t px-4 md:px-8">
       <div className="flex gap-3 items-center justify-center flex-wrap">
-        <div className="text-gray-900 cursor-pointer hover:text-blue-700 hover:underline transition-all duration-100 ease-linear">
-          Policies
-        </div>
-        <div className="text-gray-900 cursor-pointer hover:text-blue-700 hover:underline transition-all duration-100 ease-linear">
-          Safety
-        </div>
-        <div className="text-gray-900 cursor-pointer hover:text-blue-700 hover:underline transition-all duration-100 ease-linear">
-          Support
-        </div>
+        <Link href="/policies">
+          <a>
+            <div className="text-gray-900 cursor-pointer hover:text-blue-700 hover:underline transition-all duration-100 ease-linear">
+              Policies
+            </div>
+          </a>
+        </Link>
+
+        <Link href="/safety">
+          <a>
+            <div className="text-gray-900 cursor-pointer hover:text-blue-700 hover:underline transition-all duration-100 ease-linear">
+              Safety
+            </div>
+          </a>
+        </Link>
+
+        <Link href="/about-us">
+          <a>
+            <div className="text-gray-900 cursor-pointer hover:text-blue-700 hover:underline transition-all duration-100 ease-linear">
+              About us
+            </div>
+          </a>
+        </Link>
 
         <Link href="/contact-us">
           <a>

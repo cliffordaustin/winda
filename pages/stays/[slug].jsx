@@ -58,6 +58,7 @@ import PopoverBox from "../../components/ui/Popover";
 import ReactPaginate from "react-paginate";
 import { Icon } from "@iconify/react";
 import Head from "next/head";
+import Link from "next/link";
 
 const StaysDetail = ({ userProfile, stay, inCart }) => {
   const GlobalStyle = createGlobalStyle`
@@ -1872,6 +1873,16 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
                 <div className="mt-2 ml-2 flex flex-col gap-2">
                   <ListItem>You should have CV-19 travel insurance</ListItem>
+                  <ListItem>
+                    See the full cancellation policy more{" "}
+                    <Link href="/policies">
+                      <a>
+                        <div className="text-blue-500 underline inline">
+                          here
+                        </div>
+                      </a>
+                    </Link>
+                  </ListItem>
                 </div>
               </div>
 
@@ -1885,7 +1896,14 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                 <div className="mt-2 ml-2 flex flex-col gap-2">
                   <ListItem>
                     This property is compliant with Winda.guide&apos;s CV-19
-                    requirements
+                    requirements. More{" "}
+                    <Link href="/safety">
+                      <a>
+                        <div className="text-blue-500 underline inline">
+                          here
+                        </div>
+                      </a>
+                    </Link>
                   </ListItem>
                 </div>
               </div>
