@@ -239,6 +239,7 @@ const Trips = ({
               onClick={(e) => {
                 e.stopPropagation();
                 setShowLocation(!showLocation);
+                setShowPricePopup(false);
               }}
               className="w-[60%] relative md:w-[70%] flex md:rounded-tr-lg md:rounded-br-lg items-center h-full rounded-tl-lg rounded-bl-lg bg-white border-r border-gray-300"
             >
@@ -254,8 +255,11 @@ const Trips = ({
 
               {showLocation && !location && (
                 <PopularLocationsDropdown
-                  setLocation={setLocation}
-                  className="-mt-1.5"
+                  setLocation={(location) => {
+                    setLocation(location);
+                    search(location);
+                  }}
+                  className="w-[80vw]"
                 ></PopularLocationsDropdown>
               )}
             </div>
