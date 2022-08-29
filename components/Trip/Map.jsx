@@ -59,10 +59,7 @@ function MapBox({ trip }) {
       >
         {trip.stay && (
           <Marker longitude={trip.stay.longitude} latitude={trip.stay.latitude}>
-            <Icon
-              icon="fluent:bed-24-filled"
-              className="w-6 h-6 text-gray-800"
-            />
+            <Icon icon="gis:home" className="w-6 h-6 text-gray-800" />
           </Marker>
         )}
 

@@ -24,43 +24,44 @@ const PopularLocationsDropdown = ({
         </div>
         <div
           onClick={() => {
-            setLocation("Mombasa");
+            setLocation("Naivasha");
           }}
           className="w-full px-2 py-2 hover:bg-gray-100 rounded-md cursor-pointer text-sm transition-all duration-200 ease-linear"
         >
-          Mombasa
+          Naivasha
         </div>
         <div
           onClick={() => {
-            setLocation("Nakuru");
+            setLocation("Maasai Mara");
           }}
           className="w-full px-2 py-2 hover:bg-gray-100 rounded-md cursor-pointer text-sm transition-all duration-200 ease-linear"
         >
-          Nakuru
+          Maasai Mara
         </div>
         <div
           onClick={() => {
-            setLocation("Maasai mara");
+            setLocation("Samburu");
           }}
           className="w-full px-2 py-2 hover:bg-gray-100 rounded-md cursor-pointer text-sm transition-all duration-200 ease-linear"
         >
-          Maasai mara
+          Samburu
+        </div>
+
+        <div
+          onClick={() => {
+            setLocation("Lake Magadi");
+          }}
+          className="w-full px-2 py-2 hover:bg-gray-100 rounded-md cursor-pointer text-sm transition-all duration-200 ease-linear"
+        >
+          Lake Magadi
         </div>
         <div
           onClick={() => {
-            setLocation("Kisii");
+            setLocation("Ol Pejeta");
           }}
           className="w-full px-2 py-2 hover:bg-gray-100 rounded-md cursor-pointer text-sm transition-all duration-200 ease-linear"
         >
-          Kisii
-        </div>
-        <div
-          onClick={() => {
-            setLocation("Kisumu");
-          }}
-          className="w-full px-2 py-2 hover:bg-gray-100 rounded-md cursor-pointer text-sm transition-all duration-200 ease-linear"
-        >
-          Kisumu
+          Ol Pejeta
         </div>
       </div>
     </div>

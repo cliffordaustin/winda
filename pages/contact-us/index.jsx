@@ -23,7 +23,14 @@ const ContactUs = ({ userProfile }) => {
         <div className="mt-10">
           <div>
             <span className="font-bold">Email:</span>
-            <span className="ml-2">info@winda.guide</span>
+            <span
+              onClick={() => {
+                window.open("mailto:info@winda.guide", "_self");
+              }}
+              className="ml-2 text-blue-600 underline cursor-pointer"
+            >
+              info@winda.guide
+            </span>
           </div>
 
           <div className="mt-4">

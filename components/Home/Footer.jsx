@@ -32,6 +32,30 @@ export default function Footer() {
           </a>
         </Link>
 
+        <Link href="/terms-of-service">
+          <a>
+            <div className="text-gray-900 cursor-pointer hover:text-blue-700 hover:underline transition-all duration-100 ease-linear">
+              Terms of service
+            </div>
+          </a>
+        </Link>
+
+        <Link href="/privacy-policy">
+          <a>
+            <div className="text-gray-900 cursor-pointer hover:text-blue-700 hover:underline transition-all duration-100 ease-linear">
+              Privacy policy
+            </div>
+          </a>
+        </Link>
+
+        <Link href="/payment-terms">
+          <a>
+            <div className="text-gray-900 cursor-pointer hover:text-blue-700 hover:underline transition-all duration-100 ease-linear">
+              Payment terms
+            </div>
+          </a>
+        </Link>
+
         <Link href="/contact-us">
           <a>
             <div className="text-gray-900 cursor-pointer hover:text-blue-700 hover:underline transition-all duration-100 ease-linear">

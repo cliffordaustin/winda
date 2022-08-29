@@ -252,6 +252,13 @@ function TripDetail({ userProfile, userTrips, trip }) {
           </div>
 
           <div className="flex items-center gap-3">
+            <Link href="/trip/request-trip">
+              <a>
+                <div className="rounded-3xl px-1 sm:px-3 py-1 glass-effect font-bold text-xs sm:text-sm cursor-pointer !bg-gradient-to-r from-pink-600 via-red-600 to-yellow-500 !text-white">
+                  Custom trip
+                </div>
+              </a>
+            </Link>
             <UserDropdown
               userProfile={userProfile}
               changeShowDropdown={() => {
@@ -413,7 +420,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
 
                   <div> x </div>
                   <div className="!text-sm">
-                    {guest} {guest > 1 ? "guests" : "guest"}
+                    {guest} {guest > 1 ? "resident guests" : "resident guest"}
                   </div>
                 </div>
                 <Price
@@ -467,7 +474,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
                           stayPrice={totalPrice()}
                         ></Price>
                         <span className="mt-1 md:mt-3">
-                          /person/non-resident
+                          /per non-resident/trip
                         </span>
                       </div>
                     </div>
@@ -1948,6 +1955,18 @@ function TripDetail({ userProfile, userTrips, trip }) {
                     </div>
                   )}
 
+                  <div className="text-gray-600 flex items-center w-full justify-between">
+                    <div className="flex gap-1.5 items-center w-[70%]">
+                      Ending date
+                    </div>
+
+                    <div className="text-sm font-bold">
+                      {moment(new Date(router.query.starting_date))
+                        .add(trip.total_number_of_days, "days")
+                        .format("DD MMM YYYY")}
+                    </div>
+                  </div>
+
                   <div className="h-[0.4px] w-[100%] bg-gray-400"></div>
 
                   <div className="text-gray-600 flex items-center w-full justify-between">
@@ -2356,6 +2375,18 @@ function TripDetail({ userProfile, userTrips, trip }) {
                       </div>
                     )}
 
+                    <div className="text-gray-600 flex items-center w-full justify-between">
+                      <div className="flex gap-1.5 items-center w-[70%]">
+                        Ending date
+                      </div>
+
+                      <div className="text-sm font-bold">
+                        {moment(new Date(router.query.starting_date))
+                          .add(trip.total_number_of_days, "days")
+                          .format("DD MMM YYYY")}
+                      </div>
+                    </div>
+
                     <div className="h-[0.4px] w-[100%] bg-gray-400"></div>
 
                     <div className="text-gray-600 flex items-center w-full justify-between">
@@ -2423,14 +2454,15 @@ function TripDetail({ userProfile, userTrips, trip }) {
                   dialogueTitleClassName="!font-bold text-xl !font-OpenSans mb-3"
                 >
                   <div>
-                    We will get back to you via your email -{" "}
+                    We&apos;ll get back to you in 24 hours confirming all the
+                    details of the trip. We will send an extended itinerary to
+                    your email{" "}
                     <span className="font-bold underline">
                       {userProfile.email}
                     </span>
-                    , in less than <span className="font-bold">24 hours</span>
                   </div>
 
-                  <div className="mt-8">In the meantime,</div>
+                  <div className="mt-4">Meanwhile...</div>
 
                   <div className="flex gap-2 w-full">
                     <Button

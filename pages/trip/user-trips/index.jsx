@@ -55,6 +55,13 @@ const UserTrips = ({ userTrips, userProfile }) => {
             </div>
 
             <div className="flex items-center gap-3">
+              <Link href="/trip/request-trip">
+                <a>
+                  <div className="rounded-3xl px-1 sm:px-3 py-1 glass-effect font-bold text-xs sm:text-sm cursor-pointer !bg-gradient-to-r from-pink-600 via-red-600 to-yellow-500 !text-white">
+                    Custom trip
+                  </div>
+                </a>
+              </Link>
               <UserDropdown
                 userProfile={userProfile}
                 numberOfTrips={userTrips.length}
@@ -280,6 +287,18 @@ const UserTrips = ({ userTrips, userProfile }) => {
                             </div>
                           </div>
                         )}
+
+                        <div className="text-gray-600 flex items-center w-full justify-between">
+                          <div className="flex gap-1.5 items-center w-[70%]">
+                            Ending date
+                          </div>
+
+                          <div className="text-sm font-bold">
+                            {moment(new Date(trip.starting_date))
+                              .add(trip.trip.total_number_of_days, "days")
+                              .format("DD MMM YYYY")}
+                          </div>
+                        </div>
 
                         <div className="h-[0.4px] w-[100%] bg-gray-400"></div>
 
