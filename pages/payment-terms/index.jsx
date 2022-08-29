@@ -21,7 +21,7 @@ const PaymentTerms = ({ userProfile }) => {
           Payment Terms of Service
         </div>
 
-        <div className="mt-6 mb-10 px-16">
+        <div className="mt-6 mb-10 px-6 sm:px-16">
           <div className="font-bold text-sm mb-4">
             Last Updated on 28th August 2022
           </div>

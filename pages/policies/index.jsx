@@ -19,7 +19,7 @@ const Policies = ({ userProfile }) => {
 
       <div className="text-center font-bold text-3xl">Winda Guide Policies</div>
 
-      <div className="mt-6 mb-10 px-10">
+      <div className="mt-6 mb-10 px-6 sm:px-10">
         <div className="text-2xl font-bold">Trip cancellation</div>
         <div className="mt-3 ml-2">
           You should have COVID-19 travel insurance. If you cancel more than

@@ -15,7 +15,7 @@ const ContactUs = ({ userProfile }) => {
         isHomePage={true}
       ></Navbar>
 
-      <div className="mt-12 px-10">
+      <div className="mt-12 px-6 sm:px-10">
         <div className="md:text-5xl text-3xl font-OpenSans font-thin relative before:absolute before:w-[10%] before:h-2 before:rounded-3xl before:-bottom-3 before:left-0 before:bg-blue-900">
           Contact us
         </div>

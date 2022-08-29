@@ -19,7 +19,7 @@ const Safety = ({ userProfile }) => {
 
       <div className="text-center font-bold text-3xl">Winda Guide Safety</div>
 
-      <div className="mt-6 mb-10 px-10">
+      <div className="mt-6 mb-10 px-6 sm:px-10">
         <div className="text-2xl font-bold">Emergency contact information</div>
         <div className="mt-3 ml-2">
           <div>

@@ -20,7 +20,7 @@ const PrivacyPolicy = ({ userProfile }) => {
       <div className="mb-24">
         <div className="text-center font-bold text-3xl">Privacy policy</div>
 
-        <div className="mt-6 mb-10 px-16">
+        <div className="mt-6 mb-10 px-6 sm:px-16">
           <div className="font-bold text-sm mb-4">
             Last Updated on 28th August 2022
           </div>

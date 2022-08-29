@@ -19,7 +19,7 @@ const TermsOfService = ({ userProfile }) => {
 
       <div className="text-center font-bold text-3xl">Terms of service</div>
 
-      <div className="mt-6 mb-10 px-10">
+      <div className="mt-6 mb-10 px-6 sm:px-10">
         <div className="flex flex-col gap-2">
           <p>
             These Terms of Service (“Terms”) are a binding legal agreement

@@ -18,7 +18,7 @@ const AboutUs = ({ userProfile }) => {
       <div className="mb-24">
         <div className="text-center font-bold text-3xl">About Us</div>
 
-        <div className="mt-6 mb-10 px-16">
+        <div className="mt-6 mb-10 px-6 sm:px-16">
           <div>
             Traveling in Africa can be challenging and complex without relying
             on someone to guide you. A lot or the (me the opons vou det are
