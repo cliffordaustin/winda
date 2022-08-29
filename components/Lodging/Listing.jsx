@@ -15,6 +15,7 @@ import Rating from "../ui/Rating";
 import Badge from "../ui/Badge";
 import LoadingSpinerChase from "../ui/LoadingSpinerChase";
 import Button from "../ui/Button";
+import Price from "../Stay/Price";
 
 function Listing({
   listing,
@@ -28,12 +29,6 @@ function Listing({
   const dispatch = useDispatch();
 
   const [isSafari, setIsSafari] = useState(false);
-
-  const currencyToKES = useSelector((state) => state.home.currencyToKES);
-
-  const priceConversionRate = useSelector(
-    (state) => state.stay.priceConversionRate
-  );
 
   const [liked, setLiked] = useState(listing.has_user_saved);
 
@@ -54,8 +49,6 @@ function Listing({
     return image.image;
   });
 
-  const [newPrice, setNewPrice] = useState(null);
-
   const price = () => {
     return (
       listing.price_non_resident ||
@@ -73,22 +66,6 @@ function Listing({
       listing.emperor_suite_room_price
     );
   };
-
-  const priceConversion = async (price) => {
-    if (price) {
-      if (currencyToKES && priceConversionRate) {
-        setNewPrice(priceConversionRate * price);
-      } else {
-        setNewPrice(price);
-      }
-    } else {
-      return null;
-    }
-  };
-
-  useEffect(() => {
-    priceConversion(price());
-  }, [price(), currencyToKES, priceConversionRate]);
 
   const [cartLoading, setCartLoading] = useState(false);
 
@@ -303,20 +280,12 @@ function Listing({
             >
               <div className="flex flex-col gap-1">
                 <h1 className="text-gray-500 truncate">{listing.name}</h1>
-                {!currencyToKES && (
-                  <h1 className={"font-bold text-xl font-OpenSans "}>
-                    {price()
-                      ? "$" + Math.ceil(price()).toLocaleString()
-                      : "No data"}
-                  </h1>
-                )}
-                {currencyToKES && (
-                  <h1 className={"font-bold text-xl font-OpenSans "}>
-                    {price()
-                      ? "KES" + Math.ceil(newPrice).toLocaleString()
-                      : "No data"}
-                  </h1>
-                )}
+                <div className="flex">
+                  <Price stayPrice={price()}></Price>
+                  <span className="mt-[4.5px] text-gray-500 text-sm">
+                    {listing.per_house ? "/per property" : "/per person"}
+                  </span>
+                </div>
               </div>
               <div className="text-gray-500 flex gap-1 text-sm truncate mt-1 flex-wrap">
                 {listing.capacity && (
