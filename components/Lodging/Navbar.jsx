@@ -21,6 +21,8 @@ function Navbar({
   setCurrentNavState,
   showSearchOptions = true,
   userProfile,
+  isTransport,
+  setFlightPopup,
 }) {
   const [numberOfItemsInCart, setNumberOfItemsInCart] = useState(0);
 
@@ -199,6 +201,16 @@ function Navbar({
         )}
       </div>
       <div className="flex items-center gap-2">
+        {isTransport && (
+          <div
+            onClick={() => {
+              setFlightPopup(true);
+            }}
+            className="rounded-3xl md:hidden px-1 sm:px-3 py-1 glass-effect font-bold text-xs sm:text-sm cursor-pointer !bg-gradient-to-r from-pink-600 via-red-600 to-yellow-500 !text-white"
+          >
+            book flight
+          </div>
+        )}
         <UserDropdown
           changeShowDropdown={changeShowDropdown}
           showDropdown={showDropdown}

@@ -672,6 +672,8 @@ const Transport = ({
               showDropdown: !state.showDropdown,
             })
           }
+          isTransport={true}
+          setFlightPopup={setFlightPopup}
         ></Navbar>
 
         <MobileModal
@@ -1217,7 +1219,7 @@ const Transport = ({
         closeModal={() => {
           setFlightPopup(false);
         }}
-        dialoguePanelClassName="h-[85vh] relative overflow-y-scroll remove-scroll !relative max-w-[550px] !p-4 !top-[10%] md:max-h-[420px]"
+        dialoguePanelClassName="relative overflow-y-scroll remove-scroll !relative max-w-[550px] !p-4 !top-[10%] md:max-h-[420px]"
         outsideDialogueClass="!p-3"
         title={"Book for a flight"}
         dialogueTitleClassName="!font-bold !text-xl"
