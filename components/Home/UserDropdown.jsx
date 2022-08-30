@@ -44,6 +44,7 @@ function UserDropdown({
                 className="object-cover rounded-full"
                 src={userProfile.profile_pic}
                 unoptimized={true}
+                objectPosition="center"
                 objectFit="cover"
                 priority
               ></Image>
@@ -117,15 +118,22 @@ function UserDropdown({
           </a>
         </Link>
       )}
-      {isHomePage && (
-        <Link href="/trip/user-trips">
-          <a>
-            <div className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2 flex justify-between items-center">
-              <span className="font-bold text-base">your trips</span>
-            </div>
-          </a>
-        </Link>
-      )}
+
+      <Link href="/trip/user-trips">
+        <a>
+          <div className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2 flex justify-between items-center">
+            <span className="font-bold text-base">your trips</span>
+          </div>
+        </a>
+      </Link>
+
+      <Link href="/trip/request-trip">
+        <a>
+          <div className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2 flex justify-between items-center">
+            <span className="font-bold text-base">Custom trip</span>
+          </div>
+        </a>
+      </Link>
 
       {!isHomePage && (
         <Link href="/cart">

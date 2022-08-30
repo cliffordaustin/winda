@@ -259,7 +259,7 @@ function RequestTrip({ userProfile }) {
         <Image
           layout="fill"
           alt="Image of a car and a lion"
-          src="/images/signin-image3.jpg"
+          src="/images/giraffe.jpg"
           className="object-cover z-10"
           unoptimized={true}
           priority

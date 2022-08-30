@@ -538,6 +538,9 @@ const Transport = ({
 
   const [addToTripLoading, setAddToTripLoading] = useState(false);
 
+  const [showGeneralTransfersPopup, setShowGeneralTransfersPopup] =
+    useState(false);
+
   const [numberOfPeopleInFlight, setNumberOfPeopleInFlight] = useState(1);
 
   const addToTrip = async (type = "") => {
@@ -1098,8 +1101,8 @@ const Transport = ({
         </div>
         <div className="fixed hidden md:block md:w-[30%] lg:w-[20%] h-full top-[170px] bottom-0 left-0 overflow-y-scroll bg-white border-r border-gray-100">
           <div className="px-4">
-            <h1 className="my-3 font-bold text-lg">Filter results</h1>
-            <div className="mb-2">
+            {/* <h1 className="my-3 font-bold text-lg">Filter results</h1> */}
+            <div className="mb-1">
               <FilterTags></FilterTags>
             </div>
             <div className="ml-2">
@@ -1164,7 +1167,7 @@ const Transport = ({
               {/* this is required to prevent the scrollbar from hiding the content */}
               <div className="py-20"></div>
 
-              <div className="fixed bottom-2 md:w-[30%] lg:w-[20%] flex items-center justify-center left-0 right-0 p-2 w-full">
+              <div className="fixed bottom-2 md:w-[30%] lg:w-[20%] flex flex-col gap-1 items-center justify-center left-0 right-0 p-2 w-full">
                 <Button
                   onClick={() => {
                     setFlightPopup(true);
@@ -1174,6 +1177,16 @@ const Transport = ({
                   <span className="font-bold">Book for a flight</span>
                   <Icon icon="fa6-solid:plane" />
                 </Button>
+
+                {/* <Button
+                  onClick={() => {
+                    setShowGeneralTransfersPopup(true);
+                  }}
+                  className="flex items-center gap-2 !w-full !py-3 !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500"
+                >
+                  <span className="font-bold">General transfers</span>
+                  <Icon icon="fa6-solid:plane" />
+                </Button> */}
               </div>
             </div>
           </div>
@@ -1213,6 +1226,181 @@ const Transport = ({
           </div>
         </div>
       </div>
+
+      <Dialogue
+        isOpen={showGeneralTransfersPopup}
+        closeModal={() => {
+          setShowGeneralTransfersPopup(false);
+        }}
+        dialoguePanelClassName="relative overflow-y-scroll remove-scroll !relative max-w-[550px] !p-4 !top-[10%] md:max-h-[420px]"
+        outsideDialogueClass="!p-3"
+        title={"Book for a ground transfer"}
+        dialogueTitleClassName="!font-bold !text-xl"
+      >
+        <div className="flex flex-col w-full mt-3">
+          <Select
+            defaultValue={selectedFlightStartingLocation}
+            onChange={(value) => {
+              setSelectedFlightStartingLocation(value);
+            }}
+            className={"text-sm outline-none border border-gray-500 "}
+            instanceId={startingLocationOptions}
+            placeholder="Select a starting location"
+            options={startingLocationOptions}
+            isSearchable={true}
+          />
+
+          <div className="w-[50%] h-[30px] flex flex-col gap-1.5">
+            <div className="h-[46%] w-full border-r border-gray-400"></div>
+            <div className="h-[8%] relative flex items-center justify-end">
+              <Icon
+                icon="bxs:plane"
+                className="text-gray-400 w-3 h-3 absolute -right-1.5 rotate-180"
+              />
+            </div>
+            <div className="h-[46%] w-full border-r border-gray-400"></div>
+          </div>
+          <Select
+            defaultValue={selectedFlightDestination}
+            onChange={(value) => {
+              setSelectedFlightDestination(value);
+            }}
+            className={"text-sm outline-none border border-gray-500 "}
+            instanceId={destinationLocationOptions}
+            placeholder="Select a destination"
+            options={destinationLocationOptions}
+            isSearchable={true}
+          />
+        </div>
+
+        <div className="mt-5">
+          <Select
+            defaultValue={selectedFlightType}
+            onChange={(value) => {
+              setSelectedFlightType(value);
+            }}
+            className={"text-sm outline-none border border-gray-500 "}
+            instanceId={flightTypes}
+            placeholder="Select flight type"
+            options={flightTypes}
+            isSearchable={true}
+          />
+        </div>
+
+        <div className="mb-2 mt-4 font-bold">Number of passengers</div>
+        <div className="flex items-center gap-2 ">
+          <div
+            onClick={() => {
+              if (numberOfPeopleInFlight > 1) {
+                setNumberOfPeopleInFlight(numberOfPeopleInFlight - 1);
+              }
+            }}
+            className="w-8 h-8 rounded-full cursor-pointer border flex items-center justify-center shadow-lg font-bold"
+          >
+            {" "}
+            -{" "}
+          </div>
+
+          <div className="text-sm font-bold">
+            {numberOfPeopleInFlight}{" "}
+            {numberOfPeopleInFlight > 1 ? "People" : "Person"}
+          </div>
+          <div
+            onClick={() => {
+              setNumberOfPeopleInFlight(numberOfPeopleInFlight + 1);
+            }}
+            className="w-8 h-8 rounded-full cursor-pointer border flex items-center justify-center shadow-lg font-bold"
+          >
+            +
+          </div>
+        </div>
+
+        {flightPrice && (
+          <div className="mt-4 text-gray-700 text-sm">
+            The flight from{" "}
+            <span className="font-semibold">
+              {selectedFlightStartingLocation &&
+                selectedFlightStartingLocation.value}{" "}
+            </span>
+            to{" "}
+            <span className="font-semibold">
+              {selectedFlightDestination && selectedFlightDestination.value}{" "}
+            </span>
+            with{" "}
+            <span className="font-semibold">
+              {numberOfPeopleInFlight}{" "}
+              {numberOfPeopleInFlight > 1 ? "people" : "person"}
+            </span>{" "}
+            will cost{" "}
+            <span className="font-semibold">
+              <Price
+                stayPrice={flightPrice * numberOfPeopleInFlight}
+                className="!text-sm inline"
+              ></Price>
+            </span>
+          </div>
+        )}
+
+        <div className="flex gap-2">
+          {slugIsCorrect && !router.query.flight && (
+            <button
+              onClick={() => {
+                addToTrip("flight");
+              }}
+              disabled={
+                !selectedFlightStartingLocation || !selectedFlightDestination
+              }
+              className={
+                "bg-blue-500 h-10 w-full flex items-center justify-center bottom-0 mt-3 left-0 right-0 " +
+                (selectedFlightStartingLocation &&
+                selectedFlightStartingLocation.value &&
+                selectedFlightDestination &&
+                selectedFlightDestination.value
+                  ? "cursor-pointer"
+                  : "cursor-not-allowed opacity-50")
+              }
+            >
+              <span className="font-semibold text-sm text-white">
+                Add to trip
+              </span>
+              <div className={" " + (!addToTripLoading ? "hidden" : "ml-2")}>
+                <LoadingSpinerChase
+                  width={16}
+                  height={16}
+                  color="#fff"
+                ></LoadingSpinerChase>
+              </div>
+            </button>
+          )}
+
+          <button
+            onClick={() => {
+              addToBasket("flight");
+            }}
+            disabled={
+              !selectedFlightStartingLocation || !selectedFlightDestination
+            }
+            className={
+              "h-10 w-full flex items-center justify-center bottom-0 mt-3 left-0 right-0 bg-blue-500 " +
+              (selectedFlightStartingLocation &&
+              selectedFlightStartingLocation.value &&
+              selectedFlightDestination &&
+              selectedFlightDestination.value
+                ? "cursor-pointer"
+                : "cursor-not-allowed opacity-50")
+            }
+          >
+            <span className="font-semibold text-sm text-white">Book now</span>
+            <div className={" " + (!addToBasketLoading ? "hidden" : "ml-2")}>
+              <LoadingSpinerChase
+                width={16}
+                height={16}
+                color="#fff"
+              ></LoadingSpinerChase>
+            </div>
+          </button>
+        </div>
+      </Dialogue>
 
       <Dialogue
         isOpen={flightPopup}

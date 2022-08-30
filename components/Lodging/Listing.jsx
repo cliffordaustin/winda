@@ -283,7 +283,9 @@ function Listing({
                 <div className="flex">
                   <Price stayPrice={price()}></Price>
                   <span className="mt-[4.5px] text-gray-500 text-sm">
-                    {listing.per_house ? "/per property" : "/per person"}
+                    {listing.per_house
+                      ? "/per property/per night"
+                      : "/per person/per night"}
                   </span>
                 </div>
               </div>

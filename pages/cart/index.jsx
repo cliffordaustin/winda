@@ -697,7 +697,7 @@ const Cart = ({
                 }}
                 className="w-full !py-3 flex items-center gap-2 text-lg !bg-blue-900 !text-primary-blue-200"
               >
-                <span>Book trip</span>
+                <span>Request to book</span>
                 <div className={" " + (!loading ? "hidden" : "")}>
                   <LoadingSpinerChase
                     width={20}
