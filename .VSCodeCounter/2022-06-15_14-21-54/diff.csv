@@ -76,8 +76,8 @@
 "/Users/clifford/Codings/winda-test/package-lock.json", "JSON", 0, 0, 53, 0, 0, 0, 53
 "/Users/clifford/Codings/winda-test/package.json", "JSON", 0, 0, 2, 0, 0, 0, 2
 "/Users/clifford/Codings/winda-test/pages/cart/index.jsx", "JavaScript React", 0, 325, 0, 0, 0, 5, 330
-"/Users/clifford/Codings/winda-test/pages/experiences/[slug].jsx", "JavaScript React", 0, 1036, 0, 0, 109, 91, 1236
-"/Users/clifford/Codings/winda-test/pages/experiences/index.jsx", "JavaScript React", 0, 21, 0, 0, 0, 4, 25
+"/Users/clifford/Codings/winda-test/pages/activities/[slug].jsx", "JavaScript React", 0, 1036, 0, 0, 109, 91, 1236
+"/Users/clifford/Codings/winda-test/pages/activities/index.jsx", "JavaScript React", 0, 21, 0, 0, 0, 4, 25
 "/Users/clifford/Codings/winda-test/pages/index.jsx", "JavaScript React", 0, -683, 0, 0, 750, -4, 63
 "/Users/clifford/Codings/winda-test/pages/order-successfull/index.jsx", "JavaScript React", 0, 1, 0, 0, 0, 0, 1
 "/Users/clifford/Codings/winda-test/pages/orders/index.jsx", "JavaScript React", 0, -43, 0, 0, 283, 27, 267
@@ -85,7 +85,7 @@
 "/Users/clifford/Codings/winda-test/pages/stays/index.jsx", "JavaScript React", 0, 526, 0, 0, 54, 75, 655
 "/Users/clifford/Codings/winda-test/pages/transport/[slug].jsx", "JavaScript React", 0, 1974, 0, 0, 0, 136, 2110
 "/Users/clifford/Codings/winda-test/pages/transport/index.jsx", "JavaScript React", 0, 963, 0, 0, 4, 64, 1031
-"/Users/clifford/Codings/winda-test/pages/trip/experiences/index.jsx", "JavaScript React", 0, 491, 0, 0, 0, 50, 541
+"/Users/clifford/Codings/winda-test/pages/trip/activities/index.jsx", "JavaScript React", 0, 491, 0, 0, 0, 50, 541
 "/Users/clifford/Codings/winda-test/pages/trip/plan/index.jsx", "JavaScript React", 0, 2057, 0, 0, 3, 111, 2171
 "/Users/clifford/Codings/winda-test/pages/trip/stays/index.jsx", "JavaScript React", 0, 295, 0, 0, 226, 42, 563
 "/Users/clifford/Codings/winda-test/redux/actions/auth.js", "JavaScript", 86, 0, 0, 0, 0, 0, 86

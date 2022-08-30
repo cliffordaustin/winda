@@ -37,7 +37,7 @@ Directories
 | pages                                                                              |         15 |      7,869 |        848 |        496 |      9,213 |
 | pages/cart                                                                         |          1 |        431 |          0 |         36 |        467 |
 | pages/create-stay                                                                  |          1 |         10 |          0 |          3 |         13 |
-| pages/experiences                                                                  |          2 |      1,895 |         35 |        132 |      2,062 |
+| pages/activities                                                                  |          2 |      1,895 |         35 |        132 |      2,062 |
 | pages/login                                                                        |          1 |         10 |          0 |          3 |         13 |
 | pages/logout                                                                       |          1 |         13 |          0 |          4 |         17 |
 | pages/map-test                                                                     |          1 |         10 |          0 |          3 |         13 |
@@ -194,8 +194,8 @@ Files
 | /Users/clifford/Codings/winda-test/pages/_document.js                              | JavaScript         |         40 |          0 |          4 |         44 |
 | /Users/clifford/Codings/winda-test/pages/cart/index.jsx                            | JavaScript React   |        431 |          0 |         36 |        467 |
 | /Users/clifford/Codings/winda-test/pages/create-stay/index.jsx                     | JavaScript React   |         10 |          0 |          3 |         13 |
-| /Users/clifford/Codings/winda-test/pages/experiences/[slug].jsx                    | JavaScript React   |        882 |         33 |         62 |        977 |
-| /Users/clifford/Codings/winda-test/pages/experiences/index.jsx                     | JavaScript React   |      1,013 |          2 |         70 |      1,085 |
+| /Users/clifford/Codings/winda-test/pages/activities/[slug].jsx                    | JavaScript React   |        882 |         33 |         62 |        977 |
+| /Users/clifford/Codings/winda-test/pages/activities/index.jsx                     | JavaScript React   |      1,013 |          2 |         70 |      1,085 |
 | /Users/clifford/Codings/winda-test/pages/index.jsx                                 | JavaScript React   |      1,414 |         24 |         45 |      1,483 |
 | /Users/clifford/Codings/winda-test/pages/login/index.jsx                           | JavaScript React   |         10 |          0 |          3 |         13 |
 | /Users/clifford/Codings/winda-test/pages/logout/index.jsx                          | JavaScript React   |         13 |          0 |          4 |         17 |

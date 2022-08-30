@@ -110,7 +110,7 @@ const PrivacyPolicy = ({ userProfile }) => {
                 when you fill in a form, add information to your account,
                 respond to surveys, post to community forums, participate in
                 promotions, communicate with our customer care team and other
-                Customers or Service Provider, or share your experience with us.
+                Customers or Service Provider, or share your activity with us.
                 This may include health or dietary information if you choose to
                 share it with us.
               </div>
@@ -362,8 +362,8 @@ const PrivacyPolicy = ({ userProfile }) => {
               fraud warnings from identity verification service providers for
               use in our fraud prevention and risk assessment efforts. We may
               receive information about you and your activities on and off the
-              Winda Platform, or about your experiences and interactions from
-              our partners. We may receive health information, including but not
+              Winda Platform, or about your activities and interactions from our
+              partners. We may receive health information, including but not
               limited to, health information related to contagious diseases.
             </ListItem>
           </div>
@@ -411,10 +411,10 @@ const PrivacyPolicy = ({ userProfile }) => {
             </ListItem>
 
             <ListItem className="!text-base">
-              personalize and customize your experience based on your
-              interactions with the Winda Platform, your search and booking
-              history, your profile information and preferences, and other
-              content you submit, and
+              personalize and customize your activity based on your interactions
+              with the Winda Platform, your search and booking history, your
+              profile information and preferences, and other content you submit,
+              and
             </ListItem>
 
             <ListItem className="!text-base">

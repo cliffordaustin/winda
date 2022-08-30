@@ -501,7 +501,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                   <div
                     onClick={() => {
                       router.push({
-                        pathname: "/experiences",
+                        pathname: "/activities",
                         query: {
                           d_search: activity.country,
                         },
@@ -517,7 +517,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                   <div
                     onClick={() => {
                       router.push({
-                        pathname: "/experiences",
+                        pathname: "/activities",
                         query: {
                           d_search: activity.city,
                         },
@@ -532,7 +532,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                 <div
                   onClick={() => {
                     router.push({
-                      pathname: "/experiences",
+                      pathname: "/activities",
                       query: {
                         d_search: activity.location,
                       },
@@ -925,8 +925,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                     setShowMobileDateModal(true);
                   }}
                   className={
-                    "!bg-gradient-to-r !px-2 from-pink-500 via-red-500 to-yellow-500 !text-white " +
-                    (!inCart ? "" : "")
+                    "!bg-gradient-to-r !px-2 from-pink-500 via-red-500 to-yellow-500 !text-white "
                   }
                 >
                   {!inCart ? "Add to basket" : "Add to basket again"}
@@ -949,7 +948,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                 setShowMobileDateModal(!showMobileDateModal);
               }}
               className="md:!hidden overflow-y-auto"
-              title="Book this experience"
+              title="Book this activity"
             >
               <div className="px-2 mt-2">
                 {!showDateForMobilePopup && (
@@ -1394,9 +1393,13 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                       onClick={() => {
                         addToBasket();
                       }}
+                      disabled={!addToCartDate}
                       className={
                         "!bg-gradient-to-r !px-2 from-pink-500 via-red-500 to-yellow-500 !text-white " +
-                        (!inCart ? "" : "")
+                        (!inCart ? "" : "") +
+                        (!addToCartDate
+                          ? " !opacity-70 cursor-not-allowed"
+                          : "")
                       }
                     >
                       {!inCart ? "Book" : "Book again"}
@@ -1420,12 +1423,12 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
 
           {activity.type_of_activities.length > 0 && (
             <Element
-              name="experiences"
+              name="activities"
               className="flex flex-col md:flex-row gap-3 justify-between pt-10 "
             >
               <div className="border pb-2 h-fit border-gray-200 rounded-xl overflow-hidden w-full order-2 md:order-1 mt-4 md:mt-0">
                 <div className="py-2 bg-gray-200 mb-2">
-                  <span className="font-bold text-xl ml-6">Experiences</span>
+                  <span className="font-bold text-xl ml-6">Activities</span>
                 </div>
                 {!showMoreActivities && (
                   <div className="flex flex-col gap-2 px-2">

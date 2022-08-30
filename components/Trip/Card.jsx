@@ -100,7 +100,7 @@ const Card = ({
   };
 
   return (
-    <div className="border flex overflow-hidden stepWebkitSetting flex-col h-[500px] xl:flex-row w-full md:w-[48%] bg-white xl:h-[265px] mb-6 shadow-md rounded-2xl">
+    <div className="border flex relative overflow-hidden stepWebkitSetting flex-col h-[500px] xl:flex-row w-full md:w-[48%] bg-white xl:h-[265px] mb-6 shadow-md rounded-2xl">
       <div className="xl:w-[320px] h-[230px] xl:h-full">
         <Carousel
           images={images}
@@ -195,7 +195,7 @@ const Card = ({
               <Price stayPrice={totalPrice()}></Price>
             </div>
             <div className="mt-0.5 mb-1.5 font-bold">.</div>
-            <div className="mt-0.5">avg/night/non-resident</div>
+            <div className="mt-0.5">/per non-resident/trip</div>
           </div>
         </div>
 
@@ -208,6 +208,11 @@ const Card = ({
             </a>
           </Link>
         </div>
+      </div>
+
+      <div className="absolute top-1.5 left-1.5 w-fit px-2 rounded-md font-bold text-sm py-[2px] bg-yellow-400">
+        {listing.total_number_of_days}{" "}
+        {listing.total_number_of_days > 1 ? "days" : "day"}
       </div>
     </div>
   );

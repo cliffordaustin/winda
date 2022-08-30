@@ -1016,15 +1016,15 @@ function PlanTrip({
                       router.push({
                         query: {
                           ...router.query,
-                          experiences:
-                            router.query.experiences === "show" ? "" : "show",
+                          activities:
+                            router.query.activities === "show" ? "" : "show",
                           showAll: router.query.showAll === "",
                         },
                       });
                     }}
                     className={
                       "flex relative flex-col items-center justify-center py-1 px-1 rounded-xl transition-all duration-500 cursor-pointer " +
-                      (router.query.experiences === "show"
+                      (router.query.activities === "show"
                         ? "bg-blue-400 hover:bg-blue-500"
                         : "hover:bg-gray-300")
                     }
@@ -1050,7 +1050,7 @@ function PlanTrip({
                       </g>
                     </svg>
                     <span className="font-bold text-sm truncate">
-                      Experiences
+                      Activities
                     </span>
                   </div>
                   <div
@@ -1095,7 +1095,7 @@ function PlanTrip({
                         query: {
                           label: router.query.showAll === "show" ? "" : "show",
                           stay: router.query.showAll === "show" ? "" : "show",
-                          experiences:
+                          activities:
                             router.query.showAll === "show" ? "" : "show",
                           transport:
                             router.query.transport === "show" ? "" : "show",
@@ -1446,15 +1446,15 @@ function PlanTrip({
                       router.push({
                         query: {
                           ...router.query,
-                          experiences:
-                            router.query.experiences === "show" ? "" : "show",
+                          activities:
+                            router.query.activities === "show" ? "" : "show",
                           showAll: router.query.showAll === "",
                         },
                       });
                     }}
                     className={
                       "flex relative flex-col items-center justify-center py-1 px-1 rounded-xl transition-all duration-500 cursor-pointer " +
-                      (router.query.experiences === "show"
+                      (router.query.activities === "show"
                         ? "bg-blue-400 hover:bg-blue-500"
                         : "hover:bg-gray-300")
                     }
@@ -1480,7 +1480,7 @@ function PlanTrip({
                       </g>
                     </svg>
                     <span className="font-bold text-sm truncate">
-                      Experiences
+                      Activities
                     </span>
                   </div>
                   <div
@@ -1525,7 +1525,7 @@ function PlanTrip({
                         query: {
                           label: router.query.showAll === "show" ? "" : "show",
                           stay: router.query.showAll === "show" ? "" : "show",
-                          experiences:
+                          activities:
                             router.query.showAll === "show" ? "" : "show",
                           transport:
                             router.query.transport === "show" ? "" : "show",

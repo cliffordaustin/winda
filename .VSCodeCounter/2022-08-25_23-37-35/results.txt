@@ -44,7 +44,7 @@ Directories
 | pages/accounts/email-verification/[verification_slug]                                              |          1 |         64 |         28 |         10 |        102 |
 | pages/cart                                                                                         |          1 |        893 |          0 |         49 |        942 |
 | pages/contact-us                                                                                   |          1 |         84 |          2 |         13 |         99 |
-| pages/experiences                                                                                  |          2 |      3,639 |        141 |        257 |      4,037 |
+| pages/activities                                                                                  |          2 |      3,639 |        141 |        257 |      4,037 |
 | pages/login                                                                                        |          1 |         10 |          0 |          3 |         13 |
 | pages/logout                                                                                       |          1 |         13 |          0 |          4 |         17 |
 | pages/orders                                                                                       |          1 |        362 |          0 |         25 |        387 |
@@ -242,8 +242,8 @@ Files
 | /Users/clifford/Codings/winda-test/pages/accounts/email-verification/[verification_slug]/index.jsx | JavaScript React   |         64 |         28 |         10 |        102 |
 | /Users/clifford/Codings/winda-test/pages/cart/index.jsx                                            | JavaScript React   |        893 |          0 |         49 |        942 |
 | /Users/clifford/Codings/winda-test/pages/contact-us/index.jsx                                      | JavaScript React   |         84 |          2 |         13 |         99 |
-| /Users/clifford/Codings/winda-test/pages/experiences/[slug].jsx                                    | JavaScript React   |      2,178 |        107 |        171 |      2,456 |
-| /Users/clifford/Codings/winda-test/pages/experiences/index.jsx                                     | JavaScript React   |      1,461 |         34 |         86 |      1,581 |
+| /Users/clifford/Codings/winda-test/pages/activities/[slug].jsx                                    | JavaScript React   |      2,178 |        107 |        171 |      2,456 |
+| /Users/clifford/Codings/winda-test/pages/activities/index.jsx                                     | JavaScript React   |      1,461 |         34 |         86 |      1,581 |
 | /Users/clifford/Codings/winda-test/pages/index.jsx                                                 | JavaScript React   |        389 |          4 |         46 |        439 |
 | /Users/clifford/Codings/winda-test/pages/login/index.jsx                                           | JavaScript React   |         10 |          0 |          3 |         13 |
 | /Users/clifford/Codings/winda-test/pages/logout/index.jsx                                          | JavaScript React   |         13 |          0 |          4 |         17 |

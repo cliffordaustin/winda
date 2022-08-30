@@ -75,7 +75,7 @@ function Listings({
           <div
             onClick={() => {
               router.push({
-                pathname: "/experiences",
+                pathname: "/activities",
                 query: {
                   trip: router.query.trip,
                   group_trip: router.query.group_trip,

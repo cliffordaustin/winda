@@ -272,8 +272,8 @@ function Listing({
       <Link
         href={
           router.query.trip
-            ? `/experiences/${listing.slug}?${router.query.trip}&${router.query.group_trip}`
-            : `/experiences/${listing.slug}`
+            ? `/activities/${listing.slug}?${router.query.trip}&${router.query.group_trip}`
+            : `/activities/${listing.slug}`
         }
       >
         <a>

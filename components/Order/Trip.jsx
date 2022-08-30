@@ -628,9 +628,9 @@ const Trip = ({
     });
   };
 
-  const changeExperiences = () => {
+  const changeActivities = () => {
     router.push({
-      pathname: "/experiences",
+      pathname: "/activities",
       query: {
         trip: trip.slug,
         group_trip: router.query.slug,
@@ -2437,12 +2437,12 @@ const Trip = ({
             </div>
             <div>
               <p className="text-sm font-medium text-red-500">
-                Select an experience to show location
+                Select an activity to show location
               </p>
-              <h1 className="font-bold">Experience</h1>
+              <h1 className="font-bold">Activity</h1>
 
               <h1 className="font-medium mt-2 text-sm text-red-600">
-                No experience added
+                No activity added
               </h1>
             </div>
           </div>
@@ -2450,7 +2450,7 @@ const Trip = ({
           <div className="self-start flex gap-2 items-center">
             <div
               onClick={() => {
-                changeExperiences();
+                changeActivities();
               }}
               className="w-7 h-7 cursor-pointer bg-blue-200 flex items-center justify-center rounded-full"
             >
@@ -2847,7 +2847,7 @@ const Trip = ({
           <div className="w-full flex gap-2">
             <div
               onClick={() => {
-                changeExperiences();
+                changeActivities();
               }}
               className="px-3 cursor-pointer text-sm py-1 w-fit text-black border bg-white rounded-md"
             >
@@ -3230,7 +3230,7 @@ const Trip = ({
                   d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                 />
               </svg>
-              <span>Experiences</span>
+              <span>Activities</span>
             </div>
           </Button>
         </div>

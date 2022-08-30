@@ -85,14 +85,14 @@ const MapMakerPopup = ({ activity }) => {
             onClick={() => {
               if (router.query.trip) {
                 router.push({
-                  pathname: `experiences/${activity.slug}`,
+                  pathname: `activities/${activity.slug}`,
                   query: {
                     trip: router.query.trip,
                     group_trip: router.query.group_trip,
                   },
                 });
               } else {
-                router.push(`experiences/${activity.slug}`);
+                router.push(`activities/${activity.slug}`);
               }
             }}
             className="!py-1.5 !w-full !bg-white !border !border-gray-300 !text-black !font-bold"

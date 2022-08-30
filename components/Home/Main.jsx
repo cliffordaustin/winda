@@ -233,19 +233,19 @@ function Main() {
                 </div>
                 <div className="w-full h-[49%] relative self-end before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
                   <Carousel
-                    images={["/images/home/nairobi-experience.jpg"]}
+                    images={["/images/home/nairobi-activity.jpg"]}
                     imageClass="rounded-2xl"
                   ></Carousel>
 
                   <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
-                    Experiences in Nairobi
+                    Activities in Nairobi
                   </div>
 
-                  <Link href="/experiences?search=Nairobi">
+                  <Link href="/activities?search=Nairobi">
                     <a>
                       <div className="absolute bottom-2 z-30 flex flex-col left-2">
                         <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
-                          View experiences
+                          View activities
                         </div>
                       </div>
                     </a>
@@ -390,19 +390,19 @@ function Main() {
                 </div>
                 <div className="w-full h-[49%] relative self-end before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
                   <Carousel
-                    images={["/images/home/nakuru-experience.jpg"]}
+                    images={["/images/home/nakuru-activity.jpg"]}
                     imageClass="rounded-2xl"
                   ></Carousel>
 
                   <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
-                    Experiences in Naivasha
+                    Activities in Naivasha
                   </div>
 
-                  <Link href="/experiences?search=Naivasha">
+                  <Link href="/activities?search=Naivasha">
                     <a>
                       <div className="absolute bottom-2 z-30 flex flex-col left-2">
                         <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
-                          View experiences
+                          View activities
                         </div>
                       </div>
                     </a>
@@ -499,7 +499,7 @@ function Main() {
                       Maasai Mara is a game reserve ran by the county government
                       of Narok. Surrounding the reserve are many conservancies
                       that are privately owned and offer more exclusive
-                      experiences such as night game drives and bush walks which
+                      activities such as night game drives and bush walks which
                       are not allowed in the reserve. This is something to
                       consider when choosing your lodge.
                     </p>
@@ -616,14 +616,14 @@ function Main() {
                   ></Carousel>
 
                   <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
-                    Experiences in Maasai Mara
+                    Activities in Maasai Mara
                   </div>
 
-                  <Link href="/experiences?search=Maasai Mara">
+                  <Link href="/activities?search=Maasai Mara">
                     <a>
                       <div className="absolute bottom-2 z-30 flex flex-col left-2">
                         <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
-                          View experiences
+                          View activities
                         </div>
                       </div>
                     </a>
@@ -943,19 +943,19 @@ function Main() {
           <SwiperSlide className="!h-[320px] !w-[320px]">
             <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
               <Carousel
-                images={["/images/home/experiences.jpg"]}
+                images={["/images/home/activities.jpg"]}
                 imageClass="rounded-2xl"
               ></Carousel>
 
               <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
-                Experiences
+                Activities
               </div>
 
-              <Link href="/experiences">
+              <Link href="/activities">
                 <a>
                   <div className="absolute bottom-2 z-30 flex flex-col left-2">
                     <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
-                      View experiences
+                      View activities
                     </div>
                   </div>
                 </a>

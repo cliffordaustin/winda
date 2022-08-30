@@ -39,7 +39,7 @@ Directories
 | pages                                                                              |         20 |     15,971 |      2,353 |      1,183 |     19,507 |
 | pages/cart                                                                         |          1 |        756 |          0 |         41 |        797 |
 | pages/create-stay                                                                  |          1 |         10 |          0 |          3 |         13 |
-| pages/experiences                                                                  |          2 |      2,952 |        144 |        227 |      3,323 |
+| pages/activities                                                                  |          2 |      2,952 |        144 |        227 |      3,323 |
 | pages/login                                                                        |          1 |         10 |          0 |          3 |         13 |
 | pages/logout                                                                       |          1 |         13 |          0 |          4 |         17 |
 | pages/map-test                                                                     |          1 |         10 |          0 |          3 |         13 |
@@ -49,7 +49,7 @@ Directories
 | pages/stays                                                                        |          2 |      4,069 |        813 |        310 |      5,192 |
 | pages/transport                                                                    |          2 |      2,937 |          4 |        200 |      3,141 |
 | pages/trip                                                                         |          3 |      2,843 |        229 |        203 |      3,275 |
-| pages/trip/experiences                                                             |          1 |        491 |          0 |         50 |        541 |
+| pages/trip/activities                                                             |          1 |        491 |          0 |         50 |        541 |
 | pages/trip/plan                                                                    |          1 |      2,057 |          3 |        111 |      2,171 |
 | pages/trip/stays                                                                   |          1 |        295 |        226 |         42 |        563 |
 | public                                                                             |          2 |          5 |          0 |          0 |          5 |
@@ -240,8 +240,8 @@ Files
 | /Users/clifford/Codings/winda-test/pages/_document.js                              | JavaScript         |         40 |          0 |          4 |         44 |
 | /Users/clifford/Codings/winda-test/pages/cart/index.jsx                            | JavaScript React   |        756 |          0 |         41 |        797 |
 | /Users/clifford/Codings/winda-test/pages/create-stay/index.jsx                     | JavaScript React   |         10 |          0 |          3 |         13 |
-| /Users/clifford/Codings/winda-test/pages/experiences/[slug].jsx                    | JavaScript React   |      1,918 |        142 |        153 |      2,213 |
-| /Users/clifford/Codings/winda-test/pages/experiences/index.jsx                     | JavaScript React   |      1,034 |          2 |         74 |      1,110 |
+| /Users/clifford/Codings/winda-test/pages/activities/[slug].jsx                    | JavaScript React   |      1,918 |        142 |        153 |      2,213 |
+| /Users/clifford/Codings/winda-test/pages/activities/index.jsx                     | JavaScript React   |      1,034 |          2 |         74 |      1,110 |
 | /Users/clifford/Codings/winda-test/pages/index.jsx                                 | JavaScript React   |        731 |        774 |         41 |      1,546 |
 | /Users/clifford/Codings/winda-test/pages/login/index.jsx                           | JavaScript React   |         10 |          0 |          3 |         13 |
 | /Users/clifford/Codings/winda-test/pages/logout/index.jsx                          | JavaScript React   |         13 |          0 |          4 |         17 |
@@ -253,7 +253,7 @@ Files
 | /Users/clifford/Codings/winda-test/pages/stays/index.jsx                           | JavaScript React   |      1,912 |        712 |        158 |      2,782 |
 | /Users/clifford/Codings/winda-test/pages/transport/[slug].jsx                      | JavaScript React   |      1,974 |          0 |        136 |      2,110 |
 | /Users/clifford/Codings/winda-test/pages/transport/index.jsx                       | JavaScript React   |        963 |          4 |         64 |      1,031 |
-| /Users/clifford/Codings/winda-test/pages/trip/experiences/index.jsx                | JavaScript React   |        491 |          0 |         50 |        541 |
+| /Users/clifford/Codings/winda-test/pages/trip/activities/index.jsx                | JavaScript React   |        491 |          0 |         50 |        541 |
 | /Users/clifford/Codings/winda-test/pages/trip/plan/index.jsx                       | JavaScript React   |      2,057 |          3 |        111 |      2,171 |
 | /Users/clifford/Codings/winda-test/pages/trip/stays/index.jsx                      | JavaScript React   |        295 |        226 |         42 |        563 |
 | /Users/clifford/Codings/winda-test/postcss.config.js                               | JavaScript         |          6 |          0 |          1 |          7 |

@@ -678,7 +678,7 @@ const CartItem = ({
                     stayPage
                       ? router.push(`/stays/${stay.slug}`)
                       : activitiesPage
-                      ? router.push(`/experiences/${activity.slug}`)
+                      ? router.push(`/activities/${activity.slug}`)
                       : transportPage
                       ? router.push(
                           `/transport/?transportSlug=${transport.slug}`

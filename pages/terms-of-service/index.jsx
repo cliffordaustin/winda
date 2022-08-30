@@ -33,7 +33,7 @@ const TermsOfService = ({ userProfile }) => {
           <p>
             Winda Platform offers an online location that enables users
             (“Customers”) to book a variety of travel services (“Services”) ie.
-            accommodations (“Accommodation”), activities, experiences, events
+            accommodations (“Accommodation”), activities, activities, events
             (“Activities”), and transportation (“Transport”). These travel
             services are offered by providers that we contractually work with to
             sell these services on their behalf. You must register an account to
@@ -141,7 +141,7 @@ const TermsOfService = ({ userProfile }) => {
               requires you to cancel a reservation, you may be entitled to a
               partial or full refund under our cancellation policy under
               extenuating circumstances. If the Service Provider cancels, or you
-              experience a Travel Issue (as defined in the cancellation policy),
+              activity a Travel Issue (as defined in the cancellation policy),
               you may be entitled to rebooking assistance or a partial or full
               refund under our cancellation policy.
             </p>
@@ -412,7 +412,7 @@ const TermsOfService = ({ userProfile }) => {
               contract directly with the Service Provider. Winda is not and does
               not become a party to or another participant in any contractual
               relationship between the Customer and Service Provider. While we
-              work hard to ensure our Customers have great experiences using
+              work hard to ensure our Customers have great activities using
               Winda, we do not and cannot control the conduct or performance of
               the Service Providers or Customers and do not guarantee (i) the
               existence, quality, safety, suitability, or legality of any

@@ -322,7 +322,7 @@ function Navbar({
 
                 {activitiesCart.length > 0 && (
                   <div className="mb-2 ml-4 text-lg font-bold">
-                    Experiences - Your Basket({activitiesCart.length})
+                    Activities - Your Basket({activitiesCart.length})
                   </div>
                 )}
                 <div className="flex flex-wrap justify-between">

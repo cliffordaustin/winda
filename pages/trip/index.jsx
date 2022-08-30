@@ -199,7 +199,7 @@ const Trips = ({
           <div className="flex items-center gap-3">
             <Link href="/trip/request-trip">
               <a>
-                <div className="rounded-3xl px-1 sm:px-3 py-1 glass-effect font-bold text-xs sm:text-sm cursor-pointer !bg-gradient-to-r from-pink-600 via-red-600 to-yellow-500 !text-white">
+                <div className="rounded-3xl px-1 !border-none sm:px-3 py-1 glass-effect font-bold text-xs sm:text-sm cursor-pointer !bg-gradient-to-r from-pink-600 via-red-600 to-yellow-500 !text-white">
                   Custom trip
                 </div>
               </a>
@@ -229,7 +229,7 @@ const Trips = ({
           <div className="absolute flex flex-col items-center justify-center top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 z-20 w-full px-6 md:px-0">
             <div>
               <h1 className="font-black font-SourceSans mb-2 text-3xl sm:text-4xl md:text-5xl xl:text-7xl text-white uppercase text-center">
-                A Trip building experience
+                A Trip building activity
               </h1>
             </div>
           </div>

@@ -34,7 +34,7 @@ Directories
 | pages                                                                       |         20 |       -891 |     -3,067 |        -68 |     -4,026 |
 | pages/cart                                                                  |          1 |        148 |         -1 |          6 |        153 |
 | pages/contact-us                                                            |          1 |         84 |          2 |         13 |         99 |
-| pages/experiences                                                           |          2 |         39 |       -633 |          1 |       -593 |
+| pages/activities                                                           |          2 |         39 |       -633 |          1 |       -593 |
 | pages/map-test                                                              |          1 |        -10 |          0 |         -3 |        -13 |
 | pages/order-successfull                                                     |          1 |       -149 |          0 |        -15 |       -164 |
 | pages/orders                                                                |          1 |         16 |          0 |          4 |         20 |
@@ -43,7 +43,7 @@ Directories
 | pages/transport                                                             |          2 |     -1,357 |       -648 |       -127 |     -2,132 |
 | pages/trip                                                                  |          5 |        645 |       -128 |         65 |        582 |
 | pages/trip/[slug]                                                           |          1 |        743 |         -9 |         64 |        798 |
-| pages/trip/experiences                                                      |          1 |       -491 |          0 |        -50 |       -541 |
+| pages/trip/activities                                                      |          1 |       -491 |          0 |        -50 |       -541 |
 | pages/trip/plan                                                             |          1 |          8 |          0 |          1 |          9 |
 | pages/trip/plan/[slug]                                                      |          1 |          8 |          0 |          1 |          9 |
 | pages/trip/user-trips                                                       |          1 |        413 |        161 |         50 |        624 |
@@ -94,8 +94,8 @@ Files
 | /Users/clifford/Codings/winda-test/pages/_app.js                            | JavaScript       |         24 |          0 |          1 |         25 |
 | /Users/clifford/Codings/winda-test/pages/cart/index.jsx                     | JavaScript React |        148 |         -1 |          6 |        153 |
 | /Users/clifford/Codings/winda-test/pages/contact-us/index.jsx               | JavaScript React |         84 |          2 |         13 |         99 |
-| /Users/clifford/Codings/winda-test/pages/experiences/[slug].jsx             | JavaScript React |         20 |       -141 |          4 |       -117 |
-| /Users/clifford/Codings/winda-test/pages/experiences/index.jsx              | JavaScript React |         19 |       -492 |         -3 |       -476 |
+| /Users/clifford/Codings/winda-test/pages/activities/[slug].jsx             | JavaScript React |         20 |       -141 |          4 |       -117 |
+| /Users/clifford/Codings/winda-test/pages/activities/index.jsx              | JavaScript React |         19 |       -492 |         -3 |       -476 |
 | /Users/clifford/Codings/winda-test/pages/index.jsx                          | JavaScript React |       -330 |       -779 |         -1 |     -1,110 |
 | /Users/clifford/Codings/winda-test/pages/map-test/index.jsx                 | JavaScript React |        -10 |          0 |         -3 |        -13 |
 | /Users/clifford/Codings/winda-test/pages/order-successfull/index.jsx        | JavaScript React |       -149 |          0 |        -15 |       -164 |
@@ -106,7 +106,7 @@ Files
 | /Users/clifford/Codings/winda-test/pages/transport/[slug].jsx               | JavaScript React |     -1,654 |       -334 |       -141 |     -2,129 |
 | /Users/clifford/Codings/winda-test/pages/transport/index.jsx                | JavaScript React |        297 |       -314 |         14 |         -3 |
 | /Users/clifford/Codings/winda-test/pages/trip/[slug]/index.jsx              | JavaScript React |        743 |         -9 |         64 |        798 |
-| /Users/clifford/Codings/winda-test/pages/trip/experiences/index.jsx         | JavaScript React |       -491 |          0 |        -50 |       -541 |
+| /Users/clifford/Codings/winda-test/pages/trip/activities/index.jsx         | JavaScript React |       -491 |          0 |        -50 |       -541 |
 | /Users/clifford/Codings/winda-test/pages/trip/index.jsx                     | JavaScript React |        -28 |       -280 |          0 |       -308 |
 | /Users/clifford/Codings/winda-test/pages/trip/plan/[slug]/index.jsx         | JavaScript React |          8 |          0 |          1 |          9 |
 | /Users/clifford/Codings/winda-test/pages/trip/user-trips/index.jsx          | JavaScript React |        413 |        161 |         50 |        624 |

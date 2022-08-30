@@ -35,8 +35,8 @@
 "/Users/clifford/Codings/winda-test/pages/_app.js", "JavaScript", 24, 0, 0, 0, 0, 1, 25
 "/Users/clifford/Codings/winda-test/pages/cart/index.jsx", "JavaScript React", 0, 148, 0, 0, -1, 6, 153
 "/Users/clifford/Codings/winda-test/pages/contact-us/index.jsx", "JavaScript React", 0, 84, 0, 0, 2, 13, 99
-"/Users/clifford/Codings/winda-test/pages/experiences/[slug].jsx", "JavaScript React", 0, 20, 0, 0, -141, 4, -117
-"/Users/clifford/Codings/winda-test/pages/experiences/index.jsx", "JavaScript React", 0, 19, 0, 0, -492, -3, -476
+"/Users/clifford/Codings/winda-test/pages/activities/[slug].jsx", "JavaScript React", 0, 20, 0, 0, -141, 4, -117
+"/Users/clifford/Codings/winda-test/pages/activities/index.jsx", "JavaScript React", 0, 19, 0, 0, -492, -3, -476
 "/Users/clifford/Codings/winda-test/pages/index.jsx", "JavaScript React", 0, -330, 0, 0, -779, -1, -1110
 "/Users/clifford/Codings/winda-test/pages/map-test/index.jsx", "JavaScript React", 0, -10, 0, 0, 0, -3, -13
 "/Users/clifford/Codings/winda-test/pages/order-successfull/index.jsx", "JavaScript React", 0, -149, 0, 0, 0, -15, -164
@@ -47,7 +47,7 @@
 "/Users/clifford/Codings/winda-test/pages/transport/[slug].jsx", "JavaScript React", 0, -1654, 0, 0, -334, -141, -2129
 "/Users/clifford/Codings/winda-test/pages/transport/index.jsx", "JavaScript React", 0, 297, 0, 0, -314, 14, -3
 "/Users/clifford/Codings/winda-test/pages/trip/[slug]/index.jsx", "JavaScript React", 0, 743, 0, 0, -9, 64, 798
-"/Users/clifford/Codings/winda-test/pages/trip/experiences/index.jsx", "JavaScript React", 0, -491, 0, 0, 0, -50, -541
+"/Users/clifford/Codings/winda-test/pages/trip/activities/index.jsx", "JavaScript React", 0, -491, 0, 0, 0, -50, -541
 "/Users/clifford/Codings/winda-test/pages/trip/index.jsx", "JavaScript React", 0, -28, 0, 0, -280, 0, -308
 "/Users/clifford/Codings/winda-test/pages/trip/plan/[slug]/index.jsx", "JavaScript React", 0, 8, 0, 0, 0, 1, 9
 "/Users/clifford/Codings/winda-test/pages/trip/user-trips/index.jsx", "JavaScript React", 0, 413, 0, 0, 161, 50, 624

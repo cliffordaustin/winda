@@ -200,7 +200,7 @@ export default function Home({ userProfile }) {
       setShowActivityLoader(true);
       router
         .push({
-          pathname: "/experiences",
+          pathname: "/activities",
           query: { search: activityLocation },
         })
         .then(() => {
@@ -221,7 +221,7 @@ export default function Home({ userProfile }) {
           setShowActivityLoader(true);
           router
             .push({
-              pathname: "/experiences",
+              pathname: "/activities",
               query: { search: autoCompleteFromActivitySearch[0].place_name },
             })
             .then(() => {
@@ -336,10 +336,10 @@ export default function Home({ userProfile }) {
                   </a>
                 </Link>
 
-                <Link href="/experiences">
+                <Link href="/activities">
                   <a>
                     <div className="hover:bg-gray-100 text-gray-700 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2">
-                      Experiences
+                      Activities
                     </div>
                   </a>
                 </Link>

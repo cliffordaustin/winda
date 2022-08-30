@@ -167,8 +167,8 @@
 "/Users/clifford/Codings/winda-test/pages/accounts/email-confirm/[email]/index.jsx", "JavaScript React", 0, 0, 161, 0, 0, 0, 0, 0, 18, 179
 "/Users/clifford/Codings/winda-test/pages/accounts/email-verification/[verification_slug]/index.jsx", "JavaScript React", 0, 0, 64, 0, 0, 0, 0, 28, 10, 102
 "/Users/clifford/Codings/winda-test/pages/cart/index.jsx", "JavaScript React", 0, 0, 745, 0, 0, 0, 0, 1, 43, 789
-"/Users/clifford/Codings/winda-test/pages/experiences/[slug].jsx", "JavaScript React", 0, 0, 2158, 0, 0, 0, 0, 248, 167, 2573
-"/Users/clifford/Codings/winda-test/pages/experiences/index.jsx", "JavaScript React", 0, 0, 1442, 0, 0, 0, 0, 526, 89, 2057
+"/Users/clifford/Codings/winda-test/pages/activities/[slug].jsx", "JavaScript React", 0, 0, 2158, 0, 0, 0, 0, 248, 167, 2573
+"/Users/clifford/Codings/winda-test/pages/activities/index.jsx", "JavaScript React", 0, 0, 1442, 0, 0, 0, 0, 526, 89, 2057
 "/Users/clifford/Codings/winda-test/pages/index.jsx", "JavaScript React", 0, 0, 719, 0, 0, 0, 0, 783, 47, 1549
 "/Users/clifford/Codings/winda-test/pages/login/index.jsx", "JavaScript React", 0, 0, 10, 0, 0, 0, 0, 0, 3, 13
 "/Users/clifford/Codings/winda-test/pages/logout/index.jsx", "JavaScript React", 0, 0, 13, 0, 0, 0, 0, 0, 4, 17
@@ -182,7 +182,7 @@
 "/Users/clifford/Codings/winda-test/pages/transport/[slug].jsx", "JavaScript React", 0, 0, 1654, 0, 0, 0, 0, 334, 141, 2129
 "/Users/clifford/Codings/winda-test/pages/transport/index.jsx", "JavaScript React", 0, 0, 1408, 0, 0, 0, 0, 372, 117, 1897
 "/Users/clifford/Codings/winda-test/pages/trip/[slug]/index.jsx", "JavaScript React", 0, 0, 1568, 0, 0, 0, 0, 10, 126, 1704
-"/Users/clifford/Codings/winda-test/pages/trip/experiences/index.jsx", "JavaScript React", 0, 0, 491, 0, 0, 0, 0, 0, 50, 541
+"/Users/clifford/Codings/winda-test/pages/trip/activities/index.jsx", "JavaScript React", 0, 0, 491, 0, 0, 0, 0, 0, 50, 541
 "/Users/clifford/Codings/winda-test/pages/trip/index.jsx", "JavaScript React", 0, 0, 601, 0, 0, 0, 0, 280, 56, 937
 "/Users/clifford/Codings/winda-test/pages/trip/plan/[slug]/index.jsx", "JavaScript React", 0, 0, 1371, 0, 0, 0, 0, 325, 104, 1800
 "/Users/clifford/Codings/winda-test/pages/trip/plan/index.jsx", "JavaScript React", 0, 0, 139, 0, 0, 0, 0, 1, 16, 156

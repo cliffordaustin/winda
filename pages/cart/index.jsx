@@ -409,11 +409,11 @@ const Cart = ({
               </div>
               <div
                 onClick={() => {
-                  router.push("/experiences");
+                  router.push("/activities");
                 }}
                 className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2"
               >
-                Experiences
+                Activities
               </div>
               <div
                 onClick={() => {
@@ -529,7 +529,7 @@ const Cart = ({
 
           {activitiesCart.length > 0 && (
             <div className="mb-4 mt-2 ml-4 text-lg font-bold">
-              Experiences - Your Basket({activitiesCart.length})
+              Activities - Your Basket({activitiesCart.length})
             </div>
           )}
           <div className="flex flex-wrap mb-5 justify-between">

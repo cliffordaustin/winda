@@ -255,7 +255,7 @@ function Activities({
       setShowActivityLoader(true);
       router
         .push({
-          pathname: "/experiences",
+          pathname: "/activities",
           query: {
             ...router.query,
             search: activityLocation,
@@ -281,7 +281,7 @@ function Activities({
           setShowActivityLoader(true);
           router
             .push({
-              pathname: "/experiences",
+              pathname: "/activities",
               query: {
                 ...router.query,
                 search: autoCompleteFromActivitySearch[0].place_name,
@@ -1308,7 +1308,7 @@ function Activities({
             <div
               onClick={() => {
                 router.push({
-                  pathname: "/experiences",
+                  pathname: "/activities",
                   query: {
                     trip: router.query.trip,
                     group_trip: router.query.group_trip,
@@ -1332,7 +1332,7 @@ function Activities({
                 "!bg-gradient-to-r !px-4 from-pink-500 via-red-500 to-yellow-500 !text-white "
               }
             >
-              Show all {count} experiences
+              Show all {count} activities
             </Button>
           </div>
         </div>

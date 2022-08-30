@@ -44,7 +44,7 @@ const Share = ({ setShowShare, showShare, type_of_stay }) => {
         : type_of_stay === "CAMPSITE"
         ? "campsite"
         : type_of_stay === "EXPERIENCE"
-        ? "experience"
+        ? "activity"
         : type_of_stay === "LODGE"
         ? "lodge"
         : type_of_stay

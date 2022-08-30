@@ -34,8 +34,8 @@ function SearchSelect({ setCurrentNavState, currentNavState, isHomePage }) {
       <Link
         href={
           !isHomePage && router.query.trip
-            ? `/experiences?trip=${router.query.trip}&group_trip=${router.query.group_trip}`
-            : `/experiences`
+            ? `/activities?trip=${router.query.trip}&group_trip=${router.query.group_trip}`
+            : `/activities`
         }
       >
         <a>
@@ -49,7 +49,7 @@ function SearchSelect({ setCurrentNavState, currentNavState, isHomePage }) {
               (currentNavState === 3 ? styles.showLinkLine : styles.link)
             }
           >
-            Experiences
+            Activities
           </div>
         </a>
       </Link>

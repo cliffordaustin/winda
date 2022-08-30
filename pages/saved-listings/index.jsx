@@ -102,11 +102,11 @@ function SavedListings({
                       </div>
                       <div
                         onClick={() => {
-                          router.push("/experiences");
+                          router.push("/activities");
                         }}
                         className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2"
                       >
-                        Experiences
+                        Activities
                       </div>
                       <div
                         onClick={() => {
@@ -188,7 +188,7 @@ function SavedListings({
 
                 {savedActivities.length > 0 && (
                   <div className="mb-4 mt-2 ml-4 text-lg font-bold">
-                    Experiences - Your saved experiences(
+                    Activities - Your saved activities(
                     {savedActivities.length})
                   </div>
                 )}
@@ -196,7 +196,7 @@ function SavedListings({
                   {savedActivities.map((item, index) => (
                     <div
                       onClick={() => {
-                        router.push(`/experiences/${item.activity.slug}`);
+                        router.push(`/activities/${item.activity.slug}`);
                       }}
                       key={index}
                       className="md:w-[31%] w-full"

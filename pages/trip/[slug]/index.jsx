@@ -117,9 +117,9 @@ function TripDetail({ userProfile, userTrips, trip }) {
 
   const [showMoreStay, setShowMoreStay] = useState(false);
 
-  const [showMoreExperiences, setShowMoreExperiences] = useState(false);
-
   const [showMoreActivities, setShowMoreActivities] = useState(false);
+
+  const [showMoreExperiences, setShowMoreExperiences] = useState(false);
 
   const [showMoreTransport, setShowMoreTransport] = useState(false);
 
@@ -254,7 +254,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
           <div className="flex items-center gap-3">
             <Link href="/trip/request-trip">
               <a>
-                <div className="rounded-3xl px-1 sm:px-3 py-1 glass-effect font-bold text-xs sm:text-sm cursor-pointer !bg-gradient-to-r from-pink-600 via-red-600 to-yellow-500 !text-white">
+                <div className="rounded-3xl !border-none px-1 sm:px-3 py-1 glass-effect font-bold text-xs sm:text-sm cursor-pointer !bg-gradient-to-r from-pink-600 via-red-600 to-yellow-500 !text-white">
                   Custom trip
                 </div>
               </a>
@@ -791,7 +791,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
                     </div>
                     <div className="flex flex-col">
                       <h1 className="mb-1 font-bold text-gray-700 font-OpenSans text-2xl">
-                        Experience
+                        Activity
                       </h1>
                       <span>{trip.activity.name}</span>
 
@@ -1140,13 +1140,13 @@ function TripDetail({ userProfile, userTrips, trip }) {
                   <span className="font-bold text-lg">Extras</span>
                 </div>
 
-                {!showMoreExperiences && (
+                {!showMoreActivities && (
                   <div className="flex flex-wrap gap-2 px-2">
                     {trip.stay.extras_included
                       .slice(0, 5)
-                      .map((experience, index) => (
+                      .map((activity, index) => (
                         <div key={index} className="w-[48%]">
-                          <ListItem>{experience.name}</ListItem>
+                          <ListItem>{activity.name}</ListItem>
                         </div>
                       ))}
                   </div>
@@ -1154,9 +1154,9 @@ function TripDetail({ userProfile, userTrips, trip }) {
 
                 {showMoreExperiences && (
                   <div className="flex flex-wrap gap-2 px-2">
-                    {trip.stay.extras_included.map((experience, index) => (
+                    {trip.stay.extras_included.map((activity, index) => (
                       <div key={index} className="w-[48%]">
-                        <ListItem>{experience.name}</ListItem>
+                        <ListItem>{activity.name}</ListItem>
                       </div>
                     ))}
                   </div>
@@ -1417,13 +1417,13 @@ function TripDetail({ userProfile, userTrips, trip }) {
 
                 {trip.activity.type_of_activities.length > 0 && (
                   <dv
-                    name="experiences"
+                    name="activities"
                     className="flex flex-col md:flex-row gap-3 justify-between pt-10 "
                   >
                     <div className="border pb-2 h-fit border-gray-200 rounded-xl overflow-hidden w-full order-2 md:order-1 mt-4 md:mt-0">
                       <div className="py-2 bg-gray-200 mb-2">
                         <span className="font-bold text-xl ml-6">
-                          Experiences
+                          Activities
                         </span>
                       </div>
                       {!showMoreActivities && (

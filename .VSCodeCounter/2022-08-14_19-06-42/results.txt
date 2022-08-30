@@ -43,7 +43,7 @@ Directories
 | pages/accounts/email-verification                                                                  |          1 |         64 |         28 |         10 |        102 |
 | pages/accounts/email-verification/[verification_slug]                                              |          1 |         64 |         28 |         10 |        102 |
 | pages/cart                                                                                         |          1 |        745 |          1 |         43 |        789 |
-| pages/experiences                                                                                  |          2 |      3,600 |        774 |        256 |      4,630 |
+| pages/activities                                                                                  |          2 |      3,600 |        774 |        256 |      4,630 |
 | pages/login                                                                                        |          1 |         10 |          0 |          3 |         13 |
 | pages/logout                                                                                       |          1 |         13 |          0 |          4 |         17 |
 | pages/map-test                                                                                     |          1 |         10 |          0 |          3 |         13 |
@@ -55,7 +55,7 @@ Directories
 | pages/transport                                                                                    |          2 |      3,062 |        706 |        258 |      4,026 |
 | pages/trip                                                                                         |          5 |      4,170 |        616 |        352 |      5,138 |
 | pages/trip/[slug]                                                                                  |          1 |      1,568 |         10 |        126 |      1,704 |
-| pages/trip/experiences                                                                             |          1 |        491 |          0 |         50 |        541 |
+| pages/trip/activities                                                                             |          1 |        491 |          0 |         50 |        541 |
 | pages/trip/plan                                                                                    |          2 |      1,510 |        326 |        120 |      1,956 |
 | pages/trip/plan/[slug]                                                                             |          1 |      1,371 |        325 |        104 |      1,800 |
 | public                                                                                             |          2 |          5 |          0 |          0 |          5 |
@@ -238,8 +238,8 @@ Files
 | /Users/clifford/Codings/winda-test/pages/accounts/email-confirm/[email]/index.jsx                  | JavaScript React   |        161 |          0 |         18 |        179 |
 | /Users/clifford/Codings/winda-test/pages/accounts/email-verification/[verification_slug]/index.jsx | JavaScript React   |         64 |         28 |         10 |        102 |
 | /Users/clifford/Codings/winda-test/pages/cart/index.jsx                                            | JavaScript React   |        745 |          1 |         43 |        789 |
-| /Users/clifford/Codings/winda-test/pages/experiences/[slug].jsx                                    | JavaScript React   |      2,158 |        248 |        167 |      2,573 |
-| /Users/clifford/Codings/winda-test/pages/experiences/index.jsx                                     | JavaScript React   |      1,442 |        526 |         89 |      2,057 |
+| /Users/clifford/Codings/winda-test/pages/activities/[slug].jsx                                    | JavaScript React   |      2,158 |        248 |        167 |      2,573 |
+| /Users/clifford/Codings/winda-test/pages/activities/index.jsx                                     | JavaScript React   |      1,442 |        526 |         89 |      2,057 |
 | /Users/clifford/Codings/winda-test/pages/index.jsx                                                 | JavaScript React   |        719 |        783 |         47 |      1,549 |
 | /Users/clifford/Codings/winda-test/pages/login/index.jsx                                           | JavaScript React   |         10 |          0 |          3 |         13 |
 | /Users/clifford/Codings/winda-test/pages/logout/index.jsx                                          | JavaScript React   |         13 |          0 |          4 |         17 |
@@ -253,7 +253,7 @@ Files
 | /Users/clifford/Codings/winda-test/pages/transport/[slug].jsx                                      | JavaScript React   |      1,654 |        334 |        141 |      2,129 |
 | /Users/clifford/Codings/winda-test/pages/transport/index.jsx                                       | JavaScript React   |      1,408 |        372 |        117 |      1,897 |
 | /Users/clifford/Codings/winda-test/pages/trip/[slug]/index.jsx                                     | JavaScript React   |      1,568 |         10 |        126 |      1,704 |
-| /Users/clifford/Codings/winda-test/pages/trip/experiences/index.jsx                                | JavaScript React   |        491 |          0 |         50 |        541 |
+| /Users/clifford/Codings/winda-test/pages/trip/activities/index.jsx                                | JavaScript React   |        491 |          0 |         50 |        541 |
 | /Users/clifford/Codings/winda-test/pages/trip/index.jsx                                            | JavaScript React   |        601 |        280 |         56 |        937 |
 | /Users/clifford/Codings/winda-test/pages/trip/plan/[slug]/index.jsx                                | JavaScript React   |      1,371 |        325 |        104 |      1,800 |
 | /Users/clifford/Codings/winda-test/pages/trip/plan/index.jsx                                       | JavaScript React   |        139 |          1 |         16 |        156 |

@@ -93,7 +93,7 @@ function ScrollTo({ guestPopup, activity }) {
             <Link
               className="px-4 flex items-center border-b-2 border-transparent"
               activeClass="!border-b-2 !border-slate-800"
-              to="experiences"
+              to="activities"
               spy={true}
               smooth={true}
               offset={-200}
@@ -102,7 +102,7 @@ function ScrollTo({ guestPopup, activity }) {
                 slideto(0);
               }}
             >
-              <div>Experiences</div>
+              <div>Activities</div>
             </Link>
           </SwiperSlide>
         )}

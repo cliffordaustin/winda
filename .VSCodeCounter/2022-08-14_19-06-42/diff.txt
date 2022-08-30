@@ -40,7 +40,7 @@ Directories
 | pages/accounts/email-verification/[verification_slug]                                              |          1 |         64 |         28 |         10 |        102 |
 | pages/cart                                                                                         |          1 |        -11 |          1 |          2 |         -8 |
 | pages/create-stay                                                                                  |          1 |        -10 |          0 |         -3 |        -13 |
-| pages/experiences                                                                                  |          2 |        648 |        630 |         29 |      1,307 |
+| pages/activities                                                                                  |          2 |        648 |        630 |         29 |      1,307 |
 | pages/orders                                                                                       |          1 |     -1,064 |       -389 |       -100 |     -1,553 |
 | pages/saved-listings                                                                               |          1 |        330 |          0 |         19 |        349 |
 | pages/stays                                                                                        |          2 |      1,160 |        132 |         83 |      1,375 |
@@ -156,8 +156,8 @@ Files
 | /Users/clifford/Codings/winda-test/pages/accounts/email-verification/[verification_slug]/index.jsx | JavaScript React |         64 |         28 |         10 |        102 |
 | /Users/clifford/Codings/winda-test/pages/cart/index.jsx                                            | JavaScript React |        -11 |          1 |          2 |         -8 |
 | /Users/clifford/Codings/winda-test/pages/create-stay/index.jsx                                     | JavaScript React |        -10 |          0 |         -3 |        -13 |
-| /Users/clifford/Codings/winda-test/pages/experiences/[slug].jsx                                    | JavaScript React |        240 |        106 |         14 |        360 |
-| /Users/clifford/Codings/winda-test/pages/experiences/index.jsx                                     | JavaScript React |        408 |        524 |         15 |        947 |
+| /Users/clifford/Codings/winda-test/pages/activities/[slug].jsx                                    | JavaScript React |        240 |        106 |         14 |        360 |
+| /Users/clifford/Codings/winda-test/pages/activities/index.jsx                                     | JavaScript React |        408 |        524 |         15 |        947 |
 | /Users/clifford/Codings/winda-test/pages/index.jsx                                                 | JavaScript React |        -12 |          9 |          6 |          3 |
 | /Users/clifford/Codings/winda-test/pages/orders/index.jsx                                          | JavaScript React |     -1,064 |       -389 |       -100 |     -1,553 |
 | /Users/clifford/Codings/winda-test/pages/saved-listings/index.jsx                                  | JavaScript React |        330 |          0 |         19 |        349 |

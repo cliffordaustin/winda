@@ -207,7 +207,7 @@ const TripOverview = ({ staysOrder, activitiesOrder }) => {
       {activities.length > 1 && (
         <>
           <div className="mt-2 mb-2 ml-4 text-lg font-bold">
-            Experiences - Trip Overview
+            Activities - Trip Overview
           </div>
 
           <Steps direction="vertical">

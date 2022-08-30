@@ -408,7 +408,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
   const [showGuestForMobilePopup, setShowGuestForMobilePopup] = useState(false);
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const [showMoreExperiences, setShowMoreExperiences] = useState(false);
+  const [showMoreActivities, setShowMoreActivities] = useState(false);
 
   const changeLikeState = () => {
     if (Cookies.get("token")) {
@@ -1740,7 +1740,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
             {stay.extras_included.length > 0 && (
               <Element
-                name="experiences"
+                name="activities"
                 className="flex flex-col md:flex-row gap-3 justify-between pt-10 "
               >
                 <div className="">
@@ -1766,32 +1766,32 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     <span className="font-bold text-lg">Extras</span>
                   </div>
 
-                  {!showMoreExperiences && (
+                  {!showMoreActivities && (
                     <div className="flex flex-wrap gap-2 px-2">
                       {stay.extras_included
                         .slice(0, 5)
-                        .map((experience, index) => (
+                        .map((activity, index) => (
                           <div key={index} className="w-[48%]">
-                            <ListItem>{experience.name}</ListItem>
+                            <ListItem>{activity.name}</ListItem>
                           </div>
                         ))}
                     </div>
                   )}
 
-                  {showMoreExperiences && (
+                  {showMoreActivities && (
                     <div className="flex flex-wrap gap-2 px-2">
-                      {stay.extras_included.map((experience, index) => (
+                      {stay.extras_included.map((activity, index) => (
                         <div key={index} className="w-[48%]">
-                          <ListItem>{experience.name}</ListItem>
+                          <ListItem>{activity.name}</ListItem>
                         </div>
                       ))}
                     </div>
                   )}
 
-                  {!showMoreExperiences && stay.extras_included.length > 5 && (
+                  {!showMoreActivities && stay.extras_included.length > 5 && (
                     <div
                       onClick={() => {
-                        setShowMoreExperiences(true);
+                        setShowMoreActivities(true);
                       }}
                       className="font-bold text-blue-700 mt-2 flex items-center gap-0.5 cursor-pointer ml-2 mb-1"
                     >
@@ -1811,10 +1811,10 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     </div>
                   )}
 
-                  {showMoreExperiences && stay.extras_included.length > 5 && (
+                  {showMoreActivities && stay.extras_included.length > 5 && (
                     <div
                       onClick={() => {
-                        setShowMoreExperiences(false);
+                        setShowMoreActivities(false);
                       }}
                       className="font-bold text-blue-700 mt-2 flex items-center gap-0.5 cursor-pointer ml-2 mb-1"
                     >

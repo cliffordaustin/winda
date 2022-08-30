@@ -65,7 +65,7 @@ const MapMakers = ({ order, state, index }) => {
           className={"px-2 py-1 -z-10 rounded-md relative "}
           onClick={() => setShowPopup(!showPopup)}
         >
-          {state === "activity" && router.query.experiences === "show" && (
+          {state === "activity" && router.query.activities === "show" && (
             <svg
               xmlns="http://www.w3.org/2000/svg"
               aria-hidden="true"

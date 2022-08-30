@@ -187,7 +187,7 @@ function Orders({
 
               {activitiesOrders.length > 0 && (
                 <div className="mb-4 mt-2 ml-4 text-lg font-bold">
-                  Experiences - Your Orders({activitiesOrders.length})
+                  Activities - Your Orders({activitiesOrders.length})
                 </div>
               )}
               <div className="flex flex-wrap mb-5 justify-between">
