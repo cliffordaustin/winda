@@ -260,6 +260,7 @@ function Activities({
             ...router.query,
             search: activityLocation,
             d_search: "",
+            page: "",
             min_capacity: state.travelers ? state.travelers : "",
           },
         })
@@ -286,6 +287,7 @@ function Activities({
                 ...router.query,
                 search: autoCompleteFromActivitySearch[0].place_name,
                 d_search: "",
+                page: "",
                 min_capacity: state.travelers ? state.travelers : "",
               },
             })
@@ -342,10 +344,6 @@ function Activities({
   useEffect(() => {
     getItemsInOrder();
   }, []);
-
-  const searchFilter = () => {
-    console.log("search Filter");
-  };
 
   const [numOfPeople, setNumOfPeople] = useState(1);
 

@@ -42,8 +42,6 @@ function MobileStayTypes({ handlePopup, showStayTypesPopup, screenWidth }) {
     "COWORKING SPOT",
     "SWIMMING POOL",
     "HONEYMOON SPOT",
-    "FAST WIFI",
-    "WIFI",
     "RIVERFRONT",
     "PRIVATE HOUSE",
     "RESORT",

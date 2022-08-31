@@ -27,6 +27,8 @@ import Carousel from "../../components/ui/Carousel";
 import {
   startingLocationOptions,
   destinationLocationOptions,
+  destinationLocationOptionsForZanzibar,
+  destinationLocationOptionsForMaasaiMara,
   checkFlightPrice,
   flightTypes,
 } from "../../lib/flightLocations";
@@ -418,6 +420,15 @@ const Transport = ({
     selectedFlightDestination ? selectedFlightDestination.value : "",
     selectedFlightType ? selectedFlightType.value : ""
   );
+
+  const checkDestinationLocations =
+    selectedFlightStartingLocation.value == "Nairobi"
+      ? destinationLocationOptions
+      : selectedFlightStartingLocation.value == "Zanzibar"
+      ? destinationLocationOptionsForZanzibar
+      : selectedFlightStartingLocation.value == "Maasai Mara"
+      ? destinationLocationOptionsForMaasaiMara
+      : [];
 
   const [allowSlideNext, setAllowSlideNext] = useState(false);
   const [swiperIndex, setSwiperIndex] = useState(0);
@@ -1242,10 +1253,11 @@ const Transport = ({
             defaultValue={selectedFlightStartingLocation}
             onChange={(value) => {
               setSelectedFlightStartingLocation(value);
+              setSelectedFlightDestination(null);
             }}
             className={"text-sm outline-none border border-gray-500 "}
             instanceId={startingLocationOptions}
-            placeholder="Select a starting location"
+            placeholder="Select a starting locations"
             options={startingLocationOptions}
             isSearchable={true}
           />
@@ -1266,9 +1278,9 @@ const Transport = ({
               setSelectedFlightDestination(value);
             }}
             className={"text-sm outline-none border border-gray-500 "}
-            instanceId={destinationLocationOptions}
+            instanceId={checkDestinationLocations}
             placeholder="Select a destination"
-            options={destinationLocationOptions}
+            options={checkDestinationLocations}
             isSearchable={true}
           />
         </div>
@@ -1417,7 +1429,9 @@ const Transport = ({
             defaultValue={selectedFlightStartingLocation}
             onChange={(value) => {
               setSelectedFlightStartingLocation(value);
+              setSelectedFlightDestination(null);
             }}
+            value={selectedFlightStartingLocation}
             className={"text-sm outline-none border border-gray-500 "}
             instanceId={startingLocationOptions}
             placeholder="Select a starting location"
@@ -1440,10 +1454,11 @@ const Transport = ({
             onChange={(value) => {
               setSelectedFlightDestination(value);
             }}
+            value={selectedFlightDestination}
             className={"text-sm outline-none border border-gray-500 "}
-            instanceId={destinationLocationOptions}
+            instanceId={checkDestinationLocations}
             placeholder="Select a destination"
-            options={destinationLocationOptions}
+            options={checkDestinationLocations}
             isSearchable={true}
           />
         </div>

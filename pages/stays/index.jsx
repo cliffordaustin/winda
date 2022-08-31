@@ -182,6 +182,7 @@ function Stays({
             ...router.query,
             search: location,
             d_search: "",
+            page: "",
             min_capacity: numOfAdults > 0 ? numOfAdults : "",
           },
         })
@@ -208,6 +209,7 @@ function Stays({
                 ...router.query,
                 search: autoCompleteFromSearch[0].place_name,
                 d_search: "",
+                page: "",
                 min_capacity: numOfAdults > 0 ? numOfAdults : "",
               },
             })

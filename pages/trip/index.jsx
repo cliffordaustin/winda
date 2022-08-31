@@ -136,6 +136,7 @@ const Trips = ({
       query: {
         ...router.query,
         location: location,
+        page: "",
       },
     });
   };
