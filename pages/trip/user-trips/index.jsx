@@ -58,7 +58,7 @@ const UserTrips = ({ userTrips, userProfile }) => {
               <Link href="/trip/request-trip">
                 <a>
                   <div className="rounded-3xl !border-none px-1 sm:px-3 py-1 glass-effect font-bold text-xs sm:text-sm cursor-pointer !bg-gradient-to-r from-pink-600 via-red-600 to-yellow-500 !text-white">
-                    Custom trip
+                    Request to book
                   </div>
                 </a>
               </Link>
