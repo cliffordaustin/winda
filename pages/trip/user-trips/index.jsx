@@ -9,7 +9,6 @@ import getToken from "../../../lib/getToken";
 import Carousel from "../../../components/ui/Carousel";
 import { useRouter } from "next/router";
 import Price from "../../../components/Stay/Price";
-import Button from "../../../components/ui/Button";
 import Cookies from "js-cookie";
 import { Icon } from "@iconify/react";
 import PopoverBox from "../../../components/ui/Popover";
