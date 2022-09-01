@@ -7,16 +7,9 @@ import getToken from "../lib/getToken";
 import { useRouter } from "next/router";
 
 import Navbar from "../components/Home/InHeaderNavbar";
-import Search from "../components/Home/Search";
-import TransportSearch from "../components/Home/TransportSearch";
-import ActivitiesSearch from "../components/Home/ActivitiesSearch";
 import Main from "../components/Home/Main";
 import Footer from "../components/Home/Footer";
 import Button from "../components/ui/Button";
-
-import SearchSelect from "../components/Home/SearchSelect";
-
-import MobileModal from "../components/ui/MobileModal";
 
 import PopoverBox from "../components/ui/Popover";
 import Link from "next/link";
