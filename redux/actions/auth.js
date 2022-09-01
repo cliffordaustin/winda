@@ -1,5 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
+import { Mixpanel } from "../../lib/mixpanelconfig";
 
 export const signup = (payload) => async (dispatch) => {
   let response;
@@ -14,6 +15,12 @@ export const signup = (payload) => async (dispatch) => {
       payload: {
         errors: [],
       },
+    });
+    Mixpanel.identify(payload.data.email);
+    Mixpanel.track("Signup", {
+      email: payload.data.email,
+      first_name: payload.data.first_name,
+      last_name: payload.data.last_name,
     });
     Cookies.set("token", response.data.key);
     dispatch({

@@ -7,6 +7,7 @@ import NProgress from "nprogress";
 import Router from "next/router";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import "nprogress/nprogress.css";
+import ReactGA from "react-ga4";
 
 import "mapbox-gl/dist/mapbox-gl.css";
 import Head from "next/head";
@@ -21,6 +22,18 @@ NProgress.configure({
 Router.events.on("routeChangeStart", () => NProgress.start());
 Router.events.on("routeChangeComplete", () => NProgress.done());
 Router.events.on("routeChangeError", () => NProgress.done());
+
+if (process.env.NODE_ENV === "development") {
+  ReactGA.initialize(process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID);
+  if (process.browser) {
+    ReactGA.pageview(window.location.pathname + window.location.search);
+  }
+} else if (process.env.NODE_ENV === "production") {
+  ReactGA.initialize(process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID);
+  if (process.browser) {
+    ReactGA.pageview(window.location.pathname + window.location.search);
+  }
+}
 
 function MyApp({ Component, pageProps, router }) {
   return (
