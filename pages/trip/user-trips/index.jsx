@@ -6,7 +6,6 @@ import axios from "axios";
 
 import UserDropdown from "../../../components/Home/UserDropdown";
 import getToken from "../../../lib/getToken";
-import Carousel from "../../../components/ui/Carousel";
 import { useRouter } from "next/router";
 import Price from "../../../components/Stay/Price";
 import Cookies from "js-cookie";
