@@ -66,7 +66,7 @@ function UserDropdown({
           )}
 
           {!userProfile.profile_pic && userProfile && !userProfile.avatar_url && (
-            <div className="relative w-7 h-7 rounded-full bg-[#303960] text-white font-bold flex items-center text-sm justify-center">
+            <div className="relative w-7 h-7 rounded-full !bg-slate-800 text-white font-bold flex items-center text-sm justify-center">
               {fullName
                 .split(" ")
                 .map((name) => name[0])
@@ -175,12 +175,21 @@ function UserDropdown({
       <Link href="/about-us">
         <a>
           <div className="hover:bg-gray-100 text-base transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2">
-            About
+            About us
           </div>
         </a>
       </Link>
 
       {userProfile && <hr className="" />}
+      {userProfile && (
+        <Link href="/account">
+          <a>
+            <div className="hover:bg-gray-100 text-base transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2">
+              Your account
+            </div>
+          </a>
+        </Link>
+      )}
       {userProfile && (
         <Link href="/logout">
           <a>

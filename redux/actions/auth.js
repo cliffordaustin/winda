@@ -131,8 +131,6 @@ export const signup = (payload) => async (dispatch) => {
     //   pathname: `/accounts/email-confirm/${email}`,
     // });
   } catch (error) {
-    console.log(error.response.data);
-
     dispatch({
       type: "ADD_SIGNUP_ERROR",
       payload: {
@@ -258,7 +256,6 @@ export const login = (payload) => async (dispatch) => {
       type: "CHANGE_LOGIN_ERROR_FALSE",
     });
   } catch (error) {
-    console.log(error.response.data);
     if (error.response.status === 400) {
       dispatch({
         type: "CHANGE_LOGIN_ERROR_STATE",
@@ -381,9 +378,7 @@ export const signinWithGoogle = (payload, router) => async (dispatch) => {
     }
 
     router.push(router.query.redirect || "/");
-  } catch (error) {
-    console.log(error.response);
-  }
+  } catch (error) {}
 };
 
 export const logout = (router) => async (dispatch) => {
