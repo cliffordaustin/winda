@@ -80,15 +80,6 @@ const PopularLocationsDropdown = ({
         >
           Magadi
         </div>
-
-        <div
-          onClick={() => {
-            setLocation("Rwanda");
-          }}
-          className="w-full px-2 py-2 hover:bg-gray-100 rounded-md cursor-pointer text-sm transition-all duration-200 ease-linear"
-        >
-          Rwanda
-        </div>
       </div>
     </div>
   );
