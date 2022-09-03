@@ -24,19 +24,19 @@ const PopularLocationsDropdown = ({
         </div>
         <div
           onClick={() => {
-            setLocation("Naivasha");
-          }}
-          className="w-full px-2 py-2 hover:bg-gray-100 rounded-md cursor-pointer text-sm transition-all duration-200 ease-linear"
-        >
-          Naivasha
-        </div>
-        <div
-          onClick={() => {
             setLocation("Maasai Mara");
           }}
           className="w-full px-2 py-2 hover:bg-gray-100 rounded-md cursor-pointer text-sm transition-all duration-200 ease-linear"
         >
           Maasai Mara
+        </div>
+        <div
+          onClick={() => {
+            setLocation("Ol Pejeta");
+          }}
+          className="w-full px-2 py-2 hover:bg-gray-100 rounded-md cursor-pointer text-sm transition-all duration-200 ease-linear"
+        >
+          Ol Pejeta
         </div>
         <div
           onClick={() => {
@@ -46,22 +46,48 @@ const PopularLocationsDropdown = ({
         >
           Samburu
         </div>
-
         <div
           onClick={() => {
-            setLocation("Lake Magadi");
+            setLocation("Diani");
           }}
           className="w-full px-2 py-2 hover:bg-gray-100 rounded-md cursor-pointer text-sm transition-all duration-200 ease-linear"
         >
-          Lake Magadi
+          Diani
         </div>
         <div
           onClick={() => {
-            setLocation("Ol Pejeta");
+            setLocation("Lamu");
           }}
           className="w-full px-2 py-2 hover:bg-gray-100 rounded-md cursor-pointer text-sm transition-all duration-200 ease-linear"
         >
-          Ol Pejeta
+          Lamu
+        </div>
+
+        <div
+          onClick={() => {
+            setLocation("Watamu");
+          }}
+          className="w-full px-2 py-2 hover:bg-gray-100 rounded-md cursor-pointer text-sm transition-all duration-200 ease-linear"
+        >
+          Watamu
+        </div>
+
+        <div
+          onClick={() => {
+            setLocation("Magadi");
+          }}
+          className="w-full px-2 py-2 hover:bg-gray-100 rounded-md cursor-pointer text-sm transition-all duration-200 ease-linear"
+        >
+          Magadi
+        </div>
+
+        <div
+          onClick={() => {
+            setLocation("Rwanda");
+          }}
+          className="w-full px-2 py-2 hover:bg-gray-100 rounded-md cursor-pointer text-sm transition-all duration-200 ease-linear"
+        >
+          Rwanda
         </div>
       </div>
     </div>
