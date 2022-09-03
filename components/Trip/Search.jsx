@@ -17,6 +17,7 @@ const Search = ({
     event.stopPropagation();
   },
   search = () => {},
+  onKeyDown = () => {},
 }) => {
   const [autoCompleteSearch, setAutoCompleteSearch] = useState([]);
 
@@ -78,6 +79,7 @@ const Search = ({
               onChange={(event) => {
                 onChange(event);
               }}
+              onKeyPress={onKeyDown}
             ></Input>
 
             <div className="h-full w-10 mr-1 flex justify-center items-center">

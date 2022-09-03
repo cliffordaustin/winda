@@ -150,6 +150,20 @@ const Trips = ({
     });
   };
 
+  const keyDownSearch = (event) => {
+    if (event.key === "Enter") {
+      if (location !== "") {
+        router.push({
+          query: {
+            ...router.query,
+            location: location,
+            page: "",
+          },
+        });
+      }
+    }
+  };
+
   const [currentOptions, setCurrentOptions] = useState([]);
 
   const handleUnCheck = (value) => {
@@ -252,6 +266,7 @@ const Trips = ({
                 placeholder="Search for a place"
                 setLocation={setLocation}
                 search={search}
+                onKeyDown={keyDownSearch}
               ></Search>
 
               {showLocation && !location && (
@@ -260,7 +275,7 @@ const Trips = ({
                     setLocation(location);
                     search(location);
                   }}
-                  className="w-[80vw]"
+                  className="w-[100%]"
                 ></PopularLocationsDropdown>
               )}
             </div>
