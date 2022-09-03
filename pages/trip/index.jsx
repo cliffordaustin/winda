@@ -215,7 +215,7 @@ const Trips = ({
             <Link href="/trip/request-trip">
               <a>
                 <div className="rounded-3xl px-1 !border-none sm:px-3 py-1 glass-effect font-bold text-xs sm:text-sm cursor-pointer !bg-gradient-to-r from-pink-600 via-red-600 to-yellow-500 !text-white">
-                  Request to book
+                  Custom trip
                 </div>
               </a>
             </Link>

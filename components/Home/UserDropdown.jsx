@@ -131,7 +131,7 @@ function UserDropdown({
         <Link href="/trip/request-trip">
           <a>
             <div className="hover:bg-gray-100  transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2 flex justify-between items-center">
-              <span className="font-bold text-base">Request to book</span>
+              <span className="font-bold text-base">Custom trip</span>
             </div>
           </a>
         </Link>

@@ -100,7 +100,7 @@ const Card = ({
   };
 
   return (
-    <div className="border flex relative overflow-hidden stepWebkitSetting flex-col h-[500px] xl:flex-row w-full md:w-[48%] bg-white xl:h-[265px] mb-6 shadow-md rounded-2xl">
+    <div className="border flex relative overflow-hidden stepWebkitSetting flex-col h-[500px] xl:flex-row w-full md:w-[48%] bg-white xl:h-[280px] mb-6 shadow-md rounded-2xl">
       <div className="xl:w-[320px] h-[230px] xl:h-full">
         <Carousel
           images={images}
