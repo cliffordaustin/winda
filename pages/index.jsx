@@ -13,6 +13,8 @@ import Button from "../components/ui/Button";
 
 import PopoverBox from "../components/ui/Popover";
 import Link from "next/link";
+import Search from "../components/Trip/Search";
+import PopularLocationsDropdown from "../components/Lodging/PopularLocationsDropdown";
 
 export default function Home({ userProfile }) {
   const router = useRouter();
@@ -87,6 +89,37 @@ export default function Home({ userProfile }) {
   };
 
   const [showBookServiceDropdown, setShowBookServiceDropdown] = useState(false);
+
+  const [location, setLocation] = useState("");
+
+  const search = (location) => {
+    router.push({
+      pathname: "/trip",
+      query: {
+        ...router.query,
+        location: location,
+        page: "",
+      },
+    });
+  };
+
+  const keyDownSearch = (event) => {
+    if (event.key === "Enter") {
+      if (location !== "") {
+        router.push({
+          pathname: "/trip",
+          query: {
+            ...router.query,
+            location: location,
+            page: "",
+          },
+        });
+      }
+    }
+  };
+
+  const [showLocation, setShowLocation] = useState(false);
+
   return (
     <div
       className="overflow-x-hidden relative"
@@ -108,6 +141,7 @@ export default function Home({ userProfile }) {
           showSearchModal: false,
         });
         setShowBookServiceDropdown(false);
+        setShowLocation(false);
       }}
     >
       <div className="">
@@ -147,16 +181,49 @@ export default function Home({ userProfile }) {
                 Plan and book your trip easily anywhere across Africa.
               </h1>
             </div>
+
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowLocation(!showLocation);
+              }}
+              className="!w-[90%] sm:!w-[420px] mb-5 relative text-black"
+            >
+              <Search
+                inputBoxClassName={
+                  "!border-none !py-4 !z-[40] bg-white " +
+                  (showLocation ? "!rounded-b-none " : "!rounded-md ")
+                }
+                searchClass="w-full"
+                location={location}
+                handlePropagation={() => {}}
+                placeholder="Where to?"
+                setLocation={setLocation}
+                search={search}
+                onKeyDown={keyDownSearch}
+              ></Search>
+
+              {showLocation && !location && (
+                <PopularLocationsDropdown
+                  setLocation={(location) => {
+                    setLocation(location);
+                    search(location);
+                  }}
+                  className="w-[100%] !text-black !z-[40] !text-left"
+                ></PopularLocationsDropdown>
+              )}
+            </div>
+
             <div className="flex gap-2">
               <Link href="/trip">
                 <a>
-                  <Button className="flex items-center gap-4 w-36 !py-3 !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500">
-                    <span className="font-bold">Curated trips</span>
+                  <Button className="flex items-center gap-4 max-w-[360px] !py-3 !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500">
+                    <span className="font-bold">View all curated trips</span>
                   </Button>
                 </a>
               </Link>
 
-              <PopoverBox
+              {/* <PopoverBox
                 btnPopover={
                   <>
                     <span className="font-bold text-black text-sm">
@@ -202,7 +269,7 @@ export default function Home({ userProfile }) {
                     </div>
                   </a>
                 </Link>
-              </PopoverBox>
+              </PopoverBox> */}
             </div>
           </div>
         </div>

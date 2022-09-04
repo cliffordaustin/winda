@@ -74,6 +74,7 @@ function Carousel({
               src={image}
               alt="Image Gallery"
               layout="fill"
+              objectFit="cover"
               unoptimized={unoptimized}
             />
           </SwiperSlide>

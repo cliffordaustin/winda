@@ -894,7 +894,7 @@ function Main() {
           modules={[FreeMode, Navigation, Thumbs]}
           className="!relative"
         >
-          <SwiperSlide className="!h-[320px] !w-[320px]">
+          <SwiperSlide className="!h-[320px] !w-[320px] md:!w-[520px]">
             <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
               <Carousel
                 images={["/images/home/curatedtrips.jpg"]}
@@ -917,7 +917,7 @@ function Main() {
             </div>
           </SwiperSlide>
 
-          <SwiperSlide className="!h-[320px] !w-[320px]">
+          <SwiperSlide className="!h-[320px] !w-[320px] md:!w-[520px]">
             <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
               <Carousel
                 images={["/images/home/stays.jpg"]}
@@ -940,7 +940,7 @@ function Main() {
             </div>
           </SwiperSlide>
 
-          <SwiperSlide className="!h-[320px] !w-[320px]">
+          <SwiperSlide className="!h-[320px] !w-[320px] md:!w-[520px]">
             <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
               <Carousel
                 images={["/images/home/activities.jpg"]}
@@ -956,29 +956,6 @@ function Main() {
                   <div className="absolute bottom-2 z-30 flex flex-col left-2">
                     <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
                       View activities
-                    </div>
-                  </div>
-                </a>
-              </Link>
-            </div>
-          </SwiperSlide>
-
-          <SwiperSlide className="!h-[320px] !w-[320px]">
-            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
-              <Carousel
-                images={["/images/home/transport.jpg"]}
-                imageClass="rounded-2xl"
-              ></Carousel>
-
-              <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
-                Transport
-              </div>
-
-              <Link href="/transport">
-                <a>
-                  <div className="absolute bottom-2 z-30 flex flex-col left-2">
-                    <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
-                      View transport
                     </div>
                   </div>
                 </a>
