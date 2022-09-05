@@ -5,6 +5,7 @@ import Link from "next/link";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
+import styles from "../../styles/StyledLink.module.css";
 
 import SearchSelect from "./SearchSelect";
 import UserDropdown from "./UserDropdown";
@@ -125,13 +126,24 @@ function Navbar({
         </div>
       )}
       <div className="flex items-center gap-3">
-        <Link href="/trip/request-trip">
-          <a>
-            <div className="rounded-3xl !border-none px-1 sm:px-3 py-1 glass-effect font-bold text-xs sm:text-sm cursor-pointer !bg-gradient-to-r from-pink-600 via-red-600 to-yellow-500 !text-white">
-              Custom trip
-            </div>
-          </a>
-        </Link>
+        {isHomePage && (
+          <Link href={"/trip?deals=1"}>
+            <a>
+              <div
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setCurrentNavState(1);
+                }}
+                className={
+                  "cursor-pointer md:!text-base text-white before:!bg-white " +
+                  styles.link
+                }
+              >
+                Hot Deals
+              </div>
+            </a>
+          </Link>
+        )}
         <UserDropdown
           userProfile={userProfile}
           changeShowDropdown={changeShowDropdown}

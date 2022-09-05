@@ -173,13 +173,19 @@ export default function Home({ userProfile }) {
           />
 
           <div className="flex flex-col items-center justify-center absolute w-full text-center top-[40%] z-20 px-6 md:px-0">
-            <div>
+            <div className="flex flex-col items-center">
               <div className="font-black font-SourceSans mb-2 text-3xl sm:text-4xl md:text-5xl xl:text-7xl text-white uppercase text-center">
                 Control your journey
               </div>
-              <h1 className="font-bold font-OpenSans mb-8 text-base sm:text-xl text-white text-center">
+              <h1 className="font-bold font-OpenSans mb-8 text-base md:hidden sm:text-xl text-white text-center">
                 Plan and book your trip easily anywhere across Africa.
               </h1>
+
+              <div className="font-bold w-[80%] font-OpenSans mb-8 text-base hidden md:block sm:text-xl text-white text-center">
+                We&apos;re local travel experts who empower you to plan and book
+                your trips anywhere across Kenya. Browse through our curated
+                trips and book your dream trip today.
+              </div>
             </div>
 
             <div
@@ -296,6 +302,16 @@ export default function Home({ userProfile }) {
             isHomePage={true}
           ></Navbar>
         </div>
+      </div>
+
+      <div className="fixed bottom-5 right-5 z-[30]">
+        <Link href="/trip/request-trip">
+          <a>
+            <div className="!border-none px-3 py-3 font-bold text-sm cursor-pointer !rounded-md !bg-gradient-to-r bg-slate-700 !text-white">
+              Talk to winda travel expert
+            </div>
+          </a>
+        </Link>
       </div>
 
       <div className="md:mt-16 mb-8 2xl:w-4/6 2xl:mx-auto">

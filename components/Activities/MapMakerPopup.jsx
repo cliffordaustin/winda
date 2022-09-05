@@ -73,7 +73,7 @@ const MapMakerPopup = ({ activity }) => {
             <Price stayPrice={activity.price_non_resident}></Price>
           ) : null}
           {!activity.price_non_resident && (
-            <span className="font-bold text-xl font-OpenSans">Free</span>
+            <span className="font-bold text-xl font-OpenSans">Free entry</span>
           )}
         </div>
         <div className="font-bold text-sm truncate mt-1">

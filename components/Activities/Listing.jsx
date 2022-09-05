@@ -285,9 +285,23 @@ function Listing({
           >
             <div className="flex flex-col gap-1">
               <h1 className="text-gray-500 truncate">{listing.name}</h1>
-              {price() ? <Price stayPrice={price()}></Price> : null}
+
+              {price() ? (
+                <div className="flex">
+                  {listing.price_is_flexible && (
+                    <div className="mt-[5px] mr-1 font-bold text-sm">From</div>
+                  )}
+                  <Price stayPrice={price()}></Price>
+                  <span className="mt-[4.5px] text-gray-500 text-sm">
+                    /per person
+                  </span>
+                </div>
+              ) : null}
+
               {!price() && (
-                <span className="font-bold text-xl font-OpenSans">Free</span>
+                <span className="font-bold text-xl font-OpenSans">
+                  Free entry
+                </span>
               )}
             </div>
             <div className="text-gray-500 flex gap-1 text-sm truncate mt-1 flex-wrap">

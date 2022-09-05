@@ -53,13 +53,6 @@ const UserTrips = ({ userTrips, userProfile }) => {
             </div>
 
             <div className="flex items-center gap-3">
-              <Link href="/trip/request-trip">
-                <a>
-                  <div className="rounded-3xl !border-none px-1 sm:px-3 py-1 glass-effect font-bold text-xs sm:text-sm cursor-pointer !bg-gradient-to-r from-pink-600 via-red-600 to-yellow-500 !text-white">
-                    Custom trip
-                  </div>
-                </a>
-              </Link>
               <UserDropdown
                 userProfile={userProfile}
                 numberOfTrips={userTrips.length}

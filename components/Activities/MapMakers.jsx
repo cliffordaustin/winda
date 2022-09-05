@@ -49,7 +49,7 @@ const MapMakers = ({ activity }) => {
             ></Price>
           ) : null}
           {!activity.price_non_resident && (
-            <span className="text-black !text-sm font-bold">Free</span>
+            <span className="text-black !text-sm font-bold">Free entry</span>
           )}
 
           <AnimatePresence exitBeforeEnter>
@@ -96,7 +96,7 @@ const MapMakers = ({ activity }) => {
             ) : null}
             {!activeActivity.price_non_resident && (
               <span className="text-white font-semibold text-sm font-OpenSans">
-                Free
+                Free entry
               </span>
             )}
 

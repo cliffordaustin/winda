@@ -191,7 +191,13 @@ const Card = ({
 
         <div className="mt-1 mb-10 xl:mb-0">
           <div className="text-sm text-gray-700 flex gap-0.5 items-center">
-            <div className="text-xl mr-0.5 font-bold">
+            <div className="text-xl mr-0.5 font-bold flex gap-1">
+              {listing.old_price && (
+                <Price
+                  stayPrice={listing.old_price}
+                  className="!text-sm line-through self-end mb-0.5 text-red-500"
+                ></Price>
+              )}
               <Price stayPrice={totalPrice()}></Price>
             </div>
             <div className="mt-0.5 mb-1.5 font-bold">.</div>

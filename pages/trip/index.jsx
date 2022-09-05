@@ -212,14 +212,6 @@ const Trips = ({
           </div>
 
           <div className="flex items-center gap-3">
-            <Link href="/trip/request-trip">
-              <a>
-                <div className="rounded-3xl px-1 !border-none sm:px-3 py-1 glass-effect font-bold text-xs sm:text-sm cursor-pointer !bg-gradient-to-r from-pink-600 via-red-600 to-yellow-500 !text-white">
-                  Custom trip
-                </div>
-              </a>
-            </Link>
-
             <UserDropdown
               userProfile={userProfile}
               numberOfTrips={userTrips.length}
@@ -468,6 +460,16 @@ const Trips = ({
             )}
           </div>
         </div>
+      </div>
+
+      <div className="fixed bottom-5 right-5 z-[30]">
+        <Link href="/trip/request-trip">
+          <a>
+            <div className="!border-none px-3 py-3 font-bold text-sm cursor-pointer !rounded-md !bg-gradient-to-r bg-slate-700 !text-white">
+              Talk to winda travel expert
+            </div>
+          </a>
+        </Link>
       </div>
 
       <Dialogue

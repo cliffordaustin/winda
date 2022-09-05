@@ -113,7 +113,7 @@ function UserDropdown({
         <Link href="/cart">
           <a>
             <div className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2 flex justify-between items-center">
-              <span className="font-bold text-base">cart</span>
+              <span className="font-bold text-base">Cart</span>
             </div>
           </a>
         </Link>
@@ -122,7 +122,7 @@ function UserDropdown({
       <Link href="/trip/user-trips">
         <a>
           <div className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2 flex justify-between items-center">
-            <span className="font-bold text-base">your trips</span>
+            <span className="font-bold text-base">Your trips</span>
           </div>
         </a>
       </Link>
@@ -141,7 +141,7 @@ function UserDropdown({
         <Link href="/cart">
           <a>
             <div className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2 flex justify-between items-center">
-              <span className="font-bold text-base">cart</span>
+              <span className="font-bold text-base">Cart</span>
             </div>
           </a>
         </Link>
@@ -150,7 +150,7 @@ function UserDropdown({
         <Link href="/trip/user-trips">
           <a>
             <div className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2 flex justify-between items-center">
-              <span className="font-bold text-base">your trips</span>
+              <span className="font-bold text-base">Your trips</span>
             </div>
           </a>
         </Link>
@@ -159,7 +159,7 @@ function UserDropdown({
       <Link href="/orders">
         <a>
           <div className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2 flex justify-between items-center">
-            <span className="font-bold text-base">orders</span>
+            <span className="font-bold text-base">Orders</span>
           </div>
         </a>
       </Link>

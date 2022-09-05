@@ -165,7 +165,7 @@ function Main() {
                     <br />
                     <p>
                       Nairobi National Park is one of the best places in Africa
-                      to see rhino and also has a healthy population of lion,
+                      to see rhinos. There is also a healthy population of lion,
                       leopard, cheetah, and plains game like giraffe and
                       antelope. Other attractions include the African Heritage
                       House, the Giraffe Center, Sheldrick’s Elephant Orphanage,

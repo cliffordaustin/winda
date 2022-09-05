@@ -853,7 +853,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                     ) : null}
                     {!priceCalc() ? (
                       <span className="font-bold text-xl font-OpenSans">
-                        Free
+                        Free entry
                       </span>
                     ) : null}
                     {addToCartDate && (
@@ -1316,7 +1316,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                         ) : null}
                         {!priceCalc() ? (
                           <span className="font-bold text-xl font-OpenSans">
-                            Free
+                            Free entry
                           </span>
                         ) : null}
                         {addToCartDate && (
@@ -1869,7 +1869,9 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
               <div className="flex self-end">
                 {priceCalc() ? <Price stayPrice={priceCalc()}></Price> : null}
                 {!priceCalc() ? (
-                  <span className="font-bold text-xl font-OpenSans">Free</span>
+                  <span className="font-bold text-xl font-OpenSans">
+                    Free entry
+                  </span>
                 ) : null}
               </div>
               {addToCartDate && (
