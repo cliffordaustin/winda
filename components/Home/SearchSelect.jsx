@@ -54,7 +54,7 @@ function SearchSelect({ setCurrentNavState, currentNavState, isHomePage }) {
         </a>
       </Link>
 
-      <Link
+      {/* <Link
         href={
           !isHomePage && router.query.trip
             ? `/transport?trip=${router.query.trip}&group_trip=${router.query.group_trip}`
@@ -75,7 +75,7 @@ function SearchSelect({ setCurrentNavState, currentNavState, isHomePage }) {
             Transport
           </div>
         </a>
-      </Link>
+      </Link> */}
     </div>
   );
 }
