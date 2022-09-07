@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import axios from "axios";
@@ -45,28 +45,6 @@ const Trips = ({
   const [autoComplete, setAutoComplete] = useState([]);
 
   const router = useRouter();
-
-  const onChange = (event) => {
-    setLocation(event.target.value);
-
-    axios
-      .get(
-        `https://api.mapbox.com/geocoding/v5/mapbox.places/${event.target.value}.json?access_token=${process.env.NEXT_PUBLIC_MAPBOX_API_KEY}&autocomplete=true&country=ke,ug,tz,rw,bi,tz,ug,tz,sa,gh`
-      )
-      .then((response) => {
-        setAutoComplete(response.data.features);
-      });
-  };
-
-  const onKeyDown = (e) => {
-    if (e.key === "Enter") {
-      if (autoComplete.length > 0) {
-        setLocation(autoComplete[0].place_name);
-
-        setAutoComplete([]);
-      }
-    }
-  };
 
   const [showAddToTripPopup, setShowAddToTripPopup] = useState(false);
 
@@ -190,6 +168,17 @@ const Trips = ({
     }
   }, [router.query.tag]);
 
+  const [isSafari, setIsSafari] = useState(false);
+
+  useEffect(() => {
+    if (process.browser) {
+      const isSafari = /^((?!chrome|android).)*safari/i.test(
+        navigator.userAgent
+      );
+      setIsSafari(isSafari);
+    }
+  }, []);
+
   return (
     <div
       onClick={() => {
@@ -236,7 +225,11 @@ const Trips = ({
           <div className="absolute flex flex-col items-center justify-center top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 z-20 w-full px-6 md:px-0">
             <div>
               <h1 className="font-black font-SourceSans mb-2 text-3xl sm:text-4xl md:text-5xl xl:text-7xl text-white uppercase text-center">
-                A Trip building activity
+                Your Journey simplified
+              </h1>
+
+              <h1 className="font-bold font-OpenSans mb-8 text-base sm:text-xl text-white text-center">
+                Here are some inspirational trips to get you started
               </h1>
             </div>
           </div>
@@ -357,8 +350,13 @@ const Trips = ({
         </div>
       </div>
 
-      <div className="w-full">
-        <div className="h-12 flex justify-center mt-2">
+      <div className="w-full pb-20 -mb-6 bg-gray-50">
+        <div
+          className={
+            "h-[80px] sticky bg-white z-40 border-t border-b left-0 right-0 flex justify-center items-center " +
+            (isSafari ? "top-[68px]" : "top-[72.25px]")
+          }
+        >
           <Tags></Tags>
         </div>
         <div className="flex justify-between relative mt-7 h-full w-full">
@@ -466,7 +464,7 @@ const Trips = ({
         <Link href="/trip/request-trip">
           <a>
             <div className="!border-none px-3 py-3 font-bold text-sm cursor-pointer !rounded-md !bg-gradient-to-r bg-slate-700 !text-white">
-              Talk to winda travel expert
+              Talk to a travel expert
             </div>
           </a>
         </Link>
@@ -519,7 +517,7 @@ const Trips = ({
         </div>
       </Dialogue>
 
-      <div className="mt-20">
+      <div className="">
         <Footer></Footer>
       </div>
     </div>

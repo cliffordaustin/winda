@@ -2,7 +2,13 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Accordion from "../ui/Accordion";
 
-const DaysAccordion = ({ children, title, showAccordionByDefault = false }) => {
+const DaysAccordion = ({
+  children,
+  title,
+  showAccordionByDefault = false,
+  className = "",
+  accordionClassName = "",
+}) => {
   const [activeAccordion, setActiveAccordion] = useState(
     showAccordionByDefault
   );
@@ -14,9 +20,9 @@ const DaysAccordion = ({ children, title, showAccordionByDefault = false }) => {
         changeStateFunc={() => {
           setActiveAccordion(!activeAccordion);
         }}
-        className="border"
+        className={"border " + accordionClassName}
       >
-        {children}
+        <div className={className}>{children}</div>
       </Accordion>
     </>
   );

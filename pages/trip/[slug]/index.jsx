@@ -853,7 +853,50 @@ function TripDetail({ userProfile, userTrips, trip }) {
                     </div>
                   </div>
                 )}
+
+                {trip.general_transfer && (
+                  <div className="flex gap-6 items-center mt-6">
+                    <div>
+                      {trip.general_transfer.is_train && (
+                        <Icon
+                          className="w-10 h-10 text-gray-500"
+                          icon="bi:train-front"
+                        />
+                      )}
+
+                      {!trip.general_transfer.is_train && (
+                        <Icon
+                          icon="fa-solid:taxi"
+                          className="w-10 h-10 text-gray-500"
+                        />
+                      )}
+                    </div>
+                    <div className="flex flex-col">
+                      {trip.general_transfer.is_train && (
+                        <h1 className="mb-1 font-bold text-gray-700 font-OpenSans text-2xl">
+                          Train Transfer
+                        </h1>
+                      )}
+
+                      {!trip.general_transfer.is_train && (
+                        <h1 className="mb-1 font-bold text-gray-700 font-OpenSans text-2xl">
+                          Car Transfer
+                        </h1>
+                      )}
+                      <span className="text-sm capitalize">
+                        From {trip.general_transfer.starting_point} to{" "}
+                        {trip.general_transfer.destination}
+                      </span>
+                    </div>
+                  </div>
+                )}
               </Element>
+
+              {/* <div className="my-6 w-full flex justify-center">
+                <div className="border-2 border-gray-700 px-3 py-2 rounded-3xl cursor-pointer">
+                  Request more info
+                </div>
+              </div> */}
 
               <div className="w-full h-[250px] mt-4 md:hidden">
                 <MapBox trip={trip}></MapBox>
@@ -1948,6 +1991,45 @@ function TripDetail({ userProfile, userTrips, trip }) {
                     </div>
                   )}
 
+                  {trip.general_transfer && (
+                    <div className="text-gray-600 flex items-center w-full justify-between">
+                      <div className="flex gap-1.5 items-center w-[70%]">
+                        {trip.general_transfer.is_train && (
+                          <p>Train Transfer</p>
+                        )}
+
+                        {!trip.general_transfer.is_train && <p>Car Transfer</p>}
+                        <PopoverBox
+                          btnPopover={<Icon icon="bx:help-circle" />}
+                          btnClassName="flex items-center justify-center"
+                          panelClassName="bg-gray-100 rounded-lg p-2 bottom-[100%] -left-[10px] w-[180px]"
+                        >
+                          <div className="text-sm text-gray-500">
+                            <span>
+                              This is your{" "}
+                              {trip.general_transfer.is_train &&
+                                "Train Transfer"}
+                              {!trip.general_transfer.is_train &&
+                                "Car Transfer"}{" "}
+                              from {trip.general_transfer.starting_point} to{" "}
+                              {trip.general_transfer.destination}
+                            </span>
+                          </div>
+                        </PopoverBox>
+                      </div>
+
+                      <div className="text-sm font-bold">
+                        {Number(router.query.guests) +
+                          Number(router.query.non_resident)}{" "}
+                        {Number(router.query.guests) +
+                          Number(router.query.non_resident) >
+                        1
+                          ? "passengers"
+                          : "passenger"}
+                      </div>
+                    </div>
+                  )}
+
                   <div className="text-gray-600 flex items-center w-full justify-between">
                     <div className="flex gap-1.5 items-center w-[70%]">
                       Ending date
@@ -2351,6 +2433,47 @@ function TripDetail({ userProfile, userTrips, trip }) {
                                 This is your flight from{" "}
                                 {trip.flight.starting_point} to{" "}
                                 {trip.flight.destination}
+                              </span>
+                            </div>
+                          </PopoverBox>
+                        </div>
+
+                        <div className="text-sm font-bold">
+                          {Number(router.query.guests) +
+                            Number(router.query.non_resident)}{" "}
+                          {Number(router.query.guests) +
+                            Number(router.query.non_resident) >
+                          1
+                            ? "passengers"
+                            : "passenger"}
+                        </div>
+                      </div>
+                    )}
+
+                    {trip.general_transfer && (
+                      <div className="text-gray-600 flex items-center w-full justify-between">
+                        <div className="flex gap-1.5 items-center w-[70%]">
+                          {trip.general_transfer.is_train && (
+                            <p>Train Transfer</p>
+                          )}
+
+                          {!trip.general_transfer.is_train && (
+                            <p>Car Transfer</p>
+                          )}
+                          <PopoverBox
+                            btnPopover={<Icon icon="bx:help-circle" />}
+                            btnClassName="flex items-center justify-center"
+                            panelClassName="bg-gray-100 rounded-lg p-2 bottom-[100%] -left-[10px] w-[180px]"
+                          >
+                            <div className="text-sm text-gray-500">
+                              <span>
+                                This is your{" "}
+                                {trip.general_transfer.is_train &&
+                                  "Train Transfer"}
+                                {!trip.general_transfer.is_train &&
+                                  "Car Transfer"}{" "}
+                                from {trip.general_transfer.starting_point} to{" "}
+                                {trip.general_transfer.destination}
                               </span>
                             </div>
                           </PopoverBox>

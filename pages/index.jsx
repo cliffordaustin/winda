@@ -308,7 +308,7 @@ export default function Home({ userProfile }) {
         <Link href="/trip/request-trip">
           <a>
             <div className="!border-none px-3 py-3 font-bold text-sm cursor-pointer !rounded-md !bg-gradient-to-r bg-slate-700 !text-white">
-              Talk to winda travel expert
+              Talk to a travel expert
             </div>
           </a>
         </Link>
