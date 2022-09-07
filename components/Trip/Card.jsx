@@ -329,7 +329,7 @@ const Card = ({
         dialogueTitleClassName="!font-bold text-xl !font-OpenSans mb-3"
       >
         <div>
-          We&apos;ll get back to you in 24 hours confirming your request, by a
+          We&apos;ll get back to you in 24 hours confirming your request by a
           professional travel expert at winda.
         </div>
 

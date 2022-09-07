@@ -1,4 +1,4 @@
-import { React, Fragment } from "react";
+import React, { Fragment } from "react";
 import { Popover, Transition } from "@headlessui/react";
 import PropTypes from "prop-types";
 
@@ -25,7 +25,18 @@ function PopoverBox({
         leaveTo="opacity-0 translate-y-1"
       >
         <Popover.Panel className={"absolute z-[30] " + panelClassName}>
-          {children}
+          {({ close }) => (
+            <>
+              {React.Children.map(children, (child) => {
+                if (React.isValidElement(child)) {
+                  return React.cloneElement(child, {
+                    close: close,
+                  });
+                }
+                return child;
+              })}
+            </>
+          )}
         </Popover.Panel>
       </Transition>
     </Popover>

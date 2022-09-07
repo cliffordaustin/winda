@@ -234,6 +234,30 @@ function TripDetail({ userProfile, userTrips, trip }) {
 
   const [showDatePopup, setShowDatePopup] = useState(false);
 
+  function Child({ close }) {
+    return (
+      <div className="w-full">
+        <DatePicker
+          date={new Date(router.query.starting_date) || new Date()}
+          setDate={(date) => {
+            router.replace(
+              {
+                query: {
+                  ...router.query,
+                  starting_date: moment(date).format("YYYY-MM-DD"),
+                },
+              },
+              undefined,
+              { shallow: true }
+            );
+            close();
+          }}
+          disableDate={new Date()}
+        ></DatePicker>
+      </div>
+    );
+  }
+
   return (
     <div className="relative">
       <div className="fixed top-0 w-full bg-white z-50">
@@ -532,6 +556,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
                           ...router.query,
                           starting_date: moment(startDate).format("YYYY-MM-D"),
                           guests: guest,
+                          non_resident: nonResidentGuest,
                           checkout_page: 1,
                         },
                       });
@@ -2118,29 +2143,9 @@ function TripDetail({ userProfile, userTrips, trip }) {
                     }
                     btnClassName=""
                     popoverClassName="flex items-center justify-center"
-                    panelClassName="h-fit !w-[400px] rounded-lg bg-white right-0 border shadow-lg mt-1 top-full"
+                    panelClassName="h-fit !max-w-[400px] md:!w-[400px] rounded-lg bg-white right-0 border shadow-lg mt-1 top-full"
                   >
-                    <div className="w-full">
-                      <DatePicker
-                        date={
-                          new Date(router.query.starting_date) || new Date()
-                        }
-                        setDate={(date) => {
-                          router.replace(
-                            {
-                              query: {
-                                ...router.query,
-                                starting_date:
-                                  moment(date).format("YYYY-MM-DD"),
-                              },
-                            },
-                            undefined,
-                            { shallow: true }
-                          );
-                        }}
-                        disableDate={new Date()}
-                      ></DatePicker>
-                    </div>
+                    <Child></Child>
                   </PopoverBox>
                 </div>
 
@@ -2338,12 +2343,12 @@ function TripDetail({ userProfile, userTrips, trip }) {
 
                     {trip.activity && (
                       <div className="text-gray-600 flex items-center w-full justify-between">
-                        <div className="flex gap-1.5 items-center">
-                          <span>{trip.activity.name}</span>
+                        <div className="flex gap-1.5 items-center w-[75%]">
+                          <span className="truncate">{trip.activity.name}</span>
                           <PopoverBox
                             btnPopover={<Icon icon="bx:help-circle" />}
                             btnClassName="flex items-center justify-center"
-                            panelClassName="bg-gray-100 rounded-lg p-2 bottom-[100%] -right-[80px] w-[180px]"
+                            panelClassName="bg-gray-100 rounded-lg p-2 bottom-[100%] -left-[10px] w-[180px]"
                           >
                             <div className="text-sm text-gray-500">
                               <span>
@@ -2394,7 +2399,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
                           <PopoverBox
                             btnPopover={<Icon icon="bx:help-circle" />}
                             btnClassName="flex items-center justify-center"
-                            panelClassName="bg-gray-100 rounded-lg p-2 bottom-[100%] -right-[80px] w-[180px]"
+                            panelClassName="bg-gray-100 rounded-lg p-2 bottom-[100%] -left-[10px] w-[180px]"
                           >
                             <div className="text-sm text-gray-500">
                               <span>
@@ -2426,7 +2431,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
                           <PopoverBox
                             btnPopover={<Icon icon="bx:help-circle" />}
                             btnClassName="flex items-center justify-center"
-                            panelClassName="bg-gray-100 rounded-lg p-2 bottom-[100%] -right-[80px] w-[180px]"
+                            panelClassName="bg-gray-100 rounded-lg p-2 bottom-[100%] -left-[10px] w-[180px]"
                           >
                             <div className="text-sm text-gray-500">
                               <span>

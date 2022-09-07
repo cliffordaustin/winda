@@ -135,7 +135,7 @@ function Navbar({
                   setCurrentNavState(1);
                 }}
                 className={
-                  "cursor-pointer z-[30] md:!text-base text-red-500 before:!bg-red-500 " +
+                  "cursor-pointer z-[30] font-bold md:!text-base text-red-500 before:!bg-red-500 " +
                   styles.link
                 }
               >
