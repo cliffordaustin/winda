@@ -14,43 +14,35 @@ module.exports = {
         disallow: ["/accounts", "/login", "/logout", "/signup", "/transport"],
       },
     ],
+
+    additionalSitemaps: [`${siteUrl}/server-sitemap.xml`],
   },
 
-  additionalPaths: async (config) => {
-    const paths = [];
-    const stays = await fetch(`${process.env.NEXT_PUBLIC_baseURL}/stays/`);
-    const staysJson = await stays.json();
-    staysJson.forEach((item) => {
-      console.log(item.slug);
-      paths.push({
-        loc: `/stays/${item.slug}`,
-        lastmod: item.date_updated,
-        priority: 0.5,
-      });
-    });
+  // additionalPaths: async (config) => {
+  //   const paths = [];
 
-    // const activities = await axios.get(
-    //   `${process.env.NEXT_PUBLIC_baseURL}/activities/`
-    // );
+  //   const activities = await axios.get(
+  //     `${process.env.NEXT_PUBLIC_baseURL}/activities/`
+  //   );
 
-    // activities.data.forEach((item) => {
-    //   paths.push({
-    //     loc: `/activities/${item.slug}`,
-    //     lastmod: item.date_updated,
-    //     priority: 0.5,
-    //   });
-    // });
+  //   activities.data.forEach((item) => {
+  //     paths.push({
+  //       loc: `/activities/${item.slug}`,
+  //       lastmod: item.date_updated,
+  //       priority: 0.5,
+  //     });
+  //   });
 
-    // const trips = await axios.get(`${process.env.NEXT_PUBLIC_baseURL}/trips/`);
+  //   const trips = await axios.get(`${process.env.NEXT_PUBLIC_baseURL}/trips/`);
 
-    // trips.data.forEach((item) => {
-    //   paths.push({
-    //     loc: `/trips/${item.slug}`,
-    //     lastmod: item.date_updated,
-    //     priority: 0.7,
-    //   });
-    // });
-    return paths;
-  },
+  //   trips.data.forEach((item) => {
+  //     paths.push({
+  //       loc: `/trips/${item.slug}`,
+  //       lastmod: item.date_updated,
+  //       priority: 0.7,
+  //     });
+  //   });
+  //   return paths;
+  // },
   exclude: ["/accounts", "/login", "/logout", "/signup"],
 };
