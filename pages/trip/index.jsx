@@ -211,7 +211,7 @@ const Trips = ({
       </div>
 
       <div className="">
-        <div className="w-full h-500 relative before:absolute before:h-full before:w-full before:bg-black before:z-20 before:opacity-60">
+        <div className="w-full h-500 relative before:absolute before:h-full before:w-full before:bg-slate-800 before:z-20 before:opacity-80">
           <Image
             className={"w-full md:w-full"}
             layout="fill"
