@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const siteUrl = "https://www.winda.guide";
 
 module.exports = {
