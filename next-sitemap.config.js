@@ -1,5 +1,3 @@
-const axios = require("axios");
-
 const siteUrl = "https://www.winda.guide";
 
 module.exports = {
@@ -20,10 +18,9 @@ module.exports = {
 
   additionalPaths: async (config) => {
     const paths = [];
-    const { data } = await axios.get(
-      `${process.env.NEXT_PUBLIC_baseURL}/stays/`
-    );
-    data.forEach((item) => {
+    const stays = await fetch(`${process.env.NEXT_PUBLIC_baseURL}/stays/`);
+    const staysJson = await stays.json();
+    staysJson.forEach((item) => {
       console.log(item.slug);
       paths.push({
         loc: `/stays/${item.slug}`,
