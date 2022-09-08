@@ -286,9 +286,11 @@ function TripDetail({ userProfile, userTrips, trip }) {
   };
 
   useEffect(() => {
-    checkStartingDateInUrl();
-    checkNonResidentGuestsInUrl();
-    checkGuestsInUrl();
+    if (router.query.checkout_page === "1") {
+      checkStartingDateInUrl();
+      checkNonResidentGuestsInUrl();
+      checkGuestsInUrl();
+    }
   }, [router.query]);
 
   return (
