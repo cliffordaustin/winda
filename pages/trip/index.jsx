@@ -353,7 +353,7 @@ const Trips = ({
       <div className="w-full pb-20 -mb-6 bg-gray-50">
         <div
           className={
-            "h-[80px] sticky bg-white z-40 border-t border-b left-0 right-0 flex justify-center items-center " +
+            "h-[80px] sticky bg-white z-20 border-t border-b left-0 right-0 flex justify-center items-center " +
             (isSafari ? "top-[68px]" : "top-[72.25px]")
           }
         >
