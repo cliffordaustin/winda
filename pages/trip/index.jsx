@@ -241,7 +241,7 @@ const Trips = ({
                 setShowLocation(!showLocation);
                 setShowPricePopup(false);
               }}
-              className="w-[60%] relative md:w-[70%] flex md:rounded-tr-lg md:rounded-br-lg items-center h-full rounded-tl-lg rounded-bl-lg bg-white border-r border-gray-300"
+              className="w-[60%] relative md:w-[70%] flex items-center h-full rounded-tl-lg rounded-bl-lg bg-white border-r border-gray-300"
             >
               <Search
                 inputBoxClassName="border-0 "
