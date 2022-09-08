@@ -12,52 +12,49 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Icon } from "@iconify/react";
 
-import Input from "../../../../components/ui/Input";
-import getToken from "../../../../lib/getToken";
-import getTokenFromReq from "../../../../lib/getTokenFromReq";
-import Dialogue from "../../../../components/Home/Dialogue";
-import getCart from "../../../../lib/getCart";
-import Navbar from "../../../../components/Stay/Navbar";
-import CartItem from "../../../../components/Cart/CartItem";
-import Button from "../../../../components/ui/Button";
+import Input from "../../../components/ui/Input";
+import getToken from "../../../lib/getToken";
+import getTokenFromReq from "../../../lib/getTokenFromReq";
+import Dialogue from "../../../components/Home/Dialogue";
+import getCart from "../../../lib/getCart";
+import Navbar from "../../../components/Stay/Navbar";
+import CartItem from "../../../components/Cart/CartItem";
+import Button from "../../../components/ui/Button";
 import styles from "../../../../styles/Cart.module.css";
-import OrderItem from "../../../../components/Cart/OrderItem";
-import ModalPopup from "../../../../components/ui/ModalPopup";
-import Map from "../../../../components/Order/Map";
-import { priceConversionRateFunc } from "../../../../lib/PriceRate";
-import ClientOnly from "../../../../components/ClientOnly";
-import LoadingSpinerChase from "../../../../components/ui/LoadingSpinerChase";
-import OrderItemActivities from "../../../../components/Cart/OrderItemActivities";
-import ResponsiveModal from "../../../../components/ui/ResponsiveModal";
-import Destination from "../../../../components/Order/Destination";
-import { reorder } from "../../../../lib/random";
-import Modal from "../../../../components/ui/MobileModal";
-import OpenModal from "../../../../components/ui/Modal";
-import TripOverview from "../../../../components/Order/TripOverview";
-import { checkFlightPrice } from "../../../../lib/flightLocations";
-import Popup from "../../../../components/ui/Popup";
+import OrderItem from "../../../components/Cart/OrderItem";
+import ModalPopup from "../../../components/ui/ModalPopup";
+import Map from "../../../components/Order/Map";
+import { priceConversionRateFunc } from "../../../lib/PriceRate";
+import ClientOnly from "../../../components/ClientOnly";
+import LoadingSpinerChase from "../../../components/ui/LoadingSpinerChase";
+import OrderItemActivities from "../../../components/Cart/OrderItemActivities";
+import ResponsiveModal from "../../../components/ui/ResponsiveModal";
+import Destination from "../../../components/Order/Destination";
+import { reorder } from "../../../lib/random";
+import Modal from "../../../components/ui/MobileModal";
+import OpenModal from "../../../components/ui/Modal";
+import TripOverview from "../../../components/Order/TripOverview";
+import { checkFlightPrice } from "../../../lib/flightLocations";
+import Popup from "../../../components/ui/Popup";
 import moment from "moment";
-import OrderCard from "../../../../components/Order/OrderCard";
-import Trip from "../../../../components/Order/Trip";
-import TransportTrip from "../../../../components/Order/TransportTrip";
+import OrderCard from "../../../components/Order/OrderCard";
+import Trip from "../../../components/Order/Trip";
+import TransportTrip from "../../../components/Order/TransportTrip";
 import { console } from "jsondiffpatch";
-import SelectInput from "../../../../components/ui/SelectInput";
+import SelectInput from "../../../components/ui/SelectInput";
 import {
   stayPriceOfPlan,
   activityPriceOfPlan,
   activityNumOfGuests,
-} from "../../../../lib/pricePlan";
+} from "../../../lib/pricePlan";
 
 import "swiper/css/effect-creative";
 import "swiper/css";
-import TripTransportCard from "../../../../components/Order/TripTransportCard";
-import Search from "../../../../components/Trip/Search";
-import {
-  getStayPrice,
-  getActivityPrice,
-} from "../../../../lib/getTotalCartPrice";
-import BottomTooltip from "../../../../components/ui/BottomTooltip";
-import TopTooltip from "../../../../components/ui/TopTooltip";
+import TripTransportCard from "../../../components/Order/TripTransportCard";
+import Search from "../../../components/Trip/Search";
+import { getStayPrice, getActivityPrice } from "../../../lib/getTotalCartPrice";
+import BottomTooltip from "../../../components/ui/BottomTooltip";
+import TopTooltip from "../../../components/ui/TopTooltip";
 
 function PlanTrip({
   userProfile,
