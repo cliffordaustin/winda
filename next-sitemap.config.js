@@ -11,7 +11,19 @@ module.exports = {
       },
       {
         userAgent: "*",
-        disallow: ["/accounts", "/login", "/logout", "/signup", "/transport"],
+        disallow: [
+          "/account",
+          "/accounts/*",
+          "/login",
+          "/logout",
+          "/signup",
+          "/cart",
+          "/orders",
+          "/maintenance.html",
+          "/404",
+          "/saved-listings",
+          "/trip/user-trips",
+        ],
       },
     ],
 
