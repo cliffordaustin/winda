@@ -161,7 +161,7 @@ export default function Home({ userProfile }) {
       <div className="mb-12 select-none relative">
         <div className="w-full text-red-600 h-[600px] relative before:absolute before:h-full before:w-full before:bg-black before:z-20 before:opacity-60">
           <Image
-            className={"w-full"}
+            className={"w-full "}
             layout="fill"
             objectFit="cover"
             src="/images/image-header.jpg"
