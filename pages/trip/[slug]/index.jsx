@@ -2651,7 +2651,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
                       <div>
                         We&apos;ll get back to you in 24 hours confirming all
                         the details of the trip. We will send an extended
-                        itinerary to your email{" "}
+                        itinerary to your email:{" "}
                         <span className="font-bold underline">
                           {userProfile.email}
                         </span>
