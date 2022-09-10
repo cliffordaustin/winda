@@ -169,7 +169,9 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               },
             }
           )
-          .then(() => location.reload())
+          .then(() => {
+            router.push("/cart");
+          })
           .catch((err) => {
             console.log(err.response);
             setAddToBasketLoading(false);
@@ -209,7 +211,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                 : "STANDARD",
           });
           Cookies.set("cart", JSON.stringify(data));
-          location.reload();
+          router.push("/cart");
         }
       }
     }

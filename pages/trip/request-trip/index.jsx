@@ -228,7 +228,7 @@ function RequestTrip({ userProfile }) {
       >
         <div>
           We&apos;ll get back to you in 24 hours confirming all the details of
-          the trip. We will send an extended itinerary to your email address;{" "}
+          the trip. We will send an extended itinerary to your email address:{" "}
           <span className="font-bold underline">{formik.values.email}</span>
         </div>
 

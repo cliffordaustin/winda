@@ -213,7 +213,7 @@ const Trips = ({
       <div className="">
         <div className="w-full h-500 relative before:absolute before:h-full before:w-full before:bg-black before:z-20 before:opacity-70">
           <Image
-            className={"w-full md:w-full blur-sm"}
+            className={"w-full md:w-full md:blur-sm"}
             layout="fill"
             objectFit="cover"
             src="/images/trip-header-image.jpg"

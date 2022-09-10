@@ -82,9 +82,9 @@ function Main() {
         <span className="text-gray-600">Explore on</span>{" "}
         <span className="">winda</span>
       </h1>
-      <div className="text-center mt-2">
+      <h2 className="text-center mt-2">
         Take a look into what winda has to offer you.
-      </div>
+      </h2>
       <div className="px-2 sm:px-4 mt-6">
         <Swiper
           {...settings}
@@ -98,9 +98,9 @@ function Main() {
                 imageClass="rounded-2xl"
               ></Carousel>
 
-              <div className="text-white text-shadow z-30 font-black absolute top-4 left-4 text-2xl">
+              <h1 className="text-white text-shadow z-30 font-black absolute top-4 left-4 text-2xl">
                 Explore the culture
-              </div>
+              </h1>
 
               <div className="absolute bottom-4 z-30 flex flex-col left-4">
                 <p className="text-white">
@@ -262,9 +262,9 @@ function Main() {
                 imageClass="rounded-2xl"
               ></Carousel>
 
-              <div className="text-white text-shadow z-30 font-black absolute top-4 left-4 text-2xl">
+              <h1 className="text-white text-shadow z-30 font-black absolute top-4 left-4 text-2xl">
                 Romantic mood
-              </div>
+              </h1>
 
               <div className="absolute bottom-4 z-30 flex flex-col left-4">
                 <p className="text-white">
@@ -374,9 +374,9 @@ function Main() {
                     imageClass="rounded-2xl"
                   ></Carousel>
 
-                  <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
+                  <h1 className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
                     Stays in Naivasha
-                  </div>
+                  </h1>
 
                   <Link href="/stays?search=Naivasha">
                     <a>
@@ -394,9 +394,9 @@ function Main() {
                     imageClass="rounded-2xl"
                   ></Carousel>
 
-                  <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
+                  <h1 className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
                     Activities in Naivasha
-                  </div>
+                  </h1>
 
                   <Link href="/activities?search=Naivasha">
                     <a>
@@ -666,9 +666,9 @@ function Main() {
                 imageClass="rounded-2xl"
               ></Carousel>
 
-              <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
+              <h1 className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
                 Lodge
-              </div>
+              </h1>
 
               <Link href="/stays?type_of_stay=LODGE">
                 <a>
@@ -689,9 +689,9 @@ function Main() {
                 imageClass="rounded-2xl"
               ></Carousel>
 
-              <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
+              <h1 className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
                 Campsites
-              </div>
+              </h1>
 
               <Link href="/stays?type_of_stay=CAMPSITE">
                 <a>
@@ -712,9 +712,9 @@ function Main() {
                 imageClass="rounded-2xl"
               ></Carousel>
 
-              <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
+              <h1 className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
                 Tented camps
-              </div>
+              </h1>
 
               <Link href="/stays?type_of_stay=TENTED CAMP">
                 <a>
@@ -735,9 +735,9 @@ function Main() {
                 imageClass="rounded-2xl"
               ></Carousel>
 
-              <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
+              <h1 className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
                 Unique spaces
-              </div>
+              </h1>
 
               <Link href="/stays?type_of_stay=UNIQUE SPACE">
                 <a>
@@ -758,9 +758,9 @@ function Main() {
                 imageClass="rounded-2xl"
               ></Carousel>
 
-              <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
+              <h1 className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
                 Budget
-              </div>
+              </h1>
 
               <Link href="/stays?pricing_type=REASONABLE">
                 <a>
@@ -781,9 +781,9 @@ function Main() {
                 imageClass="rounded-2xl"
               ></Carousel>
 
-              <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
+              <h1 className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
                 Mid-Range
-              </div>
+              </h1>
 
               <Link href="/stays?pricing_type=MID-RANGE">
                 <a>
@@ -804,9 +804,9 @@ function Main() {
                 imageClass="rounded-2xl"
               ></Carousel>
 
-              <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
+              <h1 className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
                 Luxurious
-              </div>
+              </h1>
 
               <Link href="/stays?pricing_type=HIGH-END">
                 <a>

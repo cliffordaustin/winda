@@ -159,7 +159,9 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
             },
           }
         )
-        .then(() => location.reload())
+        .then(() => {
+          router.push("/cart");
+        })
         .catch((err) => {
           setAddToBasketLoading(false);
           console.log(err.response);
@@ -196,7 +198,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
               : "PER PERSON",
         });
         Cookies.set("cart", JSON.stringify(data));
-        location.reload();
+        router.push("/cart");
       }
     }
   };
