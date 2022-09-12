@@ -17,20 +17,20 @@ const PrivacyPolicy = ({ userProfile }) => {
         isHomePage={true}
       ></Navbar>
 
-      <div className="mb-24">
-        <div className="text-center font-bold text-3xl">Privacy policy</div>
+      <article className="mb-24">
+        <h1 className="text-center font-bold text-3xl">Privacy policy</h1>
 
         <div className="mt-6 mb-10 px-6 sm:px-16">
-          <div className="font-bold text-sm mb-4">
+          <h2 className="font-bold text-sm mb-4">
             Last Updated on 28th August 2022
-          </div>
-          <div>
+          </h2>
+          <p>
             This Privacy Policy describes how Numinous Holdings Ltd. (“Winda”)
             and its affiliates (“we,” “us”), process personal information in
             relation to your use of the Winda Platform.
-          </div>
+          </p>
 
-          <div className="font-bold !text-base mb-1 mt-3">1.DEFINITIONS</div>
+          <h1 className="font-bold !text-base mb-1 mt-3">1.DEFINITIONS</h1>
 
           <p className="mb-2">
             Undefined terms in this Privacy Policy have the same definition as
@@ -45,13 +45,13 @@ const PrivacyPolicy = ({ userProfile }) => {
             (“Terms”).
           </p>
 
-          <div className="font-bold !text-base mb-1">
+          <h1 className="font-bold !text-base mb-1">
             2.PERSONAL INFORMATION WE COLLECT
-          </div>
+          </h1>
 
-          <div className="font-bold !text-base mb-1">
+          <h1 className="font-bold !text-base mb-1">
             2.1 Information needed to use the Winda Platform.
-          </div>
+          </h1>
 
           <p>
             We collect personal information about you when you use the Winda
@@ -82,9 +82,9 @@ const PrivacyPolicy = ({ userProfile }) => {
             </ListItem>
           </div>
 
-          <div className="font-bold text-xl mb-1">
+          <h1 className="font-bold text-xl mb-1">
             2.2 Information you choose to give us.
-          </div>
+          </h1>
 
           <p>
             You can choose to provide us with additional personal information.
@@ -117,10 +117,10 @@ const PrivacyPolicy = ({ userProfile }) => {
             </ListItem>
           </div>
 
-          <div className="font-bold text-xl mb-1">
+          <h1 className="font-bold text-xl mb-1">
             2.3 Information Automatically Collected by Using the Winda Platform
             and our Payment Services.
-          </div>
+          </h1>
 
           <p>
             When you use the Winda Platform and Payment Services, we
@@ -368,13 +368,13 @@ const PrivacyPolicy = ({ userProfile }) => {
             </ListItem>
           </div>
 
-          <div className="!font-bold !text-base mb-1 mt-3">
+          <h1 className="!font-bold !text-base mb-1 mt-3">
             3. HOW WE USE THE INFORMATION WE COLLECT
-          </div>
+          </h1>
 
-          <div className="!font-bold !text-base mb-1 mt-3">
+          <h1 className="!font-bold !text-base mb-1 mt-3">
             3.1 Provide, Improve, and Develop the Winda Platform. Such as to:
-          </div>
+          </h1>
 
           <div className="flex flex-col ml-4 gap-2 mb-3 mt-2">
             <ListItem className="!text-base">
@@ -422,10 +422,10 @@ const PrivacyPolicy = ({ userProfile }) => {
             </ListItem>
           </div>
 
-          <div className="!font-bold !text-base mb-1 mt-3">
+          <h1 className="!font-bold !text-base mb-1 mt-3">
             3.2 Create and Maintain a Trusted and Safer Environment. Including
             to:
-          </div>
+          </h1>
 
           <div className="flex flex-col ml-4 gap-2 mb-3 mt-2">
             <ListItem className="!text-base">
@@ -483,10 +483,10 @@ const PrivacyPolicy = ({ userProfile }) => {
             </ListItem>
           </div>
 
-          <div className="!font-bold !text-base mb-1 mt-3">
+          <h1 className="!font-bold !text-base mb-1 mt-3">
             3.3 Provide, Personalize, Measure, and Improve our Advertising and
             Marketing. For example to:
-          </div>
+          </h1>
 
           <div className="flex flex-col ml-4 gap-2 mb-3 mt-2">
             <ListItem className="!text-base">
@@ -512,11 +512,11 @@ const PrivacyPolicy = ({ userProfile }) => {
             </ListItem>
           </div>
 
-          <div className="!font-bold !text-base mb-1 mt-3">
+          <h1 className="!font-bold !text-base mb-1 mt-3">
             3.4 Provide Payment services. Personal information is used to
             enable, or authorize third parties to use, Payment Services such as
             to:
-          </div>
+          </h1>
 
           <div className="flex flex-col ml-4 gap-2 mb-3 mt-2">
             <ListItem className="!text-base">
@@ -543,13 +543,13 @@ const PrivacyPolicy = ({ userProfile }) => {
             </ListItem>
           </div>
 
-          <div className="!font-bold !text-base mb-1 mt-3">
+          <h1 className="!font-bold !text-base mb-1 mt-3">
             4. SHARING & DISCLOSURE
-          </div>
+          </h1>
 
-          <div className="!font-bold !text-base mb-1 mt-3">
+          <h1 className="!font-bold !text-base mb-1 mt-3">
             4.1 Sharing With Your Consent or at Your Direction.
-          </div>
+          </h1>
 
           <p>
             Where you provide consent, we share your information as described at
@@ -562,10 +562,10 @@ const PrivacyPolicy = ({ userProfile }) => {
             Winda, or otherwise promote our products and services.
           </p>
 
-          <div className="!font-bold !text-base mb-1 mt-3">
+          <h1 className="!font-bold !text-base mb-1 mt-3">
             4.2 Information You Publish in Profiles, Listings, and other Public
             Information.
-          </div>
+          </h1>
 
           <p>
             You can make certain information publicly visible to others, such
@@ -605,7 +605,7 @@ const PrivacyPolicy = ({ userProfile }) => {
             settings.
           </p>
 
-          <div className="!font-bold !text-base mb-1 mt-3">5. YOUR RIGHTS</div>
+          <h1 className="!font-bold !text-base mb-1 mt-3">5. YOUR RIGHTS</h1>
 
           <p>
             You can exercise any of the rights described in this section
@@ -613,9 +613,9 @@ const PrivacyPolicy = ({ userProfile }) => {
             identity and request before taking further action on your request.
           </p>
 
-          <div className="!font-bold !text-base mb-1 mt-3">
+          <h1 className="!font-bold !text-base mb-1 mt-3">
             5.1 Managing Your Information.
-          </div>
+          </h1>
 
           <p>
             You can access and update some of your personal information through
@@ -625,9 +625,9 @@ const PrivacyPolicy = ({ userProfile }) => {
             are responsible for keeping your personal information up to date.
           </p>
 
-          <div className="!font-bold !text-base mb-1 mt-3">
+          <h1 className="!font-bold !text-base mb-1 mt-3">
             5.2 Data Access and Portability.
-          </div>
+          </h1>
 
           <p>
             In some jurisdictions, applicable law may entitle you to request
@@ -639,9 +639,7 @@ const PrivacyPolicy = ({ userProfile }) => {
             feasible).
           </p>
 
-          <div className="!font-bold !text-base mb-1 mt-3">
-            5.3 Data Erasure.
-          </div>
+          <h1 className="!font-bold !text-base mb-1 mt-3">5.3 Data Erasure.</h1>
 
           <p>
             In some jurisdictions, you can request that your personal
@@ -708,7 +706,7 @@ const PrivacyPolicy = ({ userProfile }) => {
             the revised Privacy Policy.
           </p>
         </div>
-      </div>
+      </article>
 
       <div className="">
         <Footer></Footer>

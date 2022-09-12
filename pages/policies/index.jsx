@@ -17,11 +17,11 @@ const Policies = ({ userProfile }) => {
         isHomePage={true}
       ></Navbar>
 
-      <div className="text-center font-bold text-3xl">Winda Guide Policies</div>
+      <h1 className="text-center font-bold text-3xl">Winda Guide Policies</h1>
 
-      <div className="mt-6 mb-10 px-6 sm:px-10">
-        <div className="text-2xl font-bold">Trip cancellation</div>
-        <div className="mt-3 ml-2">
+      <article className="mt-6 mb-10 px-6 sm:px-10">
+        <h1 className="text-2xl font-bold">Trip cancellation</h1>
+        <p className="mt-3 ml-2">
           You should have COVID-19 travel insurance. If you cancel more than
           60-days prior to arrival, your deposit will be refunded. Between 60
           days to 45 days prior to arrival - 50% of the reservation will be
@@ -32,17 +32,17 @@ const Policies = ({ userProfile }) => {
           For any change in the itinerary by guests whilst on safari, there will
           be no refund for any services not utilized, and all-new arrangements
           will be for the guest’s account.
-        </div>
+        </p>
 
-        <div className="text-2xl font-bold mt-8">Travel insurance</div>
-        <div className="mt-3 ml-2">
+        <h1 className="text-2xl font-bold mt-8">Travel insurance</h1>
+        <p className="mt-3 ml-2">
           It is required that you have comprehensive travel insurance for your
           entire trip prior to starting your trip, this must include emergency
           medical repatriation to your country of residence.
-        </div>
+        </p>
 
-        <div className="text-2xl font-bold mt-8">COVID-19</div>
-        <div className="mt-3 ml-2">
+        <h1 className="text-2xl font-bold mt-8">COVID-19</h1>
+        <p className="mt-3 ml-2">
           The Republic of Kenya has a vaccination program ongoing, however,
           COVID-19 is obviously still present in the country. For covid-19
           vaccinated arrivals, you must present your vaccination certificate at
@@ -51,11 +51,11 @@ const Policies = ({ userProfile }) => {
           your flight to Kenya. If you become unwell and suspect having COVID-19
           it is recommended to obtain a self-test from a pharmacy (approximately
           $10).
-        </div>
+        </p>
 
-        <div className="text-2xl font-bold mt-8">
+        <h1 className="text-2xl font-bold mt-8">
           Entry, health & visa requirements
-        </div>
+        </h1>
         <div className="mt-3 ml-2">
           The Republic of Kenya generally requires an eVisa to be attained
           online prior to entry for entry from most countries (see{" "}
@@ -84,14 +84,14 @@ const Policies = ({ userProfile }) => {
           cases of traveler’s diarrhoea.
         </div>
 
-        <div className="text-2xl font-bold mt-8">Damages</div>
-        <div className="mt-3 ml-2">
+        <h1 className="text-2xl font-bold mt-8">Damages</h1>
+        <p className="mt-3 ml-2">
           Guests are responsible for any damages incurred on their trips or
           activities. Winda.guide holds no responsibility for said damages.
-        </div>
+        </p>
 
-        <div className="text-2xl font-bold mt-8">Winda.Guide Liability</div>
-        <div className="mt-3 ml-2">
+        <h1 className="text-2xl font-bold mt-8">Winda.Guide Liability</h1>
+        <p className="mt-3 ml-2">
           Winda.Guide holds no responsibility for any of the scenarios below:
           <div className="mt-2 ml-2 flex flex-col gap-3">
             <ListItem>
@@ -105,8 +105,8 @@ const Policies = ({ userProfile }) => {
               available for recourse from the accommodation.
             </ListItem>
           </div>
-        </div>
-      </div>
+        </p>
+      </article>
 
       <div>
         <Footer></Footer>

@@ -16,30 +16,30 @@ const AboutUs = ({ userProfile }) => {
       ></Navbar>
 
       <div className="mb-24">
-        <div className="text-center font-bold text-3xl">About Us</div>
+        <h1 className="text-center font-bold text-3xl">About Us</h1>
 
-        <div className="mt-6 mb-10 px-6 sm:px-16">
-          <div>
+        <article className="mt-6 mb-10 px-6 sm:px-16">
+          <p>
             Traveling in Africa can be challenging and complex without relying
             on someone to guide you. A lot or the (me the opons vou det are
             Inflexible and don t necessarl meet vour preferences - until now.
-          </div>
+          </p>
 
-          <div className="mt-4">
+          <p className="mt-4">
             Winda.quide has curated trips that consist of 3 core elements of
             travel: stays, activities, and transport. Go to our curated trips
             and pick the one you love the most. If you want to tweak something
             let us know and we&apos;ll make it happen. Take charge of your own
             journey and build the trip of your dreams.
-          </div>
+          </p>
 
-          <div className="mt-4">
+          <p className="mt-4">
             You can also choose and book a travel service from accommodation,
             activities led by local guides, and transport for hire or transfers.
             We&apos;ve partnered with hundreds or quality-vetted service
             providers In travel to make sure vou get the best experlen.
-          </div>
-        </div>
+          </p>
+        </article>
       </div>
 
       <div className="fixed bottom-0 left-0 right-0">

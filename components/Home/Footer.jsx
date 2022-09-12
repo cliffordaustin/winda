@@ -65,7 +65,7 @@ export default function Footer() {
         </Link>
       </div>
       <div className="flex gap-4 self-center">
-        <Link href="https://www.facebook.com/winda.travel">
+        <Link rel="canonical" href="https://www.facebook.com/winda.travel">
           <a target="_blank">
             <svg
               className="social-icon"

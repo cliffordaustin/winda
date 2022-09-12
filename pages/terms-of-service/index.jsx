@@ -17,9 +17,9 @@ const TermsOfService = ({ userProfile }) => {
         isHomePage={true}
       ></Navbar>
 
-      <div className="text-center font-bold text-3xl">Terms of service</div>
+      <h1 className="text-center font-bold text-3xl">Terms of service</h1>
 
-      <div className="mt-6 mb-10 px-6 sm:px-10">
+      <article className="mt-6 mb-10 px-6 sm:px-10">
         <div className="flex flex-col gap-2">
           <p>
             These Terms of Service (“Terms”) are a binding legal agreement
@@ -54,7 +54,7 @@ const TermsOfService = ({ userProfile }) => {
         </div>
 
         <div className="mt-5">
-          <div className="font-bold text-lg">1. Actions on Winda’s website</div>
+          <h1 className="font-bold text-lg">1. Actions on Winda’s website</h1>
 
           <div className="mt-2 flex flex-col gap-3">
             <p>
@@ -129,7 +129,7 @@ const TermsOfService = ({ userProfile }) => {
         </div>
 
         <div className="mt-5">
-          <div className="font-bold text-lg">2. Cancellations, and Refunds</div>
+          <h1 className="font-bold text-lg">2. Cancellations, and Refunds</h1>
 
           <div className="mt-2 flex flex-col gap-2">
             <p>
@@ -195,7 +195,7 @@ const TermsOfService = ({ userProfile }) => {
         </div>
 
         <div className="mt-5">
-          <div className="font-bold text-lg">5. General Terms</div>
+          <h1 className="font-bold text-lg">5. General Terms</h1>
 
           <div className="mt-2 flex flex-col gap-2">
             <p>
@@ -651,7 +651,7 @@ const TermsOfService = ({ userProfile }) => {
             </p>
           </div>
         </div>
-      </div>
+      </article>
 
       <div>
         <Footer></Footer>

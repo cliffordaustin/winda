@@ -19,32 +19,32 @@ const Safety = ({ userProfile }) => {
 
       <div className="text-center font-bold text-3xl">Winda Guide Safety</div>
 
-      <div className="mt-6 mb-10 px-6 sm:px-10">
-        <div className="text-2xl font-bold">Emergency contact information</div>
+      <article className="mt-6 mb-10 px-6 sm:px-10">
+        <h1 className="text-2xl font-bold">Emergency contact information</h1>
         <div className="mt-3 ml-2">
-          <div>
+          <h1>
             Police contacts: <span className="font-bold">999/911/112</span>
-          </div>
-          <div>Rescue medical and security emergency</div>
-          <div>
+          </h1>
+          <h1>Rescue medical and security emergency</h1>
+          <h2>
             evacuation: <span className="font-bold">0714 911 911 </span>
-          </div>
-          <div>
+          </h2>
+          <h1>
             AMREF emergency medical evacuation:{" "}
             <span className="font-bold">0730 811 811/ 0709 962 811 </span>
-          </div>
-          <div>
+          </h1>
+          <p>
             Embassies & Consulates:{" "}
             <Link href="https://www.embassy-worldwide.com">
               <a target="_blank">
                 <div className="text-blue-500 underline inline">here</div>
               </a>
             </Link>
-          </div>
+          </p>
         </div>
 
-        <div className="text-2xl font-bold mt-8">Health</div>
-        <div className="mt-3 ml-2">
+        <h1 className="text-2xl font-bold mt-8">Health</h1>
+        <p className="mt-3 ml-2">
           Stay up to date on general health and safety guidelines for COVID-19
           safety per WHO. Familiarize yourself and continuously monitor
           applicable government travel restrictions and advisories, and follow
@@ -60,38 +60,38 @@ const Safety = ({ userProfile }) => {
               <div className="text-blue-500 underline inline">here</div>
             </a>
           </Link>
-        </div>
+        </p>
 
-        <div className="text-2xl font-bold mt-8">
+        <h1 className="text-2xl font-bold mt-8">
           Special Travel Considerations{" "}
-        </div>
-        <div className="mt-3 ml-2">
+        </h1>
+        <p className="mt-3 ml-2">
           Any travelers with disabilities, older travelers, or LGBTQ travelers
           should inform us beforehand to ensure we find you the right places,
           activities, and forms of transportation.
-        </div>
+        </p>
 
-        <div className="text-2xl font-bold mt-8">Money</div>
-        <div className="mt-3 ml-2">
+        <h1 className="text-2xl font-bold mt-8">Money</h1>
+        <p className="mt-3 ml-2">
           You can pay using cash (KES) in most places around Kenya. Mpesa - the
           mobile money option is used countrywide. You would need to get a local
           Safaricom sim card and register your telephone number in order to use
           Mpesa. Credit/debit cards are also used mostly in bigger cities and in
           lodges around the country. As in many bigger cities, be aware of your
           surrounding while moving around and handling money.
-        </div>
+        </p>
 
-        <div className="text-2xl font-bold mt-8">Damages</div>
-        <div className="mt-3 ml-2">
+        <h1 className="text-2xl font-bold mt-8">Damages</h1>
+        <p className="mt-3 ml-2">
           Guests are responsible for any damages incurred on their trips or
           activities. Winda.guide holds no responsibility for said damages.
-        </div>
+        </p>
 
-        <div className="text-xl font-bold mt-10">
+        <h1 className="text-xl font-bold mt-10">
           In case of any other questions, contact us:
-        </div>
+        </h1>
         <div className="mt-3 ml-2">
-          <div>
+          <p>
             Via WhatsApp or direct call on{" "}
             <span
               onClick={() => {
@@ -101,10 +101,10 @@ const Safety = ({ userProfile }) => {
             >
               +254 757 629 101
             </span>
-          </div>
-          <div>Via email: info@winda.guide</div>
+          </p>
+          <p>Via email: info@winda.guide</p>
         </div>
-      </div>
+      </article>
 
       <div>
         <Footer></Footer>

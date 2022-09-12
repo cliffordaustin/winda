@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Provider } from "react-redux";
 import store, { wrapper } from "../redux/store";
 import NProgress from "nprogress";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import "nprogress/nprogress.css";
 import ReactGA from "react-ga4";
@@ -36,6 +36,12 @@ if (process.env.NODE_ENV === "development") {
 }
 
 function MyApp({ Component, pageProps, router }) {
+  const isProd = process.env.NODE_ENV === "production";
+  const base = isProd ? "https://www.winda.com" : "http://localhost:3000";
+  const canonical = (base + (router.asPath === "/" ? "" : router.asPath)).split(
+    "?"
+  )[0];
+
   return (
     <GoogleOAuthProvider
       clientId={process.env.NEXT_PUBLIC_GOOGLE_SOCAIL_AUTH_CLIENT_ID}
@@ -59,6 +65,7 @@ function MyApp({ Component, pageProps, router }) {
           sizes="180x180"
           href="/apple-touch-icon.png"
         ></link>
+        <link rel="canonical" href={canonical} />
         <link rel="manifest" href="/site.webmanifest"></link>
 
         <meta name="msapplication-TileColor" content="#DC2626"></meta>

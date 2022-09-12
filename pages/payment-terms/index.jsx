@@ -16,31 +16,31 @@ const PaymentTerms = ({ userProfile }) => {
         isHomePage={true}
       ></Navbar>
 
-      <div className="mb-24">
-        <div className="text-center font-bold text-3xl">
+      <article className="mb-24">
+        <h1 className="text-center font-bold text-3xl">
           Payment Terms of Service
-        </div>
+        </h1>
 
         <div className="mt-6 mb-10 px-6 sm:px-16">
-          <div className="font-bold text-sm mb-4">
+          <h2 className="font-bold text-sm mb-4">
             Last Updated on 28th August 2022
-          </div>
+          </h2>
 
-          <div className="mb-3">
+          <p className="mb-3">
             These Payments Terms of Service (“Payment Terms”) are a binding
             legal agreement between you and Numinous Holdings Ltd (“Winda
             Platform”). When these Payment Terms mention “Winda,” “we,” “us,” or
             “our,” it refers to Numinous Holdings Ltd.
-          </div>
+          </p>
 
-          <div className="mb-3">
+          <p className="mb-3">
             Winda Platform provides payment services to Customers and Service
             Providers booking and listing of Accommodations, Activities, or
             transport. These payment services may include (if available) the
             following (collectively, “Payment Services”):
-          </div>
+          </p>
 
-          <div className="mb-3">
+          <p className="mb-3">
             Collecting payments from Customers (“Incoming payments”) by charging
             the payment method associated with their Winda accounts, such as
             credit card, debit card, mobile payment account, bank account or
@@ -51,11 +51,11 @@ const PaymentTerms = ({ userProfile }) => {
             Winda account in good standing in accordance with the Winda Terms of
             Service (“Terms”), and must keep your payment and personal
             information accurate and complete.
-          </div>
+          </p>
 
-          <div className="font-bold !text-base mb-2">
+          <h1 className="font-bold !text-base mb-2">
             1. Your use of the Payment Services
-          </div>
+          </h1>
 
           <div className="flex flex-col gap-2 mb-3">
             <p>
@@ -83,7 +83,7 @@ const PaymentTerms = ({ userProfile }) => {
             </p>
           </div>
 
-          <div className="font-bold !text-base mb-2">2. Customer Terms</div>
+          <h1 className="font-bold !text-base mb-2">2. Customer Terms</h1>
 
           <div className="flex flex-col gap-2 mb-3">
             <p>
@@ -753,7 +753,7 @@ const PaymentTerms = ({ userProfile }) => {
             </p>
           </div>
         </div>
-      </div>
+      </article>
 
       <div className="">
         <Footer></Footer>

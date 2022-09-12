@@ -15,6 +15,7 @@ import PopoverBox from "../components/ui/Popover";
 import Link from "next/link";
 import Search from "../components/Trip/Search";
 import PopularLocationsDropdown from "../components/Lodging/PopularLocationsDropdown";
+import CookiesMessage from "../components/Home/CookiesMessage";
 
 export default function Home({ userProfile }) {
   const router = useRouter();
@@ -321,6 +322,8 @@ export default function Home({ userProfile }) {
       <div className="mt-14">
         <Footer></Footer>
       </div>
+
+      <CookiesMessage></CookiesMessage>
     </div>
   );
 }
