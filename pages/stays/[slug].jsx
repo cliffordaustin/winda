@@ -905,7 +905,9 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                           <div className="flex items-center">
                             <Price
                               stayPrice={
-                                !stay.per_house
+                                stay.is_an_event
+                                  ? stay.event_price
+                                  : !stay.per_house
                                   ? (numOfAdults === 1
                                       ? priceSingleAdultResident
                                       : priceAdultResident) *
@@ -1505,7 +1507,9 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                           <div className="flex items-center">
                             <Price
                               stayPrice={
-                                !stay.per_house
+                                stay.is_an_event
+                                  ? stay.event_price
+                                  : !stay.per_house
                                   ? (numOfAdults === 1
                                       ? priceSingleAdultResident
                                       : priceAdultResident) *
@@ -2256,7 +2260,9 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                   <div className="flex self-end">
                     <Price
                       stayPrice={
-                        !stay.per_house
+                        stay.is_an_event
+                          ? stay.event_price
+                          : !stay.per_house
                           ? (numOfAdults === 1
                               ? priceSingleAdultResident
                               : priceAdultResident) *
@@ -2286,7 +2292,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       {moment(addToCartDate.to).format("MMM DD")}
                     </span>
                   )}
-                  {!stay.per_house && (
+                  {!stay.per_house && !stay.is_an_event && (
                     <div className="text-gray-600 text-sm flex flex-wrap self-end justify-end">
                       {numOfAdultsNonResident > 0 && (
                         <>
@@ -3017,7 +3023,10 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       </h1>
                       <h1 className="font-bold">{stay.name}</h1>
                       <p className="mt-0.5 text-sm text-gray-600 flex items-center gap-1">
-                        <Icon icon="akar-icons:clock" /> {3} days
+                        <Icon icon="akar-icons:clock" />{" "}
+                        {new Date(router.query.to_date).getDate() -
+                          new Date(router.query.starting_date).getDate()}{" "}
+                        days
                       </p>
                       {/* {trip.starting_location && (
                         <p className="mt-0.5 text-sm text-gray-600 flex items-center gap-1">
@@ -3095,7 +3104,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
                       <Price
                         className="!text-sm !font-bold"
-                        stayPrice={233}
+                        stayPrice={stay.price * Number(router.query.guests)}
                       ></Price>
                     </div>
                   </div>
@@ -3131,7 +3140,10 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       </h1>
                       <h1 className="font-bold">{stay.name}</h1>
                       <p className="mt-0.5 text-sm text-gray-600 flex items-center gap-1">
-                        <Icon icon="akar-icons:clock" /> {3} days
+                        <Icon icon="akar-icons:clock" />{" "}
+                        {new Date(router.query.to_date).getDate() -
+                          new Date(router.query.starting_date).getDate()}{" "}
+                        days
                       </p>
                       {/* {trip.starting_location && (
                         <p className="mt-0.5 text-sm text-gray-600 flex items-center gap-1">
@@ -3187,11 +3199,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     <div className="flex items-center gap-2 ">
                       <div
                         onClick={() => {
-                          if (
-                            Number(router.query.non_resident) +
-                              Number(router.query.guests) >
-                            1
-                          ) {
+                          if (Number(router.query.guests) > 1) {
                             router.replace(
                               {
                                 query: {
