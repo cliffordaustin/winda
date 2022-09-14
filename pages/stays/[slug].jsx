@@ -3037,7 +3037,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                   </div>
                   <div className="h-[0.6px] w-full bg-gray-500 mt-10 mb-4"></div>
                   <h1 className="font-bold text-2xl font-OpenSans">
-                    Trip breakdown
+                    Event breakdown
                   </h1>
 
                   <div className="mt-6 flex flex-col items-center gap-6">
@@ -3299,7 +3299,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                   <div className="md:hidden">
                     <div className="h-[0.6px] w-full bg-gray-500 mt-10 mb-4"></div>
                     <h1 className="font-bold text-2xl font-OpenSans">
-                      Trip breakdown
+                      Event breakdown
                     </h1>
                   </div>
 
