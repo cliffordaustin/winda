@@ -3017,7 +3017,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       </h1>
                       <h1 className="font-bold">{stay.name}</h1>
                       <p className="mt-0.5 text-sm text-gray-600 flex items-center gap-1">
-                        <Icon icon="akar-icons:clock" /> {3} days trip
+                        <Icon icon="akar-icons:clock" /> {3} days
                       </p>
                       {/* {trip.starting_location && (
                         <p className="mt-0.5 text-sm text-gray-600 flex items-center gap-1">
@@ -3114,27 +3114,31 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                 </div>
 
                 <div className="flex md:hidden h-28 gap-2">
-                  <div className="relative h-full bg-gray-300 w-32 rounded-xl overflow-hidden">
-                    <Image
-                      layout="fill"
-                      objectFit="cover"
-                      src={stay.stay_images[0].image}
-                      unoptimized={true}
-                      alt="Main image of trip"
-                    ></Image>
-                  </div>
+                  <div className="flex h-28 gap-2">
+                    <div className="relative h-full bg-gray-300 w-32 rounded-xl overflow-hidden">
+                      <Image
+                        layout="fill"
+                        objectFit="cover"
+                        src={stay.stay_images[0].image}
+                        unoptimized={true}
+                        alt="Main image of the order"
+                      ></Image>
+                    </div>
 
-                  <div className="flex flex-col gap-1">
-                    <h1 className="font-bold">{stay.name}</h1>
-                    {/* <p className="mt-0.5 text-sm text-gray-600 flex items-center gap-1">
-                      <Icon icon="akar-icons:clock" />{" "}
-                      {trip.total_number_of_days} days trip
-                    </p>
-                    {trip.starting_location && (
+                    <div className="flex flex-col gap-1">
+                      <h1 className="text-gray-600 text-xs uppercase">
+                        {stay.location}
+                      </h1>
+                      <h1 className="font-bold">{stay.name}</h1>
                       <p className="mt-0.5 text-sm text-gray-600 flex items-center gap-1">
-                        Starting from {trip.starting_location}
+                        <Icon icon="akar-icons:clock" /> {3} days
                       </p>
-                    )} */}
+                      {/* {trip.starting_location && (
+                        <p className="mt-0.5 text-sm text-gray-600 flex items-center gap-1">
+                          Starting from {trip.starting_location}
+                        </p>
+                      )} */}
+                    </div>
                   </div>
                 </div>
 
