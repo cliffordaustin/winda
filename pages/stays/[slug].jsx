@@ -3154,7 +3154,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       </div>
                     </div>
 
-                    <PopoverBox
+                    {/* <PopoverBox
                       btnPopover={
                         <div className="w-9 h-9 rounded-full cursor-pointer border-transparent border flex items-center justify-center hover:border-gray-200 hover:shadow-lg transition-all duration-300 ease-linear">
                           <Icon
@@ -3168,7 +3168,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       panelClassName="h-fit !max-w-[400px] md:!w-[400px] rounded-lg bg-white right-0 border shadow-lg mt-1 top-full"
                     >
                       <StartingDateChild></StartingDateChild>
-                    </PopoverBox>
+                    </PopoverBox> */}
                   </div>
 
                   <div className="flex items-center justify-between mt-8">
@@ -3236,7 +3236,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       </div>
                     </div>
 
-                    <PopoverBox
+                    {/* <PopoverBox
                       btnPopover={
                         <div className="w-9 h-9 rounded-full cursor-pointer border-transparent border flex items-center justify-center hover:border-gray-200 hover:shadow-lg transition-all duration-300 ease-linear">
                           <Icon
@@ -3250,7 +3250,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       panelClassName="h-fit !max-w-[400px] md:!w-[400px] rounded-lg bg-white right-0 border shadow-lg mt-1 top-full"
                     >
                       <EndDateChild></EndDateChild>
-                    </PopoverBox>
+                    </PopoverBox> */}
                   </div>
 
                   <div className="h-[0.4px] w-[100%] bg-gray-400 my-6"></div>
@@ -3374,7 +3374,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                   <div className="mt-8">
                     <Button
                       onClick={() => {
-                        bookTrip();
+                        // bookTrip();
                       }}
                       className="flex w-[150px] mt-3 mb-3 items-center gap-1 !px-0 !py-3 font-bold !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white"
                     >
