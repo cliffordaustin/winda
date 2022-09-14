@@ -3157,7 +3157,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                 <div className="h-[0.4px] w-[100%] my-4 bg-gray-400 md:hidden"></div>
 
                 <h1 className="font-bold text-2xl mb-4 font-OpenSans">
-                  Book trip
+                  Book event
                 </h1>
                 <div className="mt-6">
                   <div className="flex items-center justify-between">
