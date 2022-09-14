@@ -75,6 +75,18 @@ function MyApp({ Component, pageProps, router }) {
           content="Winda.guide | book travel essentials in Kenya"
         ></meta>
         <meta property="og:image" content="/images/image-header.jpg"></meta>
+
+        <meta name="twitter:card" content="/images/image-header.jpg" />
+        {/* <meta name="twitter:site" content="@digitalocean" />
+        <meta name="twitter:title" content="Sammy the Shark" />
+        <meta
+          name="twitter:description"
+          content="Senior Selachimorpha at DigitalOcean"
+        />
+        <meta
+          name="twitter:image"
+          content="https://html.sammy-codes.com/images/large-profile.jpg"
+        /> */}
       </Head>
       <Provider store={store.store}>
         <motion.div
