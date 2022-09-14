@@ -358,7 +358,8 @@ function Listing({
               <div className="font-bold text-sm truncate mt-1">
                 {listing.location}
               </div>
-              {userLatLng.latitude &&
+              {userLatLng &&
+                userLatLng.latitude &&
                 userLatLng.longitude &&
                 listing.latitude &&
                 listing.longitude && (

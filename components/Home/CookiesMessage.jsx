@@ -15,7 +15,7 @@ function CookiesMessage(props) {
     <>
       {showCookiesMessage && (
         <div className="md:w-[700px] sm:w-[400px] w-[90%] py-4 flex md:flex-row flex-col items-center gap-4 md:gap-8 px-6 bg-gray-100 z-40 shadow-2xl rounded-lg fixed bottom-5 md:bottom-10 left-[50%] -translate-x-2/4">
-          <div className="relative w-[100px] h-[100px]">
+          {/* <div className="relative w-[100px] h-[100px]">
             <Image
               className=""
               layout="fill"
@@ -24,13 +24,13 @@ function CookiesMessage(props) {
               // objectFit="cover"
               alt="Image"
             />
-          </div>
+          </div> */}
 
           <div>
-            <h1 className="text-3xl font-bold text-center md:text-left">
+            <h1 className="text-3xl hidden md:block font-bold text-center md:text-left">
               Cookies!
             </h1>
-            <p className="mt-2 text-center md:text-left">
+            <p className="md:mt-2 text-center md:text-left">
               Winda uses cookies to ensure you get the best experience on our
               website.
             </p>
