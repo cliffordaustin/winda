@@ -3301,6 +3301,79 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     <h1 className="font-bold text-2xl font-OpenSans">
                       Event breakdown
                     </h1>
+
+                    <div className="mt-6 flex flex-col items-center gap-6">
+                      <div className="text-gray-600 flex items-center w-full justify-between">
+                        <div className="flex gap-1.5 items-center w-[70%]">
+                          Starting date
+                        </div>
+
+                        <div className="text-sm font-bold">
+                          {moment(new Date(router.query.starting_date)).format(
+                            "DD MMM YYYY"
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="text-gray-600 flex items-center w-full justify-between">
+                        <div className="flex gap-1.5 items-center w-[75%]">
+                          <span className="truncate">{stay.name}</span>
+                          <PopoverBox
+                            btnPopover={<Icon icon="bx:help-circle" />}
+                            btnClassName="flex items-center justify-center"
+                            panelClassName="bg-gray-100 rounded-lg p-2 bottom-[100%] -left-[10px] w-[180px]"
+                          >
+                            <div className="text-sm text-gray-500">
+                              <span>
+                                This is a{" "}
+                                <span className="lowercase">
+                                  {stay.type_of_stay
+                                    ? stay.type_of_stay
+                                    : "stay"}
+                                </span>{" "}
+                                in{" "}
+                                <span className="lowercase">
+                                  {stay.location}
+                                  {""}
+                                  {stay.location && stay.country
+                                    ? ", "
+                                    : ""}{" "}
+                                  {stay.country}
+                                </span>{" "}
+                                .You will be staying here for 2 nights
+                              </span>
+                            </div>
+                          </PopoverBox>
+                        </div>
+
+                        <div className="text-sm font-bold">{3} nights</div>
+                      </div>
+
+                      <div className="text-gray-600 flex items-center w-full justify-between">
+                        <div className="flex gap-1.5 items-center w-[70%]">
+                          Ending date
+                        </div>
+
+                        <div className="text-sm font-bold">
+                          {moment(new Date(router.query.to_date)).format(
+                            "DD MMM YYYY"
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="h-[0.4px] w-[100%] bg-gray-400"></div>
+
+                      <div className="text-gray-600 flex items-center w-full justify-between">
+                        <div className="flex gap-1.5 items-center">
+                          Total price
+                        </div>
+
+                        <Price
+                          className="!text-sm !font-bold"
+                          stayPrice={stay.price * Number(router.query.guests)}
+                        ></Price>
+                      </div>
+                    </div>
                   </div>
 
                   <Dialogue
