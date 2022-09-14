@@ -70,6 +70,11 @@ function MyApp({ Component, pageProps, router }) {
 
         <meta name="msapplication-TileColor" content="#DC2626"></meta>
         <meta name="theme-color" content="#ffffff"></meta>
+        <meta
+          property="og:title"
+          content="Winda.guide | book travel essentials in Kenya"
+        ></meta>
+        <meta property="og:image" content="/images/image-header.jpg"></meta>
       </Head>
       <Provider store={store.store}>
         <motion.div
