@@ -710,10 +710,16 @@ function TripDetail({ userProfile, userTrips, trip }) {
                       Gallery
                     </h1>
 
-                    <TripImageGallery
-                      images={[...tripImages, ...stayImages, ...activityImages]}
-                      className="!h-[340px] !w-full md:!w-[50%]"
-                    ></TripImageGallery>
+                    <div className="h-[300px]">
+                      <TripImageGallery
+                        images={[
+                          ...tripImages,
+                          ...stayImages,
+                          ...activityImages,
+                        ]}
+                        className="!h-[340px] !w-full md:!w-[50%]"
+                      ></TripImageGallery>
+                    </div>
                   </Element>
 
                   <Element name="itinerary">

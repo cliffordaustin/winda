@@ -2231,7 +2231,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               </div>
             </div>
 
-            <div className="md:fixed hidden right-2 md:w-[42%] h-full md:pl-2 lg:px-0 lg:w-[35%] top-20 bottom-0 overflow-y-scroll md:block">
+            <div className="md:fixed hidden lg:flex flex-col right-2 md:w-[42%] h-full md:pl-2 lg:px-0 lg:w-[35%] top-20 bottom-0 overflow-y-scroll md:block">
               <div className="flex h-fit justify-between">
                 {
                   <div>
@@ -2366,7 +2366,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               </div>
               <div
                 className={
-                  " h-fit w-full lg:w-fit mx-auto xl:ml-2 order-1 md:order-2 "
+                  " h-fit w-full lg:w-fit mx-auto xl:ml-auto order-1 md:order-2 "
                 }
               >
                 <div className="">
@@ -2391,7 +2391,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                 )}
 
                 <div className=" mt-4 relative">
-                  {
+                  {!stay.is_an_event && (
                     <div
                       onClick={(e) => {
                         e.stopPropagation();
@@ -2417,7 +2417,38 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       </svg>
                       <span>Add Guests</span>
                     </div>
-                  }
+                  )}
+
+                  {stay.is_an_event && (
+                    <div className="flex mt-2 mb-3 justify-between items-center">
+                      <span className="font-bold">Add guests</span>
+
+                      <div className="flex items-center gap-2 ">
+                        <div
+                          onClick={() => {
+                            if (eventGuests > 1) {
+                              setEventGuests(eventGuests - 1);
+                            }
+                          }}
+                          className="w-7 h-7 rounded-full cursor-pointer border flex items-center justify-center focus:shadow-inner font-bold"
+                        >
+                          {" "}
+                          -{" "}
+                        </div>
+
+                        <div className="font-bold text-sm">{eventGuests}</div>
+
+                        <div
+                          onClick={() => {
+                            setEventGuests(eventGuests + 1);
+                          }}
+                          className="w-7 h-7 rounded-full cursor-pointer border flex items-center justify-center focus:shadow-inner font-bold"
+                        >
+                          +
+                        </div>
+                      </div>
+                    </div>
+                  )}
 
                   <Dialogue
                     isOpen={guestPopup}
@@ -3080,7 +3111,11 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                         </PopoverBox>
                       </div>
 
-                      <div className="text-sm font-bold">{3} nights</div>
+                      <div className="text-sm font-bold">
+                        {new Date(router.query.to_date).getDate() -
+                          new Date(router.query.starting_date).getDate()}{" "}
+                        nights
+                      </div>
                     </div>
 
                     <div className="text-gray-600 flex items-center w-full justify-between">
@@ -3104,7 +3139,12 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
                       <Price
                         className="!text-sm !font-bold"
-                        stayPrice={stay.price * Number(router.query.guests)}
+                        stayPrice={
+                          stay.event_price *
+                          Number(router.query.guests) *
+                          (new Date(router.query.to_date).getDate() -
+                            new Date(router.query.starting_date).getDate())
+                        }
                       ></Price>
                     </div>
                   </div>
@@ -3346,7 +3386,11 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                           </PopoverBox>
                         </div>
 
-                        <div className="text-sm font-bold">{3} nights</div>
+                        <div className="text-sm font-bold">
+                          {new Date(router.query.to_date).getDate() -
+                            new Date(router.query.starting_date).getDate()}{" "}
+                          nights
+                        </div>
                       </div>
 
                       <div className="text-gray-600 flex items-center w-full justify-between">
@@ -3370,7 +3414,12 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
                         <Price
                           className="!text-sm !font-bold"
-                          stayPrice={stay.price * Number(router.query.guests)}
+                          stayPrice={
+                            stay.event_price *
+                            Number(router.query.guests) *
+                            (new Date(router.query.to_date).getDate() -
+                              new Date(router.query.starting_date).getDate())
+                          }
                         ></Price>
                       </div>
                     </div>
