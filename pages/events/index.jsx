@@ -116,7 +116,7 @@ function RequestTrip({ userProfile, stays }) {
           </div>
         </div>
         <div
-          className="w-full sm:w-[80%] sm:mx-auto md:w-[55%] xl:w-[45%] px-4
+          className="w-full sm:w-[80%] flex flex-col gap-2 sm:mx-auto md:w-[55%] xl:w-[45%] px-4
          py-3 h-full"
         >
           {stays.map((stay, index) => {
@@ -248,6 +248,7 @@ function RequestTrip({ userProfile, stays }) {
                   <div className="flex justify-between">
                     <div className="mt-2 flex flex-col">
                       <Price
+                        currency="KES"
                         stayPrice={getStandardRoomPrice(stay)}
                         className="text-2xl"
                       ></Price>
@@ -255,6 +256,7 @@ function RequestTrip({ userProfile, stays }) {
                       {stay.car_transfer_price && (
                         <div className="text-gray-500 text-xs mt-1 underline flex gap-1">
                           <Price
+                            currency="KES"
                             stayPrice={
                               getStandardRoomPrice(stay) +
                               stay.car_transfer_price
@@ -267,6 +269,7 @@ function RequestTrip({ userProfile, stays }) {
                       {!stay.car_transfer_price && stay.bus_transfer_price && (
                         <div className="text-gray-500 text-xs mt-1 underline flex gap-1">
                           <Price
+                            currency="KES"
                             stayPrice={
                               getStandardRoomPrice(stay) +
                               stay.bus_transfer_price

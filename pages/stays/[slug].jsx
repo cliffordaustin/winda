@@ -542,10 +542,10 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
   const [eventDate, setEventDate] = useState({
     from:
       (router.query.starting_date && new Date(router.query.starting_date)) ||
-      new Date(2022, 9, 6),
+      new Date(2022, 9, 8),
     to:
       (router.query.end_date && new Date(router.query.end_date)) ||
-      new Date(2022, 9, 8),
+      new Date(2022, 9, 10),
   });
 
   function SelectDate({ close }) {
@@ -553,7 +553,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
       <div className="w-full">
         <DayPicker
           mode="range"
-          disabled={{ before: new Date(2022, 9, 6) }}
+          disabled={{ before: new Date(2022, 9, 8) }}
           selected={eventDate}
           onSelect={(date) => {
             if (date) {
@@ -3730,6 +3730,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                             Number(router.query.room_type)
                           ] && (
                             <Price
+                              currency="KES"
                               stayPrice={
                                 stay.type_of_rooms[
                                   Number(router.query.room_type)
@@ -3765,6 +3766,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
                         <div className="text-sm font-bold">
                           <Price
+                            currency="KES"
                             stayPrice={totalPriceOfStay(
                               stay.type_of_rooms[Number(router.query.room_type)]
                                 .price
@@ -3783,11 +3785,12 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       </div>
 
                       <Price
+                        currency="KES"
                         stayPrice={totalPriceOfStay(
                           stay.type_of_rooms[Number(router.query.room_type)]
                             .price
                         )}
-                        className="!text-black"
+                        className="!text-black !text-base"
                       ></Price>
                     </div>
                   </div>
@@ -4053,6 +4056,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                         </div>
 
                         <Price
+                          currency="KES"
                           className="!text-sm !font-bold"
                           stayPrice={
                             stay.event_price *
