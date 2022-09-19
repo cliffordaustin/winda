@@ -63,8 +63,8 @@ const ReviewOverview = ({ reviews, filterReview, stay, setFilterRateVal }) => {
   };
 
   return (
-    <div className={"lg:px-4 py-3 flex gap-4 w-full"}>
-      <div className={"flex gap-4 w-full lg:px-8"}>
+    <div className={"py-3 flex gap-4 w-full"}>
+      <div className={"flex gap-4 w-full "}>
         <div className={""}>
           <div className="flex flex-col items-center">
             <h1 className="font-bold text-gray-700 text-4xl font-lobster sm:text-5xl">

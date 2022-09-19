@@ -123,7 +123,7 @@ body {
 }
 
 .rdp-day {
-  @apply !w-full !h-full !max-w-none;
+  @apply !w-full !h-full !max-w-none !rounded-none;
 }
 
 .rdp-button:focus:not([disabled]),
@@ -143,7 +143,7 @@ body {
 .rdp-day_selected:focus:not([disabled]),
 .rdp-day_selected:active:not([disabled]),
 .rdp-day_selected:hover:not([disabled]) {
-  @apply !bg-slate-700;
+  @apply !bg-blue-700;
 }
 
 .rdp-button {
@@ -151,7 +151,7 @@ body {
 }
 
 .rdp-cell--selected {
-  @apply !bg-slate-700 !rounded-full w-10 h-10 sm:!w-12 sm:!h-12 outline-none transition-colors ease-linear duration-200;
+  @apply !bg-blue-700 !rounded-full w-10 h-10 sm:!w-12 sm:!h-12 outline-none transition-colors ease-linear duration-200;
 }
 
 .swiper-pagination > .swiper-pagination-bullet {
@@ -199,6 +199,14 @@ body {
 
 .css-4ljt47-MenuList {
   @apply !py-0;
+}
+
+.PhoneInputCountry {
+  @apply !w-[60px] border rounded-md !flex !items-center !justify-center !mr-2;
+}
+
+.PhoneInputInput {
+  @apply appearance-none leading-tight font-bold border rounded-md focus:outline-none py-3 px-4 w-full text-sm;
 }
 
 /* .mapboxgl-map {
