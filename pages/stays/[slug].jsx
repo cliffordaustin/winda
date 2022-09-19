@@ -2436,6 +2436,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                               <div className="flex justify-between items-center w-full">
                                 <div className="">
                                   <Price
+                                    currency="KES"
                                     stayPrice={
                                       room.price *
                                         (new Date(
