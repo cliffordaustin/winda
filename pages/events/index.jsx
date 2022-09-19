@@ -136,7 +136,7 @@ function RequestTrip({ userProfile, stays }) {
                   <Carousel images={images} imageClass=""></Carousel>
                 </div>
 
-                <div className="py-2 w-full">
+                <div className="py-2 w-[400px]">
                   <div className="uppercase text-xs text-gray-600 truncate">
                     {stay.location}
                   </div>
