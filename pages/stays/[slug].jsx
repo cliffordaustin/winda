@@ -545,7 +545,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
       new Date(2022, 9, 8),
     to:
       (router.query.end_date && new Date(router.query.end_date)) ||
-      new Date(2022, 9, 10),
+      new Date(2022, 9, 9),
   });
 
   function SelectDate({ close }) {
