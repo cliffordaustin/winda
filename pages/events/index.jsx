@@ -130,7 +130,7 @@ function RequestTrip({ userProfile, stays }) {
             return (
               <div
                 key={index}
-                className="w-full h-[200px] flex gap-3 bg-white rounded-md overflow-hidden border"
+                className="w-full h-[185px] flex gap-3 bg-white rounded-md overflow-hidden border"
               >
                 <div className="h-full w-[200px]">
                   <Carousel images={images} imageClass=""></Carousel>
@@ -253,7 +253,7 @@ function RequestTrip({ userProfile, stays }) {
                         className="text-2xl"
                       ></Price>
                       <p className="text-gray-500 text-xs">per night</p>
-                      {stay.car_transfer_price && (
+                      {/* {stay.car_transfer_price && (
                         <div className="text-gray-500 text-xs mt-1 underline flex gap-1">
                           <Price
                             currency="KES"
@@ -265,8 +265,8 @@ function RequestTrip({ userProfile, stays }) {
                           ></Price>
                           <span>with car transfer</span>
                         </div>
-                      )}
-                      {!stay.car_transfer_price && stay.bus_transfer_price && (
+                      )} */}
+                      {/* {!stay.car_transfer_price && stay.bus_transfer_price && (
                         <div className="text-gray-500 text-xs mt-1 underline flex gap-1">
                           <Price
                             currency="KES"
@@ -278,7 +278,7 @@ function RequestTrip({ userProfile, stays }) {
                           ></Price>
                           <span>with bus transfer</span>
                         </div>
-                      )}
+                      )} */}
                     </div>
 
                     <Link href={`/stays/${stay.slug}`}>

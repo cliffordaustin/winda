@@ -640,7 +640,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
           </div>
         </div>
 
-        <div className="flex items-center mt-4 justify-between">
+        {/* <div className="flex items-center mt-4 justify-between">
           <h1 className="text-sm font-bold">{childrenTravelers} Children</h1>
           <div className="flex items-center gap-3">
             <div
@@ -664,7 +664,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               +{" "}
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     );
   }
@@ -678,7 +678,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
           query: {
             ...router.query,
             adults: adultTravelers,
-            children: childrenTravelers,
             rooms: rooms,
             transport: transports.findIndex((t) => t.name === selected.name),
             starting_date: moment(eventDate.from).format("YYYY-MM-DD"),
@@ -734,7 +733,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
             <Icon icon="fa-solid:car-alt" className="w-6 h-6" />
             <div className="flex flex-col">
               <span className="text-sm font-bold self-start">
-                Select a transport
+                Select transport
               </span>
               <span className="text-gray-500 text-sm self-start">
                 {/* No transport selected */}
@@ -802,7 +801,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
         ...router.query,
         room_type: index,
         adults: adultTravelers,
-        children: childrenTravelers,
         rooms: rooms,
         transport: transports.findIndex((t) => t.name === selected.name),
         starting_date: moment(eventDate.from).format("YYYY-MM-DD"),
@@ -890,7 +888,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               confirmation_code: values.confirmation_code,
               phone: phone,
               adults: Number(router.query.adults),
-              children: Number(router.query.children),
               rooms: Number(router.query.rooms),
               from_date: new Date(router.query.starting_date),
               to_date: new Date(router.query.end_date),
@@ -2385,11 +2382,11 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                           <Icon icon="bxs:user" className="w-6 h-6" />
                           <div className="flex flex-col">
                             <span className="text-sm font-bold self-start">
-                              Travelers
+                              People
                             </span>
                             <span className="text-gray-500 text-sm">
-                              {rooms} rooms,{" "}
-                              {adultTravelers + childrenTravelers} travelers
+                              {rooms} rooms, {adultTravelers}{" "}
+                              {adultTravelers > 1 ? "adults" : "adult"}
                             </span>
                           </div>
                         </div>
@@ -2410,7 +2407,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       Check availability
                     </div>
                   </div>
-                  {router.query.transport !== "0" && (
+                  {router.query.transport && router.query.transport !== "0" && (
                     <div className="w-full my-3 px-2 py-2 bg-yellow-100 text-yellow-600 flex gap-2 items-center">
                       <Icon icon="bx:bx-info-circle" className="w-6 h-6" />
                       <span>
@@ -2448,7 +2445,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                           <div className="px-3 mt-3 flex flex-col gap-1 text-gray-600">
                             <div className="flex items-center gap-2">
                               <Icon icon="heroicons:users-20-solid" />
-                              <span>{room.sleeps} sleeps</span>
+                              <span>sleeps {room.sleeps}</span>
                             </div>
                           </div>
 
@@ -2526,8 +2523,8 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                                   {Number(router.query.adults || 2) +
                                     Number(router.query.children || 0) >
                                   1
-                                    ? "travelers"
-                                    : "traveler"}{" "}
+                                    ? "people"
+                                    : "person"}{" "}
                                 </div>
 
                                 <div className="mt-1 lowercase">
