@@ -1128,78 +1128,80 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                 <div className={"mt-4 " + (!stay.is_an_event ? "px-4" : "")}>
                   <div className="flex">
                     <div className="flex flex-col w-full">
-                      <div className="text-gray-500 flex justify-between md:justify-start gap-4 md:gap-2 text-sm truncate mt-3 flex-wrap">
-                        {stay.room_type && (
-                          <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center md:gap-1">
-                            <h1 className="font-bold text-base md:text-lg text-gray-800">
-                              Type of room
-                            </h1>
-                            <div className="text-gray-600 capitalize">
-                              {stay.room_type.toLowerCase()}
+                      {!stay.is_an_event && (
+                        <div className="text-gray-500 flex justify-between md:justify-start gap-4 md:gap-2 text-sm truncate mt-3 flex-wrap">
+                          {stay.room_type && (
+                            <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center md:gap-1">
+                              <h1 className="font-bold text-base md:text-lg text-gray-800">
+                                Type of room
+                              </h1>
+                              <div className="text-gray-600 capitalize">
+                                {stay.room_type.toLowerCase()}
+                              </div>
                             </div>
-                          </div>
-                        )}
-                        {stay.type_of_stay && (
-                          <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center md:gap-1">
-                            <h1 className="font-bold text-base md:text-lg text-gray-800">
-                              Type of stay
-                            </h1>
-                            <div className="text-gray-600 capitalize">
-                              {stay.type_of_stay.toLowerCase()}
+                          )}
+                          {stay.type_of_stay && (
+                            <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center md:gap-1">
+                              <h1 className="font-bold text-base md:text-lg text-gray-800">
+                                Type of stay
+                              </h1>
+                              <div className="text-gray-600 capitalize">
+                                {stay.type_of_stay.toLowerCase()}
+                              </div>
                             </div>
-                          </div>
-                        )}
-                        {stay.capacity && (
-                          <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center md:gap-1">
-                            <h1 className="font-bold text-base md:text-lg text-gray-800">
-                              Capacity
-                            </h1>
-                            <div className="text-gray-600">
-                              {stay.capacity} max
+                          )}
+                          {stay.capacity && (
+                            <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center md:gap-1">
+                              <h1 className="font-bold text-base md:text-lg text-gray-800">
+                                Capacity
+                              </h1>
+                              <div className="text-gray-600">
+                                {stay.capacity} max
+                              </div>
                             </div>
-                          </div>
-                        )}
-                        {stay.rooms && (
-                          <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center md:gap-1">
-                            <h1 className="font-bold text-base md:text-lg text-gray-800">
-                              Rooms
-                            </h1>
-                            <div className="text-gray-600">
-                              {stay.rooms} rooms
+                          )}
+                          {stay.rooms && (
+                            <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center md:gap-1">
+                              <h1 className="font-bold text-base md:text-lg text-gray-800">
+                                Rooms
+                              </h1>
+                              <div className="text-gray-600">
+                                {stay.rooms} rooms
+                              </div>
                             </div>
-                          </div>
-                        )}
-                        {stay.beds && (
-                          <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center md:gap-1">
-                            <h1 className="font-bold text-base md:text-lg text-gray-800">
-                              Beds
-                            </h1>
-                            <div className="text-gray-600">
-                              {stay.beds} bedrooms
+                          )}
+                          {stay.beds && (
+                            <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center md:gap-1">
+                              <h1 className="font-bold text-base md:text-lg text-gray-800">
+                                Beds
+                              </h1>
+                              <div className="text-gray-600">
+                                {stay.beds} bedrooms
+                              </div>
                             </div>
-                          </div>
-                        )}
-                        {stay.bathrooms && (
-                          <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center md:gap-1">
-                            <h1 className="font-bold text-base md:text-lg text-gray-800">
-                              Bathrooms
-                            </h1>
-                            <div className="text-gray-600">
-                              {stay.bathrooms} baths
+                          )}
+                          {stay.bathrooms && (
+                            <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center md:gap-1">
+                              <h1 className="font-bold text-base md:text-lg text-gray-800">
+                                Bathrooms
+                              </h1>
+                              <div className="text-gray-600">
+                                {stay.bathrooms} baths
+                              </div>
                             </div>
-                          </div>
-                        )}
-                        {stay.views > 0 && (
-                          <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center md:gap-1">
-                            <h1 className="font-bold text-base md:text-lg text-gray-800">
-                              Views
-                            </h1>
-                            <div className="text-gray-600">
-                              {stay.views} views
+                          )}
+                          {stay.views > 0 && (
+                            <div className="px-4 border-l w-[45%] md:w-fit flex flex-col items-center md:gap-1">
+                              <h1 className="font-bold text-base md:text-lg text-gray-800">
+                                Views
+                              </h1>
+                              <div className="text-gray-600">
+                                {stay.views} views
+                              </div>
                             </div>
-                          </div>
-                        )}
-                      </div>
+                          )}
+                        </div>
+                      )}
 
                       {slugIsCorrect && (
                         <div className="mt-2">
