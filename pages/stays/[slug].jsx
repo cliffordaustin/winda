@@ -573,7 +573,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
   );
 
   const [adultTravelers, setAdultTravelers] = useState(
-    Number(router.query.adults) || 2
+    Number(router.query.adults) || 1
   );
 
   const [rooms, setRooms] = useState(Number(router.query.rooms) || 1);
