@@ -2470,7 +2470,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                                         ).getDate() -
                                           new Date(
                                             router.query.starting_date
-                                          ).getDate() || 2) *
+                                          ).getDate() || 1) *
                                         (Number(router.query.rooms) || 1) +
                                       (selected.name.toLowerCase() == "car"
                                         ? stay.car_transfer_price
@@ -2566,14 +2566,14 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                                   !router.query.end_date && (
                                     <div className="mt-1">
                                       from{" "}
-                                      {moment(new Date(2022, 9, 6)).format(
-                                        "Do MMM"
-                                      )}{" "}
-                                      -{" "}
                                       {moment(new Date(2022, 9, 8)).format(
                                         "Do MMM"
                                       )}{" "}
-                                      (2 nights)
+                                      -{" "}
+                                      {moment(new Date(2022, 9, 9)).format(
+                                        "Do MMM"
+                                      )}{" "}
+                                      (1 nights)
                                     </div>
                                   )}
                               </div>
