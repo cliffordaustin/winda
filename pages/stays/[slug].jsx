@@ -2518,9 +2518,9 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                                     ? "rooms"
                                     : "room"}
                                   ,{" "}
-                                  {Number(router.query.adults || 2) +
+                                  {Number(router.query.adults || 1) +
                                     Number(router.query.children || 0)}{" "}
-                                  {Number(router.query.adults || 2) +
+                                  {Number(router.query.adults || 1) +
                                     Number(router.query.children || 0) >
                                   1
                                     ? "people"
