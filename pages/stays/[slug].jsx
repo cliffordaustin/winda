@@ -839,7 +839,13 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
       new Date(router.query.end_date).getDate() -
       new Date(router.query.starting_date).getDate();
     const rooms = Number(router.query.rooms);
-    const total = price * nights * rooms;
+    const total =
+      price * nights * rooms +
+      (selected.name.toLowerCase() == "car"
+        ? stay.car_transfer_price
+        : selected.name.toLowerCase() == "bus"
+        ? stay.bus_transfer_price
+        : 0);
     return total;
   };
 
@@ -2404,6 +2410,18 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       Check availability
                     </div>
                   </div>
+                  {router.query.transport !== "0" && (
+                    <div className="w-full my-3 px-2 py-2 bg-yellow-100 text-yellow-600 flex gap-2 items-center">
+                      <Icon icon="bx:bx-info-circle" className="w-6 h-6" />
+                      <span>
+                        This transport is a {selected.name.toLowerCase()} from
+                        Nairobi to {stay.location}.{" "}
+                        <span className="font-bold">
+                          More details will be sent to you after booking.
+                        </span>
+                      </span>
+                    </div>
+                  )}
                   <div className="flex items-start flex-wrap gap-3">
                     {stay.type_of_rooms.map((room, index) => {
                       const sortedImages = room.type_of_room_images.sort(
@@ -3643,8 +3661,8 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
         {router.query.checkout_page === "1" && (
           <div className="mt-[80px] md:mt-[100px] max-w-[1080px] mx-auto">
-            <div className="flex gap-4 px-4">
-              <div className="md:w-[40%] px-2 hidden md:block h-[90vh] mt-0 sticky top-[80px]">
+            <div className="flex md:flex-row flex-col gap-4 px-4">
+              <div className="md:w-[40%] md:px-2 md:h-[90vh] mt-0 md:sticky top-[80px]">
                 <div
                   onClick={() => {
                     router.back();
@@ -3719,6 +3737,29 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       </div>
                     </div>
 
+                    {router.query.transport !== "0" && (
+                      <div className="text-gray-600 flex items-center w-full justify-between">
+                        <div className="flex gap-1.5 items-center w-[70%]">
+                          <span>Transport</span>
+                          <PopoverBox
+                            btnPopover={<Icon icon="bx:help-circle" />}
+                            btnClassName="flex items-center justify-center"
+                            panelClassName="bg-gray-100 rounded-lg p-2 bottom-[100%] -left-[10px] w-[180px]"
+                          >
+                            <div className="text-sm text-gray-500">
+                              <span>
+                                This transport is a{" "}
+                                {selected.name.toLowerCase()} from Nairobi to{" "}
+                                {stay.location}.
+                              </span>
+                            </div>
+                          </PopoverBox>
+                        </div>
+
+                        <div className="text-sm font-bold">{selected.name}</div>
+                      </div>
+                    )}
+
                     <span className="lowercase hidden">
                       {stay.location && stay.country ? " " : ""}
                     </span>
@@ -3779,14 +3820,44 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                         <div className="text-sm font-bold">
                           <Price
                             currency="KES"
-                            stayPrice={totalPriceOfStay(
-                              stay.type_of_rooms[Number(router.query.room_type)]
-                                .price
-                            )}
+                            stayPrice={
+                              totalPriceOfStay(
+                                stay.type_of_rooms[
+                                  Number(router.query.room_type)
+                                ].price
+                              ) -
+                              (selected.name.toLowerCase() == "car"
+                                ? stay.car_transfer_price
+                                : selected.name.toLowerCase() == "bus"
+                                ? stay.bus_transfer_price
+                                : 0)
+                            }
                             className="!text-sm"
                           ></Price>
                         </div>
                       </div>
+
+                      {router.query.transport !== "0" && (
+                        <div className="text-gray-600 flex items-center w-full justify-between">
+                          <div className="flex gap-1.5 text-sm items-center w-[70%]">
+                            Transport
+                          </div>
+
+                          <div className="text-sm font-bold">
+                            <Price
+                              currency="KES"
+                              stayPrice={
+                                selected.name.toLowerCase() == "car"
+                                  ? stay.car_transfer_price
+                                  : selected.name.toLowerCase() == "bus"
+                                  ? stay.bus_transfer_price
+                                  : 0
+                              }
+                              className="!text-sm"
+                            ></Price>
+                          </div>
+                        </div>
+                      )}
                     </div>
 
                     <div className="h-[0.4px] w-[100%] bg-gray-400"></div>
@@ -3810,48 +3881,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               </div>
 
               <div className="md:w-[60%] w-full md:pl-4">
-                <div
-                  onClick={() => {
-                    router.back();
-                  }}
-                  className="flex gap-1 mb-3 md:hidden font-bold cursor-pointer items-center text-black"
-                >
-                  <Icon className="w-6 h-6" icon="bx:chevron-left" />
-                  <span>Back</span>
-                </div>
-
-                <div className="flex md:hidden h-28 gap-2">
-                  <div className="flex h-28 gap-2">
-                    <div className="relative h-full bg-gray-300 w-32 rounded-xl overflow-hidden">
-                      <Image
-                        layout="fill"
-                        objectFit="cover"
-                        src={stay.stay_images[0].image}
-                        unoptimized={true}
-                        alt="Main image of the order"
-                      ></Image>
-                    </div>
-
-                    <div className="flex flex-col gap-1">
-                      <h1 className="text-gray-600 text-xs uppercase">
-                        {stay.location}
-                      </h1>
-                      <h1 className="font-bold">{stay.name}</h1>
-                      <p className="mt-0.5 text-sm text-gray-600 flex items-center gap-1">
-                        <Icon icon="akar-icons:clock" />{" "}
-                        {new Date(router.query.to_date).getDate() -
-                          new Date(router.query.starting_date).getDate()}{" "}
-                        days
-                      </p>
-                      {/* {trip.starting_location && (
-                        <p className="mt-0.5 text-sm text-gray-600 flex items-center gap-1">
-                          Starting from {trip.starting_location}
-                        </p>
-                      )} */}
-                    </div>
-                  </div>
-                </div>
-
                 <div className="h-[0.4px] w-[100%] my-4 bg-gray-400 md:hidden"></div>
 
                 <h1 className="font-bold text-2xl mb-4 font-OpenSans">
@@ -3859,7 +3888,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                 </h1>
                 <div className="my-4 flex flex-col">
                   <form onSubmit={formik.handleSubmit}>
-                    <div className="flex items-center gap-4 w-full">
+                    <div className="flex md:flex-row flex-col items-center gap-4 w-full">
                       <div className="w-full relative">
                         <label className="block text-sm font-bold mb-2">
                           First name
@@ -4056,96 +4085,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                             {formik.errors.confirmation_code}
                           </span>
                         ) : null}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="md:hidden">
-                    <div className="h-[0.6px] w-full bg-gray-500 mt-10 mb-4"></div>
-                    <h1 className="font-bold text-2xl font-OpenSans">
-                      Event breakdown
-                    </h1>
-
-                    <div className="mt-6 flex flex-col items-center gap-6">
-                      <div className="text-gray-600 flex items-center w-full justify-between">
-                        <div className="flex gap-1.5 items-center w-[70%]">
-                          Starting date
-                        </div>
-
-                        <div className="text-sm font-bold">
-                          {moment(new Date(router.query.starting_date)).format(
-                            "DD MMM YYYY"
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="text-gray-600 flex items-center w-full justify-between">
-                        <div className="flex gap-1.5 items-center w-[75%]">
-                          <span className="truncate">{stay.name}</span>
-                          <PopoverBox
-                            btnPopover={<Icon icon="bx:help-circle" />}
-                            btnClassName="flex items-center justify-center"
-                            panelClassName="bg-gray-100 rounded-lg p-2 bottom-[100%] -left-[10px] w-[180px]"
-                          >
-                            <div className="text-sm text-gray-500">
-                              <span>
-                                This is a{" "}
-                                <span className="lowercase">
-                                  {stay.type_of_stay
-                                    ? stay.type_of_stay
-                                    : "stay"}
-                                </span>{" "}
-                                in{" "}
-                                <span className="lowercase">
-                                  {stay.location}
-                                  {""}
-                                  {stay.location && stay.country
-                                    ? ", "
-                                    : ""}{" "}
-                                  {stay.country}
-                                </span>{" "}
-                                .You will be staying here for 2 nights
-                              </span>
-                            </div>
-                          </PopoverBox>
-                        </div>
-
-                        <div className="text-sm font-bold">
-                          {new Date(router.query.to_date).getDate() -
-                            new Date(router.query.starting_date).getDate()}{" "}
-                          nights
-                        </div>
-                      </div>
-
-                      <div className="text-gray-600 flex items-center w-full justify-between">
-                        <div className="flex gap-1.5 items-center w-[70%]">
-                          Ending date
-                        </div>
-
-                        <div className="text-sm font-bold">
-                          {moment(new Date(router.query.to_date)).format(
-                            "DD MMM YYYY"
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="h-[0.4px] w-[100%] bg-gray-400"></div>
-
-                      <div className="text-gray-600 flex items-center w-full justify-between">
-                        <div className="flex gap-1.5 items-center">
-                          Total price
-                        </div>
-
-                        <Price
-                          currency="KES"
-                          className="!text-sm !font-bold"
-                          stayPrice={
-                            stay.event_price *
-                            Number(router.query.guests) *
-                            (new Date(router.query.to_date).getDate() -
-                              new Date(router.query.starting_date).getDate())
-                          }
-                        ></Price>
                       </div>
                     </div>
                   </div>
