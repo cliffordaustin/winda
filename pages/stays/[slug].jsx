@@ -852,6 +852,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
       first_name: userProfile.first_name || "",
       last_name: userProfile.last_name || "",
       email: userProfile.email || "",
+      confirmation_code: "",
     },
     validationSchema: Yup.object({
       first_name: Yup.string()
@@ -863,6 +864,11 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
       email: Yup.string()
         .email("Invalid email")
         .required("This field is required"),
+
+      confirmation_code: Yup.string()
+        .required("This field is required")
+        .max(10, "This field has a max length of 10")
+        .min(10, "This field has a max length of 10"),
     }),
     onSubmit: async (values) => {
       setLoading(true);
@@ -875,6 +881,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               last_name: values.last_name,
               email: values.email,
               message: message,
+              confirmation_code: values.confirmation_code,
               phone: phone,
               adults: Number(router.query.adults),
               children: Number(router.query.children),
@@ -890,6 +897,8 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
           })
           .catch((err) => {
             setLoading(false);
+
+            console.log(err.response);
           });
       } else if (!isValidPhoneNumber("phone")) {
         setInvalidPhone(true);
@@ -3980,6 +3989,75 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     </div>
                   </div>
 
+                  <div className="h-[0.4px] w-[100%] bg-gray-400 my-6"></div>
+
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h1 className="font-bold text-xl mb-2">Pay with Mpesa</h1>
+                      <div className="relative w-20 h-16">
+                        <Image
+                          className="w-full h-full"
+                          layout="fill"
+                          unoptimized={true}
+                          objectFit="fit"
+                          alt="Image"
+                          src="/images/128px-M-PESA_LOGO-01.svg.png"
+                        ></Image>
+                      </div>
+                    </div>
+
+                    <div className="mt-2 flex flex-col gap-4">
+                      <h1 className="text-lg text-center">
+                        Please enter the following for payment
+                      </h1>
+                      <div className="flex justify-between items-center">
+                        <h1 className="font-bold">Paybill Number</h1>
+                        <p>123ABC</p>
+                      </div>
+
+                      <div className="flex justify-between items-center">
+                        <h1 className="font-bold">Account reference number</h1>
+                        <p>475837289438</p>
+                      </div>
+
+                      <div className="flex justify-between items-center">
+                        <h1 className="font-bold">Amount to pay</h1>
+                        <Price
+                          currency="KES"
+                          stayPrice={totalPriceOfStay(
+                            stay.type_of_rooms[Number(router.query.room_type)]
+                              .price
+                          )}
+                          className="!text-black !text-base"
+                        ></Price>
+                      </div>
+                    </div>
+
+                    <div className="mt-6">
+                      <div className="flex flex-col gap-1">
+                        <Input
+                          name="confirmation_code"
+                          type="text"
+                          errorStyle={
+                            formik.touched.confirmation_code &&
+                            formik.errors.confirmation_code
+                              ? true
+                              : false
+                          }
+                          placeholder="Confirmation code"
+                          label="Please type in the mpesa confirmation code"
+                          {...formik.getFieldProps("confirmation_code")}
+                        ></Input>
+                        {formik.touched.confirmation_code &&
+                        formik.errors.confirmation_code ? (
+                          <span className="text-sm mt-1 font-bold text-red-400">
+                            {formik.errors.confirmation_code}
+                          </span>
+                        ) : null}
+                      </div>
+                    </div>
+                  </div>
+
                   <div className="md:hidden">
                     <div className="h-[0.6px] w-full bg-gray-500 mt-10 mb-4"></div>
                     <h1 className="font-bold text-2xl font-OpenSans">
@@ -4154,7 +4232,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       }}
                       className="flex w-[150px] mt-3 mb-3 items-center gap-1 !px-0 !py-3 font-bold !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white"
                     >
-                      <span>Request to book</span>
+                      <span>Book this stay</span>
 
                       <div className={" " + (loading ? "ml-1.5 " : " hidden")}>
                         <LoadingSpinerChase
