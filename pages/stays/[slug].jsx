@@ -583,144 +583,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
   const [rooms, setRooms] = useState(Number(router.query.rooms) || 1);
 
-  function SelectTravellers() {
-    return (
-      <div className="w-full p-4">
-        <div className="flex items-center w-full justify-between">
-          <h1 className="text-sm font-bold">
-            {rooms} {rooms > 1 ? "Rooms" : "Room"}
-          </h1>
-          <div className="flex items-center gap-3">
-            <div
-              onClick={() => {
-                if (rooms > 1) {
-                  setRooms(rooms - 1);
-                }
-              }}
-              className="md:w-[40px] w-[30px] h-[30px] cursor-pointer md:h-[40px] rounded-full border flex items-center justify-center font-bold"
-            >
-              {" "}
-              -{" "}
-            </div>
-            <div
-              onClick={() => {
-                setRooms(rooms + 1);
-                if (rooms >= adultTravelers) {
-                  setAdultTravelers(adultTravelers + 1);
-                }
-              }}
-              className="md:w-[40px] w-[30px] h-[30px] cursor-pointer md:h-[40px] rounded-full border flex items-center justify-center font-bold"
-            >
-              {" "}
-              +{" "}
-            </div>
-          </div>
-        </div>
-
-        <div className="flex items-center mt-4 justify-between">
-          <h1 className="text-sm font-bold">
-            {adultTravelers} {adultTravelers > 1 ? "Adults" : "Adult"}
-          </h1>
-          <div className="flex items-center gap-3">
-            <div
-              onClick={() => {
-                if (adultTravelers > 1) {
-                  setAdultTravelers(adultTravelers - 1);
-                }
-              }}
-              className="md:w-[40px] w-[30px] h-[30px] cursor-pointer md:h-[40px] rounded-full border flex items-center justify-center font-bold"
-            >
-              {" "}
-              -{" "}
-            </div>
-            <div
-              onClick={() => {
-                setAdultTravelers(adultTravelers + 1);
-              }}
-              className="md:w-[40px] w-[30px] h-[30px] cursor-pointer md:h-[40px] rounded-full border flex items-center justify-center font-bold"
-            >
-              {" "}
-              +{" "}
-            </div>
-          </div>
-        </div>
-
-        <div className="flex items-center mt-4 justify-between">
-          <h1 className="text-sm font-bold">
-            {passengers} {passengers > 1 ? "Passengers" : "Passenger"}
-            {router.query.transport && router.query.transport === "0" && (
-              <span>(select a transport option first)</span>
-            )}
-          </h1>
-          <div className="flex items-center gap-3">
-            <div
-              onClick={() => {
-                if (passengers > 1) {
-                  router.replace(
-                    {
-                      query: {
-                        ...router.query,
-                        passengers: Number(passengers) - 1,
-                      },
-                    },
-                    undefined,
-                    { shallow: true }
-                  );
-                }
-              }}
-              className="md:w-[40px] w-[30px] h-[30px] cursor-pointer md:h-[40px] rounded-full border flex items-center justify-center font-bold"
-            >
-              {" "}
-              -{" "}
-            </div>
-            <div
-              onClick={() => {
-                if (router.query.transport && router.query.transport !== "0") {
-                  router.push({
-                    query: {
-                      ...router.query,
-                      passengers: Number(passengers) + 1,
-                    },
-                  });
-                }
-              }}
-              className="md:w-[40px] w-[30px] h-[30px] cursor-pointer md:h-[40px] rounded-full border flex items-center justify-center font-bold"
-            >
-              {" "}
-              +{" "}
-            </div>
-          </div>
-        </div>
-
-        {/* <div className="flex items-center mt-4 justify-between">
-          <h1 className="text-sm font-bold">{childrenTravelers} Children</h1>
-          <div className="flex items-center gap-3">
-            <div
-              onClick={() => {
-                if (childrenTravelers > 0) {
-                  setChildrenTravelers(childrenTravelers - 1);
-                }
-              }}
-              className="w-[40px] cursor-pointer h-[40px] rounded-full border flex items-center justify-center font-bold"
-            >
-              {" "}
-              -{" "}
-            </div>
-            <div
-              onClick={() => {
-                setChildrenTravelers(childrenTravelers + 1);
-              }}
-              className="w-[40px] cursor-pointer h-[40px] rounded-full border flex items-center justify-center font-bold"
-            >
-              {" "}
-              +{" "}
-            </div>
-          </div>
-        </div> */}
-      </div>
-    );
-  }
-
   const [checkoutErrorMessage, setCheckoutErrorMessage] = useState(false);
 
   const checkAvailability = () => {
@@ -734,6 +596,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
             transport: transports.findIndex((t) => t.name === selected.name),
             starting_date: moment(eventDate.from).format("YYYY-MM-DD"),
             end_date: moment(eventDate.to).format("YYYY-MM-DD"),
+            passengers: passengers,
           },
         },
         undefined,
@@ -767,17 +630,11 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
       <Listbox
         value={selected}
         onChange={(value) => {
-          setPassengers(0);
-          router.replace(
-            {
-              query: {
-                ...router.query,
-                transport: transports.findIndex((t) => t.name === value.name),
-              },
-            },
-            undefined,
-            { shallow: true }
-          );
+          if (value.name !== "No transport") {
+            setPassengers(1);
+          } else if (value.name === "No transport") {
+            setPassengers(0);
+          }
           setSelected(value);
         }}
       >
@@ -848,6 +705,104 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
     );
   }
 
+  function SelectTravellers() {
+    return (
+      <div className="w-full p-4">
+        <div className="flex items-center w-full justify-between">
+          <h1 className="text-sm font-bold">
+            {rooms} {rooms > 1 ? "Rooms" : "Room"}
+          </h1>
+          <div className="flex items-center gap-3">
+            <div
+              onClick={() => {
+                if (rooms > 1) {
+                  setRooms(rooms - 1);
+                }
+              }}
+              className="md:w-[40px] w-[30px] h-[30px] cursor-pointer md:h-[40px] rounded-full border flex items-center justify-center font-bold"
+            >
+              {" "}
+              -{" "}
+            </div>
+            <div
+              onClick={() => {
+                setRooms(rooms + 1);
+                if (rooms >= adultTravelers) {
+                  setAdultTravelers(adultTravelers + 1);
+                }
+              }}
+              className="md:w-[40px] w-[30px] h-[30px] cursor-pointer md:h-[40px] rounded-full border flex items-center justify-center font-bold"
+            >
+              {" "}
+              +{" "}
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center mt-4 justify-between">
+          <h1 className="text-sm font-bold">
+            {adultTravelers} {adultTravelers > 1 ? "Adults" : "Adult"}
+          </h1>
+          <div className="flex items-center gap-3">
+            <div
+              onClick={() => {
+                if (adultTravelers > 1) {
+                  setAdultTravelers(adultTravelers - 1);
+                }
+              }}
+              className="md:w-[40px] w-[30px] h-[30px] cursor-pointer md:h-[40px] rounded-full border flex items-center justify-center font-bold"
+            >
+              {" "}
+              -{" "}
+            </div>
+            <div
+              onClick={() => {
+                setAdultTravelers(adultTravelers + 1);
+              }}
+              className="md:w-[40px] w-[30px] h-[30px] cursor-pointer md:h-[40px] rounded-full border flex items-center justify-center font-bold"
+            >
+              {" "}
+              +{" "}
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center mt-4 justify-between">
+          <h1 className="text-sm font-bold">
+            {passengers} {passengers > 1 ? "Passengers" : "Passenger"}
+            {(selected.name == "No transport" || !selected.name) && (
+              <span>(select a transport first)</span>
+            )}
+          </h1>
+          <div className="flex items-center gap-3">
+            <div
+              onClick={() => {
+                if (passengers > 1) {
+                  setPassengers(passengers - 1);
+                }
+              }}
+              className="md:w-[40px] w-[30px] h-[30px] cursor-pointer md:h-[40px] rounded-full border flex items-center justify-center font-bold"
+            >
+              {" "}
+              -{" "}
+            </div>
+            <div
+              onClick={() => {
+                if (selected.name !== "No transport") {
+                  setPassengers(passengers + 1);
+                }
+              }}
+              className="md:w-[40px] w-[30px] h-[30px] cursor-pointer md:h-[40px] rounded-full border flex items-center justify-center font-bold"
+            >
+              {" "}
+              +{" "}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   function reserve(index) {
     router.push({
       query: {
@@ -858,6 +813,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
         transport: transports.findIndex((t) => t.name === selected.name),
         starting_date: moment(eventDate.from).format("YYYY-MM-DD"),
         end_date: moment(eventDate.to).format("YYYY-MM-DD"),
+        passengers: passengers,
         checkout_page: 1,
       },
     });
@@ -887,12 +843,13 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
       new Date(router.query.end_date).getDate() -
       new Date(router.query.starting_date).getDate();
     const rooms = Number(router.query.rooms);
+    const passengers = Number(router.query.passengers);
     const total =
       price * nights * rooms +
       (selected.name.toLowerCase() == "van"
-        ? stay.car_transfer_price
+        ? stay.car_transfer_price * passengers
         : selected.name.toLowerCase() == "bus"
-        ? stay.bus_transfer_price
+        ? stay.bus_transfer_price * passengers
         : 0);
     return total;
   };
@@ -2612,20 +2569,20 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                   >
                     Check availability
                   </div>
-                  {router.query.transport && router.query.transport !== "0" && (
+                  {selected.name !== "No transport" && (
                     <div className="w-full my-3 px-2 py-2 bg-yellow-100 text-yellow-600 flex gap-2 items-center">
                       <Icon icon="bx:bx-info-circle" className="w-6 h-6" />
                       <span>
                         This transport is a {selected.name.toLowerCase()} from{" "}
-                        {router.query.transport === "1"
+                        {selected.name === "Van"
                           ? stay.car_transfer_starting_location
-                          : router.query.transport === "2"
+                          : selected.name === "Bus"
                           ? stay.bus_transfer_starting_location
                           : ""}{" "}
                         to{" "}
-                        {router.query.transport === "1"
+                        {selected.name === "Van"
                           ? stay.car_transfer_end_location
-                          : router.query.transport === "2"
+                          : selected.name === "Bus"
                           ? stay.bus_transfer_end_location
                           : ""}
                         .{" "}
@@ -3956,7 +3913,13 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     {router.query.transport !== "0" && (
                       <div className="text-gray-600 flex items-center w-full justify-between">
                         <div className="flex gap-1.5 items-center w-[70%]">
-                          <span>Transport</span>
+                          <span>
+                            Transport({router.query.passengers}{" "}
+                            {Number(router.query.passengers) > 1
+                              ? "passengers"
+                              : "passenger"}
+                            )
+                          </span>
                           <PopoverBox
                             btnPopover={<Icon icon="bx:help-circle" />}
                             btnClassName="flex items-center justify-center"
@@ -4054,9 +4017,9 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                                 ].price
                               ) -
                               (selected.name.toLowerCase() == "van"
-                                ? stay.car_transfer_price
+                                ? stay.car_transfer_price * passengers
                                 : selected.name.toLowerCase() == "bus"
-                                ? stay.bus_transfer_price
+                                ? stay.bus_transfer_price * passengers
                                 : 0)
                             }
                             className="!text-sm"
@@ -4075,9 +4038,11 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                               currency="KES"
                               stayPrice={
                                 selected.name.toLowerCase() == "van"
-                                  ? stay.car_transfer_price
+                                  ? stay.car_transfer_price *
+                                    Number(router.query.passengers)
                                   : selected.name.toLowerCase() == "bus"
-                                  ? stay.bus_transfer_price
+                                  ? stay.bus_transfer_price *
+                                    Number(router.query.passengers)
                                   : 0
                               }
                               className="!text-sm"
