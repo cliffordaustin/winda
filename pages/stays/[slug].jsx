@@ -4327,7 +4327,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     <div className="flex gap-2 w-full">
                       <Button
                         onClick={() => {
-                          router.replace("/events");
+                          router.replace("/gondwana");
                         }}
                         className="flex w-[60%] mt-3 mb-3 items-center gap-1 !px-0 !py-3 font-bold !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white"
                       >
