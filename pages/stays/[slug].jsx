@@ -125,7 +125,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
   const [addToBasketLoading, setAddToBasketLoading] = useState(false);
 
   const [scrollRef, inView, entry] = useInView({
-    rootMargin: "-72px 0px",
+    rootMargin: "-98px 0px",
   });
 
   const priceConversionRate = async () => {
@@ -1176,7 +1176,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     (stay.is_an_event
                       ? "h-[60px] bg-white z-10 border-t border-b flex sticky left-0 right-0 "
                       : "h-12 border-b border-gray-200 w-[100%] px-3 lg:px-10 bg-slate-100 sticky left-0 right-0") +
-                    (isSafari ? "top-[68px]" : "top-[72.25px]")
+                    (isSafari ? "top-[108px]" : "top-[115.25px]")
                   }
                   ref={scrollRef}
                 >
@@ -1194,7 +1194,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     (stay.is_an_event
                       ? "h-[60px] fixed bg-white z-10 border-t border-b left-0 right-0 flex w-full "
                       : "h-[60px] fixed bg-white z-10 border-t border-b left-0 flex w-full md:w-[56%] px-3 lg:w-[63%] ") +
-                    (isSafari ? "top-[68px]" : "top-[72.25px]")
+                    (isSafari ? "top-[108px]" : "top-[115.25px]")
                   }
                 >
                   <ScrollTo guestPopup={guestPopup} stay={stay}></ScrollTo>
@@ -3838,7 +3838,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
         )}
 
         {router.query.checkout_page === "1" && (
-          <div className="mt-[80px] md:mt-[100px] max-w-[1080px] mx-auto">
+          <div className="mt-[120px] md:mt-[140px] max-w-[1080px] mx-auto">
             <div className="flex md:flex-row flex-col gap-4 px-4">
               <div className="md:w-[40%] md:px-2 md:h-[90vh] mt-0 md:sticky top-[80px]">
                 <div

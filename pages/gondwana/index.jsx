@@ -16,6 +16,7 @@ import { useRouter } from "next/router";
 import Listings from "../../components/Lodging/Listings";
 import Carousel from "../../components/ui/Carousel";
 import Price from "../../components/Stay/Price";
+import ContactBanner from "../../components/Home/ContactBanner";
 
 function RequestTrip({ userProfile, stays }) {
   const router = useRouter();
@@ -80,6 +81,7 @@ function RequestTrip({ userProfile, stays }) {
   return (
     <div>
       <div className="fixed top-0 w-full bg-white z-50">
+        <ContactBanner></ContactBanner>
         <div className="bg-white sm:px-12 px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-8">
             <Link href="/">
@@ -99,7 +101,7 @@ function RequestTrip({ userProfile, stays }) {
           </div>
         </div>
       </div>
-      <div className="flex md:bg-gray-100 gap-2 mt-[80px] relative">
+      <div className="flex md:bg-gray-100 gap-2 mt-[110px] relative">
         <div className="hidden md:block h-[91vh] mt-0 sticky top-[80px] w-[45%] xl:w-[55%]">
           <Carousel
             images={carouselImages}
