@@ -104,17 +104,18 @@ function RequestTrip({ userProfile, stays }) {
           <Carousel
             images={carouselImages}
             imageClass="!w-full rounded-none"
+            objectPosition="top"
           ></Carousel>
 
           <div className="flex flex-col absolute bottom-16 left-4 z-40">
-            <div className="font-mono text-2xl mb-1 text-white">
+            {/* <div className="font-mono text-2xl mb-1 text-white">
               INTRODUCING
             </div>
             <div className="font-bold text-white font-lobster text-6xl">
               Dwana in the Wild: Amboseli Edition
-            </div>
+            </div> */}
 
-            <p className="font-SourceSans text-lg mt-1 text-white">
+            <p className="font-mono text-2xl mt-1 text-white">
               These are our select partner lodges for Dwana in the Wild and we
               have the best rates for them.
             </p>
