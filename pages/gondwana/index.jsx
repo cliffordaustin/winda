@@ -319,7 +319,7 @@ function RequestTrip({ userProfile, stays }) {
             );
           })}
         </div>
-        <div className="flex gap-4 items-center px-8 md:px-4 border-t fixed bottom-0 w-full md:w-[50%] xl:w-[40%] right-5 bg-white h-[40px]">
+        <div className="flex gap-4 items-center px-8 md:px-4 border-t fixed bottom-0 w-full md:w-[50%] xl:w-[40%] md:right-5 bg-white h-[40px]">
           <div
             onClick={() => {
               setShowFAQ(true);
@@ -335,7 +335,8 @@ function RequestTrip({ userProfile, stays }) {
             }}
             title="FAQ"
             dialogueTitleClassName="!font-bold mb-6"
-            dialoguePanelClassName="max-h-[500px] max-w-lg  overflow-y-scroll remove-scroll"
+            dialoguePanelClassName="max-h-[500px] max-w-lg overflow-y-scroll remove-scroll"
+            outsideDialogueClass="!p-1"
           >
             <h1 className="mt-4 font-bold">
               What accommodation is being offered?
@@ -426,6 +427,7 @@ function RequestTrip({ userProfile, stays }) {
               setShowTerms(false);
             }}
             title="Terms and condition"
+            outsideDialogueClass="!p-1"
             dialogueTitleClassName="!font-bold mb-6"
             dialoguePanelClassName="max-h-[500px] max-w-lg overflow-y-scroll remove-scroll"
           >
