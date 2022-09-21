@@ -900,6 +900,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               phone: phone,
               adults: Number(router.query.adults),
               rooms: Number(router.query.rooms),
+              passengers: Number(router.query.passengers),
               from_date: new Date(router.query.starting_date),
               to_date: new Date(router.query.end_date),
               transport: Number(router.query.transport),
@@ -911,8 +912,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
           })
           .catch((err) => {
             setLoading(false);
-
-            console.log(err.response);
           });
       } else if (!isValidPhoneNumber("phone")) {
         setInvalidPhone(true);
