@@ -700,10 +700,12 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
     {
       name: "Van",
       unavailable: stay.car_transfer_price ? false : true,
+      price: stay.car_transfer_price,
     },
     {
       name: "Bus",
       unavailable: stay.bus_transfer_price ? false : true,
+      price: stay.bus_transfer_price,
     },
   ];
 
@@ -785,6 +787,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       }`}
                     >
                       {item.name}
+                      {item.price && <span> (KES{item.price})</span>}
                     </span>
                   </div>
                 </Listbox.Option>

@@ -100,7 +100,7 @@ function RequestTrip({ userProfile, stays }) {
         </div>
       </div>
       <div className="flex md:bg-gray-100 gap-2 mt-[80px] relative">
-        <div className="hidden md:block h-[91vh] mt-0 sticky top-[80px] w-[45%] xl:w-[55%] ">
+        <div className="hidden md:block h-[91vh] mt-0 sticky top-[80px] w-[45%] xl:w-[55%]">
           <Carousel
             images={carouselImages}
             imageClass="!w-full rounded-none"
