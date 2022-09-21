@@ -969,7 +969,12 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
         </div>
 
         <div className="h-[80px] flex flex-col items-center justify-center border-t border-t-gray-300 py-2 px-2 sticky bottom-0 left-0 right-0 bg-white">
-          <div className="w-[90%] px-3 cursor-pointer flex items-center justify-center text-sm bg-blue-600 py-3 text-white font-bold rounded-3xl">
+          <div
+            onClick={() => {
+              checkAvailability();
+            }}
+            className="w-[90%] px-3 cursor-pointer flex items-center justify-center text-sm bg-blue-600 py-3 text-white font-bold rounded-3xl"
+          >
             Check availability
           </div>
         </div>
