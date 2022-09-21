@@ -546,7 +546,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
       new Date(2022, 9, 8),
     to:
       (router.query.end_date && new Date(router.query.end_date)) ||
-      new Date(2022, 9, 9),
+      new Date(2022, 9, 10),
   });
 
   function SelectDate({ close }) {
@@ -2740,10 +2740,10 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                                         "Do MMM"
                                       )}{" "}
                                       -{" "}
-                                      {moment(new Date(2022, 9, 9)).format(
+                                      {moment(new Date(2022, 9, 10)).format(
                                         "Do MMM"
                                       )}{" "}
-                                      (1 nights)
+                                      (2 nights)
                                     </div>
                                   )}
                               </div>

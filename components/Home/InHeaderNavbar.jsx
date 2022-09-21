@@ -127,7 +127,7 @@ function Navbar({
       )}
       <div className="flex items-center gap-3">
         {isHomePage && (
-          <Link href={"/trip?deals=1"}>
+          <Link href={"/gondwana"}>
             <a>
               <div
                 onClick={(event) => {
@@ -135,11 +135,11 @@ function Navbar({
                   setCurrentNavState(1);
                 }}
                 className={
-                  "cursor-pointer z-[30] font-bold md:!text-base text-red-500 before:!bg-red-500 " +
+                  "cursor-pointer z-[30] font-bold md:!text-base text-white before:!bg-white " +
                   styles.link
                 }
               >
-                Hot Deals
+                Gondwana
               </div>
             </a>
           </Link>
