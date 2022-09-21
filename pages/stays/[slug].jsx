@@ -698,7 +698,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
       name: "No transport",
     },
     {
-      name: "Car",
+      name: "Van",
       unavailable: stay.car_transfer_price ? false : true,
     },
     {
@@ -840,7 +840,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
     const rooms = Number(router.query.rooms);
     const total =
       price * nights * rooms +
-      (selected.name.toLowerCase() == "car"
+      (selected.name.toLowerCase() == "van"
         ? stay.car_transfer_price
         : selected.name.toLowerCase() == "bus"
         ? stay.bus_transfer_price
@@ -2555,15 +2555,31 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       Check availability
                     </div>
                   </div>
-                  <div className="px-3 cursor-pointer flex md:hidden items-center justify-center text-sm bg-blue-600 w-full sm:w-[70%] py-2 mb-4 text-white font-bold rounded-md">
+                  <div
+                    onClick={() => {
+                      checkAvailability();
+                    }}
+                    className="px-3 cursor-pointer flex md:hidden items-center justify-center text-sm bg-blue-600 w-full sm:w-[70%] py-2 mb-4 text-white font-bold rounded-md"
+                  >
                     Check availability
                   </div>
                   {router.query.transport && router.query.transport !== "0" && (
                     <div className="w-full my-3 px-2 py-2 bg-yellow-100 text-yellow-600 flex gap-2 items-center">
                       <Icon icon="bx:bx-info-circle" className="w-6 h-6" />
                       <span>
-                        This transport is a {selected.name.toLowerCase()} from
-                        Nairobi to {stay.location}.{" "}
+                        This transport is a {selected.name.toLowerCase()} from{" "}
+                        {router.query.transport === "1"
+                          ? stay.car_transfer_starting_location
+                          : router.query.transport === "2"
+                          ? stay.bus_transfer_starting_location
+                          : ""}{" "}
+                        to{" "}
+                        {router.query.transport === "1"
+                          ? stay.car_transfer_end_location
+                          : router.query.transport === "2"
+                          ? stay.bus_transfer_end_location
+                          : ""}
+                        .{" "}
                         <span className="font-bold">
                           More details will be sent to you after booking.
                         </span>
@@ -2623,7 +2639,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                                             router.query.starting_date
                                           ).getDate() || 1) *
                                         (Number(router.query.rooms) || 1) +
-                                      (selected.name.toLowerCase() == "car"
+                                      (selected.name.toLowerCase() == "van"
                                         ? stay.car_transfer_price
                                         : selected.name.toLowerCase() == "bus"
                                         ? stay.bus_transfer_price
@@ -3897,8 +3913,19 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                             <div className="text-sm text-gray-500">
                               <span>
                                 This transport is a{" "}
-                                {selected.name.toLowerCase()} from Nairobi to{" "}
-                                {stay.location}.
+                                {selected.name.toLowerCase()} from{" "}
+                                {router.query.transport === "1"
+                                  ? stay.car_transfer_starting_location
+                                  : router.query.transport === "2"
+                                  ? stay.bus_transfer_starting_location
+                                  : ""}{" "}
+                                to{" "}
+                                {router.query.transport === "1"
+                                  ? stay.car_transfer_end_location
+                                  : router.query.transport === "2"
+                                  ? stay.bus_transfer_end_location
+                                  : ""}
+                                .{" "}
                               </span>
                             </div>
                           </PopoverBox>
@@ -3974,7 +4001,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                                   Number(router.query.room_type)
                                 ].price
                               ) -
-                              (selected.name.toLowerCase() == "car"
+                              (selected.name.toLowerCase() == "van"
                                 ? stay.car_transfer_price
                                 : selected.name.toLowerCase() == "bus"
                                 ? stay.bus_transfer_price
@@ -3995,7 +4022,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                             <Price
                               currency="KES"
                               stayPrice={
-                                selected.name.toLowerCase() == "car"
+                                selected.name.toLowerCase() == "van"
                                   ? stay.car_transfer_price
                                   : selected.name.toLowerCase() == "bus"
                                   ? stay.bus_transfer_price
@@ -4280,6 +4307,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     isOpen={showCheckoutResponseModal}
                     closeModal={() => {
                       setShowCheckoutResponseModal(false);
+                      router.back();
                     }}
                     dialoguePanelClassName="!max-w-md !h-[265px]"
                     title={"Thanks for booking this stay"}
@@ -4300,7 +4328,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                         }}
                         className="flex w-[60%] mt-3 mb-3 items-center gap-1 !px-0 !py-3 font-bold !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white"
                       >
-                        <span>Checkout other events</span>
+                        <span>Back to Gondwana</span>
                       </Button>
 
                       <Button
@@ -4309,7 +4337,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                         }}
                         className="flex w-[40%] mt-3 mb-3 items-center gap-1 !px-0 !py-3 font-bold !bg-transparent hover:!bg-gray-200 !border !border-gray-400 !text-black"
                       >
-                        <span>Go back home</span>
+                        <span>Check out Winda</span>
                       </Button>
                     </div>
                   </Dialogue>

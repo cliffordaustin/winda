@@ -9,12 +9,9 @@ import { Icon } from "@iconify/react";
 import { Cookies } from "js-cookie";
 
 import getToken from "../../lib/getToken";
-import Button from "../../components/ui/Button";
-import Input from "../../components/ui/Input";
-import TextArea from "../../components/ui/TextArea";
-import LoadingSpinerChase from "../../components/ui/LoadingSpinerChase";
+
 import UserDropdown from "../../components/Home/UserDropdown";
-import Dialogue from "../../components/Home/Dialogue";
+import CarouselAutoPlay from "../../components/ui/CarouselAutoplay";
 import { useRouter } from "next/router";
 import Listings from "../../components/Lodging/Listings";
 import Carousel from "../../components/ui/Carousel";
@@ -73,6 +70,12 @@ function RequestTrip({ userProfile, stays }) {
     return standardRoom.price;
   };
 
+  const carouselImages = [
+    "/images/gondwana_img1.jpg",
+    "/images/gondwana_img2.jpg",
+    "/images/gondwana_img3.jpg",
+  ];
+
   return (
     <div>
       <div className="fixed top-0 w-full bg-white z-50">
@@ -96,23 +99,24 @@ function RequestTrip({ userProfile, stays }) {
         </div>
       </div>
       <div className="flex md:bg-gray-100 gap-2 mt-[80px] relative">
-        <div className="px-2 hidden md:block h-[91vh] mt-0 sticky top-[80px] w-[45%] xl:w-[55%] before:absolute before:left-0 before:right-0 before:h-[91vh] before:w-full before:z-30 before:bg-black before:opacity-40">
-          <Image
-            layout="fill"
-            alt="Image of a car and a lion"
-            src="/images/gondwana_img.jpg"
-            className="object-cover z-10"
-            unoptimized={true}
-            priority
-          ></Image>
+        <div className="hidden md:block h-[91vh] mt-0 sticky top-[80px] w-[45%] xl:w-[55%] before:absolute before:left-0 before:right-0 before:h-[91vh] before:w-full before:z-30 before:bg-black before:opacity-40">
+          <CarouselAutoPlay
+            images={carouselImages}
+            imageClass="!w-full rounded-none"
+          ></CarouselAutoPlay>
 
           <div className="flex flex-col absolute bottom-16 left-4 z-40">
             <div className="font-mono text-2xl mb-1 text-white">
               INTRODUCING
             </div>
             <div className="font-bold text-white font-lobster text-6xl">
-              Gondwana event
+              Dwana in the Wild: Amboseli Edition
             </div>
+
+            <p className="font-SourceSans text-lg mt-1 text-white">
+              These are our select partner lodges for Dwana in the Wild and we
+              have the best rates for them.
+            </p>
           </div>
         </div>
         <div
@@ -236,25 +240,26 @@ function RequestTrip({ userProfile, stays }) {
                     )}
                   </div>
 
-                  <div className="text-gray-600 text-sm mt-2">
-                    {Math.round(
-                      getDistanceFromLatLonInKm(
-                        stay.latitude,
-                        stay.longitude,
-                        userLatLng.latitude,
-                        userLatLng.longitude
-                      )
-                    ).toLocaleString()}
-                    KM Away
-                  </div>
+                  {stay.distance_from_venue && (
+                    <div className="text-gray-700 text-xs mt-2">
+                      {stay.distance_from_venue.toLocaleString()}
+                      KM{" "}
+                      <span className="text-gray-500">away from the venue</span>
+                    </div>
+                  )}
 
                   <div className="flex justify-between relative">
                     <div className="mt-2 flex flex-col">
-                      <Price
-                        currency="KES"
-                        stayPrice={getStandardRoomPrice(stay)}
-                        className="text-2xl"
-                      ></Price>
+                      <div className="flex gap-1">
+                        <span className="uppercase text-xs text-gray-500 self-end mb-1">
+                          From
+                        </span>
+                        <Price
+                          currency="KES"
+                          stayPrice={getStandardRoomPrice(stay)}
+                          className="text-2xl"
+                        ></Price>
+                      </div>
                       <p className="text-gray-500 text-xs">per night</p>
                       {/* {stay.car_transfer_price && (
                         <div className="text-gray-500 text-xs mt-1 underline flex gap-1">
