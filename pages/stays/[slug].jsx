@@ -125,7 +125,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
   const [addToBasketLoading, setAddToBasketLoading] = useState(false);
 
   const [scrollRef, inView, entry] = useInView({
-    rootMargin: "-98px 0px",
+    rootMargin: "-70px 0px",
   });
 
   const priceConversionRate = async () => {
@@ -1044,11 +1044,11 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               className={
                 stay.is_an_event
                   ? "w-full md:!max-w-[1000px] !mx-auto !border-none px-4"
-                  : "md:w-[56%] lg:w-[63%]  md:border-r md:border-gray-200 md:absolute md:mt-0 mt-10 left-0 md:block top-10"
+                  : "md:w-[56%] lg:w-[63%] md:border-r md:border-gray-200 md:absolute md:mt-0 mt-10 left-0 md:block top-10"
               }
             >
               <div className="!relative" name="about">
-                <div className={stay.is_an_event ? "mt-30" : "mt-10 px-3"}>
+                <div className={stay.is_an_event ? "mt-[135px]" : "mt-10 px-3"}>
                   <div className="text-sm text-gray-600 font-medium flex items-center">
                     <div>
                       <div
@@ -1174,7 +1174,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                   className={
                     (guestPopup ? " !z-0 " : " ") +
                     (stay.is_an_event
-                      ? "h-[60px] bg-white z-10 border-t border-b flex sticky left-0 right-0 "
+                      ? "h-[60px] bg-white z-10 border-t border-b flex left-0 right-0 "
                       : "h-12 border-b border-gray-200 w-[100%] px-3 lg:px-10 bg-slate-100 sticky left-0 right-0") +
                     (isSafari ? "top-[108px]" : "top-[115.25px]")
                   }

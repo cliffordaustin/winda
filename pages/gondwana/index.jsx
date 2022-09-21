@@ -101,7 +101,15 @@ function RequestTrip({ userProfile, stays }) {
           </div>
         </div>
       </div>
-      <div className="flex md:bg-gray-100 gap-2 mt-[110px] relative">
+
+      <div className="md:hidden h-[400px] mt-[110px]">
+        <Carousel
+          images={carouselImages}
+          imageClass="!w-full rounded-none"
+          objectPosition="top"
+        ></Carousel>
+      </div>
+      <div className="flex md:bg-gray-100 gap-2 mt-[20px] md:mt-[110px] relative">
         <div className="hidden md:block h-[91vh] mt-0 sticky top-[80px] w-[45%] xl:w-[55%]">
           <Carousel
             images={carouselImages}
@@ -117,10 +125,10 @@ function RequestTrip({ userProfile, stays }) {
               Dwana in the Wild: Amboseli Edition
             </div> */}
 
-            <p className="font-mono text-2xl mt-1 text-white">
+            {/* <p className="font-mono text-2xl mt-1 text-white">
               These are our select partner lodges for Dwana in the Wild and we
               have the best rates for them.
-            </p>
+            </p> */}
           </div>
         </div>
         <div
