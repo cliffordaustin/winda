@@ -2446,7 +2446,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                   <div className="w-full">
                     <h1 className="mb-3 text-lg font-bold">Choose your room</h1>
                   </div>
-                  <div className="my-4 flex gap-3">
+                  <div className="my-4 flex flex-wrap gap-3">
                     <div className="hidden md:block">
                       <PopoverBox
                         btnPopover={
@@ -2552,7 +2552,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       <SelectTravellers></SelectTravellers>
                     </PopoverBox>
 
-                    <div className="hidden md:block">
+                    <div className="">
                       <TransportType></TransportType>
                     </div>
 
