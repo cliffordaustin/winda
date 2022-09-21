@@ -4186,16 +4186,16 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       </h1>
                       <div className="flex justify-between items-center">
                         <h1 className="font-bold">Paybill Number</h1>
-                        <p>123ABC</p>
+                        <p>329329</p>
                       </div>
 
                       <div className="flex justify-between items-center">
-                        <h1 className="font-bold">Account reference number</h1>
-                        <p>475837289438</p>
+                        <h1 className="font-bold">Account Number</h1>
+                        <p>0102479992200</p>
                       </div>
 
                       <div className="flex justify-between items-center">
-                        <h1 className="font-bold">Amount to pay</h1>
+                        <h1 className="font-bold">Amount to Pay</h1>
                         <Price
                           currency="KES"
                           stayPrice={totalPriceOfStay(
