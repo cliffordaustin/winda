@@ -48,7 +48,7 @@ function Carousel({
           });
         }}
         autoplay={{
-          delay: 2500,
+          delay: 5000,
           disableOnInteraction: false,
         }}
         className="!h-full !relative !w-full "

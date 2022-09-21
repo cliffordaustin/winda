@@ -71,6 +71,7 @@ function RequestTrip({ userProfile, stays }) {
   };
 
   const carouselImages = [
+    "/images/gondwana_img5.jpg",
     "/images/gondwana_img1.jpg",
     "/images/gondwana_img2.jpg",
     "/images/gondwana_img3.jpg",
@@ -99,11 +100,11 @@ function RequestTrip({ userProfile, stays }) {
         </div>
       </div>
       <div className="flex md:bg-gray-100 gap-2 mt-[80px] relative">
-        <div className="hidden md:block h-[91vh] mt-0 sticky top-[80px] w-[45%] xl:w-[55%] before:absolute before:left-0 before:right-0 before:h-[91vh] before:w-full before:z-30 before:bg-black before:opacity-40">
-          <CarouselAutoPlay
+        <div className="hidden md:block h-[91vh] mt-0 sticky top-[80px] w-[45%] xl:w-[55%] ">
+          <Carousel
             images={carouselImages}
             imageClass="!w-full rounded-none"
-          ></CarouselAutoPlay>
+          ></Carousel>
 
           <div className="flex flex-col absolute bottom-16 left-4 z-40">
             <div className="font-mono text-2xl mb-1 text-white">
