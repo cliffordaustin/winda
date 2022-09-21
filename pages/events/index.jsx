@@ -95,7 +95,7 @@ function RequestTrip({ userProfile, stays }) {
           </div>
         </div>
       </div>
-      <div className="flex bg-gray-100 gap-2 mt-[80px] relative">
+      <div className="flex md:bg-gray-100 gap-2 mt-[80px] relative">
         <div className="px-2 hidden md:block h-[91vh] mt-0 sticky top-[80px] w-[45%] xl:w-[55%] before:absolute before:left-0 before:right-0 before:h-[91vh] before:w-full before:z-30 before:bg-black before:opacity-40">
           <Image
             layout="fill"
@@ -139,7 +139,7 @@ function RequestTrip({ userProfile, stays }) {
                   ></Carousel>
                 </div>
 
-                <div className="py-2 md:px-0 px-2 w-[400px]">
+                <div className="py-2 md:px-0 px-2 md:w-[400px]">
                   <div className="uppercase text-xs text-gray-600 truncate">
                     {stay.location}
                   </div>
@@ -248,7 +248,7 @@ function RequestTrip({ userProfile, stays }) {
                     KM Away
                   </div>
 
-                  <div className="flex justify-between">
+                  <div className="flex justify-between relative">
                     <div className="mt-2 flex flex-col">
                       <Price
                         currency="KES"
@@ -286,7 +286,7 @@ function RequestTrip({ userProfile, stays }) {
 
                     <Link href={`/stays/${stay.slug}`}>
                       <a className="self-end">
-                        <div className="w-fit cursor-pointer mr-3 px-3 py-1.5 gap-0.5 rounded-md flex items-center justify-center bg-blue-500 text-white">
+                        <div className="w-fit cursor-pointer mr-3 absolute md:static bottom-0 right-0 px-3 py-1.5 gap-0.5 rounded-md flex items-center justify-center bg-blue-500 text-white">
                           <span className="font-bold">view</span>
                           <Icon icon="akar-icons:chevron-right" />
                         </div>
