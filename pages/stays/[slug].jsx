@@ -577,12 +577,16 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
     Number(router.query.adults) || 1
   );
 
+  const [passengers, setPassengers] = useState(
+    Number(router.query.passengers) || 0
+  );
+
   const [rooms, setRooms] = useState(Number(router.query.rooms) || 1);
 
   function SelectTravellers() {
     return (
-      <div className="w-[250px] p-4">
-        <div className="flex items-center justify-between">
+      <div className="w-full p-4">
+        <div className="flex items-center w-full justify-between">
           <h1 className="text-sm font-bold">
             {rooms} {rooms > 1 ? "Rooms" : "Room"}
           </h1>
@@ -632,6 +636,53 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
             <div
               onClick={() => {
                 setAdultTravelers(adultTravelers + 1);
+              }}
+              className="md:w-[40px] w-[30px] h-[30px] cursor-pointer md:h-[40px] rounded-full border flex items-center justify-center font-bold"
+            >
+              {" "}
+              +{" "}
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center mt-4 justify-between">
+          <h1 className="text-sm font-bold">
+            {passengers} {passengers > 1 ? "Passengers" : "Passenger"}
+            {router.query.transport && router.query.transport === "0" && (
+              <span>(select a transport option first)</span>
+            )}
+          </h1>
+          <div className="flex items-center gap-3">
+            <div
+              onClick={() => {
+                if (passengers > 1) {
+                  router.replace(
+                    {
+                      query: {
+                        ...router.query,
+                        passengers: Number(passengers) - 1,
+                      },
+                    },
+                    undefined,
+                    { shallow: true }
+                  );
+                }
+              }}
+              className="md:w-[40px] w-[30px] h-[30px] cursor-pointer md:h-[40px] rounded-full border flex items-center justify-center font-bold"
+            >
+              {" "}
+              -{" "}
+            </div>
+            <div
+              onClick={() => {
+                if (router.query.transport && router.query.transport !== "0") {
+                  router.push({
+                    query: {
+                      ...router.query,
+                      passengers: Number(passengers) + 1,
+                    },
+                  });
+                }
               }}
               className="md:w-[40px] w-[30px] h-[30px] cursor-pointer md:h-[40px] rounded-full border flex items-center justify-center font-bold"
             >
@@ -716,6 +767,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
       <Listbox
         value={selected}
         onChange={(value) => {
+          setPassengers(0);
           router.replace(
             {
               query: {
@@ -817,7 +869,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
       new Date(router.query.starting_date).getDate();
     const rooms = Number(router.query.rooms);
     const adults = Number(router.query.adults);
-    const children = Number(router.query.children);
+
     return (
       nights +
       (nights > 1 ? " nights" : " night") +
@@ -826,10 +878,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
       (rooms > 1 ? " rooms" : " room") +
       ", " +
       adults +
-      (adults > 1 ? " adults" : " adult") +
-      (children > 0
-        ? ", " + children + (children > 1 ? " children" : " child")
-        : "")
+      (adults > 1 ? " adults" : " adult")
     );
   }
 
@@ -2643,15 +2692,15 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                                         ? stay.car_transfer_price
                                         : selected.name.toLowerCase() == "bus"
                                         ? stay.bus_transfer_price
-                                        : 0)
+                                        : 0) *
+                                        Number(passengers)
                                     }
                                   ></Price>
                                 </div>
 
                                 {Number(router.query.rooms || 1) <=
                                   room.available_rooms &&
-                                  (Number(router.query.adults) +
-                                    Number(router.query.children) || 1) <=
+                                  (Number(router.query.adults) || 1) <=
                                     room.sleeps && (
                                     <div
                                       onClick={() => {
@@ -2675,8 +2724,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
                           {Number(router.query.rooms || 1) <=
                             room.available_rooms &&
-                            (Number(router.query.adults) +
-                              Number(router.query.children) || 1) <=
+                            (Number(router.query.adults) || 1) <=
                               room.sleeps && (
                               <div className="text-sm text-gray-600 font-bold border-l-8 border-blue-100 px-3 py-2">
                                 <div>
@@ -2684,18 +2732,23 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                                   {Number(router.query.rooms || 1) > 1
                                     ? "rooms"
                                     : "room"}
-                                  ,{" "}
-                                  {Number(router.query.adults || 1) +
-                                    Number(router.query.children || 0)}{" "}
-                                  {Number(router.query.adults || 1) +
-                                    Number(router.query.children || 0) >
-                                  1
+                                  , {Number(router.query.adults || 1)}{" "}
+                                  {Number(router.query.adults || 1) > 1
                                     ? "people"
                                     : "person"}{" "}
                                 </div>
 
                                 <div className="mt-1 lowercase">
-                                  with {selected.name}
+                                  with {selected.name}{" "}
+                                  {passengers > 0 && (
+                                    <span>
+                                      ({passengers}{" "}
+                                      {passengers > 1
+                                        ? "passengers"
+                                        : "passenger"}
+                                      )
+                                    </span>
+                                  )}
                                 </div>
 
                                 {router.query.starting_date &&
@@ -2747,8 +2800,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                             )}
                           {(Number(router.query.rooms || 1) >
                             room.available_rooms ||
-                            (Number(router.query.adults) +
-                              Number(router.query.children) || 1) >
+                            (Number(router.query.adults) || 1) >
                               room.sleeps) && (
                             <div className="font-bold text-red-600 px-3 py-2 text-sm">
                               Not available
