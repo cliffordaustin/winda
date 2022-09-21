@@ -198,7 +198,7 @@ function ScrollTo({ guestPopup, stay }) {
           show={!dontShowReserveBtn}
         >
           <Link
-            className="px-3 cursor-pointer flex items-center justify-center text-sm bg-blue-600 w-[150px] py-2 text-white font-bold rounded-md"
+            className="px-3 cursor-pointer md:flex hidden items-center justify-center text-sm bg-blue-600 w-[150px] py-2 text-white font-bold rounded-md"
             to="rooms"
             spy={true}
             smooth={true}

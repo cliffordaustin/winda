@@ -11,6 +11,7 @@ import { Listbox, Transition } from "@headlessui/react";
 import { useInView } from "react-intersection-observer";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { Link as ReactScrollLink } from "react-scroll";
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 
@@ -580,7 +581,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
   function SelectTravellers() {
     return (
-      <div className="w-full p-4">
+      <div className="w-[250px] p-4">
         <div className="flex items-center justify-between">
           <h1 className="text-sm font-bold">
             {rooms} {rooms > 1 ? "Rooms" : "Room"}
@@ -592,7 +593,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                   setRooms(rooms - 1);
                 }
               }}
-              className="w-[40px] cursor-pointer h-[40px] rounded-full border flex items-center justify-center font-bold"
+              className="md:w-[40px] w-[30px] h-[30px] cursor-pointer md:h-[40px] rounded-full border flex items-center justify-center font-bold"
             >
               {" "}
               -{" "}
@@ -604,7 +605,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                   setAdultTravelers(adultTravelers + 1);
                 }
               }}
-              className="w-[40px] cursor-pointer h-[40px] rounded-full border flex items-center justify-center font-bold"
+              className="md:w-[40px] w-[30px] h-[30px] cursor-pointer md:h-[40px] rounded-full border flex items-center justify-center font-bold"
             >
               {" "}
               +{" "}
@@ -623,7 +624,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                   setAdultTravelers(adultTravelers - 1);
                 }
               }}
-              className="w-[40px] cursor-pointer h-[40px] rounded-full border flex items-center justify-center font-bold"
+              className="md:w-[40px] w-[30px] h-[30px] cursor-pointer md:h-[40px] rounded-full border flex items-center justify-center font-bold"
             >
               {" "}
               -{" "}
@@ -632,7 +633,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               onClick={() => {
                 setAdultTravelers(adultTravelers + 1);
               }}
-              className="w-[40px] cursor-pointer h-[40px] rounded-full border flex items-center justify-center font-bold"
+              className="md:w-[40px] w-[30px] h-[30px] cursor-pointer md:h-[40px] rounded-full border flex items-center justify-center font-bold"
             >
               {" "}
               +{" "}
@@ -909,6 +910,73 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
     },
   });
 
+  const getStandardRoomPrice = (stay) => {
+    const standardRoom = stay.type_of_rooms.find(
+      (room) => room.is_standard === true
+    );
+    return standardRoom.price;
+  };
+
+  const [showMobileRoomDateModal, setShowMobileRoomDateModal] = useState(false);
+
+  const MobileRoomDatePopup = () => {
+    return (
+      <Dialogue
+        isOpen={showMobileRoomDateModal}
+        closeModal={() => setShowMobileRoomDateModal(false)}
+        dialoguePanelClassName={
+          " !h-[100vh] !rounded-none relative overflow-y-scroll !p-0 remove-scroll "
+        }
+        outsideDialogueClass="!p-0"
+      >
+        <div className="h-[100px] flex flex-col justify-between border-b border-b-gray-300 py-2 px-2 sticky top-0 left-0 right-0 bg-white">
+          <div
+            onClick={() => setShowMobileRoomDateModal(false)}
+            className="bg-white cursor-pointer border w-8 h-8 rounded-full flex items-center justify-center shadow-md text-lg font-bold"
+          >
+            <span>x</span>
+          </div>
+          <div className="flex gap-2 items-center">
+            <div className="text-lg font-bold">
+              {eventDate.from
+                ? moment(eventDate.from).format("Do MMM")
+                : "Select check-in date"}
+            </div>
+            <Icon icon="ant-design:arrow-right-outlined" className="w-6 h-6" />
+            <div className="text-lg font-bold">
+              {eventDate.from && !eventDate.to
+                ? "Select check-out date"
+                : moment(eventDate.to).format("Do MMM")}
+            </div>
+          </div>
+        </div>
+        <div className="p-4">
+          <DayPicker
+            mode="range"
+            disabled={{ before: new Date(2022, 9, 8) }}
+            selected={eventDate}
+            onSelect={(date) => {
+              if (date) {
+                setEventDate(date);
+              }
+            }}
+            defaultMonth={new Date(2022, 9)}
+            // numberOfMonths={14}
+            reverseMonths={true}
+            // dir="ltr"
+            className="rounded-lg !w-full p-4"
+          />
+        </div>
+
+        <div className="h-[80px] flex flex-col items-center justify-center border-t border-t-gray-300 py-2 px-2 sticky bottom-0 left-0 right-0 bg-white">
+          <div className="w-[90%] px-3 cursor-pointer flex items-center justify-center text-sm bg-blue-600 py-3 text-white font-bold rounded-3xl">
+            Check availability
+          </div>
+        </div>
+      </Dialogue>
+    );
+  };
+
   return (
     <div
       className={
@@ -959,7 +1027,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
             <div
               className={
                 stay.is_an_event
-                  ? "!max-w-[1000px] !mx-auto !border-none px-4"
+                  ? "w-full md:!max-w-[1000px] !mx-auto !border-none px-4"
                   : "md:w-[56%] lg:w-[63%]  md:border-r md:border-gray-200 md:absolute md:mt-0 mt-10 left-0 md:block top-10"
               }
             >
@@ -1015,7 +1083,9 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                   <div className="text-2xl font-bold">{stay.name}</div>
                 </div>
 
-                <div className={stay.is_an_event ? " " : " -ml-8 -mr-0"}>
+                <div
+                  className={stay.is_an_event ? "-ml-8 -mr-4 " : " -ml-8 -mr-0"}
+                >
                   <ImageGallery images={stay.stay_images}></ImageGallery>
 
                   <div className="flex absolute bg-white px-3 rounded-3xl py-1 top-4 right-3 gap-2 items-center">
@@ -1088,7 +1158,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                   className={
                     (guestPopup ? " !z-0 " : " ") +
                     (stay.is_an_event
-                      ? "h-[60px] bg-white z-10 border-t border-b left-0 right-0 flex "
+                      ? "h-[60px] bg-white z-10 border-t border-b flex sticky left-0 right-0 "
                       : "h-12 border-b border-gray-200 w-[100%] px-3 lg:px-10 bg-slate-100 sticky left-0 right-0") +
                     (isSafari ? "top-[68px]" : "top-[72.25px]")
                   }
@@ -1237,151 +1307,179 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       }
                     >
                       <div className="flex justify-between items-center gap-2">
-                        <div>
-                          <div className="flex items-center">
-                            <Price
-                              stayPrice={
-                                stay.is_an_event
-                                  ? stay.event_price
-                                  : !stay.per_house
-                                  ? (numOfAdults === 1
-                                      ? priceSingleAdultResident
-                                      : priceAdultResident) *
-                                      numOfAdults +
-                                    (numOfAdultsNonResident === 1
-                                      ? priceSingleAdultNonResident
-                                      : priceAdultNonResident) *
-                                      numOfAdultsNonResident +
-                                    (numOfChildren === 1
-                                      ? priceSingleChildResident
-                                      : priceChildResident) *
-                                      numOfChildren +
-                                    (numOfChildrenNonResident === 1
-                                      ? priceSingleChildNonResident
-                                      : priceChildNonResident) *
-                                      numOfChildrenNonResident
-                                  : stay.per_house
-                                  ? stay.per_house_price
-                                  : null
-                              }
-                            ></Price>
-                            <span className="mt-1">/night</span>
+                        {!stay.is_an_event && (
+                          <div>
+                            <div className="flex items-center">
+                              <Price
+                                stayPrice={
+                                  stay.is_an_event
+                                    ? stay.event_price
+                                    : !stay.per_house
+                                    ? (numOfAdults === 1
+                                        ? priceSingleAdultResident
+                                        : priceAdultResident) *
+                                        numOfAdults +
+                                      (numOfAdultsNonResident === 1
+                                        ? priceSingleAdultNonResident
+                                        : priceAdultNonResident) *
+                                        numOfAdultsNonResident +
+                                      (numOfChildren === 1
+                                        ? priceSingleChildResident
+                                        : priceChildResident) *
+                                        numOfChildren +
+                                      (numOfChildrenNonResident === 1
+                                        ? priceSingleChildNonResident
+                                        : priceChildNonResident) *
+                                        numOfChildrenNonResident
+                                    : stay.per_house
+                                    ? stay.per_house_price
+                                    : null
+                                }
+                              ></Price>
+                              <span className="mt-1">/night</span>
 
-                            {addToCartDate &&
-                              addToCartDate.from &&
-                              addToCartDate.to && (
-                                <div className="mx-1 mb-1 font-bold">.</div>
-                              )}
+                              {addToCartDate &&
+                                addToCartDate.from &&
+                                addToCartDate.to && (
+                                  <div className="mx-1 mb-1 font-bold">.</div>
+                                )}
 
-                            {addToCartDate &&
-                              addToCartDate.from &&
-                              addToCartDate.to && (
-                                <span className="text-sm font-bold mt-1.5">
-                                  {moment(addToCartDate.from).format("MMM DD")}{" "}
-                                  - {moment(addToCartDate.to).format("MMM DD")}
-                                </span>
-                              )}
+                              {addToCartDate &&
+                                addToCartDate.from &&
+                                addToCartDate.to && (
+                                  <span className="text-sm font-bold mt-1.5">
+                                    {moment(addToCartDate.from).format(
+                                      "MMM DD"
+                                    )}{" "}
+                                    -{" "}
+                                    {moment(addToCartDate.to).format("MMM DD")}
+                                  </span>
+                                )}
+                            </div>
+
+                            {!stay.per_house && (
+                              <div className="text-gray-600 text-sm flex flex-wrap self-end">
+                                {numOfAdultsNonResident > 0 && (
+                                  <>
+                                    <span>
+                                      {numOfAdultsNonResident}{" "}
+                                      {numOfAdultsNonResident > 1
+                                        ? "Non-Resident Adults"
+                                        : "Non-Resident Adult"}
+                                    </span>
+                                  </>
+                                )}
+                                {numOfAdults > 0 && (
+                                  <>
+                                    <span className="font-bold mx-0.5 ">,</span>
+                                    <span>
+                                      {numOfAdults}{" "}
+                                      {numOfAdults > 1
+                                        ? "Resident Adults"
+                                        : "Resident Adult"}
+                                    </span>
+                                  </>
+                                )}
+                                {numOfChildren > 0 && (
+                                  <>
+                                    <span className="font-bold mx-0.5 ">,</span>
+                                    <span>
+                                      {numOfChildren}{" "}
+                                      {numOfChildren > 1
+                                        ? "Resident Children"
+                                        : "Resident Child"}
+                                    </span>
+                                  </>
+                                )}
+
+                                {numOfChildrenNonResident > 0 && (
+                                  <>
+                                    <span className="font-bold mx-0.5 ">,</span>
+                                    <span>
+                                      {numOfChildrenNonResident}{" "}
+                                      {numOfChildrenNonResident > 1
+                                        ? "Non-Resident Children"
+                                        : "Non-Resident Child"}
+                                    </span>
+                                  </>
+                                )}
+                              </div>
+                            )}
+
+                            {stay.per_house && (
+                              <div className="text-gray-600 text-sm flex flex-wrap self-end">
+                                {numOfAdults > 0 && (
+                                  <>
+                                    <span>
+                                      {numOfAdults}{" "}
+                                      {numOfAdults > 1 ? "Adults" : "Adult"}
+                                    </span>
+                                  </>
+                                )}
+
+                                {numOfChildren > 0 && (
+                                  <>
+                                    <span className="font-bold mx-0.5 ">,</span>
+                                    <span>
+                                      {numOfChildren}{" "}
+                                      {numOfChildren > 1 ? "Children" : "Child"}
+                                    </span>
+                                  </>
+                                )}
+                              </div>
+                            )}
                           </div>
-
-                          {!stay.per_house && (
-                            <div className="text-gray-600 text-sm flex flex-wrap self-end">
-                              {numOfAdultsNonResident > 0 && (
-                                <>
-                                  <span>
-                                    {numOfAdultsNonResident}{" "}
-                                    {numOfAdultsNonResident > 1
-                                      ? "Non-Resident Adults"
-                                      : "Non-Resident Adult"}
-                                  </span>
-                                </>
-                              )}
-                              {numOfAdults > 0 && (
-                                <>
-                                  <span className="font-bold mx-0.5 ">,</span>
-                                  <span>
-                                    {numOfAdults}{" "}
-                                    {numOfAdults > 1
-                                      ? "Resident Adults"
-                                      : "Resident Adult"}
-                                  </span>
-                                </>
-                              )}
-                              {numOfChildren > 0 && (
-                                <>
-                                  <span className="font-bold mx-0.5 ">,</span>
-                                  <span>
-                                    {numOfChildren}{" "}
-                                    {numOfChildren > 1
-                                      ? "Resident Children"
-                                      : "Resident Child"}
-                                  </span>
-                                </>
-                              )}
-
-                              {numOfChildrenNonResident > 0 && (
-                                <>
-                                  <span className="font-bold mx-0.5 ">,</span>
-                                  <span>
-                                    {numOfChildrenNonResident}{" "}
-                                    {numOfChildrenNonResident > 1
-                                      ? "Non-Resident Children"
-                                      : "Non-Resident Child"}
-                                  </span>
-                                </>
-                              )}
-                            </div>
-                          )}
-
-                          {stay.per_house && (
-                            <div className="text-gray-600 text-sm flex flex-wrap self-end">
-                              {numOfAdults > 0 && (
-                                <>
-                                  <span>
-                                    {numOfAdults}{" "}
-                                    {numOfAdults > 1 ? "Adults" : "Adult"}
-                                  </span>
-                                </>
-                              )}
-
-                              {numOfChildren > 0 && (
-                                <>
-                                  <span className="font-bold mx-0.5 ">,</span>
-                                  <span>
-                                    {numOfChildren}{" "}
-                                    {numOfChildren > 1 ? "Children" : "Child"}
-                                  </span>
-                                </>
-                              )}
-                            </div>
-                          )}
-                        </div>
-
-                        <Button
-                          onClick={() => {
-                            setShowMobileDateModal(true);
-                          }}
-                          className={
-                            "!bg-gradient-to-r !px-2 from-pink-500 via-red-500 to-yellow-500 !text-white " +
-                            (!inCart ? "" : "")
-                          }
-                        >
-                          {!inCart && !stay.is_an_event
-                            ? "Add to basket"
-                            : !inCart && stay.is_an_event
-                            ? "Book now"
-                            : "Add again"}
-                          <div
+                        )}
+                        {stay.is_an_event && (
+                          <div>
+                            <Price
+                              currency="KES"
+                              stayPrice={getStandardRoomPrice(stay)}
+                              className="text-2xl"
+                            ></Price>
+                          </div>
+                        )}
+                        {!stay.is_an_event && (
+                          <Button
+                            onClick={() => {
+                              setShowMobileDateModal(true);
+                            }}
                             className={
-                              " " + (!addToBasketLoading ? "hidden" : "ml-2")
+                              "!bg-gradient-to-r !px-2 from-pink-500 via-red-500 to-yellow-500 !text-white " +
+                              (!inCart ? "" : "")
                             }
                           >
-                            <LoadingSpinerChase
-                              width={16}
-                              height={16}
-                              color="#fff"
-                            ></LoadingSpinerChase>
-                          </div>
-                        </Button>
+                            {!inCart && !stay.is_an_event
+                              ? "Add to basket"
+                              : !inCart && stay.is_an_event
+                              ? "Book now"
+                              : "Add again"}
+                            <div
+                              className={
+                                " " + (!addToBasketLoading ? "hidden" : "ml-2")
+                              }
+                            >
+                              <LoadingSpinerChase
+                                width={16}
+                                height={16}
+                                color="#fff"
+                              ></LoadingSpinerChase>
+                            </div>
+                          </Button>
+                        )}
+
+                        {stay.is_an_event && (
+                          <ReactScrollLink
+                            className="cursor-pointer flex items-center justify-center text-sm bg-blue-600 px-2 py-2 text-white font-bold rounded-md"
+                            to="rooms"
+                            spy={true}
+                            smooth={true}
+                            offset={-400}
+                            duration={500}
+                          >
+                            <span>Reserve a room</span>
+                          </ReactScrollLink>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -2069,7 +2167,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                   </Dialogue>
                 )}
 
-                <div className={"mt-10 " + (!stay.is_an_event ? "px-4" : "")}>
+                <div className={"mt-6 " + (!stay.is_an_event ? "px-4" : "")}>
                   {!showAllDescription && (
                     <p className="font-medium text-gray-600">
                       {stay.description.slice(0, 500)}
@@ -2334,7 +2432,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     <h1 className="mb-3 text-lg font-bold">Choose your room</h1>
                   </div>
                   <div className="my-4 flex gap-3">
-                    <div>
+                    <div className="hidden md:block">
                       <PopoverBox
                         btnPopover={
                           <div className="border cursor-pointer border-gray-600 flex items-center gap-2 px-3 py-2">
@@ -2376,9 +2474,52 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                         </div>
                       )}
                     </div>
+
+                    <div
+                      onClick={() => {
+                        setShowMobileRoomDateModal(true);
+                      }}
+                      className="md:hidden"
+                    >
+                      <div className="border cursor-pointer border-gray-600 flex items-center gap-2 px-1 py-2">
+                        <Icon icon="fontisto:date" className="w-6 h-6" />
+                        <div className="flex flex-col">
+                          <span className="text-sm font-bold self-start">
+                            Select a date
+                          </span>
+                          <span className="text-gray-500 text-sm">
+                            {eventDate.from &&
+                              eventDate.to &&
+                              moment(eventDate.from).format("Do MMM") +
+                                " - " +
+                                moment(eventDate.to).format("Do MMM")}
+
+                            {!eventDate.from && (
+                              <span className="text-gray-500 text-sm">
+                                Select check-in date
+                              </span>
+                            )}
+
+                            {eventDate.from && !eventDate.to && (
+                              <span className="text-gray-500 text-sm">
+                                Select check-out date
+                              </span>
+                            )}
+                          </span>
+                        </div>
+                      </div>
+
+                      <MobileRoomDatePopup></MobileRoomDatePopup>
+
+                      {!eventDate.to && (
+                        <div className="text-sm text-red-500">
+                          please select a checkout date
+                        </div>
+                      )}
+                    </div>
                     <PopoverBox
                       btnPopover={
-                        <div className="border cursor-pointer border-gray-600 flex items-center gap-2 px-3 py-2">
+                        <div className="border cursor-pointer border-gray-600 flex items-center gap-2 px-1 md:px-3 py-2">
                           <Icon icon="bxs:user" className="w-6 h-6" />
                           <div className="flex flex-col">
                             <span className="text-sm font-bold self-start">
@@ -2391,21 +2532,26 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                           </div>
                         </div>
                       }
-                      panelClassName="h-fit !max-w-[400px] md:!w-[400px] rounded-lg bg-white left-0 border shadow-lg mt-1 top-full"
+                      panelClassName="h-fit !max-w-[400px] md:!w-[400px] rounded-lg bg-white right-0 md:left-0 border shadow-lg mt-1 top-full"
                     >
                       <SelectTravellers></SelectTravellers>
                     </PopoverBox>
 
-                    <TransportType></TransportType>
+                    <div className="hidden md:block">
+                      <TransportType></TransportType>
+                    </div>
 
                     <div
                       onClick={() => {
                         checkAvailability();
                       }}
-                      className="px-3 py-4 cursor-pointer flex self-start items-center justify-center bg-blue-600 w-fit text-white font-bold rounded-md"
+                      className="px-3 hidden md:flex py-4 cursor-pointer self-start items-center justify-center bg-blue-600 w-fit text-white font-bold rounded-md"
                     >
                       Check availability
                     </div>
+                  </div>
+                  <div className="px-3 cursor-pointer flex md:hidden items-center justify-center text-sm bg-blue-600 w-full sm:w-[70%] py-2 mb-4 text-white font-bold rounded-md">
+                    Check availability
                   </div>
                   {router.query.transport && router.query.transport !== "0" && (
                     <div className="w-full my-3 px-2 py-2 bg-yellow-100 text-yellow-600 flex gap-2 items-center">
@@ -2419,7 +2565,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       </span>
                     </div>
                   )}
-                  <div className="flex items-start flex-wrap gap-3">
+                  <div className="flex md:flex-row flex-col items-start flex-wrap gap-3">
                     {stay.type_of_rooms.map((room, index) => {
                       const sortedImages = room.type_of_room_images.sort(
                         (x, y) => y.main - x.main

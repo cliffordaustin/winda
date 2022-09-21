@@ -130,13 +130,16 @@ function RequestTrip({ userProfile, stays }) {
             return (
               <div
                 key={index}
-                className="w-full h-[185px] flex gap-3 bg-white rounded-md overflow-hidden border"
+                className="w-full md:h-[185px] flex md:flex-row flex-col gap-3 bg-white rounded-md overflow-hidden border"
               >
-                <div className="h-full w-[200px]">
-                  <Carousel images={images} imageClass=""></Carousel>
+                <div className="md:h-full w-full h-[200px] md:w-[200px]">
+                  <Carousel
+                    images={images}
+                    imageClass="rounded-t-md md:rounded-t-none md:rounded-l-md"
+                  ></Carousel>
                 </div>
 
-                <div className="py-2 w-[400px]">
+                <div className="py-2 md:px-0 px-2 w-[400px]">
                   <div className="uppercase text-xs text-gray-600 truncate">
                     {stay.location}
                   </div>
