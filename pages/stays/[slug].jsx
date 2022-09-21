@@ -66,6 +66,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Carousel from "../../components/ui/Carousel";
 import Input from "../../components/ui/Input";
+import ContactBanner from "../../components/Home/ContactBanner";
 
 const StaysDetail = ({ userProfile, stay, inCart }) => {
   const GlobalStyle = createGlobalStyle`
@@ -1011,6 +1012,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
         </Head>
         <GlobalStyle></GlobalStyle>
         <div className="fixed top-0 w-full bg-white z-20">
+          {stay.is_an_event && <ContactBanner></ContactBanner>}
           <Navbar
             showDropdown={state.showDropdown}
             currentNavState={state.currentNavState}
@@ -1046,7 +1048,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               }
             >
               <div className="!relative" name="about">
-                <div className={stay.is_an_event ? "mt-20" : "mt-10 px-3"}>
+                <div className={stay.is_an_event ? "mt-30" : "mt-10 px-3"}>
                   <div className="text-sm text-gray-600 font-medium flex items-center">
                     <div>
                       <div
