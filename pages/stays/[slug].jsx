@@ -896,6 +896,8 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               last_name: values.last_name,
               email: values.email,
               message: message,
+              type_of_room:
+                stay.type_of_rooms[Number(router.query.room_type)].name,
               confirmation_code: values.confirmation_code,
               phone: phone,
               adults: Number(router.query.adults),
