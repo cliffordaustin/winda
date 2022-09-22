@@ -1445,15 +1445,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                             )}
                           </div>
                         )}
-                        {stay.is_an_event && (
-                          <div>
-                            <Price
-                              currency="KES"
-                              stayPrice={getStandardRoomPrice(stay)}
-                              className="text-2xl"
-                            ></Price>
-                          </div>
-                        )}
+                        {/* {stay.is_an_event && <div></div>} */}
                         {!stay.is_an_event && (
                           <Button
                             onClick={() => {
@@ -1485,7 +1477,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
                         {stay.is_an_event && (
                           <ReactScrollLink
-                            className="cursor-pointer flex items-center justify-center text-sm bg-blue-600 px-2 py-2 text-white font-bold rounded-md"
+                            className="cursor-pointer w-full flex items-center justify-center text-sm bg-blue-600 px-2 py-2 text-white font-bold rounded-md"
                             to="rooms"
                             spy={true}
                             smooth={true}
