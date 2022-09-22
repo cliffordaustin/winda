@@ -2661,8 +2661,10 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
                                 {Number(router.query.rooms || 1) <=
                                   room.available_rooms &&
-                                  (Number(router.query.adults) || 1) <=
-                                    room.sleeps && (
+                                  Math.ceil(
+                                    Number(router.query.adults || 1) /
+                                      (Number(router.query.rooms) || 1)
+                                  ) <= room.sleeps && (
                                     <div
                                       onClick={() => {
                                         reserve(index);
@@ -2685,8 +2687,10 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
                           {Number(router.query.rooms || 1) <=
                             room.available_rooms &&
-                            (Number(router.query.adults) || 1) <=
-                              room.sleeps && (
+                            Math.ceil(
+                              Number(router.query.adults || 1) /
+                                (Number(router.query.rooms) || 1)
+                            ) <= room.sleeps && (
                               <div className="text-sm text-gray-600 font-bold border-l-8 border-blue-100 px-3 py-2">
                                 <div>
                                   for {Number(router.query.rooms || 1)}{" "}
@@ -2759,14 +2763,16 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                                   )}
                               </div>
                             )}
-                          {(Number(router.query.rooms || 1) >
+                          {Number(router.query.rooms || 1) >
                             room.available_rooms ||
-                            (Number(router.query.adults) || 1) >
-                              room.sleeps) && (
-                            <div className="font-bold text-red-600 px-3 py-2 text-sm">
-                              Not available
-                            </div>
-                          )}
+                            (Math.ceil(
+                              Number(router.query.adults || 1) /
+                                (Number(router.query.rooms) || 1)
+                            ) > room.sleeps && (
+                              <div className="font-bold text-red-600 px-3 py-2 text-sm">
+                                Not available
+                              </div>
+                            ))}
                         </div>
                       );
                     })}

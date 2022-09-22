@@ -1,0 +1,74 @@
+"filename", "language", "JSON", "JavaScript", "HTML", "CSS", "JavaScript React", "XML", "comment", "blank", "total"
+"/Users/clifford/Codings/winda-test/components/Activities/Listing.jsx", "JavaScript React", 0, 0, 0, 0, 12, 0, 0, 2, 14
+"/Users/clifford/Codings/winda-test/components/Activities/MobileSearchModal.jsx", "JavaScript React", 0, 0, 0, 0, 17, 0, 0, 1, 18
+"/Users/clifford/Codings/winda-test/components/Error/ServerError.jsx", "JavaScript React", 0, 0, 0, 0, 42, 0, 0, 6, 48
+"/Users/clifford/Codings/winda-test/components/Home/ActivitiesSearch.jsx", "JavaScript React", 0, 0, 0, 0, 6, 0, 0, 1, 7
+"/Users/clifford/Codings/winda-test/components/Home/ContactBanner.jsx", "JavaScript React", 0, 0, 0, 0, 34, 0, 0, 6, 40
+"/Users/clifford/Codings/winda-test/components/Home/CookiesMessage.jsx", "JavaScript React", 0, 0, 0, 0, 50, 0, 10, 6, 66
+"/Users/clifford/Codings/winda-test/components/Home/Footer.jsx", "JavaScript React", 0, 0, 0, 0, 48, 0, 0, 7, 55
+"/Users/clifford/Codings/winda-test/components/Home/InHeaderNavbar.jsx", "JavaScript React", 0, 0, 0, 0, 18, 0, 0, 0, 18
+"/Users/clifford/Codings/winda-test/components/Home/Main.jsx", "JavaScript React", 0, 0, 0, 0, -20, 0, 0, -3, -23
+"/Users/clifford/Codings/winda-test/components/Home/Search.jsx", "JavaScript React", 0, 0, 0, 0, 4, 0, 0, 1, 5
+"/Users/clifford/Codings/winda-test/components/Home/SearchSelect.jsx", "JavaScript React", 0, 0, 0, 0, -24, 0, 22, 1, -1
+"/Users/clifford/Codings/winda-test/components/Home/UserDropdown.jsx", "JavaScript React", 0, 0, 0, 0, 12, 0, 0, 2, 14
+"/Users/clifford/Codings/winda-test/components/Lodging/Listing.jsx", "JavaScript React", 0, 0, 0, 0, -23, 0, 0, -5, -28
+"/Users/clifford/Codings/winda-test/components/Lodging/MobileStayTypes.jsx", "JavaScript React", 0, 0, 0, 0, 9, 0, 0, 0, 9
+"/Users/clifford/Codings/winda-test/components/Lodging/Navbar.jsx", "JavaScript React", 0, 0, 0, 0, 12, 0, 0, 0, 12
+"/Users/clifford/Codings/winda-test/components/Lodging/PopularLocationsDropdown.jsx", "JavaScript React", 0, 0, 0, 0, 85, 0, 0, 6, 91
+"/Users/clifford/Codings/winda-test/components/Stay/MobileSearchModal.jsx", "JavaScript React", 0, 0, 0, 0, 17, 0, 0, 1, 18
+"/Users/clifford/Codings/winda-test/components/Stay/ScrollTo.jsx", "JavaScript React", 0, 0, 0, 0, 7, 0, 38, 3, 48
+"/Users/clifford/Codings/winda-test/components/Trip/Card.jsx", "JavaScript React", 0, 0, 0, 0, 177, 0, 75, 19, 271
+"/Users/clifford/Codings/winda-test/components/Trip/DaysAccordion.jsx", "JavaScript React", 0, 0, 0, 0, 6, 0, 0, 0, 6
+"/Users/clifford/Codings/winda-test/components/Trip/Map.jsx", "JavaScript React", 0, 0, 0, 0, -3, 0, 0, 0, -3
+"/Users/clifford/Codings/winda-test/components/Trip/RequestInfo.jsx", "JavaScript React", 0, 0, 0, 0, 160, 0, 0, 8, 168
+"/Users/clifford/Codings/winda-test/components/Trip/Search.jsx", "JavaScript React", 0, 0, 0, 0, 5, 0, -3, 0, 2
+"/Users/clifford/Codings/winda-test/components/Trip/Tags.jsx", "JavaScript React", 0, 0, 0, 0, 417, 0, 0, 56, 473
+"/Users/clifford/Codings/winda-test/components/ui/Carousel.jsx", "JavaScript React", 0, 0, 0, 0, 3, 0, 0, 0, 3
+"/Users/clifford/Codings/winda-test/components/ui/CarouselAutoplay.jsx", "JavaScript React", 0, 0, 0, 0, 70, 0, 2, 8, 80
+"/Users/clifford/Codings/winda-test/components/ui/Popover.jsx", "JavaScript React", 0, 0, 0, 0, 11, 0, 0, 0, 11
+"/Users/clifford/Codings/winda-test/components/ui/Select.jsx", "JavaScript React", 0, 0, 0, 0, 82, 0, 0, 3, 85
+"/Users/clifford/Codings/winda-test/lib/flightLocations.js", "JavaScript", 0, 172, 0, 0, 0, 0, 0, 3, 175
+"/Users/clifford/Codings/winda-test/lib/generalTransfersLocation.js", "JavaScript", 0, 225, 0, 0, 0, 0, 0, 9, 234
+"/Users/clifford/Codings/winda-test/lib/mixpanelconfig.js", "JavaScript", 0, -4, 0, 0, 0, 0, 0, 0, -4
+"/Users/clifford/Codings/winda-test/lib/onScreen.js", "JavaScript", 0, 2, 0, 0, 0, 0, 0, 0, 2
+"/Users/clifford/Codings/winda-test/lib/url.js", "JavaScript", 0, 11, 0, 0, 0, 0, 0, 0, 11
+"/Users/clifford/Codings/winda-test/next-sitemap.config.js", "JavaScript", 0, 15, 0, 0, 0, 0, 22, 1, 38
+"/Users/clifford/Codings/winda-test/next.config.js", "JavaScript", 0, 15, 0, 0, 0, 0, 0, 0, 15
+"/Users/clifford/Codings/winda-test/package-lock.json", "JSON", 125, 0, 0, 0, 0, 0, 0, 0, 125
+"/Users/clifford/Codings/winda-test/package.json", "JSON", 4, 0, 0, 0, 0, 0, 0, 0, 4
+"/Users/clifford/Codings/winda-test/pages-not-to-show/plan/[slug]/index.jsx", "JavaScript React", 0, 0, 0, 0, 1376, 0, 325, 105, 1806
+"/Users/clifford/Codings/winda-test/pages-not-to-show/plan/index.jsx", "JavaScript React", 0, 0, 0, 0, 139, 0, 1, 16, 156
+"/Users/clifford/Codings/winda-test/pages-not-to-show/transport/index.jsx", "JavaScript React", 0, 0, 0, 0, 1907, 0, 68, 142, 2117
+"/Users/clifford/Codings/winda-test/pages-not-to-show/trips/[slug]/index.jsx", "JavaScript React", 0, 0, 0, 0, 56, 0, 0, 9, 65
+"/Users/clifford/Codings/winda-test/pages/_app.js", "JavaScript", 0, 26, 0, 0, 0, 0, 8, 3, 37
+"/Users/clifford/Codings/winda-test/pages/_document.js", "JavaScript", 0, 4, 0, 0, 0, 0, 0, 0, 4
+"/Users/clifford/Codings/winda-test/pages/about-us/index.jsx", "JavaScript React", 0, 0, 0, 0, 85, 0, 0, 14, 99
+"/Users/clifford/Codings/winda-test/pages/account/index.jsx", "JavaScript React", 0, 0, 0, 0, 367, 0, 0, 32, 399
+"/Users/clifford/Codings/winda-test/pages/activities-server-sitemap.xml/index.jsx", "JavaScript React", 0, 0, 0, 0, 18, 0, 0, 6, 24
+"/Users/clifford/Codings/winda-test/pages/activities/[slug].jsx", "JavaScript React", 0, 0, 0, 0, 21, 0, 0, 0, 21
+"/Users/clifford/Codings/winda-test/pages/activities/index.jsx", "JavaScript React", 0, 0, 0, 0, -1, 0, 0, -1, -2
+"/Users/clifford/Codings/winda-test/pages/contact-us/index.jsx", "JavaScript React", 0, 0, 0, 0, 7, 0, 0, 0, 7
+"/Users/clifford/Codings/winda-test/pages/gondwana/index.jsx", "JavaScript React", 0, 0, 0, 0, 556, 0, 36, 53, 645
+"/Users/clifford/Codings/winda-test/pages/index.jsx", "JavaScript React", 0, 0, 0, 0, -94, 0, 47, -16, -63
+"/Users/clifford/Codings/winda-test/pages/payment-terms/index.jsx", "JavaScript React", 0, 0, 0, 0, 730, 0, 0, 82, 812
+"/Users/clifford/Codings/winda-test/pages/policies/index.jsx", "JavaScript React", 0, 0, 0, 0, 147, 0, 0, 18, 165
+"/Users/clifford/Codings/winda-test/pages/privacy-policy/index.jsx", "JavaScript React", 0, 0, 0, 0, 676, 0, 0, 89, 765
+"/Users/clifford/Codings/winda-test/pages/safety/index.jsx", "JavaScript React", 0, 0, 0, 0, 146, 0, 0, 17, 163
+"/Users/clifford/Codings/winda-test/pages/stays-server-sitemap.xml/index.jsx", "JavaScript React", 0, 0, 0, 0, 18, 0, 0, 7, 25
+"/Users/clifford/Codings/winda-test/pages/stays/[slug].jsx", "JavaScript React", 0, 0, 0, 0, 1440, 0, 7, 96, 1543
+"/Users/clifford/Codings/winda-test/pages/stays/index.jsx", "JavaScript React", 0, 0, 0, 0, 2, 0, 0, 0, 2
+"/Users/clifford/Codings/winda-test/pages/terms-of-service/index.jsx", "JavaScript React", 0, 0, 0, 0, 685, 0, 0, 25, 710
+"/Users/clifford/Codings/winda-test/pages/transport/index.jsx", "JavaScript React", 0, 0, 0, 0, -1705, 0, -58, -131, -1894
+"/Users/clifford/Codings/winda-test/pages/trip/[slug]/index.jsx", "JavaScript React", 0, 0, 0, 0, 268, 0, 5, 21, 294
+"/Users/clifford/Codings/winda-test/pages/trip/index.jsx", "JavaScript React", 0, 0, 0, 0, -21, 0, 0, 0, -21
+"/Users/clifford/Codings/winda-test/pages/trip/plan/[slug]/index.jsx", "JavaScript React", 0, 0, 0, 0, -1379, 0, -325, -105, -1809
+"/Users/clifford/Codings/winda-test/pages/trip/plan/index.jsx", "JavaScript React", 0, 0, 0, 0, -139, 0, -1, -16, -156
+"/Users/clifford/Codings/winda-test/pages/trip/request-trip/index.jsx", "JavaScript React", 0, 0, 0, 0, 314, 0, 0, 24, 338
+"/Users/clifford/Codings/winda-test/pages/trip/user-trips/index.jsx", "JavaScript React", 0, 0, 0, 0, 44, 0, 0, 5, 49
+"/Users/clifford/Codings/winda-test/pages/trips-server-sitemap.xml/index.jsx", "JavaScript React", 0, 0, 0, 0, 18, 0, 0, 6, 24
+"/Users/clifford/Codings/winda-test/pages/trips/[slug]/index.jsx", "JavaScript React", 0, 0, 0, 0, -56, 0, 0, -9, -65
+"/Users/clifford/Codings/winda-test/public/images/cookie-svgrepo-com.svg", "XML", 0, 0, 0, 0, 0, 108, 1, 1, 110
+"/Users/clifford/Codings/winda-test/public/maintenance.html", "HTML", 0, 0, 19, 0, 0, 0, 0, 3, 22
+"/Users/clifford/Codings/winda-test/redux/actions/auth.js", "JavaScript", 0, 3, 0, 0, 0, 0, 0, -1, 2
+"/Users/clifford/Codings/winda-test/styles/globals.css", "CSS", 0, 0, 0, 13, 0, 0, 1, 3, 17
+"Total", "-", 129, 469, 19, 13, 6859, 108, 281, 640, 8518
