@@ -834,9 +834,9 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
       nights +
       (nights > 1 ? " nights" : " night") +
       ", " +
-      rooms +
-      (rooms > 1 ? " rooms" : " room") +
-      ", " +
+      (!stay.type_of_rooms[Number(router.query.room_type)].is_tented_camp
+        ? rooms + (rooms > 1 ? " rooms" : " room") + ", "
+        : "") +
       adults +
       (adults > 1 ? " adults" : " adult")
     );
@@ -850,6 +850,22 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
     const passengers = Number(router.query.passengers);
     const total =
       price * nights * rooms +
+      (selected.name.toLowerCase() == "van"
+        ? stay.car_transfer_price * passengers
+        : selected.name.toLowerCase() == "bus"
+        ? stay.bus_transfer_price * passengers
+        : 0);
+    return total;
+  };
+
+  const totalPriceOfStayForTentedCamp = (price) => {
+    const nights =
+      new Date(router.query.end_date).getDate() -
+      new Date(router.query.starting_date).getDate();
+    const adults = Number(router.query.adults);
+    const passengers = Number(router.query.passengers);
+    const total =
+      price * nights * adults +
       (selected.name.toLowerCase() == "van"
         ? stay.car_transfer_price * passengers
         : selected.name.toLowerCase() == "bus"
@@ -901,7 +917,10 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               confirmation_code: values.confirmation_code,
               phone: phone,
               adults: Number(router.query.adults),
-              rooms: Number(router.query.rooms),
+              rooms: stay.type_of_rooms[Number(router.query.room_type)]
+                .is_tented_camp
+                ? 0
+                : Number(router.query.rooms),
               passengers: Number(router.query.passengers),
               from_date: new Date(router.query.starting_date),
               to_date: new Date(router.query.end_date),
@@ -1105,7 +1124,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                 >
                   <ImageGallery images={stay.stay_images}></ImageGallery>
 
-                  <div className="flex absolute bg-white px-3 rounded-3xl py-1 top-4 right-3 gap-2 items-center">
+                  <div className="flex absolute bg-white px-3 rounded-3xl py-1 top-0 right-3 gap-2 items-center">
                     <div className="cursor-pointer">
                       {!liked && (
                         <svg
@@ -2604,21 +2623,29 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                           key={room.id}
                           className="w-full md:w-[32%] overflow-hidden border rounded-2xl"
                         >
-                          <div>
+                          <div className="relative">
                             <div className={"w-full relative h-[170px] "}>
                               <Carousel
                                 images={images}
                                 imageClass="rounded-tl-2xl rounded-tr-2xl"
                               ></Carousel>
                             </div>
+
+                            {room.is_tented_camp && (
+                              <div className="px-1.5 py-1.5 text-sm font-bold bg-blue-600 text-white absolute w-fit left-0 top-0 rounded-tl-2xl">
+                                Tented camp
+                              </div>
+                            )}
                           </div>
 
-                          <div className="px-3 mt-3 flex flex-col gap-1 text-gray-600">
-                            <div className="flex items-center gap-2">
-                              <Icon icon="heroicons:users-20-solid" />
-                              <span>sleeps {room.sleeps}</span>
+                          {!room.is_tented_camp && (
+                            <div className="px-3 mt-3 flex flex-col gap-1 text-gray-600">
+                              <div className="flex items-center gap-2">
+                                <Icon icon="heroicons:users-20-solid" />
+                                <span>sleeps {room.sleeps}</span>
+                              </div>
                             </div>
-                          </div>
+                          )}
 
                           <div className="mt-2 px-2">
                             <h1 className="mb-3 text-base font-bold">
@@ -2632,45 +2659,96 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                             <div className="mt-2 mb-2">
                               <div className="flex justify-between items-center w-full">
                                 <div className="">
-                                  <Price
-                                    currency="KES"
-                                    stayPrice={
-                                      room.price *
-                                        (new Date(
-                                          router.query.end_date
-                                        ).getDate() -
-                                          new Date(
-                                            router.query.starting_date
-                                          ).getDate() || 1) *
-                                        (Number(router.query.rooms) || 1) +
-                                      (selected.name.toLowerCase() == "van"
-                                        ? stay.car_transfer_price
-                                        : selected.name.toLowerCase() == "bus"
-                                        ? stay.bus_transfer_price
-                                        : 0) *
-                                        Number(passengers)
-                                    }
-                                  ></Price>
+                                  {!room.is_tented_camp && (
+                                    <Price
+                                      currency="KES"
+                                      stayPrice={
+                                        room.price *
+                                          (new Date(
+                                            router.query.end_date
+                                          ).getDate() -
+                                            new Date(
+                                              router.query.starting_date
+                                            ).getDate() || 2) *
+                                          (Number(router.query.rooms) || 1) +
+                                        (selected.name.toLowerCase() == "van"
+                                          ? stay.car_transfer_price
+                                          : selected.name.toLowerCase() == "bus"
+                                          ? stay.bus_transfer_price
+                                          : 0) *
+                                          Number(passengers)
+                                      }
+                                    ></Price>
+                                  )}
+
+                                  {room.is_tented_camp && (
+                                    <>
+                                      <Price
+                                        currency="KES"
+                                        stayPrice={
+                                          room.price *
+                                            (new Date(
+                                              router.query.end_date
+                                            ).getDate() -
+                                              new Date(
+                                                router.query.starting_date
+                                              ).getDate() || 2) *
+                                            (Number(router.query.adults) || 1) +
+                                          (selected.name.toLowerCase() == "van"
+                                            ? stay.car_transfer_price
+                                            : selected.name.toLowerCase() ==
+                                              "bus"
+                                            ? stay.bus_transfer_price
+                                            : 0) *
+                                            Number(passengers)
+                                        }
+                                      ></Price>
+                                    </>
+                                  )}
                                 </div>
 
-                                {Number(router.query.rooms || 1) <=
-                                  room.available_rooms &&
-                                  Math.ceil(
-                                    Number(router.query.adults || 1) /
-                                      (Number(router.query.rooms) || 1)
-                                  ) <= room.sleeps && (
-                                    <div
-                                      onClick={() => {
-                                        reserve(index);
-                                      }}
-                                      className="px-3 text-sm cursor-pointer bg-blue-600 w-fit py-1.5 text-white font-bold rounded-md"
-                                    >
-                                      Reserve{" "}
-                                      {Number(router.query.rooms) > 1
-                                        ? Number(router.query.rooms) + " rooms"
-                                        : ""}
-                                    </div>
-                                  )}
+                                {!room.is_tented_camp && (
+                                  <div>
+                                    {Number(router.query.rooms || 1) <=
+                                      room.available_rooms &&
+                                      Math.ceil(
+                                        Number(router.query.adults || 1) /
+                                          (Number(router.query.rooms) || 1)
+                                      ) <= room.sleeps && (
+                                        <div
+                                          onClick={() => {
+                                            reserve(index);
+                                          }}
+                                          className="px-3 text-sm cursor-pointer bg-blue-600 w-fit py-1.5 text-white font-bold rounded-md"
+                                        >
+                                          Reserve{" "}
+                                          {Number(router.query.rooms) > 1
+                                            ? Number(router.query.rooms) +
+                                              " rooms"
+                                            : ""}
+                                        </div>
+                                      )}
+                                  </div>
+                                )}
+
+                                {room.is_tented_camp && (
+                                  <div>
+                                    {Number(router.query.adults || 1) <=
+                                      room.sleeps && (
+                                      <div
+                                        onClick={() => {
+                                          reserve(index);
+                                        }}
+                                        className="px-3 text-sm cursor-pointer bg-blue-600 w-fit py-1.5 text-white font-bold rounded-md"
+                                      >
+                                        Reserve{" "}
+                                        {Number(router.query.adults) > 1
+                                          ? "for " + Number(router.query.adults)
+                                          : ""}
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
                               </div>
                             </div>
                           </div>
@@ -2679,7 +2757,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                             <hr />
                           </div>
 
-                          {Number(router.query.rooms || 1) <=
+                          {/* {Number(router.query.rooms || 1) <=
                             room.available_rooms &&
                             Math.ceil(
                               Number(router.query.adults || 1) /
@@ -2687,11 +2765,17 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                             ) <= room.sleeps && (
                               <div className="text-sm text-gray-600 font-bold border-l-8 border-blue-100 px-3 py-2">
                                 <div>
-                                  for {Number(router.query.rooms || 1)}{" "}
-                                  {Number(router.query.rooms || 1) > 1
-                                    ? "rooms"
-                                    : "room"}
-                                  , {Number(router.query.adults || 1)}{" "}
+                                  for{" "}
+                                  {!room.is_tented_camp && (
+                                    <span>
+                                      {Number(router.query.rooms || 1)}{" "}
+                                      {Number(router.query.rooms || 1) > 1
+                                        ? "rooms"
+                                        : "room"}
+                                      ,{" "}
+                                    </span>
+                                  )}
+                                  {Number(router.query.adults || 1)}{" "}
                                   {Number(router.query.adults || 1) > 1
                                     ? "people"
                                     : "person"}{" "}
@@ -2756,17 +2840,103 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                                     </div>
                                   )}
                               </div>
-                            )}
-                          {Number(router.query.rooms || 1) >
-                            room.available_rooms ||
-                            (Math.ceil(
-                              Number(router.query.adults || 1) /
-                                (Number(router.query.rooms) || 1)
-                            ) > room.sleeps && (
-                              <div className="font-bold text-red-600 px-3 py-2 text-sm">
-                                Not available
-                              </div>
-                            ))}
+                            )} */}
+
+                          <div className="text-sm text-gray-600 font-bold border-l-8 border-blue-100 px-3 py-2">
+                            <div>
+                              for{" "}
+                              {!room.is_tented_camp && (
+                                <span>
+                                  {Number(router.query.rooms || 1)}{" "}
+                                  {Number(router.query.rooms || 1) > 1
+                                    ? "rooms"
+                                    : "room"}
+                                  ,{" "}
+                                </span>
+                              )}
+                              {Number(router.query.adults || 1)}{" "}
+                              {Number(router.query.adults || 1) > 1
+                                ? "people"
+                                : "person"}{" "}
+                            </div>
+
+                            <div className="mt-1 lowercase">
+                              with {selected.name}{" "}
+                              {passengers > 0 && (
+                                <span>
+                                  ({passengers}{" "}
+                                  {passengers > 1 ? "passengers" : "passenger"})
+                                </span>
+                              )}
+                            </div>
+
+                            {router.query.starting_date &&
+                              router.query.end_date && (
+                                <div className="mt-1">
+                                  from{" "}
+                                  {moment(router.query.starting_date).format(
+                                    "Do MMM"
+                                  )}{" "}
+                                  -{" "}
+                                  {moment(router.query.end_date).format(
+                                    "Do MMM"
+                                  )}{" "}
+                                  (
+                                  {new Date(router.query.end_date).getDate() -
+                                    new Date(
+                                      router.query.starting_date
+                                    ).getDate()}{" "}
+                                  {new Date(router.query.end_date).getDate() -
+                                    new Date(
+                                      router.query.starting_date
+                                    ).getDate() >
+                                  1
+                                    ? "nights"
+                                    : "night"}{" "}
+                                  )
+                                </div>
+                              )}
+
+                            {!router.query.starting_date &&
+                              !router.query.end_date && (
+                                <div className="mt-1">
+                                  from{" "}
+                                  {moment(new Date(2022, 9, 8)).format(
+                                    "Do MMM"
+                                  )}{" "}
+                                  -{" "}
+                                  {moment(new Date(2022, 9, 10)).format(
+                                    "Do MMM"
+                                  )}{" "}
+                                  (2 nights)
+                                </div>
+                              )}
+                          </div>
+                          {!room.is_tented_camp && (
+                            <div>
+                              {Number(router.query.rooms || 1) >
+                                room.available_rooms ||
+                                (Math.ceil(
+                                  Number(router.query.adults || 1) /
+                                    (Number(router.query.rooms) || 1)
+                                ) > room.sleeps && (
+                                  <div className="font-bold text-red-600 px-3 py-2 text-sm">
+                                    Not available
+                                  </div>
+                                ))}
+                            </div>
+                          )}
+
+                          {room.is_tented_camp && (
+                            <div>
+                              {Number(router.query.adults || 1) >
+                                room.sleeps && (
+                                <div className="font-bold text-red-600 px-3 py-2 text-sm">
+                                  Not available
+                                </div>
+                              )}
+                            </div>
+                          )}
                         </div>
                       );
                     })}
@@ -3962,6 +4132,12 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       <div className="text-sm font-bold underline">
                         <BreakDown></BreakDown>
                       </div>
+                      {stay.type_of_rooms[Number(router.query.room_type)]
+                        .is_tented_camp && (
+                        <div className="border border-gray-400 self-start text-xs font-bold rounded-md px-2 py-1.5">
+                          Tented camp
+                        </div>
+                      )}
                     </div>
 
                     <div className="h-[0.4px] w-[100%] bg-gray-400"></div>
@@ -3969,7 +4145,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     <div className="flex flex-col gap-3 justify-between w-full items-center">
                       <div className="text-gray-600 flex items-center w-full justify-between">
                         <div className="flex gap-1.5 text-sm items-center w-[70%]">
-                          Room price per night
+                          Price per night
                         </div>
 
                         <div className="text-sm font-bold">
@@ -3983,7 +4159,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                                   Number(router.query.room_type)
                                 ].price
                               }
-                              className="!text-sm"
+                              className="!text-sm !text-gray-600"
                             ></Price>
                           )}
                         </div>
@@ -3991,12 +4167,25 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
                       <div className="text-gray-600 flex items-center w-full justify-between">
                         <div className="flex gap-1.5 text-sm items-center w-[70%]">
-                          <span>
-                            {Number(router.query.rooms) +
-                              (Number(router.query.rooms) > 1
-                                ? " rooms"
-                                : " room")}
-                          </span>
+                          {!stay.type_of_rooms[Number(router.query.room_type)]
+                            .is_tented_camp && (
+                            <span>
+                              {Number(router.query.rooms) +
+                                (Number(router.query.rooms) > 1
+                                  ? " rooms"
+                                  : " room")}
+                            </span>
+                          )}
+
+                          {stay.type_of_rooms[Number(router.query.room_type)]
+                            .is_tented_camp && (
+                            <span>
+                              {Number(router.query.adults) +
+                                (Number(router.query.adults) > 1
+                                  ? " adults"
+                                  : " adult")}
+                            </span>
+                          )}
 
                           <span> x </span>
 
@@ -4011,7 +4200,28 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                           </span>
                         </div>
 
-                        <div className="text-sm font-bold">
+                        {stay.type_of_rooms[Number(router.query.room_type)]
+                          .is_tented_camp && (
+                          <Price
+                            currency="KES"
+                            stayPrice={
+                              totalPriceOfStayForTentedCamp(
+                                stay.type_of_rooms[
+                                  Number(router.query.room_type)
+                                ].price
+                              ) -
+                              (selected.name.toLowerCase() == "van"
+                                ? stay.car_transfer_price * passengers
+                                : selected.name.toLowerCase() == "bus"
+                                ? stay.bus_transfer_price * passengers
+                                : 0)
+                            }
+                            className="!text-sm"
+                          ></Price>
+                        )}
+
+                        {!stay.type_of_rooms[Number(router.query.room_type)]
+                          .is_tented_camp && (
                           <Price
                             currency="KES"
                             stayPrice={
@@ -4028,7 +4238,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                             }
                             className="!text-sm"
                           ></Price>
-                        </div>
+                        )}
                       </div>
 
                       {router.query.transport !== "0" && (
@@ -4063,14 +4273,29 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                         Total price
                       </div>
 
-                      <Price
-                        currency="KES"
-                        stayPrice={totalPriceOfStay(
-                          stay.type_of_rooms[Number(router.query.room_type)]
-                            .price
-                        )}
-                        className="!text-black !text-base"
-                      ></Price>
+                      {!stay.type_of_rooms[Number(router.query.room_type)]
+                        .is_tented_camp && (
+                        <Price
+                          currency="KES"
+                          stayPrice={totalPriceOfStay(
+                            stay.type_of_rooms[Number(router.query.room_type)]
+                              .price
+                          )}
+                          className="!text-black !text-base"
+                        ></Price>
+                      )}
+
+                      {stay.type_of_rooms[Number(router.query.room_type)]
+                        .is_tented_camp && (
+                        <Price
+                          currency="KES"
+                          stayPrice={totalPriceOfStayForTentedCamp(
+                            stay.type_of_rooms[Number(router.query.room_type)]
+                              .price
+                          )}
+                          className="!text-black !text-base"
+                        ></Price>
+                      )}
                     </div>
                   </div>
                 </div>
