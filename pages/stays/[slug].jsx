@@ -11,6 +11,7 @@ import { Listbox, Transition } from "@headlessui/react";
 import { useInView } from "react-intersection-observer";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { Mixpanel } from "../../lib/mixpanelconfig";
 import { Link as ReactScrollLink } from "react-scroll";
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 import "react-phone-number-input/style.css";
@@ -808,6 +809,9 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
   }
 
   function reserve(index) {
+    Mixpanel.track("Event accommodation reserve button clicked", {
+      name_of_accommodation: stay.name,
+    });
     router.push({
       query: {
         ...router.query,
@@ -928,6 +932,9 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
             }
           )
           .then((res) => {
+            Mixpanel.track("Event accommodation paid", {
+              name_of_accommodation: stay.name,
+            });
             setLoading(false);
             setShowCheckoutResponseModal(true);
           })

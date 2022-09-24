@@ -7,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
 import { Cookies } from "js-cookie";
+import { Mixpanel } from "../../lib/mixpanelconfig";
 
 import getToken from "../../lib/getToken";
 
@@ -307,7 +308,14 @@ function RequestTrip({ userProfile, stays }) {
 
                     <Link href={`/stays/${stay.slug}`}>
                       <a className="self-end">
-                        <div className="w-fit cursor-pointer mr-3 absolute md:static bottom-0 right-0 px-3 py-1.5 gap-0.5 rounded-md flex items-center justify-center bg-blue-500 text-white">
+                        <div
+                          onClick={() => {
+                            Mixpanel.track("Event accommodation opened", {
+                              name_of_accommodation: stay.name,
+                            });
+                          }}
+                          className="w-fit cursor-pointer mr-3 absolute md:static bottom-0 right-0 px-3 py-1.5 gap-0.5 rounded-md flex items-center justify-center bg-blue-500 text-white"
+                        >
                           <span className="font-bold">view</span>
                           <Icon icon="akar-icons:chevron-right" />
                         </div>
