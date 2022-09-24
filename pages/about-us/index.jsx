@@ -5,6 +5,7 @@ import axios from "axios";
 
 import getToken from "../../lib/getToken";
 import Footer from "../../components/Home/Footer";
+import Button from "../../components/ui/Button";
 
 const AboutUs = ({ userProfile }) => {
   return (
@@ -20,25 +21,34 @@ const AboutUs = ({ userProfile }) => {
 
         <article className="mt-6 mb-10 px-6 sm:px-16">
           <p>
-            Traveling in Africa can be challenging and complex without relying
-            on someone to guide you. A lot or the (me the opons vou det are
-            Inflexible and don t necessarl meet vour preferences - until now.
+            Winda.guide was borne out of a frustration around traveling within
+            Africa. Outside of the mainstream tourist destinations which tend to
+            have fixed packages and are overcrowded there&apos;s little
+            information on where else to explore, how to get there and where you
+            can stay and what you can do. We are a team of Kenyans who love to
+            travel and we&apos;ve covered over 100 hundred countries between us
+            across the world - the one observation with traveling in Africa is
+            the over-reliance on agents or other people to give you
+            recommendations on where to go. We have changed that travel
+            experience. Now you can come to winda.guide. Explore the vast array
+            of travel destinations, build your whole itinerary with us and book
+            everything with us.
           </p>
 
           <p className="mt-4">
-            Winda.quide has curated trips that consist of 3 core elements of
-            travel: stays, activities, and transport. Go to our curated trips
-            and pick the one you love the most. If you want to tweak something
-            let us know and we&apos;ll make it happen. Take charge of your own
-            journey and build the trip of your dreams.
+            Our mission is simple: to uncover all that Africa has to offer and
+            show it to the world.
           </p>
 
           <p className="mt-4">
-            You can also choose and book a travel service from accommodation,
-            activities led by local guides, and transport for hire or transfers.
-            We&apos;ve partnered with hundreds or quality-vetted service
-            providers In travel to make sure vou get the best experlen.
+            Join us on this journey, let&apos;s discover Africa together.
           </p>
+
+          <div className="w-full flex items-center justify-center mt-6">
+            <Button className="!rounded-lg h-[65%] !flex gap-1 !px-1 !py-3 !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 items-center justify-center w-[200px]">
+              <span className="font-bold uppercase">Explore with winda</span>
+            </Button>
+          </div>
         </article>
       </div>
 
