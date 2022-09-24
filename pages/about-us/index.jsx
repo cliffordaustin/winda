@@ -6,6 +6,7 @@ import axios from "axios";
 import getToken from "../../lib/getToken";
 import Footer from "../../components/Home/Footer";
 import Button from "../../components/ui/Button";
+import Link from "next/link";
 
 const AboutUs = ({ userProfile }) => {
   return (
@@ -45,9 +46,15 @@ const AboutUs = ({ userProfile }) => {
           </p>
 
           <div className="w-full flex items-center justify-center mt-6">
-            <Button className="!rounded-lg h-[65%] !flex gap-1 !px-1 !py-3 !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 items-center justify-center w-[200px]">
-              <span className="font-bold uppercase">Explore with winda</span>
-            </Button>
+            <Link href="/">
+              <a>
+                <Button className="!rounded-lg h-[65%] !flex gap-1 !px-1 !py-3 !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 items-center justify-center w-[200px]">
+                  <span className="font-bold uppercase">
+                    Explore with winda
+                  </span>
+                </Button>
+              </a>
+            </Link>
           </div>
         </article>
       </div>
