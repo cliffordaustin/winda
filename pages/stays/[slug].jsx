@@ -2597,20 +2597,15 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     <div className="w-full my-3 px-2 py-2 bg-yellow-100 text-yellow-600 flex gap-2 items-center">
                       <Icon icon="bx:bx-info-circle" className="w-6 h-6" />
                       <span>
-                        This transport is a {selected.name.toLowerCase()} from{" "}
-                        {selected.name === "Van"
-                          ? stay.car_transfer_starting_location
-                          : selected.name === "Bus"
-                          ? stay.bus_transfer_starting_location
-                          : ""}{" "}
-                        to{" "}
-                        {selected.name === "Van"
-                          ? stay.car_transfer_end_location
-                          : selected.name === "Bus"
-                          ? stay.bus_transfer_end_location
-                          : ""}
-                        .{" "}
+                        {selected.name.toLowerCase() == "bus" && (
+                          <span>{stay.bus_transfer_text_location}</span>
+                        )}
+
+                        {selected.name.toLowerCase() == "van" && (
+                          <span>{stay.car_transfer_text_location}</span>
+                        )}
                         <span className="font-bold">
+                          {" "}
                           More details will be sent to you after booking.
                         </span>
                       </span>
@@ -4108,20 +4103,18 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                           >
                             <div className="text-sm text-gray-500">
                               <span>
-                                This transport is a{" "}
-                                {selected.name.toLowerCase()} from{" "}
-                                {router.query.transport === "1"
-                                  ? stay.car_transfer_starting_location
-                                  : router.query.transport === "2"
-                                  ? stay.bus_transfer_starting_location
-                                  : ""}{" "}
-                                to{" "}
-                                {router.query.transport === "1"
-                                  ? stay.car_transfer_end_location
-                                  : router.query.transport === "2"
-                                  ? stay.bus_transfer_end_location
-                                  : ""}
-                                .{" "}
+                                {router.query.transport === "2" && (
+                                  <span>{stay.bus_transfer_text_location}</span>
+                                )}
+
+                                {router.query.transport === "1" && (
+                                  <span>{stay.car_transfer_text_location}</span>
+                                )}
+                                <span className="font-bold">
+                                  {" "}
+                                  More details will be sent to you after
+                                  booking.
+                                </span>
                               </span>
                             </div>
                           </PopoverBox>
