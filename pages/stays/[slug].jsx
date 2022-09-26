@@ -4474,14 +4474,29 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
                       <div className="flex justify-between items-center">
                         <h1 className="font-bold">Amount to Pay</h1>
-                        <Price
-                          currency="KES"
-                          stayPrice={totalPriceOfStay(
-                            stay.type_of_rooms[Number(router.query.room_type)]
-                              .price
-                          )}
-                          className="!text-black !text-base"
-                        ></Price>
+                        {stay.type_of_rooms[Number(router.query.room_type)]
+                          .is_tented_camp && (
+                          <Price
+                            currency="KES"
+                            stayPrice={totalPriceOfStayForTentedCamp(
+                              stay.type_of_rooms[Number(router.query.room_type)]
+                                .price
+                            )}
+                            className="!text-base"
+                          ></Price>
+                        )}
+
+                        {!stay.type_of_rooms[Number(router.query.room_type)]
+                          .is_tented_camp && (
+                          <Price
+                            currency="KES"
+                            stayPrice={totalPriceOfStay(
+                              stay.type_of_rooms[Number(router.query.room_type)]
+                                .price
+                            )}
+                            className="!text-base"
+                          ></Price>
+                        )}
                       </div>
                     </div>
 
