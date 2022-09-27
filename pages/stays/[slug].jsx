@@ -10,6 +10,7 @@ import Select from "react-select";
 import { Listbox, Transition } from "@headlessui/react";
 import { useInView } from "react-intersection-observer";
 import { useFormik } from "formik";
+import { usePaystackPayment } from "react-paystack";
 import * as Yup from "yup";
 import { Mixpanel } from "../../lib/mixpanelconfig";
 import { Link as ReactScrollLink } from "react-scroll";
@@ -1018,6 +1019,24 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
       </Dialogue>
     );
   };
+
+  const config = {
+    reference: new Date().getTime().toString(),
+    email: "cliffordausin670@gmail.com",
+    amount: 20000,
+    publicKey: "pk_test_e90626a41ac13dd2039227ed66ec73de468a3f96",
+    currency: "GHS",
+  };
+
+  const onSuccess = (reference) => {
+    console.log(reference);
+  };
+
+  const onClose = () => {
+    console.log("closed");
+  };
+
+  const initializePayment = usePaystackPayment(config);
 
   return (
     <div
@@ -4463,6 +4482,10 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                         Please enter the following for payment
                       </h1>
                       <div className="flex justify-between items-center">
+                        <h1 className="font-bold">Account Name</h1>
+                        <p>C2B Standard Chartered Bank </p>
+                      </div>
+                      <div className="flex justify-between items-center">
                         <h1 className="font-bold">Paybill Number</h1>
                         <p>329329</p>
                       </div>
@@ -4621,6 +4644,18 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       </div>
                     </Button>
                   </div>
+
+                  {/* <div className="mt-8">
+                    <Button
+                      onClick={() => {
+                        initializePayment(onSuccess, onClose);
+                      }}
+                      className="flex w-full mt-3 mb-3 items-center gap-1 !px-0 !py-3 font-bold !bg-blue-600 !text-white"
+                    >
+                      <span>Other payment methods</span>
+                      <Icon icon="bxs:lock-alt" className="w-5 h-5" />
+                    </Button>
+                  </div> */}
                 </div>
               </div>
             </div>

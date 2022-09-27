@@ -7,6 +7,7 @@ import getToken from "../../lib/getToken";
 import Footer from "../../components/Home/Footer";
 import Button from "../../components/ui/Button";
 import Link from "next/link";
+import Image from "next/image";
 
 const AboutUs = ({ userProfile }) => {
   return (
@@ -18,7 +19,25 @@ const AboutUs = ({ userProfile }) => {
       ></Navbar>
 
       <div className="mb-24">
-        <h1 className="text-center font-bold text-3xl">About Us</h1>
+        <div className="w-full text-red-600 h-[500px] relative before:absolute before:h-full before:w-full before:bg-black before:z-20 before:opacity-60">
+          <Image
+            className={"w-full "}
+            layout="fill"
+            objectFit="cover"
+            src="/images/about-us-img.jpg"
+            objectPosition={"center"}
+            sizes="380"
+            alt="Image of samburu man looking at a vast landscape"
+            unoptimized={true}
+            priority
+          />
+
+          <div className="absolute w-full left-[0] md:left-[5%] bottom-[10%] z-20 px-6 md:px-0">
+            <h1 className="font-black font-SourceSans mb-2 text-3xl sm:text-4xl md:text-5xl xl:text-7xl text-white uppercase ">
+              Our Mission
+            </h1>
+          </div>
+        </div>
 
         <article className="mt-6 mb-10 px-6 sm:px-16">
           <p>
@@ -45,7 +64,7 @@ const AboutUs = ({ userProfile }) => {
             Join us on this journey, let&apos;s discover Africa together.
           </p>
 
-          <div className="w-full flex items-center justify-center mt-6">
+          <div className="w-full flex items-center justify-center mt-6 mb-12">
             <Link href="/">
               <a>
                 <Button className="!rounded-lg h-[65%] !flex gap-1 !px-1 !py-3 !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 items-center justify-center w-[200px]">
@@ -59,7 +78,7 @@ const AboutUs = ({ userProfile }) => {
         </article>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0">
+      <div className="md:fixed bottom-0 left-0 right-0">
         <Footer></Footer>
       </div>
     </div>
