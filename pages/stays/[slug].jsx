@@ -907,8 +907,8 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
         .min(10, "This field has a max length of 10"),
     }),
     onSubmit: async (values) => {
-      setLoading(true);
-      if (isValidPhoneNumber(phone)) {
+      if (isValidPhoneNumber(phone || "")) {
+        setLoading(true);
         axios
           .post(
             `${process.env.NEXT_PUBLIC_baseURL}/stays/${router.query.slug}/create-event/`,
@@ -942,7 +942,8 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
           .catch((err) => {
             setLoading(false);
           });
-      } else if (!isValidPhoneNumber("phone")) {
+      } else if (!isValidPhoneNumber(phone || "")) {
+        setLoading(false);
         setInvalidPhone(true);
       }
     },
@@ -1022,10 +1023,10 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
   const config = {
     reference: new Date().getTime().toString(),
-    email: "cliffordausin670@gmail.com",
+    email: formik.values.email,
     amount: 20000,
-    publicKey: "pk_test_e90626a41ac13dd2039227ed66ec73de468a3f96",
-    currency: "GHS",
+    publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLICK_KEY,
+    currency: "KES",
   };
 
   const onSuccess = (reference) => {
@@ -4482,10 +4483,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                         Please enter the following for payment
                       </h1>
                       <div className="flex justify-between items-center">
-                        <h1 className="font-bold">Account Name</h1>
-                        <p>C2B Standard Chartered Bank </p>
-                      </div>
-                      <div className="flex justify-between items-center">
                         <h1 className="font-bold">Paybill Number</h1>
                         <p>329329</p>
                       </div>
@@ -4521,6 +4518,16 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                           ></Price>
                         )}
                       </div>
+                    </div>
+
+                    <div className="mt-4">
+                      <p className="text-sm">
+                        The account name is{" "}
+                        <span className="font-bold">
+                          C2B Standard Chartered Bank
+                        </span>{" "}
+                        for account 0102479992200
+                      </p>
                     </div>
 
                     <div className="mt-6">
@@ -4645,11 +4652,31 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     </Button>
                   </div>
 
-                  {/* <div className="mt-8">
+                  {/* <div className="mt-4 flex gap-4 items-center">
+                    <div className="flex-grow h-px bg-gray-300"></div>
+                    <div className="text-sm font-bold text-center">Or</div>
+                    <div className="flex-grow h-px bg-gray-300"></div>
+                  </div>
+
+                  <div className="mt-4">
                     <Button
                       onClick={() => {
-                        initializePayment(onSuccess, onClose);
+                        formik.setTouched({
+                          first_name: true,
+                          last_name: true,
+                          email: true,
+                          confirmation_code: false,
+                        });
+                        if (isValidPhoneNumber(phone || "")) {
+                          setInvalidPhone(true);
+                          formik.validateForm().then(() => {
+                            initializePayment(onSuccess, onClose);
+                          });
+                        } else {
+                          setInvalidPhone(true);
+                        }
                       }}
+                      type="submit"
                       className="flex w-full mt-3 mb-3 items-center gap-1 !px-0 !py-3 font-bold !bg-blue-600 !text-white"
                     >
                       <span>Other payment methods</span>
