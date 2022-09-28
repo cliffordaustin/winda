@@ -2675,8 +2675,11 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       return (
                         <div
                           key={room.id}
-                          className="w-full md:w-[32%] overflow-hidden border rounded-2xl"
+                          className="w-full relative md:w-[32%] overflow-hidden border rounded-2xl"
                         >
+                          {room.not_available && (
+                            <div className="absolute inset-0 bg-white z-20 bg-opacity-60"></div>
+                          )}
                           <div className="relative">
                             <div className={"w-full relative h-[170px] "}>
                               <Carousel
@@ -2713,34 +2716,36 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                             <div className="mt-2 mb-2">
                               <div className="flex justify-between items-center w-full">
                                 <div className="">
-                                  {!room.is_tented_camp && (
-                                    <Price
-                                      currency="KES"
-                                      stayPrice={
-                                        room.price *
-                                          (new Date(
-                                            router.query.end_date
-                                          ).getDate() -
-                                            new Date(
-                                              router.query.starting_date
-                                            ).getDate() || 2) *
-                                          (Number(router.query.rooms) || 1) +
-                                        (transports[
-                                          Number(router.query.transport) || 0
-                                        ].name.toLowerCase() == "van"
-                                          ? stay.car_transfer_price
-                                          : transports[
-                                              Number(router.query.transport) ||
-                                                0
-                                            ].name.toLowerCase() == "bus"
-                                          ? stay.bus_transfer_price
-                                          : 0) *
-                                          Number(passengers)
-                                      }
-                                    ></Price>
-                                  )}
+                                  {!room.is_tented_camp &&
+                                    !room.not_available && (
+                                      <Price
+                                        currency="KES"
+                                        stayPrice={
+                                          room.price *
+                                            (new Date(
+                                              router.query.end_date
+                                            ).getDate() -
+                                              new Date(
+                                                router.query.starting_date
+                                              ).getDate() || 2) *
+                                            (Number(router.query.rooms) || 1) +
+                                          (transports[
+                                            Number(router.query.transport) || 0
+                                          ].name.toLowerCase() == "van"
+                                            ? stay.car_transfer_price
+                                            : transports[
+                                                Number(
+                                                  router.query.transport
+                                                ) || 0
+                                              ].name.toLowerCase() == "bus"
+                                            ? stay.bus_transfer_price
+                                            : 0) *
+                                            Number(passengers)
+                                        }
+                                      ></Price>
+                                    )}
 
-                                  {room.is_tented_camp && (
+                                  {room.is_tented_camp && !room.not_available && (
                                     <>
                                       <Price
                                         currency="KES"
@@ -2771,7 +2776,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                                   )}
                                 </div>
 
-                                {!room.is_tented_camp && (
+                                {!room.is_tented_camp && !room.not_available && (
                                   <div>
                                     {Number(router.query.rooms || 1) <=
                                       room.available_rooms &&
@@ -2795,7 +2800,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                                   </div>
                                 )}
 
-                                {room.is_tented_camp && (
+                                {room.is_tented_camp && !room.not_available && (
                                   <div>
                                     {Number(router.query.adults || 1) <=
                                       room.sleeps && (
@@ -2906,106 +2911,115 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                               </div>
                             )} */}
 
-                          <div className="text-sm text-gray-600 font-bold border-l-8 border-blue-100 px-3 py-2">
-                            <div>
-                              for{" "}
-                              {!room.is_tented_camp && (
-                                <span>
-                                  {Number(router.query.rooms || 1)}{" "}
-                                  {Number(router.query.rooms || 1) > 1
-                                    ? "rooms"
-                                    : "room"}
-                                  ,{" "}
-                                </span>
-                              )}
-                              {Number(router.query.adults || 1)}{" "}
-                              {Number(router.query.adults || 1) > 1
-                                ? "adults"
-                                : "adult"}{" "}
+                          {!room.not_available && (
+                            <div className="text-sm text-gray-600 font-bold border-l-8 border-blue-100 px-3 py-2">
+                              <div>
+                                for{" "}
+                                {!room.is_tented_camp && (
+                                  <span>
+                                    {Number(router.query.rooms || 1)}{" "}
+                                    {Number(router.query.rooms || 1) > 1
+                                      ? "rooms"
+                                      : "room"}
+                                    ,{" "}
+                                  </span>
+                                )}
+                                {Number(router.query.adults || 1)}{" "}
+                                {Number(router.query.adults || 1) > 1
+                                  ? "adults"
+                                  : "adult"}{" "}
+                              </div>
+
+                              <div className="mt-1 lowercase">
+                                with{" "}
+                                {
+                                  transports[
+                                    Number(router.query.transport) || 0
+                                  ].name
+                                }{" "}
+                                {Number(router.query.passengers || 0) > 0 && (
+                                  <span>
+                                    ({Number(router.query.passengers || 0)}{" "}
+                                    {Number(router.query.adults || 0) > 1
+                                      ? "passengers"
+                                      : "passenger"}
+                                    )
+                                  </span>
+                                )}
+                              </div>
+
+                              {router.query.starting_date &&
+                                router.query.end_date && (
+                                  <div className="mt-1">
+                                    from{" "}
+                                    {moment(router.query.starting_date).format(
+                                      "Do MMM"
+                                    )}{" "}
+                                    -{" "}
+                                    {moment(router.query.end_date).format(
+                                      "Do MMM"
+                                    )}{" "}
+                                    (
+                                    {new Date(router.query.end_date).getDate() -
+                                      new Date(
+                                        router.query.starting_date
+                                      ).getDate()}{" "}
+                                    {new Date(router.query.end_date).getDate() -
+                                      new Date(
+                                        router.query.starting_date
+                                      ).getDate() >
+                                    1
+                                      ? "nights"
+                                      : "night"}{" "}
+                                    )
+                                  </div>
+                                )}
+
+                              {!router.query.starting_date &&
+                                !router.query.end_date && (
+                                  <div className="mt-1">
+                                    from{" "}
+                                    {moment(new Date(2022, 9, 8)).format(
+                                      "Do MMM"
+                                    )}{" "}
+                                    -{" "}
+                                    {moment(new Date(2022, 9, 10)).format(
+                                      "Do MMM"
+                                    )}{" "}
+                                    (2 nights)
+                                  </div>
+                                )}
                             </div>
-
-                            <div className="mt-1 lowercase">
-                              with{" "}
-                              {
-                                transports[Number(router.query.transport) || 0]
-                                  .name
-                              }{" "}
-                              {Number(router.query.passengers || 0) > 0 && (
-                                <span>
-                                  ({Number(router.query.passengers || 0)}{" "}
-                                  {Number(router.query.adults || 0) > 1
-                                    ? "passengers"
-                                    : "passenger"}
-                                  )
-                                </span>
-                              )}
-                            </div>
-
-                            {router.query.starting_date &&
-                              router.query.end_date && (
-                                <div className="mt-1">
-                                  from{" "}
-                                  {moment(router.query.starting_date).format(
-                                    "Do MMM"
-                                  )}{" "}
-                                  -{" "}
-                                  {moment(router.query.end_date).format(
-                                    "Do MMM"
-                                  )}{" "}
-                                  (
-                                  {new Date(router.query.end_date).getDate() -
-                                    new Date(
-                                      router.query.starting_date
-                                    ).getDate()}{" "}
-                                  {new Date(router.query.end_date).getDate() -
-                                    new Date(
-                                      router.query.starting_date
-                                    ).getDate() >
-                                  1
-                                    ? "nights"
-                                    : "night"}{" "}
-                                  )
-                                </div>
-                              )}
-
-                            {!router.query.starting_date &&
-                              !router.query.end_date && (
-                                <div className="mt-1">
-                                  from{" "}
-                                  {moment(new Date(2022, 9, 8)).format(
-                                    "Do MMM"
-                                  )}{" "}
-                                  -{" "}
-                                  {moment(new Date(2022, 9, 10)).format(
-                                    "Do MMM"
-                                  )}{" "}
-                                  (2 nights)
-                                </div>
-                              )}
-                          </div>
-                          {!room.is_tented_camp && (
+                          )}
+                          {!room.is_tented_camp && !room.not_available && (
                             <div>
-                              {Number(router.query.rooms || 1) >
+                              {(Number(router.query.rooms || 1) >
                                 room.available_rooms ||
-                                (Math.ceil(
+                                Math.ceil(
                                   Number(router.query.adults || 1) /
                                     (Number(router.query.rooms) || 1)
-                                ) > room.sleeps && (
-                                  <div className="font-bold text-red-600 px-3 py-2 text-sm">
-                                    Not available
-                                  </div>
-                                ))}
+                                ) > room.sleeps) && (
+                                <div className="font-bold text-red-600 px-3 py-2 text-sm">
+                                  Not available for this filter
+                                </div>
+                              )}
                             </div>
                           )}
 
-                          {room.is_tented_camp && (
+                          {room.is_tented_camp && !room.not_available && (
                             <div>
                               {Number(router.query.adults || 1) >
                                 room.sleeps && (
                                 <div className="font-bold text-red-600 px-3 py-2 text-sm">
-                                  Not available
+                                  Not available for this filter
                                 </div>
                               )}
+                            </div>
+                          )}
+
+                          {room.not_available && (
+                            <div className="font-bold text-red-600 px-3 py-2 text-sm">
+                              Not available
                             </div>
                           )}
                         </div>
