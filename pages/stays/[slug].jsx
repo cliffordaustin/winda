@@ -3000,7 +3000,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                                     (Number(router.query.rooms) || 1)
                                 ) > room.sleeps) && (
                                 <div className="font-bold text-red-600 px-3 py-2 text-sm">
-                                  Not available for this filter
+                                  Not available for these options
                                 </div>
                               )}
                             </div>
@@ -3011,7 +3011,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                               {Number(router.query.adults || 1) >
                                 room.sleeps && (
                                 <div className="font-bold text-red-600 px-3 py-2 text-sm">
-                                  Not available for this filter
+                                  Not available for these options
                                 </div>
                               )}
                             </div>
