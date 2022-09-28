@@ -404,7 +404,7 @@ function Stays({
         setShowDateRangePopup(false);
       }}
     >
-      <ContactBanner></ContactBanner>
+      {/* <ContactBanner></ContactBanner> */}
       <div className="sticky top-0 left-0 right-0 bg-white border-b z-20 pb-4">
         <Navbar
           showDropdown={state.showDropdown}

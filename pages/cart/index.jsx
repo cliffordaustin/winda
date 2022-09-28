@@ -336,7 +336,7 @@ const Cart = ({
   ) {
     nothingInCart = (
       <div>
-        <ContactBanner></ContactBanner>
+        {/* <ContactBanner></ContactBanner> */}
         <Navbar
           showDropdown={state.showDropdown}
           currentNavState={state.currentNavState}
@@ -448,7 +448,7 @@ const Cart = ({
   ) {
     showCartItems = (
       <div>
-        <ContactBanner></ContactBanner>
+        {/* <ContactBanner></ContactBanner> */}
         <Navbar
           showDropdown={state.showDropdown}
           currentNavState={state.currentNavState}

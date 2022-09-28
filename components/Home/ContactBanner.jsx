@@ -4,7 +4,7 @@ import { Icon } from "@iconify/react";
 
 function ContactBanner(props) {
   return (
-    <div className="flex justify-between text-white px-4 py-2 bg-red-600">
+    <div className="flex justify-between text-white px-4 py-2 bg-blue-600">
       {/* <div></div> */}
 
       <div className="flex items-center text-white gap-4">

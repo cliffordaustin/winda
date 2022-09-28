@@ -298,7 +298,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
     <>
       {!pageError && (
         <div className="relative">
-          <ContactBanner></ContactBanner>
+          {/* <ContactBanner></ContactBanner> */}
           <div className="sticky top-0 w-full bg-white z-50">
             <div className="bg-white sm:px-12 px-4 py-4 flex items-center justify-between">
               <div className="flex items-center gap-8">

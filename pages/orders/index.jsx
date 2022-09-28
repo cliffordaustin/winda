@@ -72,7 +72,7 @@ function Orders({
           transportOrders.length === 0 &&
           flightCart.length === 0 && (
             <div>
-              <ContactBanner></ContactBanner>
+              {/* <ContactBanner></ContactBanner> */}
               <Navbar
                 showDropdown={state.showDropdown}
                 currentNavState={state.currentNavState}
@@ -130,7 +130,7 @@ function Orders({
           transportOrders.length > 0 ||
           flightCart.length > 0) && (
           <div>
-            <ContactBanner></ContactBanner>
+            {/* <ContactBanner></ContactBanner> */}
             <Navbar
               showDropdown={state.showDropdown}
               currentNavState={state.currentNavState}

@@ -1059,14 +1059,18 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
         </Head>
         <GlobalStyle></GlobalStyle>
 
-        <div className="md:hidden">
-          <ContactBanner></ContactBanner>
-        </div>
-
-        <div className="sticky md:fixed top-0 w-full bg-white z-20">
-          <div className="hidden md:block">
+        {stay.is_an_event && (
+          <div className="md:hidden">
             <ContactBanner></ContactBanner>
           </div>
+        )}
+
+        <div className="sticky md:fixed top-0 w-full bg-white z-20">
+          {stay.is_an_event && (
+            <div className="hidden md:block">
+              <ContactBanner></ContactBanner>
+            </div>
+          )}
 
           <Navbar
             showDropdown={state.showDropdown}
@@ -1099,7 +1103,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               className={
                 stay.is_an_event
                   ? "w-full md:!max-w-[1000px] !mx-auto !border-none px-4"
-                  : "md:w-[56%] lg:w-[63%] md:border-r md:border-gray-200 md:absolute md:mt-0 left-0 md:block md:top-10"
+                  : "md:w-[56%] lg:w-[63%] md:border-r md:border-gray-200 md:absolute md:mt-0 left-0 md:block"
               }
             >
               <div className="!relative" name="about">
@@ -3246,7 +3250,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
             </div>
 
             {!stay.is_an_event && (
-              <div className="md:fixed hidden lg:flex flex-col right-2 md:w-[42%] h-full md:pl-2 lg:px-0 lg:w-[35%] top-[124px] bottom-0 overflow-y-scroll md:block">
+              <div className="md:fixed hidden lg:flex flex-col right-2 md:w-[42%] h-full md:pl-2 lg:px-0 lg:w-[35%] top-[94px] bottom-0 overflow-y-scroll md:block">
                 <div className="flex h-fit justify-between">
                   {
                     <div>
