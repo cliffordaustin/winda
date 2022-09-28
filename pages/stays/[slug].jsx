@@ -817,12 +817,22 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
       query: {
         ...router.query,
         room_type: index,
-        adults: adultTravelers,
-        rooms: rooms,
-        transport: transports.findIndex((t) => t.name === selected.name),
-        starting_date: moment(eventDate.from).format("YYYY-MM-DD"),
-        end_date: moment(eventDate.to).format("YYYY-MM-DD"),
-        passengers: passengers,
+        adults: Number(router.query.adults) || 1,
+        rooms: Number(router.query.rooms) || 1,
+        transport: transports.findIndex(
+          (t) => t.name === transports[Number(router.query.transport) || 0].name
+        ),
+        starting_date:
+          (router.query.starting_date &&
+            moment(new Date(router.query.starting_date)).format(
+              "YYYY-MM-DD"
+            )) ||
+          moment(new Date(2022, 9, 8)).format("YYYY-MM-DD"),
+        end_date:
+          (router.query.end_date &&
+            moment(new Date(router.query.end_date)).format("YYYY-MM-DD")) ||
+          moment(new Date(2022, 9, 10)).format("YYYY-MM-DD"),
+        passengers: Number(router.query.passengers) || 0,
         checkout_page: 1,
       },
     });
@@ -2715,9 +2725,14 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                                               router.query.starting_date
                                             ).getDate() || 2) *
                                           (Number(router.query.rooms) || 1) +
-                                        (selected.name.toLowerCase() == "van"
+                                        (transports[
+                                          Number(router.query.transport) || 0
+                                        ].name.toLowerCase() == "van"
                                           ? stay.car_transfer_price
-                                          : selected.name.toLowerCase() == "bus"
+                                          : transports[
+                                              Number(router.query.transport) ||
+                                                0
+                                            ].name.toLowerCase() == "bus"
                                           ? stay.bus_transfer_price
                                           : 0) *
                                           Number(passengers)
@@ -2738,10 +2753,15 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                                                 router.query.starting_date
                                               ).getDate() || 2) *
                                             (Number(router.query.adults) || 1) +
-                                          (selected.name.toLowerCase() == "van"
+                                          (transports[
+                                            Number(router.query.transport) || 0
+                                          ].name.toLowerCase() == "van"
                                             ? stay.car_transfer_price
-                                            : selected.name.toLowerCase() ==
-                                              "bus"
+                                            : transports[
+                                                Number(
+                                                  router.query.transport
+                                                ) || 0
+                                              ].name.toLowerCase() == "bus"
                                             ? stay.bus_transfer_price
                                             : 0) *
                                             Number(passengers)
@@ -2900,16 +2920,23 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                               )}
                               {Number(router.query.adults || 1)}{" "}
                               {Number(router.query.adults || 1) > 1
-                                ? "people"
-                                : "person"}{" "}
+                                ? "adults"
+                                : "adult"}{" "}
                             </div>
 
                             <div className="mt-1 lowercase">
-                              with {selected.name}{" "}
-                              {passengers > 0 && (
+                              with{" "}
+                              {
+                                transports[Number(router.query.transport) || 0]
+                                  .name
+                              }{" "}
+                              {Number(router.query.passengers || 0) > 0 && (
                                 <span>
-                                  ({passengers}{" "}
-                                  {passengers > 1 ? "passengers" : "passenger"})
+                                  ({Number(router.query.passengers || 0)}{" "}
+                                  {Number(router.query.adults || 0) > 1
+                                    ? "passengers"
+                                    : "passenger"}
+                                  )
                                 </span>
                               )}
                             </div>
