@@ -16,6 +16,7 @@ import Link from "next/link";
 import Search from "../components/Trip/Search";
 import PopularLocationsDropdown from "../components/Lodging/PopularLocationsDropdown";
 import CookiesMessage from "../components/Home/CookiesMessage";
+import ContactBanner from "../components/Home/ContactBanner";
 
 export default function Home({ userProfile }) {
   const router = useRouter();
@@ -158,6 +159,7 @@ export default function Home({ userProfile }) {
           />
         </Head>
       </div>
+      <ContactBanner></ContactBanner>
 
       <div className="mb-12 select-none relative">
         <div className="w-full text-red-600 h-[600px] relative before:absolute before:h-full before:w-full before:bg-black before:z-20 before:opacity-60">
@@ -280,6 +282,7 @@ export default function Home({ userProfile }) {
             </div>
           </div>
         </div>
+
         <div className="absolute top-4 w-full z-50">
           <Navbar
             showDropdown={state.showDropdown}

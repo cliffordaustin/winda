@@ -1058,8 +1058,16 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
           />
         </Head>
         <GlobalStyle></GlobalStyle>
-        <div className="fixed top-0 w-full bg-white z-20">
-          {stay.is_an_event && <ContactBanner></ContactBanner>}
+
+        <div className="md:hidden">
+          <ContactBanner></ContactBanner>
+        </div>
+
+        <div className="sticky md:fixed top-0 w-full bg-white z-20">
+          <div className="hidden md:block">
+            <ContactBanner></ContactBanner>
+          </div>
+
           <Navbar
             showDropdown={state.showDropdown}
             currentNavState={state.currentNavState}
@@ -1091,11 +1099,17 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               className={
                 stay.is_an_event
                   ? "w-full md:!max-w-[1000px] !mx-auto !border-none px-4"
-                  : "md:w-[56%] lg:w-[63%] md:border-r md:border-gray-200 md:absolute md:mt-0 mt-10 left-0 md:block top-10"
+                  : "md:w-[56%] lg:w-[63%] md:border-r md:border-gray-200 md:absolute md:mt-0 left-0 md:block md:top-10"
               }
             >
               <div className="!relative" name="about">
-                <div className={stay.is_an_event ? "mt-[135px]" : "mt-10 px-3"}>
+                <div
+                  className={
+                    stay.is_an_event
+                      ? "md:mt-[135px] mt-5"
+                      : "mt-4 md:mt-[82px] px-3"
+                  }
+                >
                   <div className="text-sm text-gray-600 font-medium flex items-center">
                     <div>
                       <div
@@ -1223,7 +1237,9 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     (stay.is_an_event
                       ? "h-[60px] bg-white z-10 border-t border-b flex left-0 right-0 "
                       : "h-12 border-b border-gray-200 w-[100%] px-3 lg:px-10 bg-slate-100 sticky left-0 right-0") +
-                    (isSafari ? "top-[108px]" : "top-[115.25px]")
+                    (isSafari
+                      ? "top-[68px] md:top-[108px]"
+                      : "md:top-[115.25px] top-[72.25px]")
                   }
                   ref={scrollRef}
                 >
@@ -1241,7 +1257,9 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     (stay.is_an_event
                       ? "h-[60px] fixed bg-white z-10 border-t border-b left-0 right-0 flex w-full "
                       : "h-[60px] fixed bg-white z-10 border-t border-b left-0 flex w-full md:w-[56%] px-3 lg:w-[63%] ") +
-                    (isSafari ? "top-[108px]" : "top-[115.25px]")
+                    (isSafari
+                      ? "top-[68px] md:top-[108px]"
+                      : "md:top-[115.25px] top-[72.25px]")
                   }
                 >
                   <ScrollTo guestPopup={guestPopup} stay={stay}></ScrollTo>
@@ -3228,7 +3246,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
             </div>
 
             {!stay.is_an_event && (
-              <div className="md:fixed hidden lg:flex flex-col right-2 md:w-[42%] h-full md:pl-2 lg:px-0 lg:w-[35%] top-20 bottom-0 overflow-y-scroll md:block">
+              <div className="md:fixed hidden lg:flex flex-col right-2 md:w-[42%] h-full md:pl-2 lg:px-0 lg:w-[35%] top-[124px] bottom-0 overflow-y-scroll md:block">
                 <div className="flex h-fit justify-between">
                   {
                     <div>
@@ -4029,7 +4047,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
         )}
 
         {router.query.checkout_page === "1" && (
-          <div className="mt-[120px] md:mt-[140px] max-w-[1080px] mx-auto">
+          <div className="mt-5 md:mt-[140px] max-w-[1080px] mx-auto">
             <div className="flex md:flex-row flex-col gap-4 px-4">
               <div className="md:w-[40%] md:px-2 md:h-[90vh] mt-0 md:sticky top-[80px]">
                 <div
@@ -4679,7 +4697,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       type="submit"
                       className="flex w-full mt-3 mb-3 items-center gap-1 !px-0 !py-3 font-bold !bg-blue-600 !text-white"
                     >
-                      <span>Other payment methods</span>
+                      <span>Use a card</span>
                       <Icon icon="bxs:lock-alt" className="w-5 h-5" />
                     </Button>
                   </div> */}

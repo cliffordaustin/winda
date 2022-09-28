@@ -43,6 +43,7 @@ import {
 import Dialogue from "../../components/Home/Dialogue";
 import Head from "next/head";
 import Link from "next/link";
+import ContactBanner from "../../components/Home/ContactBanner";
 
 const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
   const GlobalStyle = createGlobalStyle`
@@ -467,7 +468,13 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
       </Head>
 
       <GlobalStyle></GlobalStyle>
-      <div className="fixed top-0 w-full bg-white z-20">
+      <div className="md:hidden">
+        <ContactBanner></ContactBanner>
+      </div>
+      <div className="sticky md:fixed top-0 w-full bg-white z-20">
+        <div className="hidden md:block">
+          <ContactBanner></ContactBanner>
+        </div>
         <Navbar
           showDropdown={state.showDropdown}
           currentNavState={state.currentNavState}
@@ -494,7 +501,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
       </div>
 
       <div className="flex flex-col px-4 md:px-0 md:flex-row justify-around relative h-full w-full">
-        <div className="md:w-[56%] lg:w-[63%] md:px-4 md:border-r md:border-gray-200 md:absolute md:mt-0 mt-10 left-2 md:block top-10">
+        <div className="md:w-[56%] lg:w-[63%] md:px-4 md:border-r md:border-gray-200 md:absolute md:mt-10 mt-3 left-2 md:block top-10">
           {/* about */}
           <Element name="about">
             <div className="mt-10">
@@ -1856,7 +1863,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
           </div>
         </div>
 
-        <div className="md:fixed hidden right-2 md:w-[42%] h-full md:pl-2 lg:px-0 lg:w-[35%] top-20 bottom-0 overflow-y-scroll md:block">
+        <div className="md:fixed hidden right-2 md:w-[42%] h-full md:pl-2 lg:px-0 lg:w-[35%] md:top-[124px] bottom-0 overflow-y-scroll md:block">
           <div className="flex justify-between">
             {
               <div>

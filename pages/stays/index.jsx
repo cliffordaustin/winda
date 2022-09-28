@@ -37,6 +37,7 @@ import Cookies from "js-cookie";
 import { route } from "next/dist/server/router";
 import MobileSearchModal from "../../components/Stay/MobileSearchModal";
 import { useGoogleOneTapLogin } from "@react-oauth/google";
+import ContactBanner from "../../components/Home/ContactBanner";
 
 function Stays({
   userProfile,
@@ -403,7 +404,8 @@ function Stays({
         setShowDateRangePopup(false);
       }}
     >
-      <div className="fixed top-0 left-0 right-0 bg-white border-b z-20 pb-4">
+      <ContactBanner></ContactBanner>
+      <div className="sticky top-0 left-0 right-0 bg-white border-b z-20 pb-4">
         <Navbar
           showDropdown={state.showDropdown}
           currentNavState={state.currentNavState}
@@ -980,7 +982,7 @@ function Stays({
       </div>
 
       {!mobileMap && (
-        <div className="mt-[170px] w-full">
+        <div className="mt-3 w-full">
           <div className="flex gap-2 px-4">
             <div className="lg:w-[40%] xl:w-[50%] hidden lg:block px-2 h-[78vh] mt-0 sticky top-[170px]">
               <Map stays={allStays}></Map>

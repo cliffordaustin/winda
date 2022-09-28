@@ -28,6 +28,7 @@ import { setFilteredActivities } from "../../redux/actions/activity";
 import TypeOfActivities from "../../components/Activities/ActivitiesFilterItems";
 import MobileSearchModal from "../../components/Activities/MobileSearchModal";
 import { Icon } from "@iconify/react";
+import ContactBanner from "../../components/Home/ContactBanner";
 
 function Activities({
   userProfile,
@@ -409,7 +410,8 @@ function Activities({
         });
       }}
     >
-      <div className="fixed top-0 left-0 right-0 bg-white border-b z-20 pb-4">
+      <ContactBanner></ContactBanner>
+      <div className="sticky top-0 left-0 right-0 bg-white border-b z-20 pb-4">
         <Navbar
           showDropdown={state.showDropdown}
           currentNavState={state.currentNavState}
@@ -1337,7 +1339,7 @@ function Activities({
       </MobileModal>
 
       {!mobileMap && (
-        <div className="mt-[170px] w-full">
+        <div className="mt-3 w-full">
           <div className="flex gap-2 px-4">
             <div className="lg:w-[40%] xl:w-[50%] hidden lg:block px-2 h-[78vh] mt-0 sticky top-[170px]">
               <Map activities={allactivities}></Map>

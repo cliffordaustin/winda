@@ -38,6 +38,7 @@ import { checkFlightPrice } from "../../../lib/flightLocations";
 import PopoverBox from "../../../components/ui/Popover";
 import DatePicker from "../../../components/ui/DatePickerOpen";
 import ServerError from "../../../components/Error/ServerError";
+import ContactBanner from "../../../components/Home/ContactBanner";
 
 function TripDetail({ userProfile, userTrips, trip }) {
   const router = useRouter();
@@ -297,7 +298,8 @@ function TripDetail({ userProfile, userTrips, trip }) {
     <>
       {!pageError && (
         <div className="relative">
-          <div className="fixed top-0 w-full bg-white z-50">
+          <ContactBanner></ContactBanner>
+          <div className="sticky top-0 w-full bg-white z-50">
             <div className="bg-white sm:px-12 px-4 py-4 flex items-center justify-between">
               <div className="flex items-center gap-8">
                 <Link href="/">
@@ -326,7 +328,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
           </div>
           {router.query.checkout_page !== "1" && (
             <>
-              <div className="mt-[72px] w-full mx-auto">
+              <div className="w-full mx-auto">
                 <div className="relative">
                   <ImageGallery
                     images={trip.single_trip_images}
@@ -1884,7 +1886,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
             </>
           )}
           {router.query.checkout_page === "1" && (
-            <div className="mt-[80px] md:mt-[100px] max-w-[1080px] mx-auto">
+            <div className=" max-w-[1080px] mx-auto">
               <div className="flex gap-4 px-4">
                 <div className="md:w-[40%] px-2 hidden md:block h-[90vh] mt-0 sticky top-[80px]">
                   <div

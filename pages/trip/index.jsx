@@ -27,6 +27,7 @@ import Dropdown from "../../components/ui/Dropdown";
 import Tags from "../../components/Trip/Tags";
 import Dialogue from "../../components/Home/Dialogue";
 import PopularLocationsDropdown from "../../components/Lodging/PopularLocationsDropdown";
+import ContactBanner from "../../components/Home/ContactBanner";
 
 const Trips = ({
   userProfile,
@@ -185,7 +186,8 @@ const Trips = ({
         setShowLocation(false);
       }}
     >
-      <div className="fixed top-0 w-full bg-white z-50">
+      <ContactBanner></ContactBanner>
+      <div className="sticky top-0 w-full bg-white z-50">
         <div className="bg-white sm:px-12 px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-8">
             <Link href="/">

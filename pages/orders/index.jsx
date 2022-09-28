@@ -11,6 +11,7 @@ import CartItem from "../../components/Cart/CartItem";
 import Footer from "../../components/Home/Footer";
 import Dialogue from "../../components/Home/Dialogue";
 import FlightItem from "../../components/Cart/FlightItem";
+import ContactBanner from "../../components/Home/ContactBanner";
 
 function Orders({
   userProfile,
@@ -71,6 +72,7 @@ function Orders({
           transportOrders.length === 0 &&
           flightCart.length === 0 && (
             <div>
+              <ContactBanner></ContactBanner>
               <Navbar
                 showDropdown={state.showDropdown}
                 currentNavState={state.currentNavState}
@@ -128,6 +130,7 @@ function Orders({
           transportOrders.length > 0 ||
           flightCart.length > 0) && (
           <div>
+            <ContactBanner></ContactBanner>
             <Navbar
               showDropdown={state.showDropdown}
               currentNavState={state.currentNavState}

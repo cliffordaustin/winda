@@ -22,6 +22,7 @@ import { getStayPrice, getActivityPrice } from "../../lib/getTotalCartPrice";
 import PopoverBox from "../../components/ui/Popover";
 import FlightItem from "../../components/Cart/FlightItem";
 import Price from "../../components/Stay/Price";
+import ContactBanner from "../../components/Home/ContactBanner";
 
 const Cart = ({
   cart,
@@ -335,6 +336,7 @@ const Cart = ({
   ) {
     nothingInCart = (
       <div>
+        <ContactBanner></ContactBanner>
         <Navbar
           showDropdown={state.showDropdown}
           currentNavState={state.currentNavState}
@@ -446,6 +448,7 @@ const Cart = ({
   ) {
     showCartItems = (
       <div>
+        <ContactBanner></ContactBanner>
         <Navbar
           showDropdown={state.showDropdown}
           currentNavState={state.currentNavState}
