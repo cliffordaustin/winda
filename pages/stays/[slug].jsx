@@ -1269,8 +1269,8 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                   show={!inView}
                   className={
                     (stay.is_an_event
-                      ? "h-[60px] fixed bg-white z-10 border-t border-b left-0 right-0 flex w-full "
-                      : "h-[60px] fixed bg-white z-10 border-t border-b left-0 flex w-full md:w-[56%] px-3 lg:w-[63%] ") +
+                      ? "h-[60px] fixed bg-white z-20 border-t border-b left-0 right-0 flex w-full "
+                      : "h-[60px] fixed bg-white z-20 border-t border-b left-0 flex w-full md:w-[56%] px-3 lg:w-[63%] ") +
                     (isSafari
                       ? "top-[68px] md:top-[108px]"
                       : "md:top-[115.25px] top-[72.25px]")
@@ -2678,7 +2678,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                           className="w-full relative md:w-[32%] overflow-hidden border rounded-2xl"
                         >
                           {room.not_available && (
-                            <div className="absolute inset-0 bg-white z-20 bg-opacity-60"></div>
+                            <div className="absolute inset-0 bg-white z-10 bg-opacity-60"></div>
                           )}
                           <div className="relative">
                             <div className={"w-full relative h-[170px] "}>
