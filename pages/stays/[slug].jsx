@@ -564,6 +564,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               setEventDate(date);
             }
           }}
+          min={stay.has_min_date ? 2 : 1}
           defaultMonth={new Date(2022, 9)}
           numberOfMonths={2}
           className="rounded-lg !w-full p-4"
