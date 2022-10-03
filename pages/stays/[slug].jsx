@@ -4809,7 +4809,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                   </div>
 
                   <div className="flex justify-between mt-3 items-center">
-                    <h1 className="font-bold">Tax (3.5%)</h1>
+                    <h1 className="font-bold">Card processing fees (3.5%)</h1>
                     {stay.type_of_rooms[Number(router.query.room_type)]
                       .is_tented_camp && (
                       <Price
