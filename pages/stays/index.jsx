@@ -275,48 +275,6 @@ function Stays({
     }
   }, []);
 
-  const [userLatLng, setUserLatLng] = useState({
-    latitude: null,
-    longitude: null,
-  });
-
-  useEffect(() => {
-    const getLatLng = async () => {
-      const latlng = await axios.get(
-        `https://ipinfo.io?token=${process.env.NEXT_PUBLIC_ipInfoToken}`
-      );
-
-      const lat = latlng.data.loc.split(",")[0];
-      const lng = latlng.data.loc.split(",")[1];
-
-      setUserLatLng({
-        ...userLatLng,
-        longitude: lng,
-        latitude: lat,
-      });
-    };
-    getLatLng();
-  }, []);
-
-  function deg2rad(deg) {
-    return deg * (Math.PI / 180);
-  }
-
-  function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
-    let R = 6371; // Radius of the earth in km
-    let dLat = deg2rad(lat2 - lat1); // deg2rad below
-    let dLon = deg2rad(lon2 - lon1);
-    let a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(deg2rad(lat1)) *
-        Math.cos(deg2rad(lat2)) *
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
-    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    let d = R * c; // Distance in km
-    return d;
-  }
-
   // useEffect(() => {
   //   if (state.windowSize >= 768) {
   //     setState({
@@ -989,8 +947,6 @@ function Stays({
             </div>
             <div className="lg:w-[60%] xl:w-[50%] w-full md:pl-4">
               <Listings
-                getDistance={getDistanceFromLatLonInKm}
-                userLatLng={userLatLng}
                 itemsInCart={itemsInCart}
                 itemsInOrders={itemsInOrders}
                 userProfile={userProfile}
