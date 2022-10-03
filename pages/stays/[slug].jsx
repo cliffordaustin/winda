@@ -1031,20 +1031,78 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
     );
   };
 
+  const total = () => {
+    let price = stay.type_of_rooms[Number(router.query.room_type) || 0]
+      .is_tented_camp
+      ? totalPriceOfStayForTentedCamp(
+          stay.type_of_rooms[Number(router.query.room_type) || 0].price
+        ) +
+        totalPriceOfStayForTentedCamp(
+          stay.type_of_rooms[Number(router.query.room_type) || 0].price
+        ) *
+          0.035
+      : totalPriceOfStay(
+          stay.type_of_rooms[Number(router.query.room_type) || 0].price
+        ) +
+        totalPriceOfStay(
+          stay.type_of_rooms[Number(router.query.room_type) || 0].price
+        ) *
+          0.035;
+
+    return parseInt(
+      (Math.floor(price * 100) / 100).toFixed(2).replace(".", ""),
+      10
+    );
+  };
+
   const config = {
     reference: new Date().getTime().toString(),
     email: formik.values.email,
-    amount: 20000,
+    amount: total(),
     publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLICK_KEY,
     currency: "KES",
   };
 
   const onSuccess = (reference) => {
-    formik.submitForm();
-  };
-
-  const onClose = () => {
-    console.log("closed");
+    if (isValidPhoneNumber(phone || "")) {
+      setLoading(true);
+      axios
+        .post(
+          `${process.env.NEXT_PUBLIC_baseURL}/stays/${router.query.slug}/create-event/`,
+          {
+            first_name: formik.values.first_name,
+            last_name: formik.values.last_name,
+            email: formik.values.email,
+            message: message,
+            type_of_room:
+              stay.type_of_rooms[Number(router.query.room_type)].name,
+            confirmation_code: "CARD",
+            phone: phone,
+            adults: Number(router.query.adults),
+            rooms: stay.type_of_rooms[Number(router.query.room_type)]
+              .is_tented_camp
+              ? 0
+              : Number(router.query.rooms),
+            passengers: Number(router.query.passengers),
+            from_date: new Date(router.query.starting_date),
+            to_date: new Date(router.query.end_date),
+            transport: Number(router.query.transport),
+          }
+        )
+        .then((res) => {
+          Mixpanel.track("Event accommodation paid", {
+            name_of_accommodation: stay.name,
+          });
+          setLoading(false);
+          setShowCheckoutResponseModal(true);
+        })
+        .catch((err) => {
+          setLoading(false);
+        });
+    } else if (!isValidPhoneNumber(phone || "")) {
+      setLoading(false);
+      setInvalidPhone(true);
+    }
   };
 
   const initializePayment = usePaystackPayment(config);
@@ -4701,9 +4759,9 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       onClick={() => {
                         formik.handleSubmit();
                       }}
-                      className="flex w-[150px] mt-3 mb-3 items-center gap-1 !px-0 !py-3 font-bold !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white"
+                      className="flex w-full md:w-[210px] mt-3 mb-3 items-center gap-1 !px-0 !py-3 font-bold !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white"
                     >
-                      <span>Book this stay</span>
+                      <span>Book this stay with mpesa</span>
 
                       <div className={" " + (loading ? "ml-1.5 " : " hidden")}>
                         <LoadingSpinerChase
@@ -4834,7 +4892,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                         if (isValidPhoneNumber(phone || "")) {
                           setInvalidPhone(true);
                           formik.validateForm().then(() => {
-                            initializePayment(onSuccess, onClose);
+                            initializePayment(onSuccess);
                           });
                         } else {
                           setInvalidPhone(true);
@@ -4845,6 +4903,14 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     >
                       <span>Use a card</span>
                       <Icon icon="bxs:lock-alt" className="w-5 h-5" />
+
+                      <div className={" " + (loading ? "ml-1.5 " : " hidden")}>
+                        <LoadingSpinerChase
+                          width={13}
+                          height={13}
+                          color="white"
+                        ></LoadingSpinerChase>
+                      </div>
                     </Button>
                   </div>
 
