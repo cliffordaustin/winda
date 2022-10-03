@@ -5,6 +5,7 @@ import Head from "next/head";
 import axios from "axios";
 import getToken from "../lib/getToken";
 import { useRouter } from "next/router";
+import { Mixpanel } from "../lib/mixpanelconfig";
 
 import Navbar from "../components/Home/InHeaderNavbar";
 import Main from "../components/Home/Main";
@@ -95,6 +96,7 @@ export default function Home({ userProfile }) {
   const [location, setLocation] = useState("");
 
   const search = (location) => {
+    console.log("used the search 1");
     router.push({
       pathname: "/trip",
       query: {
@@ -108,6 +110,7 @@ export default function Home({ userProfile }) {
   const keyDownSearch = (event) => {
     if (event.key === "Enter") {
       if (location !== "") {
+        Mixpanel.track("Searched curated trips location");
         router.push({
           pathname: "/trip",
           query: {
@@ -226,7 +229,12 @@ export default function Home({ userProfile }) {
             <div className="flex gap-2">
               <Link href="/trip">
                 <a>
-                  <Button className="flex items-center gap-4 max-w-[360px] !py-3 !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500">
+                  <Button
+                    onClick={() => {
+                      Mixpanel.track("Clicked view all curated trips button");
+                    }}
+                    className="flex items-center gap-4 max-w-[360px] !py-3 !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500"
+                  >
                     <span className="font-bold">View all curated trips</span>
                   </Button>
                 </a>

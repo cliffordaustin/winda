@@ -24,6 +24,7 @@
     "formik": "^2.2.9",
     "framer-motion": "^6.2.8",
     "gapi-script": "^1.2.0",
+    "html-react-parser": "^3.0.4",
     "js-cookie": "^3.0.1",
     "jsondiffpatch": "^0.4.1",
     "jwt-decode": "^3.1.2",
@@ -74,6 +75,7 @@
   },
   "devDependencies": {
     "@iconify/react": "^3.2.2",
+    "@tailwindcss/typography": "^0.5.7",
     "autoprefixer": "^10.4.2",
     "eslint": "8.10.0",
     "eslint-config-next": "12.1.0",

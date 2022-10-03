@@ -13,6 +13,7 @@ import Image from "next/image";
 import Carousel from "../ui/Carousel";
 import { useRouter } from "next/router";
 import Dialogue from "./Dialogue";
+import { Mixpanel } from "../../lib/mixpanelconfig";
 import Link from "next/link";
 
 SwiperCore.use([Navigation]);
@@ -109,7 +110,14 @@ function Main() {
                 </p>
                 <Link href="/trip?tag=cultural">
                   <a>
-                    <div className="px-3 cursor-pointer font-bold text-sm py-2 w-fit bg-white text-black rounded-lg mt-2">
+                    <div
+                      onClick={() => {
+                        Mixpanel.track(
+                          "View curated trips for Nairobi button clicked"
+                        );
+                      }}
+                      className="px-3 cursor-pointer font-bold text-sm py-2 w-fit bg-white text-black rounded-lg mt-2"
+                    >
                       View curated trips
                     </div>
                   </a>
@@ -137,6 +145,7 @@ function Main() {
                   <div
                     onClick={() => {
                       setSelectedLocation("nairobi-stays");
+                      Mixpanel.track("Show more about Nairobi button clicked");
                     }}
                     className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
                   >
@@ -223,7 +232,14 @@ function Main() {
 
                   <Link href="/stays?search=Nairobi">
                     <a>
-                      <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                      <div
+                        onClick={() => {
+                          Mixpanel.track(
+                            "View stays for Nairobi button clicked"
+                          );
+                        }}
+                        className="absolute bottom-2 z-30 flex flex-col left-2"
+                      >
                         <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
                           View stays
                         </div>
@@ -243,7 +259,14 @@ function Main() {
 
                   <Link href="/activities?search=Nairobi">
                     <a>
-                      <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                      <div
+                        onClick={() => {
+                          Mixpanel.track(
+                            "View activities for Nairobi button clicked"
+                          );
+                        }}
+                        className="absolute bottom-2 z-30 flex flex-col left-2"
+                      >
                         <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
                           View activities
                         </div>
@@ -274,7 +297,14 @@ function Main() {
                 </p>
                 <Link href="/trip?tag=romantic">
                   <a>
-                    <div className="px-3 cursor-pointer font-bold text-sm py-2 w-fit bg-white text-black rounded-lg mt-2">
+                    <div
+                      onClick={() => {
+                        Mixpanel.track(
+                          "View curated trips for Naivasha button clicked"
+                        );
+                      }}
+                      className="px-3 cursor-pointer font-bold text-sm py-2 w-fit bg-white text-black rounded-lg mt-2"
+                    >
                       View curated trips
                     </div>
                   </a>
@@ -302,6 +332,7 @@ function Main() {
                   <div
                     onClick={() => {
                       setSelectedLocation("naivasha-stays");
+                      Mixpanel.track("Show more about Naivasha button clicked");
                     }}
                     className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
                   >
@@ -380,7 +411,14 @@ function Main() {
 
                   <Link href="/stays?search=Naivasha">
                     <a>
-                      <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                      <div
+                        onClick={() => {
+                          Mixpanel.track(
+                            "View stays for Naivasha button clicked"
+                          );
+                        }}
+                        className="absolute bottom-2 z-30 flex flex-col left-2"
+                      >
                         <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
                           View stays
                         </div>
@@ -400,7 +438,14 @@ function Main() {
 
                   <Link href="/activities?search=Naivasha">
                     <a>
-                      <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                      <div
+                        onClick={() => {
+                          Mixpanel.track(
+                            "View activities for Naivasha button clicked"
+                          );
+                        }}
+                        className="absolute bottom-2 z-30 flex flex-col left-2"
+                      >
                         <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
                           View activities
                         </div>
@@ -431,7 +476,14 @@ function Main() {
 
                 <Link href="/trip?tag=road_trip">
                   <a>
-                    <div className="px-3 cursor-pointer font-bold text-sm py-2 w-fit bg-white text-black rounded-lg mt-2">
+                    <div
+                      onClick={() => {
+                        Mixpanel.track(
+                          "View curated trips for Maasai Mara button clicked"
+                        );
+                      }}
+                      className="px-3 cursor-pointer font-bold text-sm py-2 w-fit bg-white text-black rounded-lg mt-2"
+                    >
                       View curated trips
                     </div>
                   </a>
@@ -462,6 +514,9 @@ function Main() {
                   <div
                     onClick={() => {
                       setSelectedLocation("massai-mara-stays");
+                      Mixpanel.track(
+                        "Show more about Maasai Mara button clicked"
+                      );
                     }}
                     className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2"
                   >
@@ -601,7 +656,14 @@ function Main() {
 
                   <Link href="/stays?search=Maasai Mara">
                     <a>
-                      <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                      <div
+                        onClick={() => {
+                          Mixpanel.track(
+                            "View stays for Maasai Mara button clicked"
+                          );
+                        }}
+                        className="absolute bottom-2 z-30 flex flex-col left-2"
+                      >
                         <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
                           View stays
                         </div>
@@ -621,7 +683,14 @@ function Main() {
 
                   <Link href="/activities?search=Maasai Mara">
                     <a>
-                      <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                      <div
+                        onClick={() => {
+                          Mixpanel.track(
+                            "View activities for Maasai Mara button clicked"
+                          );
+                        }}
+                        className="absolute bottom-2 z-30 flex flex-col left-2"
+                      >
                         <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
                           View activities
                         </div>
@@ -672,7 +741,12 @@ function Main() {
 
               <Link href="/stays?type_of_stay=LODGE">
                 <a>
-                  <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                  <div
+                    onClick={() => {
+                      Mixpanel.track("Lodge button clicked");
+                    }}
+                    className="absolute bottom-2 z-30 flex flex-col left-2"
+                  >
                     <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
                       View stays
                     </div>
@@ -695,7 +769,12 @@ function Main() {
 
               <Link href="/stays?type_of_stay=CAMPSITE">
                 <a>
-                  <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                  <div
+                    onClick={() => {
+                      Mixpanel.track("Campsites button clicked");
+                    }}
+                    className="absolute bottom-2 z-30 flex flex-col left-2"
+                  >
                     <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
                       View stays
                     </div>
@@ -718,7 +797,12 @@ function Main() {
 
               <Link href="/stays?type_of_stay=TENTED CAMP">
                 <a>
-                  <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                  <div
+                    onClick={() => {
+                      Mixpanel.track("Tented camps button clicked");
+                    }}
+                    className="absolute bottom-2 z-30 flex flex-col left-2"
+                  >
                     <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
                       View stays
                     </div>
@@ -741,7 +825,12 @@ function Main() {
 
               <Link href="/stays?type_of_stay=UNIQUE SPACE">
                 <a>
-                  <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                  <div
+                    onClick={() => {
+                      Mixpanel.track("Unique spaces button clicked");
+                    }}
+                    className="absolute bottom-2 z-30 flex flex-col left-2"
+                  >
                     <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
                       View stays
                     </div>
@@ -764,7 +853,12 @@ function Main() {
 
               <Link href="/stays?pricing_type=REASONABLE">
                 <a>
-                  <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                  <div
+                    onClick={() => {
+                      Mixpanel.track("Budget button clicked");
+                    }}
+                    className="absolute bottom-2 z-30 flex flex-col left-2"
+                  >
                     <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
                       View stays
                     </div>
@@ -787,7 +881,12 @@ function Main() {
 
               <Link href="/stays?pricing_type=MID-RANGE">
                 <a>
-                  <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                  <div
+                    onClick={() => {
+                      Mixpanel.track("Mid-Range button clicked");
+                    }}
+                    className="absolute bottom-2 z-30 flex flex-col left-2"
+                  >
                     <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
                       View stays
                     </div>
@@ -810,7 +909,12 @@ function Main() {
 
               <Link href="/stays?pricing_type=HIGH-END">
                 <a>
-                  <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                  <div
+                    onClick={() => {
+                      Mixpanel.track("Luxurious button clicked");
+                    }}
+                    className="absolute bottom-2 z-30 flex flex-col left-2"
+                  >
                     <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
                       View stays
                     </div>
@@ -907,7 +1011,12 @@ function Main() {
 
               <Link href="/trip">
                 <a>
-                  <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                  <div
+                    onClick={() => {
+                      Mixpanel.track("All curated trips button clicked");
+                    }}
+                    className="absolute bottom-2 z-30 flex flex-col left-2"
+                  >
                     <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
                       View curated trips
                     </div>
@@ -930,7 +1039,12 @@ function Main() {
 
               <Link href="/stays">
                 <a>
-                  <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                  <div
+                    onClick={() => {
+                      Mixpanel.track("All stays button clicked");
+                    }}
+                    className="absolute bottom-2 z-30 flex flex-col left-2"
+                  >
                     <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
                       View stays
                     </div>
@@ -953,7 +1067,12 @@ function Main() {
 
               <Link href="/activities">
                 <a>
-                  <div className="absolute bottom-2 z-30 flex flex-col left-2">
+                  <div
+                    onClick={() => {
+                      Mixpanel.track("All activities button clicked");
+                    }}
+                    className="absolute bottom-2 z-30 flex flex-col left-2"
+                  >
                     <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
                       View activities
                     </div>

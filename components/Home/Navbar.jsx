@@ -36,18 +36,11 @@ function Navbar({
           ></SearchSelect>
         </div>
       )}
-      <UserDropdown
-        userProfile={userProfile}
-        changeShowDropdown={changeShowDropdown}
-        showDropdown={showDropdown}
-      ></UserDropdown>
+      <UserDropdown userProfile={userProfile}></UserDropdown>
     </div>
   );
 }
 
-Navbar.propTypes = {
-  showDropdown: PropTypes.bool.isRequired,
-  changeShowDropdown: PropTypes.func.isRequired,
-};
+Navbar.propTypes = {};
 
 export default Navbar;
