@@ -1251,9 +1251,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     (stay.is_an_event
                       ? "h-[60px] bg-white z-10 border-t border-b flex left-0 right-0 "
                       : "h-12 border-b border-gray-200 w-[100%] px-3 lg:px-10 bg-slate-100 sticky left-0 right-0") +
-                    (isSafari
-                      ? "top-[68px] md:top-[108px]"
-                      : "md:top-[115.25px] top-[72.25px]")
+                    (isSafari ? "top-[68px]" : "top-[72.25px]")
                   }
                   ref={scrollRef}
                 >
