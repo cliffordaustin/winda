@@ -432,6 +432,8 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
   const [loading, setLoading] = useState(false);
 
+  const [loadingForPaystack, setLoadingForPaystack] = useState(false);
+
   const [eventGuests, setEventGuests] = useState(1);
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -519,6 +521,222 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
     stay
   );
 
+  const [childrenTravelers, setChildrenTravelers] = useState(
+    Number(router.query.children) || 0
+  );
+
+  const [adultTravelers, setAdultTravelers] = useState(
+    Number(router.query.adults) || 1
+  );
+
+  const [passengers, setPassengers] = useState(
+    Number(router.query.passengers) || 0
+  );
+
+  const [rooms, setRooms] = useState(Number(router.query.rooms) || 1);
+
+  const [checkoutErrorMessage, setCheckoutErrorMessage] = useState(false);
+
+  const transports = [
+    {
+      name: "No transport",
+    },
+    {
+      name: "Van",
+      unavailable: stay.car_transfer_price ? false : true,
+      price: stay.car_transfer_price,
+    },
+    {
+      name: "Bus",
+      unavailable: stay.bus_transfer_price ? false : true,
+      price: stay.bus_transfer_price,
+    },
+  ];
+
+  const [selected, setSelected] = useState(
+    transports[Number(router.query.transport) || 0]
+  );
+
+  const [phone, setPhone] = useState("");
+
+  const [invalidPhone, setInvalidPhone] = useState(false);
+
+  const totalPriceOfStay = (price) => {
+    const nights =
+      new Date(router.query.end_date).getDate() -
+      new Date(router.query.starting_date).getDate();
+    const rooms = Number(router.query.rooms);
+    const passengers = Number(router.query.passengers);
+    const total =
+      price * nights * rooms +
+      (selected.name.toLowerCase() == "van"
+        ? stay.car_transfer_price * passengers
+        : selected.name.toLowerCase() == "bus"
+        ? stay.bus_transfer_price * passengers
+        : 0);
+    return total;
+  };
+
+  const totalPriceOfStayForTentedCamp = (price) => {
+    const nights =
+      new Date(router.query.end_date).getDate() -
+      new Date(router.query.starting_date).getDate();
+    const adults = Number(router.query.adults);
+    const passengers = Number(router.query.passengers);
+    const total =
+      price * nights * adults +
+      (selected.name.toLowerCase() == "van"
+        ? stay.car_transfer_price * passengers
+        : selected.name.toLowerCase() == "bus"
+        ? stay.bus_transfer_price * passengers
+        : 0);
+    return total;
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      first_name: userProfile.first_name || "",
+      last_name: userProfile.last_name || "",
+      email: userProfile.email || "",
+      confirmation_code: "",
+    },
+    validationSchema: Yup.object({
+      first_name: Yup.string()
+        .max(120, "This field has a max length of 120")
+        .required("This field is required"),
+      last_name: Yup.string()
+        .max(120, "This field has a max length of 120")
+        .required("This field is required"),
+      email: Yup.string()
+        .email("Invalid email")
+        .required("This field is required"),
+
+      confirmation_code: Yup.string()
+        .required("This field is required")
+        .max(10, "This field has a max length of 10")
+        .min(10, "This field has a max length of 10"),
+    }),
+    onSubmit: async (values) => {
+      if (isValidPhoneNumber(phone || "")) {
+        setLoading(true);
+        axios
+          .post(
+            `${process.env.NEXT_PUBLIC_baseURL}/stays/${router.query.slug}/create-event/`,
+            {
+              first_name: values.first_name,
+              last_name: values.last_name,
+              email: values.email,
+              message: message,
+              type_of_room:
+                stay.type_of_rooms[Number(router.query.room_type)].name,
+              confirmation_code: values.confirmation_code,
+              phone: phone,
+              adults: Number(router.query.adults),
+              rooms: stay.type_of_rooms[Number(router.query.room_type)]
+                .is_tented_camp
+                ? 0
+                : Number(router.query.rooms),
+              passengers: Number(router.query.passengers),
+              from_date: new Date(router.query.starting_date),
+              to_date: new Date(router.query.end_date),
+              transport: Number(router.query.transport),
+            }
+          )
+          .then((res) => {
+            Mixpanel.track("Event accommodation paid", {
+              name_of_accommodation: stay.name,
+            });
+            setLoading(false);
+            setShowCheckoutResponseModal(true);
+          })
+          .catch((err) => {
+            setLoading(false);
+          });
+      } else if (!isValidPhoneNumber(phone || "")) {
+        setLoading(false);
+        setInvalidPhone(true);
+      }
+    },
+  });
+
+  const [showMobileRoomDateModal, setShowMobileRoomDateModal] = useState(false);
+
+  const total = () => {
+    let price = stay.type_of_rooms[Number(router.query.room_type) || 0]
+      .is_tented_camp
+      ? totalPriceOfStayForTentedCamp(
+          stay.type_of_rooms[Number(router.query.room_type) || 0].price
+        ) +
+        totalPriceOfStayForTentedCamp(
+          stay.type_of_rooms[Number(router.query.room_type) || 0].price
+        ) *
+          0.035
+      : totalPriceOfStay(
+          stay.type_of_rooms[Number(router.query.room_type) || 0].price
+        ) +
+        totalPriceOfStay(
+          stay.type_of_rooms[Number(router.query.room_type) || 0].price
+        ) *
+          0.035;
+
+    return parseInt(
+      (Math.floor(price * 100) / 100).toFixed(2).replace(".", ""),
+      10
+    );
+  };
+
+  const config = {
+    reference: new Date().getTime().toString(),
+    email: formik.values.email,
+    amount: total(),
+    publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLICK_KEY,
+    currency: "KES",
+  };
+
+  const onSuccess = (reference) => {
+    if (isValidPhoneNumber(phone || "")) {
+      setLoadingForPaystack(true);
+      axios
+        .post(
+          `${process.env.NEXT_PUBLIC_baseURL}/stays/${router.query.slug}/create-event/`,
+          {
+            first_name: formik.values.first_name,
+            last_name: formik.values.last_name,
+            email: formik.values.email,
+            message: message,
+            type_of_room:
+              stay.type_of_rooms[Number(router.query.room_type)].name,
+            confirmation_code: "CARD",
+            phone: phone,
+            adults: Number(router.query.adults),
+            rooms: stay.type_of_rooms[Number(router.query.room_type)]
+              .is_tented_camp
+              ? 0
+              : Number(router.query.rooms),
+            passengers: Number(router.query.passengers),
+            from_date: new Date(router.query.starting_date),
+            to_date: new Date(router.query.end_date),
+            transport: Number(router.query.transport),
+          }
+        )
+        .then((res) => {
+          Mixpanel.track("Event accommodation paid", {
+            name_of_accommodation: stay.name,
+          });
+          setLoadingForPaystack(false);
+          setShowCheckoutResponseModal(true);
+        })
+        .catch((err) => {
+          setLoadingForPaystack(false);
+        });
+    } else if (!isValidPhoneNumber(phone || "")) {
+      setLoadingForPaystack(false);
+      setInvalidPhone(true);
+    }
+  };
+
+  const initializePayment = usePaystackPayment(config);
+
   const handlePageClick = (event) => {
     router.push(
       {
@@ -573,22 +791,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
     );
   }
 
-  const [childrenTravelers, setChildrenTravelers] = useState(
-    Number(router.query.children) || 0
-  );
-
-  const [adultTravelers, setAdultTravelers] = useState(
-    Number(router.query.adults) || 1
-  );
-
-  const [passengers, setPassengers] = useState(
-    Number(router.query.passengers) || 0
-  );
-
-  const [rooms, setRooms] = useState(Number(router.query.rooms) || 1);
-
-  const [checkoutErrorMessage, setCheckoutErrorMessage] = useState(false);
-
   const checkAvailability = () => {
     if (eventDate.to) {
       router.replace(
@@ -610,26 +812,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
       setCheckoutErrorMessage(true);
     }
   };
-
-  const transports = [
-    {
-      name: "No transport",
-    },
-    {
-      name: "Van",
-      unavailable: stay.car_transfer_price ? false : true,
-      price: stay.car_transfer_price,
-    },
-    {
-      name: "Bus",
-      unavailable: stay.bus_transfer_price ? false : true,
-      price: stay.bus_transfer_price,
-    },
-  ];
-
-  const [selected, setSelected] = useState(
-    transports[Number(router.query.transport) || 0]
-  );
 
   function TransportType() {
     return (
@@ -858,116 +1040,12 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
     );
   }
 
-  const totalPriceOfStay = (price) => {
-    const nights =
-      new Date(router.query.end_date).getDate() -
-      new Date(router.query.starting_date).getDate();
-    const rooms = Number(router.query.rooms);
-    const passengers = Number(router.query.passengers);
-    const total =
-      price * nights * rooms +
-      (selected.name.toLowerCase() == "van"
-        ? stay.car_transfer_price * passengers
-        : selected.name.toLowerCase() == "bus"
-        ? stay.bus_transfer_price * passengers
-        : 0);
-    return total;
-  };
-
-  const totalPriceOfStayForTentedCamp = (price) => {
-    const nights =
-      new Date(router.query.end_date).getDate() -
-      new Date(router.query.starting_date).getDate();
-    const adults = Number(router.query.adults);
-    const passengers = Number(router.query.passengers);
-    const total =
-      price * nights * adults +
-      (selected.name.toLowerCase() == "van"
-        ? stay.car_transfer_price * passengers
-        : selected.name.toLowerCase() == "bus"
-        ? stay.bus_transfer_price * passengers
-        : 0);
-    return total;
-  };
-
-  const [phone, setPhone] = useState("");
-
-  const [invalidPhone, setInvalidPhone] = useState(false);
-
-  const formik = useFormik({
-    initialValues: {
-      first_name: userProfile.first_name || "",
-      last_name: userProfile.last_name || "",
-      email: userProfile.email || "",
-      confirmation_code: "",
-    },
-    validationSchema: Yup.object({
-      first_name: Yup.string()
-        .max(120, "This field has a max length of 120")
-        .required("This field is required"),
-      last_name: Yup.string()
-        .max(120, "This field has a max length of 120")
-        .required("This field is required"),
-      email: Yup.string()
-        .email("Invalid email")
-        .required("This field is required"),
-
-      confirmation_code: Yup.string()
-        .required("This field is required")
-        .max(10, "This field has a max length of 10")
-        .min(10, "This field has a max length of 10"),
-    }),
-    onSubmit: async (values) => {
-      if (isValidPhoneNumber(phone || "")) {
-        setLoading(true);
-        axios
-          .post(
-            `${process.env.NEXT_PUBLIC_baseURL}/stays/${router.query.slug}/create-event/`,
-            {
-              first_name: values.first_name,
-              last_name: values.last_name,
-              email: values.email,
-              message: message,
-              type_of_room:
-                stay.type_of_rooms[Number(router.query.room_type)].name,
-              confirmation_code: values.confirmation_code,
-              phone: phone,
-              adults: Number(router.query.adults),
-              rooms: stay.type_of_rooms[Number(router.query.room_type)]
-                .is_tented_camp
-                ? 0
-                : Number(router.query.rooms),
-              passengers: Number(router.query.passengers),
-              from_date: new Date(router.query.starting_date),
-              to_date: new Date(router.query.end_date),
-              transport: Number(router.query.transport),
-            }
-          )
-          .then((res) => {
-            Mixpanel.track("Event accommodation paid", {
-              name_of_accommodation: stay.name,
-            });
-            setLoading(false);
-            setShowCheckoutResponseModal(true);
-          })
-          .catch((err) => {
-            setLoading(false);
-          });
-      } else if (!isValidPhoneNumber(phone || "")) {
-        setLoading(false);
-        setInvalidPhone(true);
-      }
-    },
-  });
-
   const getStandardRoomPrice = (stay) => {
     const standardRoom = stay.type_of_rooms.find(
       (room) => room.is_standard === true
     );
     return standardRoom.price;
   };
-
-  const [showMobileRoomDateModal, setShowMobileRoomDateModal] = useState(false);
 
   const MobileRoomDatePopup = () => {
     return (
@@ -1030,82 +1108,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
       </Dialogue>
     );
   };
-
-  const total = () => {
-    let price = stay.type_of_rooms[Number(router.query.room_type) || 0]
-      .is_tented_camp
-      ? totalPriceOfStayForTentedCamp(
-          stay.type_of_rooms[Number(router.query.room_type) || 0].price
-        ) +
-        totalPriceOfStayForTentedCamp(
-          stay.type_of_rooms[Number(router.query.room_type) || 0].price
-        ) *
-          0.035
-      : totalPriceOfStay(
-          stay.type_of_rooms[Number(router.query.room_type) || 0].price
-        ) +
-        totalPriceOfStay(
-          stay.type_of_rooms[Number(router.query.room_type) || 0].price
-        ) *
-          0.035;
-
-    return parseInt(
-      (Math.floor(price * 100) / 100).toFixed(2).replace(".", ""),
-      10
-    );
-  };
-
-  const config = {
-    reference: new Date().getTime().toString(),
-    email: formik.values.email,
-    amount: total(),
-    publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLICK_KEY,
-    currency: "KES",
-  };
-
-  const onSuccess = (reference) => {
-    if (isValidPhoneNumber(phone || "")) {
-      setLoading(true);
-      axios
-        .post(
-          `${process.env.NEXT_PUBLIC_baseURL}/stays/${router.query.slug}/create-event/`,
-          {
-            first_name: formik.values.first_name,
-            last_name: formik.values.last_name,
-            email: formik.values.email,
-            message: message,
-            type_of_room:
-              stay.type_of_rooms[Number(router.query.room_type)].name,
-            confirmation_code: "CARD",
-            phone: phone,
-            adults: Number(router.query.adults),
-            rooms: stay.type_of_rooms[Number(router.query.room_type)]
-              .is_tented_camp
-              ? 0
-              : Number(router.query.rooms),
-            passengers: Number(router.query.passengers),
-            from_date: new Date(router.query.starting_date),
-            to_date: new Date(router.query.end_date),
-            transport: Number(router.query.transport),
-          }
-        )
-        .then((res) => {
-          Mixpanel.track("Event accommodation paid", {
-            name_of_accommodation: stay.name,
-          });
-          setLoading(false);
-          setShowCheckoutResponseModal(true);
-        })
-        .catch((err) => {
-          setLoading(false);
-        });
-    } else if (!isValidPhoneNumber(phone || "")) {
-      setLoading(false);
-      setInvalidPhone(true);
-    }
-  };
-
-  const initializePayment = usePaystackPayment(config);
 
   return (
     <div
@@ -4904,7 +4906,11 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       <span>Use a card</span>
                       <Icon icon="bxs:lock-alt" className="w-5 h-5" />
 
-                      <div className={" " + (loading ? "ml-1.5 " : " hidden")}>
+                      <div
+                        className={
+                          " " + (loadingForPaystack ? "ml-1.5 " : " hidden")
+                        }
+                      >
                         <LoadingSpinerChase
                           width={13}
                           height={13}
