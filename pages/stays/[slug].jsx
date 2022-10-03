@@ -1040,7 +1040,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
   };
 
   const onSuccess = (reference) => {
-    console.log(reference);
+    formik.submitForm();
   };
 
   const onClose = () => {
@@ -4712,6 +4712,139 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                           color="white"
                         ></LoadingSpinerChase>
                       </div>
+                    </Button>
+                  </div>
+
+                  <div className="mt-4 flex gap-4 items-center">
+                    <div className="flex-grow h-px bg-gray-300"></div>
+                    <div className="text-sm font-bold text-center">
+                      Or pay with card
+                    </div>
+                    <div className="flex-grow h-px bg-gray-300"></div>
+                  </div>
+
+                  <div className="flex justify-between items-center">
+                    <h1 className="font-bold">Price</h1>
+                    {stay.type_of_rooms[Number(router.query.room_type)]
+                      .is_tented_camp && (
+                      <Price
+                        currency="KES"
+                        stayPrice={totalPriceOfStayForTentedCamp(
+                          stay.type_of_rooms[Number(router.query.room_type)]
+                            .price
+                        )}
+                        className="!text-base"
+                      ></Price>
+                    )}
+
+                    {!stay.type_of_rooms[Number(router.query.room_type)]
+                      .is_tented_camp && (
+                      <Price
+                        currency="KES"
+                        stayPrice={totalPriceOfStay(
+                          stay.type_of_rooms[Number(router.query.room_type)]
+                            .price
+                        )}
+                        className="!text-base"
+                      ></Price>
+                    )}
+                  </div>
+
+                  <div className="flex justify-between mt-3 items-center">
+                    <h1 className="font-bold">Tax (3.5%)</h1>
+                    {stay.type_of_rooms[Number(router.query.room_type)]
+                      .is_tented_camp && (
+                      <Price
+                        currency="KES"
+                        stayPrice={
+                          totalPriceOfStayForTentedCamp(
+                            stay.type_of_rooms[Number(router.query.room_type)]
+                              .price
+                          ) * 0.035
+                        }
+                        className="!text-base"
+                      ></Price>
+                    )}
+
+                    {!stay.type_of_rooms[Number(router.query.room_type)]
+                      .is_tented_camp && (
+                      <Price
+                        currency="KES"
+                        stayPrice={
+                          totalPriceOfStay(
+                            stay.type_of_rooms[Number(router.query.room_type)]
+                              .price
+                          ) * 0.035
+                        }
+                        className="!text-base"
+                      ></Price>
+                    )}
+                  </div>
+
+                  <div className="flex justify-between mt-3 items-center">
+                    <h1 className="font-bold">Total price</h1>
+                    {stay.type_of_rooms[Number(router.query.room_type)]
+                      .is_tented_camp && (
+                      <Price
+                        currency="KES"
+                        stayPrice={
+                          totalPriceOfStayForTentedCamp(
+                            stay.type_of_rooms[Number(router.query.room_type)]
+                              .price
+                          ) +
+                          totalPriceOfStayForTentedCamp(
+                            stay.type_of_rooms[Number(router.query.room_type)]
+                              .price
+                          ) *
+                            0.035
+                        }
+                        className="!text-base"
+                      ></Price>
+                    )}
+
+                    {!stay.type_of_rooms[Number(router.query.room_type)]
+                      .is_tented_camp && (
+                      <Price
+                        currency="KES"
+                        stayPrice={
+                          totalPriceOfStay(
+                            stay.type_of_rooms[Number(router.query.room_type)]
+                              .price
+                          ) +
+                          totalPriceOfStay(
+                            stay.type_of_rooms[Number(router.query.room_type)]
+                              .price
+                          ) *
+                            0.035
+                        }
+                        className="!text-base"
+                      ></Price>
+                    )}
+                  </div>
+
+                  <div className="mt-4 mb-3">
+                    <Button
+                      onClick={() => {
+                        formik.setTouched({
+                          first_name: true,
+                          last_name: true,
+                          email: true,
+                          confirmation_code: false,
+                        });
+                        if (isValidPhoneNumber(phone || "")) {
+                          setInvalidPhone(true);
+                          formik.validateForm().then(() => {
+                            initializePayment(onSuccess, onClose);
+                          });
+                        } else {
+                          setInvalidPhone(true);
+                        }
+                      }}
+                      type="submit"
+                      className="flex w-full mt-3 mb-3 items-center gap-1 !px-0 !py-3 font-bold !bg-blue-600 !text-white"
+                    >
+                      <span>Use a card</span>
+                      <Icon icon="bxs:lock-alt" className="w-5 h-5" />
                     </Button>
                   </div>
 
