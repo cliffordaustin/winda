@@ -17,7 +17,6 @@ import { Link as ReactScrollLink } from "react-scroll";
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 
-// import { getServerSideProps } from "../../lib/getServerSideProps";
 import Navbar from "../../components/Stay/Navbar";
 import ImageGallery from "../../components/Stay/ImageGallery";
 import Price from "../../components/Stay/Price";
