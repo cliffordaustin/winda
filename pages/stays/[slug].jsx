@@ -763,7 +763,9 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
   const [eventDate, setEventDate] = useState({
     from:
       (router.query.starting_date && new Date(router.query.starting_date)) ||
-      new Date(2022, 9, 8),
+      (stay.date_starts_from_ninth
+        ? new Date(2022, 9, 9)
+        : new Date(2022, 9, 8)),
     to:
       (router.query.end_date && new Date(router.query.end_date)) ||
       new Date(2022, 9, 10),
@@ -774,7 +776,11 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
       <div className="w-full">
         <DayPicker
           mode="range"
-          disabled={{ before: new Date(2022, 9, 8) }}
+          disabled={{
+            before: stay.date_starts_from_ninth
+              ? new Date(2022, 9, 9)
+              : new Date(2022, 9, 8),
+          }}
           selected={eventDate}
           onSelect={(date) => {
             if (date) {
@@ -1009,7 +1015,11 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
             moment(new Date(router.query.starting_date)).format(
               "YYYY-MM-DD"
             )) ||
-          moment(new Date(2022, 9, 8)).format("YYYY-MM-DD"),
+          moment(
+            stay.date_starts_from_ninth
+              ? new Date(2022, 9, 9)
+              : new Date(2022, 9, 8)
+          ).format("YYYY-MM-DD"),
         end_date:
           (router.query.end_date &&
             moment(new Date(router.query.end_date)).format("YYYY-MM-DD")) ||
@@ -1080,7 +1090,11 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
         <div className="p-4">
           <DayPicker
             mode="range"
-            disabled={{ before: new Date(2022, 9, 8) }}
+            disabled={{
+              before: stay.date_starts_from_ninth
+                ? new Date(2022, 9, 9)
+                : new Date(2022, 9, 8),
+            }}
             selected={eventDate}
             onSelect={(date) => {
               if (date) {
@@ -2774,7 +2788,13 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
                             <div className="mt-2 mb-2">
                               <div className="flex justify-between items-center w-full">
-                                <div className="">
+                                <div className="flex">
+                                  {room.old_price && (
+                                    <Price
+                                      stayPrice={room.old_price}
+                                      className="!text-sm line-through mr-1 self-end mb-0.5 text-red-500"
+                                    ></Price>
+                                  )}
                                   {!room.is_tented_camp &&
                                     !room.not_available && (
                                       <Price
@@ -2786,7 +2806,10 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                                             ).getDate() -
                                               new Date(
                                                 router.query.starting_date
-                                              ).getDate() || 2) *
+                                              ).getDate() ||
+                                              (stay.date_starts_from_ninth
+                                                ? 1
+                                                : 2)) *
                                             (Number(router.query.rooms) || 1) +
                                           (transports[
                                             Number(router.query.transport) || 0
@@ -2815,7 +2838,10 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                                             ).getDate() -
                                               new Date(
                                                 router.query.starting_date
-                                              ).getDate() || 2) *
+                                              ).getDate() ||
+                                              (stay.date_starts_from_ninth
+                                                ? 1
+                                                : 2)) *
                                             (Number(router.query.adults) || 1) +
                                           (transports[
                                             Number(router.query.transport) || 0
@@ -3038,14 +3064,20 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                                 !router.query.end_date && (
                                   <div className="mt-1">
                                     from{" "}
-                                    {moment(new Date(2022, 9, 8)).format(
-                                      "Do MMM"
-                                    )}{" "}
+                                    {moment(
+                                      stay.date_starts_from_ninth
+                                        ? new Date(2022, 9, 9)
+                                        : new Date(2022, 9, 8)
+                                    ).format("Do MMM")}{" "}
                                     -{" "}
                                     {moment(new Date(2022, 9, 10)).format(
                                       "Do MMM"
                                     )}{" "}
-                                    (2 nights)
+                                    ({stay.date_starts_from_ninth ? "1" : "2"}{" "}
+                                    {stay.date_starts_from_ninth
+                                      ? "night"
+                                      : "nights"}
+                                    )
                                   </div>
                                 )}
                             </div>
