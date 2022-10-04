@@ -2791,6 +2791,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                                 <div className="flex">
                                   {room.old_price && (
                                     <Price
+                                      currency="KES"
                                       stayPrice={room.old_price}
                                       className="!text-sm line-through mr-1 self-end mb-0.5 text-red-500"
                                     ></Price>
