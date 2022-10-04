@@ -2908,6 +2908,19 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                             </div>
                           </div>
 
+                          {room.available_rooms && room.available_rooms <= 6 && (
+                            <div className="w-full my-1 text-red-600 px-2 text-sm flex gap-1 items-center">
+                              <Icon
+                                icon="bx:bx-info-circle"
+                                className="w-5 h-5"
+                              />
+                              <span>
+                                only {room.available_rooms} rooms available at
+                                this price.
+                              </span>
+                            </div>
+                          )}
+
                           <div className="mt-2">
                             <hr />
                           </div>
