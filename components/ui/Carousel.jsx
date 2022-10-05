@@ -16,6 +16,7 @@ function Carousel({
   className = "",
   unoptimized = true,
   objectPosition = "center",
+  layout = "fill",
 }) {
   const settings = {
     spaceBetween: 10,
@@ -75,7 +76,7 @@ function Carousel({
               src={image}
               alt="Image Gallery"
               objectPosition={objectPosition}
-              layout="fill"
+              layout={layout}
               objectFit="cover"
               unoptimized={unoptimized}
             />

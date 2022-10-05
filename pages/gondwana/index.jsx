@@ -27,6 +27,8 @@ function RequestTrip({ userProfile, stays }) {
   const [showFAQ, setShowFAQ] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
 
+  const [eventDetails, setEventDetails] = useState(false);
+
   const getStandardRoomPrice = (stay) => {
     const standardRoom = stay.type_of_rooms.find(
       (room) => room.is_standard === true
@@ -35,7 +37,7 @@ function RequestTrip({ userProfile, stays }) {
   };
 
   const carouselImages = [
-    "/images/gondwana_img5.jpg",
+    "/images/gondwana_img6.jpg",
     "/images/gondwana_img1.jpg",
     "/images/gondwana_img2.jpg",
     "/images/gondwana_img3.jpg",
@@ -65,20 +67,37 @@ function RequestTrip({ userProfile, stays }) {
         </div>
       </div>
 
-      <div className="md:hidden h-[400px] mt-[110px]">
-        <Carousel
+      <div className="lg:hidden relative h-[400px] sm:h-[500px] mt-[120px]">
+        {/* <Carousel
           images={carouselImages}
           imageClass="!w-full rounded-none"
           objectPosition="top"
-        ></Carousel>
+          layout="intrinsic"
+        ></Carousel> */}
+
+        <Image
+          className={"w-full "}
+          src={"/images/gondwana_img6.jpg"}
+          alt="Image Gallery"
+          layout="fill"
+          unoptimized={true}
+        />
       </div>
-      <div className="flex md:bg-gray-100 gap-2 mt-[20px] md:mt-[110px] relative">
-        <div className="hidden md:block h-[91vh] mt-0 sticky top-[80px] w-[45%] xl:w-[55%]">
-          <Carousel
+      <div className="flex lg:bg-gray-100 gap-2 mt-[20px] lg:mt-[110px] relative">
+        <div className="hidden lg:block h-[86.7vh] mt-0 sticky top-[80px] w-[45%] xl:w-[55%]">
+          {/* <Carousel
             images={carouselImages}
             imageClass="!w-full rounded-none"
             objectPosition="top"
-          ></Carousel>
+          ></Carousel> */}
+
+          <Image
+            className={"w-full "}
+            src={"/images/gondwana_img6.jpg"}
+            alt="Image Gallery"
+            layout="fill"
+            unoptimized={true}
+          />
 
           <div className="flex flex-col absolute bottom-16 left-4 z-40">
             {/* <div className="font-mono text-2xl mb-1 text-white">
@@ -95,7 +114,7 @@ function RequestTrip({ userProfile, stays }) {
           </div>
         </div>
         <div
-          className="w-full mb-10 sm:w-[80%] flex flex-col gap-2 sm:mx-auto md:w-[55%] xl:w-[45%] px-4
+          className="w-full relative mb-10 sm:w-[80%] flex flex-col gap-2 sm:mx-auto lg:w-[55%] xl:w-[45%] px-4
          py-3 h-full"
         >
           {stays.map((stay, index) => {
@@ -118,7 +137,7 @@ function RequestTrip({ userProfile, stays }) {
                   ></Carousel>
                 </div>
 
-                <div className="py-2 md:px-0 px-2 md:w-[400px]">
+                <div className="py-2 md:px-0 px-2 w-full">
                   <div className="uppercase text-xs text-gray-600 truncate">
                     {stay.location}
                   </div>
@@ -284,263 +303,319 @@ function RequestTrip({ userProfile, stays }) {
               </div>
             );
           })}
-        </div>
-        <div className="flex gap-4 items-center px-8 md:px-4 border-t fixed bottom-0 w-full md:w-[50%] xl:w-[40%] md:right-5 bg-white h-[40px]">
-          <div
-            onClick={() => {
-              setShowFAQ(true);
-            }}
-            className="underline font-bold cursor-pointer"
-          >
-            FAQ
-          </div>
-          <Dialogue
-            isOpen={showFAQ}
-            closeModal={() => {
-              setShowFAQ(false);
-            }}
-            title="FAQ"
-            dialogueTitleClassName="!font-bold mb-6"
-            dialoguePanelClassName="max-h-[500px] max-w-lg overflow-y-scroll remove-scroll"
-            outsideDialogueClass="!p-1"
-          >
-            <h1 className="mt-4 font-bold">
-              What accommodation is being offered?
-            </h1>
+          <div className="flex gap-4 items-center px-8 lg:px-4 border-t fixed bottom-0 right-0 w-full lg:w-[55.3%] xl:w-[45%] bg-white h-[40px]">
+            <div
+              onClick={() => {
+                setShowFAQ(true);
+              }}
+              className="underline font-bold cursor-pointer"
+            >
+              FAQ
+            </div>
+            <Dialogue
+              isOpen={showFAQ}
+              closeModal={() => {
+                setShowFAQ(false);
+              }}
+              title="FAQ"
+              dialogueTitleClassName="!font-bold mb-6"
+              dialoguePanelClassName="max-h-[500px] max-w-lg overflow-y-scroll remove-scroll"
+              outsideDialogueClass="!p-1"
+            >
+              <h1 className="mt-4 font-bold">
+                What accommodation is being offered?
+              </h1>
 
-            <p className="mt-2">
-              Winda.guide has organised the best rates for Kilima Camp and Kibo
-              camp as accommodation for Dwana in the wild.{" "}
-            </p>
+              <p className="mt-2">
+                Winda.guide has organised the best rates for Kilima Camp and
+                Kibo camp as accommodation for Dwana in the wild.{" "}
+              </p>
 
-            <h1 className="mt-4 font-bold">
-              Is there transport for people staying in other non-recommended
-              accommodation?
-            </h1>
+              <h1 className="mt-4 font-bold">
+                Is there transport for people staying in other non-recommended
+                accommodation?
+              </h1>
 
-            <p className="mt-2">
-              No, unfortunately we have not organised transport to other
-              non-recommended accommodations from Nairobi & between said
-              accommodation and the event site (Kilima Safari Camp).
-            </p>
+              <p className="mt-2">
+                No, unfortunately we have not organised transport to other
+                non-recommended accommodations from Nairobi & between said
+                accommodation and the event site (Kilima Safari Camp).
+              </p>
 
-            <h1 className="mt-4 font-bold">
-              Can we stay in Amboseli National Park?
-            </h1>
+              <h1 className="mt-4 font-bold">
+                Can we stay in Amboseli National Park?
+              </h1>
 
-            <p className="mt-2">
-              We highly recommend you do not stay at any properties within
-              Amboseli NP. This is because you will not be able to leave the
-              park after 6pm or enter the park before 6am as the gates are shut
-              due to wildlife security.{" "}
-            </p>
+              <p className="mt-2">
+                We highly recommend you do not stay at any properties within
+                Amboseli NP. This is because you will not be able to leave the
+                park after 6pm or enter the park before 6am as the gates are
+                shut due to wildlife security.{" "}
+              </p>
 
-            <h1 className="font-bold mt-4">What are the event timings?</h1>
+              <h1 className="font-bold mt-4">What are the event timings?</h1>
 
-            <p className="mt-2">
-              Dwana in the wild will start Saturday 8th October 4pm- 2 am &
-              Sunday 9th October 3pm-2am.
-            </p>
+              <p className="mt-2">
+                Dwana in the wild will start Saturday 8th October 4pm- 2 am &
+                Sunday 9th October 3pm-2am.
+              </p>
 
-            <h1 className="font-bold mt-4">
-              Can I bring alcohol and food from outside the accommodation,
-              inside?
-            </h1>
+              <h1 className="font-bold mt-4">
+                Can I bring alcohol and food from outside the accommodation,
+                inside?
+              </h1>
 
-            <p className="mt-2">
-              No, you are not allowed to bring food or alcohol from outside.
-              There will be a cash bar serving drinks for the duration of the
-              event at Kilima Camp. Accommodation at Kilima camp is also full
-              board and there will be food to purchase for those not staying at
-              Kilima.{" "}
-            </p>
+              <p className="mt-2">
+                No, you are not allowed to bring food or alcohol from outside.
+                There will be a cash bar serving drinks for the duration of the
+                event at Kilima Camp. Accommodation at Kilima camp is also full
+                board and there will be food to purchase for those not staying
+                at Kilima.{" "}
+              </p>
 
-            <p className="mt-2">
-              Kibo Camp also has a cash bar and full board accommodation
-              (breakfast, lunch & dinner) included with the price.{" "}
-            </p>
+              <p className="mt-2">
+                Kibo Camp also has a cash bar and full board accommodation
+                (breakfast, lunch & dinner) included with the price.{" "}
+              </p>
 
-            <h1 className="font-bold mt-4">
-              Is there transportation from Nairobi to the accommodation around
-              Amboseli?
-            </h1>
+              <h1 className="font-bold mt-4">
+                Is there transportation from Nairobi to the accommodation around
+                Amboseli?
+              </h1>
 
-            <p className="mt-2">
-              Yes , we have arranged a bus transport with two pickups in Nairobi
-              on Saturday 8th October and two drop-offs on Monday October 10th.
-              These are available to add when you book your accommodation
-            </p>
+              <p className="mt-2">
+                Yes , we have arranged a bus transport with two pickups in
+                Nairobi on Saturday 8th October and two drop-offs on Monday
+                October 10th. These are available to add when you book your
+                accommodation
+              </p>
 
-            <h1 className="font-bold mt-4">What Should I wear?</h1>
+              <h1 className="font-bold mt-4">What Should I wear?</h1>
 
-            <p className="mt-2">
-              It is likely to be hot in the day and cold at night, please dress
-              accordingly. Also, we recommend you wear suitable footwear as they
-              ground might be uneven.{" "}
-            </p>
+              <p className="mt-2">
+                It is likely to be hot in the day and cold at night, please
+                dress accordingly. Also, we recommend you wear suitable footwear
+                as they ground might be uneven.{" "}
+              </p>
 
-            <div className="fixed top-3 right-4 flex flex-col">
-              <div
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowFAQ(false);
-                }}
-                className="flex cursor-pointer items-center justify-center w-7 h-7 rounded-full bg-white shadow-lg"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="2"
+              <div className="fixed top-3 right-4 flex flex-col">
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowFAQ(false);
+                  }}
+                  className="flex cursor-pointer items-center justify-center w-7 h-7 rounded-full bg-white shadow-lg"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </div>
               </div>
+            </Dialogue>
+            <div
+              onClick={() => {
+                setShowTerms(true);
+              }}
+              className="underline font-bold cursor-pointer"
+            >
+              Terms and condition
             </div>
-          </Dialogue>
-          <div
-            onClick={() => {
-              setShowTerms(true);
-            }}
-            className="underline font-bold cursor-pointer"
-          >
-            Terms and condition
-          </div>
-          <Dialogue
-            isOpen={showTerms}
-            closeModal={() => {
-              setShowTerms(false);
-            }}
-            title="Terms and condition"
-            outsideDialogueClass="!p-1"
-            dialogueTitleClassName="!font-bold mb-6"
-            dialoguePanelClassName="max-h-[500px] max-w-lg overflow-y-scroll remove-scroll"
-          >
-            <h1 className="text-center underline">
-              Dwana in the Wild Amboseli
-            </h1>
-            <h1 className="text-center underline">Accommodation Details</h1>
+            <Dialogue
+              isOpen={showTerms}
+              closeModal={() => {
+                setShowTerms(false);
+              }}
+              title="Terms and condition"
+              outsideDialogueClass="!p-1"
+              dialogueTitleClassName="!font-bold mb-6"
+              dialoguePanelClassName="max-h-[500px] max-w-lg overflow-y-scroll remove-scroll"
+            >
+              <h1 className="text-center underline">
+                Dwana in the Wild Amboseli
+              </h1>
+              <h1 className="text-center underline">Accommodation Details</h1>
 
-            <p className="font-bold">Tentative event times</p>
-            <p className="font-bold">Saturday 8th October 4 pm - 2 am</p>
+              <p className="font-bold">Tentative event times</p>
+              <p className="font-bold">Saturday 8th October 4 pm - 2 am</p>
 
-            <p className="font-bold">Sunday 9th October 3 pm - 2 am</p>
-            <p className="font-bold">
-              Kilima Safari camp is the site at which Dwana in the Wild will
-              take place.
-            </p>
+              <p className="font-bold">Sunday 9th October 3 pm - 2 am</p>
+              <p className="font-bold">
+                Kilima Safari camp is the site at which Dwana in the Wild will
+                take place.
+              </p>
 
-            <h1 className="underline mt-6">Kilima Safari Camp</h1>
-            <p className="font-bold mt-2">
-              This is the event location for Dwana in the Wild
-            </p>
-            <p className="mt-2">
-              Included in the Rates for AA Safari camp is full board
-              accommodation (Breakfast, Lunch and Dinner) with tea, coffee &
-              purified drinking water, any additional beverages are extra.
-              Amenities include: swimming pool, ensuite rooms, wi-fi, bar &
-              restaurant.
-            </p>
-            <p className="underline mt-6">Kibo Camp</p>
-            <p className="mt-2">
-              Included in the rates for Kibo Camp; full board accommodation
-              (Breakfast, Lunch and Dinner) with tea, coffee & purified drinking
-              water , any additional beverages are extra. Amenities include:
-              bar, wi-fi, swimming pool & spa (any treatments are additional)
-            </p>
-            <h1 className="font-bold mt-2 underline">
-              Transfers options from Nairobi
-            </h1>
-            <p className="mb-2">
-              Transfers by bus from Nairobi to Amboseli and back are charged at
-              KES 4,000 per person.
-            </p>
-            <p className="mb-2">There will be two pickups within Nairobi:</p>
-            <div className="ml-4">
-              <p>1. Saturday, October 8th; Westlands at 8 am.</p>
-              <p>2. Capital Centre 9 am.</p>
-            </div>
-            <p className="mt-2">
-              If you choose the bus transfer option your details will be shared
-              with the transfer company and they will communicate with you
-              directly.
-            </p>
-            <h1 className="font-bold mt-4 underline">Event Transfers</h1>
-            <p className="mt-4">
-              We have organized transfers between Kibo Camp and Kilima Safari
-              Camp for KES 2,000 per person for the weekend. This will include{" "}
-              <span className="font-bold">transfers</span> to and from your
-              accommodation (if not staying at Kilima Safari Camp) and the event
-              location (Kilima Safari Camp). This will be paid at the event.
-            </p>
-            <p className="mt-2 font-bold">
-              Transfer times will be confirmed closer to the time of the event
-            </p>
-            <h1 className="font-bold mt-4">Disclaimer</h1>
-            <p className="mt-2">
-              Winda.Guide accepts no responsibility for loss or damage to
-              client’s property, health or loss of life.
-            </p>
-            <p className="mt-2">
-              Please note that all damages inflicted on the accommodation are
-              the responsibility of the clients to settle with said
-              accommodation.
-            </p>
-            <div className="font-bold mt-4">
-              Please note we do not recommend staying in a lodge within Amboseli
-              NP , as you will not be able to exit the park after 6 pm and
-              return before 6 am.
-            </div>
-            <p className="mt-4">Landing Page Note:</p>
-            <p className="mt-2">
-              Please book extra activities such as game drives, bushwalks &
-              sundowners with your accommodation directly. N.B. not all
-              accommodation offers all stated activities.
-            </p>
-            <p className="mt-4">Dress-code</p>
-            <p className="mt-2">
-              Please be sensible and appreciate it will get cold in the night
-              and possibly very warm in the day. Rain is also a possibility,
-              dress accordingly. We also highly recommend adequate supportive
-              footwear as the ground may be uneven.
-            </p>
-            <p className="mt-4">Cancellation Policy</p>
-            <p className="mt-2">
-              There will be no refunds for any accommodation booked and no
-              transfer of names associated with bookings. All sales are final.
-            </p>
+              <h1 className="underline mt-6">Kilima Safari Camp</h1>
+              <p className="font-bold mt-2">
+                This is the event location for Dwana in the Wild
+              </p>
+              <p className="mt-2">
+                Included in the Rates for AA Safari camp is full board
+                accommodation (Breakfast, Lunch and Dinner) with tea, coffee &
+                purified drinking water, any additional beverages are extra.
+                Amenities include: swimming pool, ensuite rooms, wi-fi, bar &
+                restaurant.
+              </p>
+              <p className="underline mt-6">Kibo Camp</p>
+              <p className="mt-2">
+                Included in the rates for Kibo Camp; full board accommodation
+                (Breakfast, Lunch and Dinner) with tea, coffee & purified
+                drinking water , any additional beverages are extra. Amenities
+                include: bar, wi-fi, swimming pool & spa (any treatments are
+                additional)
+              </p>
+              <h1 className="font-bold mt-2 underline">
+                Transfers options from Nairobi
+              </h1>
+              <p className="mb-2">
+                Transfers by bus from Nairobi to Amboseli and back are charged
+                at KES 4,000 per person.
+              </p>
+              <p className="mb-2">There will be two pickups within Nairobi:</p>
+              <div className="ml-4">
+                <p>1. Saturday, October 8th; Westlands at 8 am.</p>
+                <p>2. Capital Centre 9 am.</p>
+              </div>
+              <p className="mt-2">
+                If you choose the bus transfer option your details will be
+                shared with the transfer company and they will communicate with
+                you directly.
+              </p>
+              <h1 className="font-bold mt-4 underline">Event Transfers</h1>
+              <p className="mt-4">
+                We have organized transfers between Kibo Camp and Kilima Safari
+                Camp for KES 2,000 per person for the weekend. This will include{" "}
+                <span className="font-bold">transfers</span> to and from your
+                accommodation (if not staying at Kilima Safari Camp) and the
+                event location (Kilima Safari Camp). This will be paid at the
+                event.
+              </p>
+              <p className="mt-2 font-bold">
+                Transfer times will be confirmed closer to the time of the event
+              </p>
+              <h1 className="font-bold mt-4">Disclaimer</h1>
+              <p className="mt-2">
+                Winda.Guide accepts no responsibility for loss or damage to
+                client’s property, health or loss of life.
+              </p>
+              <p className="mt-2">
+                Please note that all damages inflicted on the accommodation are
+                the responsibility of the clients to settle with said
+                accommodation.
+              </p>
+              <div className="font-bold mt-4">
+                Please note we do not recommend staying in a lodge within
+                Amboseli NP , as you will not be able to exit the park after 6
+                pm and return before 6 am.
+              </div>
+              <p className="mt-4">Landing Page Note:</p>
+              <p className="mt-2">
+                Please book extra activities such as game drives, bushwalks &
+                sundowners with your accommodation directly. N.B. not all
+                accommodation offers all stated activities.
+              </p>
+              <p className="mt-4">Dress-code</p>
+              <p className="mt-2">
+                Please be sensible and appreciate it will get cold in the night
+                and possibly very warm in the day. Rain is also a possibility,
+                dress accordingly. We also highly recommend adequate supportive
+                footwear as the ground may be uneven.
+              </p>
+              <p className="mt-4">Cancellation Policy</p>
+              <p className="mt-2">
+                There will be no refunds for any accommodation booked and no
+                transfer of names associated with bookings. All sales are final.
+              </p>
 
-            <div className="fixed top-3 right-4 flex flex-col">
-              <div
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowTerms(false);
-                }}
-                className="flex cursor-pointer items-center justify-center w-7 h-7 rounded-full bg-white shadow-lg"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="2"
+              <div className="fixed top-3 right-4 flex flex-col">
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowTerms(false);
+                  }}
+                  className="flex cursor-pointer items-center justify-center w-7 h-7 rounded-full bg-white shadow-lg"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </div>
               </div>
+            </Dialogue>
+
+            <div
+              onClick={() => {
+                setEventDetails(true);
+              }}
+              className="underline font-bold cursor-pointer"
+            >
+              Event details
             </div>
-          </Dialogue>
+            <Dialogue
+              isOpen={eventDetails}
+              closeModal={() => {
+                setEventDetails(false);
+              }}
+              title="Event details"
+              outsideDialogueClass="!p-1"
+              dialogueTitleClassName="!font-bold !py-3 !px-4 bg-gray-100"
+              dialoguePanelClassName="max-h-[600px] !p-0 max-w-2xl overflow-y-scroll remove-scroll"
+            >
+              <div className="relative w-full h-[600px]">
+                <Image
+                  className={"w-full h-full "}
+                  src={"/images/DISCLAIMER-event.jpg"}
+                  alt="Image Gallery"
+                  layout="fill"
+                  unoptimized={true}
+                />
+              </div>
+
+              <div className="w-full mt-6"></div>
+
+              <div className="relative w-full h-[500px]">
+                <Image
+                  className={"w-full h-full "}
+                  src={"/images/bus-schedule-event.jpg"}
+                  alt="Image Gallery"
+                  layout="fill"
+                  unoptimized={true}
+                />
+              </div>
+
+              <div className="w-full mt-6"></div>
+
+              <div className="relative w-full h-[500px]">
+                <Image
+                  className={"w-full h-full "}
+                  src={"/images/INTERNAL-COMMUTE-event.jpg"}
+                  alt="Image Gallery"
+                  layout="fill"
+                  unoptimized={true}
+                />
+              </div>
+            </Dialogue>
+          </div>
         </div>
       </div>
     </div>
