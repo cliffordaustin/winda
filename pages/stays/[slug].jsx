@@ -1178,6 +1178,23 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               })
             }
           ></Navbar>
+
+          <Transition
+            enter="transition-all ease-in duration-150"
+            leave="transition-all ease-out duration-150"
+            enterFrom="opacity-0 scale-50"
+            enterTo="opacity-100 scale-100"
+            leaveFrom="opacity-100 scale-100"
+            leaveTo="opacity-0 scale-50"
+            show={!inView}
+            className={
+              stay.is_an_event
+                ? "h-[60px] bg-white z-20 border-t border-b left-0 right-0 flex w-full "
+                : "h-[60px] bg-white absolute z-20 border-t border-b left-0 flex w-full md:w-[55.85%] px-3 lg:w-[62.85%] "
+            }
+          >
+            <ScrollTo guestPopup={guestPopup} stay={stay}></ScrollTo>
+          </Transition>
         </div>
 
         {router.query.checkout_page !== "1" && (
@@ -1252,7 +1269,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                 >
                   <ImageGallery images={stay.stay_images}></ImageGallery>
 
-                  <div className="flex absolute bg-white px-3 rounded-3xl py-1 top-0 right-3 gap-2 items-center">
+                  <div className="flex absolute bg-white px-3 rounded-3xl py-1 top-[80px] right-3 gap-2 items-center">
                     <div className="cursor-pointer">
                       {!liked && (
                         <svg
@@ -1323,7 +1340,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     (guestPopup ? " !z-0 " : " ") +
                     (stay.is_an_event
                       ? "h-[60px] bg-white z-10 border-t border-b flex left-0 right-0 "
-                      : "h-12 border-b border-gray-200 w-[100%] px-3 lg:px-10 bg-slate-100 sticky left-0 right-0") +
+                      : "h-[60px] border-b border-gray-200 w-[100%] px-3 lg:px-10 ") +
                     (isSafari
                       ? "top-[68px] md:top-[108px]"
                       : "md:top-[115.25px] top-[72.25px]")
@@ -1332,7 +1349,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                 >
                   <ScrollTo guestPopup={guestPopup} stay={stay}></ScrollTo>
                 </div>
-                <Transition
+                {/* <Transition
                   enter="transition-all ease-in duration-150"
                   leave="transition-all ease-out duration-150"
                   enterFrom="opacity-0 scale-50"
@@ -1346,11 +1363,11 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       : "h-[60px] fixed bg-white z-20 border-t border-b left-0 flex w-full md:w-[56%] px-3 lg:w-[63%] ") +
                     (isSafari
                       ? "top-[68px] md:top-[108px]"
-                      : "md:top-[115.25px] top-[72.25px]")
+                      : "md:top-[115px] top-[72.25px]")
                   }
                 >
                   <ScrollTo guestPopup={guestPopup} stay={stay}></ScrollTo>
-                </Transition>
+                </Transition> */}
 
                 <div className="flex flex-wrap gap-1 mt-4">
                   {stay.tags &&
@@ -2908,18 +2925,20 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                             </div>
                           </div>
 
-                          {room.available_rooms && room.available_rooms <= 6 && (
-                            <div className="w-full my-1 text-red-600 px-2 text-sm flex gap-1 items-center">
-                              <Icon
-                                icon="bx:bx-info-circle"
-                                className="w-5 h-5"
-                              />
-                              <span>
-                                only {room.available_rooms} rooms available at
-                                this price.
-                              </span>
-                            </div>
-                          )}
+                          {room.available_rooms &&
+                            room.available_rooms <= 6 &&
+                            stay.date_starts_from_ninth && (
+                              <div className="w-full my-1 text-red-600 px-2 text-sm flex gap-1 items-center">
+                                <Icon
+                                  icon="bx:bx-info-circle"
+                                  className="w-5 h-5"
+                                />
+                                <span>
+                                  only {room.available_rooms} rooms available at
+                                  this price.
+                                </span>
+                              </div>
+                            )}
 
                           <div className="mt-2">
                             <hr />
