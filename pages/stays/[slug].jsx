@@ -635,10 +635,10 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                 .is_tented_camp
                 ? 0
                 : Number(router.query.rooms),
-              passengers: Number(router.query.passengers),
+              passengers: Number(router.query.passengers) || 0,
               from_date: new Date(router.query.starting_date),
               to_date: new Date(router.query.end_date),
-              transport: Number(router.query.transport),
+              transport: Number(router.query.transport) || 0,
             }
           )
           .then((res) => {
@@ -712,10 +712,10 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               .is_tented_camp
               ? 0
               : Number(router.query.rooms),
-            passengers: Number(router.query.passengers),
+            passengers: Number(router.query.passengers) || 0,
             from_date: new Date(router.query.starting_date),
             to_date: new Date(router.query.end_date),
-            transport: Number(router.query.transport),
+            transport: Number(router.query.transport) || 0,
           }
         )
         .then((res) => {
@@ -804,10 +804,10 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
             ...router.query,
             adults: adultTravelers,
             rooms: rooms,
-            transport: transports.findIndex((t) => t.name === selected.name),
+            // transport: transports.findIndex((t) => t.name === selected.name),
             starting_date: moment(eventDate.from).format("YYYY-MM-DD"),
             end_date: moment(eventDate.to).format("YYYY-MM-DD"),
-            passengers: passengers,
+            // passengers: passengers,
           },
         },
         undefined,
@@ -961,7 +961,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
           </div>
         </div>
 
-        <div className="flex items-center mt-4 justify-between">
+        {/* <div className="flex items-center mt-4 justify-between">
           <h1 className="text-sm font-bold">
             {passengers} {passengers > 1 ? "Passengers" : "Passenger"}
             {(selected.name == "No transport" || !selected.name) && (
@@ -992,7 +992,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               +{" "}
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     );
   }
@@ -1007,9 +1007,9 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
         room_type: index,
         adults: Number(router.query.adults) || 1,
         rooms: Number(router.query.rooms) || 1,
-        transport: transports.findIndex(
-          (t) => t.name === transports[Number(router.query.transport) || 0].name
-        ),
+        // transport: transports.findIndex(
+        //   (t) => t.name === transports[Number(router.query.transport) || 0].name
+        // ),
         starting_date:
           (router.query.starting_date &&
             moment(new Date(router.query.starting_date)).format(
@@ -1024,7 +1024,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
           (router.query.end_date &&
             moment(new Date(router.query.end_date)).format("YYYY-MM-DD")) ||
           moment(new Date(2022, 9, 10)).format("YYYY-MM-DD"),
-        passengers: Number(router.query.passengers) || 0,
+        // passengers: Number(router.query.passengers) || 0,
         checkout_page: 1,
       },
     });
@@ -2697,9 +2697,9 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       <SelectTravellers></SelectTravellers>
                     </PopoverBox>
 
-                    <div className="">
+                    {/* <div className="">
                       <TransportType></TransportType>
-                    </div>
+                    </div> */}
 
                     <div
                       onClick={() => {
@@ -3029,7 +3029,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                                   : "adult"}{" "}
                               </div>
 
-                              <div className="mt-1 lowercase">
+                              {/* <div className="mt-1 lowercase">
                                 with{" "}
                                 {
                                   transports[
@@ -3045,7 +3045,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                                     )
                                   </span>
                                 )}
-                              </div>
+                              </div> */}
 
                               {router.query.starting_date &&
                                 router.query.end_date && (
@@ -4274,7 +4274,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       </div>
                     </div>
 
-                    {router.query.transport !== "0" && (
+                    {/* {router.query.transport !== "0" && (
                       <div className="text-gray-600 flex items-center w-full justify-between">
                         <div className="flex gap-1.5 items-center w-[70%]">
                           <span>
@@ -4310,7 +4310,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
                         <div className="text-sm font-bold">{selected.name}</div>
                       </div>
-                    )}
+                    )} */}
 
                     <span className="lowercase hidden">
                       {stay.location && stay.country ? " " : ""}
@@ -4429,7 +4429,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                         )}
                       </div>
 
-                      {router.query.transport !== "0" && (
+                      {/* {router.query.transport !== "0" && (
                         <div className="text-gray-600 flex items-center w-full justify-between">
                           <div className="flex gap-1.5 text-sm items-center w-[70%]">
                             Transport
@@ -4451,7 +4451,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                             ></Price>
                           </div>
                         </div>
-                      )}
+                      )} */}
                     </div>
 
                     <div className="h-[0.4px] w-[100%] bg-gray-400"></div>
