@@ -80,6 +80,8 @@ function RequestTrip({ userProfile, stays }) {
           src={"/images/gondwana_img6.jpg"}
           alt="Image Gallery"
           layout="fill"
+          objectFit="cover"
+          objectPosition={"left"}
           unoptimized={true}
         />
       </div>
@@ -96,6 +98,8 @@ function RequestTrip({ userProfile, stays }) {
             src={"/images/gondwana_img6.jpg"}
             alt="Image Gallery"
             layout="fill"
+            objectFit="cover"
+            objectPosition={"left"}
             unoptimized={true}
           />
 
