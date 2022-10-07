@@ -688,7 +688,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
     reference: new Date().getTime().toString(),
     email: formik.values.email,
     amount: total(),
-    publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLICK_KEY,
+    publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
     currency: "KES",
   };
 
