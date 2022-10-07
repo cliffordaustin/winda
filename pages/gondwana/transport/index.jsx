@@ -141,7 +141,7 @@ function Transport({ userProfile }) {
     email: formik.values.email,
     amount: total(),
     publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
-    currency: "GHS",
+    currency: "KES",
   };
 
   const onSuccess = (reference) => {
