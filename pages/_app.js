@@ -78,7 +78,7 @@ function MyApp({ Component, pageProps, router }) {
 
         <meta name="twitter:card" content="/images/image-header.jpg" />
 
-        <script type="text/javascript" src="/script.js" async></script>
+        <script type="text/javascript" src="/script.js" defer></script>
         {/* <meta name="twitter:site" content="@digitalocean" />
         <meta name="twitter:title" content="Sammy the Shark" />
         <meta
