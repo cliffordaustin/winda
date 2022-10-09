@@ -180,6 +180,12 @@ const Trips = ({
     }
   }, []);
 
+  useEffect(() => {
+    if (process.browser) {
+      window.Beacon("init", process.env.NEXT_PUBLIC_BEACON_ID);
+    }
+  }, []);
+
   return (
     <div
       onClick={() => {
@@ -460,16 +466,6 @@ const Trips = ({
             )}
           </div>
         </div>
-      </div>
-
-      <div className="fixed bottom-5 right-5 z-[30]">
-        <Link href="/trip/request-trip">
-          <a>
-            <div className="!border-none px-3 py-3 font-bold text-sm cursor-pointer !rounded-md !bg-gradient-to-r bg-slate-700 !text-white">
-              Talk to a travel expert
-            </div>
-          </a>
-        </Link>
       </div>
 
       <Dialogue

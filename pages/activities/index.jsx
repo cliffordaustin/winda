@@ -335,6 +335,12 @@ function Activities({
     });
   };
 
+  useEffect(() => {
+    if (process.browser) {
+      window.Beacon("init", process.env.NEXT_PUBLIC_BEACON_ID);
+    }
+  }, []);
+
   return (
     <div
       className="relative"

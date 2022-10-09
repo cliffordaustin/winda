@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useRouter } from "next/router";
+import { createGlobalStyle } from "styled-components";
 import axios from "axios";
 import Cookies from "js-cookie";
 
@@ -41,6 +42,18 @@ import ServerError from "../../../components/Error/ServerError";
 import ContactBanner from "../../../components/Home/ContactBanner";
 
 function TripDetail({ userProfile, userTrips, trip }) {
+  const GlobalStyle = createGlobalStyle`
+  .BeaconFabButtonFrame {
+    @media (max-width: 768px) {
+      bottom: 70px !important;
+    }
+  }
+  .hsds-beacon .eTCLra {
+    @media (max-width: 768px) {
+      bottom: 70px !important;
+    }
+  }
+`;
   const router = useRouter();
 
   const [showDropdown, changeShowDropdown] = useState(false);
@@ -263,7 +276,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
   }
 
   const checkStartingDateInUrl = () => {
-    if (new Date(router.query.starting_date) != "Invalid Date") {
+    if (moment(router.query.starting_date.replace(/-/g, "/")).isValid()) {
       return true;
     } else {
       setPageError(true);
@@ -293,6 +306,14 @@ function TripDetail({ userProfile, userTrips, trip }) {
       checkGuestsInUrl();
     }
   }, [router.query]);
+
+  useEffect(() => {
+    if (process.browser) {
+      window.Beacon("init", process.env.NEXT_PUBLIC_BEACON_ID);
+    }
+  }, []);
+
+  console.log(pageError);
 
   return (
     <>
@@ -328,6 +349,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
           </div>
           {router.query.checkout_page !== "1" && (
             <>
+              <GlobalStyle></GlobalStyle>
               <div className="w-full mx-auto">
                 <div className="relative">
                   <ImageGallery

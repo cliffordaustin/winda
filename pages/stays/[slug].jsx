@@ -81,6 +81,16 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
   .rdp-day_range_middle {
     opacity: 0.5 !important;
   }
+  .BeaconFabButtonFrame {
+    @media (max-width: 768px) {
+      bottom: 70px !important;
+    }
+  }
+  .hsds-beacon .eTCLra {
+    @media (max-width: 768px) {
+      bottom: 70px !important;
+    }
+  }
 `;
 
   const [state, setState] = useState({
@@ -1121,6 +1131,12 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
       </Dialogue>
     );
   };
+
+  useEffect(() => {
+    if (process.browser) {
+      window.Beacon("init", process.env.NEXT_PUBLIC_BEACON_ID);
+    }
+  }, []);
 
   return (
     <div
