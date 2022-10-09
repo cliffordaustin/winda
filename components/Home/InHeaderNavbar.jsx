@@ -126,7 +126,7 @@ function Navbar({
         </div>
       )}
       <div className="flex items-center gap-3">
-        {isHomePage && (
+        {/* {isHomePage && (
           <Link href={"/gondwana"}>
             <a>
               <div
@@ -143,7 +143,7 @@ function Navbar({
               </div>
             </a>
           </Link>
-        )}
+        )} */}
         <UserDropdown
           userProfile={userProfile}
           changeShowDropdown={changeShowDropdown}
