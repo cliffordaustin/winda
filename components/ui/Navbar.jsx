@@ -11,7 +11,7 @@ import UserDropdown from "../Home/UserDropdown";
 import Button from "./Button";
 import PopoverBox from "./Popover";
 import { Icon } from "@iconify/react";
-import Burger from "./burger";
+import Burger from "./Burger";
 import Dialogue from "../Home/Dialogue";
 import { Mixpanel } from "../../lib/mixpanelconfig";
 
