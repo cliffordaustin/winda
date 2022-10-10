@@ -7,7 +7,7 @@ import getToken from "../lib/getToken";
 import { useRouter } from "next/router";
 import { Mixpanel } from "../lib/mixpanelconfig";
 
-import Navbar from "../components/Home/InHeaderNavbar";
+import Navbar from "../components/ui/Navbar";
 import Main from "../components/Home/Main";
 import Footer from "../components/Home/Footer";
 import Button from "../components/ui/Button";
@@ -18,6 +18,9 @@ import Search from "../components/Trip/Search";
 import PopularLocationsDropdown from "../components/Lodging/PopularLocationsDropdown";
 import CookiesMessage from "../components/Home/CookiesMessage";
 import ContactBanner from "../components/Home/ContactBanner";
+import SearchOptions from "../components/ui/SearchOptions";
+import Dialogue from "../components/Home/Dialogue";
+import { Icon } from "@iconify/react";
 
 export default function Home({ userProfile }) {
   const router = useRouter();
@@ -95,30 +98,45 @@ export default function Home({ userProfile }) {
 
   const [location, setLocation] = useState("");
 
+  const checkSearch = (location) => {
+    if (router.query.search === "2") {
+      Mixpanel.track("User interated with the search to the stays");
+      router.push({
+        pathname: "/stays",
+        query: {
+          search: location,
+          page: "",
+        },
+      });
+    } else if (router.query.search === "3") {
+      Mixpanel.track("User interated with the search to the activities");
+      router.push({
+        pathname: "/activities",
+        query: {
+          search: location,
+          page: "",
+        },
+      });
+    } else {
+      Mixpanel.track("User interated with the search to the curated trips");
+      router.push({
+        pathname: "/trip",
+        query: {
+          location: location,
+          page: "",
+        },
+      });
+    }
+  };
+
   const search = (location) => {
-    console.log("used the search 1");
-    router.push({
-      pathname: "/trip",
-      query: {
-        ...router.query,
-        location: location,
-        page: "",
-      },
-    });
+    checkSearch((location = location));
   };
 
   const keyDownSearch = (event) => {
     if (event.key === "Enter") {
       if (location !== "") {
-        Mixpanel.track("Searched curated trips location");
-        router.push({
-          pathname: "/trip",
-          query: {
-            ...router.query,
-            location: location,
-            page: "",
-          },
-        });
+        checkSearch((location = location));
       }
     }
   };
@@ -131,9 +149,20 @@ export default function Home({ userProfile }) {
     }
   }, []);
 
+  const [screenWidth, setScreenWidth] = useState(0);
+
+  useEffect(() => {
+    if (process.browser) {
+      setScreenWidth(window.innerWidth);
+      window.onresize = () => {
+        setScreenWidth(window.innerWidth);
+      };
+    }
+  }, []);
+
   return (
     <div
-      className="overflow-x-hidden relative"
+      className="relative"
       onClick={() => {
         setState({
           ...state,
@@ -170,8 +199,12 @@ export default function Home({ userProfile }) {
       </div>
       {/* <ContactBanner></ContactBanner> */}
 
+      <div className="sticky bg-white top-0 left-0 right-0 z-50">
+        <Navbar userProfile={userProfile}></Navbar>
+      </div>
+
       <div className="mb-12 select-none relative">
-        <div className="w-full text-red-600 h-[600px] relative before:absolute before:h-full before:w-full before:bg-black before:z-20 before:opacity-60">
+        <div className="w-full text-red-600 h-[500px] md:h-[600px] relative before:absolute before:h-full before:w-full before:bg-black before:z-20 before:opacity-60">
           <Image
             className={"w-full "}
             layout="fill"
@@ -184,7 +217,7 @@ export default function Home({ userProfile }) {
             priority
           />
 
-          <div className="flex flex-col items-center justify-center absolute w-full text-center top-[40%] z-20 px-6 md:px-0">
+          <div className="flex flex-col items-center justify-center absolute w-full text-center top-[30%] md:top-[40%] z-20 px-6 md:px-0">
             <div className="flex flex-col items-center">
               <h1 className="font-black font-SourceSans mb-2 text-3xl sm:text-4xl md:text-5xl xl:text-7xl text-white uppercase text-center">
                 Control your journey
@@ -205,99 +238,111 @@ export default function Home({ userProfile }) {
                 e.stopPropagation();
                 setShowLocation(!showLocation);
               }}
-              className="!w-[90%] sm:!w-[420px] mb-5 relative text-black"
+              className="!w-[100%] sm:!max-w-[700px] mb-5 relative text-black"
             >
               <Search
                 inputBoxClassName={
-                  "!border-none !py-4 !z-[40] bg-white " +
-                  (showLocation ? "!rounded-b-none " : "!rounded-md ")
+                  "!border-none !py-0 !h-[60px] w-full mx-auto !z-[40] bg-white " +
+                  (showLocation && !location
+                    ? "md:!rounded-b-none md:!rounded-t-3xl !rounded-full "
+                    : "!rounded-full ")
                 }
-                searchClass="w-full"
+                inputClassName="!h-[60px] placeholder:text-black !rounded-full "
+                autoCompleteSearchClassName="!rounded-t-3xl !rounded-b-none"
+                searchClass="w-full "
+                showSearchBtn={screenWidth >= 768 ? true : false}
+                iconContainerClassName="!w-[60px] text-red-600"
+                autoCompleteClassName="!rounded-b-3xl"
                 location={location}
                 handlePropagation={() => {}}
                 placeholder="Where to?"
                 setLocation={setLocation}
                 search={search}
                 onKeyDown={keyDownSearch}
+                showSearchOptions={true}
               ></Search>
 
               {showLocation && !location && (
-                <PopularLocationsDropdown
-                  setLocation={(location) => {
-                    setLocation(location);
-                    search(location);
-                  }}
-                  className="w-[100%] !text-black !z-[40] !text-left"
-                ></PopularLocationsDropdown>
-              )}
-            </div>
-
-            <div className="flex gap-2">
-              <Link href="/trip">
-                <a>
-                  <Button
-                    onClick={() => {
-                      Mixpanel.track("Clicked view all curated trips button");
+                <div className="bg-white hidden md:block">
+                  <div className="border-t py-1.5">
+                    <SearchOptions></SearchOptions>
+                  </div>
+                  <PopularLocationsDropdown
+                    setLocation={(location) => {
+                      setLocation(location);
+                      search(location);
                     }}
-                    className="flex items-center gap-4 max-w-[360px] !py-3 !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500"
-                  >
-                    <span className="font-bold">View all curated trips</span>
-                  </Button>
-                </a>
-              </Link>
-
-              {/* <PopoverBox
-                btnPopover={
-                  <>
-                    <span className="font-bold text-black text-sm">
-                      Book a service
-                    </span>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 text-black"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </>
-                }
-                panelClassName="mt-2 w-[150px] text-left md:w-[250px] bg-white rounded-lg overflow-hidden"
-                btnClassName="flex relative items-center gap-2 px-3 rounded-md py-3 bg-white"
-              >
-                <Link href="/stays">
-                  <a>
-                    <div className="hover:bg-gray-100 text-gray-700 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2">
-                      Stays
-                    </div>
-                  </a>
-                </Link>
-
-                <Link href="/activities">
-                  <a>
-                    <div className="hover:bg-gray-100 text-gray-700 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2">
-                      Activities
-                    </div>
-                  </a>
-                </Link>
-
-                <Link href="/transport">
-                  <a>
-                    <div className="hover:bg-gray-100 text-gray-700 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2">
-                      Transport
-                    </div>
-                  </a>
-                </Link>
-              </PopoverBox> */}
+                    className="w-[100%] !text-black rounded-b-3xl !z-[40] !text-left"
+                  ></PopularLocationsDropdown>
+                </div>
+              )}
             </div>
           </div>
         </div>
 
-        <div className="absolute top-4 w-full z-50">
+        {screenWidth < 768 && (
+          <Dialogue
+            isOpen={showLocation}
+            closeModal={() => {
+              setShowLocation(false);
+            }}
+            dialogueTitleClassName="!font-bold"
+            outsideDialogueClass="!p-0"
+            backgroundClassName=""
+            panelBackgroundClassName=""
+            dialoguePanelClassName="h-screen !p-0 !rounded-none w-full overflow-y-scroll remove-scroll"
+          >
+            <div className="h-full">
+              <div
+                onClick={() => {
+                  setShowLocation(false);
+                }}
+                className="w-full py-2 bg-black text-white bg-opacity-50 cursor-pointer flex items-center justify-center gap-1"
+              >
+                <Icon icon="icon-park-outline:close-one" className="mt-0.5" />
+                <span className="font-bold">close</span>
+              </div>
+
+              <div className="mt-2 ">
+                <Search
+                  inputBoxClassName={
+                    "!border !py-0 !h-[60px] w-full mx-auto !z-[40] bg-white !rounded-none "
+                  }
+                  inputClassName="!h-[55px] placeholder:text-black !rounded-full "
+                  autoCompleteSearchClassName="!rounded-none !rounded-b-none"
+                  searchClass="w-full "
+                  // showSearchBtn={true}
+                  iconContainerClassName="!w-[60px] text-red-600"
+                  autoCompleteClassName="!rounded-b-3xl"
+                  location={location}
+                  handlePropagation={() => {}}
+                  placeholder="Where to?"
+                  setLocation={setLocation}
+                  search={search}
+                  onKeyDown={keyDownSearch}
+                  showSearchOptions={true}
+                ></Search>
+
+                {showLocation && !location && (
+                  <div className="bg-white mt-2">
+                    <div className="border-t py-1.5">
+                      <SearchOptions></SearchOptions>
+                    </div>
+                    <PopularLocationsDropdown
+                      setLocation={(location) => {
+                        setLocation(location);
+                        search(location);
+                      }}
+                      className="w-[100%] !static !text-black rounded-b-3xl !z-[40] !text-left"
+                    ></PopularLocationsDropdown>
+                  </div>
+                )}
+              </div>
+            </div>
+          </Dialogue>
+        )}
+
+        {/* <div className="absolute top-4 w-full z-50">
           <Navbar
             showDropdown={state.showDropdown}
             userProfile={userProfile}
@@ -319,7 +364,7 @@ export default function Home({ userProfile }) {
             }
             isHomePage={true}
           ></Navbar>
-        </div>
+        </div> */}
       </div>
 
       <div className="md:mt-16 mb-8 2xl:w-4/6 2xl:mx-auto">

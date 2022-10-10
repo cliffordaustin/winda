@@ -4,6 +4,8 @@ import PropTypes from "prop-types";
 
 import styles from "../../styles/Search.module.css";
 import Input from "../ui/Input";
+import { Icon } from "@iconify/react";
+import SearchOptions from "../ui/SearchOptions";
 
 const Search = ({
   setLocation,
@@ -12,12 +14,16 @@ const Search = ({
   inputClassName = "",
   autoCompleteClassName = "",
   inputBoxClassName = "",
+  iconContainerClassName = "!text-gray-600",
+  autoCompleteSearchClassName = "!rounded-t-xl !rounded-b-none",
   searchClass = "",
   handlePropagation = (event) => {
     event.stopPropagation();
   },
   search = () => {},
   onKeyDown = () => {},
+  showSearchOptions = false,
+  showSearchBtn = false,
 }) => {
   const [autoCompleteSearch, setAutoCompleteSearch] = useState([]);
 
@@ -43,17 +49,22 @@ const Search = ({
             }}
             className={
               "w-full flex items-center !py-3 stepWebkitSetting border border-gray-200 rounded-md " +
-              inputBoxClassName +
-              (autoCompleteSearch.length > 0 &&
-                " !rounded-t-xl !rounded-b-none")
+              (autoCompleteSearch.length > 0 && autoCompleteSearchClassName) +
+              " " +
+              inputBoxClassName
             }
           >
-            <div className="h-full w-10 ml-1 flex justify-center items-center z-10 cursor-pointer">
+            <div
+              className={
+                "h-full w-10 ml-1 flex justify-center items-center z-10 cursor-pointer " +
+                iconContainerClassName
+              }
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 aria-hidden="true"
                 role="img"
-                className="w-5 h-5 text-gray-600"
+                className="w-5 h-5"
                 preserveAspectRatio="xMidYMid meet"
                 viewBox="0 0 16 16"
               >
@@ -82,27 +93,42 @@ const Search = ({
               onKeyPress={onKeyDown}
             ></Input>
 
-            <div className="h-full w-10 mr-1 flex justify-center items-center">
-              {location && (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setLocation("");
-                    setAutoCompleteSearch([]);
+            <div className="flex h-[80%] max-w-[150px] absolute right-2">
+              <div className="h-full w-10 mr-1 flex justify-center items-center">
+                {location && (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setLocation("");
+                      setAutoCompleteSearch([]);
+                    }}
+                    className="w-5 h-5 cursor-pointer text-gray-600"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                )}
+              </div>
+              {showSearchBtn && (
+                <div
+                  className={
+                    "rounded-full text-white font-bold w-[120px] bg-red-500 ml-1 flex gap-2 justify-center items-center z-10 cursor-pointer "
+                  }
+                  onClick={() => {
+                    search(location);
                   }}
-                  className="w-5 h-5 cursor-pointer text-gray-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="2"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
+                  <span>Search</span>
+                  <Icon icon="bx:right-arrow-alt" className="mt-0.5" />
+                </div>
               )}
             </div>
           </div>
@@ -113,6 +139,11 @@ const Search = ({
                 autoCompleteClassName
               }
             >
+              {showSearchOptions && (
+                <div className="border-t border-b py-1.5">
+                  <SearchOptions></SearchOptions>
+                </div>
+              )}
               {autoCompleteSearch.map((item, index) => (
                 <div
                   key={index}

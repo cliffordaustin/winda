@@ -11,6 +11,7 @@ import ReactGA from "react-ga4";
 
 import "mapbox-gl/dist/mapbox-gl.css";
 import Head from "next/head";
+import Script from "next/script";
 
 NProgress.configure({
   minimum: 0.3,
@@ -77,19 +78,13 @@ function MyApp({ Component, pageProps, router }) {
         <meta property="og:image" content="/images/image-header.jpg"></meta>
 
         <meta name="twitter:card" content="/images/image-header.jpg" />
-
-        <script type="text/javascript" src="/script.js" defer></script>
-        {/* <meta name="twitter:site" content="@digitalocean" />
-        <meta name="twitter:title" content="Sammy the Shark" />
-        <meta
-          name="twitter:description"
-          content="Senior Selachimorpha at DigitalOcean"
-        />
-        <meta
-          name="twitter:image"
-          content="https://html.sammy-codes.com/images/large-profile.jpg"
-        /> */}
       </Head>
+
+      <Script
+        type="text/javascript"
+        src="/script.js"
+        strategy="beforeInteractive"
+      ></Script>
       <Provider store={store.store}>
         <motion.div
           key={router.route}
