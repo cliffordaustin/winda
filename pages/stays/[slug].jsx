@@ -671,22 +671,23 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
   const [showMobileRoomDateModal, setShowMobileRoomDateModal] = useState(false);
 
   const total = () => {
-    let price = stay.type_of_rooms[Number(router.query.room_type) || 0]
-      .is_tented_camp
-      ? totalPriceOfStayForTentedCamp(
-          stay.type_of_rooms[Number(router.query.room_type) || 0].price
-        ) +
-        totalPriceOfStayForTentedCamp(
-          stay.type_of_rooms[Number(router.query.room_type) || 0].price
-        ) *
-          0.035
-      : totalPriceOfStay(
-          stay.type_of_rooms[Number(router.query.room_type) || 0].price
-        ) +
-        totalPriceOfStay(
-          stay.type_of_rooms[Number(router.query.room_type) || 0].price
-        ) *
-          0.035;
+    let price =
+      stay.type_of_rooms.length > 0 &&
+      (stay.type_of_rooms[Number(router.query.room_type) || 0].is_tented_camp
+        ? totalPriceOfStayForTentedCamp(
+            stay.type_of_rooms[Number(router.query.room_type) || 0].price
+          ) +
+          totalPriceOfStayForTentedCamp(
+            stay.type_of_rooms[Number(router.query.room_type) || 0].price
+          ) *
+            0.035
+        : totalPriceOfStay(
+            stay.type_of_rooms[Number(router.query.room_type) || 0].price
+          ) +
+          totalPriceOfStay(
+            stay.type_of_rooms[Number(router.query.room_type) || 0].price
+          ) *
+            0.035);
 
     return parseInt(
       (Math.floor(price * 100) / 100).toFixed(2).replace(".", ""),
