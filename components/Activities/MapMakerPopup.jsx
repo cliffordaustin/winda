@@ -9,6 +9,7 @@ import Badge from "../ui/Badge";
 import Price from "../Stay/Price";
 import Button from "../ui/Button";
 import { useRouter } from "next/router";
+import { Mixpanel } from "../../lib/mixpanelconfig";
 
 const MapMakerPopup = ({ activity }) => {
   const [isSafari, setIsSafari] = useState(false);
@@ -84,6 +85,9 @@ const MapMakerPopup = ({ activity }) => {
           <Button
             onClick={() => {
               if (router.query.trip) {
+                Mixpanel.track("User clicked on an activity from the map", {
+                  name_of_activity: activity.name,
+                });
                 router.push({
                   pathname: `activities/${activity.slug}`,
                   query: {
@@ -92,6 +96,9 @@ const MapMakerPopup = ({ activity }) => {
                   },
                 });
               } else {
+                Mixpanel.track("User clicked on an activity from the map", {
+                  name_of_activity: activity.name,
+                });
                 router.push(`activities/${activity.slug}`);
               }
             }}

@@ -6,6 +6,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 
 import Button from "../ui/Button";
+import { Mixpanel } from "../../lib/mixpanelconfig";
 import Carousel from "../ui/Carousel";
 import Price from "../Stay/Price";
 import { Icon } from "@iconify/react";
@@ -93,7 +94,6 @@ const Card = ({
         });
       })
       .catch((err) => {
-        console.log(err.response);
         setLoading(false);
       });
   };
@@ -214,7 +214,14 @@ const Card = ({
                 <div className="flex flex-col items-center">
                   <Link href={`/trip/${listing.slug}`}>
                     <a className="w-full">
-                      <Button className="w-fit !px-4 !bg-transparent font-bold !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white">
+                      <Button
+                        onClick={() => {
+                          Mixpanel.track("User opened a trip", {
+                            name_of_trip: listing.name,
+                          });
+                        }}
+                        className="w-fit !px-4 !bg-transparent font-bold !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white"
+                      >
                         view trip
                       </Button>
                     </a>
@@ -311,6 +318,7 @@ const Card = ({
                   tripSlug={listing.slug}
                   submitCompleteFunc={setShowRequestInfoPopup}
                   showInfo={setShowRequestInfo}
+                  name={listing.name}
                 ></RequestInfo>
               </div>
             </div>
@@ -463,7 +471,14 @@ const Card = ({
           <div>
             <Link href={`/trip/${listing.slug}`}>
               <a className="w-full">
-                <Button className="w-fit !px-3 !bg-transparent font-bold !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white">
+                <Button
+                  onClick={() => {
+                    Mixpanel.track("User opened a trip", {
+                      name_of_trip: listing.name,
+                    });
+                  }}
+                  className="w-fit !px-3 !bg-transparent font-bold !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white"
+                >
                   view trip
                 </Button>
               </a>
@@ -477,6 +492,9 @@ const Card = ({
       <div
         onClick={() => {
           setShowDialogue(true);
+          Mixpanel.track("User used the quick lookup feature", {
+            name_of_trip: listing.name,
+          });
         }}
         className="absolute cursor-pointer top-1.5 left-1.5 w-fit px-1 rounded-md flex items-center gap-0.5 font-bold text-sm py-[2px] bg-white"
       >

@@ -9,6 +9,7 @@ import Badge from "../ui/Badge";
 import Price from "../Stay/Price";
 import Button from "../ui/Button";
 import { useRouter } from "next/router";
+import { Mixpanel } from "../../lib/mixpanelconfig";
 
 const MapMakerPopup = ({ stay }) => {
   const [isSafari, setIsSafari] = useState(false);
@@ -91,6 +92,12 @@ const MapMakerPopup = ({ stay }) => {
           <Button
             onClick={() => {
               if (router.query.trip) {
+                Mixpanel.track(
+                  "User clicked on an accommodation from the map",
+                  {
+                    name_of_accommodation: stay.name,
+                  }
+                );
                 router.push({
                   pathname: `stays/${stay.slug}`,
                   query: {
@@ -99,6 +106,12 @@ const MapMakerPopup = ({ stay }) => {
                   },
                 });
               } else {
+                Mixpanel.track(
+                  "User clicked on an accommodation from the map",
+                  {
+                    name_of_accommodation: stay.name,
+                  }
+                );
                 router.push(`stays/${stay.slug}`);
               }
             }}

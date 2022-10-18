@@ -13,6 +13,11 @@ import Cookies from "js-cookie";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import { useFormik } from "formik";
+import { usePaystackPayment } from "react-paystack";
+import * as Yup from "yup";
+import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
+import "react-phone-number-input/style.css";
 
 import { checkFlightPrice } from "../../lib/flightLocations";
 import LoadingSpinerChase from "../../components/ui/LoadingSpinerChase";
@@ -23,6 +28,9 @@ import PopoverBox from "../../components/ui/Popover";
 import FlightItem from "../../components/Cart/FlightItem";
 import Price from "../../components/Stay/Price";
 import ContactBanner from "../../components/Home/ContactBanner";
+import { Icon } from "@iconify/react";
+import { Mixpanel } from "../../lib/mixpanelconfig";
+import Input from "../../components/ui/Input";
 
 const Cart = ({
   cart,
@@ -193,7 +201,187 @@ const Cart = ({
     return price;
   };
 
-  const checkout = async () => {
+  const [phone, setPhone] = useState("");
+
+  const [invalidPhone, setInvalidPhone] = useState(false);
+
+  const formik = useFormik({
+    initialValues: {
+      first_name: userProfile.first_name || "",
+      last_name: userProfile.last_name || "",
+      email: userProfile.email || "",
+    },
+    validationSchema: Yup.object({
+      first_name: Yup.string()
+        .max(120, "This field has a max length of 120")
+        .required("This field is required"),
+      last_name: Yup.string()
+        .max(120, "This field has a max length of 120")
+        .required("This field is required"),
+      email: Yup.string()
+        .email("Invalid email")
+        .required("This field is required"),
+    }),
+    onSubmit: async (values) => {
+      if (isValidPhoneNumber(phone || "")) {
+        setLoading(true);
+        for (const item of allItemsInCart) {
+          await axios
+            .post(
+              `${process.env.NEXT_PUBLIC_baseURL}/stays/${item.stay.slug}/add-to-order/`,
+              {
+                first_name: values.first_name || "",
+                last_name: values.last_name || "",
+                email: values.email || "",
+                phone: phone,
+                from_date: item.from_date,
+                to_date: item.to_date,
+                num_of_adults: item.num_of_adults,
+                num_of_children: item.num_of_children,
+                num_of_adults_non_resident: item.num_of_adults_non_resident,
+                num_of_children_non_resident: item.num_of_children_non_resident,
+                plan: item.plan,
+              },
+              {
+                headers: {
+                  Authorization: `Token ${Cookies.get("token")}`,
+                },
+              }
+            )
+            .then((res) => {
+              Mixpanel.track("User request to book for accommodation", {
+                name_of_accommodation: item.stay.name,
+                first_name: values.first_name || "",
+                last_name: values.last_name || "",
+                email: values.email || "",
+              });
+              axios.delete(
+                `${process.env.NEXT_PUBLIC_baseURL}/user-cart/${item.id}/`,
+                {
+                  headers: {
+                    Authorization: `Token ${Cookies.get("token")}`,
+                  },
+                }
+              );
+            })
+            .catch((err) => {
+              setLoading(false);
+            });
+        }
+        for (const item of allItemsInActivityCart) {
+          await axios
+            .post(
+              `${process.env.NEXT_PUBLIC_baseURL}/activities/${item.activity.slug}/add-to-order/`,
+              {
+                first_name: values.first_name || "",
+                last_name: values.last_name || "",
+                email: values.email || "",
+                phone: phone,
+                from_date: item.from_date,
+                number_of_people: item.number_of_people,
+                number_of_people_non_resident:
+                  item.number_of_people_non_resident,
+                number_of_sessions: item.number_of_sessions,
+                number_of_sessions_non_resident:
+                  item.number_of_sessions_non_resident,
+                number_of_groups: item.number_of_groups,
+                number_of_groups_non_resident:
+                  item.number_of_groups_non_resident,
+                pricing_type: item.pricing_type,
+              },
+              {
+                headers: {
+                  Authorization: `Token ${Cookies.get("token")}`,
+                },
+              }
+            )
+            .then((res) => {
+              Mixpanel.track("User request to book for activity", {
+                name_of_activity: item.activity.name,
+                first_name: values.first_name || "",
+                last_name: values.last_name || "",
+                email: values.email || "",
+              });
+              axios.delete(
+                `${process.env.NEXT_PUBLIC_baseURL}/user-activities-cart/${item.id}/`,
+                {
+                  headers: {
+                    Authorization: `Token ${Cookies.get("token")}`,
+                  },
+                }
+              );
+            })
+            .catch((err) => {
+              setLoading(false);
+            });
+        }
+        for (const item of allItemsInTransportCart) {
+          await axios
+            .post(
+              `${process.env.NEXT_PUBLIC_baseURL}/transport/${item.transport.slug}/add-to-order/`,
+              {
+                first_name: values.first_name || "",
+                last_name: values.last_name || "",
+                starting_point: item.starting_point,
+                user_need_a_driver: item.user_need_a_driver,
+                from_date: item.from_date,
+                number_of_days: item.number_of_days,
+              },
+              {
+                headers: {
+                  Authorization: `Token ${Cookies.get("token")}`,
+                },
+              }
+            )
+            .then((res) => {
+              axios.delete(
+                `${process.env.NEXT_PUBLIC_baseURL}/user-transport-cart/${item.id}/`,
+                {
+                  headers: {
+                    Authorization: `Token ${Cookies.get("token")}`,
+                  },
+                }
+              );
+            })
+            .catch((err) => {
+              setLoading(false);
+            });
+        }
+        for (const item of flightCart) {
+          await axios
+            .put(
+              `${process.env.NEXT_PUBLIC_baseURL}/flights/${item.slug}/`,
+              {
+                user_has_ordered: true,
+              },
+              {
+                headers: {
+                  Authorization: `Token ${Cookies.get("token")}`,
+                },
+              }
+            )
+            .then(() => {})
+            .catch((err) => {
+              setLoading(false);
+            });
+        }
+
+        router.push({
+          pathname: "/orders",
+          query: {
+            show_checkout_message: "2",
+          },
+        });
+
+        setLoading(false);
+      } else if (!isValidPhoneNumber(phone || "")) {
+        setLoading(false);
+        setInvalidPhone(true);
+      }
+    },
+  });
+
+  const requestBooking = async () => {
     setLoading(true);
     for (const item of allItemsInCart) {
       await axios
@@ -202,6 +390,8 @@ const Cart = ({
           {
             first_name: userProfile.first_name || "",
             last_name: userProfile.last_name || "",
+            email: userProfile.email || "",
+            phone: phone,
             from_date: item.from_date,
             to_date: item.to_date,
             num_of_adults: item.num_of_adults,
@@ -217,6 +407,12 @@ const Cart = ({
           }
         )
         .then((res) => {
+          Mixpanel.track("User request to book for accommodation", {
+            name_of_accommodation: item.stay.name,
+            first_name: userProfile.first_name || "",
+            last_name: userProfile.last_name || "",
+            email: userProfile.email || "",
+          });
           axios.delete(
             `${process.env.NEXT_PUBLIC_baseURL}/user-cart/${item.id}/`,
             {
@@ -237,6 +433,8 @@ const Cart = ({
           {
             first_name: userProfile.first_name || "",
             last_name: userProfile.last_name || "",
+            email: userProfile.email || "",
+            phone: phone,
             from_date: item.from_date,
             number_of_people: item.number_of_people,
             number_of_people_non_resident: item.number_of_people_non_resident,
@@ -254,6 +452,12 @@ const Cart = ({
           }
         )
         .then((res) => {
+          Mixpanel.track("User request to book for activity", {
+            name_of_activity: item.activity.name,
+            first_name: userProfile.first_name || "",
+            last_name: userProfile.last_name || "",
+            email: userProfile.email || "",
+          });
           axios.delete(
             `${process.env.NEXT_PUBLIC_baseURL}/user-activities-cart/${item.id}/`,
             {
@@ -321,11 +525,195 @@ const Cart = ({
     router.push({
       pathname: "/orders",
       query: {
-        show_checkout_message: "1",
+        show_checkout_message: "2",
       },
     });
 
     setLoading(false);
+  };
+
+  const [loadingForPaystack, setLoadingForPaystack] = useState(false);
+
+  const total = () => {
+    let price = totalPrice() + totalPrice() * 0.035;
+
+    return parseInt(
+      (Math.floor(price * 100) / 100).toFixed(2).replace(".", ""),
+      10
+    );
+  };
+
+  const config = {
+    reference: new Date().getTime().toString(),
+    email: userProfile.email,
+    amount: total(),
+    publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
+    currency: process.env.NODE_ENV === "production" ? "KES" : "GHS",
+  };
+
+  const initializePayment = usePaystackPayment(config);
+
+  const onSuccess = async (reference) => {
+    if (isValidPhoneNumber(phone || "")) {
+      setLoadingForPaystack(true);
+      for (const item of allItemsInCart) {
+        await axios
+          .post(
+            `${process.env.NEXT_PUBLIC_baseURL}/stays/${item.stay.slug}/add-to-order/`,
+            {
+              first_name: formik.userProfile.first_name || "",
+              last_name: formik.values.last_name || "",
+              email: formik.values.email || "",
+              phone: phone,
+              from_date: item.from_date,
+              to_date: item.to_date,
+              num_of_adults: item.num_of_adults,
+              num_of_children: item.num_of_children,
+              num_of_adults_non_resident: item.num_of_adults_non_resident,
+              num_of_children_non_resident: item.num_of_children_non_resident,
+              plan: item.plan,
+              paid: true,
+              reviewing: false,
+            },
+            {
+              headers: {
+                Authorization: `Token ${Cookies.get("token")}`,
+              },
+            }
+          )
+          .then((res) => {
+            Mixpanel.track("User has paid for accommodation", {
+              name_of_accommodation: item.stay.name,
+              amount: totalPrice() + totalPrice() * 0.035,
+              first_name: formik.values.first_name || "",
+              last_name: formik.values.last_name || "",
+              email: formik.values.email || "",
+            });
+            axios.delete(
+              `${process.env.NEXT_PUBLIC_baseURL}/user-cart/${item.id}/`,
+              {
+                headers: {
+                  Authorization: `Token ${Cookies.get("token")}`,
+                },
+              }
+            );
+          })
+          .catch((err) => {
+            setLoadingForPaystack(false);
+          });
+      }
+      for (const item of allItemsInActivityCart) {
+        await axios
+          .post(
+            `${process.env.NEXT_PUBLIC_baseURL}/activities/${item.activity.slug}/add-to-order/`,
+            {
+              first_name: formik.values.first_name || "",
+              last_name: formik.values.last_name || "",
+              email: formik.values.email || "",
+              phone: phone,
+              from_date: item.from_date,
+              number_of_people: item.number_of_people,
+              number_of_people_non_resident: item.number_of_people_non_resident,
+              number_of_sessions: item.number_of_sessions,
+              number_of_sessions_non_resident:
+                item.number_of_sessions_non_resident,
+              number_of_groups: item.number_of_groups,
+              number_of_groups_non_resident: item.number_of_groups_non_resident,
+              pricing_type: item.pricing_type,
+              paid: true,
+              reviewing: false,
+            },
+            {
+              headers: {
+                Authorization: `Token ${Cookies.get("token")}`,
+              },
+            }
+          )
+          .then((res) => {
+            Mixpanel.track("User has paid for activity", {
+              name_of_activity: item.activity.name,
+              amount: totalPrice() + totalPrice() * 0.035,
+              first_name: formik.values.first_name || "",
+              last_name: formik.values.last_name || "",
+              email: formik.values.email || "",
+            });
+            axios.delete(
+              `${process.env.NEXT_PUBLIC_baseURL}/user-activities-cart/${item.id}/`,
+              {
+                headers: {
+                  Authorization: `Token ${Cookies.get("token")}`,
+                },
+              }
+            );
+          })
+          .catch((err) => {
+            setLoadingForPaystack(false);
+          });
+      }
+      for (const item of allItemsInTransportCart) {
+        await axios
+          .post(
+            `${process.env.NEXT_PUBLIC_baseURL}/transport/${item.transport.slug}/add-to-order/`,
+            {
+              first_name: formik.values.first_name || "",
+              last_name: formik.values.last_name || "",
+              starting_point: item.starting_point,
+              user_need_a_driver: item.user_need_a_driver,
+              from_date: item.from_date,
+              number_of_days: item.number_of_days,
+              paid: true,
+            },
+            {
+              headers: {
+                Authorization: `Token ${Cookies.get("token")}`,
+              },
+            }
+          )
+          .then((res) => {
+            axios.delete(
+              `${process.env.NEXT_PUBLIC_baseURL}/user-transport-cart/${item.id}/`,
+              {
+                headers: {
+                  Authorization: `Token ${Cookies.get("token")}`,
+                },
+              }
+            );
+          })
+          .catch((err) => {
+            setLoadingForPaystack(false);
+          });
+      }
+      for (const item of flightCart) {
+        await axios
+          .put(
+            `${process.env.NEXT_PUBLIC_baseURL}/flights/${item.slug}/`,
+            {
+              user_has_ordered: true,
+            },
+            {
+              headers: {
+                Authorization: `Token ${Cookies.get("token")}`,
+              },
+            }
+          )
+          .then(() => {})
+          .catch((err) => {
+            setLoadingForPaystack(false);
+          });
+      }
+
+      router.push({
+        pathname: "/orders",
+        query: {
+          show_checkout_message: "1",
+        },
+      });
+
+      setLoadingForPaystack(false);
+    } else if (!isValidPhoneNumber(phone || "")) {
+      setLoadingForPaystack(false);
+      setInvalidPhone(true);
+    }
   };
 
   if (
@@ -662,52 +1050,256 @@ const Cart = ({
             ))}
           </div>
 
-          <div className="px-2 mt-6 mb-12 ml-auto md:w-[50%]">
-            <div className={styles.priceTotal}>
-              <div className="font-bold">Price Total</div>
+          <div className="flex flex-col md:flex-row justify-between">
+            {/* <div className="px-2 mt-6 w-full md:w-[48%]">
+              <div className="mb-4 flex flex-col">
+                <form onSubmit={formik.handleSubmit}>
+                  <div className="flex md:flex-row flex-col items-center gap-4 w-full">
+                    <div className="w-full relative">
+                      <label className="block text-sm font-bold mb-2">
+                        First name
+                      </label>
 
-              <Price stayPrice={totalPrice()}></Price>
-            </div>
+                      <Input
+                        name="first_name"
+                        type="text"
+                        placeholder="First name"
+                        errorStyle={
+                          formik.touched.first_name && formik.errors.first_name
+                            ? true
+                            : false
+                        }
+                        className={"w-full "}
+                        {...formik.getFieldProps("first_name")}
+                      ></Input>
 
-            <ClientOnly>
-              {!Cookies.get("token") && (
-                <div className="mt-2 mb-2">
-                  You are currently not signed in. To checkout or save these
-                  items or see your previously saved items,
-                  <Link
-                    href={{
-                      pathname: "/login",
-                      query: { redirect: `${router.asPath}` },
+                      {formik.touched.first_name && formik.errors.first_name ? (
+                        <span className="text-sm  font-bold text-red-400">
+                          {formik.errors.first_name}
+                        </span>
+                      ) : null}
+                      <p className="text-gray-500 text-sm mt-1">
+                        Please give us the name of someone coming for this trip.
+                      </p>
+                    </div>
+                    <div className="w-full self-start relative">
+                      <Input
+                        name="last_name"
+                        type="text"
+                        placeholder="Last name"
+                        label="Last name"
+                        className={"w-full "}
+                        errorStyle={
+                          formik.touched.last_name && formik.errors.last_name
+                            ? true
+                            : false
+                        }
+                        {...formik.getFieldProps("last_name")}
+                      ></Input>
+                      {formik.touched.last_name && formik.errors.last_name ? (
+                        <span className="text-sm absolute -bottom-6 font-bold text-red-400">
+                          {formik.errors.last_name}
+                        </span>
+                      ) : null}
+                    </div>
+                  </div>
+                  <div
+                    className={
+                      "mb-4 " +
+                      (formik.errors.last_name || formik.errors.first_name
+                        ? "mb-4"
+                        : "")
+                    }
+                  ></div>
+                  <Input
+                    name="email"
+                    type="email"
+                    errorStyle={
+                      formik.touched.email && formik.errors.email ? true : false
+                    }
+                    placeholder="Email"
+                    label="Email"
+                    {...formik.getFieldProps("email")}
+                  ></Input>
+                  {formik.touched.email && formik.errors.email ? (
+                    <span className="text-sm mt-3 font-bold text-red-400">
+                      {formik.errors.email}
+                    </span>
+                  ) : null}
+                  <p className="text-gray-500 text-sm mt-1">
+                    We’ll send your confirmation email to this address. Please
+                    make sure it&apos;s valid.
+                  </p>
+
+                  <div className="mt-4">
+                    <label className="block text-sm font-bold mb-2">
+                      Cell phone number
+                    </label>
+                    <PhoneInput
+                      placeholder="Enter phone number"
+                      value={phone}
+                      onChange={setPhone}
+                      defaultCountry="KE"
+                    />
+
+                    {invalidPhone && (
+                      <p className="text-sm mt-1 font-bold text-red-500">
+                        Invalid phone number.
+                      </p>
+                    )}
+                  </div>
+                </form>
+              </div>
+            </div> */}
+
+            <div className="px-2 mt-6 w-full mb-12 ml-auto md:w-[50%]">
+              <div className="px-2 py-2 bg-gray-100 flex items-center justify-between">
+                <div className="font-bold">Price</div>
+
+                <Price
+                  className="!text-base !font-bold"
+                  stayPrice={totalPrice()}
+                ></Price>
+              </div>
+
+              {/* <div className="px-2 mt-1.5 py-2 flex items-center justify-between">
+                <h1 className="font-bold">Processing fees (3.5%)</h1>
+                <Price
+                  className="!text-base !font-bold"
+                  stayPrice={totalPrice() * 0.035}
+                ></Price>
+              </div>
+
+              <div className="px-2 mt-1.5 py-2 bg-gray-100 flex items-center justify-between">
+                <h1 className="font-bold">Total price</h1>
+                <Price
+                  className="!text-base !font-bold"
+                  stayPrice={totalPrice() + totalPrice() * 0.035}
+                ></Price>
+              </div> */}
+
+              <ClientOnly>
+                {!Cookies.get("token") && (
+                  <div className="mt-2 mb-2">
+                    You are currently not signed in. To checkout or save these
+                    items or see your previously saved items,
+                    <Link
+                      href={{
+                        pathname: "/login",
+                        query: { redirect: `${router.asPath}` },
+                      }}
+                    >
+                      <a className="text-blue-500 font-bold">sign in</a>
+                    </Link>
+                  </div>
+                )}
+              </ClientOnly>
+
+              {/* <div className="mt-4 mb-3">
+                {totalPrice() > 0 && (
+                  <Button
+                    onClick={() => {
+                      formik.setTouched({
+                        first_name: true,
+                        last_name: true,
+                        email: true,
+                      });
+                      if (isValidPhoneNumber(phone || "")) {
+                        setInvalidPhone(false);
+                        formik.validateForm().then(() => {
+                          initializePayment(onSuccess);
+                        });
+                      } else {
+                        setInvalidPhone(true);
+                      }
                     }}
+                    type="submit"
+                    className="flex w-full mb-3 items-center gap-1 !px-0 !py-3 font-bold !bg-gradient-to-r from-red-600 via-red-500 to-yellow-500 !text-white"
                   >
-                    <a className="text-blue-500 font-bold">sign in</a>
-                  </Link>
-                </div>
-              )}
-            </ClientOnly>
+                    <span>Pay now</span>
 
-            <div className="flex mt-2 justify-center">
-              <Button
-                onClick={() => {
-                  if (Cookies.get("token")) {
-                    checkout();
-                  } else {
-                    router.push({
-                      pathname: "/login",
-                      query: { redirect: `${router.asPath}` },
-                    });
-                  }
-                }}
-                className="w-full !py-3 flex items-center gap-2 text-lg !bg-blue-900 !text-primary-blue-200"
-              >
-                <span>Request to book</span>
-                <div className={" " + (!loading ? "hidden" : "")}>
-                  <LoadingSpinerChase
-                    width={20}
-                    height={20}
-                  ></LoadingSpinerChase>
+                    <Icon icon="bxs:lock-alt" className="w-5 h-5" />
+
+                    <div
+                      className={
+                        " " + (loadingForPaystack ? "ml-1.5 " : " hidden")
+                      }
+                    >
+                      <LoadingSpinerChase
+                        width={13}
+                        height={13}
+                        color="white"
+                      ></LoadingSpinerChase>
+                    </div>
+                  </Button>
+                )}
+
+                {totalPrice() === 0 && (
+                  <Button
+                    onClick={() => {
+                      formik.setTouched({
+                        first_name: true,
+                        last_name: true,
+                        email: true,
+                      });
+                      if (isValidPhoneNumber(phone || "")) {
+                        setInvalidPhone(false);
+                        onSuccess(null);
+                      } else {
+                        setInvalidPhone(true);
+                      }
+                    }}
+                    type="submit"
+                    className="flex w-full mb-3 items-center gap-1 !px-0 !py-3 font-bold !bg-gradient-to-r from-red-600 via-red-500 to-yellow-500 !text-white"
+                  >
+                    <span>Pay now - it&apos;s free!</span>
+
+                    <div
+                      className={
+                        " " + (loadingForPaystack ? "ml-1.5 " : " hidden")
+                      }
+                    >
+                      <LoadingSpinerChase
+                        width={13}
+                        height={13}
+                        color="white"
+                      ></LoadingSpinerChase>
+                    </div>
+                  </Button>
+                )}
+              </div> */}
+
+              {/* <div className="mt-8 flex gap-4 items-center">
+                <div className="flex-grow h-px bg-gray-300"></div>
+                <div className="text-sm font-bold text-center">
+                  Don&apos;t want to pay now?
                 </div>
-              </Button>
+                <div className="flex-grow h-px bg-gray-300"></div>
+              </div> */}
+
+              <div className="flex mt-2 justify-center">
+                <Button
+                  onClick={() => {
+                    if (Cookies.get("token")) {
+                      requestBooking();
+                    } else {
+                      router.push({
+                        pathname: "/login",
+                        query: { redirect: `${router.asPath}` },
+                      });
+                    }
+                  }}
+                  className="w-full !py-3 flex items-center gap-2 text-lg !bg-blue-900 !text-primary-blue-200"
+                >
+                  <span>Request to book</span>
+                  <div className={" " + (!loading ? "hidden" : "")}>
+                    <LoadingSpinerChase
+                      width={20}
+                      height={20}
+                    ></LoadingSpinerChase>
+                  </div>
+                </Button>
+              </div>
             </div>
           </div>
         </div>

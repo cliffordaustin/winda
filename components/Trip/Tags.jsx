@@ -10,6 +10,7 @@ import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/thumbs";
 import Checkbox from "../ui/Checkbox";
+import { Mixpanel } from "../../lib/mixpanelconfig";
 
 const Tags = () => {
   const settings = {
@@ -32,6 +33,10 @@ const Tags = () => {
         .replace("[", "") // remove [
         .replace("]", "") // remove ]
         .trim(); // remove all white space
+
+      Mixpanel.track("Selected tag for curated trips", {
+        tag: event.target.value,
+      });
 
       router.push({ query: { ...router.query, tag: allOptions } });
     } else {

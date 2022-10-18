@@ -16,6 +16,7 @@ import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import Button from "../ui/Button";
 import Price from "../Stay/Price";
+import { Mixpanel } from "../../lib/mixpanelconfig";
 
 function Listing({
   listing,
@@ -266,6 +267,11 @@ function Listing({
       }}
       onMouseLeave={() => {
         dispatch(setActiveActivity(null));
+      }}
+      onClick={() => {
+        Mixpanel.track("User clicked on an activity", {
+          name_of_activity: listing.name,
+        });
       }}
       className="w-full sm:!w-[31.5%] lg:!w-[47%] xl:!w-[47%] !relative select-none"
     >

@@ -282,11 +282,43 @@ function Orders({
                   We’ll get back to you via your email -{" "}
                   <span className="font-bold">{userProfile.email}</span> in{" "}
                   <span className="font-bold">24 hours</span> with confirmation
-                  details plus a payment link to complete your booking.
+                  details.
                 </div>
 
                 <div className="mt-6">
-                  Wherever you go, go with your heart. 🦒
+                  &quot;Wherever you go, go with your heart. 🦒&quot;
+                </div>
+
+                <div></div>
+              </Dialogue>
+
+              <Dialogue
+                isOpen={router.query.show_checkout_message === "2"}
+                closeModal={() => {
+                  router.replace(
+                    {
+                      query: {
+                        ...router.query,
+                        show_checkout_message: "0",
+                      },
+                    },
+                    undefined,
+                    { shallow: true }
+                  );
+                }}
+                dialoguePanelClassName="!max-w-md !h-[230px]"
+                title={"Thank you for booking with Winda!"}
+                dialogueTitleClassName="!font-bold text-xl !font-OpenSans mb-3"
+              >
+                <div>
+                  We’ll get back to you via your email -{" "}
+                  <span className="font-bold">{userProfile.email}</span> in{" "}
+                  <span className="font-bold">24 hours</span> with confirmation
+                  details and payment instructions.
+                </div>
+
+                <div className="mt-6">
+                  &quot;Wherever you go, go with your heart. 🦒&quot;
                 </div>
 
                 <div></div>

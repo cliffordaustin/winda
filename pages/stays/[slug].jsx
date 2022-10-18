@@ -210,6 +210,11 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               }
             )
             .then(() => {
+              Mixpanel.track("User added accommodation to basket", {
+                name_of_activity: stay.name,
+                from_date: addToCartDate.from,
+                to_date: addToCartDate.to,
+              });
               router.push("/cart");
             })
             .catch((err) => {
@@ -251,6 +256,11 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                   : "STANDARD",
             });
             Cookies.set("cart", JSON.stringify(data));
+            Mixpanel.track("User added accommodation to basket", {
+              name_of_activity: stay.name,
+              from_date: addToCartDate.from,
+              to_date: addToCartDate.to,
+            });
             router.push("/cart");
           }
         }

@@ -8,8 +8,9 @@ import Button from "../ui/Button";
 import TextArea from "../ui/TextArea";
 import LoadingSpinerChase from "../ui/LoadingSpinerChase";
 import { useRouter } from "next/router";
+import { Mixpanel } from "../../lib/mixpanelconfig";
 
-function RequestInfo({ tripSlug, submitCompleteFunc, showInfo }) {
+function RequestInfo({ tripSlug, submitCompleteFunc, showInfo, name }) {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const formik = useFormik({
@@ -43,6 +44,9 @@ function RequestInfo({ tripSlug, submitCompleteFunc, showInfo }) {
           }
         )
         .then((res) => {
+          Mixpanel.track("User requested more info on trip", {
+            name_of_trip: name,
+          });
           setLoading(false);
           showInfo(false);
           submitCompleteFunc(true);

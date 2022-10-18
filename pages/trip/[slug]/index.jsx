@@ -4,6 +4,11 @@ import { useRouter } from "next/router";
 import { createGlobalStyle } from "styled-components";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { useFormik } from "formik";
+import { usePaystackPayment } from "react-paystack";
+import * as Yup from "yup";
+import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
+import "react-phone-number-input/style.css";
 
 import {
   Link as ReactScrollLink,
@@ -40,6 +45,8 @@ import PopoverBox from "../../../components/ui/Popover";
 import DatePicker from "../../../components/ui/DatePickerOpen";
 import ServerError from "../../../components/Error/ServerError";
 import ContactBanner from "../../../components/Home/ContactBanner";
+import Input from "../../../components/ui/Input";
+import { Mixpanel } from "../../../lib/mixpanelconfig";
 
 function TripDetail({ userProfile, userTrips, trip }) {
   const GlobalStyle = createGlobalStyle`
@@ -313,7 +320,152 @@ function TripDetail({ userProfile, userTrips, trip }) {
     }
   }, []);
 
-  console.log(pageError);
+  const [loadingForPaystack, setLoadingForPaystack] = useState(false);
+
+  const [phone, setPhone] = useState("");
+
+  const [invalidPhone, setInvalidPhone] = useState(false);
+
+  const formik = useFormik({
+    initialValues: {
+      first_name: userProfile.first_name || "",
+      last_name: userProfile.last_name || "",
+      email: userProfile.email || "",
+    },
+    validationSchema: Yup.object({
+      first_name: Yup.string()
+        .max(120, "This field has a max length of 120")
+        .required("This field is required"),
+      last_name: Yup.string()
+        .max(120, "This field has a max length of 120")
+        .required("This field is required"),
+      email: Yup.string()
+        .email("Invalid email")
+        .required("This field is required"),
+    }),
+    onSubmit: async (values) => {
+      if (isValidPhoneNumber(phone || "")) {
+        setLoading(true);
+        axios
+          .post(
+            `${process.env.NEXT_PUBLIC_baseURL}/trip/${router.query.slug}/create-booked-trip/`,
+            {
+              first_name: values.first_name,
+              last_name: values.last_name,
+              email: values.email,
+              starting_date: router.query.starting_date,
+              phone: phone,
+              guests: Number(router.query.guests)
+                ? Number(router.query.guests)
+                : null,
+              non_residents: Number(router.query.non_resident)
+                ? Number(router.query.non_resident)
+                : null,
+              message: message,
+              booking_request: true,
+            }
+          )
+          .then((res) => {
+            setLoading(false);
+            setShowCheckoutResponseModal(true);
+            Mixpanel.track("User requested to book trip", {
+              name_of_trip: trip.name,
+              first_name: values.first_name,
+              last_name: values.last_name,
+              email: values.email,
+              residents: Number(router.query.guests)
+                ? Number(router.query.guests)
+                : 0,
+              non_residents: Number(router.query.non_resident)
+                ? Number(router.query.non_resident)
+                : 0,
+            });
+          })
+          .catch((err) => {
+            setLoading(false);
+          });
+      } else if (!isValidPhoneNumber(phone || "")) {
+        setLoading(false);
+        setInvalidPhone(true);
+      }
+    },
+  });
+
+  const total = () => {
+    let price =
+      trip.price * Number(router.query.guests) +
+      totalPrice() * Number(router.query.non_resident) +
+      (trip.price * Number(router.query.guests) +
+        totalPrice() * Number(router.query.non_resident)) *
+        0.035;
+
+    return parseInt(
+      (Math.floor(price * 100) / 100).toFixed(2).replace(".", ""),
+      10
+    );
+  };
+
+  const config = {
+    reference: new Date().getTime().toString(),
+    email: formik.values.email,
+    amount: total(),
+    publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
+    currency: process.env.NODE_ENV === "production" ? "USD" : "GHS",
+  };
+
+  const [
+    showCheckoutResponseModalForPayment,
+    setShowCheckoutResponseModalForPayment,
+  ] = useState(false);
+
+  const onSuccess = (reference) => {
+    if (isValidPhoneNumber(phone || "")) {
+      setLoadingForPaystack(true);
+      axios
+        .post(
+          `${process.env.NEXT_PUBLIC_baseURL}/trip/${router.query.slug}/create-booked-trip/`,
+          {
+            first_name: formik.values.first_name,
+            last_name: formik.values.last_name,
+            email: formik.values.email,
+            starting_date: router.query.starting_date,
+            phone: phone,
+            guests: Number(router.query.guests)
+              ? Number(router.query.guests)
+              : null,
+            non_residents: Number(router.query.non_resident)
+              ? Number(router.query.non_resident)
+              : null,
+            message: message,
+            paid: true,
+          }
+        )
+        .then((res) => {
+          setLoadingForPaystack(false);
+          setShowCheckoutResponseModalForPayment(true);
+          Mixpanel.track("User paid for trip", {
+            name_of_trip: trip.name,
+            first_name: formik.values.first_name,
+            last_name: formik.values.last_name,
+            email: formik.values.email,
+            residents: Number(router.query.guests)
+              ? Number(router.query.guests)
+              : 0,
+            non_residents: Number(router.query.non_resident)
+              ? Number(router.query.non_resident)
+              : 0,
+          });
+        })
+        .catch((err) => {
+          setLoadingForPaystack(false);
+        });
+    } else if (!isValidPhoneNumber(phone || "")) {
+      setLoadingForPaystack(false);
+      setInvalidPhone(true);
+    }
+  };
+
+  const initializePayment = usePaystackPayment(config);
 
   return (
     <>
@@ -524,6 +676,9 @@ function TripDetail({ userProfile, userTrips, trip }) {
 
                   <Button
                     onClick={() => {
+                      Mixpanel.track("User clicked on the book trip button", {
+                        name_of_trip: trip.name,
+                      });
                       router.push({
                         query: {
                           ...router.query,
@@ -613,6 +768,12 @@ function TripDetail({ userProfile, userTrips, trip }) {
                       </div>
                       <Button
                         onClick={() => {
+                          Mixpanel.track(
+                            "User clicked on the book trip button",
+                            {
+                              name_of_trip: trip.name,
+                            }
+                          );
                           router.push({
                             query: {
                               ...router.query,
@@ -859,6 +1020,12 @@ function TripDetail({ userProfile, userTrips, trip }) {
 
                           <div
                             onClick={() => {
+                              Mixpanel.track(
+                                "User clicked on view more stays for curated trips",
+                                {
+                                  name_of_trip: trip.name,
+                                }
+                              );
                               setShowMoreStay(true);
                             }}
                             className="font-medium hover:underline cursor-pointer text-blue-600"
@@ -885,6 +1052,12 @@ function TripDetail({ userProfile, userTrips, trip }) {
 
                           <div
                             onClick={() => {
+                              Mixpanel.track(
+                                "User clicked on view more activities for curated trips",
+                                {
+                                  name_of_trip: trip.name,
+                                }
+                              );
                               setShowMoreActivities(true);
                             }}
                             className="font-medium hover:underline cursor-pointer text-blue-600"
@@ -915,6 +1088,12 @@ function TripDetail({ userProfile, userTrips, trip }) {
 
                           <div
                             onClick={() => {
+                              Mixpanel.track(
+                                "User clicked on view more transport for curated trips",
+                                {
+                                  name_of_trip: trip.name,
+                                }
+                              );
                               setShowMoreTransport(true);
                             }}
                             className="font-medium hover:underline cursor-pointer text-blue-600"
@@ -2630,6 +2809,202 @@ function TripDetail({ userProfile, userTrips, trip }) {
                       </div>
                     </div>
 
+                    <div className="mt-8 flex gap-4 items-center">
+                      <div className="flex-grow h-px bg-gray-300"></div>
+                      <div className="text-sm font-bold text-center">
+                        Your details
+                      </div>
+                      <div className="flex-grow h-px bg-gray-300"></div>
+                    </div>
+
+                    <div className="mb-4 mt-8 flex flex-col">
+                      <form onSubmit={formik.handleSubmit}>
+                        <div className="flex md:flex-row flex-col items-center gap-4 w-full">
+                          <div className="w-full relative">
+                            <label className="block text-sm font-bold mb-2">
+                              First name
+                            </label>
+
+                            <Input
+                              name="first_name"
+                              type="text"
+                              placeholder="First name"
+                              errorStyle={
+                                formik.touched.first_name &&
+                                formik.errors.first_name
+                                  ? true
+                                  : false
+                              }
+                              className={"w-full "}
+                              {...formik.getFieldProps("first_name")}
+                            ></Input>
+
+                            {formik.touched.first_name &&
+                            formik.errors.first_name ? (
+                              <span className="text-sm  font-bold text-red-400">
+                                {formik.errors.first_name}
+                              </span>
+                            ) : null}
+                            <p className="text-gray-500 text-sm mt-1">
+                              Please give us the name of someone coming for this
+                              trip.
+                            </p>
+                          </div>
+                          <div className="w-full self-start relative">
+                            <Input
+                              name="last_name"
+                              type="text"
+                              placeholder="Last name"
+                              label="Last name"
+                              className={"w-full "}
+                              errorStyle={
+                                formik.touched.last_name &&
+                                formik.errors.last_name
+                                  ? true
+                                  : false
+                              }
+                              {...formik.getFieldProps("last_name")}
+                            ></Input>
+                            {formik.touched.last_name &&
+                            formik.errors.last_name ? (
+                              <span className="text-sm absolute -bottom-6 font-bold text-red-400">
+                                {formik.errors.last_name}
+                              </span>
+                            ) : null}
+                          </div>
+                        </div>
+                        <div
+                          className={
+                            "mb-4 " +
+                            (formik.errors.last_name || formik.errors.first_name
+                              ? "mb-4"
+                              : "")
+                          }
+                        ></div>
+                        <Input
+                          name="email"
+                          type="email"
+                          errorStyle={
+                            formik.touched.email && formik.errors.email
+                              ? true
+                              : false
+                          }
+                          placeholder="Email"
+                          label="Email"
+                          {...formik.getFieldProps("email")}
+                        ></Input>
+                        {formik.touched.email && formik.errors.email ? (
+                          <span className="text-sm mt-3 font-bold text-red-400">
+                            {formik.errors.email}
+                          </span>
+                        ) : null}
+                        <p className="text-gray-500 text-sm mt-1">
+                          We’ll send your confirmation email to this address.
+                          Please make sure it&apos;s valid.
+                        </p>
+
+                        <div className="mt-4">
+                          <label className="block text-sm font-bold mb-2">
+                            Cell phone number
+                          </label>
+                          <PhoneInput
+                            placeholder="Enter phone number"
+                            value={phone}
+                            onChange={setPhone}
+                            defaultCountry="KE"
+                          />
+
+                          {invalidPhone && (
+                            <p className="text-sm mt-1 font-bold text-red-500">
+                              Invalid phone number.
+                            </p>
+                          )}
+                        </div>
+                      </form>
+                    </div>
+
+                    <div className="mt-8 flex gap-4 items-center">
+                      <div className="flex-grow h-px bg-gray-300"></div>
+                      <div className="text-sm font-bold text-center">
+                        Payment
+                      </div>
+                      <div className="flex-grow h-px bg-gray-300"></div>
+                    </div>
+
+                    <div className="flex justify-between items-center">
+                      <h1 className="font-bold">Price</h1>
+                      <Price
+                        className="!text-sm !font-bold"
+                        stayPrice={
+                          trip.price * Number(router.query.guests) +
+                          totalPrice() * Number(router.query.non_resident)
+                        }
+                      ></Price>
+                    </div>
+
+                    <div className="flex justify-between mt-3 items-center">
+                      <h1 className="font-bold">Processing fees (3.5%)</h1>
+                      <Price
+                        className="!text-sm !font-bold"
+                        stayPrice={
+                          (trip.price * Number(router.query.guests) +
+                            totalPrice() * Number(router.query.non_resident)) *
+                          0.035
+                        }
+                      ></Price>
+                    </div>
+
+                    <div className="flex justify-between mt-3 items-center">
+                      <h1 className="font-bold">Total price</h1>
+                      <Price
+                        className="!text-sm !font-bold"
+                        stayPrice={
+                          trip.price * Number(router.query.guests) +
+                          totalPrice() * Number(router.query.non_resident) +
+                          (trip.price * Number(router.query.guests) +
+                            totalPrice() * Number(router.query.non_resident)) *
+                            0.035
+                        }
+                      ></Price>
+                    </div>
+
+                    <div className="mt-4 mb-3">
+                      <Button
+                        onClick={() => {
+                          formik.setTouched({
+                            first_name: true,
+                            last_name: true,
+                            email: true,
+                          });
+                          if (isValidPhoneNumber(phone || "")) {
+                            setInvalidPhone(false);
+                            formik.validateForm().then(() => {
+                              initializePayment(onSuccess);
+                            });
+                          } else {
+                            setInvalidPhone(true);
+                          }
+                        }}
+                        type="submit"
+                        className="flex w-full mb-3 items-center gap-1 !px-0 !py-3 font-bold !bg-gradient-to-r from-red-600 via-red-500 to-yellow-500 !text-white"
+                      >
+                        <span>Pay now</span>
+                        <Icon icon="bxs:lock-alt" className="w-5 h-5" />
+
+                        <div
+                          className={
+                            " " + (loadingForPaystack ? "ml-1.5 " : " hidden")
+                          }
+                        >
+                          <LoadingSpinerChase
+                            width={13}
+                            height={13}
+                            color="white"
+                          ></LoadingSpinerChase>
+                        </div>
+                      </Button>
+                    </div>
+
                     <Dialogue
                       isOpen={showMessage}
                       closeModal={() => {
@@ -2673,9 +3048,10 @@ function TripDetail({ userProfile, userTrips, trip }) {
                       isOpen={showCheckoutResponseModal}
                       closeModal={() => {
                         setShowCheckoutResponseModal(false);
+                        router.back();
                       }}
                       dialoguePanelClassName="!max-w-md !h-[265px]"
-                      title={"Thanks for booking this trip"}
+                      title={"Thanks for requesting to book this trip"}
                       dialogueTitleClassName="!font-bold text-xl !font-OpenSans mb-3"
                     >
                       <div>
@@ -2683,7 +3059,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
                         the details of the trip. We will send an extended
                         itinerary to your email:{" "}
                         <span className="font-bold underline">
-                          {userProfile.email}
+                          {formik.values.email}
                         </span>
                       </div>
 
@@ -2701,21 +3077,72 @@ function TripDetail({ userProfile, userTrips, trip }) {
 
                         <Button
                           onClick={() => {
-                            router.replace("/trip/user-trips");
+                            router.replace("/");
                           }}
                           className="flex w-[40%] mt-3 mb-3 items-center gap-1 !px-0 !py-3 font-bold !bg-transparent hover:!bg-gray-200 !border !border-gray-400 !text-black"
                         >
-                          <span>View your trips</span>
+                          <span>Check out Winda</span>
                         </Button>
                       </div>
                     </Dialogue>
 
+                    <Dialogue
+                      isOpen={showCheckoutResponseModalForPayment}
+                      closeModal={() => {
+                        setShowCheckoutResponseModalForPayment(false);
+                        router.back();
+                      }}
+                      dialoguePanelClassName="!max-w-md !h-[265px]"
+                      title={"Thanks for booking this trip"}
+                      dialogueTitleClassName="!font-bold text-xl !font-OpenSans mb-3"
+                    >
+                      <div>
+                        Thank you for booking!!!🥳. We&apos;ll get back to you
+                        in less than 24 hours. We are confirming all the details
+                        of the trip. We will send an extended itinerary to your
+                        email:{" "}
+                        <span className="font-bold underline">
+                          {formik.values.email}
+                        </span>
+                      </div>
+
+                      <div className="mt-4">Meanwhile...</div>
+
+                      <div className="flex gap-2 w-full">
+                        <Button
+                          onClick={() => {
+                            router.replace("/trip");
+                          }}
+                          className="flex w-[60%] mt-3 mb-3 items-center gap-1 !px-0 !py-3 font-bold !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white"
+                        >
+                          <span>Checkout other curated trips</span>
+                        </Button>
+
+                        <Button
+                          onClick={() => {
+                            router.replace("/");
+                          }}
+                          className="flex w-[40%] mt-3 mb-3 items-center gap-1 !px-0 !py-3 font-bold !bg-transparent hover:!bg-gray-200 !border !border-gray-400 !text-black"
+                        >
+                          <span>Check out Winda</span>
+                        </Button>
+                      </div>
+                    </Dialogue>
+
+                    <div className="mt-8 flex gap-4 items-center">
+                      <div className="flex-grow h-px bg-gray-300"></div>
+                      <div className="text-sm font-bold text-center">
+                        Don&apos;t want to pay now?
+                      </div>
+                      <div className="flex-grow h-px bg-gray-300"></div>
+                    </div>
+
                     <div className="mt-8">
                       <Button
                         onClick={() => {
-                          bookTrip();
+                          formik.handleSubmit();
                         }}
-                        className="flex w-[150px] mt-3 mb-3 items-center gap-1 !px-0 !py-3 font-bold !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white"
+                        className="flex w-full mt-3 mb-3 items-center gap-1 !px-0 !py-3 font-bold !bg-blue-600 !text-white"
                       >
                         <span>Request to book</span>
 

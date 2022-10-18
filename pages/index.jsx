@@ -160,6 +160,25 @@ export default function Home({ userProfile }) {
     }
   }, []);
 
+  useEffect(() => {
+    if (process.browser) {
+      let iteration = 1;
+      const video = document.getElementsByTagName("video")[0];
+      video.addEventListener(
+        "ended",
+        function () {
+          if (iteration < 2) {
+            console.log("Played");
+            this.currentTime = 0;
+            this.play();
+            iteration++;
+          }
+        },
+        false
+      );
+    }
+  }, []);
+
   return (
     <div
       className="relative"
@@ -205,19 +224,27 @@ export default function Home({ userProfile }) {
 
       <div className="mb-12 select-none relative">
         <div className="w-full text-red-600 h-[500px] md:h-[600px] relative before:absolute before:h-full before:w-full before:bg-black before:z-20 before:opacity-60">
-          <Image
-            className={"w-full "}
-            layout="fill"
-            objectFit="cover"
-            src="/images/image-header.jpg"
-            objectPosition={"bottom"}
-            sizes="380"
-            alt="Image of samburu man looking at a vast landscape"
-            unoptimized={true}
-            priority
-          />
+          <video
+            autoPlay
+            muted
+            className="w-full h-full absolute inset-0 object-cover object-center"
+            id="video"
+          >
+            <source src="videos/winda.webm" type="video/webm"></source>
+            <Image
+              className={"w-full "}
+              layout="fill"
+              objectFit="cover"
+              src="/images/image-header.jpg"
+              objectPosition={"bottom"}
+              sizes="380"
+              alt="Image of samburu man looking at a vast landscape"
+              unoptimized={true}
+              priority
+            />
+          </video>
 
-          <div className="flex flex-col items-center justify-center absolute w-full text-center top-[30%] md:top-[40%] z-20 px-6 md:px-0">
+          <div className="flex flex-col items-center justify-center absolute w-full text-center top-[40%] md:top-[40%] z-20 px-6 md:px-0">
             <div className="flex flex-col items-center">
               <h1 className="font-black font-SourceSans mb-2 text-3xl sm:text-4xl md:text-5xl xl:text-7xl text-white uppercase text-center">
                 Control your journey

@@ -119,15 +119,15 @@ function UserDropdown({
         </Link>
       )}
 
-      <Link href="/trip/user-trips">
+      {/* <Link href="/trip/user-trips">
         <a>
           <div className="hover:bg-gray-100 transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2 flex justify-between items-center">
             <span className="font-bold text-base">Your trips</span>
           </div>
         </a>
-      </Link>
+      </Link> */}
 
-      {!isHomePage && (
+      {/* {!isHomePage && (
         <Link href="/trip/request-trip">
           <a>
             <div className="hover:bg-gray-100  transition-colors duration-300 cursor-pointer ease-in-out px-2 py-2 flex justify-between items-center">
@@ -135,7 +135,7 @@ function UserDropdown({
             </div>
           </a>
         </Link>
-      )}
+      )} */}
 
       {!isHomePage && (
         <Link href="/cart">
