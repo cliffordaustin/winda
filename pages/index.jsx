@@ -227,10 +227,12 @@ export default function Home({ userProfile }) {
           <video
             autoPlay
             muted
+            playsInline
             className="w-full h-full absolute inset-0 object-cover object-center"
             id="video"
           >
             <source src="videos/winda.webm" type="video/webm"></source>
+            <source src="videos/winda.mp4" type="video/mp4"></source>
             <Image
               className={"w-full "}
               layout="fill"
