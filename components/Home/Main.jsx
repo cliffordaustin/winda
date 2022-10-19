@@ -394,7 +394,7 @@ function Main() {
         </Link>
       </div> */}
 
-      <div className="">
+      <div className="px-2">
         <Swiper
           {...settings}
           modules={[FreeMode, Navigation, Mousewheel, Thumbs]}
