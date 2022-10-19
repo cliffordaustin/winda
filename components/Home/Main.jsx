@@ -81,11 +81,12 @@ function Main() {
 
   return (
     <div className="w-full">
-      {/* <h1 className="font-bold text-3xl font-OpenSans text-center">
+      <h1 className="font-bold text-3xl mb-6 font-OpenSans text-center">
         <span className="text-gray-600">Explore on</span>{" "}
         <span className="">winda</span>
-      </h1> */}
-      <div className="w-full flex justify-center">
+      </h1>
+
+      {/* <div className="w-full flex justify-center">
         <div className="px-3 md:px-6 md:w-[60%] w-full">
           <h2 className="text-center mt-2 text-base md:text-lg">
             Have you ever been frustrated while planning your trip in East
@@ -164,9 +165,9 @@ function Main() {
 
           <div className="w-full h-[0.5px] bg-gray-200 md:hidden"></div>
         </div>
-      </div>
+      </div> */}
 
-      <div className="md:px-6 px-3 text-center mt-8">
+      {/* <div className="md:px-6 px-3 text-center mt-8">
         <h1 className="text-2xl font-bold">Popular trips</h1>
       </div>
 
@@ -302,7 +303,7 @@ function Main() {
             </div>
           </SwiperSlide>
 
-          {/* <div
+          <div
             className={
               " absolute hidden md:flex h-12 w-12 z-10 left-[46%] -bottom-[30px] items-center justify-end " +
               (state.isBeginningOfSlide ? "invisible" : "")
@@ -324,7 +325,7 @@ function Main() {
                 />
               </svg>
             </div>
-          </div> */}
+          </div>
 
           <div className="flex items-center justify-center gap-6 mt-4">
             <div
@@ -350,7 +351,7 @@ function Main() {
             </div>
           </div>
 
-          {/* <div
+          <div
             className={
               " absolute hidden md:flex h-12 w-12 z-30 right-3 top-[50%] -translate-y-2/4 items-center " +
               (state.isEndOfSlide ? "invisible" : "")
@@ -372,7 +373,7 @@ function Main() {
                 />
               </svg>
             </div>
-          </div> */}
+          </div>
         </Swiper>
       </div>
 
@@ -391,10 +392,10 @@ function Main() {
             </Button>
           </a>
         </Link>
-      </div>
+      </div> */}
 
       <div className="">
-        {/* <Swiper
+        <Swiper
           {...settings}
           modules={[FreeMode, Navigation, Mousewheel, Thumbs]}
           className=""
@@ -1008,14 +1009,14 @@ function Main() {
               </div>
             </div>
           </SwiperSlide>
-        </Swiper> */}
+        </Swiper>
       </div>
 
-      {/* <h1 className="font-bold text-2xl font-OpenSans text-center mt-16 mb-4">
+      <h1 className="font-bold text-2xl font-OpenSans text-center mt-16 mb-4">
         <span className="text-gray-600">Find stays that suits you</span>
-      </h1> */}
+      </h1>
 
-      {/* <div className="px-2">
+      <div className="px-2">
         <Swiper
           {...roomsSettings}
           modules={[FreeMode, Navigation, Thumbs]}
@@ -1279,13 +1280,13 @@ function Main() {
             </div>
           </div>
         </Swiper>
-      </div> */}
+      </div>
 
-      {/* <h1 className="font-bold text-2xl font-OpenSans text-center mt-16 mb-4">
+      <h1 className="font-bold text-2xl font-OpenSans text-center mt-16 mb-4">
         <span className="text-gray-600">Explore all our services</span>
-      </h1> */}
+      </h1>
 
-      {/* <div className="px-2">
+      <div className="px-2">
         <Swiper
           {...exploreSettings}
           onSwiper={(swiper) => {
@@ -1437,7 +1438,7 @@ function Main() {
             </div>
           </div>
         </Swiper>
-      </div> */}
+      </div>
     </div>
   );
 }
