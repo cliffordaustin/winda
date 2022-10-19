@@ -435,7 +435,7 @@ function Navbar({ userProfile }) {
                 }}
                 className="flex items-center gap-4 max-w-[360px] !py-3 !bg-gradient-to-r from-pink-500 via-red-500 !rounded-3xl to-yellow-500"
               >
-                <span className="font-bold">Explore our curated trips</span>
+                <span className="font-bold">Explore all trips</span>
               </Button>
             </a>
           </Link>

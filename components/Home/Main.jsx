@@ -15,6 +15,8 @@ import { useRouter } from "next/router";
 import Dialogue from "./Dialogue";
 import { Mixpanel } from "../../lib/mixpanelconfig";
 import Link from "next/link";
+import Button from "../ui/Button";
+import { Icon } from "@iconify/react";
 
 SwiperCore.use([Navigation]);
 
@@ -79,15 +81,320 @@ function Main() {
 
   return (
     <div className="w-full">
-      <h1 className="font-bold text-3xl font-OpenSans text-center">
+      {/* <h1 className="font-bold text-3xl font-OpenSans text-center">
         <span className="text-gray-600">Explore on</span>{" "}
         <span className="">winda</span>
-      </h1>
-      <h2 className="text-center mt-2">
-        Take a look into what winda has to offer you.
-      </h2>
-      <div className="px-2 sm:px-4 mt-6">
+      </h1> */}
+      <div className="w-full flex justify-center">
+        <div className="px-3 md:px-6 md:w-[60%] w-full">
+          <h2 className="text-center mt-2 text-base md:text-lg">
+            Have you ever been frustrated while planning your trip in East
+            Africa? Searching through many websites, talking to multiple travel
+            agents and still not sure whether you got the best deal?
+          </h2>
+        </div>
+      </div>
+
+      <div className="w-full flex justify-center mt-8">
+        <div className="px-3 flex flex-col items-center justify-center gap-2 md:px-6 md:w-[60%] w-full">
+          <h2 className="text-center mt-2 text-base md:text-lg">
+            Cut through the noise. Discover tried and tested trips enjoyed by
+            our customers
+          </h2>
+          <Link href="/trip">
+            <a>
+              <Button
+                onClick={() => {
+                  Mixpanel.track(
+                    "Clicked view all curated trips button under about our service section"
+                  );
+                }}
+                className="flex items-center gap-4 max-w-[360px] !uppercase !py-3 !bg-gradient-to-r !bg-red-500 !rounded-3xl"
+              >
+                <span className="font-bold">Explore trips now</span>
+              </Button>
+            </a>
+          </Link>
+        </div>
+      </div>
+
+      <div className="my-6">
+        <hr />
+      </div>
+
+      <div className="w-full flex justify-center mt-8">
+        <div className="px-3 flex items-center justify-center gap-2 md:px-6 md:w-[60%] w-full">
+          <div className="py-4 px-3 rounded-md text-base md:text-lg hover:shadow-md transition-shadow duration-500">
+            Everyone deserves a great travel experience
+          </div>
+          <div className="h-[60%] w-[2px] bg-gray-300"></div>
+          <div className="py-4 px-3 rounded-md text-base md:text-lg md:hover:shadow-md transition-shadow duration-500">
+            Trips booked across Kenya, Uganda, Tanzania and Rwanda
+          </div>
+        </div>
+      </div>
+
+      <div className="md:px-6 px-3 text-center mt-8">
+        <h1 className="text-2xl font-bold">How it works</h1>
+        <div className="flex flex-col md:flex-row items-center justify-center gap-4 flex-wrap mt-4">
+          <div className="w-full h-[0.5px] bg-gray-200 md:hidden"></div>
+
+          <div className="h-[120px] md:h-[200px] w-[260px] flex items-center justify-center flex-col gap-4 bg-white rounded-lg md:hover:shadow-all transition-shadow duration-500 px-3">
+            <h1 className="font-bold">1</h1>
+            <p className="mt-2">
+              Explore our curated trips and find what you like
+            </p>
+          </div>
+
+          <div className="w-full h-[0.5px] bg-gray-200 md:hidden"></div>
+
+          <div className="h-[120px] md:h-[200px] w-[260px] flex items-center justify-center flex-col gap-4 bg-white rounded-lg md:hover:shadow-all transition-shadow duration-500 px-3">
+            <h1 className="font-bold">2</h1>
+            <p className="mt-2">
+              Add the number of people and dates to check availability
+            </p>
+          </div>
+
+          <div className="w-full h-[0.5px] bg-gray-200 md:hidden"></div>
+
+          <div className="h-[120px] md:h-[200px] w-[260px] flex items-center justify-center flex-col gap-4 bg-white rounded-lg md:hover:shadow-all transition-shadow duration-500 px-3">
+            <h1 className="font-bold">3</h1>
+            <p className="mt-2">Book your trip</p>
+          </div>
+
+          <div className="w-full h-[0.5px] bg-gray-200 md:hidden"></div>
+        </div>
+      </div>
+
+      <div className="md:px-6 px-3 text-center mt-8">
+        <h1 className="text-2xl font-bold">Popular trips</h1>
+      </div>
+
+      <div className="px-2 md:px-0 mt-6">
         <Swiper
+          {...roomsSettings}
+          modules={[FreeMode, Navigation, Thumbs]}
+          onSwiper={(swiper) => {
+            setState({
+              ...state,
+              isEndOfSlide: swiper.isEnd,
+              isBeginningOfSlide: swiper.isBeginning,
+            });
+          }}
+          onSlideChange={(swiper) => {
+            setState({
+              ...state,
+              isEndOfSlide: swiper.isEnd,
+              isBeginningOfSlide: swiper.isBeginning,
+            });
+          }}
+          className="md:w-[70%] lg:w-[900px] w-full"
+        >
+          <SwiperSlide className="!h-[320px] !w-[320px]">
+            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+              <Carousel
+                images={["/images/home/romantic-trip.webp"]}
+                imageClass="rounded-2xl"
+              ></Carousel>
+
+              <h1 className="text-white text-shadow z-30 font-black absolute top-4 left-4 text-2xl">
+                Romantic weekend
+              </h1>
+
+              <div className="absolute bottom-4 z-30 flex flex-col left-4">
+                <Link href="/trip?tag=romantic">
+                  <a>
+                    <div
+                      onClick={() => {
+                        Mixpanel.track("View curated trips for romantic trips");
+                      }}
+                      className="px-3 cursor-pointer font-bold text-sm py-2 w-fit bg-white text-black rounded-lg mt-2"
+                    >
+                      View curated trips
+                    </div>
+                  </a>
+                </Link>
+              </div>
+            </div>
+          </SwiperSlide>
+
+          <SwiperSlide className="!h-[320px] !w-[320px]">
+            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+              <Carousel
+                images={["/images/home/person_hiking.webp"]}
+                imageClass="rounded-2xl"
+              ></Carousel>
+
+              <h1 className="text-white text-shadow z-30 font-black absolute top-4 left-4 text-2xl">
+                Solo trips
+              </h1>
+
+              <div className="absolute bottom-4 z-30 flex flex-col left-4">
+                <Link href="/trip?tag=solo_getaway">
+                  <a>
+                    <div
+                      onClick={() => {
+                        Mixpanel.track("View curated trips for solo trips");
+                      }}
+                      className="px-3 cursor-pointer font-bold text-sm py-2 w-fit bg-white text-black rounded-lg mt-2"
+                    >
+                      View curated trips
+                    </div>
+                  </a>
+                </Link>
+              </div>
+            </div>
+          </SwiperSlide>
+
+          <SwiperSlide className="!h-[320px] !w-[320px]">
+            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+              <Carousel
+                images={["/images/home/roadtrip.webp"]}
+                imageClass="rounded-2xl"
+              ></Carousel>
+
+              <h1 className="text-white text-shadow z-30 font-black absolute top-4 left-4 text-2xl">
+                Road trips
+              </h1>
+
+              <div className="absolute bottom-4 z-30 flex flex-col left-4">
+                <Link href="/trip?tag=road_trip">
+                  <a>
+                    <div
+                      onClick={() => {
+                        Mixpanel.track("View curated trips for road trips");
+                      }}
+                      className="px-3 cursor-pointer font-bold text-sm py-2 w-fit bg-white text-black rounded-lg mt-2"
+                    >
+                      View curated trips
+                    </div>
+                  </a>
+                </Link>
+              </div>
+            </div>
+          </SwiperSlide>
+
+          <SwiperSlide className="!h-[320px] !w-[320px]">
+            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+              <Carousel
+                images={["/images/home/cultural-trip.webp"]}
+                imageClass="rounded-2xl"
+              ></Carousel>
+
+              <h1 className="text-white text-shadow z-30 font-black absolute top-4 left-4 text-2xl">
+                Cultural trips
+              </h1>
+
+              <div className="absolute bottom-4 z-30 flex flex-col left-4">
+                <Link href="/trip?tag=cultural">
+                  <a>
+                    <div
+                      onClick={() => {
+                        Mixpanel.track("View curated trips for cultural trips");
+                      }}
+                      className="px-3 cursor-pointer font-bold text-sm py-2 w-fit bg-white text-black rounded-lg mt-2"
+                    >
+                      View curated trips
+                    </div>
+                  </a>
+                </Link>
+              </div>
+            </div>
+          </SwiperSlide>
+
+          {/* <div
+            className={
+              " absolute hidden md:flex h-12 w-12 z-10 left-[46%] -bottom-[30px] items-center justify-end " +
+              (state.isBeginningOfSlide ? "invisible" : "")
+            }
+          >
+            <div className="cursor-pointer h-8 w-8 swiper-room-button-prev border bg-white shadow-lg rounded-full flex items-center justify-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 text-black"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+            </div>
+          </div> */}
+
+          <div className="flex items-center justify-center gap-6 mt-4">
+            <div
+              className={
+                "cursor-pointer h-8 w-8 swiper-room-button-prev border bg-white rounded-full flex items-center justify-center " +
+                (state.isBeginningOfSlide
+                  ? "text-gray-400 cursor-not-allowed"
+                  : "text-blue-500 border-blue-500")
+              }
+            >
+              <Icon icon="codicon:arrow-small-left" className="w-6 h-6" />
+            </div>
+
+            <div
+              className={
+                "cursor-pointer h-8 w-8 swiper-room-button-next rounded-full bg-white border flex items-center justify-center " +
+                (state.isEndOfSlide
+                  ? "text-gray-400 cursor-not-allowed"
+                  : "text-blue-500 border-blue-500")
+              }
+            >
+              <Icon icon="codicon:arrow-small-right" className="w-6 h-6" />
+            </div>
+          </div>
+
+          {/* <div
+            className={
+              " absolute hidden md:flex h-12 w-12 z-30 right-3 top-[50%] -translate-y-2/4 items-center " +
+              (state.isEndOfSlide ? "invisible" : "")
+            }
+          >
+            <div className="cursor-pointer h-8 w-8 swiper-room-button-next rounded-full border flex items-center justify-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </div>
+          </div> */}
+        </Swiper>
+      </div>
+
+      <div className="flex items-center justify-center mt-6">
+        <Link href="/trip">
+          <a>
+            <Button
+              onClick={() => {
+                Mixpanel.track(
+                  "Clicked view all curated trips button under popular trips"
+                );
+              }}
+              className="flex items-center gap-4 max-w-[360px] !uppercase !py-3 !bg-gradient-to-r !bg-red-500 !rounded-3xl"
+            >
+              <span className="font-bold">see all trips</span>
+            </Button>
+          </a>
+        </Link>
+      </div>
+
+      <div className="">
+        {/* <Swiper
           {...settings}
           modules={[FreeMode, Navigation, Mousewheel, Thumbs]}
           className=""
@@ -701,14 +1008,14 @@ function Main() {
               </div>
             </div>
           </SwiperSlide>
-        </Swiper>
+        </Swiper> */}
       </div>
 
-      <h1 className="font-bold text-2xl font-OpenSans text-center mt-16 mb-4">
+      {/* <h1 className="font-bold text-2xl font-OpenSans text-center mt-16 mb-4">
         <span className="text-gray-600">Find stays that suits you</span>
-      </h1>
+      </h1> */}
 
-      <div className="px-2">
+      {/* <div className="px-2">
         <Swiper
           {...roomsSettings}
           modules={[FreeMode, Navigation, Thumbs]}
@@ -972,13 +1279,13 @@ function Main() {
             </div>
           </div>
         </Swiper>
-      </div>
+      </div> */}
 
-      <h1 className="font-bold text-2xl font-OpenSans text-center mt-16 mb-4">
+      {/* <h1 className="font-bold text-2xl font-OpenSans text-center mt-16 mb-4">
         <span className="text-gray-600">Explore all our services</span>
-      </h1>
+      </h1> */}
 
-      <div className="px-2">
+      {/* <div className="px-2">
         <Swiper
           {...exploreSettings}
           onSwiper={(swiper) => {
@@ -1130,7 +1437,7 @@ function Main() {
             </div>
           </div>
         </Swiper>
-      </div>
+      </div> */}
     </div>
   );
 }
