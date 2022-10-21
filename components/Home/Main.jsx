@@ -417,7 +417,7 @@ function Main() {
           className="stepWebkitSetting"
         >
           <SwiperSlide className="!h-[400px] sm:!h-[380px] !w-[90%] sm:!w-[80%] lg:!w-[800px] flex gap-3">
-            <div className="w-full rounded-2xl flex flex-col lg:flex-row gap-4 px-2 md:px-4 py-2 md:py-4 h-full bg-red-500">
+            <div className="w-full rounded-2xl flex flex-col lg:flex-row gap-4 px-2 md:px-4 py-2 md:py-4 h-full bg-blue-600">
               <div className="lg:w-[40%] flex flex-col justify-between py-2">
                 <h1 className="text-xl md:text-3xl font-bold text-white">
                   Start your holiday with these curated trips.
@@ -452,7 +452,7 @@ function Main() {
           </SwiperSlide>
 
           <SwiperSlide className="!h-[400px] sm:!h-[380px] !w-[90%] sm:!w-[80%] lg:!w-[800px] flex gap-3">
-            <div className="w-full rounded-2xl flex flex-col lg:flex-row gap-4 px-2 md:px-4 py-2 md:py-4 h-full bg-red-500">
+            <div className="w-full rounded-2xl flex flex-col lg:flex-row gap-4 px-2 md:px-4 py-2 md:py-4 h-full bg-blue-600">
               <div className="lg:w-[40%] flex flex-col justify-between py-2">
                 <h1 className="text-xl md:text-3xl font-bold text-white">
                   We created trips dedicated to exploring kenya culture.
@@ -488,7 +488,7 @@ function Main() {
           </SwiperSlide>
 
           <SwiperSlide className="!h-[400px] sm:!h-[380px] !w-[90%] sm:!w-[80%] lg:!w-[800px] flex gap-3">
-            <div className="w-full rounded-2xl flex flex-col lg:flex-row gap-4 px-2 md:px-4 py-2 md:py-4 h-full bg-red-500">
+            <div className="w-full rounded-2xl flex flex-col lg:flex-row gap-4 px-2 md:px-4 py-2 md:py-4 h-full bg-blue-600">
               <div className="lg:w-[40%] flex flex-col justify-between py-2">
                 <h1 className="text-xl md:text-3xl font-bold text-white">
                   The best memories are the ones you create with your perfect
@@ -524,7 +524,7 @@ function Main() {
           </SwiperSlide>
 
           <SwiperSlide className="!h-[400px] sm:!h-[380px] !w-[90%] sm:!w-[80%] lg:!w-[800px] flex gap-3">
-            <div className="w-full rounded-2xl flex flex-col lg:flex-row gap-4 px-2 md:px-4 py-2 md:py-4 h-full bg-red-500">
+            <div className="w-full rounded-2xl flex flex-col lg:flex-row gap-4 px-2 md:px-4 py-2 md:py-4 h-full bg-blue-600">
               <div className="lg:w-[40%] flex flex-col justify-between py-2">
                 <h1 className="text-xl md:text-3xl font-bold text-white">
                   We created trips meant for you to explore kenya and enjoy your

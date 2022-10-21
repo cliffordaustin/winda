@@ -426,7 +426,7 @@ function Navbar({ userProfile }) {
           <Link href="https://api.whatsapp.com/send?phone=+254757629101&text=Hi winda">
             <a
               target="_blank"
-              className="flex items-center gap-0.5 px-4 py-3 !bg-gradient-to-r from-pink-500 via-red-500 !rounded-3xl to-yellow-500"
+              className="flex items-center gap-0.5 px-4 py-3 !rounded-3xl !bg-blue-600"
             >
               {/* <div>
                 <Icon icon="logos:whatsapp-icon" className="w-5 h-5" />
@@ -444,7 +444,7 @@ function Navbar({ userProfile }) {
                 onClick={() => {
                   Mixpanel.track("Clicked view all curated trips button");
                 }}
-                className="flex items-center gap-4 max-w-[360px] !py-3 !bg-gradient-to-r from-pink-500 via-red-500 !rounded-3xl to-yellow-500"
+                className="flex items-center gap-0.5 px-4 py-3 !rounded-3xl !bg-blue-600"
               >
                 <span className="font-bold">Explore all trips</span>
               </Button>
