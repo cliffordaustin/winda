@@ -87,7 +87,7 @@ function Navbar({ userProfile }) {
 
   return (
     <div>
-      <div className="flex items-center justify-between sm:px-8 px-6 md:px-12 py-5">
+      <div className="flex items-center border-b justify-between sm:px-8 px-6 md:px-6 lg:px-12 py-5">
         <div className="flex items-center gap-12">
           <Link href="/">
             <a className="relative w-28 h-9 cursor-pointer">
@@ -424,12 +424,15 @@ function Navbar({ userProfile }) {
 
         <div className="hidden md:flex items-center gap-2">
           <Link href="https://api.whatsapp.com/send?phone=+254757629101&text=Hi winda">
-            <a target="_blank" className="flex items-center gap-0.5 underline">
-              <div>
+            <a
+              target="_blank"
+              className="flex items-center gap-0.5 px-4 py-3 !bg-gradient-to-r from-pink-500 via-red-500 !rounded-3xl to-yellow-500"
+            >
+              {/* <div>
                 <Icon icon="logos:whatsapp-icon" className="w-5 h-5" />
-              </div>
-              <span className="ml-2 text-black text-sm font-bold cursor-pointer">
-                +254757629101
+              </div> */}
+              <span className="ml-2 text-white text-sm font-bold cursor-pointer">
+                Travel concierge
               </span>
             </a>
           </Link>

@@ -43,6 +43,8 @@ function Main() {
   const settings = {
     spaceBetween: 20,
     slidesPerView: "auto",
+    // slidesPerGroup: 1,
+    loop: true,
     freeMode: {
       enabled: true,
     },
@@ -82,7 +84,7 @@ function Main() {
   return (
     <div className="w-full">
       <h1 className="font-bold text-3xl mb-6 font-OpenSans text-center">
-        <span className="text-gray-600">Explore on</span>{" "}
+        <span className="text-gray-600">Explore trips on</span>{" "}
         <span className="">winda</span>
       </h1>
 
@@ -411,13 +413,13 @@ function Main() {
               isBeginningOfExploreSlide: swiper.isBeginning,
             });
           }}
-          modules={[FreeMode, Navigation, Mousewheel, Thumbs]}
-          className=""
+          modules={[Navigation, FreeMode]}
+          className="stepWebkitSetting"
         >
-          <SwiperSlide className="!h-[400px] sm:!h-[380px] !w-[90%] sm:!w-[1000px] md:!w-[90%] lg:!w-[1000px] flex gap-3">
+          <SwiperSlide className="!h-[400px] sm:!h-[380px] !w-[90%] sm:!w-[80%] lg:!w-[800px] flex gap-3">
             <div className="w-full rounded-2xl flex flex-col lg:flex-row gap-4 px-2 md:px-4 py-2 md:py-4 h-full bg-red-500">
-              <div className="lg:w-[30%] flex flex-col justify-between py-2">
-                <h1 className="text-3xl font-bold text-white">
+              <div className="lg:w-[40%] flex flex-col justify-between py-2">
+                <h1 className="text-xl md:text-3xl font-bold text-white">
                   Start your holiday with these curated trips.
                 </h1>
 
@@ -431,25 +433,133 @@ function Main() {
                       }}
                       className="px-3 cursor-pointer font-bold text-sm py-2 w-fit bg-white text-black rounded-lg mt-2"
                     >
-                      View curated trips
+                      Book now
                     </div>
                   </a>
                 </Link>
               </div>
-              <div className="w-full h-full lg:w-[70%] bg-blue-500 rounded-2xl relative">
+              <div className="w-full h-full lg:w-[60%] rounded-2xl relative before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
                 <Carousel
-                  images={["/images/home/group-of-people.webp"]}
+                  images={["/images/home/group-of-travelers.jpg"]}
                   imageClass="rounded-2xl"
-                  alt="Image by Timon Studler from unsplash"
                 ></Carousel>
 
-                <div className="absolute bottom-4 left-4 text-white font-Condiment text-3xl md:text-5xl">
-                  Holiday trips!
+                <div className="absolute z-20 bottom-4 font-bold left-4 text-white text-3xl md:text-5xl">
+                  Holiday season offers
                 </div>
               </div>
             </div>
           </SwiperSlide>
-          <SwiperSlide className="!h-[400px] sm:!h-[380px] !w-[600px] sm:!w-[800px] md:!w-[900px] lg:!w-[900px] flex gap-3">
+
+          <SwiperSlide className="!h-[400px] sm:!h-[380px] !w-[90%] sm:!w-[80%] lg:!w-[800px] flex gap-3">
+            <div className="w-full rounded-2xl flex flex-col lg:flex-row gap-4 px-2 md:px-4 py-2 md:py-4 h-full bg-red-500">
+              <div className="lg:w-[40%] flex flex-col justify-between py-2">
+                <h1 className="text-xl md:text-3xl font-bold text-white">
+                  We created trips dedicated to exploring kenya culture.
+                </h1>
+
+                <Link href="/trip?tag=cultural">
+                  <a>
+                    <div
+                      onClick={() => {
+                        Mixpanel.track(
+                          "View curated trips for Nairobi button clicked"
+                        );
+                      }}
+                      className="px-3 cursor-pointer font-bold text-sm py-2 w-fit bg-white text-black rounded-lg mt-2"
+                    >
+                      Book now
+                    </div>
+                  </a>
+                </Link>
+              </div>
+              <div className="w-full h-full lg:w-[60%] rounded-2xl relative before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+                <Carousel
+                  images={["/images/home/cultural-trip.webp"]}
+                  imageClass="rounded-2xl"
+                  objectPosition="center"
+                ></Carousel>
+
+                <div className="absolute z-20 bottom-4 font-bold left-4 text-white text-3xl md:text-5xl">
+                  Explore the culture
+                </div>
+              </div>
+            </div>
+          </SwiperSlide>
+
+          <SwiperSlide className="!h-[400px] sm:!h-[380px] !w-[90%] sm:!w-[80%] lg:!w-[800px] flex gap-3">
+            <div className="w-full rounded-2xl flex flex-col lg:flex-row gap-4 px-2 md:px-4 py-2 md:py-4 h-full bg-red-500">
+              <div className="lg:w-[40%] flex flex-col justify-between py-2">
+                <h1 className="text-xl md:text-3xl font-bold text-white">
+                  The best memories are the ones you create with your perfect
+                  partner.
+                </h1>
+
+                <Link href="/trip?tag=romantic">
+                  <a>
+                    <div
+                      onClick={() => {
+                        Mixpanel.track(
+                          "View curated trips for Naivasha button clicked"
+                        );
+                      }}
+                      className="px-3 cursor-pointer font-bold text-sm py-2 w-fit bg-white text-black rounded-lg mt-2"
+                    >
+                      Book now
+                    </div>
+                  </a>
+                </Link>
+              </div>
+              <div className="w-full h-full lg:w-[60%] rounded-2xl relative before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+                <Carousel
+                  images={["/images/home/romantic-trip.webp"]}
+                  imageClass="rounded-2xl"
+                ></Carousel>
+
+                <div className="absolute z-20 bottom-4 font-bold left-4 text-white text-3xl md:text-5xl">
+                  Romantic mood
+                </div>
+              </div>
+            </div>
+          </SwiperSlide>
+
+          <SwiperSlide className="!h-[400px] sm:!h-[380px] !w-[90%] sm:!w-[80%] lg:!w-[800px] flex gap-3">
+            <div className="w-full rounded-2xl flex flex-col lg:flex-row gap-4 px-2 md:px-4 py-2 md:py-4 h-full bg-red-500">
+              <div className="lg:w-[40%] flex flex-col justify-between py-2">
+                <h1 className="text-xl md:text-3xl font-bold text-white">
+                  We created trips meant for you to explore kenya and enjoy your
+                  time.
+                </h1>
+
+                <Link href="/trip?tag=road_trip">
+                  <a>
+                    <div
+                      onClick={() => {
+                        Mixpanel.track(
+                          "View curated trips for Maasai Mara button clicked"
+                        );
+                      }}
+                      className="px-3 cursor-pointer font-bold text-sm py-2 w-fit bg-white text-black rounded-lg mt-2"
+                    >
+                      Book now
+                    </div>
+                  </a>
+                </Link>
+              </div>
+              <div className="w-full h-full lg:w-[60%] rounded-2xl relative before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+                <Carousel
+                  images={["/images/home/roadtrip.webp"]}
+                  imageClass="rounded-2xl"
+                ></Carousel>
+
+                <div className="absolute z-20 bottom-4 font-bold left-4 text-white text-3xl md:text-5xl">
+                  Spend time on the road
+                </div>
+              </div>
+            </div>
+          </SwiperSlide>
+
+          {/* <SwiperSlide className="!h-[400px] sm:!h-[380px] !w-[600px] sm:!w-[800px] md:!w-[900px] lg:!w-[900px] flex gap-3">
             <div className="xsmall:w-[50%] w-[55%] sm:w-[60%] h-full relative before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-40">
               <Carousel
                 images={["/images/home/cultural-trip.webp"]}
@@ -575,67 +685,10 @@ function Main() {
                   </div>
                 </div>
               </Dialogue>
-
-              {/* <div className="h-full w-[48%] flex flex-col gap-2">
-                <div className="w-full h-[49%] relative before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
-                  <Carousel
-                    images={["/images/home/nairobi.webp"]}
-                    imageClass="rounded-2xl"
-                  ></Carousel>
-
-                  <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
-                    Stays in Nairobi
-                  </div>
-
-                  <Link href="/stays?search=Nairobi">
-                    <a>
-                      <div
-                        onClick={() => {
-                          Mixpanel.track(
-                            "View stays for Nairobi button clicked"
-                          );
-                        }}
-                        className="absolute bottom-2 z-30 flex flex-col left-2"
-                      >
-                        <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
-                          View stays
-                        </div>
-                      </div>
-                    </a>
-                  </Link>
-                </div>
-                <div className="w-full h-[49%] relative self-end before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
-                  <Carousel
-                    images={["/images/home/nairobi-activity.webp"]}
-                    imageClass="rounded-2xl"
-                  ></Carousel>
-
-                  <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
-                    Activities in Nairobi
-                  </div>
-
-                  <Link href="/activities?search=Nairobi">
-                    <a>
-                      <div
-                        onClick={() => {
-                          Mixpanel.track(
-                            "View activities for Nairobi button clicked"
-                          );
-                        }}
-                        className="absolute bottom-2 z-30 flex flex-col left-2"
-                      >
-                        <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
-                          View activities
-                        </div>
-                      </div>
-                    </a>
-                  </Link>
-                </div>
-              </div> */}
             </div>
-          </SwiperSlide>
+          </SwiperSlide> */}
 
-          <SwiperSlide className="!h-[400px] sm:!h-[380px] !w-[600px] sm:!w-[800px] md:!w-[900px] lg:!w-[900px] flex gap-3">
+          {/* <SwiperSlide className="!h-[400px] sm:!h-[380px] !w-[600px] sm:!w-[800px] md:!w-[900px] lg:!w-[900px] flex gap-3">
             <div className="xsmall:w-[50%] w-[55%] sm:w-[60%] h-full relative before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-40">
               <Carousel
                 images={["/images/home/romantic-trip.webp"]}
@@ -755,66 +808,11 @@ function Main() {
                 </div>
               </Dialogue>
 
-              {/* <div className="h-full w-[48%] flex flex-col gap-2">
-                <div className="w-full h-[49%] relative before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
-                  <Carousel
-                    images={["/images/home/nakuru.webp"]}
-                    imageClass="rounded-2xl"
-                  ></Carousel>
-
-                  <h1 className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
-                    Stays in Naivasha
-                  </h1>
-
-                  <Link href="/stays?search=Naivasha">
-                    <a>
-                      <div
-                        onClick={() => {
-                          Mixpanel.track(
-                            "View stays for Naivasha button clicked"
-                          );
-                        }}
-                        className="absolute bottom-2 z-30 flex flex-col left-2"
-                      >
-                        <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
-                          View stays
-                        </div>
-                      </div>
-                    </a>
-                  </Link>
-                </div>
-                <div className="w-full h-[49%] relative self-end before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
-                  <Carousel
-                    images={["/images/home/nakuru-activity.webp"]}
-                    imageClass="rounded-2xl"
-                  ></Carousel>
-
-                  <h1 className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
-                    Activities in Naivasha
-                  </h1>
-
-                  <Link href="/activities?search=Naivasha">
-                    <a>
-                      <div
-                        onClick={() => {
-                          Mixpanel.track(
-                            "View activities for Naivasha button clicked"
-                          );
-                        }}
-                        className="absolute bottom-2 z-30 flex flex-col left-2"
-                      >
-                        <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
-                          View activities
-                        </div>
-                      </div>
-                    </a>
-                  </Link>
-                </div>
-              </div> */}
+              
             </div>
-          </SwiperSlide>
+          </SwiperSlide> */}
 
-          <SwiperSlide className="!h-[400px] sm:!h-[380px] !w-[600px] sm:!w-[800px] md:!w-[900px] lg:!w-[900px] flex gap-3">
+          {/* <SwiperSlide className="!h-[400px] sm:!h-[380px] !w-[600px] sm:!w-[800px] md:!w-[900px] lg:!w-[900px] flex gap-3">
             <div className="xsmall:w-[50%] w-[55%] sm:w-[60%] h-full relative before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-40">
               <Carousel
                 images={["/images/home/roadtrip.webp"]}
@@ -1000,64 +998,9 @@ function Main() {
                 </div>
               </Dialogue>
 
-              {/* <div className="h-full w-[48%] flex flex-col gap-2">
-                <div className="w-full h-[49%] relative before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
-                  <Carousel
-                    images={["/images/home/stay-maasai-mara.webp"]}
-                    imageClass="rounded-2xl"
-                  ></Carousel>
-
-                  <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
-                    Stays in Maasai Mara
-                  </div>
-
-                  <Link href="/stays?search=Maasai Mara">
-                    <a>
-                      <div
-                        onClick={() => {
-                          Mixpanel.track(
-                            "View stays for Maasai Mara button clicked"
-                          );
-                        }}
-                        className="absolute bottom-2 z-30 flex flex-col left-2"
-                      >
-                        <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
-                          View stays
-                        </div>
-                      </div>
-                    </a>
-                  </Link>
-                </div>
-                <div className="w-full h-[49%] relative self-end before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
-                  <Carousel
-                    images={["/images/home/maasai-mara-loita.webp"]}
-                    imageClass="rounded-2xl"
-                  ></Carousel>
-
-                  <div className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
-                    Activities in Maasai Mara
-                  </div>
-
-                  <Link href="/activities?search=Maasai Mara">
-                    <a>
-                      <div
-                        onClick={() => {
-                          Mixpanel.track(
-                            "View activities for Maasai Mara button clicked"
-                          );
-                        }}
-                        className="absolute bottom-2 z-30 flex flex-col left-2"
-                      >
-                        <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
-                          View activities
-                        </div>
-                      </div>
-                    </a>
-                  </Link>
-                </div>
-              </div> */}
+              
             </div>
-          </SwiperSlide>
+          </SwiperSlide> */}
 
           {/* <div
             className={
@@ -1106,11 +1049,59 @@ function Main() {
               </svg>
             </div>
           </div> */}
+
+          <div
+            className={
+              " absolute clear-both hidden md:flex h-12 w-12 z-30 left-1 top-[50%] -translate-y-2/4 items-center justify-end " +
+              (state.isBeginningOfExploreSlide ? "invisible" : "")
+            }
+          >
+            <div className="cursor-pointer clear-both h-8 w-8 swiper-button-prev rounded-full border-2 flex items-center justify-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+            </div>
+          </div>
+
+          <div
+            className={
+              " absolute hidden md:flex h-12 w-12 z-30 right-1 top-[50%] -translate-y-2/4 items-center " +
+              (state.isEndOfExploreSlide ? "invisible" : "")
+            }
+          >
+            <div className="cursor-pointer h-8 w-8 swiper-button-next rounded-full border-2 flex items-center justify-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </div>
+          </div>
         </Swiper>
       </div>
 
       <h1 className="font-bold text-2xl font-OpenSans text-center mt-16 mb-4">
-        <span className="text-gray-600">Find stays that suits you</span>
+        <span className="text-gray-600">Find what suits you</span>
       </h1>
 
       <div className="px-2">
