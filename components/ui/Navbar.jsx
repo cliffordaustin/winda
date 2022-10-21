@@ -423,9 +423,17 @@ function Navbar({ userProfile }) {
         {/* <UserDropdown userProfile={userProfile}></UserDropdown> */}
 
         <div className="hidden md:flex items-center gap-2">
-          <Link href="/login">
-            <a className="font-bold">Login</a>
+          <Link href="https://api.whatsapp.com/send?phone=+254757629101&text=Hi winda">
+            <a target="_blank" className="flex items-center gap-0.5 underline">
+              <div>
+                <Icon icon="logos:whatsapp-icon" className="w-5 h-5" />
+              </div>
+              <span className="ml-2 text-black text-sm font-bold cursor-pointer">
+                +254757629101
+              </span>
+            </a>
           </Link>
+
           <div></div>
           <Link href="/trip">
             <a>
@@ -438,6 +446,9 @@ function Navbar({ userProfile }) {
                 <span className="font-bold">Explore all trips</span>
               </Button>
             </a>
+          </Link>
+          <Link href="/login">
+            <a className="font-bold">Login</a>
           </Link>
         </div>
 

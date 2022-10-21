@@ -21,6 +21,7 @@ import ContactBanner from "../components/Home/ContactBanner";
 import SearchOptions from "../components/ui/SearchOptions";
 import Dialogue from "../components/Home/Dialogue";
 import { Icon } from "@iconify/react";
+import WhatsappBanner from "../components/Home/WhatsappBanner";
 
 export default function Home({ userProfile }) {
   const router = useRouter();
@@ -168,7 +169,6 @@ export default function Home({ userProfile }) {
         "ended",
         function () {
           if (iteration < 2) {
-            console.log("Played");
             this.currentTime = 0;
             this.play();
             iteration++;
@@ -219,6 +219,9 @@ export default function Home({ userProfile }) {
       {/* <ContactBanner></ContactBanner> */}
 
       <div className="sticky bg-white top-0 left-0 right-0 z-50">
+        <div className="md:hidden">
+          <WhatsappBanner></WhatsappBanner>
+        </div>
         <Navbar userProfile={userProfile}></Navbar>
       </div>
 

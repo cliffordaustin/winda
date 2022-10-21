@@ -1426,7 +1426,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
             query.type_of_stay ? query.type_of_stay : ""
           }&min_price=${query.min_price ? query.min_price : ""}&max_price=${
             query.max_price ? query.max_price : ""
-          }&ordering=${query.ordering ? query.ordering : ""}`
+          }&ordering=${query.ordering ? query.ordering : ""}&tags=${
+            query.tags ? query.tags : ""
+          }`
         );
 
         const allactivities = await axios.get(
@@ -1440,7 +1442,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
             query.type_of_stay ? query.type_of_stay : ""
           }&min_price=${query.min_price ? query.min_price : ""}&max_price=${
             query.max_price ? query.max_price : ""
-          }&ordering=${query.ordering ? query.ordering : ""}`
+          }&ordering=${query.ordering ? query.ordering : ""}&tags=${
+            query.tags ? query.tags : ""
+          }`
         );
 
         // await context.dispatch({
@@ -1471,7 +1475,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
               query.type_of_stay ? query.type_of_stay : ""
             }&min_price=${query.min_price ? query.min_price : ""}&max_price=${
               query.max_price ? query.max_price : ""
-            }&ordering=${query.ordering ? query.ordering : ""}`,
+            }&ordering=${query.ordering ? query.ordering : ""}&tags=${
+              query.tags ? query.tags : ""
+            }`,
             {
               headers: {
                 Authorization: "Token " + token,

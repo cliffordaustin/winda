@@ -10,6 +10,7 @@ module.exports = {
         lobster: ["Lobster", "sans-serif"],
         OpenSans: ["Open Sans", "sans-serif"],
         SourceSans: ["Source Sans Pro", "sans-serif"],
+        Condiment: ["Condiment", "sans-serif"],
       },
 
       screens: {
