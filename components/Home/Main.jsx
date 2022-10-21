@@ -1410,10 +1410,10 @@ function Main() {
               (state.isBeginningOfSlide ? "invisible" : "")
             }
           >
-            <div className="cursor-pointer h-8 w-8 swiper-room-button-prev rounded-full border flex items-center justify-center">
+            <div className="cursor-pointer h-8 w-8 swiper-room-button-prev rounded-full border-2 flex items-center justify-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 text-white"
+                className="h-6 w-6 text-white"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -1434,10 +1434,10 @@ function Main() {
               (state.isEndOfSlide ? "invisible" : "")
             }
           >
-            <div className="cursor-pointer h-8 w-8 swiper-room-button-next rounded-full border flex items-center justify-center">
+            <div className="cursor-pointer h-8 w-8 swiper-room-button-next rounded-full border-2 flex items-center justify-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 text-white"
+                className="h-6 w-6 text-white"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"

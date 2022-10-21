@@ -226,7 +226,7 @@ export default function Home({ userProfile }) {
       </div>
 
       <div className="mb-12 select-none relative">
-        <div className="w-full text-red-600 h-[500px] md:h-[600px] relative before:absolute before:h-full before:w-full before:bg-black before:z-20 before:opacity-60">
+        <div className="w-full text-red-600 h-[500px] md:h-[600px] relative before:absolute before:h-full before:w-full before:bg-black before:z-20 before:opacity-40">
           <video
             autoPlay
             muted
@@ -234,7 +234,6 @@ export default function Home({ userProfile }) {
             className="w-full h-full absolute inset-0 object-cover object-center"
             id="video"
           >
-            <source src="videos/winda.webm" type="video/webm"></source>
             <source src="videos/winda.mp4" type="video/mp4"></source>
             <Image
               className={"w-full "}
