@@ -1284,7 +1284,7 @@ function Main() {
                 Weekend Getaways
               </h1>
 
-              <Link href="/activities?tags=weekend getaways">
+              <Link href="/activities?tags=weekend">
                 <a>
                   <div
                     onClick={() => {
