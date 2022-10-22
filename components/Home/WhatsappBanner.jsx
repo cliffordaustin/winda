@@ -14,7 +14,7 @@ function WhatsappBanner(props) {
         <Link href="https://api.whatsapp.com/send?phone=+254757629101&text=Hi winda">
           <a
             target="_blank"
-            className="flex items-center gap-0.5 px-4 py-3 !rounded-3xl !bg-blue-600"
+            className="flex items-center gap-0.5 px-4 py-3 !rounded-3xl !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500"
           >
             <span className="ml-2 text-white text-sm font-bold cursor-pointer">
               Travel concierge

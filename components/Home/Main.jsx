@@ -417,9 +417,9 @@ function Main() {
           className="stepWebkitSetting"
         >
           <SwiperSlide className="!h-[400px] sm:!h-[380px] !w-[90%] sm:!w-[80%] lg:!w-[800px] flex gap-3">
-            <div className="w-full rounded-2xl flex flex-col lg:flex-row gap-4 px-2 md:px-4 py-2 md:py-4 h-full bg-blue-600">
+            <div className="w-full rounded-2xl flex flex-col lg:flex-row gap-4 px-2 md:px-4 py-2 md:py-4 h-full bg-white border">
               <div className="lg:w-[40%] flex flex-col justify-between py-2">
-                <h1 className="text-xl md:text-3xl font-bold text-white">
+                <h1 className="text-xl md:text-3xl font-bold text-black">
                   Start your holiday with these curated trips.
                 </h1>
 
@@ -431,7 +431,7 @@ function Main() {
                           "View curated trips for this holiday button clicked"
                         );
                       }}
-                      className="px-3 cursor-pointer font-bold text-sm py-2 w-fit bg-white text-black rounded-lg mt-2"
+                      className="px-3 cursor-pointer font-bold text-sm py-2 w-fit !bg-gradient-to-r from-pink-500 via-red-500 rounded-lg text-white to-yellow-500 mt-2"
                     >
                       Book now
                     </div>
@@ -452,9 +452,9 @@ function Main() {
           </SwiperSlide>
 
           <SwiperSlide className="!h-[400px] sm:!h-[380px] !w-[90%] sm:!w-[80%] lg:!w-[800px] flex gap-3">
-            <div className="w-full rounded-2xl flex flex-col lg:flex-row gap-4 px-2 md:px-4 py-2 md:py-4 h-full bg-blue-600">
+            <div className="w-full rounded-2xl flex flex-col lg:flex-row gap-4 px-2 md:px-4 py-2 md:py-4 h-full bg-white border">
               <div className="lg:w-[40%] flex flex-col justify-between py-2">
-                <h1 className="text-xl md:text-3xl font-bold text-white">
+                <h1 className="text-xl md:text-3xl font-bold text-black">
                   We created trips dedicated to exploring kenya culture.
                 </h1>
 
@@ -466,7 +466,7 @@ function Main() {
                           "View curated trips for Nairobi button clicked"
                         );
                       }}
-                      className="px-3 cursor-pointer font-bold text-sm py-2 w-fit bg-white text-black rounded-lg mt-2"
+                      className="px-3 cursor-pointer font-bold text-sm py-2 w-fit !bg-gradient-to-r from-pink-500 via-red-500 rounded-lg text-white to-yellow-500 mt-2"
                     >
                       Book now
                     </div>
@@ -488,9 +488,9 @@ function Main() {
           </SwiperSlide>
 
           <SwiperSlide className="!h-[400px] sm:!h-[380px] !w-[90%] sm:!w-[80%] lg:!w-[800px] flex gap-3">
-            <div className="w-full rounded-2xl flex flex-col lg:flex-row gap-4 px-2 md:px-4 py-2 md:py-4 h-full bg-blue-600">
+            <div className="w-full rounded-2xl flex flex-col lg:flex-row gap-4 px-2 md:px-4 py-2 md:py-4 h-full bg-white border">
               <div className="lg:w-[40%] flex flex-col justify-between py-2">
-                <h1 className="text-xl md:text-3xl font-bold text-white">
+                <h1 className="text-xl md:text-3xl font-bold text-black">
                   The best memories are the ones you create with your perfect
                   partner.
                 </h1>
@@ -503,7 +503,7 @@ function Main() {
                           "View curated trips for Naivasha button clicked"
                         );
                       }}
-                      className="px-3 cursor-pointer font-bold text-sm py-2 w-fit bg-white text-black rounded-lg mt-2"
+                      className="px-3 cursor-pointer font-bold text-sm py-2 w-fit !bg-gradient-to-r from-pink-500 via-red-500 rounded-lg text-white to-yellow-500 mt-2"
                     >
                       Book now
                     </div>
@@ -524,9 +524,9 @@ function Main() {
           </SwiperSlide>
 
           <SwiperSlide className="!h-[400px] sm:!h-[380px] !w-[90%] sm:!w-[80%] lg:!w-[800px] flex gap-3">
-            <div className="w-full rounded-2xl flex flex-col lg:flex-row gap-4 px-2 md:px-4 py-2 md:py-4 h-full bg-blue-600">
+            <div className="w-full rounded-2xl flex flex-col lg:flex-row gap-4 px-2 md:px-4 py-2 md:py-4 h-full bg-white border">
               <div className="lg:w-[40%] flex flex-col justify-between py-2">
-                <h1 className="text-xl md:text-3xl font-bold text-white">
+                <h1 className="text-xl md:text-3xl font-bold text-black">
                   We created trips meant for you to explore kenya and enjoy your
                   time.
                 </h1>
@@ -539,7 +539,7 @@ function Main() {
                           "View curated trips for Maasai Mara button clicked"
                         );
                       }}
-                      className="px-3 cursor-pointer font-bold text-sm py-2 w-fit bg-white text-black rounded-lg mt-2"
+                      className="px-3 cursor-pointer font-bold text-sm py-2 w-fit !bg-gradient-to-r from-pink-500 via-red-500 rounded-lg text-white to-yellow-500 mt-2"
                     >
                       Book now
                     </div>
@@ -1056,10 +1056,10 @@ function Main() {
               (state.isBeginningOfExploreSlide ? "invisible" : "")
             }
           >
-            <div className="cursor-pointer clear-both h-8 w-8 swiper-button-prev rounded-full border-2 flex items-center justify-center">
+            <div className="cursor-pointer clear-both h-8 w-8 swiper-button-prev rounded-full border-2 border-gray-500 flex items-center justify-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 text-white"
+                className="h-6 w-6 text-gray-500"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -1080,10 +1080,10 @@ function Main() {
               (state.isEndOfExploreSlide ? "invisible" : "")
             }
           >
-            <div className="cursor-pointer h-8 w-8 swiper-button-next rounded-full border-2 flex items-center justify-center">
+            <div className="cursor-pointer h-8 w-8 swiper-button-next rounded-full border-2 border-gray-500 flex items-center justify-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 text-white"
+                className="h-6 w-6 text-gray-500"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
