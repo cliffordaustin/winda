@@ -84,8 +84,8 @@ function Main() {
   return (
     <div className="w-full">
       <h1 className="font-bold text-3xl mb-6 font-OpenSans text-center">
-        <span className="text-gray-600">Explore trips on</span>{" "}
-        <span className="">winda</span>
+        <span className="text-slate-800">Explore trips on</span>{" "}
+        <span className="text-red-500">winda</span>
       </h1>
 
       {/* <div className="w-full flex justify-center">
@@ -417,9 +417,9 @@ function Main() {
           className="stepWebkitSetting"
         >
           <SwiperSlide className="!h-[400px] sm:!h-[380px] !w-[90%] sm:!w-[80%] lg:!w-[800px] flex gap-3">
-            <div className="w-full rounded-2xl flex flex-col lg:flex-row gap-4 px-2 md:px-4 py-2 md:py-4 h-full bg-white border">
+            <div className="w-full rounded-2xl flex flex-col lg:flex-row gap-4 px-2 md:px-4 py-2 md:py-4 h-full bg-[#001d3d] border">
               <div className="lg:w-[40%] flex flex-col justify-between py-2">
-                <h1 className="text-xl md:text-3xl font-bold text-black">
+                <h1 className="text-xl md:text-3xl font-bold text-white">
                   Start your holiday with these curated trips.
                 </h1>
 
@@ -444,15 +444,100 @@ function Main() {
                   imageClass="rounded-2xl"
                 ></Carousel>
 
-                <div className="absolute z-20 bottom-4 font-bold left-4 text-white text-3xl md:text-5xl">
+                <div className="absolute z-20 bottom-4 font-bold left-4 text-white text-2xl md:text-3xl">
                   Holiday season offers
                 </div>
               </div>
             </div>
           </SwiperSlide>
 
-          <SwiperSlide className="!h-[400px] sm:!h-[380px] !w-[90%] sm:!w-[80%] lg:!w-[800px] flex gap-3">
-            <div className="w-full rounded-2xl flex flex-col lg:flex-row gap-4 px-2 md:px-4 py-2 md:py-4 h-full bg-white border">
+          <SwiperSlide className="!h-[400px] sm:!h-[380px] !w-[90%] sm:!w-[380px]">
+            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+              <Carousel
+                images={["/images/home/cultural-trip.webp"]}
+                imageClass="rounded-2xl"
+                objectPosition="center"
+              ></Carousel>
+
+              <h1 className="text-white text-shadow z-30 font-black absolute top-4 left-4 text-xl">
+                Explore the culture
+              </h1>
+
+              <Link href="/trip?tag=cultural">
+                <a>
+                  <div
+                    onClick={() => {
+                      Mixpanel.track(
+                        "View curated trips for Nairobi button clicked"
+                      );
+                    }}
+                    className="absolute bottom-4 z-30 flex flex-col left-4 px-3 cursor-pointer font-bold text-sm py-2 w-fit !bg-gradient-to-r from-pink-500 via-red-500 rounded-lg text-white to-yellow-500 mt-2"
+                  >
+                    Book now
+                  </div>
+                </a>
+              </Link>
+            </div>
+          </SwiperSlide>
+
+          <SwiperSlide className="!h-[400px] sm:!h-[380px] !w-[90%] sm:!w-[380px]">
+            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+              <Carousel
+                images={["/images/home/romantic-trip.webp"]}
+                imageClass="rounded-2xl"
+              ></Carousel>
+
+              <h1 className="text-white text-shadow z-30 font-black absolute top-4 left-4 text-xl">
+                Romantic mood
+              </h1>
+
+              <Link href="/trip?tag=romantic">
+                <a>
+                  <div
+                    onClick={() => {
+                      Mixpanel.track(
+                        "View curated trips for Nairobi button clicked"
+                      );
+                    }}
+                    className="absolute bottom-4 z-30 flex flex-col left-4 px-3 cursor-pointer font-bold text-sm py-2 w-fit !bg-gradient-to-r from-pink-500 via-red-500 rounded-lg text-white to-yellow-500 mt-2"
+                  >
+                    Book now
+                  </div>
+                </a>
+              </Link>
+            </div>
+          </SwiperSlide>
+
+          <SwiperSlide className="!h-[400px] sm:!h-[380px] !w-[90%] sm:!w-[380px]">
+            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+              <Carousel
+                images={["/images/home/roadtrip.webp"]}
+                imageClass="rounded-2xl"
+              ></Carousel>
+
+              <h1 className="text-white text-shadow z-30 font-black absolute top-4 left-4 text-xl">
+                Spend time on the road
+              </h1>
+
+              <Link href="/trip?tag=road_trip">
+                <a>
+                  <div
+                    onClick={() => {
+                      Mixpanel.track(
+                        "View curated trips for Nairobi button clicked"
+                      );
+                    }}
+                    className="absolute bottom-4 z-30 flex flex-col left-4 px-3 cursor-pointer font-bold text-sm py-2 w-fit !bg-gradient-to-r from-pink-500 via-red-500 rounded-lg text-white to-yellow-500 mt-2"
+                  >
+                    Book now
+                  </div>
+                </a>
+              </Link>
+            </div>
+          </SwiperSlide>
+
+          {/* <SwiperSlide className="!h-[400px] !w-[500px] sm:!h-[380px] flex gap-3">
+            <div className="w-full rounded-2xl flex flex-col lg:flex-row gap-4 px-2 md:px-4 py-2 md:py-4 h-full">
               <div className="lg:w-[40%] flex flex-col justify-between py-2">
                 <h1 className="text-xl md:text-3xl font-bold text-black">
                   We created trips dedicated to exploring kenya culture.
@@ -473,7 +558,7 @@ function Main() {
                   </a>
                 </Link>
               </div>
-              <div className="w-full h-full lg:w-[60%] rounded-2xl relative before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+              <div className="w-full h-full rounded-2xl relative before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
                 <Carousel
                   images={["/images/home/cultural-trip.webp"]}
                   imageClass="rounded-2xl"
@@ -485,9 +570,9 @@ function Main() {
                 </div>
               </div>
             </div>
-          </SwiperSlide>
+          </SwiperSlide> */}
 
-          <SwiperSlide className="!h-[400px] sm:!h-[380px] !w-[90%] sm:!w-[80%] lg:!w-[800px] flex gap-3">
+          {/* <SwiperSlide className="!h-[400px] sm:!h-[380px] !w-[90%] sm:!w-[80%] lg:!w-[800px] flex gap-3">
             <div className="w-full rounded-2xl flex flex-col lg:flex-row gap-4 px-2 md:px-4 py-2 md:py-4 h-full bg-white border">
               <div className="lg:w-[40%] flex flex-col justify-between py-2">
                 <h1 className="text-xl md:text-3xl font-bold text-black">
@@ -521,9 +606,9 @@ function Main() {
                 </div>
               </div>
             </div>
-          </SwiperSlide>
+          </SwiperSlide> */}
 
-          <SwiperSlide className="!h-[400px] sm:!h-[380px] !w-[90%] sm:!w-[80%] lg:!w-[800px] flex gap-3">
+          {/* <SwiperSlide className="!h-[400px] sm:!h-[380px] !w-[90%] sm:!w-[80%] lg:!w-[800px] flex gap-3">
             <div className="w-full rounded-2xl flex flex-col lg:flex-row gap-4 px-2 md:px-4 py-2 md:py-4 h-full bg-white border">
               <div className="lg:w-[40%] flex flex-col justify-between py-2">
                 <h1 className="text-xl md:text-3xl font-bold text-black">
@@ -557,7 +642,7 @@ function Main() {
                 </div>
               </div>
             </div>
-          </SwiperSlide>
+          </SwiperSlide> */}
 
           {/* <SwiperSlide className="!h-[400px] sm:!h-[380px] !w-[600px] sm:!w-[800px] md:!w-[900px] lg:!w-[900px] flex gap-3">
             <div className="xsmall:w-[50%] w-[55%] sm:w-[60%] h-full relative before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-40">
