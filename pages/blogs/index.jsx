@@ -55,11 +55,11 @@ function Blogs({ blogs, userProfile }) {
         {blogs.map((blog, index) => (
           <div key={index}>
             <Link href={`/blogs/${blog.slug}`}>
-              <a className="flex gap-2">
+              <a className="flex md:flex-row flex-col gap-2">
                 <div
                   className={
-                    "flex flex-col " +
-                    (blog.header_image_src ? "w-[80%]" : "w-full")
+                    "flex flex-col md:order-1 order-2 " +
+                    (blog.header_image_src ? "w-full md:w-[80%]" : "w-full")
                   }
                 >
                   <h1 className="font-bold text-xl">{blog.name}</h1>
@@ -76,13 +76,14 @@ function Blogs({ blogs, userProfile }) {
                 </div>
 
                 {blog.header_image_src && (
-                  <div className="relative w-[20%] h-[150px]">
+                  <div className="relative md:order-2 order-1 w-full h-[200px] md:w-[20%] md:h-[150px]">
                     <Image
                       layout="fill"
                       alt="Logo"
                       src={blog.header_image_src}
                       objectFit={"cover"}
-                      className="rounded-lg"
+                      objectPosition={"center"}
+                      className="rounded-none"
                       priority
                     ></Image>
                   </div>
