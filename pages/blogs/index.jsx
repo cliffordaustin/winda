@@ -9,16 +9,20 @@ import UserDropdown from "../../components/Home/UserDropdown";
 
 function Blogs({ blogs, userProfile }) {
   let doc = "";
-  let text = "";
   let image = "";
 
-  if (process.browser) {
-    doc = new DOMParser().parseFromString(blogs[0].content, "text/html");
-    doc = [...doc.getElementsByTagName("p")].map(
-      (text, index) => text.textContent
-    );
-    text = doc.join(" ");
-  }
+  const getText = (index) => {
+    let text = "";
+    if (process.browser) {
+      doc = new DOMParser().parseFromString(blogs[0].content, "text/html");
+      doc = [...doc.getElementsByTagName("p")].map(
+        (text, index) => text.textContent
+      );
+      text = doc.join(" ");
+    }
+
+    return text;
+  };
 
   if (process.browser) {
     image = new DOMParser().parseFromString(blogs[0].content, "text/html");
@@ -63,7 +67,7 @@ function Blogs({ blogs, userProfile }) {
                   }
                 >
                   <h1 className="font-bold text-xl">{blog.name}</h1>
-                  <p className="mt-4">{text.slice(0, 250)}...</p>
+                  <p className="mt-4">{getText(index).slice(0, 250)}...</p>
                   <div className="mt-4 flex gap-2 items-center">
                     <div className="bg-gray-100 py-1 px-3 rounded-3xl">
                       {blog.category}
