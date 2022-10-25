@@ -8,6 +8,7 @@ import { Icon } from "@iconify/react";
 import TripImageGallery from "../../../../components/Trip/ImageGallery";
 import DaysAccordion from "../../../../components/Trip/DaysAccordion";
 import Carousel from "../../../../components/ui/Carousel";
+import CuratedTripMap from "../../../../components/Trip/CuratedTripMap";
 
 function CuratedTripDetail({ trip, userProfile }) {
   const totalNumberOfBreakfasts = () => {
@@ -210,7 +211,9 @@ function CuratedTripDetail({ trip, userProfile }) {
                 )}
                 <div className="w-full">{trip.description}</div>
               </div>
-              <div className="w-[30%] h-[350px] bg-red-500"></div>
+              <div className="w-[30%] h-[350px]">
+                <CuratedTripMap locations={trip.locations}></CuratedTripMap>
+              </div>
             </div>
 
             {trip.essential_information && (
