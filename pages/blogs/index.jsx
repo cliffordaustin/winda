@@ -14,7 +14,7 @@ function Blogs({ blogs, userProfile }) {
   const getText = (index) => {
     let text = "";
     if (process.browser) {
-      doc = new DOMParser().parseFromString(blogs[0].content, "text/html");
+      doc = new DOMParser().parseFromString(blogs[index].content, "text/html");
       doc = [...doc.getElementsByTagName("p")].map(
         (text, index) => text.textContent
       );
