@@ -8,6 +8,9 @@ const DaysAccordion = ({
   showAccordionByDefault = false,
   className = "",
   accordionClassName = "",
+  titleClass = "",
+  titleContainerClassName = "",
+  accordionContentClassName = "",
 }) => {
   const [activeAccordion, setActiveAccordion] = useState(
     showAccordionByDefault
@@ -17,6 +20,9 @@ const DaysAccordion = ({
       <Accordion
         title={title}
         accordion={activeAccordion}
+        titleClass={titleClass}
+        titleContainerClassName={titleContainerClassName}
+        accordionContentClassName={accordionContentClassName}
         changeStateFunc={() => {
           setActiveAccordion(!activeAccordion);
         }}

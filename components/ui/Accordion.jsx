@@ -7,6 +7,9 @@ function Accordion({
   title,
   children,
   className = "",
+  titleClass = "",
+  titleContainerClassName = "",
+  accordionContentClassName = "",
   setAccordion = () => {},
   changeStateFunc = () => {},
 }) {
@@ -64,12 +67,15 @@ function Accordion({
           setAccordion(!accordion);
           changeStateFunc();
         }}
-        className="flex items-center justify-between cursor-pointer py-2"
+        className={
+          "flex items-center justify-between cursor-pointer py-2 " +
+          titleContainerClassName
+        }
       >
-        <h1 className="font-bold">{title}</h1>
+        <div className={"font-bold " + titleClass}>{title}</div>
         <motion.svg
           xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5"
+          className="h-5 w-5 mr-4"
           viewBox="0 0 20 20"
           fill="currentColor"
           variants={icon}
@@ -90,7 +96,7 @@ function Accordion({
             animate="show"
             initial="hide"
             exit="exit"
-            className=""
+            className={"" + accordionContentClassName}
           >
             {children}
           </motion.div>
@@ -102,7 +108,7 @@ function Accordion({
 
 Accordion.propTypes = {
   accordion: PropTypes.bool.isRequired,
-  title: PropTypes.string.isRequired,
+  title: PropTypes.node.isRequired,
   setAccordion: PropTypes.func,
   children: PropTypes.node.isRequired,
 };
