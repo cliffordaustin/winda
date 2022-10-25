@@ -417,10 +417,10 @@ function Main() {
           className="stepWebkitSetting"
         >
           <SwiperSlide className="!h-[400px] sm:!h-[380px] !w-[90%] sm:!w-[80%] lg:!w-[800px] flex gap-3">
-            <div className="w-full rounded-2xl flex flex-col lg:flex-row gap-4 px-2 md:px-4 py-2 md:py-4 h-full bg-[#001d3d] border">
+            <div className="w-full rounded-2xl flex flex-col lg:flex-row gap-4 px-2 md:px-4 py-2 md:py-4 h-full bg-white border">
               <div className="lg:w-[40%] flex flex-col justify-between py-2">
-                <h1 className="text-xl md:text-3xl font-bold text-white">
-                  Start your holiday with these curated trips.
+                <h1 className="text-xl md:text-3xl font-bold text-black">
+                  Great travel offers for the upcoming holiday season
                 </h1>
 
                 <Link href="/trip?holiday=1">
@@ -481,7 +481,7 @@ function Main() {
           </SwiperSlide>
 
           <SwiperSlide className="!h-[400px] sm:!h-[380px] !w-[90%] sm:!w-[380px]">
-            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+            <div className="relative h-full w-full">
               <Carousel
                 images={["/images/home/romantic-trip.webp"]}
                 imageClass="rounded-2xl"
@@ -516,7 +516,7 @@ function Main() {
               ></Carousel>
 
               <h1 className="text-white text-shadow z-30 font-black absolute top-4 left-4 text-xl">
-                Spend time on the road
+                Road-trips galore!
               </h1>
 
               <Link href="/trip?tag=road_trip">
