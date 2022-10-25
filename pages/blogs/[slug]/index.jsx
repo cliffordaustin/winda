@@ -55,6 +55,7 @@ function Blog({ blog, userProfile }) {
       </div>
       <GlobalStyle></GlobalStyle>
       <article className="prose !leading-6 !text-base mt-5 translate-x-0 lg:prose-xl px-4 !w-full !max-w-[900px] mx-auto">
+        <h2 className="text-center font-black">{blog.name}</h2>
         {parse(doc)}
       </article>
     </div>

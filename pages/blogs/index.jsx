@@ -57,7 +57,10 @@ function Blogs({ blogs, userProfile }) {
             <Link href={`/blogs/${blog.slug}`}>
               <a className="flex gap-2">
                 <div
-                  className={"flex flex-col " + (image ? "w-[80%]" : "w-full")}
+                  className={
+                    "flex flex-col " +
+                    (blog.header_image_src ? "w-[80%]" : "w-full")
+                  }
                 >
                   <h1 className="font-bold text-xl">{blog.name}</h1>
                   <p className="mt-4">{text.slice(0, 250)}...</p>
@@ -72,12 +75,12 @@ function Blogs({ blogs, userProfile }) {
                   </div>
                 </div>
 
-                {image && (
+                {blog.header_image_src && (
                   <div className="relative w-[20%] h-[150px]">
                     <Image
                       layout="fill"
                       alt="Logo"
-                      src={image}
+                      src={blog.header_image_src}
                       objectFit={"cover"}
                       className="rounded-lg"
                       priority
