@@ -491,9 +491,9 @@ function CuratedTripDetail({ trip, userProfile }) {
                   );
                 })}
 
-                <div className="text-2xl font-black ml-2 mt-6">
+                {/* <div className="text-2xl font-black ml-2 mt-6">
                   Similar trips
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
