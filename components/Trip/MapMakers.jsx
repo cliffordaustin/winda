@@ -3,7 +3,7 @@ import { Marker, Popup } from "react-map-gl";
 import { motion, AnimatePresence } from "framer-motion";
 import { Icon } from "@iconify/react";
 
-const MapMakers = ({ location }) => {
+const MapMakers = ({ location, num }) => {
   const [showPopup, setShowPopup] = useState(false);
 
   const variants = {
@@ -31,9 +31,13 @@ const MapMakers = ({ location }) => {
           onMouseOver={() => setShowPopup(true)}
           onMouseLeave={() => setShowPopup(false)}
           onClick={() => setShowPopup(!showPopup)}
-          className="w-10 h-10"
+          className="relative"
         >
           <Icon className="w-9 h-9 text-gray-800" icon="entypo:location-pin" />
+
+          <div className="absolute -top-5 left-[50%] text-black -translate-x-2/4 text-lg font-bold">
+            {num}
+          </div>
         </div>
 
         <AnimatePresence exitBeforeEnter>

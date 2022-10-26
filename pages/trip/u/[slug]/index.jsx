@@ -490,10 +490,6 @@ function CuratedTripDetail({ trip, userProfile }) {
                     </DaysAccordion>
                   );
                 })}
-
-                {/* <div className="text-2xl font-black ml-2 mt-6">
-                  Similar trips
-                </div> */}
               </div>
             </div>
           </div>
