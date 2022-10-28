@@ -9,44 +9,45 @@ function MobileStayTypes({ handlePopup, showStayTypesPopup, screenWidth }) {
   const router = useRouter();
 
   const options = [
-    "LODGE",
-    "BOUTIQUE HOTEL",
-    "CAMPSITE",
-    "TENTED CAMP",
-    "COTTAGE",
-    "WEEKEND GETAWAY",
-    "ROMANTIC GETAWAY",
-    "GROUP GETAWAY",
-    "CONSERVANCY",
-    "HOTEL",
-    "NATIONAL PARK/GAME RESERVES",
-    "COZY PLACE",
-    "UNIQUE LOCATION",
-    "LAKEFRONT",
-    "WELLNESS RETREAT",
-    "BEACHFRONT",
-    "LUXURIOUS",
-    "BEAUTIFUL VIEW",
-    "OFF-GRID",
-    "ECO-STAY",
-    "QUIRKY",
-    "TRADITIONAL",
-    "LOCALLY OWNED",
-    "COMMUNITY OWNED",
-    "OWNER OPERATED",
-    "MANSION",
-    "OVER-WATER",
-    "CARBON NEUTRAL",
-    "UNIQUE EXPERIENCES",
-    "STUNNING ARCHITECTURE",
-    "COWORKING SPOT",
-    "SWIMMING POOL",
-    "HONEYMOON SPOT",
-    "RIVERFRONT",
-    "PRIVATE HOUSE",
-    "RESORT",
-    "POPULAR",
-    "FARMSTAY",
+    "lodge",
+    "tented_camp",
+    "house",
+    "campsite",
+    "weekend_getaway",
+    "romantic_getaway",
+    "group_getaway",
+    "conservancy",
+    "farmstay",
+    "national_park_game_reserves",
+    "lakefront",
+    "beachfront",
+    "luxurious",
+    "beautiful_view",
+    "off_grid",
+    "eco_stay",
+    "quirky",
+    "honeymoon_spot",
+    "unique_experiences",
+    "traditional",
+    "mansion",
+    "over_water",
+    "stunning_architecture",
+    "riverfront",
+    "private_house",
+    "resort",
+    "boutique_hotel",
+    "unique_space",
+    "unique_location",
+    "hotel",
+    "cottage",
+    "coworking_spot",
+    "fast_wifi",
+    "locally_owned",
+    "community_owned",
+    "carbon_neutral",
+    "owner_operated",
+    "popular",
+    "wellness_retreat",
   ];
 
   const [currentOptions, setCurrentOptions] = useState([]);
@@ -61,7 +62,7 @@ function MobileStayTypes({ handlePopup, showStayTypesPopup, screenWidth }) {
         .replace("]", "") // remove ]
         .trim(); // remove all white space
 
-      router.push({ query: { ...router.query, type_of_stay: allOptions } });
+      router.push({ query: { ...router.query, tag: allOptions } });
     } else {
       updatedList.splice(currentOptions.indexOf(event.target.value), 1);
 
@@ -71,16 +72,16 @@ function MobileStayTypes({ handlePopup, showStayTypesPopup, screenWidth }) {
         .replace("]", "") // remove ]
         .trim(); // remove all white space
 
-      router.push({ query: { ...router.query, type_of_stay: allOptions } });
+      router.push({ query: { ...router.query, tag: allOptions } });
     }
     setCurrentOptions(updatedList);
   };
 
   useEffect(() => {
-    if (router.query.type_of_stay) {
-      setCurrentOptions(router.query.type_of_stay.split(","));
+    if (router.query.tag) {
+      setCurrentOptions(router.query.tag.split(","));
     }
-  }, [router.query.type_of_stay]);
+  }, [router.query.tag]);
 
   const containsOption = (option) => {
     return currentOptions.includes(option);
@@ -96,7 +97,7 @@ function MobileStayTypes({ handlePopup, showStayTypesPopup, screenWidth }) {
               value={option}
               onChange={handleCheck}
             ></Checkbox>
-            <div className="lowercase">{option}</div>
+            <div className="lowercase">{option.split("_").join(" ")}</div>
           </label>
         ))}
       </div>

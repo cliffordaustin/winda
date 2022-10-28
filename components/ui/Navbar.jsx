@@ -14,6 +14,9 @@ import { Icon } from "@iconify/react";
 import Burger from "./Burger";
 import Dialogue from "../Home/Dialogue";
 import { Mixpanel } from "../../lib/mixpanelconfig";
+import Cookies from "js-cookie";
+import { useRouter } from "next/router";
+import { InlineWidget } from "react-calendly";
 
 function Navbar({ userProfile }) {
   const [curatedTripsHover, setCuratedTripsHover] = useState(true);
@@ -25,6 +28,8 @@ function Navbar({ userProfile }) {
 
   const navigationPrevRef = React.useRef(null);
   const navigationNextRef = React.useRef(null);
+
+  const router = useRouter();
 
   function Item({ title, subText, icon, href }) {
     const [showIcon, setShowIcon] = useState(false);
@@ -84,6 +89,15 @@ function Navbar({ userProfile }) {
       swiper.slideToLoop(index);
     }
   };
+
+  const changeCurrency = (currency) => {
+    Cookies.set("currency", currency);
+    router.reload();
+  };
+
+  const currency = Cookies.get("currency");
+
+  const [showCalendly, setShowCalendly] = useState(false);
 
   return (
     <div>
@@ -419,370 +433,446 @@ function Navbar({ userProfile }) {
             </Transition>
           </Popover>
         </div>
-
-        {/* <UserDropdown userProfile={userProfile}></UserDropdown> */}
-
-        <div className="hidden md:flex items-center gap-2">
-          <Link href="https://api.whatsapp.com/send?phone=+254757629101&text=Hi winda">
-            <a
-              target="_blank"
+        <div className="flex items-center gap-2">
+          <div className="hidden md:flex items-center gap-2">
+            <div
+              onClick={() => {
+                setShowCalendly(true);
+              }}
               className="flex items-center gap-0.5 px-4 py-3 !bg-gradient-to-r from-pink-500 via-red-500 !rounded-3xl to-yellow-500"
             >
-              {/* <div>
-                <Icon icon="logos:whatsapp-icon" className="w-5 h-5" />
-              </div> */}
               <span className="ml-2 text-white text-sm font-bold cursor-pointer">
                 Travel concierge
               </span>
-            </a>
-          </Link>
+            </div>
 
-          <div></div>
-          <Link href="/trip">
-            <a>
-              <Button
-                onClick={() => {
-                  Mixpanel.track("Clicked view all curated trips button");
-                }}
-                className="flex items-center gap-4 max-w-[360px] !py-3 !bg-gradient-to-r from-pink-500 via-red-500 !rounded-3xl to-yellow-500"
-              >
-                <span className="font-bold">Explore all trips</span>
-              </Button>
-            </a>
-          </Link>
-          <Link href="/login">
-            <a className="font-bold">Login</a>
-          </Link>
-        </div>
-
-        <div className="md:hidden">
-          <div
-            onClick={() => {
-              setOpenBurger(!openBurger);
-            }}
-          >
-            <Burger></Burger>
+            <div></div>
+            <Link href="/trip">
+              <a>
+                <Button
+                  onClick={() => {
+                    Mixpanel.track("Clicked view all curated trips button");
+                  }}
+                  className="flex items-center gap-4 max-w-[360px] !py-3 !bg-gradient-to-r from-pink-500 via-red-500 !rounded-3xl to-yellow-500"
+                >
+                  <span className="font-bold">Explore all trips</span>
+                </Button>
+              </a>
+            </Link>
+            <Link href="/login">
+              <a className="font-bold">Login</a>
+            </Link>
           </div>
 
-          <Transition appear as={React.Fragment} show={openBurger}>
-            <Dialog
-              as="div"
-              className="relative z-50"
-              onClose={() => {
-                setOpenBurger(false);
+          <div className="md:hidden">
+            <div
+              onClick={() => {
+                setOpenBurger(!openBurger);
               }}
             >
-              <div className="fixed bottom-0 left-0 right-0 overflow-y-auto">
-                <div
-                  className={"flex items-end justify-center p-0 text-center "}
-                >
-                  <Dialog.Panel
-                    className={
-                      "w-full transform overflow-hidden bg-white screen-height-safari text-left border-t align-middle shadow-xl transition-all !rounded-none relative overflow-y-scroll remove-scroll "
-                    }
+              <Burger></Burger>
+            </div>
+
+            <Transition appear as={React.Fragment} show={openBurger}>
+              <Dialog
+                as="div"
+                className="relative z-50"
+                onClose={() => {
+                  setOpenBurger(false);
+                }}
+              >
+                <div className="fixed bottom-0 left-0 right-0 overflow-y-auto">
+                  <div
+                    className={"flex items-end justify-center p-0 text-center "}
                   >
-                    <Transition.Child
-                      as={React.Fragment}
-                      enter="ease-out duration-300"
-                      enterFrom="opacity-0"
-                      enterTo="opacity-100"
-                      leave="ease-in duration-200"
-                      leaveFrom="opacity-100"
-                      leaveTo="opacity-0"
+                    <Dialog.Panel
+                      className={
+                        "w-full transform overflow-hidden bg-white screen-height-safari text-left border-t align-middle shadow-xl transition-all !rounded-none relative overflow-y-scroll remove-scroll "
+                      }
                     >
-                      <div
-                        onClick={() => {
-                          setOpenBurger(false);
-                        }}
-                        className="w-full py-2 bg-black text-white bg-opacity-50 cursor-pointer flex items-center justify-center gap-1"
+                      <Transition.Child
+                        as={React.Fragment}
+                        enter="ease-out duration-300"
+                        enterFrom="opacity-0"
+                        enterTo="opacity-100"
+                        leave="ease-in duration-200"
+                        leaveFrom="opacity-100"
+                        leaveTo="opacity-0"
                       >
-                        <Icon
-                          icon="icon-park-outline:close-one"
-                          className="mt-0.5"
-                        />
-                        <span className="font-bold">close</span>
-                      </div>
-                    </Transition.Child>
-                    <Swiper
-                      preventInteractionOnTransition={true}
-                      allowTouchMove={false}
-                      onSwiper={(swiper) => {
-                        setSwiper(swiper);
-                      }}
-                      onSlideChange={(swiper) => {}}
-                      modules={[Navigation]}
-                      className="!h-full"
-                    >
-                      <SwiperSlide className="overflow-y-scroll p-2 remove-scroll ">
-                        <Transition.Child
-                          as={React.Fragment}
-                          enter="ease-out duration-300"
-                          enterFrom="opacity-0 scale-95"
-                          enterTo="opacity-100 scale-100"
-                          leave="ease-in duration-200"
-                          leaveFrom="opacity-100 scale-100"
-                          leaveTo="opacity-0 scale-95"
-                        >
-                          <div className="px-2 py-3 bg-gray-100 rounded-md flex flex-col">
-                            <div className="py-2 border-b">
-                              <h1 className="font-bold">
-                                Explore our services
-                              </h1>
-                            </div>
-
-                            <div
-                              onClick={() => {
-                                slideto(1);
-                                setCuratedTripsHover(true);
-                                setStaysHover(false);
-                                setActivitiesHover(false);
-                              }}
-                              className="flex items-center justify-between mt-3 cursor-pointer"
-                            >
-                              <div className="flex flex-col gap-1">
-                                <h1 className="font-bold">Curated trips</h1>
-                                <p className="mt-2 text-sm text-gray-600">
-                                  We created curated trips meant for you to
-                                  create those special moments.
-                                </p>
-                              </div>
-
-                              <Icon
-                                icon="bx:chevron-right"
-                                className="w-8 h-8"
-                              />
-                            </div>
-
-                            <div
-                              onClick={() => {
-                                slideto(1);
-                                setCuratedTripsHover(false);
-                                setStaysHover(true);
-                                setActivitiesHover(false);
-                              }}
-                              className="flex items-center justify-between mt-5 cursor-pointer"
-                            >
-                              <div className="flex flex-col gap-1">
-                                <h1 className="font-bold">Stays</h1>
-                                <p className="mt-2 text-sm text-gray-600">
-                                  Explore our large number of carefully selected
-                                  stays.
-                                </p>
-                              </div>
-
-                              <Icon
-                                icon="bx:chevron-right"
-                                className="w-8 h-8"
-                              />
-                            </div>
-
-                            <div
-                              onClick={() => {
-                                slideto(1);
-                                setCuratedTripsHover(false);
-                                setStaysHover(false);
-                                setActivitiesHover(true);
-                              }}
-                              className="flex items-center justify-between mt-5 cursor-pointer"
-                            >
-                              <div className="flex flex-col gap-1">
-                                <h1 className="font-bold">Activites</h1>
-                                <p className="mt-2 text-sm text-gray-600">
-                                  Find an activity that suits your budget and
-                                  taste.
-                                </p>
-                              </div>
-
-                              <Icon
-                                icon="bx:chevron-right"
-                                className="w-8 h-8"
-                              />
-                            </div>
-                          </div>
-                        </Transition.Child>
-                      </SwiperSlide>
-
-                      <SwiperSlide className="overflow-y-scroll p-2 remove-scroll">
                         <div
                           onClick={() => {
-                            slideto(0);
+                            setOpenBurger(false);
                           }}
-                          className="bg-white cursor-pointer flex items-center gap-1"
+                          className="w-full py-2 bg-black text-white bg-opacity-50 cursor-pointer flex items-center justify-center gap-1"
                         >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-6 w-6 text-black"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
+                          <Icon
+                            icon="icon-park-outline:close-one"
+                            className="mt-0.5"
+                          />
+                          <span className="font-bold">close</span>
+                        </div>
+                      </Transition.Child>
+                      <Swiper
+                        preventInteractionOnTransition={true}
+                        allowTouchMove={false}
+                        onSwiper={(swiper) => {
+                          setSwiper(swiper);
+                        }}
+                        onSlideChange={(swiper) => {}}
+                        modules={[Navigation]}
+                        className="!h-full"
+                      >
+                        <SwiperSlide className="overflow-y-scroll p-2 remove-scroll ">
+                          <Transition.Child
+                            as={React.Fragment}
+                            enter="ease-out duration-300"
+                            enterFrom="opacity-0 scale-95"
+                            enterTo="opacity-100 scale-100"
+                            leave="ease-in duration-200"
+                            leaveFrom="opacity-100 scale-100"
+                            leaveTo="opacity-0 scale-95"
                           >
-                            <path
-                              fillRule="evenodd"
-                              d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                          <h3 className="font-bold text-black">Back</h3>
-                        </div>
-                        <div className="px-2 mt-3">
-                          {curatedTripsHover && (
-                            <div className="flex w-full flex-wrap items-center justify-between gap-3">
-                              <Item
-                                icon="carbon:agriculture-analytics"
-                                title="Cultural"
-                                subText="Curated cultural trips"
-                                href="/trip?tag=cultural"
-                              ></Item>
+                            <div className="px-2 py-3 bg-gray-100 rounded-md flex flex-col">
+                              <div className="py-2 border-b">
+                                <h1 className="font-bold">
+                                  Explore our services
+                                </h1>
+                              </div>
 
-                              <Item
-                                icon="icon-park-outline:oval-love-two"
-                                title="Romantic"
-                                subText="Curated romantic trips"
-                                href="/trip?tag=romantic"
-                              ></Item>
+                              <div
+                                onClick={() => {
+                                  slideto(1);
+                                  setCuratedTripsHover(true);
+                                  setStaysHover(false);
+                                  setActivitiesHover(false);
+                                }}
+                                className="flex items-center justify-between mt-3 cursor-pointer"
+                              >
+                                <div className="flex flex-col gap-1">
+                                  <h1 className="font-bold">Curated trips</h1>
+                                  <p className="mt-2 text-sm text-gray-600">
+                                    We created curated trips meant for you to
+                                    create those special moments.
+                                  </p>
+                                </div>
 
-                              <Item
-                                icon="bi:calendar-week"
-                                title="Weekend getaway"
-                                subText="Curated weekend getaway trips"
-                                href="/trip?tag=weekend_getaway"
-                              ></Item>
+                                <Icon
+                                  icon="bx:chevron-right"
+                                  className="w-8 h-8"
+                                />
+                              </div>
 
-                              <Item
-                                icon="fluent:clipboard-day-20-regular"
-                                title="Day trip"
-                                subText="Curated day trips"
-                                href="/trip?tag=day_trips"
-                              ></Item>
+                              <div
+                                onClick={() => {
+                                  slideto(1);
+                                  setCuratedTripsHover(false);
+                                  setStaysHover(true);
+                                  setActivitiesHover(false);
+                                }}
+                                className="flex items-center justify-between mt-5 cursor-pointer"
+                              >
+                                <div className="flex flex-col gap-1">
+                                  <h1 className="font-bold">Stays</h1>
+                                  <p className="mt-2 text-sm text-gray-600">
+                                    Explore our large number of carefully
+                                    selected stays.
+                                  </p>
+                                </div>
 
-                              <Item
-                                icon="carbon:pedestrian-family"
-                                title="Family"
-                                subText="Curated family trips"
-                                href="/trip?tag=family"
-                              ></Item>
+                                <Icon
+                                  icon="bx:chevron-right"
+                                  className="w-8 h-8"
+                                />
+                              </div>
 
-                              <Item
-                                icon="akar-icons:people-group"
-                                title="Group"
-                                subText="Curated group trips"
-                                href="/trip?tag=groups"
-                              ></Item>
+                              <div
+                                onClick={() => {
+                                  slideto(1);
+                                  setCuratedTripsHover(false);
+                                  setStaysHover(false);
+                                  setActivitiesHover(true);
+                                }}
+                                className="flex items-center justify-between mt-5 cursor-pointer"
+                              >
+                                <div className="flex flex-col gap-1">
+                                  <h1 className="font-bold">Activites</h1>
+                                  <p className="mt-2 text-sm text-gray-600">
+                                    Find an activity that suits your budget and
+                                    taste.
+                                  </p>
+                                </div>
 
-                              <Item
-                                icon="bx:trip"
-                                title="Road trip"
-                                subText="Curated road trips"
-                                href="/trip?tag=road_trip"
-                              ></Item>
-
-                              <Item
-                                icon="fe:app-menu"
-                                title="View all"
-                                subText="View all curated trips"
-                                href="/trip"
-                              ></Item>
+                                <Icon
+                                  icon="bx:chevron-right"
+                                  className="w-8 h-8"
+                                />
+                              </div>
                             </div>
-                          )}
+                          </Transition.Child>
+                        </SwiperSlide>
 
-                          {staysHover && (
-                            <div className="flex w-full flex-wrap items-center justify-between gap-3">
-                              <Item
-                                icon="bx:bed"
-                                title="Lodge"
-                                subText="Available lodges"
-                                href="/stays?type_of_stay=LODGE"
-                              ></Item>
+                        <SwiperSlide className="overflow-y-scroll p-2 remove-scroll">
+                          <div
+                            onClick={() => {
+                              slideto(0);
+                            }}
+                            className="bg-white cursor-pointer flex items-center gap-1"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-6 w-6 text-black"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                            <h3 className="font-bold text-black">Back</h3>
+                          </div>
+                          <div className="px-2 mt-3">
+                            {curatedTripsHover && (
+                              <div className="flex w-full flex-wrap items-center justify-between gap-3">
+                                <Item
+                                  icon="carbon:agriculture-analytics"
+                                  title="Cultural"
+                                  subText="Curated cultural trips"
+                                  href="/trip?tag=cultural"
+                                ></Item>
 
-                              <Item
-                                icon="carbon:campsite"
-                                title="Campsite"
-                                subText="Available campsites"
-                                href="/stays?type_of_stay=CAMPSITE"
-                              ></Item>
+                                <Item
+                                  icon="icon-park-outline:oval-love-two"
+                                  title="Romantic"
+                                  subText="Curated romantic trips"
+                                  href="/trip?tag=romantic"
+                                ></Item>
 
-                              <Item
-                                icon="fontisto:tent"
-                                title="Tented campsite"
-                                subText="Available tented campsites"
-                                href="/stays?type_of_stay=TENTED CAMP"
-                              ></Item>
+                                <Item
+                                  icon="bi:calendar-week"
+                                  title="Weekend getaway"
+                                  subText="Curated weekend getaway trips"
+                                  href="/trip?tag=weekend_getaway"
+                                ></Item>
 
-                              <Item
-                                icon="akar-icons:star"
-                                title="Unique space"
-                                subText="Available unique spaces"
-                                href="/stays?type_of_stay=UNIQUE SPACE"
-                              ></Item>
+                                <Item
+                                  icon="fluent:clipboard-day-20-regular"
+                                  title="Day trip"
+                                  subText="Curated day trips"
+                                  href="/trip?tag=day_trips"
+                                ></Item>
 
-                              <Item
-                                icon="tabler:report-money"
-                                title="Budget"
-                                subText="Available budget stays"
-                                href="/stays?pricing_type=REASONABLE"
-                              ></Item>
+                                <Item
+                                  icon="carbon:pedestrian-family"
+                                  title="Family"
+                                  subText="Curated family trips"
+                                  href="/trip?tag=family"
+                                ></Item>
 
-                              <Item
-                                icon="material-symbols:price-change-outline-sharp"
-                                title="Mid-range"
-                                subText="Available mid-range stays"
-                                href="/stays?pricing_type=MID-RANGE"
-                              ></Item>
+                                <Item
+                                  icon="akar-icons:people-group"
+                                  title="Group"
+                                  subText="Curated group trips"
+                                  href="/trip?tag=groups"
+                                ></Item>
 
-                              <Item
-                                icon="cil:diamond"
-                                title="Luxury"
-                                subText="Available luxury stays"
-                                href="/stays?pricing_type=HIGH-END"
-                              ></Item>
+                                <Item
+                                  icon="bx:trip"
+                                  title="Road trip"
+                                  subText="Curated road trips"
+                                  href="/trip?tag=road_trip"
+                                ></Item>
 
-                              <Item
-                                icon="fe:app-menu"
-                                title="View all"
-                                subText="View all stays"
-                                href="/stays"
-                              ></Item>
-                            </div>
-                          )}
+                                <Item
+                                  icon="fe:app-menu"
+                                  title="View all"
+                                  subText="View all curated trips"
+                                  href="/trip"
+                                ></Item>
+                              </div>
+                            )}
 
-                          {activitiesHover && (
-                            <div className="flex w-full flex-wrap items-center justify-between gap-3">
-                              <Item
-                                icon="tabler:report-money"
-                                title="Budget"
-                                subText="Available budget activities"
-                                href="/activities?pricing_type=REASONABLE"
-                              ></Item>
+                            {staysHover && (
+                              <div className="flex w-full flex-wrap items-center justify-between gap-3">
+                                <Item
+                                  icon="bx:bed"
+                                  title="Lodge"
+                                  subText="Available lodges"
+                                  href="/stays?type_of_stay=LODGE"
+                                ></Item>
 
-                              <Item
-                                icon="material-symbols:price-change-outline-sharp"
-                                title="Mid-range"
-                                subText="Available Mid-range activities"
-                                href="/activities?pricing_type=MID-RANGE"
-                              ></Item>
+                                <Item
+                                  icon="carbon:campsite"
+                                  title="Campsite"
+                                  subText="Available campsites"
+                                  href="/stays?type_of_stay=CAMPSITE"
+                                ></Item>
 
-                              <Item
-                                icon="cil:diamond"
-                                title="Luxury"
-                                subText="Available luxury activities"
-                                href="/activities?pricing_type=HIGH-END"
-                              ></Item>
+                                <Item
+                                  icon="fontisto:tent"
+                                  title="Tented campsite"
+                                  subText="Available tented campsites"
+                                  href="/stays?type_of_stay=TENTED CAMP"
+                                ></Item>
 
-                              <Item
-                                icon="fe:app-menu"
-                                title="View all"
-                                subText="View all activities"
-                                href="/activities"
-                              ></Item>
-                            </div>
-                          )}
-                        </div>
-                      </SwiperSlide>
-                    </Swiper>
-                  </Dialog.Panel>
+                                <Item
+                                  icon="akar-icons:star"
+                                  title="Unique space"
+                                  subText="Available unique spaces"
+                                  href="/stays?type_of_stay=UNIQUE SPACE"
+                                ></Item>
+
+                                <Item
+                                  icon="tabler:report-money"
+                                  title="Budget"
+                                  subText="Available budget stays"
+                                  href="/stays?pricing_type=REASONABLE"
+                                ></Item>
+
+                                <Item
+                                  icon="material-symbols:price-change-outline-sharp"
+                                  title="Mid-range"
+                                  subText="Available mid-range stays"
+                                  href="/stays?pricing_type=MID-RANGE"
+                                ></Item>
+
+                                <Item
+                                  icon="cil:diamond"
+                                  title="Luxury"
+                                  subText="Available luxury stays"
+                                  href="/stays?pricing_type=HIGH-END"
+                                ></Item>
+
+                                <Item
+                                  icon="fe:app-menu"
+                                  title="View all"
+                                  subText="View all stays"
+                                  href="/stays"
+                                ></Item>
+                              </div>
+                            )}
+
+                            {activitiesHover && (
+                              <div className="flex w-full flex-wrap items-center justify-between gap-3">
+                                <Item
+                                  icon="tabler:report-money"
+                                  title="Budget"
+                                  subText="Available budget activities"
+                                  href="/activities?pricing_type=REASONABLE"
+                                ></Item>
+
+                                <Item
+                                  icon="material-symbols:price-change-outline-sharp"
+                                  title="Mid-range"
+                                  subText="Available Mid-range activities"
+                                  href="/activities?pricing_type=MID-RANGE"
+                                ></Item>
+
+                                <Item
+                                  icon="cil:diamond"
+                                  title="Luxury"
+                                  subText="Available luxury activities"
+                                  href="/activities?pricing_type=HIGH-END"
+                                ></Item>
+
+                                <Item
+                                  icon="fe:app-menu"
+                                  title="View all"
+                                  subText="View all activities"
+                                  href="/activities"
+                                ></Item>
+                              </div>
+                            )}
+                          </div>
+                        </SwiperSlide>
+                      </Swiper>
+                    </Dialog.Panel>
+                  </div>
                 </div>
+              </Dialog>
+            </Transition>
+          </div>
+
+          <Dialogue
+            isOpen={showCalendly}
+            closeModal={() => {
+              setShowCalendly(false);
+            }}
+            title="Travel concierge"
+            dialogueTitleClassName="!font-bold !ml-4 !text-xl md:!text-2xl"
+            outsideDialogueClass="!p-0"
+            dialoguePanelClassName="screen-height-safari !rounded-none md:!rounded-md md:!min-h-0 md:max-h-[700px] !px-0 !max-w-6xl overflow-y-scroll remove-scroll"
+          >
+            <div className="">
+              <InlineWidget url="https://calendly.com/ndiko/winda-guide-custom-trip" />
+            </div>
+
+            <div className="fixed top-3 right-4 flex flex-col">
+              <div
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowCalendly(false);
+                }}
+                className="flex cursor-pointer items-center justify-center w-7 h-7 rounded-full bg-white shadow-lg"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
               </div>
-            </Dialog>
-          </Transition>
+            </div>
+          </Dialogue>
+
+          <PopoverBox
+            btnPopover={
+              <>
+                {(!currency || currency === "USD") && (
+                  <div className="flex items-center underline font-bold">
+                    <Icon icon="fxemoji:heavydollarsign" />
+                    <span className="text-sm">USD</span>
+                  </div>
+                )}
+
+                {currency && currency === "KES" && (
+                  <div className="flex items-center underline font-bold">
+                    <span className="text-sm">KES</span>
+                  </div>
+                )}
+              </>
+            }
+            panelClassName="bg-white w-[200px] mt-0.5 py-0.5 right-0 rounded-sm shadow-md"
+          >
+            <div className="text-sm px-2 py-1 bg-gray-200 font-bold">
+              Change currency
+            </div>
+            <div
+              onClick={() => {
+                changeCurrency("KES");
+              }}
+              className="px-2 py-1 hover:bg-gray-50 transition-colors duration-150 ease-linear cursor-pointer text-sm"
+            >
+              Kenyan shilling - KES
+            </div>
+            <div
+              onClick={() => {
+                changeCurrency("USD");
+              }}
+              className="px-2 py-1 hover:bg-gray-50 transition-colors duration-150 ease-linear cursor-pointer text-sm"
+            >
+              United States Dollar - USD
+            </div>
+          </PopoverBox>
         </div>
       </div>
     </div>

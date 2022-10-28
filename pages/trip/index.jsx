@@ -28,6 +28,8 @@ import Tags from "../../components/Trip/Tags";
 import Dialogue from "../../components/Home/Dialogue";
 import PopularLocationsDropdown from "../../components/Lodging/PopularLocationsDropdown";
 import ContactBanner from "../../components/Home/ContactBanner";
+import Navbar from "../../components/ui/Navbar";
+import TravelConciergeBanner from "../../components/Home/TravelConciergeBanner";
 
 const Trips = ({
   userProfile,
@@ -192,30 +194,11 @@ const Trips = ({
         setShowLocation(false);
       }}
     >
-      {/* <ContactBanner></ContactBanner> */}
-      <div className="sticky top-0 w-full bg-white z-50">
-        <div className="bg-white sm:px-12 px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-8">
-            <Link href="/">
-              <a className="relative w-28 h-9 cursor-pointer">
-                <Image
-                  layout="fill"
-                  alt="Logo"
-                  src="/images/winda_logo/horizontal-blue-font.png"
-                  priority
-                ></Image>
-              </a>
-            </Link>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <UserDropdown
-              userProfile={userProfile}
-              numberOfTrips={userTrips.length}
-              isHomePage={true}
-            ></UserDropdown>
-          </div>
+      <div className="sticky bg-white top-0 left-0 right-0 z-50">
+        <div className="md:hidden">
+          <TravelConciergeBanner></TravelConciergeBanner>
         </div>
+        <Navbar userProfile={userProfile}></Navbar>
       </div>
 
       <div className="">

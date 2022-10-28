@@ -47,6 +47,8 @@ import ServerError from "../../../components/Error/ServerError";
 import ContactBanner from "../../../components/Home/ContactBanner";
 import Input from "../../../components/ui/Input";
 import { Mixpanel } from "../../../lib/mixpanelconfig";
+import Navbar from "../../../components/ui/Navbar";
+import TravelConciergeBanner from "../../../components/Home/TravelConciergeBanner";
 
 function TripDetail({ userProfile, userTrips, trip }) {
   const GlobalStyle = createGlobalStyle`
@@ -410,7 +412,11 @@ function TripDetail({ userProfile, userTrips, trip }) {
     email: formik.values.email,
     amount: total(),
     publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
-    currency: process.env.NODE_ENV === "production" ? "USD" : "GHS",
+    currency: process.env.NODE_ENV === "production" ? "USD" : "KES",
+    mobile_money: {
+      phone: "+254725052346",
+      provider: "mtn",
+    },
   };
 
   const [
@@ -471,32 +477,12 @@ function TripDetail({ userProfile, userTrips, trip }) {
     <>
       {!pageError && (
         <div className="relative">
-          <div className="sticky top-0 w-full bg-white z-50">
-            <div className="bg-white sm:px-12 px-4 py-4 flex items-center justify-between">
-              <div className="flex items-center gap-8">
-                <Link href="/">
-                  <a className="relative w-28 h-9 cursor-pointer">
-                    <Image
-                      layout="fill"
-                      alt="Logo"
-                      src="/images/winda_logo/horizontal-blue-font.png"
-                      priority
-                    ></Image>
-                  </a>
-                </Link>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <UserDropdown
-                  userProfile={userProfile}
-                  changeShowDropdown={() => {
-                    changeShowDropdown(!showDropdown);
-                  }}
-                  showDropdown={showDropdown}
-                  numberOfTrips={userTrips.length}
-                ></UserDropdown>
-              </div>
+          <div className="sticky bg-white top-0 left-0 right-0 z-50">
+            <div className="md:hidden">
+              <TravelConciergeBanner></TravelConciergeBanner>
             </div>
+
+            <Navbar userProfile={userProfile}></Navbar>
           </div>
           {router.query.checkout_page !== "1" && (
             <>
@@ -506,12 +492,12 @@ function TripDetail({ userProfile, userTrips, trip }) {
                   <ImageGallery
                     images={trip.single_trip_images}
                     stayType={""}
-                    className="md:!h-[540px] !h-[300px]"
+                    className="md:!h-[540px] !mt-0 !h-[300px]"
                   ></ImageGallery>
                 </div>
               </div>
               <div className="flex gap-4 px-4">
-                <div className="md:w-[40%] lg:w-[30%] hidden md:block h-[90vh] mt-0 sticky top-[70px]">
+                <div className="md:w-[40%] lg:w-[30%] hidden md:block h-[90vh] mt-0 sticky top-[80px]">
                   <div className="w-full h-[200px] mt-4">
                     <MapBox trip={trip}></MapBox>
                   </div>
@@ -2088,7 +2074,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
           {router.query.checkout_page === "1" && (
             <div className=" max-w-[1080px] mx-auto">
               <div className="flex gap-4 px-4">
-                <div className="md:w-[40%] px-2 hidden md:block h-[90vh] mt-0 sticky top-[80px]">
+                <div className="md:w-[40%] px-2 hidden md:block h-[90vh] mt-0 sticky top-[100px]">
                   <div
                     onClick={() => {
                       router.back();
@@ -2360,7 +2346,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
                     onClick={() => {
                       router.back();
                     }}
-                    className="flex gap-1 mb-3 md:hidden font-bold cursor-pointer items-center text-black"
+                    className="flex gap-1 mb-3 md:hidden mt-4 font-bold cursor-pointer items-center text-black"
                   >
                     <Icon className="w-6 h-6" icon="bx:chevron-left" />
                     <span>Back</span>
@@ -2392,7 +2378,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
 
                   <div className="h-[0.4px] w-[100%] my-4 bg-gray-400 md:hidden"></div>
 
-                  <h1 className="font-bold text-2xl mb-4 font-OpenSans">
+                  <h1 className="font-bold text-2xl mt-4 mb-4 font-OpenSans">
                     Book trip
                   </h1>
                   <div className="mt-6">

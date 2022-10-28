@@ -33,11 +33,24 @@ const MapMakers = ({ location, num }) => {
           onClick={() => setShowPopup(!showPopup)}
           className="relative"
         >
-          <Icon className="w-9 h-9 text-gray-800" icon="entypo:location-pin" />
-
-          <div className="absolute -top-5 left-[50%] text-black -translate-x-2/4 text-lg font-bold">
-            {num}
-          </div>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+            role="img"
+            className="w-10 h-10 text-red-500"
+            preserveAspectRatio="xMidYMid meet"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill="white"
+              stroke="black"
+              strokeWidth="0.7px"
+              d="M10.832 2.688A4.056 4.056 0 0 0 8.02 1.5h-.04a4.056 4.056 0 0 0-4 4c-.013.75.198 1.487.606 2.117L7.734 14h.533l3.147-6.383c.409-.63.62-1.367.606-2.117a4.056 4.056 0 0 0-1.188-2.812z"
+            ></path>
+            <text x="6.5" y="9" fill="black" style={{ fontSize: "6px" }}>
+              {num}
+            </text>
+          </svg>
         </div>
 
         <AnimatePresence exitBeforeEnter>

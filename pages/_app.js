@@ -1,7 +1,7 @@
 import "../styles/globals.css";
 import { useEffect } from "react";
 import { motion } from "framer-motion";
-import { Provider } from "react-redux";
+import { Provider, useDispatch } from "react-redux";
 import store, { wrapper } from "../redux/store";
 import NProgress from "nprogress";
 import Router, { useRouter } from "next/router";
@@ -12,6 +12,7 @@ import ReactGA from "react-ga4";
 import "mapbox-gl/dist/mapbox-gl.css";
 import Head from "next/head";
 import Script from "next/script";
+import { priceConversionRateFunc } from "../lib/PriceRate";
 
 NProgress.configure({
   minimum: 0.3,
@@ -42,6 +43,12 @@ function MyApp({ Component, pageProps, router }) {
   const canonical = (base + (router.asPath === "/" ? "" : router.asPath)).split(
     "?"
   )[0];
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    priceConversionRateFunc(dispatch);
+  }, []);
 
   return (
     <GoogleOAuthProvider

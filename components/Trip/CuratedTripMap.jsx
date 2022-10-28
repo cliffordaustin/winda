@@ -4,25 +4,30 @@ import PropTypes from "prop-types";
 import Map, { Marker, NavigationControl } from "react-map-gl";
 
 import { createGlobalStyle } from "styled-components";
+import SwiperCore, { FreeMode, Navigation, Thumbs } from "swiper";
 
 import { Icon } from "@iconify/react";
 import MapMakers from "./MapMakers";
 import Dialogue from "../Home/Dialogue";
+import { Swiper, SwiperSlide } from "swiper/react";
 
+// import "swiper/css";
+import "swiper/css/thumbs";
+SwiperCore.use([Navigation]);
 function CuratedTripMap({ locations }) {
   const mapRef = useRef();
 
   const [expandMap, setExpandMap] = useState(false);
 
   const [viewport, setViewport] = useState({
-    longitude: 36.8442449,
-    latitude: -1.3924933,
+    longitude: locations.length > 0 ? locations[0].longitude : 36.8442449,
+    latitude: locations.length > 0 ? locations[0].latitude : -1.3924933,
     zoom: 5,
   });
 
   const [viewportExpandedMap, setViewportExpandedMap] = useState({
-    longitude: 36.8442449,
-    latitude: -1.3924933,
+    longitude: locations.length > 0 ? locations[0].longitude : 36.8442449,
+    latitude: locations.length > 0 ? locations[0].latitude : -1.3924933,
     zoom: 4,
   });
 
@@ -42,6 +47,14 @@ function CuratedTripMap({ locations }) {
     border: none !important;
   }
 `;
+
+  const settings = {
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+  };
+
   return (
     <div style={{ position: "relative", height: "100%", width: "100%" }}>
       <GlobalStyle></GlobalStyle>
@@ -87,12 +100,74 @@ function CuratedTripMap({ locations }) {
         dialogueTitleClassName="!font-bold ml-3"
         dialoguePanelClassName="max-h-[500px] !px-0 max-w-xl overflow-y-scroll remove-scroll"
       >
-        {/* <div className="mt-2 flex gap-2 items-center">
-          {locations.map((location, index) => (
-            <div key={index} className="px-4 py-2 w-fit text-white">
-              {location.location}
+        {/* <div className="mt-2 flex items-center">
+          <Swiper
+            {...settings}
+            slidesPerView={"auto"}
+            freeMode={true}
+            modules={[Navigation, Thumbs]}
+            className={"!w-full !relative !px-4 "}
+          >
+            {locations.map((location, index) => (
+              <SwiperSlide
+                key={index}
+                className="!w-fit flex items-center justify-center"
+              >
+                <div className="px-2 py-1 text-sm font-bold text-white bg-blue-500 rounded-3xl items-center">
+                  {location.location}
+                </div>
+                {locations.length !== index + 1 && (
+                  <div className="w-[50px] h-[1px] bg-gray-500"></div>
+                )}
+              </SwiperSlide>
+            ))}
+
+            <div
+              className={
+                "hidden absolute h-14 w-20 pl-2 bg-gradient-to-r from-white text-white left-0 z-20 -top-[50%] md:flex items-center justify-start "
+              }
+            >
+              <div className="cursor-pointer h-5 w-5 swiper-button-prev rounded-full border bg-gray-50 flex items-center justify-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 text-gray-500"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg>
+              </div>
             </div>
-          ))}
+
+            <div
+              className={
+                "hidden absolute h-14 w-20 pr-2 bg-gradient-to-l from-white text-white right-0 z-20 -top-[50%] md:flex items-center justify-end "
+              }
+            >
+              <div className="cursor-pointer h-5 w-5 swiper-button-next rounded-full border bg-gray-50 flex items-center justify-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 text-gray-500"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </div>
+            </div>
+          </Swiper>
         </div> */}
         <div className="mt-2 w-full h-[500px]">
           <Map

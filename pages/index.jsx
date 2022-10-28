@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { InlineWidget } from "react-calendly";
 import Head from "next/head";
 import axios from "axios";
 import getToken from "../lib/getToken";
@@ -21,7 +22,7 @@ import ContactBanner from "../components/Home/ContactBanner";
 import SearchOptions from "../components/ui/SearchOptions";
 import Dialogue from "../components/Home/Dialogue";
 import { Icon } from "@iconify/react";
-import WhatsappBanner from "../components/Home/WhatsappBanner";
+import TravelConciergeBanner from "../components/Home/TravelConciergeBanner";
 
 export default function Home({ userProfile }) {
   const router = useRouter();
@@ -216,11 +217,10 @@ export default function Home({ userProfile }) {
           />
         </Head>
       </div>
-      {/* <ContactBanner></ContactBanner> */}
 
       <div className="sticky bg-white top-0 left-0 right-0 z-50">
         <div className="md:hidden">
-          <WhatsappBanner></WhatsappBanner>
+          <TravelConciergeBanner></TravelConciergeBanner>
         </div>
         <Navbar userProfile={userProfile}></Navbar>
       </div>

@@ -29,6 +29,7 @@ export const mainReducer = (state, action) => {
       },
       stay: {
         stays: [...action.payload.stay.stays, ...state.stay.stays],
+        priceConversionRate: action.payload.stay.priceConversionRate,
       },
       transport: {
         transports: [

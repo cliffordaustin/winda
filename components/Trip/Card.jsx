@@ -360,7 +360,9 @@ const Card = ({
           {listing.total_number_of_days}{" "}
           {listing.total_number_of_days > 1 ? "days" : "day"}
         </div>
-        <div className="text-base text-gray-700 font-bold">{listing.name}</div>
+        <div className="text-base text-gray-700 font-bold truncate">
+          {listing.name} this is the name of the listing
+        </div>
 
         <p className="mt-2 text-sm text-gray-500">
           {listing.description && listing.description.substring(0, 150)}...
@@ -444,7 +446,7 @@ const Card = ({
         </div>
 
         <div className="mt-1 mb-10 xl:mb-0">
-          <div className="text-sm text-gray-700 flex gap-0.5 items-center">
+          <div className="text-sm text-gray-700 flex flex-wrap gap-0.5 items-center">
             <div className="text-xl mr-0.5 font-bold flex gap-1">
               {listing.old_price && (
                 <Price
@@ -452,10 +454,10 @@ const Card = ({
                   className="!text-sm line-through self-end mb-0.5 text-red-500"
                 ></Price>
               )}
-              <Price stayPrice={totalPrice()}></Price>
+              <Price stayPrice={totalPrice()} className="!text-lg"></Price>
             </div>
-            <div className="mt-0.5 mb-1.5 font-bold">.</div>
-            <div className="mt-0.5 font-bold">/per non-resident/trip</div>
+            {/* <div className="mt-0.5 mb-1.5 font-bold">.</div> */}
+            <div className="font-bold">/per non-resident/trip</div>
           </div>
         </div>
 

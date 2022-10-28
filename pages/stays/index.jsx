@@ -38,6 +38,7 @@ import { route } from "next/dist/server/router";
 import MobileSearchModal from "../../components/Stay/MobileSearchModal";
 import { useGoogleOneTapLogin } from "@react-oauth/google";
 import ContactBanner from "../../components/Home/ContactBanner";
+import { stayUrl } from "../../lib/stayUrl";
 
 function Stays({
   userProfile,
@@ -1664,7 +1665,7 @@ function Stays({
 
             <div className="mt-2 mb-4">
               <span className="block font-bold text-base mb-2">
-                All stay types
+                Filter stays by
               </span>
               <MobileStayTypes
                 handlePopup={() => {
@@ -2385,7 +2386,7 @@ function Stays({
 
               <div className="mt-2 mb-4">
                 <span className="block font-bold text-base mb-2">
-                  All stay types
+                  Filter stays by
                 </span>
                 <MobileStayTypes
                   handlePopup={() => {
@@ -2513,51 +2514,13 @@ export const getServerSideProps = wrapper.getServerSideProps(
       try {
         const token = getTokenFromReq(req);
 
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_baseURL}/stays/?search=${
-            query.search ? query.search : ""
-          }&d_search=${query.d_search ? query.d_search : ""}&page=${
-            query.page ? query.page : 1
-          }&type_of_stay=${
-            query.type_of_stay ? query.type_of_stay : ""
-          }&pricing_type=${
-            query.pricing_type ? query.pricing_type : ""
-          }&min_capacity=${
-            query.min_capacity ? query.min_capacity : ""
-          }&min_price=${query.min_price ? query.min_price : ""}&max_price=${
-            query.max_price ? query.max_price : ""
-          }&min_rooms=${query.min_rooms ? query.min_rooms : ""}&max_rooms=${
-            query.max_rooms ? query.max_rooms : ""
-          }&min_beds=${query.min_beds ? query.min_beds : ""}&max_beds=${
-            query.max_beds ? query.max_beds : ""
-          }&min_bathrooms=${
-            query.min_bathrooms ? query.min_bathrooms : ""
-          }&max_bathrooms=${
-            query.max_bathrooms ? query.min_bathrooms : ""
-          }&ordering=${query.ordering ? query.ordering : ""}`
-        );
+        const url = stayUrl(query);
 
-        const allStays = await axios.get(
-          `${process.env.NEXT_PUBLIC_baseURL}/all-stays/?search=${
-            query.search ? query.search : ""
-          }&d_search=${query.d_search ? query.d_search : ""}&type_of_stay=${
-            query.type_of_stay ? query.type_of_stay : ""
-          }&pricing_type=${
-            query.pricing_type ? query.pricing_type : ""
-          }&min_capacity=${
-            query.min_capacity ? query.min_capacity : ""
-          }&min_price=${query.min_price ? query.min_price : ""}&max_price=${
-            query.max_price ? query.max_price : ""
-          }&min_rooms=${query.min_rooms ? query.min_rooms : ""}&max_rooms=${
-            query.max_rooms ? query.max_rooms : ""
-          }&min_beds=${query.min_beds ? query.min_beds : ""}&max_beds=${
-            query.max_beds ? query.max_beds : ""
-          }&min_bathrooms=${
-            query.min_bathrooms ? query.min_bathrooms : ""
-          }&max_bathrooms=${
-            query.max_bathrooms ? query.min_bathrooms : ""
-          }&ordering=${query.ordering ? query.ordering : ""}`
-        );
+        const allStaysUrl = stayUrl(query, true);
+
+        const response = await axios.get(`${url}`);
+
+        const allStays = await axios.get(`${allStaysUrl}`);
 
         if (token) {
           const userProfile = await axios.get(
@@ -2569,34 +2532,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
             }
           );
 
-          const response = await axios.get(
-            `${process.env.NEXT_PUBLIC_baseURL}/stays/?search=${
-              query.search ? query.search : ""
-            }&d_search=${query.d_search ? query.d_search : ""}&page=${
-              query.page ? query.page : 1
-            }&type_of_stay=${
-              query.type_of_stay ? query.type_of_stay : ""
-            }&pricing_type=${
-              query.pricing_type ? query.pricing_type : ""
-            }&min_capacity=${
-              query.min_capacity ? query.min_capacity : ""
-            }&min_price=${query.min_price ? query.min_price : ""}&max_price=${
-              query.max_price ? query.max_price : ""
-            }&min_rooms=${query.min_rooms ? query.min_rooms : ""}&max_rooms=${
-              query.max_rooms ? query.max_rooms : ""
-            }&min_beds=${query.min_beds ? query.min_beds : ""}&max_beds=${
-              query.max_beds ? query.max_beds : ""
-            }&min_bathrooms=${
-              query.min_bathrooms ? query.min_bathrooms : ""
-            }&max_bathrooms=${
-              query.max_bathrooms ? query.min_bathrooms : ""
-            }&ordering=${query.ordering ? query.ordering : ""}`,
-            {
-              headers: {
-                Authorization: "Token " + token,
-              },
-            }
-          );
+          const response = await axios.get(`${url}`, {
+            headers: {
+              Authorization: "Token " + token,
+            },
+          });
 
           return {
             props: {
