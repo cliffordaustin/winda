@@ -202,12 +202,12 @@ const Trips = ({
       </div>
 
       <div className="">
-        <div className="w-full h-500 relative before:absolute before:h-full before:w-full before:bg-black before:z-20 before:opacity-70">
+        <div className="w-full h-500 relative before:absolute before:h-full before:w-full before:bg-black before:z-20 before:opacity-60">
           <Image
-            className={"w-full md:w-full md:blur-sm"}
+            className={"w-full md:w-full"}
             layout="fill"
             objectFit="cover"
-            src="/images/trip-header-image.jpg"
+            src="/images/image-header.jpg"
             sizes="380"
             alt="Image Gallery"
             priority
@@ -216,7 +216,9 @@ const Trips = ({
           <div className="absolute flex flex-col items-center justify-center top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 z-20 w-full px-6 md:px-0">
             <div>
               <h1 className="font-black font-SourceSans mb-2 text-3xl sm:text-4xl md:text-5xl xl:text-7xl text-white uppercase text-center">
-                Your Journey simplified
+                {router.query.holiday === "1"
+                  ? "Holiday in the Mara!"
+                  : "Your Journey simplified"}
               </h1>
 
               <h1 className="font-bold font-OpenSans mb-8 text-base sm:text-xl text-white text-center">
