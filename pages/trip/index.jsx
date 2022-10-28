@@ -222,7 +222,9 @@ const Trips = ({
               </h1>
 
               <h1 className="font-bold font-OpenSans mb-8 text-base sm:text-xl text-white text-center">
-                Here are some inspirational trips to get you started
+                {router.query.holiday === "1"
+                  ? "Enjoy a tranquil and wild Christmas with your family and friends in the Mara"
+                  : "Here are some inspirational trips to get you started"}
               </h1>
             </div>
           </div>
