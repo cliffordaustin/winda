@@ -345,7 +345,9 @@ const Trips = ({
         <div
           className={
             "h-[80px] sticky bg-white z-20 border-t border-b left-0 right-0 flex justify-center items-center " +
-            (isSafari ? "top-[68px]" : "top-[72.25px]")
+            (isSafari
+              ? "md:top-[84.2px] top-[137.2px]"
+              : "top-[137.2px] md:top-[84.2px]")
           }
         >
           <Tags></Tags>
