@@ -304,9 +304,7 @@ const Card = ({
                       ></Price>
                     </div>
                     <div className="mt-0.5 mb-1.5 font-bold">.</div>
-                    <div className="mt-0.5 font-bold">
-                      /per non-resident/trip
-                    </div>
+                    <div className="mt-0.5 font-bold">/per person/trip</div>
                   </div>
                 </div>
               </div>
