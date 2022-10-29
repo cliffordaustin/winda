@@ -68,6 +68,13 @@ function Listing({
           listing.emperor_suite_room_price;
   };
 
+  const getStandardRoomPrice = (stay) => {
+    const standardRoom = stay.type_of_rooms.find(
+      (room) => room.is_standard === true
+    );
+    return standardRoom.price;
+  };
+
   const [cartLoading, setCartLoading] = useState(false);
 
   const [listingIsInCart, setListingIsInCart] = useState(false);
@@ -287,11 +294,20 @@ function Listing({
               <div className="flex flex-col gap-1">
                 <h1 className="text-gray-500 truncate">{listing.name}</h1>
                 <div className="flex">
-                  <Price stayPrice={price()}></Price>
+                  {listing.is_an_event && (
+                    <span className="uppercase mr-1 text-xs text-gray-500 self-end mb-1">
+                      From
+                    </span>
+                  )}
+                  {!listing.is_an_event && <Price stayPrice={price()}></Price>}
+                  {listing.is_an_event && (
+                    <Price stayPrice={getStandardRoomPrice(listing)}></Price>
+                  )}
                   <span className="mt-[4.5px] text-gray-500 text-sm">
-                    {listing.per_house
-                      ? "/per property/per night"
-                      : "/per person/per night"}
+                    {!listing.is_an_event &&
+                      (listing.per_house
+                        ? "/per property/per night"
+                        : "/per person/per night")}
                   </span>
                 </div>
               </div>

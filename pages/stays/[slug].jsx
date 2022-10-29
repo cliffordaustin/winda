@@ -710,7 +710,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
     email: formik.values.email,
     amount: total(),
     publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
-    currency: "KES",
+    currency: process.env.NODE_ENV === "production" ? "USD" : "GHS",
   };
 
   const onSuccess = (reference) => {
@@ -782,14 +782,8 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
   }, []);
 
   const [eventDate, setEventDate] = useState({
-    from:
-      (router.query.starting_date && new Date(router.query.starting_date)) ||
-      (stay.date_starts_from_ninth
-        ? new Date(2022, 9, 9)
-        : new Date(2022, 9, 8)),
-    to:
-      (router.query.end_date && new Date(router.query.end_date)) ||
-      new Date(2022, 9, 10),
+    from: new Date(),
+    to: new Date().setDate(new Date().getDate() + 1),
   });
 
   function SelectDate({ close }) {
@@ -798,9 +792,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
         <DayPicker
           mode="range"
           disabled={{
-            before: stay.date_starts_from_ninth
-              ? new Date(2022, 9, 9)
-              : new Date(2022, 9, 8),
+            before: new Date(),
           }}
           selected={eventDate}
           onSelect={(date) => {
@@ -808,8 +800,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               setEventDate(date);
             }
           }}
-          min={stay.has_min_date ? 2 : 1}
-          defaultMonth={new Date(2022, 9)}
           numberOfMonths={2}
           className="rounded-lg !w-full p-4"
         />
@@ -1036,15 +1026,13 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
             moment(new Date(router.query.starting_date)).format(
               "YYYY-MM-DD"
             )) ||
-          moment(
-            stay.date_starts_from_ninth
-              ? new Date(2022, 9, 9)
-              : new Date(2022, 9, 8)
-          ).format("YYYY-MM-DD"),
+          moment(new Date()).format("YYYY-MM-DD"),
         end_date:
           (router.query.end_date &&
             moment(new Date(router.query.end_date)).format("YYYY-MM-DD")) ||
-          moment(new Date(2022, 9, 10)).format("YYYY-MM-DD"),
+          moment(new Date().setDate(new Date().getDate() + 1)).format(
+            "YYYY-MM-DD"
+          ),
         // passengers: Number(router.query.passengers) || 0,
         checkout_page: 1,
       },
@@ -1169,18 +1157,18 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
         </Head>
         <GlobalStyle></GlobalStyle>
 
-        {stay.is_an_event && (
+        {/* {stay.is_an_event && (
           <div className="md:hidden">
             <ContactBanner></ContactBanner>
           </div>
-        )}
+        )} */}
 
         <div className="sticky md:fixed top-0 w-full bg-white z-20">
-          {stay.is_an_event && (
+          {/* {stay.is_an_event && (
             <div className="hidden md:block">
               <ContactBanner></ContactBanner>
             </div>
-          )}
+          )} */}
 
           <Navbar
             showDropdown={state.showDropdown}
@@ -1206,22 +1194,24 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
             }
           ></Navbar>
 
-          <Transition
-            enter="transition-all ease-in duration-150"
-            leave="transition-all ease-out duration-150"
-            enterFrom="opacity-0 scale-50"
-            enterTo="opacity-100 scale-100"
-            leaveFrom="opacity-100 scale-100"
-            leaveTo="opacity-0 scale-50"
-            show={!inView}
-            className={
-              stay.is_an_event
-                ? "h-[60px] bg-white z-20 border-t border-b left-0 right-0 flex w-full "
-                : "h-[60px] bg-white absolute z-20 border-t border-b left-0 flex w-full md:w-[55.85%] px-3 lg:w-[62.85%] "
-            }
-          >
-            <ScrollTo guestPopup={guestPopup} stay={stay}></ScrollTo>
-          </Transition>
+          {router.query.checkout_page !== "1" && (
+            <Transition
+              enter="transition-all ease-in duration-150"
+              leave="transition-all ease-out duration-150"
+              enterFrom="opacity-0 scale-50"
+              enterTo="opacity-100 scale-100"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-50"
+              show={!inView}
+              className={
+                stay.is_an_event
+                  ? "h-[60px] bg-white z-20 border-t border-b left-0 right-0 flex w-full "
+                  : "h-[60px] bg-white absolute z-20 border-t border-b left-0 flex w-full md:w-[55.85%] px-3 lg:w-[62.85%] "
+              }
+            >
+              <ScrollTo guestPopup={guestPopup} stay={stay}></ScrollTo>
+            </Transition>
+          )}
         </div>
 
         {router.query.checkout_page !== "1" && (
@@ -2835,7 +2825,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                                 <div className="flex">
                                   {room.old_price && (
                                     <Price
-                                      currency="KES"
                                       stayPrice={room.old_price}
                                       className="!text-sm line-through mr-1 self-end mb-0.5 text-red-500"
                                     ></Price>
@@ -2843,7 +2832,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                                   {!room.is_tented_camp &&
                                     !room.not_available && (
                                       <Price
-                                        currency="KES"
                                         stayPrice={
                                           room.price *
                                             (new Date(
@@ -2851,10 +2839,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                                             ).getDate() -
                                               new Date(
                                                 router.query.starting_date
-                                              ).getDate() ||
-                                              (stay.date_starts_from_ninth
-                                                ? 1
-                                                : 2)) *
+                                              ).getDate() || 1) *
                                             (Number(router.query.rooms) || 1) +
                                           (transports[
                                             Number(router.query.transport) || 0
@@ -2875,7 +2860,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                                   {room.is_tented_camp && !room.not_available && (
                                     <>
                                       <Price
-                                        currency="KES"
                                         stayPrice={
                                           room.price *
                                             (new Date(
@@ -2883,10 +2867,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                                             ).getDate() -
                                               new Date(
                                                 router.query.starting_date
-                                              ).getDate() ||
-                                              (stay.date_starts_from_ninth
-                                                ? 1
-                                                : 2)) *
+                                              ).getDate() || 1) *
                                             (Number(router.query.adults) || 1) +
                                           (transports[
                                             Number(router.query.transport) || 0
@@ -3123,21 +3104,13 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                               {!router.query.starting_date &&
                                 !router.query.end_date && (
                                   <div className="mt-1">
-                                    from{" "}
+                                    from {moment(new Date()).format("Do MMM")} -{" "}
                                     {moment(
-                                      stay.date_starts_from_ninth
-                                        ? new Date(2022, 9, 9)
-                                        : new Date(2022, 9, 8)
+                                      new Date().setDate(
+                                        new Date().getDate() + 1
+                                      )
                                     ).format("Do MMM")}{" "}
-                                    -{" "}
-                                    {moment(new Date(2022, 9, 10)).format(
-                                      "Do MMM"
-                                    )}{" "}
-                                    ({stay.date_starts_from_ninth ? "1" : "2"}{" "}
-                                    {stay.date_starts_from_ninth
-                                      ? "night"
-                                      : "nights"}
-                                    )
+                                    (1 night)
                                   </div>
                                 )}
                             </div>
@@ -4387,7 +4360,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                             Number(router.query.room_type)
                           ] && (
                             <Price
-                              currency="KES"
                               stayPrice={
                                 stay.type_of_rooms[
                                   Number(router.query.room_type)
@@ -4437,7 +4409,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                         {stay.type_of_rooms[Number(router.query.room_type)]
                           .is_tented_camp && (
                           <Price
-                            currency="KES"
                             stayPrice={
                               totalPriceOfStayForTentedCamp(
                                 stay.type_of_rooms[
@@ -4457,7 +4428,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                         {!stay.type_of_rooms[Number(router.query.room_type)]
                           .is_tented_camp && (
                           <Price
-                            currency="KES"
                             stayPrice={
                               totalPriceOfStay(
                                 stay.type_of_rooms[
@@ -4483,7 +4453,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
                           <div className="text-sm font-bold">
                             <Price
-                              currency="KES"
+                              
                               stayPrice={
                                 selected.name.toLowerCase() == "van"
                                   ? stay.car_transfer_price *
@@ -4510,7 +4480,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       {!stay.type_of_rooms[Number(router.query.room_type)]
                         .is_tented_camp && (
                         <Price
-                          currency="KES"
                           stayPrice={totalPriceOfStay(
                             stay.type_of_rooms[Number(router.query.room_type)]
                               .price
@@ -4522,7 +4491,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       {stay.type_of_rooms[Number(router.query.room_type)]
                         .is_tented_camp && (
                         <Price
-                          currency="KES"
                           stayPrice={totalPriceOfStayForTentedCamp(
                             stay.type_of_rooms[Number(router.query.room_type)]
                               .price
@@ -4677,7 +4645,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
                   <div className="h-[0.4px] w-[100%] bg-gray-400 my-6"></div>
 
-                  <div>
+                  {/* <div>
                     <div className="flex items-center gap-2">
                       <h1 className="font-bold text-xl mb-2">Pay with Mpesa</h1>
                       <div className="relative w-20 h-16">
@@ -4711,7 +4679,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                         {stay.type_of_rooms[Number(router.query.room_type)]
                           .is_tented_camp && (
                           <Price
-                            currency="KES"
                             stayPrice={totalPriceOfStayForTentedCamp(
                               stay.type_of_rooms[Number(router.query.room_type)]
                                 .price
@@ -4723,7 +4690,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                         {!stay.type_of_rooms[Number(router.query.room_type)]
                           .is_tented_camp && (
                           <Price
-                            currency="KES"
                             stayPrice={totalPriceOfStay(
                               stay.type_of_rooms[Number(router.query.room_type)]
                                 .price
@@ -4767,7 +4733,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                         ) : null}
                       </div>
                     </div>
-                  </div>
+                  </div> */}
 
                   <Dialogue
                     isOpen={showMessage}
@@ -4829,11 +4795,11 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     <div className="flex gap-2 w-full">
                       <Button
                         onClick={() => {
-                          router.replace("/gondwana");
+                          router.replace("/stays?holiday=1");
                         }}
                         className="flex w-[60%] mt-3 mb-3 items-center gap-1 !px-0 !py-3 font-bold !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white"
                       >
-                        <span>Back to Gondwana</span>
+                        <span>Other holiday offers</span>
                       </Button>
 
                       <Button
@@ -4847,7 +4813,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     </div>
                   </Dialogue>
 
-                  <div className="mt-8">
+                  {/* <div className="mt-8">
                     <Button
                       onClick={() => {
                         formik.handleSubmit();
@@ -4864,22 +4830,21 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                         ></LoadingSpinerChase>
                       </div>
                     </Button>
-                  </div>
+                  </div> */}
 
-                  <div className="mt-4 flex gap-4 items-center">
+                  {/* <div className="mt-4 flex gap-4 items-center">
                     <div className="flex-grow h-px bg-gray-300"></div>
                     <div className="text-sm font-bold text-center">
-                      Or pay with card
+                      pay with card
                     </div>
                     <div className="flex-grow h-px bg-gray-300"></div>
-                  </div>
+                  </div> */}
 
                   <div className="flex justify-between items-center">
                     <h1 className="font-bold">Price</h1>
                     {stay.type_of_rooms[Number(router.query.room_type)]
                       .is_tented_camp && (
                       <Price
-                        currency="KES"
                         stayPrice={totalPriceOfStayForTentedCamp(
                           stay.type_of_rooms[Number(router.query.room_type)]
                             .price
@@ -4891,7 +4856,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     {!stay.type_of_rooms[Number(router.query.room_type)]
                       .is_tented_camp && (
                       <Price
-                        currency="KES"
                         stayPrice={totalPriceOfStay(
                           stay.type_of_rooms[Number(router.query.room_type)]
                             .price
@@ -4906,7 +4870,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     {stay.type_of_rooms[Number(router.query.room_type)]
                       .is_tented_camp && (
                       <Price
-                        currency="KES"
                         stayPrice={
                           totalPriceOfStayForTentedCamp(
                             stay.type_of_rooms[Number(router.query.room_type)]
@@ -4920,7 +4883,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     {!stay.type_of_rooms[Number(router.query.room_type)]
                       .is_tented_camp && (
                       <Price
-                        currency="KES"
                         stayPrice={
                           totalPriceOfStay(
                             stay.type_of_rooms[Number(router.query.room_type)]
@@ -4937,7 +4899,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     {stay.type_of_rooms[Number(router.query.room_type)]
                       .is_tented_camp && (
                       <Price
-                        currency="KES"
                         stayPrice={
                           totalPriceOfStayForTentedCamp(
                             stay.type_of_rooms[Number(router.query.room_type)]
@@ -4956,7 +4917,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     {!stay.type_of_rooms[Number(router.query.room_type)]
                       .is_tented_camp && (
                       <Price
-                        currency="KES"
                         stayPrice={
                           totalPriceOfStay(
                             stay.type_of_rooms[Number(router.query.room_type)]
@@ -4983,7 +4943,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                           confirmation_code: false,
                         });
                         if (isValidPhoneNumber(phone || "")) {
-                          setInvalidPhone(true);
+                          setInvalidPhone(false);
                           formik.validateForm().then(() => {
                             initializePayment(onSuccess);
                           });
@@ -4994,7 +4954,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       type="submit"
                       className="flex w-full mt-3 mb-3 items-center gap-1 !px-0 !py-3 font-bold !bg-blue-600 !text-white"
                     >
-                      <span>Use a card</span>
+                      <span>Pay now</span>
                       <Icon icon="bxs:lock-alt" className="w-5 h-5" />
 
                       <div

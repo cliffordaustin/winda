@@ -413,10 +413,10 @@ function TripDetail({ userProfile, userTrips, trip }) {
     amount: total(),
     publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
     currency: process.env.NODE_ENV === "production" ? "USD" : "KES",
-    mobile_money: {
-      phone: "+254725052346",
-      provider: "mtn",
-    },
+    // mobile_money: {
+    //   phone: "+254725052346",
+    //   provider: "mpesa",
+    // },
   };
 
   const [
