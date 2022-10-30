@@ -23,6 +23,7 @@ import SearchOptions from "../components/ui/SearchOptions";
 import Dialogue from "../components/Home/Dialogue";
 import { Icon } from "@iconify/react";
 import TravelConciergeBanner from "../components/Home/TravelConciergeBanner";
+import Cookies from "js-cookie";
 
 export default function Home({ userProfile }) {
   const router = useRouter();

@@ -92,6 +92,7 @@ function Navbar({ userProfile }) {
 
   const changeCurrency = (currency) => {
     Cookies.set("currency", currency);
+    Cookies.set("defaultCurrency", "0");
     router.reload();
   };
 

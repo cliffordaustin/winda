@@ -13,6 +13,8 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import Head from "next/head";
 import Script from "next/script";
 import { priceConversionRateFunc } from "../lib/PriceRate";
+import Cookies from "js-cookie";
+import axios from "axios";
 
 NProgress.configure({
   minimum: 0.3,
@@ -48,6 +50,24 @@ function MyApp({ Component, pageProps, router }) {
 
   useEffect(() => {
     priceConversionRateFunc(dispatch);
+  }, []);
+
+  const getUserLocation = async () => {
+    if (Cookies.get("defaultCurrency") !== "0") {
+      try {
+        const res = await axios.get(
+          `https://api.ipgeolocation.io/ipgeo?apiKey=${process.env.NEXT_PUBLIC_IPGEOLOCATION_API_KEY}`
+        );
+
+        if (res.data.currency.code === "KES") {
+          Cookies.set("currency", "KES");
+        }
+      } catch (error) {}
+    }
+  };
+
+  useEffect(() => {
+    getUserLocation();
   }, []);
 
   return (
