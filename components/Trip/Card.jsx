@@ -359,7 +359,7 @@ const Card = ({
           {listing.total_number_of_days > 1 ? "days" : "day"}
         </div>
         <div className="text-base text-gray-700 font-bold truncate">
-          {listing.name} this is the name of the listing
+          {listing.name}
         </div>
 
         <p className="mt-2 text-sm text-gray-500">
