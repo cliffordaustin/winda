@@ -58,6 +58,7 @@ function MyApp({ Component, pageProps, router }) {
         );
 
         if (res.data.currency.code === "ZAR") {
+          priceConversionRateFunc(dispatch);
           dispatch({
             type: "CHANGE_CURRENCY",
             payload: true,
