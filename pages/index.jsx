@@ -25,7 +25,7 @@ import { Icon } from "@iconify/react";
 import TravelConciergeBanner from "../components/Home/TravelConciergeBanner";
 import Cookies from "js-cookie";
 
-export default function Home({ userProfile }) {
+export default function Home({ userProfile, holidayTrips }) {
   const router = useRouter();
 
   const [state, setState] = useState({
@@ -179,21 +179,6 @@ export default function Home({ userProfile }) {
         false
       );
     }
-  }, []);
-
-  const [holidayTrips, setHolidayTrips] = useState([]);
-
-  const getHolidayTrips = async () => {
-    try {
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_baseURL}/recommended-trips/?has_holiday_package=true`
-      );
-      setHolidayTrips(res.data.results);
-    } catch (error) {}
-  };
-
-  useEffect(() => {
-    getHolidayTrips();
   }, []);
 
   return (
@@ -407,6 +392,10 @@ export async function getServerSideProps(context) {
   try {
     const token = getToken(context);
 
+    const holidayTrips = await axios.get(
+      `${process.env.NEXT_PUBLIC_baseURL}/recommended-trips/?has_holiday_package=true`
+    );
+
     if (token) {
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_baseURL}/user/`,
@@ -426,6 +415,7 @@ export async function getServerSideProps(context) {
 
     return {
       props: {
+        holidayTrips: holidayTrips.data.results,
         userProfile: "",
       },
       // statusCode: error.response.statusCode,

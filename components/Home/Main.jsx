@@ -408,7 +408,7 @@ function Main({ holidayTrips }) {
 
       <div className="flex flex-col px-2 gap-4">
         <h1 className="font-black text-2xl ml-2 text-center">
-          Holiday Special
+          Holiday Special Packages
         </h1>
 
         <div className="mb-8">
@@ -535,7 +535,7 @@ function Main({ holidayTrips }) {
         </div>
       </div>
 
-      <div className="my-6">
+      {/* <div className="my-6">
         <h1 className="font-black text-2xl ml-2 text-center">
           It&apos;s as easy as it gets
         </h1>
@@ -575,7 +575,7 @@ function Main({ holidayTrips }) {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* <div className="px-2">
         <Swiper
@@ -916,7 +916,7 @@ function Main({ holidayTrips }) {
               ></Carousel>
 
               <h1 className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
-                Campings
+                Camping
               </h1>
 
               <Link href="/stays?type_of_stay=CAMPSITE">
