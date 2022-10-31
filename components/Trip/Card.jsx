@@ -489,17 +489,10 @@ const Card = ({
 
       {/* <div className="fixed w-full h-12 bg-red-400"></div> */}
 
-      <div
-        onClick={() => {
-          setShowDialogue(true);
-          Mixpanel.track("User used the quick lookup feature", {
-            name_of_trip: listing.name,
-          });
-        }}
-        className="absolute cursor-pointer top-1.5 left-1.5 w-fit px-1 rounded-md flex items-center gap-0.5 font-bold text-sm py-[2px] bg-white"
-      >
-        <Icon className="w-5 h-5" icon="bx:search-alt" />
-        <div className="text-sm font-bold">Quick lookup</div>
+      <div className="absolute cursor-pointer top-1.5 left-1.5 w-fit px-1 rounded-md flex items-center gap-0.5 font-bold text-sm py-[2px] bg-white">
+        <div className="text-sm font-bold">
+          {listing.area_covered.split(",")[0]}
+        </div>
         {/* {listing.total_number_of_days}{" "}
         {listing.total_number_of_days > 1 ? "days" : "day"} */}
       </div>

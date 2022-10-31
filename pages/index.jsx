@@ -23,6 +23,7 @@ import SearchOptions from "../components/ui/SearchOptions";
 import Dialogue from "../components/Home/Dialogue";
 import { Icon } from "@iconify/react";
 import TravelConciergeBanner from "../components/Home/TravelConciergeBanner";
+import Cookies from "js-cookie";
 
 export default function Home({ userProfile }) {
   const router = useRouter();
@@ -178,6 +179,21 @@ export default function Home({ userProfile }) {
         false
       );
     }
+  }, []);
+
+  const [holidayTrips, setHolidayTrips] = useState([]);
+
+  const getHolidayTrips = async () => {
+    try {
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_baseURL}/recommended-trips/?has_holiday_package=true`
+      );
+      setHolidayTrips(res.data.results);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    getHolidayTrips();
   }, []);
 
   return (
@@ -372,34 +388,10 @@ export default function Home({ userProfile }) {
             </div>
           </Dialogue>
         )}
-
-        {/* <div className="absolute top-4 w-full z-50">
-          <Navbar
-            showDropdown={state.showDropdown}
-            userProfile={userProfile}
-            currentNavState={state.currentNavState}
-            setCurrentNavState={(currentNavState) => {
-              setState({
-                ...state,
-                currentNavState: currentNavState,
-                showCheckOutDate: false,
-                showCheckInDate: false,
-                showPopup: false,
-              });
-            }}
-            changeShowDropdown={() =>
-              setState({
-                ...state,
-                showDropdown: !state.showDropdown,
-              })
-            }
-            isHomePage={true}
-          ></Navbar>
-        </div> */}
       </div>
 
       <div className="md:mt-16 mb-8 2xl:w-4/6 2xl:mx-auto">
-        <Main></Main>
+        <Main holidayTrips={holidayTrips}></Main>
       </div>
 
       <div className="mt-14">
