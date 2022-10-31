@@ -448,7 +448,7 @@ function Navbar({ userProfile }) {
             </div>
 
             <div></div>
-            <Link href="/trip">
+            {/* <Link href="/trip">
               <a>
                 <Button
                   onClick={() => {
@@ -462,7 +462,7 @@ function Navbar({ userProfile }) {
             </Link>
             <Link href="/login">
               <a className="font-bold">Login</a>
-            </Link>
+            </Link> */}
           </div>
 
           <div className="md:hidden">
@@ -839,14 +839,14 @@ function Navbar({ userProfile }) {
             btnPopover={
               <>
                 {(!currency || currency === "USD") && (
-                  <div className="flex items-center underline font-bold">
+                  <div className="flex mt-1 items-center underline font-bold">
                     <Icon icon="fxemoji:heavydollarsign" />
                     <span className="text-sm">USD</span>
                   </div>
                 )}
 
                 {currency && currency === "KES" && (
-                  <div className="flex items-center underline font-bold">
+                  <div className="flex mt-1 items-center underline font-bold">
                     <span className="text-sm">KES</span>
                   </div>
                 )}

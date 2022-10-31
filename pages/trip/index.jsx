@@ -188,6 +188,8 @@ const Trips = ({
     }
   }, []);
 
+  const isHolidayTrip = router.query.holiday === "1" ? true : false;
+
   return (
     <div
       onClick={() => {
@@ -201,149 +203,151 @@ const Trips = ({
         <Navbar userProfile={userProfile}></Navbar>
       </div>
 
-      <div className="">
-        <div className="w-full h-500 relative before:absolute before:h-full before:w-full before:bg-black before:z-20 before:opacity-60">
-          <Image
-            className={"w-full md:w-full"}
-            layout="fill"
-            objectFit="cover"
-            src="/images/image-header.jpg"
-            sizes="380"
-            alt="Image Gallery"
-            priority
-          />
+      {!isHolidayTrip && (
+        <div className="">
+          <div className="w-full h-500 relative before:absolute before:h-full before:w-full before:bg-black before:z-20 before:opacity-60">
+            <Image
+              className={"w-full md:w-full"}
+              layout="fill"
+              objectFit="cover"
+              src="/images/image-header.jpg"
+              sizes="380"
+              alt="Image Gallery"
+              priority
+            />
 
-          <div className="absolute flex flex-col items-center justify-center top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 z-20 w-full px-6 md:px-0">
-            <div>
-              <h1 className="font-black font-SourceSans mb-2 text-3xl sm:text-4xl md:text-5xl xl:text-7xl text-white uppercase text-center">
-                {router.query.holiday === "1"
-                  ? "Special Holiday Offers"
-                  : "Your Journey simplified"}
-              </h1>
+            <div className="absolute flex flex-col items-center justify-center top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 z-20 w-full px-6 md:px-0">
+              <div>
+                <h1 className="font-black font-SourceSans mb-2 text-3xl sm:text-4xl md:text-5xl xl:text-7xl text-white uppercase text-center">
+                  {router.query.holiday === "1"
+                    ? "Special Holiday Offers"
+                    : "Your Journey simplified"}
+                </h1>
 
-              <h1 className="font-bold font-OpenSans mb-8 text-base sm:text-xl text-white text-center">
-                {router.query.holiday === "1"
-                  ? "Here are some special rates for our very special customers. Explore them below!"
-                  : "Here are some inspirational trips to get you started"}
-              </h1>
+                <h1 className="font-bold font-OpenSans mb-8 text-base sm:text-xl text-white text-center">
+                  {router.query.holiday === "1"
+                    ? "Here are some special rates for our very special customers. Explore them below!"
+                    : "Here are some inspirational trips to get you started"}
+                </h1>
+              </div>
             </div>
-          </div>
 
-          <div className="absolute z-[30] flex bottom-20 w-[95%] md:w-[600px] lg:w-[700px] left-2/4 -translate-x-2/4 h-14 bg-white rounded-lg">
-            <div
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowLocation(!showLocation);
-                setShowPricePopup(false);
-              }}
-              className="w-[60%] relative md:w-[70%] flex items-center h-full rounded-tl-lg rounded-bl-lg bg-white border-r border-gray-300"
-            >
-              <Search
-                inputBoxClassName="border-0 "
-                searchClass="w-full"
-                location={location}
-                handlePropagation={() => {}}
-                placeholder="Search for a place"
-                setLocation={setLocation}
-                search={search}
-                onKeyDown={keyDownSearch}
-              ></Search>
-
-              {showLocation && !location && (
-                <PopularLocationsDropdown
-                  setLocation={(location) => {
-                    setLocation(location);
-                    search(location);
-                  }}
-                  className="w-[100%]"
-                ></PopularLocationsDropdown>
-              )}
-            </div>
-            <div className="w-[40%] md:w-[30%] flex">
+            <div className="absolute z-[30] flex bottom-20 w-[95%] md:w-[600px] lg:w-[700px] left-2/4 -translate-x-2/4 h-14 bg-white rounded-lg">
               <div
-                onClick={() => {
-                  setShowPricePopup(!showPricePopup);
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowLocation(!showLocation);
+                  setShowPricePopup(false);
                 }}
-                className="w-full relative cursor-pointer pl-3 gap-2 h-full bg-white rounded-tr-lg rounded-br-lg flex items-center"
+                className="w-[60%] relative md:w-[70%] flex items-center h-full rounded-tl-lg rounded-bl-lg bg-white border-r border-gray-300"
               >
-                <Icon
-                  className="w-6 h-6 text-gray-500"
-                  icon="material-symbols:price-change-outline-rounded"
-                />
-                <div className="text-sm text-gray-500">
-                  {router.query.price === "1"
-                    ? "Reasonable"
-                    : router.query.price === "2"
-                    ? "Mid Range"
-                    : router.query.price === "3"
-                    ? "Luxury"
-                    : "Filter by price"}
-                </div>
+                <Search
+                  inputBoxClassName="border-0 "
+                  searchClass="w-full"
+                  location={location}
+                  handlePropagation={() => {}}
+                  placeholder="Search for a place"
+                  setLocation={setLocation}
+                  search={search}
+                  onKeyDown={keyDownSearch}
+                ></Search>
 
-                <Dropdown
-                  showDropdown={showPricePopup}
-                  className="absolute -left-20 sm:-left-0 md:-left-10 !z-30 lg:left-[5%] top-full mt-2 w-56"
+                {showLocation && !location && (
+                  <PopularLocationsDropdown
+                    setLocation={(location) => {
+                      setLocation(location);
+                      search(location);
+                    }}
+                    className="w-[100%]"
+                  ></PopularLocationsDropdown>
+                )}
+              </div>
+              <div className="w-[40%] md:w-[30%] flex">
+                <div
+                  onClick={() => {
+                    setShowPricePopup(!showPricePopup);
+                  }}
+                  className="w-full relative cursor-pointer pl-3 gap-2 h-full bg-white rounded-tr-lg rounded-br-lg flex items-center"
                 >
-                  <div
-                    onClick={() => {
-                      router.push({
-                        query: {
-                          ...router.query,
-                          price: "1",
-                        },
-                      });
-                    }}
-                    className={
-                      "w-full py-3 px-2 font-bold text-sm " +
-                      (router.query.price === "1"
-                        ? "bg-gray-700 text-white"
-                        : " hover:bg-gray-200 transition-all duration-300 ease-linear")
-                    }
-                  >
-                    Reasonable
+                  <Icon
+                    className="w-6 h-6 text-gray-500"
+                    icon="material-symbols:price-change-outline-rounded"
+                  />
+                  <div className="text-sm text-gray-500">
+                    {router.query.price === "1"
+                      ? "Reasonable"
+                      : router.query.price === "2"
+                      ? "Mid Range"
+                      : router.query.price === "3"
+                      ? "Luxury"
+                      : "Filter by price"}
                   </div>
-                  <div
-                    onClick={() => {
-                      router.push({
-                        query: {
-                          ...router.query,
-                          price: "2",
-                        },
-                      });
-                    }}
-                    className={
-                      "w-full py-3 px-2 font-bold text-sm " +
-                      (router.query.price === "2"
-                        ? "bg-gray-700 text-white"
-                        : " hover:bg-gray-200 transition-all duration-300 ease-linear")
-                    }
+
+                  <Dropdown
+                    showDropdown={showPricePopup}
+                    className="absolute -left-20 sm:-left-0 md:-left-10 !z-30 lg:left-[5%] top-full mt-2 w-56"
                   >
-                    Mid Range
-                  </div>
-                  <div
-                    onClick={() => {
-                      router.push({
-                        query: {
-                          ...router.query,
-                          price: "3",
-                        },
-                      });
-                    }}
-                    className={
-                      "w-full py-3 px-2 font-bold text-sm " +
-                      (router.query.price === "3"
-                        ? "bg-gray-700 text-white"
-                        : " hover:bg-gray-200 transition-all duration-300 ease-linear")
-                    }
-                  >
-                    Luxury
-                  </div>
-                </Dropdown>
+                    <div
+                      onClick={() => {
+                        router.push({
+                          query: {
+                            ...router.query,
+                            price: "1",
+                          },
+                        });
+                      }}
+                      className={
+                        "w-full py-3 px-2 font-bold text-sm " +
+                        (router.query.price === "1"
+                          ? "bg-gray-700 text-white"
+                          : " hover:bg-gray-200 transition-all duration-300 ease-linear")
+                      }
+                    >
+                      Reasonable
+                    </div>
+                    <div
+                      onClick={() => {
+                        router.push({
+                          query: {
+                            ...router.query,
+                            price: "2",
+                          },
+                        });
+                      }}
+                      className={
+                        "w-full py-3 px-2 font-bold text-sm " +
+                        (router.query.price === "2"
+                          ? "bg-gray-700 text-white"
+                          : " hover:bg-gray-200 transition-all duration-300 ease-linear")
+                      }
+                    >
+                      Mid Range
+                    </div>
+                    <div
+                      onClick={() => {
+                        router.push({
+                          query: {
+                            ...router.query,
+                            price: "3",
+                          },
+                        });
+                      }}
+                      className={
+                        "w-full py-3 px-2 font-bold text-sm " +
+                        (router.query.price === "3"
+                          ? "bg-gray-700 text-white"
+                          : " hover:bg-gray-200 transition-all duration-300 ease-linear")
+                      }
+                    >
+                      Luxury
+                    </div>
+                  </Dropdown>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       <div className="w-full pb-20 -mb-6 bg-gray-50">
         <div
