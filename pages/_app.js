@@ -1,5 +1,5 @@
 import "../styles/globals.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Provider, useDispatch } from "react-redux";
 import store, { wrapper } from "../redux/store";
@@ -48,6 +48,8 @@ function MyApp({ Component, pageProps, router }) {
 
   const dispatch = useDispatch();
 
+  const [currencyIskes, setCurrencyIskes] = useState(false);
+
   const getUserLocation = async () => {
     if (Cookies.get("defaultCurrency") !== "0") {
       try {
@@ -55,9 +57,13 @@ function MyApp({ Component, pageProps, router }) {
           `https://api.ipgeolocation.io/ipgeo?apiKey=${process.env.NEXT_PUBLIC_IPGEOLOCATION_API_KEY}`
         );
 
-        if (res.data.currency.code === "KES") {
+        if (res.data.currency.code === "ZAR") {
+          dispatch({
+            type: "CHANGE_CURRENCY",
+            payload: true,
+          });
           Cookies.set("currency", "KES");
-          priceConversionRateFunc(dispatch);
+          setCurrencyIskes(true);
         }
       } catch (error) {}
     }

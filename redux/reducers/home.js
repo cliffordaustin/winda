@@ -10,12 +10,16 @@ const homePageState = {
   currentCartItemActivitiesId: -1,
   currentCartItemName: "",
   mapRoute: [],
+  currencyIskes: false,
 };
 
 const homePageReducer = (state = homePageState, action) => {
   switch (action.type) {
     case "HIDE_TOP_BANNER":
       return { ...state, topBanner: false };
+
+    case "CHANGE_CURRENCY":
+      return { ...state, currencyIskes: action.payload };
 
     case "HIDE_HELP_REORDER_POPUP":
       return { ...state, helpReorderPopup: false };

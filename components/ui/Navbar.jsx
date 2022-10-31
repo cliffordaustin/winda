@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Link from "next/link";
 import Image from "next/image";
+import { useSelector } from "react-redux";
 import { Popover, Transition, Dialog } from "@headlessui/react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper";
@@ -24,6 +25,8 @@ function Navbar({ userProfile }) {
 
   const [isShowingExplore, setIsShowingExplore] = useState(false);
   const [openBurger, setOpenBurger] = useState(false);
+
+  const currencyIskes = useSelector((state) => state.home.currencyIskes);
 
   const navigationPrevRef = React.useRef(null);
   const navigationNextRef = React.useRef(null);
@@ -95,7 +98,7 @@ function Navbar({ userProfile }) {
     router.reload();
   };
 
-  const currency = Cookies.get("currency");
+  const currency = Cookies.get("currency") || currencyIskes ? "KES" : null;
 
   const [showCalendly, setShowCalendly] = useState(false);
 
