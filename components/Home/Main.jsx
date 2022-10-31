@@ -547,18 +547,18 @@ function Main({ holidayTrips }) {
               className="w-12 h-12 icon-gradient"
             />
 
-            <div className="flex flex-col items-center gap-1">
-              <h1 className="font-bold text-red-600 text-lg">Explore</h1>
+            <dniv className="flex flex-col items-center gap-1">
+              <h1 className="font-bold text-lg">Explore</h1>
               <p className="text-sm text-gray-600 text-center">
                 Explore our curated trips and find what you like
               </p>
-            </div>
+            </dniv>
           </div>
 
           <div className="flex flex-col w-[31%] items-center gap-3">
             <Icon icon="bi:calendar-check-fill" className="w-12 h-12" />
             <div className="flex flex-col items-center gap-1">
-              <h1 className="font-bold text-red-600 text-lg">Availability</h1>
+              <h1 className="font-bold text-lg">Availability</h1>
               <p className="text-sm text-gray-600 text-center">
                 Add the number of people and dates to check availability
               </p>
@@ -568,7 +568,7 @@ function Main({ holidayTrips }) {
           <div className="flex flex-col w-[31%] items-center gap-3">
             <Icon icon="fluent:payment-16-filled" className="w-12 h-12" />
             <div className="flex flex-col items-center gap-1">
-              <h1 className="font-bold text-red-600 text-lg">Book</h1>
+              <h1 className="font-bold text-lg">Book</h1>
               <p className="text-sm text-gray-600 text-center">
                 Book your trip
               </p>
