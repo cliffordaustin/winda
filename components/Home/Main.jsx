@@ -450,17 +450,15 @@ function Main({ holidayTrips }) {
                         ></Carousel>
                       </div>
 
-                      <div className="px-2">
+                      <div className="px-2 mt-1">
                         <h1 className="font-bold text-lg truncate">
                           {trip.name}
                         </h1>
-                        <p className="text-gray-600 text-sm">
-                          {trip.area_covered.split(",")[0]} |{" "}
-                          {trip.total_number_of_days}{" "}
-                          {trip.total_number_of_days > 1
-                            ? "days trip"
-                            : "day trip"}
-                        </p>
+                        <div className="absolute cursor-pointer top-1.5 left-1.5 w-fit px-1 rounded-md flex items-center gap-0.5 font-bold text-sm py-[2px] bg-white">
+                          <div className="text-sm font-bold">
+                            {trip.area_covered.split(",")[0]}
+                          </div>
+                        </div>
 
                         <div className="text-sm text-gray-700 flex flex-wrap gap-0.5 items-center">
                           <div className="text-xl mr-0.5 font-bold flex gap-1">
@@ -475,7 +473,10 @@ function Main({ holidayTrips }) {
                               className="!text-lg"
                             ></Price>
                           </div>
-                          <div className="font-bold">/per person</div>
+                          <div className="font-bold">
+                            /per person/{trip.total_number_of_days}{" "}
+                            {trip.total_number_of_days > 1 ? "days" : "day"}
+                          </div>
                         </div>
                       </div>
                     </a>
@@ -771,7 +772,7 @@ function Main({ holidayTrips }) {
         <span className="text-gray-600">Find what suits you</span>
       </h1> */}
 
-      <h1 className="font-bold text-3xl mb-6 font-OpenSans text-center mt-6">
+      <h1 className="font-bold text-2xl mb-6 font-OpenSans text-center mt-6">
         <span className="text-slate-800">Explore on</span>{" "}
         <span className="text-red-500">winda</span>
       </h1>
