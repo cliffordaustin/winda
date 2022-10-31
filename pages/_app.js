@@ -57,7 +57,7 @@ function MyApp({ Component, pageProps, router }) {
           `https://api.ipgeolocation.io/ipgeo?apiKey=${process.env.NEXT_PUBLIC_IPGEOLOCATION_API_KEY}`
         );
 
-        if (res.data.currency.code === "ZAR") {
+        if (res.data.currency.code === "KES") {
           priceConversionRateFunc(dispatch);
           dispatch({
             type: "CHANGE_CURRENCY",
