@@ -55,7 +55,6 @@ function MyApp({ Component, pageProps, router }) {
           `https://api.ipgeolocation.io/ipgeo?apiKey=${process.env.NEXT_PUBLIC_IPGEOLOCATION_API_KEY}`
         );
 
-        console.log("currency code ", res.data.currency);
         if (res.data.currency.code === "KES") {
           Cookies.set("currency", "KES");
           priceConversionRateFunc(dispatch);

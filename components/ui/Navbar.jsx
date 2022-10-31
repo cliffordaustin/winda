@@ -5,7 +5,6 @@ import Image from "next/image";
 import { Popover, Transition, Dialog } from "@headlessui/react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper";
-import SearchSelect from "../Home/SearchSelect";
 import styles from "../../styles/StyledLink.module.css";
 import UserDropdown from "../Home/UserDropdown";
 import Button from "./Button";
