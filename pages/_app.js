@@ -48,10 +48,6 @@ function MyApp({ Component, pageProps, router }) {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    priceConversionRateFunc(dispatch);
-  }, []);
-
   const getUserLocation = async () => {
     if (Cookies.get("defaultCurrency") !== "0") {
       try {
@@ -61,6 +57,7 @@ function MyApp({ Component, pageProps, router }) {
 
         if (res.data.currency.code === "KES") {
           Cookies.set("currency", "KES");
+          priceConversionRateFunc(dispatch);
         }
       } catch (error) {}
     }
@@ -68,6 +65,10 @@ function MyApp({ Component, pageProps, router }) {
 
   useEffect(() => {
     getUserLocation();
+  }, []);
+
+  useEffect(() => {
+    priceConversionRateFunc(dispatch);
   }, []);
 
   return (
