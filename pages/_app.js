@@ -56,6 +56,7 @@ function MyApp({ Component, pageProps, router }) {
         );
 
         if (res.data.currency.code === "KES") {
+          console.log("currency code ", res.data.currency);
           Cookies.set("currency", "KES");
           priceConversionRateFunc(dispatch);
         }
