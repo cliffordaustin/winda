@@ -54,13 +54,24 @@ function MyApp({ Component, pageProps, router }) {
         `https://api.ipgeolocation.io/ipgeo?apiKey=${process.env.NEXT_PUBLIC_IPGEOLOCATION_API_KEY}`
       );
 
-      if (res.data.currency.code === "USD") {
+      if (
+        res.data.currency.code === "KES" &&
+        Cookies.get("defaultCurrency") !== "0"
+      ) {
         dispatch({
           type: "CHANGE_USER_LOCATION",
           payload: true,
         });
         priceConversionRateFunc(dispatch);
         Cookies.set("currency", "KES");
+      } else if (
+        res.data.currency.code === "KES" &&
+        Cookies.get("defaultCurrency") === "0"
+      ) {
+        dispatch({
+          type: "CHANGE_USER_LOCATION",
+          payload: true,
+        });
       }
     } catch (error) {}
   };
