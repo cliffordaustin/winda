@@ -2334,7 +2334,11 @@ function TripDetail({ userProfile, userTrips, trip }) {
                         </div>
 
                         <div className="text-sm font-bold">
-                          {moment(new Date(router.query.starting_date))
+                          {moment(
+                            new Date(
+                              router.query.starting_date.replace(/-/g, "/")
+                            )
+                          )
                             .add(trip.total_number_of_days, "days")
                             .format("DD MMM YYYY")}
                         </div>
@@ -2404,9 +2408,11 @@ function TripDetail({ userProfile, userTrips, trip }) {
                       <div className="flex flex-col gap-2">
                         <div className="font-bold">Starting date</div>
                         <div className="text-sm text-gray-600">
-                          {moment(new Date(router.query.starting_date)).format(
-                            "DD MMM YYYY"
-                          )}
+                          {moment(
+                            new Date(
+                              router.query.starting_date.replace(/-/g, "/")
+                            )
+                          ).format("DD MMM YYYY")}
                         </div>
                       </div>
 
@@ -2788,7 +2794,11 @@ function TripDetail({ userProfile, userTrips, trip }) {
                           </div>
 
                           <div className="text-sm font-bold">
-                            {moment(new Date(router.query.starting_date))
+                            {moment(
+                              new Date(
+                                router.query.starting_date.replace(/-/g, "/")
+                              )
+                            )
                               .add(trip.total_number_of_days, "days")
                               .format("DD MMM YYYY")}
                           </div>
