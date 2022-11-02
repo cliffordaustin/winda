@@ -10,7 +10,7 @@ const homePageState = {
   currentCartItemActivitiesId: -1,
   currentCartItemName: "",
   mapRoute: [],
-  currencyIskes: false,
+  userIsFromKenya: false,
 };
 
 const homePageReducer = (state = homePageState, action) => {
@@ -18,8 +18,8 @@ const homePageReducer = (state = homePageState, action) => {
     case "HIDE_TOP_BANNER":
       return { ...state, topBanner: false };
 
-    case "CHANGE_CURRENCY":
-      return { ...state, currencyIskes: action.payload };
+    case "CHANGE_USER_LOCATION":
+      return { ...state, userIsFromKenya: action.payload };
 
     case "HIDE_HELP_REORDER_POPUP":
       return { ...state, helpReorderPopup: false };

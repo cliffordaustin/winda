@@ -48,26 +48,21 @@ function MyApp({ Component, pageProps, router }) {
 
   const dispatch = useDispatch();
 
-  const [currencyIskes, setCurrencyIskes] = useState(false);
-
   const getUserLocation = async () => {
-    if (Cookies.get("defaultCurrency") !== "0") {
-      try {
-        const res = await axios.get(
-          `https://api.ipgeolocation.io/ipgeo?apiKey=${process.env.NEXT_PUBLIC_IPGEOLOCATION_API_KEY}`
-        );
+    try {
+      const res = await axios.get(
+        `https://api.ipgeolocation.io/ipgeo?apiKey=${process.env.NEXT_PUBLIC_IPGEOLOCATION_API_KEY}`
+      );
 
-        if (res.data.currency.code === "KES") {
-          priceConversionRateFunc(dispatch);
-          dispatch({
-            type: "CHANGE_CURRENCY",
-            payload: true,
-          });
-          Cookies.set("currency", "KES");
-          setCurrencyIskes(true);
-        }
-      } catch (error) {}
-    }
+      if (res.data.currency.code === "USD") {
+        dispatch({
+          type: "CHANGE_USER_LOCATION",
+          payload: true,
+        });
+        priceConversionRateFunc(dispatch);
+        Cookies.set("currency", "KES");
+      }
+    } catch (error) {}
   };
 
   useEffect(() => {

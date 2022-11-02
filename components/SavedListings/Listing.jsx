@@ -19,6 +19,7 @@ const Listing = ({
   stayId,
   transportId,
   activityId,
+  partnerPage,
 }) => {
   const sortedImages = stayPage
     ? stay.stay_images.sort((x, y) => y.main - x.main)
@@ -31,10 +32,29 @@ const Listing = ({
 
   const price = () => {
     return stayPage
-      ? stay.price
+      ? stay.price_non_resident ||
+          stay.price ||
+          stay.per_house_price ||
+          stay.deluxe_price_non_resident ||
+          stay.deluxe_price ||
+          stay.family_room_price_non_resident ||
+          stay.family_room_price ||
+          stay.executive_suite_room_price_non_resident ||
+          stay.executive_suite_room_price ||
+          stay.presidential_suite_room_price_non_resident ||
+          stay.presidential_suite_room_price ||
+          stay.emperor_suite_room_price_non_resident ||
+          stay.emperor_suite_room_price
       : transportPage
       ? transport.price_per_day
       : activity.price;
+  };
+
+  const getStandardRoomPrice = (stay) => {
+    const standardRoom = stay.type_of_rooms.find(
+      (room) => room.is_standard === true
+    );
+    return standardRoom.price;
   };
 
   const [loading, setLoading] = React.useState(false);
@@ -112,7 +132,16 @@ const Listing = ({
             </div>
           )}
           <div className="flex">
-            <Price stayPrice={price()}></Price>
+            {!stay.is_an_event && <Price stayPrice={price()}></Price>}
+            {stay.is_an_event && (
+              <Price stayPrice={getStandardRoomPrice(stay)}></Price>
+            )}
+            <span className="mt-[4.5px] text-gray-500 text-sm">
+              {!stay.is_an_event &&
+                (stay.per_house
+                  ? "/per property/per night"
+                  : "/per person/per night")}
+            </span>
 
             {stayPage && <div className="text-sm mt-1.5">/night</div>}
             {activitiesPage && <div className="text-sm mt-1.5">/person</div>}
@@ -245,52 +274,28 @@ const Listing = ({
           {activitiesPage ? activity.location : stayPage ? stay.location : ""}
         </div>
 
-        <div className="mt-2">
-          <Button
-            onClick={(e) => {
-              unsave(e);
-            }}
-            className="!bg-red-500 !py-1 flex gap-2 !px-1.5"
-          >
-            <span className="text-white text-sm">Unsave</span>
+        {!partnerPage && (
+          <div className="mt-2">
+            <Button
+              onClick={(e) => {
+                unsave(e);
+              }}
+              className="!bg-red-500 !py-1 flex gap-2 !px-1.5"
+            >
+              <span className="text-white text-sm">Unsave</span>
 
-            {loading && (
-              <div>
-                <LoadingSpinerChase width={14} height={14}></LoadingSpinerChase>
-              </div>
-            )}
-          </Button>
-        </div>
+              {loading && (
+                <div>
+                  <LoadingSpinerChase
+                    width={14}
+                    height={14}
+                  ></LoadingSpinerChase>
+                </div>
+              )}
+            </Button>
+          </div>
+        )}
       </Card>
-      {stayPage && (
-        <div>
-          {stay.type_of_stay === "LODGE" && (
-            <div className="absolute top-2 left-2 z-10 px-2 rounded-md bg-green-600 text-white">
-              Lodge
-            </div>
-          )}
-          {stay.type_of_stay === "HOUSE" && (
-            <div className="absolute top-2 left-2 z-10 px-2 rounded-md bg-green-600 text-white">
-              House
-            </div>
-          )}
-          {stay.type_of_stay === "UNIQUE SPACE" && (
-            <div className="absolute top-2 left-2 z-10 px-2 rounded-md bg-green-600 text-white">
-              Unique space
-            </div>
-          )}
-          {stay.type_of_stay === "CAMPSITE" && (
-            <div className="absolute top-2 left-2 z-10 px-2 rounded-md bg-green-600 text-white">
-              Campsite
-            </div>
-          )}
-          {stay.type_of_stay === "BOUTIQUE HOTEL" && (
-            <div className="absolute top-2 left-2 z-10 px-2 rounded-md bg-green-600 text-white">
-              Boutique hotel
-            </div>
-          )}
-        </div>
-      )}
     </div>
   );
 };

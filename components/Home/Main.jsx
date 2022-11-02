@@ -5,6 +5,7 @@ import styles from "../../styles/Main.module.css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Thumbs, Mousewheel } from "swiper";
 import SwiperCore from "swiper";
+import { useDispatch, useSelector } from "react-redux";
 
 import "swiper/css/effect-creative";
 import "swiper/css";
@@ -95,6 +96,8 @@ function Main({ holidayTrips }) {
   };
 
   const [selectedLocation, setSelectedLocation] = useState("");
+
+  const userIsFromKenya = useSelector((state) => state.home.userIsFromKenya);
 
   return (
     <div className="w-full">
@@ -439,6 +442,12 @@ function Main({ holidayTrips }) {
               const images = sortedImages.map((image) => {
                 return image.image;
               });
+
+              const totalPrice = () => {
+                return userIsFromKenya
+                  ? trip.price
+                  : trip.price_non_resident || trip.price;
+              };
               return (
                 <SwiperSlide key={index} className="!w-[320px] cursor-pointer">
                   <Link href={`/trip/${trip.slug}`}>
@@ -469,7 +478,7 @@ function Main({ holidayTrips }) {
                               ></Price>
                             )}
                             <Price
-                              stayPrice={trip.price_non_resident || trip.price}
+                              stayPrice={totalPrice()}
                               className="!text-lg"
                             ></Price>
                           </div>
@@ -798,10 +807,10 @@ function Main({ holidayTrips }) {
           className="!relative"
         >
           <SwiperSlide className="!h-[320px] !w-[320px]">
-            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-lg before:z-20 before:opacity-20">
               <Carousel
                 images={["/images/home/cultural-trip.webp"]}
-                imageClass="rounded-2xl"
+                imageClass="rounded-lg"
                 objectPosition="center"
               ></Carousel>
 
@@ -830,7 +839,7 @@ function Main({ holidayTrips }) {
             <div className="relative h-full w-full">
               <Carousel
                 images={["/images/home/romantic-trip.webp"]}
-                imageClass="rounded-2xl"
+                imageClass="rounded-lg"
               ></Carousel>
 
               <h1 className="text-white text-shadow z-30 font-black absolute top-4 left-4 text-xl">
@@ -854,10 +863,10 @@ function Main({ holidayTrips }) {
             </div>
           </SwiperSlide>
           <SwiperSlide className="!h-[320px] !w-[320px]">
-            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-lg before:z-20 before:opacity-20">
               <Carousel
                 images={["/images/home/roadtrip.webp"]}
-                imageClass="rounded-2xl"
+                imageClass="rounded-lg"
               ></Carousel>
 
               <h1 className="text-white text-shadow z-30 font-black absolute top-4 left-4 text-xl">
@@ -885,7 +894,7 @@ function Main({ holidayTrips }) {
             <div className="relative h-full w-full">
               <Carousel
                 images={["/images/home/romantic-trip.webp"]}
-                imageClass="rounded-2xl"
+                imageClass="rounded-lg"
               ></Carousel>
 
               <h1 className="text-white text-shadow z-30 font-black absolute top-4 left-4 text-xl">
@@ -910,10 +919,10 @@ function Main({ holidayTrips }) {
           </SwiperSlide>
 
           <SwiperSlide className="!h-[320px] !w-[320px]">
-            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-lg before:z-20 before:opacity-20">
               <Carousel
                 images={["/images/home/campsite.webp"]}
-                imageClass="rounded-2xl"
+                imageClass="rounded-lg"
               ></Carousel>
 
               <h1 className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
@@ -938,10 +947,10 @@ function Main({ holidayTrips }) {
           </SwiperSlide>
 
           <SwiperSlide className="!h-[320px] !w-[320px]">
-            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-lg before:z-20 before:opacity-20">
               <Carousel
                 images={["/images/home/uniquespace.webp"]}
-                imageClass="rounded-2xl"
+                imageClass="rounded-lg"
               ></Carousel>
 
               <h1 className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
@@ -966,10 +975,10 @@ function Main({ holidayTrips }) {
           </SwiperSlide>
 
           <SwiperSlide className="!h-[320px] !w-[320px]">
-            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-lg before:z-20 before:opacity-20">
               <Carousel
                 images={["/images/home/lodging.webp"]}
-                imageClass="rounded-2xl"
+                imageClass="rounded-lg"
               ></Carousel>
 
               <h1 className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
@@ -994,10 +1003,10 @@ function Main({ holidayTrips }) {
           </SwiperSlide>
 
           <SwiperSlide className="!h-[320px] !w-[320px]">
-            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-lg before:z-20 before:opacity-20">
               <Carousel
                 images={["/images/home/restaurant.webp"]}
-                imageClass="rounded-2xl"
+                imageClass="rounded-lg"
               ></Carousel>
 
               <h1 className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
@@ -1022,10 +1031,10 @@ function Main({ holidayTrips }) {
           </SwiperSlide>
 
           <SwiperSlide className="!h-[320px] !w-[320px]">
-            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-lg before:z-20 before:opacity-20">
               <Carousel
                 images={["/images/home/culture-activity.webp"]}
-                imageClass="rounded-2xl"
+                imageClass="rounded-lg"
               ></Carousel>
 
               <h1 className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
@@ -1050,10 +1059,10 @@ function Main({ holidayTrips }) {
           </SwiperSlide>
 
           <SwiperSlide className="!h-[320px] !w-[320px]">
-            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
+            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-lg before:z-20 before:opacity-20">
               <Carousel
                 images={["/images/home/weekend-getaway-activity.webp"]}
-                imageClass="rounded-2xl"
+                imageClass="rounded-lg"
               ></Carousel>
 
               <h1 className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">

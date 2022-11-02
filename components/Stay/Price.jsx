@@ -10,7 +10,15 @@ const Price = ({ stayPrice, className = "", currency = "$" }) => {
     (state) => state.stay.priceConversionRate
   );
 
-  const currencySymbol = Cookies.get("currency");
+  const userIsFromKenya = useSelector((state) => state.home.userIsFromKenya);
+
+  const [currencySymbol, setCurrencySymbol] = useState(Cookies.get("currency"));
+
+  useEffect(() => {
+    if (Cookies.get("defaultCurrency") !== "0") {
+      setCurrencySymbol(userIsFromKenya ? "KES" : null);
+    }
+  }, [userIsFromKenya]);
 
   return (
     <ClientOnly>

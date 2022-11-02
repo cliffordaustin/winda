@@ -33,7 +33,7 @@ import Share from "../../components/Stay/Share";
 import AllReviews from "../../components/Stay/AllReviews";
 import getCart from "../../lib/getCart";
 import ClientOnly from "../../components/ClientOnly";
-import DatePicker from "../../components/ui/DatePickerRange";
+// import DatePicker from "../../components/ui/DatePickerRange";
 import Footer from "../../components/Home/Footer";
 import ScrollTo from "../../components/Stay/ScrollTo";
 import { useRef } from "react";
@@ -770,6 +770,14 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
     );
   };
 
+  const getDisabledDates = () => {
+    return stay.unavailable_dates
+      ? stay.unavailable_dates.map((date) => {
+          return new Date(date);
+        })
+      : [];
+  };
+
   const [isSafari, setIsSafari] = useState(false);
 
   useEffect(() => {
@@ -791,9 +799,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
       <div className="w-full">
         <DayPicker
           mode="range"
-          disabled={{
-            before: new Date(),
-          }}
+          disabled={[{ before: new Date() }, ...getDisabledDates()]}
           selected={eventDate}
           onSelect={(date) => {
             if (date) {
@@ -1099,11 +1105,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
         <div className="p-4">
           <DayPicker
             mode="range"
-            disabled={{
-              before: stay.date_starts_from_ninth
-                ? new Date(2022, 9, 9)
-                : new Date(2022, 9, 8),
-            }}
+            disabled={[{ before: new Date() }, ...getDisabledDates()]}
             selected={eventDate}
             onSelect={(date) => {
               if (date) {
@@ -1740,11 +1742,19 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                                 Select checkout date
                               </div>
                             )}
-                          <DatePicker
-                            setDate={setAddToCartDate}
-                            date={addToCartDate}
-                            disableDate={new Date()}
-                          ></DatePicker>
+                          <DayPicker
+                            mode="range"
+                            disabled={[
+                              { before: new Date() },
+                              ...getDisabledDates(),
+                            ]}
+                            selected={addToCartDate}
+                            onSelect={(date) => {
+                              if (date) {
+                                setAddToCartDate(date);
+                              }
+                            }}
+                          />
                           {addToCartDate &&
                             (addToCartDate.from || addToCartDate.to) && (
                               <div
@@ -3556,11 +3566,19 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                 >
                   <div className="">
                     {
-                      <DatePicker
-                        setDate={setAddToCartDate}
-                        date={addToCartDate}
-                        disableDate={new Date()}
-                      ></DatePicker>
+                      <DayPicker
+                        mode="range"
+                        disabled={[
+                          { before: new Date() },
+                          ...getDisabledDates(),
+                        ]}
+                        selected={addToCartDate}
+                        onSelect={(date) => {
+                          if (date) {
+                            setAddToCartDate(date);
+                          }
+                        }}
+                      />
                     }
                   </div>
 

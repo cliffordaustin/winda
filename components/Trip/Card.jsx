@@ -98,8 +98,12 @@ const Card = ({
       });
   };
 
+  const userIsFromKenya = useSelector((state) => state.home.userIsFromKenya);
+
   const totalPrice = () => {
-    return listing.price_non_resident || listing.price;
+    return userIsFromKenya
+      ? listing.price
+      : listing.price_non_resident || listing.price;
   };
 
   const [showDialogue, setShowDialogue] = useState(false);

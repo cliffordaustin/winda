@@ -409,6 +409,7 @@ export async function getServerSideProps(context) {
       return {
         props: {
           userProfile: response.data[0],
+          holidayTrips: holidayTrips.data.results,
         },
       };
     }
@@ -432,6 +433,7 @@ export async function getServerSideProps(context) {
       return {
         props: {
           userProfile: "",
+          holidayTrips: [],
         },
         // statusCode: error.response.statusCode,
       };

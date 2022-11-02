@@ -49,6 +49,8 @@ import Input from "../../../components/ui/Input";
 import { Mixpanel } from "../../../lib/mixpanelconfig";
 import Navbar from "../../../components/ui/Navbar";
 import TravelConciergeBanner from "../../../components/Home/TravelConciergeBanner";
+import { useSelector } from "react-redux";
+import { set } from "nprogress";
 
 function TripDetail({ userProfile, userTrips, trip }) {
   const GlobalStyle = createGlobalStyle`
@@ -176,8 +178,10 @@ function TripDetail({ userProfile, userTrips, trip }) {
       });
   };
 
+  const userIsFromKenya = useSelector((state) => state.home.userIsFromKenya);
+
   const totalPrice = () => {
-    return trip.price_non_resident || trip.price;
+    return userIsFromKenya ? trip.price : trip.price_non_resident || trip.price;
   };
 
   const tripSortedImages = trip.single_trip_images.sort(
@@ -209,6 +213,11 @@ function TripDetail({ userProfile, userTrips, trip }) {
   const [guest, setGuest] = useState(0);
 
   const [nonResidentGuest, setNonResidentGuest] = useState(1);
+
+  useEffect(() => {
+    setGuest(userIsFromKenya ? 1 : 0);
+    setNonResidentGuest(userIsFromKenya ? 0 : 1);
+  }, [userIsFromKenya]);
 
   const [showMap, setShowMap] = useState(false);
 
@@ -407,12 +416,20 @@ function TripDetail({ userProfile, userTrips, trip }) {
     );
   };
 
+  const priceConversionRate = useSelector(
+    (state) => state.stay.priceConversionRate
+  );
+
+  const currency = Cookies.get("currency");
+
   const config = {
     reference: new Date().getTime().toString(),
     email: formik.values.email,
-    amount: total(),
+    amount:
+      !currency || currency === "USD" ? total() : total() * priceConversionRate,
     publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
-    currency: process.env.NODE_ENV === "production" ? "USD" : "KES",
+    currency: currency === "KES" ? "KES" : "USD",
+    channels: ["card", "mobile_money"],
     // mobile_money: {
     //   phone: "+254725052346",
     //   provider: "mpesa",
@@ -609,7 +626,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
                     <div className="text-sm text-gray-800 flex gap-0.5 items-center">
                       <Price
                         className="!text-sm !font-bold"
-                        stayPrice={totalPrice()}
+                        stayPrice={trip.price_non_resident}
                       ></Price>
 
                       <div> x </div>
@@ -622,7 +639,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
                     </div>
                     <Price
                       className="!text-sm !font-bold"
-                      stayPrice={totalPrice() * nonResidentGuest}
+                      stayPrice={trip.price_non_resident * nonResidentGuest}
                     ></Price>
                   </div>
 
@@ -654,7 +671,8 @@ function TripDetail({ userProfile, userTrips, trip }) {
                     <Price
                       className="!text-sm !font-bold"
                       stayPrice={
-                        trip.price * guest + totalPrice() * nonResidentGuest
+                        trip.price * guest +
+                        trip.price_non_resident * nonResidentGuest
                       }
                     ></Price>
                   </div>

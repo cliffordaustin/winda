@@ -26,7 +26,7 @@ function Navbar({ userProfile }) {
   const [isShowingExplore, setIsShowingExplore] = useState(false);
   const [openBurger, setOpenBurger] = useState(false);
 
-  const currencyIskes = useSelector((state) => state.home.currencyIskes);
+  const userIsFromKenya = useSelector((state) => state.home.userIsFromKenya);
 
   const navigationPrevRef = React.useRef(null);
   const navigationNextRef = React.useRef(null);
@@ -98,7 +98,13 @@ function Navbar({ userProfile }) {
     router.reload();
   };
 
-  const currency = Cookies.get("currency") || currencyIskes ? "KES" : null;
+  const [currency, setCurrency] = useState(Cookies.get("currency"));
+
+  useEffect(() => {
+    if (Cookies.get("defaultCurrency") !== "0") {
+      setCurrency(userIsFromKenya ? "KES" : null);
+    }
+  }, [userIsFromKenya]);
 
   const [showCalendly, setShowCalendly] = useState(false);
 
