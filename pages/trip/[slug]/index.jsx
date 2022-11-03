@@ -705,9 +705,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
                               className="!text-base sm:!text-xl md:!text-3xl"
                               stayPrice={totalPrice()}
                             ></Price>
-                            <span className="mt-1 md:mt-3">
-                              /per non-resident/trip
-                            </span>
+                            <span className="mt-1 md:mt-3">/per person</span>
                           </div>
                         </div>
                       </div>
