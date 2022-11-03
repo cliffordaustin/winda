@@ -17,6 +17,7 @@ import { Mixpanel } from "../../lib/mixpanelconfig";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import { InlineWidget } from "react-calendly";
+import NavbarCurrency from "./NavbarCurrency";
 
 function Navbar({ userProfile }) {
   const [curatedTripsHover, setCuratedTripsHover] = useState(true);
@@ -25,8 +26,6 @@ function Navbar({ userProfile }) {
 
   const [isShowingExplore, setIsShowingExplore] = useState(false);
   const [openBurger, setOpenBurger] = useState(false);
-
-  const userIsFromKenya = useSelector((state) => state.home.userIsFromKenya);
 
   const navigationPrevRef = React.useRef(null);
   const navigationNextRef = React.useRef(null);
@@ -91,20 +90,6 @@ function Navbar({ userProfile }) {
       swiper.slideToLoop(index);
     }
   };
-
-  const changeCurrency = (currency) => {
-    Cookies.set("currency", currency);
-    Cookies.set("defaultCurrency", "0");
-    router.reload();
-  };
-
-  const [currency, setCurrency] = useState(Cookies.get("currency"));
-
-  useEffect(() => {
-    if (Cookies.get("defaultCurrency") !== "0") {
-      setCurrency(userIsFromKenya ? "KES" : null);
-    }
-  }, [userIsFromKenya]);
 
   const [showCalendly, setShowCalendly] = useState(false);
 
@@ -843,45 +828,7 @@ function Navbar({ userProfile }) {
             </div>
           </Dialogue>
 
-          <PopoverBox
-            btnPopover={
-              <>
-                {(!currency || currency === "USD") && (
-                  <div className="flex mt-1 items-center underline font-bold">
-                    <Icon icon="fxemoji:heavydollarsign" />
-                    <span className="text-sm">USD</span>
-                  </div>
-                )}
-
-                {currency && currency === "KES" && (
-                  <div className="flex mt-1 items-center underline font-bold">
-                    <span className="text-sm">KES</span>
-                  </div>
-                )}
-              </>
-            }
-            panelClassName="bg-white w-[200px] mt-0.5 py-0.5 right-0 rounded-sm shadow-md"
-          >
-            <div className="text-sm px-2 py-1 bg-gray-200 font-bold">
-              Change currency
-            </div>
-            <div
-              onClick={() => {
-                changeCurrency("KES");
-              }}
-              className="px-2 py-1 hover:bg-gray-50 transition-colors duration-150 ease-linear cursor-pointer text-sm"
-            >
-              Kenyan shilling - KES
-            </div>
-            <div
-              onClick={() => {
-                changeCurrency("USD");
-              }}
-              className="px-2 py-1 hover:bg-gray-50 transition-colors duration-150 ease-linear cursor-pointer text-sm"
-            >
-              United States Dollar - USD
-            </div>
-          </PopoverBox>
+          <NavbarCurrency></NavbarCurrency>
         </div>
       </div>
     </div>

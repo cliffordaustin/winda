@@ -15,6 +15,7 @@ import CartItem from "../Cart/CartItem";
 import FlightItem from "../Cart/FlightItem";
 import PopoverBox from "../ui/Popover";
 import { Icon } from "@iconify/react";
+import NavbarCurrency from "../ui/NavbarCurrency";
 
 function Navbar({
   showDropdown,
@@ -193,13 +194,6 @@ function Navbar({
     }
     return price;
   };
-
-  const changeCurrency = (currency) => {
-    Cookies.set("currency", currency);
-    router.reload();
-  };
-
-  const currency = Cookies.get("currency");
 
   return (
     <div className="relative flex items-center justify-between shadow-sm sm:px-12 px-6 md:px-20 py-4">
@@ -486,45 +480,7 @@ function Navbar({
           </div>
         )}
 
-        <PopoverBox
-          btnPopover={
-            <>
-              {(!currency || currency === "USD") && (
-                <div className="flex items-center underline font-bold">
-                  <Icon icon="fxemoji:heavydollarsign" />
-                  <span className="text-sm">USD</span>
-                </div>
-              )}
-
-              {currency && currency === "KES" && (
-                <div className="flex items-center underline font-bold">
-                  <span className="text-sm">KES</span>
-                </div>
-              )}
-            </>
-          }
-          panelClassName="bg-white w-[200px] mt-0.5 py-0.5 right-0 rounded-sm shadow-md"
-        >
-          <div className="text-sm px-2 py-1 bg-gray-200 font-bold">
-            Change currency
-          </div>
-          <div
-            onClick={() => {
-              changeCurrency("KES");
-            }}
-            className="px-2 py-1 hover:bg-gray-50 transition-colors duration-150 ease-linear cursor-pointer text-sm"
-          >
-            Kenyan shilling - KES
-          </div>
-          <div
-            onClick={() => {
-              changeCurrency("USD");
-            }}
-            className="px-2 py-1 hover:bg-gray-50 transition-colors duration-150 ease-linear cursor-pointer text-sm"
-          >
-            United States Dollar - USD
-          </div>
-        </PopoverBox>
+        <NavbarCurrency></NavbarCurrency>
       </div>
     </div>
   );

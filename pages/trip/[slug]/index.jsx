@@ -402,6 +402,10 @@ function TripDetail({ userProfile, userTrips, trip }) {
     },
   });
 
+  const priceConversionRate = useSelector(
+    (state) => state.stay.priceConversionRate
+  );
+
   const total = () => {
     let price =
       trip.price * Number(router.query.guests) +
@@ -410,30 +414,21 @@ function TripDetail({ userProfile, userTrips, trip }) {
         totalPrice() * Number(router.query.non_resident)) *
         0.035;
 
+    price = !userIsFromKenya ? price : price * priceConversionRate;
+
     return parseInt(
       (Math.floor(price * 100) / 100).toFixed(2).replace(".", ""),
       10
     );
   };
 
-  const priceConversionRate = useSelector(
-    (state) => state.stay.priceConversionRate
-  );
-
-  const currency = Cookies.get("currency");
-
   const config = {
     reference: new Date().getTime().toString(),
     email: formik.values.email,
-    amount:
-      !currency || currency === "USD" ? total() : total() * priceConversionRate,
+    amount: total(),
     publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
-    currency: currency === "KES" ? "KES" : "USD",
+    currency: userIsFromKenya ? "KES" : "USD",
     channels: ["card", "mobile_money"],
-    // mobile_money: {
-    //   phone: "+254725052346",
-    //   provider: "mpesa",
-    // },
   };
 
   const [

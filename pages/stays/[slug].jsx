@@ -139,29 +139,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
     rootMargin: "-70px 0px",
   });
 
-  const priceConversionRate = async () => {
-    try {
-      const response = await fetch(
-        "https://api.exchangerate-api.com/v4/latest/usd",
-        {
-          method: "GET",
-        }
-      );
-
-      const data = await response.json();
-      dispatch({
-        type: "SET_PRICE_CONVERSION",
-        payload: data.rates.KES,
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    priceConversionRate();
-  }, []);
-
   const addToBasket = async () => {
     if (stay.is_an_event) {
       router.push({
@@ -680,6 +657,12 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
   const [showMobileRoomDateModal, setShowMobileRoomDateModal] = useState(false);
 
+  const userIsFromKenya = useSelector((state) => state.home.userIsFromKenya);
+
+  const priceConversionRate = useSelector(
+    (state) => state.stay.priceConversionRate
+  );
+
   const total = () => {
     let price =
       stay.type_of_rooms.length > 0 &&
@@ -699,6 +682,8 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
           ) *
             0.035);
 
+    price = !userIsFromKenya ? price : price * priceConversionRate;
+
     return parseInt(
       (Math.floor(price * 100) / 100).toFixed(2).replace(".", ""),
       10
@@ -710,7 +695,8 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
     email: formik.values.email,
     amount: total(),
     publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
-    currency: process.env.NODE_ENV === "production" ? "USD" : "GHS",
+    currency: userIsFromKenya ? "KES" : "USD",
+    channels: ["card", "mobile_money"],
   };
 
   const onSuccess = (reference) => {
