@@ -101,7 +101,7 @@ function CuratedTripDetail({ trip, userProfile }) {
     <div>
       <Navbar userProfile={userProfile} />
 
-      <div className="relative md:!h-[540px] !h-[300px] w-full before:absolute before:h-full before:w-full before:bg-black  before:z-10 before:opacity-30">
+      <div className="relative md:!h-[540px] !h-[300px] w-full">
         <ImageGallery
           images={trip.curated_trip_images}
           stayType={""}
@@ -246,7 +246,7 @@ function CuratedTripDetail({ trip, userProfile }) {
                 Itinerary
               </h1>
 
-              <div className="mt-4">
+              <div className="mt-4 flex flex-col gap-2">
                 {trip.itineraries.map((itinerary, index) => {
                   return (
                     <DaysAccordion
@@ -263,7 +263,7 @@ function CuratedTripDetail({ trip, userProfile }) {
                       }
                       accordionClassName="!px-0 !py-0"
                       accordionContentClassName="px-2 py-1.5"
-                      titleContainerClassName="!p-0 border-b"
+                      titleContainerClassName="!p-0"
                       showAccordionByDefault={index === 0 ? true : false}
                     >
                       {itinerary.itinerary_locations.map((location, index) => (
@@ -288,7 +288,7 @@ function CuratedTripDetail({ trip, userProfile }) {
                         }
                         accordionClassName="!px-0 !py-0"
                         accordionContentClassName="px-2 py-1.5"
-                        titleContainerClassName="!p-0 border-b"
+                        titleContainerClassName="!p-0 border-b-none"
                         showAccordionByDefault={false}
                       >
                         <div className="mt-4 flex gap-3">
@@ -308,7 +308,7 @@ function CuratedTripDetail({ trip, userProfile }) {
                               return (
                                 <div
                                   key={index}
-                                  className="flex flex-col w-[350px] h-[410px] rounded-lg shadow-lg"
+                                  className="flex flex-col w-[350px] h-fit rounded-lg shadow-lg"
                                 >
                                   <div className="h-[200px] w-full">
                                     <Carousel
@@ -360,7 +360,7 @@ function CuratedTripDetail({ trip, userProfile }) {
                               return (
                                 <div
                                   key={index}
-                                  className="flex flex-col w-[350px] h-[410px] rounded-lg shadow-lg"
+                                  className="flex flex-col w-[350px] h-fit rounded-lg shadow-lg"
                                 >
                                   <div className="h-[200px] w-full">
                                     <Carousel
