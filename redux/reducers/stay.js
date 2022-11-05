@@ -1,3 +1,7 @@
+import { persistReducer } from "redux-persist";
+import createFilter from "redux-persist-transform-filter";
+import storage from "redux-persist/lib/storage";
+
 const stayState = {
   stays: [],
   typeOfStay: "lodge",
@@ -93,4 +97,13 @@ const stayReducer = (state = stayState, action) => {
   }
 };
 
-export default stayReducer;
+const rateSubsetFilter = createFilter("rate", ["[priceConversionRate]"]);
+
+const persistConfig = {
+  key: "priceConversionRate",
+  storage: storage,
+  whitelist: ["priceConversionRate"],
+  transforms: [rateSubsetFilter],
+};
+
+export default persistReducer(persistConfig, stayReducer);
