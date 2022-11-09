@@ -9,6 +9,7 @@ function AllTrips({
   trips,
   userTrips,
   recommendedTrips,
+  isSecondTrip,
   setShowAddToTripPopup,
   showAddToTripPopup,
   setSelectedData,
@@ -23,6 +24,7 @@ function AllTrips({
             userProfile={userProfile}
             trips={trips}
             userTrips={userTrips}
+            isSecondTrip={isSecondTrip}
             setSelectedData={setSelectedData}
             setShowAddToTripPopup={setShowAddToTripPopup}
             showAddToTripPopup={showAddToTripPopup}

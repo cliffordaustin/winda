@@ -30,10 +30,12 @@ import PopularLocationsDropdown from "../../components/Lodging/PopularLocationsD
 import ContactBanner from "../../components/Home/ContactBanner";
 import Navbar from "../../components/ui/Navbar";
 import TravelConciergeBanner from "../../components/Home/TravelConciergeBanner";
+import { is } from "date-fns/locale";
 
 const Trips = ({
   userProfile,
   recommendedTrips,
+  secondTrips,
   userTrips,
   pageSize,
   count,
@@ -429,6 +431,16 @@ const Trips = ({
                 </div>
               )}
             </div>
+            {/* <AllTrips
+              userProfile={userProfile}
+              trips={userTrips}
+              userTrips={userTrips}
+              isSecondTrip={true}
+              recommendedTrips={secondTrips}
+              setSelectedData={setSelectedData}
+              setShowAddToTripPopup={setShowAddToTripPopup}
+              showAddToTripPopup={showAddToTripPopup}
+            ></AllTrips> */}
             <AllTrips
               userProfile={userProfile}
               trips={userTrips}
@@ -523,6 +535,10 @@ export async function getServerSideProps(context) {
 
     const url = getRecommendeTripUrl(context);
 
+    const seconTripUrl = getRecommendeTripUrl(context, true);
+
+    const secondTrips = await axios.get(`${seconTripUrl}`);
+
     const trips = await axios.get(`${url}`);
 
     if (token) {
@@ -548,6 +564,7 @@ export async function getServerSideProps(context) {
         props: {
           userProfile: response.data[0],
           recommendedTrips: trips.data.results,
+          secondTrips: secondTrips.data.results,
           userTrips: data || [],
           nextLink: trips.data.next,
           previousLink: trips.data.previous,
@@ -562,6 +579,7 @@ export async function getServerSideProps(context) {
       props: {
         userProfile: "",
         recommendedTrips: trips.data.results,
+        secondTrips: secondTrips.data.results,
         userTrips: [],
         nextLink: trips.data.next,
         previousLink: trips.data.previous,
@@ -583,6 +601,7 @@ export async function getServerSideProps(context) {
         props: {
           userProfile: "",
           recommendedTrips: [],
+          secondTrips: [],
           userTrips: [],
           nextLink: "",
           previousLink: "",

@@ -410,9 +410,7 @@ function Main({ holidayTrips }) {
       </div> */}
 
       <div className="flex flex-col px-2 gap-4">
-        <h1 className="font-black text-2xl ml-2 text-center">
-          Holiday Special Packages
-        </h1>
+        <h1 className="font-black text-2xl ml-2 text-center">Holiday Offers</h1>
 
         <div className="mb-8">
           <Swiper

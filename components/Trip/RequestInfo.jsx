@@ -10,7 +10,13 @@ import LoadingSpinerChase from "../ui/LoadingSpinerChase";
 import { useRouter } from "next/router";
 import { Mixpanel } from "../../lib/mixpanelconfig";
 
-function RequestInfo({ tripSlug, submitCompleteFunc, showInfo, name }) {
+function RequestInfo({
+  tripSlug,
+  submitCompleteFunc,
+  showInfo,
+  name,
+  isSecondTrip,
+}) {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const formik = useFormik({
@@ -35,7 +41,9 @@ function RequestInfo({ tripSlug, submitCompleteFunc, showInfo, name }) {
     onSubmit: async (values) => {
       axios
         .post(
-          `${process.env.NEXT_PUBLIC_baseURL}/recommended-trips/${tripSlug}/request-info/`,
+          `${process.env.NEXT_PUBLIC_baseURL}/${
+            isSecondTrip ? "curated-trips" : "recommended-trips"
+          }/${tripSlug}/request-info/`,
           {
             first_name: values.first_name,
             last_name: values.last_name,
