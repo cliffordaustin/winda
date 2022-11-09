@@ -461,6 +461,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
               : null,
             message: message,
             paid: true,
+            booking_request: false,
           }
         )
         .then((res) => {

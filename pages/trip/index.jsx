@@ -431,7 +431,7 @@ const Trips = ({
                 </div>
               )}
             </div>
-            <AllTrips
+            {/* <AllTrips
               userProfile={userProfile}
               trips={userTrips}
               userTrips={userTrips}
@@ -440,7 +440,7 @@ const Trips = ({
               setSelectedData={setSelectedData}
               setShowAddToTripPopup={setShowAddToTripPopup}
               showAddToTripPopup={showAddToTripPopup}
-            ></AllTrips>
+            ></AllTrips> */}
             <AllTrips
               userProfile={userProfile}
               trips={userTrips}

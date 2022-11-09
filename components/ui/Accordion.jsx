@@ -56,10 +56,7 @@ function Accordion({
   };
   return (
     <div
-      className={
-        "py-1 px-2 bg-white border-t border-gray-300 w-full min-h-fit " +
-        className
-      }
+      className={"py-1 px-2 bg-white shadow-md w-full min-h-fit " + className}
     >
       <div
         onClick={(e) => {

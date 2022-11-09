@@ -107,6 +107,16 @@ const Card = ({
       : listing.price_non_resident || listing.price;
   };
 
+  const totalPriceForSecondTrip = () => {
+    return userIsFromKenya
+      ? listing.plan_a_price.price
+      : listing.plan_a_price.price_non_resident;
+  };
+
+  const totalOldPriceForSecondTrip = () => {
+    return listing.plan_a_price && listing.plan_a_price.old_price;
+  };
+
   const [showDialogue, setShowDialogue] = useState(false);
 
   const [showRequestInfo, setShowRequestInfo] = useState(false);
@@ -304,7 +314,11 @@ const Card = ({
                         ></Price>
                       )}
                       <Price
-                        stayPrice={totalPrice()}
+                        stayPrice={
+                          isSecondTrip
+                            ? totalPriceForSecondTrip()
+                            : totalPrice()
+                        }
                         className="!text-base"
                       ></Price>
                     </div>
@@ -321,6 +335,7 @@ const Card = ({
                   tripSlug={listing.slug}
                   submitCompleteFunc={setShowRequestInfoPopup}
                   showInfo={setShowRequestInfo}
+                  isSecondTrip={isSecondTrip}
                   name={listing.name}
                 ></RequestInfo>
               </div>
@@ -457,7 +472,18 @@ const Card = ({
                   className="!text-sm line-through self-end mb-0.5 text-red-500"
                 ></Price>
               )}
-              <Price stayPrice={totalPrice()} className="!text-lg"></Price>
+              {totalOldPriceForSecondTrip() && (
+                <Price
+                  stayPrice={totalOldPriceForSecondTrip()}
+                  className="!text-sm line-through self-end mb-0.5 text-red-500"
+                ></Price>
+              )}
+              <Price
+                stayPrice={
+                  isSecondTrip ? totalPriceForSecondTrip() : totalPrice()
+                }
+                className="!text-lg"
+              ></Price>
             </div>
             {/* <div className="mt-0.5 mb-1.5 font-bold">.</div> */}
             <div className="font-bold">/per person/trip</div>
