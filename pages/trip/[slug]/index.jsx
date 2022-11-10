@@ -321,7 +321,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
           date={new Date(router.query.starting_date) || new Date()}
           defaultMonth={getDefaultStartingDate()}
           disabled={[{ before: new Date() }, isDayDisabled]}
-          selected={startDate}
+          selected={new Date(router.query.starting_date)}
           onSelect={(date) => {
             router.replace(
               {
