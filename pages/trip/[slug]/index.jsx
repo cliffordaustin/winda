@@ -316,9 +316,13 @@ function TripDetail({ userProfile, userTrips, trip }) {
   function Child({ close }) {
     return (
       <div className="w-full">
-        <DatePicker
+        <DayPicker
+          mode="single"
           date={new Date(router.query.starting_date) || new Date()}
-          setDate={(date) => {
+          defaultMonth={getDefaultStartingDate()}
+          disabled={[{ before: new Date() }, isDayDisabled]}
+          selected={startDate}
+          onSelect={(date) => {
             router.replace(
               {
                 query: {
@@ -331,8 +335,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
             );
             close();
           }}
-          disableDate={new Date()}
-        ></DatePicker>
+        />
       </div>
     );
   }
