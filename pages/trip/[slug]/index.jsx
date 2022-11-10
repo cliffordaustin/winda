@@ -51,6 +51,8 @@ import Navbar from "../../../components/ui/Navbar";
 import TravelConciergeBanner from "../../../components/Home/TravelConciergeBanner";
 import { useSelector } from "react-redux";
 import { set } from "nprogress";
+import { DayPicker } from "react-day-picker";
+import { isSameDay } from "date-fns";
 
 function TripDetail({ userProfile, userTrips, trip }) {
   const GlobalStyle = createGlobalStyle`
@@ -208,7 +210,49 @@ function TripDetail({ userProfile, userTrips, trip }) {
     return image.image;
   });
 
-  const [startDate, setStartDate] = useState(new Date());
+  const daysBetweenDates = (startDate, endDate) => {
+    var dates = [];
+
+    var currDate = moment(startDate).startOf("day");
+    var lastDate = moment(endDate).startOf("day");
+
+    while (currDate.add(1, "days").diff(lastDate) < 0) {
+      dates.push(currDate.clone().toDate());
+    }
+
+    return dates;
+  };
+
+  const daysAvailable = trip.available_dates.map((date) => {
+    return daysBetweenDates(date.starting_date, date.ending_date);
+  });
+
+  const daysAvailableFormatted =
+    daysAvailable.length > 0 ? daysAvailable.flat() : [];
+
+  function isDayDisabled(day) {
+    return (
+      daysAvailable.length > 0 &&
+      daysAvailableFormatted.find(
+        (availableDate) =>
+          moment(day).format("YYYY-MM-DD") ===
+          moment(availableDate).format("YYYY-MM-DD")
+      ) === undefined
+    );
+  }
+
+  let getDefaultStartingDate = () => {
+    let defaultDate = new Date();
+    for (let i = 0; i < daysAvailableFormatted.length; i++) {
+      if (daysAvailableFormatted[i] >= new Date()) {
+        defaultDate = daysAvailableFormatted[i];
+        break;
+      }
+    }
+    return defaultDate;
+  };
+
+  const [startDate, setStartDate] = useState(getDefaultStartingDate());
 
   const [guest, setGuest] = useState(0);
 
@@ -537,12 +581,22 @@ function TripDetail({ userProfile, userTrips, trip }) {
                       popoverClassName="w-full"
                       panelClassName="h-fit w-fit rounded-lg bg-white -top-10 border shadow-lg mt-2"
                     >
-                      <div className="w-full">
-                        <DatePicker
+                      <div
+                        className={"w-full "}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <DayPicker
+                          mode="single"
+                          defaultMonth={getDefaultStartingDate()}
+                          disabled={[{ before: new Date() }, isDayDisabled]}
+                          selected={startDate}
+                          onSelect={setStartDate}
+                        />
+                        {/* <DatePicker
                           date={startDate}
                           setDate={setStartDate}
                           disableDate={new Date()}
-                        ></DatePicker>
+                        ></DatePicker> */}
                       </div>
                     </PopoverBox>
                     <div className="h-[1px] w-[90%] bg-gray-300"></div>
