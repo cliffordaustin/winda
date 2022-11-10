@@ -229,8 +229,8 @@ function BookTrip({ trip, userProfile }) {
         <Navbar userProfile={userProfile}></Navbar>
       </div>
       <div className=" max-w-[1080px] mt-5 mx-auto">
-        <div className="flex gap-4 px-4">
-          <div className="md:w-[40%] px-2 hidden md:block h-[90vh] mt-0 sticky top-[100px]">
+        <div className="flex flex-col md:flex-row gap-4 px-4">
+          <div className="w-full md:w-[40%] md:px-2 md:h-[90vh] mt-0 md:sticky top-[100px]">
             <div
               onClick={() => {
                 router.back();
@@ -330,7 +330,7 @@ function BookTrip({ trip, userProfile }) {
             </div>
           </div>
 
-          <div className="md:w-[60%] w-full md:pl-4">
+          <div className="w-full md:w-[60%] md:pl-4">
             <div className="px-4 py-2 mb-4 text-sm bg-gray-100">
               <span className="font-bold">Note:</span>{" "}
               <span>

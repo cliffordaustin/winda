@@ -15,6 +15,10 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
+import ScrollToNavigation from "../../../../components/Trip/ScrollToNavigations";
+import { Transition } from "@headlessui/react";
+import { useInView } from "react-intersection-observer";
+import { Link as ReactScrollLink } from "react-scroll";
 
 function CuratedTripDetail({ trip, userProfile }) {
   const totalNumberOfBreakfasts = () => {
@@ -109,6 +113,14 @@ function CuratedTripDetail({ trip, userProfile }) {
 
   const [datePricing, setDatePricing] = useState([]);
 
+  const [scrollRef, inView, entry] = useInView({
+    rootMargin: "-70px 0px",
+  });
+
+  const [planRef, planInView, planEntry] = useInView({
+    rootMargin: "-70px 0px",
+  });
+
   const getDateAndPricing = async () => {
     try {
       const { data } = await axios.get(
@@ -156,6 +168,20 @@ function CuratedTripDetail({ trip, userProfile }) {
     <div>
       <div className="sticky bg-white top-0 left-0 right-0 z-50">
         <Navbar userProfile={userProfile}></Navbar>
+        <Transition
+          enter="transition-all ease-in duration-150"
+          leave="transition-all ease-out duration-150"
+          enterFrom="opacity-0 scale-50"
+          enterTo="opacity-100 scale-100"
+          leaveFrom="opacity-100 scale-100"
+          leaveTo="opacity-0 scale-50"
+          show={!inView}
+          className={
+            "h-[60px] bg-white z-20 border-t border-b left-0 right-0 flex w-full px-3 lg:px-10 "
+          }
+        >
+          <ScrollToNavigation></ScrollToNavigation>
+        </Transition>
       </div>
 
       <div className="relative md:!h-[540px] !h-[300px] w-full">
@@ -166,116 +192,125 @@ function CuratedTripDetail({ trip, userProfile }) {
         ></ImageGallery>
       </div>
 
+      <div
+        ref={scrollRef}
+        className="h-[60px] border-b border-gray-200 w-[100%] px-3 lg:px-10"
+      >
+        <ScrollToNavigation></ScrollToNavigation>
+      </div>
+
       <div className="px-4 mt-4">
         <div className="w-full max-w-[1100px] mx-auto">
-          <div className="flex flex-col gap-2">
-            <h1 className="text-2xl lg:text-4xl font-black">{trip.name}</h1>
-          </div>
-
-          <div className="w-full flex items-start gap-2">
-            <div className="flex flex-wrap w-[70%] gap-8 mt-8">
-              <div className="flex w-[30%] flex-col items-center h-fit justify-center gap-1.5">
-                <div className="flex gap-1 items-center">
-                  <Icon
-                    icon="clarity:calendar-solid-badged"
-                    className="w-7 h-7"
-                  />
-                  <h1 className="font-bold">Days</h1>
-                </div>
-
-                <div className="font-bold">
-                  {trip.total_number_of_days} days
-                </div>
-              </div>
-
-              <div className="flex w-[30%] flex-col items-center h-fit justify-center gap-1.5">
-                <div className="flex gap-1 items-center">
-                  <Icon icon="bx:world" className="w-7 h-7" />
-                  <h1 className="font-bold">Country</h1>
-                </div>
-
-                <div className="font-bold">
-                  {trip.number_of_countries}{" "}
-                  {trip.number_of_countries > 1 ? "countries" : "country"}
-                </div>
-              </div>
-
-              <div className="flex w-[30%] flex-col items-center h-fit justify-center gap-1.5">
-                <div className="flex gap-1 items-center">
-                  <Icon icon="bxs:group" className="w-7 h-7" />
-                  <h1 className="font-bold">Max group size</h1>
-                </div>
-                <div className="font-bold">
-                  Maximum of {trip.max_number_of_people} people
-                </div>
-              </div>
-
-              <div className="flex w-[30%] flex-col items-center h-fit justify-center gap-1.5">
-                <div className="flex gap-1 items-center">
-                  <Icon icon="dashicons:food" className="w-7 h-7" />
-                  <h1 className="font-bold">Meals</h1>
-                </div>
-                <div className="font-bold">
-                  {totalNumberOfBreakfasts() > 0
-                    ? `${totalNumberOfBreakfasts()} ${
-                        totalNumberOfBreakfasts() > 1
-                          ? " breakfasts"
-                          : "breakfast"
-                      }`
-                    : ""}
-
-                  {totalNumberOfLunches() > 0
-                    ? ` | ${totalNumberOfLunches()} ${
-                        totalNumberOfLunches() > 1 ? " lunches" : " lunch"
-                      }`
-                    : ""}
-
-                  {totalNumberOfDinners() > 0
-                    ? ` | ${totalNumberOfDinners()} ${
-                        totalNumberOfDinners() > 1 ? " dinners" : " dinner"
-                      }`
-                    : ""}
-                </div>
-              </div>
-
-              <div className="flex w-[30%] flex-col items-center h-fit justify-center gap-1.5">
-                <div className="flex gap-1 items-center">
-                  <Icon
-                    icon="simple-icons:transportforlondon"
-                    className="w-7 h-7"
-                  />
-                  <h1 className="font-bold">Transport</h1>
-                </div>
-                <div className="font-bold">
-                  {hasCarTransport() ? `Car` : ""}
-
-                  {hasTrainTransport() ? ` | Train` : ""}
-
-                  {hasFlightTransport() ? ` | Flight` : ""}
-
-                  {hasBusTransport() ? ` | Bus` : ""}
-                </div>
-              </div>
-              {trip.trip_is_carbon_neutral && (
-                <div className="flex w-[30%] flex-col h-fit items-center bg-green-300 py-2 px-2 rounded-md">
-                  <Icon
-                    icon="fluent:earth-leaf-24-filled"
-                    className="w-7 h-7 text-green-900"
-                  />
-                  <h1 className="font-bold text-green-900">
-                    Trip is carbon neutral
-                  </h1>
-                </div>
-              )}
-              <div className="w-full">{trip.description}</div>
+          <div name="about">
+            <div className="flex flex-col gap-2">
+              <h1 className="text-2xl lg:text-4xl font-black">{trip.name}</h1>
             </div>
-            <div className="w-[30%] h-[350px]">
-              <CuratedTripMap locations={trip.locations}></CuratedTripMap>
+
+            <div className="w-full flex items-start gap-2">
+              <div className="flex flex-wrap w-full md:w-[70%] gap-8 mt-8">
+                <div className="flex w-[45%] lg:w-[30%] flex-col items-center h-fit justify-center gap-1.5">
+                  <div className="flex gap-1 items-center">
+                    <Icon
+                      icon="clarity:calendar-solid-badged"
+                      className="w-7 h-7"
+                    />
+                    <h1 className="font-bold">Days</h1>
+                  </div>
+
+                  <div className="font-bold">
+                    {trip.total_number_of_days} days
+                  </div>
+                </div>
+
+                <div className="flex w-[45%] lg:w-[30%] flex-col items-center h-fit justify-center gap-1.5">
+                  <div className="flex gap-1 items-center">
+                    <Icon icon="bx:world" className="w-7 h-7" />
+                    <h1 className="font-bold">Country</h1>
+                  </div>
+
+                  <div className="font-bold">
+                    {trip.number_of_countries}{" "}
+                    {trip.number_of_countries > 1 ? "countries" : "country"}
+                  </div>
+                </div>
+
+                <div className="flex w-[45%] lg:w-[30%] flex-col items-center h-fit justify-center gap-1.5">
+                  <div className="flex gap-1 items-center">
+                    <Icon icon="bxs:group" className="w-7 h-7" />
+                    <h1 className="font-bold">Max group size</h1>
+                  </div>
+                  <div className="font-bold text-center">
+                    Maximum of {trip.max_number_of_people} people
+                  </div>
+                </div>
+
+                <div className="flex w-[45%] lg:w-[30%] flex-col items-center h-fit justify-center gap-1.5">
+                  <div className="flex gap-1 items-center">
+                    <Icon icon="dashicons:food" className="w-7 h-7" />
+                    <h1 className="font-bold">Meals</h1>
+                  </div>
+                  <div className="font-bold text-center">
+                    {totalNumberOfBreakfasts() > 0
+                      ? `${totalNumberOfBreakfasts()} ${
+                          totalNumberOfBreakfasts() > 1
+                            ? " breakfasts"
+                            : "breakfast"
+                        }`
+                      : ""}
+
+                    {totalNumberOfLunches() > 0
+                      ? ` | ${totalNumberOfLunches()} ${
+                          totalNumberOfLunches() > 1 ? " lunches" : " lunch"
+                        }`
+                      : ""}
+
+                    {totalNumberOfDinners() > 0
+                      ? ` | ${totalNumberOfDinners()} ${
+                          totalNumberOfDinners() > 1 ? " dinners" : " dinner"
+                        }`
+                      : ""}
+                  </div>
+                </div>
+
+                <div className="flex w-[45%] lg:w-[30%] flex-col items-center h-fit justify-center gap-1.5">
+                  <div className="flex gap-1 items-center">
+                    <Icon
+                      icon="simple-icons:transportforlondon"
+                      className="w-7 h-7"
+                    />
+                    <h1 className="font-bold">Transport</h1>
+                  </div>
+                  <div className="font-bold text-center">
+                    {hasCarTransport() ? `Car` : ""}
+
+                    {hasTrainTransport() ? ` | Train` : ""}
+
+                    {hasFlightTransport() ? ` | Flight` : ""}
+
+                    {hasBusTransport() ? ` | Bus` : ""}
+                  </div>
+                </div>
+                {trip.trip_is_carbon_neutral && (
+                  <div className="flex w-[45%] lg:w-[30%] flex-col h-fit items-center bg-green-300 py-2 px-2 rounded-md">
+                    <Icon
+                      icon="fluent:earth-leaf-24-filled"
+                      className="w-7 h-7 text-green-900"
+                    />
+                    <h1 className="font-bold text-green-900 text-center">
+                      Trip is carbon neutral
+                    </h1>
+                  </div>
+                )}
+                <div className="w-full">{trip.description}</div>
+              </div>
+              <div className="w-[30%] h-[350px] hidden md:block">
+                <CuratedTripMap locations={trip.locations}></CuratedTripMap>
+              </div>
             </div>
           </div>
 
           {trip.essential_information && (
-            <div className="mb-6 mt-12">
+            <div name="essential-info" className="mb-6 pt-12">
               <h1 className="font-bold text-2xl text-gray-700 font-OpenSans mb-2">
                 Essential information
               </h1>
@@ -286,7 +321,7 @@ function CuratedTripDetail({ trip, userProfile }) {
             </div>
           )}
 
-          <div name="gallery" className="mt-6 mb-12">
+          <div name="gallery" className="pt-6 pb-8">
             <h1 className="font-bold text-2xl text-gray-700 font-OpenSans mb-4">
               Gallery
             </h1>
@@ -299,7 +334,7 @@ function CuratedTripDetail({ trip, userProfile }) {
             </div>
           </div>
 
-          <div className="mt-6 mb-12">
+          <div name="itinerary" className="pt-6 pb-12">
             <h1 className="font-bold text-2xl text-gray-700 font-OpenSans mb-4">
               Itinerary
             </h1>
@@ -332,7 +367,7 @@ function CuratedTripDetail({ trip, userProfile }) {
                             {location.location}
                           </h1>
                         </div>
-                        <p className="ml-12">{location.description}</p>
+                        <p className="ml-4 md:ml-12">{location.description}</p>
                       </div>
                     ))}
 
@@ -349,7 +384,7 @@ function CuratedTripDetail({ trip, userProfile }) {
                       titleContainerClassName="!p-0 border-b"
                       showAccordionByDefault={false}
                     >
-                      <div className="mt-4 flex gap-3">
+                      <div className="mt-4 flex flex-wrap gap-3">
                         {itinerary.itinerary_accommodations.map(
                           (accommodation, index) => {
                             const sortedImages =
@@ -366,7 +401,7 @@ function CuratedTripDetail({ trip, userProfile }) {
                             return (
                               <div
                                 key={index}
-                                className="flex flex-col w-[350px] h-fit rounded-lg shadow-lg"
+                                className="flex flex-col w-full sm:w-[350px] h-fit rounded-lg shadow-lg"
                               >
                                 <div className="h-[200px] w-full">
                                   <Carousel
@@ -401,7 +436,7 @@ function CuratedTripDetail({ trip, userProfile }) {
                       titleContainerClassName="!p-0 border-b"
                       showAccordionByDefault={false}
                     >
-                      <div className="mt-4 flex gap-3">
+                      <div className="mt-4 flex flex-wrap gap-3">
                         {itinerary.itinerary_activities.map(
                           (itinerary_activity, index) => {
                             const sortedImages =
@@ -418,7 +453,7 @@ function CuratedTripDetail({ trip, userProfile }) {
                             return (
                               <div
                                 key={index}
-                                className="flex flex-col w-[350px] h-fit rounded-lg shadow-lg"
+                                className="flex flex-col w-full sm:w-[350px] h-fit rounded-lg shadow-lg"
                               >
                                 <div className="h-[200px] w-full">
                                   <Carousel
@@ -551,15 +586,23 @@ function CuratedTripDetail({ trip, userProfile }) {
             </div>
           </div>
 
-          <div className="mb-12 flex flex-col gap-2">
+          <div name="map" className="w-full h-[350px] md:hidden">
+            <CuratedTripMap locations={trip.locations}></CuratedTripMap>
+          </div>
+
+          <div
+            ref={planRef}
+            name="plan"
+            className="mb-12 mt-10 flex flex-col gap-2"
+          >
             <h1 className="font-bold text-2xl text-gray-700 font-OpenSans text-center mb-9">
               <span>Pick a </span>
               <span className="text-red-600">plan </span>
               <span>that fits your budget</span>
             </h1>
 
-            <div className="mt-8 flex items-center gap-6 mx-auto w-[80%] justify-center">
-              <div className="h-fit px-3 py-3 bg-gray-100 rounded-2xl w-[30%]">
+            <div className="md:mt-8 flex md:flex-row flex-col items-center gap-6 mx-auto w-full sm:w-[80%] justify-center">
+              <div className="h-fit px-3 py-3 bg-gray-100 rounded-2xl w-full md:w-[30%]">
                 <h3 className="font-bold uppercase text-sm text-center">
                   Basic plan
                 </h3>
@@ -625,7 +668,7 @@ function CuratedTripDetail({ trip, userProfile }) {
                 </div>
               </div>
 
-              <div className="w-[30%] flex items-center relative flex-col">
+              <div className="w-full md:w-[30%] mt-6 md:mt-0 flex items-center relative flex-col">
                 <div className="border border-gray-300 absolute font-bold -top-[30px] h-[30px] rounded-t-lg flex items-center justify-center text-sm px-2">
                   Most popular
                 </div>
@@ -699,7 +742,7 @@ function CuratedTripDetail({ trip, userProfile }) {
                 </div>
               </div>
 
-              <div className="h-fit px-3 py-3 bg-gray-100 rounded-2xl w-[30%]">
+              <div className="h-fit px-3 py-3 bg-gray-100 rounded-2xl w-full md:w-[30%]">
                 <h3 className="font-bold uppercase text-sm text-center">
                   Ultimate plan
                 </h3>
@@ -766,6 +809,40 @@ function CuratedTripDetail({ trip, userProfile }) {
               </div>
             </div>
           </div>
+
+          {!planInView && (
+            <div
+              className={
+                "w-full z-10 px-4 border-t md:hidden fixed bottom-0 safari-bottom left-0 right-0 bg-white py-1 "
+              }
+            >
+              <div className="flex justify-between items-center gap-2">
+                <div className="flex flex-col gap-1">
+                  <p className="text-gray-500 text-sm">Starting at</p>
+                  <div className="flex justify-center gap-1">
+                    {planAOldPrice() && (
+                      <Price
+                        stayPrice={planAOldPrice()}
+                        className="!text-sm line-through self-end mb-0.5 text-red-500"
+                      ></Price>
+                    )}
+                    <Price stayPrice={planAPrice()}></Price>
+                  </div>
+                </div>
+
+                <ReactScrollLink
+                  className="cursor-pointer w-fit flex items-center justify-center text-sm bg-blue-600 px-3 py-2 text-white font-bold rounded-md"
+                  to="plan"
+                  spy={true}
+                  smooth={true}
+                  offset={-400}
+                  duration={500}
+                >
+                  <span>Pick a plan</span>
+                </ReactScrollLink>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

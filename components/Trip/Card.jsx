@@ -526,13 +526,13 @@ const Card = ({
 
       {/* <div className="fixed w-full h-12 bg-red-400"></div> */}
 
-      {!isSecondTrip && (
+      {/* {!isSecondTrip && (
         <div className="absolute cursor-pointer top-1.5 left-1.5 w-fit px-1 rounded-md flex items-center gap-0.5 font-bold text-sm py-[2px] bg-white">
           <div className="text-sm font-bold">
             {listing.area_covered.split(",")[0]}
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };
