@@ -855,11 +855,13 @@ function TripDetail({ userProfile, userTrips, trip }) {
                       dialoguePanelClassName="!overflow-y-scroll md:hidden !p-4 max-h-[500px] !max-w-lg"
                     >
                       <div className="w-full">
-                        <DatePicker
-                          date={startDate}
-                          setDate={setStartDate}
-                          disableDate={new Date()}
-                        ></DatePicker>
+                        <DayPicker
+                          mode="single"
+                          defaultMonth={getDefaultStartingDate()}
+                          disabled={[{ before: new Date() }, isDayDisabled]}
+                          selected={startDate}
+                          onSelect={setStartDate}
+                        />
                       </div>
                     </Dialogue>
 
