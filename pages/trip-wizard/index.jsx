@@ -61,6 +61,7 @@ function TripWizard({ userProfile }) {
   const getCurrentYear = new Date().getFullYear();
 
   const handleNext = () => {
+    console.log("hello world");
     if (state.swiperIndex === 0 && !router.query.location) {
       router.replace(
         {
@@ -186,6 +187,7 @@ function TripWizard({ userProfile }) {
         .required("This field is required"),
     }),
     onSubmit: (values) => {
+      console.log("called");
       if (phone && !isValidPhoneNumber(phone || "")) {
         setInvalidPhone(true);
       } else {
@@ -298,32 +300,34 @@ function TripWizard({ userProfile }) {
               <Icon icon="bxs:left-arrow" />
               <span className="font-black">Prev</span>
             </div>
-            {state.endOfSlide && (
-              <div
-                onClick={() => {
-                  formik.handleSubmit();
-                }}
-                className="flex absolute right-3 md:right-8 items-center gap-2 px-4 py-3 !bg-gradient-to-r from-pink-500 via-red-500 !rounded-md to-yellow-500"
-              >
-                <span className="text-white text-sm font-bold cursor-pointer">
-                  Submit
-                </span>
 
-                {loading && (
-                  <LoadingSpinerChase
-                    width={12}
-                    height={12}
-                  ></LoadingSpinerChase>
-                )}
-              </div>
-            )}
+            <div
+              onClick={() => {
+                formik.handleSubmit();
+              }}
+              className={
+                "flex absolute right-3 md:right-8 items-center gap-2 px-4 py-3 !bg-gradient-to-r from-pink-500 via-red-500 !rounded-md to-yellow-500 " +
+                (!state.endOfSlide ? "hidden" : "")
+              }
+            >
+              <span className="text-white text-sm font-bold cursor-pointer">
+                Submit
+              </span>
 
-            {!state.endOfSlide && (
-              <div className="px-4 py-2 flex items-center justify-center gap-1 absolute right-0 md:right-8 cursor-pointer text-black swiper-pagination swiper-button-next ">
-                <span className="font-black">Next</span>
-                <Icon icon="bxs:right-arrow" />
-              </div>
-            )}
+              {loading && (
+                <LoadingSpinerChase width={12} height={12}></LoadingSpinerChase>
+              )}
+            </div>
+
+            <div
+              className={
+                "px-4 py-2 flex items-center justify-center gap-1 absolute right-0 md:right-8 cursor-pointer text-black swiper-pagination swiper-button-next " +
+                (state.endOfSlide ? "hidden" : "")
+              }
+            >
+              <span className="font-black">Next</span>
+              <Icon icon="bxs:right-arrow" />
+            </div>
           </div>
         </Swiper>
       </div>
