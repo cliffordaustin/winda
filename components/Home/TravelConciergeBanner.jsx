@@ -6,8 +6,9 @@ import Dialogue from "./Dialogue";
 import { InlineWidget } from "react-calendly";
 import { Mixpanel } from "../../lib/mixpanelconfig";
 import { useRouter } from "next/router";
+import { Transition } from "@headlessui/react";
 
-function TravelConciergeBanner() {
+function TravelConciergeBanner({ showTripWizard = false }) {
   const [showCalendly, setShowCalendly] = useState(false);
 
   const router = useRouter();
@@ -67,15 +68,26 @@ function TravelConciergeBanner() {
         </Link>
         <div className="font-bold"></div>
         <div className="flex items-center gap-2">
-          <div
-            onClick={() => {
-              router.push("/trip-wizard");
-              Mixpanel.track("Clicked on trip wizard");
-            }}
-            className="flex items-center gap-0.5 px-4 cursor-pointer py-2 border-gradient"
+          <Transition
+            enter="transition-all ease-in duration-150"
+            leave="transition-all ease-out duration-150"
+            enterFrom="opacity-0 scale-50"
+            enterTo="opacity-100 scale-100"
+            leaveFrom="opacity-100 scale-100"
+            leaveTo="opacity-0 scale-50"
+            show={showTripWizard}
           >
-            <span className="text-black text-sm font-bold">Trip wizard</span>
-          </div>
+            <div
+              onClick={() => {
+                router.push("/trip-wizard");
+                Mixpanel.track("Clicked on trip wizard");
+              }}
+              className="flex items-center gap-0.5 px-4 py-2 cursor-pointer border-gradient"
+            >
+              <span className="text-black text-sm font-bold">Trip wizard</span>
+            </div>
+          </Transition>
+
           <div
             onClick={() => {
               setShowCalendly(true);

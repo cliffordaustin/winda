@@ -7,6 +7,7 @@ import axios from "axios";
 import getToken from "../lib/getToken";
 import { useRouter } from "next/router";
 import { Mixpanel } from "../lib/mixpanelconfig";
+import { useInView } from "react-intersection-observer";
 
 import Navbar from "../components/ui/Navbar";
 import Main from "../components/Home/Main";
@@ -54,6 +55,10 @@ export default function Home({ userProfile, holidayTrips }) {
     selectedActivitiesSearchItem: 0,
     showSearchModal: false,
     windowSize: 0,
+  });
+
+  const [scrollRef, inView, entry] = useInView({
+    rootMargin: "-70px 0px",
   });
 
   useEffect(() => {
@@ -221,9 +226,14 @@ export default function Home({ userProfile, holidayTrips }) {
 
       <div className="sticky bg-white top-0 left-0 right-0 z-50">
         <div className="md:hidden">
-          <TravelConciergeBanner></TravelConciergeBanner>
+          <TravelConciergeBanner
+            showTripWizard={!inView ? true : false}
+          ></TravelConciergeBanner>
         </div>
-        <Navbar userProfile={userProfile}></Navbar>
+        <Navbar
+          userProfile={userProfile}
+          showTripWizard={!inView ? true : false}
+        ></Navbar>
       </div>
 
       <div className="mb-12 select-none relative">
@@ -308,6 +318,19 @@ export default function Home({ userProfile, holidayTrips }) {
                   ></PopularLocationsDropdown>
                 </div>
               )}
+            </div>
+
+            <div
+              onClick={() => {
+                router.push("/trip-wizard");
+                Mixpanel.track("Clicked on trip wizard");
+              }}
+              ref={scrollRef}
+              className="flex items-center gap-0.5 px-4 py-3 cursor-pointer !rounded-3xl !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500"
+            >
+              <span className="text-white text-sm font-black">
+                Tell us about your trip
+              </span>
             </div>
           </div>
         </div>

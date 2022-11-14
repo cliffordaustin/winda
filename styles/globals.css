@@ -369,7 +369,7 @@ body {
 .border-gradient {
   position: relative;
   box-sizing: border-box;
-  background: #fff;
+  background: white;
   border-radius: 3rem;
 }
 

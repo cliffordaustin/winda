@@ -1,16 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { Icon } from "@iconify/react";
 import Input from "../ui/Input";
+import Checkbox from "../ui/Checkbox";
 
 function Locations(props) {
   const router = useRouter();
 
   const [location, setLocation] = useState("");
 
-  const defaultLocations = [
+  const [showKenyaLocations, setShowKenyaLocations] = useState(true);
+  const [showTanzaniaLocations, setShowTanzaniaLocations] = useState(false);
+  const [showUgandaLocations, setShowUgandaLocations] = useState(false);
+  const [showRwandaLocations, setShowRwandaLocations] = useState(false);
+
+  const kenyaDefaultLocations = [
     {
       name: "Nairobi",
       tag: "nairobi",
@@ -103,63 +109,183 @@ function Locations(props) {
       imageAlt: "Image of Watamu. Image by Timothy K from usplash.com",
     },
   ];
+
+  const [currentOptions, setCurrentOptions] = useState([]);
+
+  const handleCheck = (event) => {
+    var updatedList = [...currentOptions];
+    if (event.target.checked) {
+      updatedList = [...currentOptions, event.target.value];
+      const allOptions = updatedList
+        .toString()
+        .replace("[", "") // remove [
+        .replace("]", "") // remove ]
+        .trim(); // remove all white space
+
+      router.replace(
+        {
+          query: {
+            ...router.query,
+            location: allOptions,
+          },
+        },
+        undefined,
+        { shallow: true }
+      );
+    } else {
+      updatedList.splice(currentOptions.indexOf(event.target.value), 1);
+
+      const allOptions = updatedList
+        .toString()
+        .replace("[", "") // remove [
+        .replace("]", "") // remove ]
+        .trim(); // remove all white space
+
+      router.replace(
+        {
+          query: {
+            ...router.query,
+            location: allOptions,
+          },
+        },
+        undefined,
+        { shallow: true }
+      );
+    }
+    setCurrentOptions(updatedList);
+  };
+
+  useEffect(() => {
+    if (router.query.tag) {
+      setCurrentOptions(router.query.tag.split(","));
+    } else {
+      setCurrentOptions([]);
+    }
+  }, [router.query.tag]);
+
+  const containsOption = (option) => {
+    return currentOptions.includes(option);
+  };
+
   return (
     <div className="flex flex-wrap justify-between mt-4 gap-3">
-      {defaultLocations.map((location, index) => (
+      <div className="flex items-center gap-3 w-full justify-center mb-3">
         <div
           onClick={() => {
-            router.replace(
-              {
-                query: {
-                  ...router.query,
-                  location: location.tag,
-                },
-              },
-              undefined,
-              { shallow: true }
-            );
+            setShowUgandaLocations(false);
+            setShowKenyaLocations(true);
+            setShowTanzaniaLocations(false);
+            setShowRwandaLocations(false);
           }}
-          key={index}
           className={
-            "w-full md:w-[47%] relative cursor-pointer flex border-2 overflow-hidden rounded-md max-h-[150px] " +
-            (router.query.location == location.tag ||
-            (!router.query.location && index === 0)
-              ? "border-blue-500"
-              : "border-gray-200")
+            "px-4 rounded-3xl py-2 cursor-pointer font-bold text-sm " +
+            (showKenyaLocations
+              ? "bg-gray-700 text-white border-2 border-gray-700"
+              : "border-2 border-gray-700")
           }
         >
-          <div className="h-full w-[20%] relative">
-            <Image
-              className={"w-full object-cover "}
-              src={location.imagePath}
-              alt={location.imageAlt}
-              layout={"fill"}
-              objectFit="cover"
-              unoptimized={true}
-            />
-          </div>
+          Kenya
+        </div>
+        <div
+          onClick={() => {
+            setShowUgandaLocations(true);
+            setShowKenyaLocations(false);
+            setShowTanzaniaLocations(false);
+            setShowRwandaLocations(false);
+          }}
+          className={
+            "px-4 cursor-pointer rounded-3xl py-2 font-bold text-sm " +
+            (showUgandaLocations
+              ? "bg-gray-700 text-white border-2 border-gray-700"
+              : "border-2 border-gray-700")
+          }
+        >
+          Uganda
+        </div>
+        <div
+          onClick={() => {
+            setShowUgandaLocations(false);
+            setShowKenyaLocations(false);
+            setShowTanzaniaLocations(true);
+            setShowRwandaLocations(false);
+          }}
+          className={
+            "px-4 rounded-3xl py-2 cursor-pointer font-bold text-sm " +
+            (showTanzaniaLocations
+              ? "bg-gray-700 text-white border-2 border-gray-700"
+              : "border-2 border-gray-700")
+          }
+        >
+          Tanzania
+        </div>
+        <div
+          onClick={() => {
+            setShowUgandaLocations(false);
+            setShowKenyaLocations(false);
+            setShowTanzaniaLocations(false);
+            setShowRwandaLocations(true);
+          }}
+          className={
+            "px-4 rounded-3xl py-2 cursor-pointer font-bold text-sm " +
+            (showRwandaLocations
+              ? "bg-gray-700 text-white border-2 border-gray-700"
+              : "border-2 border-gray-700")
+          }
+        >
+          Rwanda
+        </div>
+      </div>
+      {showKenyaLocations &&
+        kenyaDefaultLocations.map((location, index) => (
+          <label
+            key={index}
+            className={
+              "w-full md:w-[47%] relative cursor-pointer flex border-2 overflow-hidden rounded-md max-h-[150px] " +
+              (containsOption(location.tag) ||
+              (!router.query.location && index === 0)
+                ? "border-blue-500"
+                : "border-gray-200")
+            }
+          >
+            <Checkbox
+              checked={containsOption(location.tag)}
+              value={location.tag}
+              onChange={handleCheck}
+              hideInput={true}
+            ></Checkbox>
 
-          <div className="flex w-[80%] justify-between">
-            <div className="flex flex-col gap-1 py-1 px-2">
-              <h1 className="font-black">{location.name}</h1>
-              <p className="text-sm text-gray-600">{location.desc}</p>
-            </div>
-
-            <div className="absolute top-2 right-3">
-              <Icon
-                icon="mdi:checkbox-marked-circle"
-                className={
-                  " " +
-                  (router.query.location == location.tag ||
-                  (!router.query.location && index === 0)
-                    ? "text-blue-600"
-                    : "text-gray-200")
-                }
+            <div className="h-full w-[20%] relative">
+              <Image
+                className={"w-full object-cover "}
+                src={location.imagePath}
+                alt={location.imageAlt}
+                layout={"fill"}
+                objectFit="cover"
+                unoptimized={true}
               />
             </div>
-          </div>
-        </div>
-      ))}
+
+            <div className="flex w-[80%] justify-between">
+              <div className="flex flex-col gap-1 py-1 px-2">
+                <h1 className="font-black">{location.name}</h1>
+                <p className="text-sm text-gray-600">{location.desc}</p>
+              </div>
+
+              <div className="absolute top-2 right-3">
+                <Icon
+                  icon="mdi:checkbox-marked-circle"
+                  className={
+                    " " +
+                    (containsOption(location.tag) ||
+                    (!router.query.location && index === 0)
+                      ? "text-blue-600"
+                      : "text-gray-200")
+                  }
+                />
+              </div>
+            </div>
+          </label>
+        ))}
 
       <div
         onClick={() => {

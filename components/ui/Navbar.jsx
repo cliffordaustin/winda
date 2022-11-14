@@ -19,7 +19,7 @@ import { useRouter } from "next/router";
 import { InlineWidget } from "react-calendly";
 import NavbarCurrency from "./NavbarCurrency";
 
-function Navbar({ userProfile }) {
+function Navbar({ userProfile, showTripWizard = false }) {
   const [curatedTripsHover, setCuratedTripsHover] = useState(true);
   const [staysHover, setStaysHover] = useState(false);
   const [activitiesHover, setActivitiesHover] = useState(false);
@@ -452,15 +452,28 @@ function Navbar({ userProfile }) {
         </div>
         <div className="flex items-center gap-2">
           <div className="hidden md:flex items-center gap-4">
-            <div
-              onClick={() => {
-                router.push("/trip-wizard");
-                Mixpanel.track("Clicked on trip wizard");
-              }}
-              className="flex items-center gap-0.5 px-4 py-2 cursor-pointer border-gradient"
+            <Transition
+              enter="transition-all ease-in duration-150"
+              leave="transition-all ease-out duration-150"
+              enterFrom="opacity-0 scale-50"
+              enterTo="opacity-100 scale-100"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-50"
+              show={showTripWizard}
             >
-              <span className="text-black text-sm font-bold">Trip wizard</span>
-            </div>
+              <div
+                onClick={() => {
+                  router.push("/trip-wizard");
+                  Mixpanel.track("Clicked on trip wizard");
+                }}
+                className="flex items-center gap-0.5 px-4 py-2 cursor-pointer border-gradient"
+              >
+                <span className="text-black text-sm font-bold">
+                  Trip wizard
+                </span>
+              </div>
+            </Transition>
+
             <div
               onClick={() => {
                 setShowCalendly(true);
