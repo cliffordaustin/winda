@@ -16,6 +16,7 @@ import LoadingSpinerChase from "../../../components/ui/LoadingSpinerChase";
 import UserDropdown from "../../../components/Home/UserDropdown";
 import Dialogue from "../../../components/Home/Dialogue";
 import { useRouter } from "next/router";
+import Head from "next/head";
 
 function RequestTrip({ userProfile }) {
   const router = useRouter();
@@ -61,6 +62,10 @@ function RequestTrip({ userProfile }) {
   });
   return (
     <div className="flex gap-2 relative">
+      <Head>
+        <title>Winda.guide | Request for a trip</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <div className="w-full sm:w-[80%] sm:mx-auto md:w-[45%] px-4 py-3 h-full">
         <div
           onClick={() => {

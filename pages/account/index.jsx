@@ -13,6 +13,7 @@ import Button from "../../components/ui/Button";
 import LoadingSpinerChase from "../../components/ui/LoadingSpinerChase";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
+import Head from "next/head";
 
 const AboutUs = ({ userProfile }) => {
   let fullName = userProfile.first_name + " " + userProfile.last_name;
@@ -109,6 +110,10 @@ const AboutUs = ({ userProfile }) => {
   });
   return (
     <div className="relative">
+      <Head>
+        <title>Winda.guide | Your account</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       {showChangePasswordPopup && (
         <div className="absolute z-30 top-0 left-0 right-0 flex items-center justify-center py-2 px-3 bg-green-100">
           <span className="text-green-700 font-bold">

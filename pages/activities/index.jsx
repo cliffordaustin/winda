@@ -29,6 +29,7 @@ import TypeOfActivities from "../../components/Activities/ActivitiesFilterItems"
 import MobileSearchModal from "../../components/Activities/MobileSearchModal";
 import { Icon } from "@iconify/react";
 import ContactBanner from "../../components/Home/ContactBanner";
+import Head from "next/head";
 
 function Activities({
   userProfile,
@@ -366,6 +367,15 @@ function Activities({
         });
       }}
     >
+      <Head>
+        <title>Winda.guide | explore activities</title>
+        <meta
+          name="description"
+          content="Search, discover, and activities in Kenya. Try it now."
+        ></meta>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
+
       {/* <ContactBanner></ContactBanner> */}
       <div className="sticky top-0 left-0 right-0 bg-white border-b z-20 pb-4">
         <Navbar

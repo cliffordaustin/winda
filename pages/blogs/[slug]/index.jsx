@@ -7,6 +7,7 @@ import parse from "html-react-parser";
 import Navbar from "../../../components/Home/Navbar";
 import Image from "next/image";
 import UserDropdown from "../../../components/Home/UserDropdown";
+import Head from "next/head";
 
 function Blog({ blog, userProfile }) {
   const GlobalStyle = createGlobalStyle`
@@ -29,6 +30,10 @@ function Blog({ blog, userProfile }) {
   }
   return (
     <div>
+      <Head>
+        <title>{blog.name}</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <div className="sticky border-b top-0 w-full bg-white z-50">
         <div className="bg-white sm:px-12 px-4 py-3 flex items-center justify-between">
           <div className="flex gap-1">

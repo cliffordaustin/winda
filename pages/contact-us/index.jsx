@@ -5,10 +5,16 @@ import axios from "axios";
 
 import getToken from "../../lib/getToken";
 import Footer from "../../components/Home/Footer";
+import Head from "next/head";
 
 const ContactUs = ({ userProfile }) => {
   return (
     <div>
+      <Head>
+        <title>Winda.guide | Contact us</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
+
       <Navbar
         userProfile={userProfile}
         logoImage="/images/winda_logo/horizontal-blue-font.png"

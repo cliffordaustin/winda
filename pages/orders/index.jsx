@@ -12,6 +12,7 @@ import Footer from "../../components/Home/Footer";
 import Dialogue from "../../components/Home/Dialogue";
 import FlightItem from "../../components/Cart/FlightItem";
 import ContactBanner from "../../components/Home/ContactBanner";
+import Head from "next/head";
 
 function Orders({
   userProfile,
@@ -66,6 +67,11 @@ function Orders({
 
   return (
     <div className="relative">
+      <Head>
+        <title>Winda.guide | Your orders</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
+
       <div>
         {stayOrders.length === 0 &&
           activitiesOrders.length === 0 &&

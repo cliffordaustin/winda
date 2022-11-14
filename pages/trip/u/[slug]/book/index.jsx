@@ -23,6 +23,7 @@ import DatePicker from "../../../../../components/ui/DatePickerOpen";
 import { useSelector } from "react-redux";
 import Cookies from "js-cookie";
 import { Mixpanel } from "../../../../../lib/mixpanelconfig";
+import Head from "next/head";
 
 function BookTrip({ trip, userProfile }) {
   const tripSortedImages = trip.curated_trip_images.sort(
@@ -249,6 +250,10 @@ function BookTrip({ trip, userProfile }) {
 
   return (
     <div>
+      <Head>
+        <title>Winda.guide | Book trip</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <div className="sticky bg-white top-0 left-0 right-0 z-50">
         <Navbar userProfile={userProfile}></Navbar>
       </div>

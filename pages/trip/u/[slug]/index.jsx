@@ -19,6 +19,7 @@ import ScrollToNavigation from "../../../../components/Trip/ScrollToNavigations"
 import { Transition } from "@headlessui/react";
 import { useInView } from "react-intersection-observer";
 import { Link as ReactScrollLink } from "react-scroll";
+import Head from "next/head";
 
 function CuratedTripDetail({ trip, userProfile }) {
   const totalNumberOfBreakfasts = () => {
@@ -167,6 +168,14 @@ function CuratedTripDetail({ trip, userProfile }) {
   return (
     <div>
       <div className="sticky bg-white top-0 left-0 right-0 z-50">
+        <Head>
+          <title>{trip.name}</title>
+          <meta
+            name="viewport"
+            content="initial-scale=1.0, width=device-width"
+          />
+        </Head>
+
         <Navbar userProfile={userProfile}></Navbar>
         <Transition
           enter="transition-all ease-in duration-150"

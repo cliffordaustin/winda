@@ -53,6 +53,7 @@ import { useSelector } from "react-redux";
 import { set } from "nprogress";
 import { DayPicker } from "react-day-picker";
 import { isSameDay } from "date-fns";
+import Head from "next/head";
 
 function TripDetail({ userProfile, userTrips, trip }) {
   const GlobalStyle = createGlobalStyle`
@@ -537,6 +538,13 @@ function TripDetail({ userProfile, userTrips, trip }) {
     <>
       {!pageError && (
         <div className="relative">
+          <Head>
+            <title>{trip.name}</title>
+            <meta
+              name="viewport"
+              content="initial-scale=1.0, width=device-width"
+            />
+          </Head>
           <div className="sticky bg-white top-0 left-0 right-0 z-50">
             <div className="md:hidden">
               <TravelConciergeBanner></TravelConciergeBanner>

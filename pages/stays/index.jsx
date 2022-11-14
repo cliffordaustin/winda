@@ -39,6 +39,7 @@ import MobileSearchModal from "../../components/Stay/MobileSearchModal";
 import { useGoogleOneTapLogin } from "@react-oauth/google";
 import ContactBanner from "../../components/Home/ContactBanner";
 import { stayUrl } from "../../lib/stayUrl";
+import Head from "next/head";
 
 function Stays({
   userProfile,
@@ -371,6 +372,17 @@ function Stays({
     >
       {/* <ContactBanner></ContactBanner> */}
       <div className="sticky top-0 left-0 right-0 bg-white border-b z-20 pb-4">
+        <Head>
+          <title>Winda.guide | explore stays or accommodation</title>
+          <meta
+            name="description"
+            content="Search, discover, and stays or accommodation in Kenya. Try it now."
+          ></meta>
+          <meta
+            name="viewport"
+            content="initial-scale=1.0, width=device-width"
+          />
+        </Head>
         <Navbar
           showDropdown={state.showDropdown}
           currentNavState={state.currentNavState}

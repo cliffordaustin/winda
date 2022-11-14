@@ -28,6 +28,7 @@ import LoadingSpinerChase from "../../components/ui/LoadingSpinerChase";
 import { Mixpanel } from "../../lib/mixpanelconfig";
 import Dialogue from "../../components/Home/Dialogue";
 import Successful from "../../components/TripWizard/Successful";
+import Head from "next/head";
 
 function TripWizard({ userProfile }) {
   const settings = {
@@ -230,6 +231,10 @@ function TripWizard({ userProfile }) {
 
   return (
     <div>
+      <Head>
+        <title>Winda.guide | Trip wizard</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <GlobalStyle></GlobalStyle>
       <div>
         <Navbar userProfile={userProfile}></Navbar>

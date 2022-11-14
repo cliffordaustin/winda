@@ -13,6 +13,7 @@ import Navbar from "../../components/Stay/Navbar";
 import Footer from "../../components/Home/Footer";
 import Listing from "../../components/SavedListings/Listing";
 import PopoverBox from "../../components/ui/Popover";
+import Head from "next/head";
 
 function SavedListings({
   userProfile,
@@ -33,6 +34,10 @@ function SavedListings({
 
   return (
     <div className="relative">
+      <Head>
+        <title>Winda.guide | Your saved listings</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <div className="mb-24">
         <div>
           {savedStays.length === 0 &&

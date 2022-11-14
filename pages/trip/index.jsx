@@ -31,6 +31,7 @@ import ContactBanner from "../../components/Home/ContactBanner";
 import Navbar from "../../components/ui/Navbar";
 import TravelConciergeBanner from "../../components/Home/TravelConciergeBanner";
 import { is } from "date-fns/locale";
+import Head from "next/head";
 
 const Trips = ({
   userProfile,
@@ -198,6 +199,19 @@ const Trips = ({
         setShowLocation(false);
       }}
     >
+      <div className="">
+        <Head>
+          <title>Winda.guide | explore curated trips</title>
+          <meta
+            name="description"
+            content="Search, discover, and book trips in Kenya. Try it now."
+          ></meta>
+          <meta
+            name="viewport"
+            content="initial-scale=1.0, width=device-width"
+          />
+        </Head>
+      </div>
       <div className="sticky bg-white top-0 left-0 right-0 z-50">
         <div className="md:hidden">
           <TravelConciergeBanner></TravelConciergeBanner>

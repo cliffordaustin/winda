@@ -8,10 +8,15 @@ import Footer from "../../components/Home/Footer";
 import Button from "../../components/ui/Button";
 import Link from "next/link";
 import Image from "next/image";
+import Head from "next/head";
 
 const AboutUs = ({ userProfile }) => {
   return (
     <div className="">
+      <Head>
+        <title>Winda.guide | About us</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <Navbar
         userProfile={userProfile}
         logoImage="/images/winda_logo/horizontal-blue-font.png"

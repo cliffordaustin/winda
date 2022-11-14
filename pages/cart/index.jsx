@@ -31,6 +31,7 @@ import ContactBanner from "../../components/Home/ContactBanner";
 import { Icon } from "@iconify/react";
 import { Mixpanel } from "../../lib/mixpanelconfig";
 import Input from "../../components/ui/Input";
+import Head from "next/head";
 
 const Cart = ({
   cart,
@@ -1309,6 +1310,11 @@ const Cart = ({
 
   return (
     <div className="relative">
+      <Head>
+        <title>Winda.guide | Your basket</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
+
       <div className="mb-24">
         {showCartItems}
         {nothingInCart}
