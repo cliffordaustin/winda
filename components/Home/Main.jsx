@@ -449,7 +449,14 @@ function Main({ holidayTrips }) {
               return (
                 <SwiperSlide key={index} className="!w-[320px] cursor-pointer">
                   <Link href={`/trip/${trip.slug}`}>
-                    <a className="w-full cursor-pointer">
+                    <a
+                      onClick={() => {
+                        Mixpanel.track("User opened a trip", {
+                          name_of_trip: trip.name,
+                        });
+                      }}
+                      className="w-full cursor-pointer"
+                    >
                       <div className="!h-[220px] relative w-full">
                         <Carousel
                           images={[images[0]]}

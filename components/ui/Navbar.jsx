@@ -83,6 +83,15 @@ function Navbar({ userProfile }) {
     }
   };
 
+  const settings = {
+    spaceBetween: 10,
+    slidesPerView: 1,
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+  };
+
   const [swiper, setSwiper] = useState(null);
 
   const slideto = (index) => {
@@ -107,139 +116,139 @@ function Navbar({ userProfile }) {
               ></Image>
             </a>
           </Link>
-
-          <Popover className={"hidden md:block"}>
-            <Popover.Button className={"outline-none "}>
-              <div
-                onMouseEnter={() => {
-                  setIsShowingExplore(true);
-                }}
-                onMouseLeave={() => {
-                  setIsShowingExplore(false);
-                }}
-                onClick={() => {
-                  setIsShowingExplore(!isShowingExplore);
-                }}
-                className="items-center flex gap-3"
-              >
+          <div className="flex items-center gap-4">
+            <Popover className={"hidden md:block"}>
+              <Popover.Button className={"outline-none "}>
                 <div
+                  onMouseEnter={() => {
+                    setIsShowingExplore(true);
+                  }}
+                  onMouseLeave={() => {
+                    setIsShowingExplore(false);
+                  }}
+                  onClick={() => {
+                    setIsShowingExplore(!isShowingExplore);
+                  }}
+                  className="items-center flex gap-3"
+                >
+                  <div
+                    className={
+                      "font-bold cursor-pointer hover:bg-gray-100 transition-all duration-300 ease-linear rounded-3xl px-2 py-2 !text-base flex items-center gap-1 " +
+                      styles.link
+                    }
+                  >
+                    <span>Explore our services</span>
+                    <Icon icon="bx:chevron-down" className="w-6 h-6" />
+                  </div>
+                </div>
+              </Popover.Button>
+
+              <Transition
+                as={React.Fragment}
+                enter="transition ease-out duration-200"
+                enterFrom="opacity-0 translate-y-1"
+                enterTo="opacity-100 translate-y-0"
+                leave="transition ease-in duration-150"
+                leaveFrom="opacity-100 translate-y-0"
+                leaveTo="opacity-0 translate-y-1"
+                show={isShowingExplore}
+                onMouseEnter={() => setIsShowingExplore(true)}
+                onMouseLeave={() => setIsShowingExplore(false)}
+              >
+                <Popover.Panel
                   className={
-                    "font-bold cursor-pointer hover:bg-gray-100 transition-all duration-300 ease-linear rounded-3xl px-2 py-2 !text-base flex items-center gap-1 " +
-                    styles.link
+                    "absolute z-[30] bg-white rounded-xl border-4 border-gray-100 md:right-0 shadow-md lg:left-[60px] mt-2 md:w-full lg:w-[850px] overflow-hidden"
                   }
                 >
-                  <span>Explore our services</span>
-                  <Icon icon="bx:chevron-down" className="w-6 h-6" />
-                </div>
-              </div>
-            </Popover.Button>
+                  <div className="flex">
+                    <div className="w-[300px] pr-1 cursor-pointer bg-gray-100">
+                      <div
+                        className={
+                          "px-3 py-2 rounded-lg relative swiper-button-next " +
+                          (curatedTripsHover
+                            ? "bg-white transition-all duration-300 ease-in-out"
+                            : "")
+                        }
+                        onMouseOver={() => {
+                          setCuratedTripsHover(true);
+                          setStaysHover(false);
+                          setActivitiesHover(false);
+                        }}
+                        onClick={() => {
+                          setCuratedTripsHover(true);
+                          setStaysHover(false);
+                          setActivitiesHover(false);
+                        }}
+                      >
+                        <h1 className="font-bold">Curated trips</h1>
+                        <p className="mt-2 text-sm text-gray-600">
+                          We created curated trips meant for you to create those
+                          special moments.
+                        </p>
+                      </div>
 
-            <Transition
-              as={React.Fragment}
-              enter="transition ease-out duration-200"
-              enterFrom="opacity-0 translate-y-1"
-              enterTo="opacity-100 translate-y-0"
-              leave="transition ease-in duration-150"
-              leaveFrom="opacity-100 translate-y-0"
-              leaveTo="opacity-0 translate-y-1"
-              show={isShowingExplore}
-              onMouseEnter={() => setIsShowingExplore(true)}
-              onMouseLeave={() => setIsShowingExplore(false)}
-            >
-              <Popover.Panel
-                className={
-                  "absolute z-[30] bg-white rounded-xl border-4 border-gray-100 md:right-0 shadow-md lg:left-[60px] mt-2 md:w-full lg:w-[850px] overflow-hidden"
-                }
-              >
-                <div className="flex">
-                  <div className="w-[300px] pr-1 cursor-pointer bg-gray-100">
-                    <div
-                      className={
-                        "px-3 py-2 rounded-lg relative swiper-button-next " +
-                        (curatedTripsHover
-                          ? "bg-white transition-all duration-300 ease-in-out"
-                          : "")
-                      }
-                      onMouseOver={() => {
-                        setCuratedTripsHover(true);
-                        setStaysHover(false);
-                        setActivitiesHover(false);
-                      }}
-                      onClick={() => {
-                        setCuratedTripsHover(true);
-                        setStaysHover(false);
-                        setActivitiesHover(false);
-                      }}
-                    >
-                      <h1 className="font-bold">Curated trips</h1>
-                      <p className="mt-2 text-sm text-gray-600">
-                        We created curated trips meant for you to create those
-                        special moments.
-                      </p>
+                      <div
+                        className={
+                          "mt-3 px-3 py-2 rounded-lg " +
+                          (staysHover
+                            ? "bg-white transition-all duration-300 ease-in-out"
+                            : "")
+                        }
+                        onMouseOver={() => {
+                          setCuratedTripsHover(false);
+                          setStaysHover(true);
+                          setActivitiesHover(false);
+                        }}
+                        onClick={() => {
+                          setCuratedTripsHover(false);
+                          setStaysHover(true);
+                          setActivitiesHover(false);
+                        }}
+                      >
+                        <h1 className="font-bold">Stays</h1>
+                        <p className="mt-2 text-sm text-gray-600">
+                          Explore our large number of carefully selected stays.
+                        </p>
+                      </div>
+
+                      <div
+                        className={
+                          "mt-3 px-3 py-2 rounded-lg " +
+                          (activitiesHover
+                            ? "bg-white transition-all duration-300 ease-in-out"
+                            : "")
+                        }
+                        onMouseOver={() => {
+                          setCuratedTripsHover(false);
+                          setStaysHover(false);
+                          setActivitiesHover(true);
+                        }}
+                        onClick={() => {
+                          setCuratedTripsHover(false);
+                          setStaysHover(false);
+                          setActivitiesHover(true);
+                        }}
+                      >
+                        <h1 className="font-bold">Activites</h1>
+                        <p className="mt-2 text-sm text-gray-600">
+                          Find an activity that suits your budget and taste.
+                        </p>
+                      </div>
                     </div>
 
-                    <div
-                      className={
-                        "mt-3 px-3 py-2 rounded-lg " +
-                        (staysHover
-                          ? "bg-white transition-all duration-300 ease-in-out"
-                          : "")
-                      }
-                      onMouseOver={() => {
-                        setCuratedTripsHover(false);
-                        setStaysHover(true);
-                        setActivitiesHover(false);
-                      }}
-                      onClick={() => {
-                        setCuratedTripsHover(false);
-                        setStaysHover(true);
-                        setActivitiesHover(false);
-                      }}
-                    >
-                      <h1 className="font-bold">Stays</h1>
-                      <p className="mt-2 text-sm text-gray-600">
-                        Explore our large number of carefully selected stays.
-                      </p>
-                    </div>
-
-                    <div
-                      className={
-                        "mt-3 px-3 py-2 rounded-lg " +
-                        (activitiesHover
-                          ? "bg-white transition-all duration-300 ease-in-out"
-                          : "")
-                      }
-                      onMouseOver={() => {
-                        setCuratedTripsHover(false);
-                        setStaysHover(false);
-                        setActivitiesHover(true);
-                      }}
-                      onClick={() => {
-                        setCuratedTripsHover(false);
-                        setStaysHover(false);
-                        setActivitiesHover(true);
-                      }}
-                    >
-                      <h1 className="font-bold">Activites</h1>
-                      <p className="mt-2 text-sm text-gray-600">
-                        Find an activity that suits your budget and taste.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="w-[550px] relative px-6 py-2">
-                    <Transition
-                      as={React.Fragment}
-                      enter="transition-all duration-300"
-                      enterFrom="opacity-0 absolute top-[50px]"
-                      enterTo="opacity-100 absolute top-[6px]"
-                      leave="transition-all duration-300"
-                      leaveFrom="opacity-100 absolute top-[6px]"
-                      leaveTo="opacity-0 absolute top-[50px]"
-                      show={curatedTripsHover}
-                    >
-                      <div className="flex w-full flex-wrap items-center justify-between gap-3">
-                        {/* <div className="flex w-[46%] gap-2 items-center cursor-pointer">
+                    <div className="w-[550px] relative px-6 py-2">
+                      <Transition
+                        as={React.Fragment}
+                        enter="transition-all duration-300"
+                        enterFrom="opacity-0 absolute top-[50px]"
+                        enterTo="opacity-100 absolute top-[6px]"
+                        leave="transition-all duration-300"
+                        leaveFrom="opacity-100 absolute top-[6px]"
+                        leaveTo="opacity-0 absolute top-[50px]"
+                        show={curatedTripsHover}
+                      >
+                        <div className="flex w-full flex-wrap items-center justify-between gap-3">
+                          {/* <div className="flex w-[46%] gap-2 items-center cursor-pointer">
                       <div className="w-12 h-10 flex items-center justify-center rounded-lg bg-blue-600 bg-opacity-30">
                         <Icon
                           icon="carbon:agriculture-analytics"
@@ -254,190 +263,212 @@ function Navbar({ userProfile }) {
                       </div>
                     </div> */}
 
-                        <Item
-                          icon="carbon:agriculture-analytics"
-                          title="Cultural"
-                          subText="Curated cultural trips"
-                          href="/trip?tag=cultural"
-                        ></Item>
+                          <Item
+                            icon="carbon:agriculture-analytics"
+                            title="Cultural"
+                            subText="Curated cultural trips"
+                            href="/trip?tag=cultural"
+                          ></Item>
 
-                        <Item
-                          icon="icon-park-outline:oval-love-two"
-                          title="Romantic"
-                          subText="Curated romantic trips"
-                          href="/trip?tag=romantic"
-                        ></Item>
+                          <Item
+                            icon="icon-park-outline:oval-love-two"
+                            title="Romantic"
+                            subText="Curated romantic trips"
+                            href="/trip?tag=romantic"
+                          ></Item>
 
-                        <Item
-                          icon="bi:calendar-week"
-                          title="Weekend getaway"
-                          subText="Curated weekend getaway trips"
-                          href="/trip?tag=weekend_getaway"
-                        ></Item>
+                          <Item
+                            icon="bi:calendar-week"
+                            title="Weekend getaway"
+                            subText="Curated weekend getaway trips"
+                            href="/trip?tag=weekend_getaway"
+                          ></Item>
 
-                        <Item
-                          icon="fluent:clipboard-day-20-regular"
-                          title="Day trip"
-                          subText="Curated day trips"
-                          href="/trip?tag=day_trips"
-                        ></Item>
+                          <Item
+                            icon="fluent:clipboard-day-20-regular"
+                            title="Day trip"
+                            subText="Curated day trips"
+                            href="/trip?tag=day_trips"
+                          ></Item>
 
-                        <Item
-                          icon="carbon:pedestrian-family"
-                          title="Family"
-                          subText="Curated family trips"
-                          href="/trip?tag=family"
-                        ></Item>
+                          <Item
+                            icon="carbon:pedestrian-family"
+                            title="Family"
+                            subText="Curated family trips"
+                            href="/trip?tag=family"
+                          ></Item>
 
-                        <Item
-                          icon="akar-icons:people-group"
-                          title="Group"
-                          subText="Curated group trips"
-                          href="/trip?tag=groups"
-                        ></Item>
+                          <Item
+                            icon="akar-icons:people-group"
+                            title="Group"
+                            subText="Curated group trips"
+                            href="/trip?tag=groups"
+                          ></Item>
 
-                        <Item
-                          icon="bx:trip"
-                          title="Road trip"
-                          subText="Curated road trips"
-                          href="/trip?tag=road_trip"
-                        ></Item>
+                          <Item
+                            icon="bx:trip"
+                            title="Road trip"
+                            subText="Curated road trips"
+                            href="/trip?tag=road_trip"
+                          ></Item>
 
-                        <Item
-                          icon="fe:app-menu"
-                          title="View all"
-                          subText="View all curated trips"
-                          href="/trip"
-                        ></Item>
-                      </div>
-                    </Transition>
+                          <Item
+                            icon="fe:app-menu"
+                            title="View all"
+                            subText="View all curated trips"
+                            href="/trip"
+                          ></Item>
+                        </div>
+                      </Transition>
 
-                    <Transition
-                      as={React.Fragment}
-                      enter="transition-all duration-300"
-                      enterFrom="opacity-0 absolute top-[50px]"
-                      enterTo="opacity-100 absolute top-[6px]"
-                      leave="transition-all duration-300"
-                      leaveFrom="opacity-100 absolute top-[6px]"
-                      leaveTo="opacity-0 absolute top-[50px]"
-                      show={staysHover}
-                    >
-                      <div className="flex w-full flex-wrap items-center justify-between gap-3">
-                        <Item
-                          icon="bx:bed"
-                          title="Lodge"
-                          subText="Available lodges"
-                          href="/stays?type_of_stay=LODGE"
-                        ></Item>
+                      <Transition
+                        as={React.Fragment}
+                        enter="transition-all duration-300"
+                        enterFrom="opacity-0 absolute top-[50px]"
+                        enterTo="opacity-100 absolute top-[6px]"
+                        leave="transition-all duration-300"
+                        leaveFrom="opacity-100 absolute top-[6px]"
+                        leaveTo="opacity-0 absolute top-[50px]"
+                        show={staysHover}
+                      >
+                        <div className="flex w-full flex-wrap items-center justify-between gap-3">
+                          <Item
+                            icon="bx:bed"
+                            title="Lodge"
+                            subText="Available lodges"
+                            href="/stays?type_of_stay=LODGE"
+                          ></Item>
 
-                        <Item
-                          icon="carbon:campsite"
-                          title="Campsite"
-                          subText="Available campsites"
-                          href="/stays?type_of_stay=CAMPSITE"
-                        ></Item>
+                          <Item
+                            icon="carbon:campsite"
+                            title="Campsite"
+                            subText="Available campsites"
+                            href="/stays?type_of_stay=CAMPSITE"
+                          ></Item>
 
-                        <Item
-                          icon="fontisto:tent"
-                          title="Tented campsite"
-                          subText="Available tented campsites"
-                          href="/stays?type_of_stay=TENTED CAMP"
-                        ></Item>
+                          <Item
+                            icon="fontisto:tent"
+                            title="Tented campsite"
+                            subText="Available tented campsites"
+                            href="/stays?type_of_stay=TENTED CAMP"
+                          ></Item>
 
-                        <Item
-                          icon="akar-icons:star"
-                          title="Unique space"
-                          subText="Available unique spaces"
-                          href="/stays?type_of_stay=UNIQUE SPACE"
-                        ></Item>
+                          <Item
+                            icon="akar-icons:star"
+                            title="Unique space"
+                            subText="Available unique spaces"
+                            href="/stays?type_of_stay=UNIQUE SPACE"
+                          ></Item>
 
-                        <Item
-                          icon="tabler:report-money"
-                          title="Budget"
-                          subText="Available budget stays"
-                          href="/stays?pricing_type=REASONABLE"
-                        ></Item>
+                          <Item
+                            icon="tabler:report-money"
+                            title="Budget"
+                            subText="Available budget stays"
+                            href="/stays?pricing_type=REASONABLE"
+                          ></Item>
 
-                        <Item
-                          icon="material-symbols:price-change-outline-sharp"
-                          title="Mid-range"
-                          subText="Available mid-range stays"
-                          href="/stays?pricing_type=MID-RANGE"
-                        ></Item>
+                          <Item
+                            icon="material-symbols:price-change-outline-sharp"
+                            title="Mid-range"
+                            subText="Available mid-range stays"
+                            href="/stays?pricing_type=MID-RANGE"
+                          ></Item>
 
-                        <Item
-                          icon="cil:diamond"
-                          title="Luxury"
-                          subText="Available luxury stays"
-                          href="/stays?pricing_type=HIGH-END"
-                        ></Item>
+                          <Item
+                            icon="cil:diamond"
+                            title="Luxury"
+                            subText="Available luxury stays"
+                            href="/stays?pricing_type=HIGH-END"
+                          ></Item>
 
-                        <Item
-                          icon="fe:app-menu"
-                          title="View all"
-                          subText="View all stays"
-                          href="/stays"
-                        ></Item>
-                      </div>
-                    </Transition>
+                          <Item
+                            icon="fe:app-menu"
+                            title="View all"
+                            subText="View all stays"
+                            href="/stays"
+                          ></Item>
+                        </div>
+                      </Transition>
 
-                    <Transition
-                      as={React.Fragment}
-                      enter="transition-all duration-300"
-                      enterFrom="opacity-0 absolute top-[50px]"
-                      enterTo="opacity-100 absolute top-[6px]"
-                      leave="transition-all duration-300"
-                      leaveFrom="opacity-100 absolute top-[6px]"
-                      leaveTo="opacity-0 absolute top-[50px]"
-                      show={activitiesHover}
-                    >
-                      <div className="flex w-full flex-wrap items-center justify-between gap-3">
-                        <Item
-                          icon="tabler:report-money"
-                          title="Budget"
-                          subText="Available budget activities"
-                          href="/activities?pricing_type=REASONABLE"
-                        ></Item>
+                      <Transition
+                        as={React.Fragment}
+                        enter="transition-all duration-300"
+                        enterFrom="opacity-0 absolute top-[50px]"
+                        enterTo="opacity-100 absolute top-[6px]"
+                        leave="transition-all duration-300"
+                        leaveFrom="opacity-100 absolute top-[6px]"
+                        leaveTo="opacity-0 absolute top-[50px]"
+                        show={activitiesHover}
+                      >
+                        <div className="flex w-full flex-wrap items-center justify-between gap-3">
+                          <Item
+                            icon="tabler:report-money"
+                            title="Budget"
+                            subText="Available budget activities"
+                            href="/activities?pricing_type=REASONABLE"
+                          ></Item>
 
-                        <Item
-                          icon="material-symbols:price-change-outline-sharp"
-                          title="Mid-range"
-                          subText="Available Mid-range activities"
-                          href="/activities?pricing_type=MID-RANGE"
-                        ></Item>
+                          <Item
+                            icon="material-symbols:price-change-outline-sharp"
+                            title="Mid-range"
+                            subText="Available Mid-range activities"
+                            href="/activities?pricing_type=MID-RANGE"
+                          ></Item>
 
-                        <Item
-                          icon="cil:diamond"
-                          title="Luxury"
-                          subText="Available luxury activities"
-                          href="/activities?pricing_type=HIGH-END"
-                        ></Item>
+                          <Item
+                            icon="cil:diamond"
+                            title="Luxury"
+                            subText="Available luxury activities"
+                            href="/activities?pricing_type=HIGH-END"
+                          ></Item>
 
-                        <Item
-                          icon="fe:app-menu"
-                          title="View all"
-                          subText="View all activities"
-                          href="/activities"
-                        ></Item>
-                      </div>
-                    </Transition>
+                          <Item
+                            icon="fe:app-menu"
+                            title="View all"
+                            subText="View all activities"
+                            href="/activities"
+                          ></Item>
+                        </div>
+                      </Transition>
+                    </div>
                   </div>
+                </Popover.Panel>
+              </Transition>
+            </Popover>
+
+            <Link href="/blogs">
+              <a className="hidden md:block">
+                <div
+                  className={
+                    "font-bold cursor-pointertransition-all duration-300 cursor-pointer ease-linear rounded-3xl py-2 !text-base flex items-center gap-1 " +
+                    styles.link
+                  }
+                >
+                  Blog
                 </div>
-              </Popover.Panel>
-            </Transition>
-          </Popover>
+              </a>
+            </Link>
+          </div>
         </div>
         <div className="flex items-center gap-2">
-          <div className="hidden md:flex items-center gap-2">
+          <div className="hidden md:flex items-center gap-4">
+            <div
+              onClick={() => {
+                router.push("/trip-wizard");
+                Mixpanel.track("Clicked on trip wizard");
+              }}
+              className="flex items-center gap-0.5 px-4 py-2 cursor-pointer border-gradient"
+            >
+              <span className="text-black text-sm font-bold">Trip wizard</span>
+            </div>
             <div
               onClick={() => {
                 setShowCalendly(true);
+                Mixpanel.track("Clicked on travel concierge");
               }}
-              className="flex items-center gap-0.5 px-4 py-3 !bg-gradient-to-r from-pink-500 via-red-500 !rounded-3xl to-yellow-500"
+              className="flex items-center gap-0.5 px-4 py-3 cursor-pointer !bg-gradient-to-r from-pink-500 via-red-500 !rounded-3xl to-yellow-500"
             >
-              <span className="ml-2 text-white text-sm font-bold cursor-pointer">
-                Travel concierge
-              </span>
+              <span className="text-white text-sm font-bold">Contact Us</span>
             </div>
 
             <div></div>
@@ -481,7 +512,7 @@ function Navbar({ userProfile }) {
                   >
                     <Dialog.Panel
                       className={
-                        "w-full transform overflow-hidden bg-white screen-height-safari text-left border-t align-middle shadow-xl transition-all !rounded-none relative overflow-y-scroll remove-scroll "
+                        "w-full transform bg-white screen-height-safari text-left border-t align-middle shadow-xl transition-all !rounded-none relative "
                       }
                     >
                       <Transition.Child
@@ -507,16 +538,17 @@ function Navbar({ userProfile }) {
                         </div>
                       </Transition.Child>
                       <Swiper
-                        preventInteractionOnTransition={true}
-                        allowTouchMove={false}
+                        // preventInteractionOnTransition={true}
+                        // allowTouchMove={false}
+                        {...settings}
                         onSwiper={(swiper) => {
                           setSwiper(swiper);
                         }}
                         onSlideChange={(swiper) => {}}
-                        modules={[Navigation]}
-                        className="!h-full"
+                        className="!h-full !overflow-y-scroll"
+                        autoHeight={true}
                       >
-                        <SwiperSlide className="overflow-y-scroll p-2 remove-scroll ">
+                        <SwiperSlide className="h-full">
                           <Transition.Child
                             as={React.Fragment}
                             enter="ease-out duration-300"
@@ -526,91 +558,93 @@ function Navbar({ userProfile }) {
                             leaveFrom="opacity-100 scale-100"
                             leaveTo="opacity-0 scale-95"
                           >
-                            <div className="px-2 py-3 bg-gray-100 rounded-md flex flex-col">
-                              <div className="py-2 border-b">
-                                <h1 className="font-bold">
-                                  Explore our services
-                                </h1>
-                              </div>
-
-                              <div
-                                onClick={() => {
-                                  slideto(1);
-                                  setCuratedTripsHover(true);
-                                  setStaysHover(false);
-                                  setActivitiesHover(false);
-                                }}
-                                className="flex items-center justify-between mt-3 cursor-pointer"
-                              >
-                                <div className="flex flex-col gap-1">
-                                  <h1 className="font-bold">Curated trips</h1>
-                                  <p className="mt-2 text-sm text-gray-600">
-                                    We created curated trips meant for you to
-                                    create those special moments.
-                                  </p>
+                            <div className="px-2 mt-2">
+                              <div className="px-2 py-3 bg-gray-100 rounded-md flex flex-col">
+                                <div className="py-2 border-b">
+                                  <h1 className="font-bold">
+                                    Explore our services
+                                  </h1>
                                 </div>
 
-                                <Icon
-                                  icon="bx:chevron-right"
-                                  className="w-8 h-8"
-                                />
-                              </div>
+                                <div
+                                  onClick={() => {
+                                    slideto(1);
+                                    setCuratedTripsHover(true);
+                                    setStaysHover(false);
+                                    setActivitiesHover(false);
+                                  }}
+                                  className="flex items-center justify-between mt-3 cursor-pointer"
+                                >
+                                  <div className="flex flex-col gap-1">
+                                    <h1 className="font-bold">Curated trips</h1>
+                                    <p className="mt-2 text-sm text-gray-600">
+                                      We created curated trips meant for you to
+                                      create those special moments.
+                                    </p>
+                                  </div>
 
-                              <div
-                                onClick={() => {
-                                  slideto(1);
-                                  setCuratedTripsHover(false);
-                                  setStaysHover(true);
-                                  setActivitiesHover(false);
-                                }}
-                                className="flex items-center justify-between mt-5 cursor-pointer"
-                              >
-                                <div className="flex flex-col gap-1">
-                                  <h1 className="font-bold">Stays</h1>
-                                  <p className="mt-2 text-sm text-gray-600">
-                                    Explore our large number of carefully
-                                    selected stays.
-                                  </p>
+                                  <Icon
+                                    icon="bx:chevron-right"
+                                    className="w-8 h-8"
+                                  />
                                 </div>
 
-                                <Icon
-                                  icon="bx:chevron-right"
-                                  className="w-8 h-8"
-                                />
-                              </div>
+                                <div
+                                  onClick={() => {
+                                    slideto(1);
+                                    setCuratedTripsHover(false);
+                                    setStaysHover(true);
+                                    setActivitiesHover(false);
+                                  }}
+                                  className="flex items-center justify-between mt-5 cursor-pointer"
+                                >
+                                  <div className="flex flex-col gap-1">
+                                    <h1 className="font-bold">Stays</h1>
+                                    <p className="mt-2 text-sm text-gray-600">
+                                      Explore our large number of carefully
+                                      selected stays.
+                                    </p>
+                                  </div>
 
-                              <div
-                                onClick={() => {
-                                  slideto(1);
-                                  setCuratedTripsHover(false);
-                                  setStaysHover(false);
-                                  setActivitiesHover(true);
-                                }}
-                                className="flex items-center justify-between mt-5 cursor-pointer"
-                              >
-                                <div className="flex flex-col gap-1">
-                                  <h1 className="font-bold">Activites</h1>
-                                  <p className="mt-2 text-sm text-gray-600">
-                                    Find an activity that suits your budget and
-                                    taste.
-                                  </p>
+                                  <Icon
+                                    icon="bx:chevron-right"
+                                    className="w-8 h-8"
+                                  />
                                 </div>
 
-                                <Icon
-                                  icon="bx:chevron-right"
-                                  className="w-8 h-8"
-                                />
+                                <div
+                                  onClick={() => {
+                                    slideto(1);
+                                    setCuratedTripsHover(false);
+                                    setStaysHover(false);
+                                    setActivitiesHover(true);
+                                  }}
+                                  className="flex items-center justify-between mt-5 cursor-pointer"
+                                >
+                                  <div className="flex flex-col gap-1">
+                                    <h1 className="font-bold">Activites</h1>
+                                    <p className="mt-2 text-sm text-gray-600">
+                                      Find an activity that suits your budget
+                                      and taste.
+                                    </p>
+                                  </div>
+
+                                  <Icon
+                                    icon="bx:chevron-right"
+                                    className="w-8 h-8"
+                                  />
+                                </div>
                               </div>
                             </div>
                           </Transition.Child>
                         </SwiperSlide>
 
-                        <SwiperSlide className="overflow-y-scroll p-2 remove-scroll">
+                        <SwiperSlide className="!h-full">
                           <div
                             onClick={() => {
                               slideto(0);
                             }}
-                            className="bg-white cursor-pointer flex items-center gap-1"
+                            className="bg-white mt-3 ml-3 swiper-button-prev cursor-pointer flex items-center gap-1 !overflow-y-scroll"
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -626,7 +660,7 @@ function Navbar({ userProfile }) {
                             </svg>
                             <h3 className="font-bold text-black">Back</h3>
                           </div>
-                          <div className="px-2 mt-3">
+                          <div className="px-4 mt-3">
                             {curatedTripsHover && (
                               <div className="flex w-full flex-wrap items-center justify-between gap-3">
                                 <Item
@@ -793,7 +827,7 @@ function Navbar({ userProfile }) {
             closeModal={() => {
               setShowCalendly(false);
             }}
-            title="Travel concierge"
+            title="Contact Us"
             dialogueTitleClassName="!font-bold !ml-4 !text-xl md:!text-2xl"
             outsideDialogueClass="!p-0"
             dialoguePanelClassName="screen-height-safari !rounded-none md:!rounded-md md:!min-h-0 md:max-h-[700px] !px-0 !max-w-6xl overflow-y-scroll remove-scroll"

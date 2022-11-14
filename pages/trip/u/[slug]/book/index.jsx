@@ -123,6 +123,12 @@ function BookTrip({ trip, userProfile }) {
             phone: phone,
             adults: adults,
             message: message,
+            plan:
+              router.query.plan === "2"
+                ? "PLAN B"
+                : router.query.plan === "3"
+                ? "PLAN C"
+                : "PLAN A",
             booking_request: true,
           }
         )
@@ -134,6 +140,12 @@ function BookTrip({ trip, userProfile }) {
             first_name: values.first_name,
             last_name: values.last_name,
             email: values.email,
+            plan:
+              router.query.plan === "2"
+                ? "PLAN B"
+                : router.query.plan === "3"
+                ? "PLAN C"
+                : "PLAN A",
             adults: adults,
           });
         })
@@ -203,6 +215,12 @@ function BookTrip({ trip, userProfile }) {
           adults: adults,
           message: message,
           paid: true,
+          plan:
+            router.query.plan === "2"
+              ? "PLAN B"
+              : router.query.plan === "3"
+              ? "PLAN C"
+              : "PLAN A",
           booking_request: false,
         }
       )
@@ -214,6 +232,12 @@ function BookTrip({ trip, userProfile }) {
           first_name: formik.values.first_name,
           last_name: formik.values.last_name,
           email: formik.values.email,
+          plan:
+            router.query.plan === "2"
+              ? "PLAN B"
+              : router.query.plan === "3"
+              ? "PLAN C"
+              : "PLAN A",
           adults: adults,
         });
       })

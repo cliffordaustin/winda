@@ -1,15 +1,15 @@
 import { Fragment, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 
-export default function Select({ data }) {
-  const [selected, setSelected] = useState(data[0]);
-
+export default function Select({ data, selected, setSelected }) {
   return (
     <div className="w-72">
       <Listbox value={selected} onChange={setSelected}>
         <div className="relative">
-          <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
-            <span className="block truncate">{selected.name}</span>
+          <Listbox.Button className="relative h-[40px] border-2 w-full focus:outline-none rounded-md ">
+            <span className="block truncate text-black text-left ml-2 font-bold text-sm">
+              {selected.name}
+            </span>
             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -38,8 +38,8 @@ export default function Select({ data }) {
                 <Listbox.Option
                   key={personIdx}
                   className={({ active }) =>
-                    `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                      active ? "bg-amber-100 text-amber-900" : "text-gray-900"
+                    `relative cursor-default select-none py-2 pl-3 pr-4 ${
+                      active ? "bg-blue-100 text-blue-900" : "text-gray-900"
                     }`
                   }
                   value={item}
@@ -47,14 +47,14 @@ export default function Select({ data }) {
                   {({ selected }) => (
                     <>
                       <span
-                        className={`block truncate ${
-                          selected ? "font-medium" : "font-normal"
+                        className={`block truncate text-black text-left ml-2 font-bold text-sm ${
+                          selected ? "font-bold" : "font-normal"
                         }`}
                       >
                         {item.name}
                       </span>
                       {selected ? (
-                        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
+                        <span className="absolute inset-y-0 right-0 flex items-center pr-3 text-blue-600">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"

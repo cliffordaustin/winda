@@ -4,17 +4,21 @@ import { Icon } from "@iconify/react";
 import Link from "next/link";
 import Dialogue from "./Dialogue";
 import { InlineWidget } from "react-calendly";
+import { Mixpanel } from "../../lib/mixpanelconfig";
+import { useRouter } from "next/router";
 
 function TravelConciergeBanner() {
   const [showCalendly, setShowCalendly] = useState(false);
+
+  const router = useRouter();
   return (
-    <div className="flex justify-between text-white px-4 py-2 bg-white border-b">
+    <div className="flex justify-between text-white px-4 py-2 border-b">
       <Dialogue
         isOpen={showCalendly}
         closeModal={() => {
           setShowCalendly(false);
         }}
-        title="Travel concierge"
+        title="Contact Us"
         dialogueTitleClassName="!font-bold !ml-4 !text-xl md:!text-2xl"
         outsideDialogueClass="!p-0"
         dialoguePanelClassName="screen-height-safari !rounded-none md:!rounded-md md:!min-h-0 md:max-h-[700px] !px-0 max-w-6xl overflow-y-scroll remove-scroll"
@@ -49,18 +53,38 @@ function TravelConciergeBanner() {
         </div>
       </Dialogue>
 
-      <div className="flex justify-between w-full items-center text-black gap-4">
+      <div className="flex justify-between w-full items-center text-black">
+        <Link href="/blogs">
+          <a className="">
+            <div
+              className={
+                "font-bold cursor-pointertransition-all duration-300 cursor-pointer ease-linear rounded-3xl py-2 !text-base flex items-center gap-1 underline "
+              }
+            >
+              Blogs
+            </div>
+          </a>
+        </Link>
         <div className="font-bold"></div>
-
-        <div
-          onClick={() => {
-            setShowCalendly(true);
-          }}
-          className="flex items-center gap-0.5 px-4 py-3 !rounded-3xl !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500"
-        >
-          <span className="ml-2 text-white text-sm font-bold cursor-pointer">
-            Travel concierge
-          </span>
+        <div className="flex items-center gap-2">
+          <div
+            onClick={() => {
+              router.push("/trip-wizard");
+              Mixpanel.track("Clicked on trip wizard");
+            }}
+            className="flex items-center gap-0.5 px-4 cursor-pointer py-2 border-gradient"
+          >
+            <span className="text-black text-sm font-bold">Trip wizard</span>
+          </div>
+          <div
+            onClick={() => {
+              setShowCalendly(true);
+              Mixpanel.track("Clicked on travel concierge");
+            }}
+            className="flex items-center gap-0.5 px-4 py-3 cursor-pointer !rounded-3xl !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500"
+          >
+            <span className="text-white text-sm font-bold">Contact us</span>
+          </div>
         </div>
       </div>
     </div>
