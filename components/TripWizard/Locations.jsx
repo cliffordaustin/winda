@@ -244,11 +244,17 @@ function Locations(props) {
     var updatedList = [...currentOptions];
     if (event.target.checked) {
       updatedList = [...currentOptions, event.target.value];
-      const allOptions = updatedList
+      let allOptions = updatedList
         .toString()
         .replace("[", "") // remove [
         .replace("]", "") // remove ]
         .trim(); // remove all white space
+
+      // in case the location = 0(not sure), if the user checks a different location, then the location should
+      // be updated to the new location and remove the previous location(location = 0)
+      // comma is added because if a user checks a location after checking a 'not sure' the output becomes "0,location2"
+      // so we need to remove the comma and the 0
+      allOptions = allOptions.replace("0,", "");
 
       router.replace(
         {
@@ -284,12 +290,12 @@ function Locations(props) {
   };
 
   useEffect(() => {
-    if (router.query.tag) {
-      setCurrentOptions(router.query.tag.split(","));
+    if (router.query.location) {
+      setCurrentOptions(router.query.location.split(","));
     } else {
       setCurrentOptions([]);
     }
-  }, [router.query.tag]);
+  }, [router.query.location]);
 
   const containsOption = (option) => {
     return currentOptions.includes(option);
@@ -421,8 +427,7 @@ function Locations(props) {
             key={index}
             className={
               "w-full md:w-[47%] relative cursor-pointer flex border-2 overflow-hidden rounded-md max-h-[150px] " +
-              (containsOption(location.tag) ||
-              (!router.query.location && index === 0)
+              (containsOption(location.tag)
                 ? "border-blue-500"
                 : "border-gray-200")
             }
@@ -456,8 +461,7 @@ function Locations(props) {
                   icon="mdi:checkbox-marked-circle"
                   className={
                     " " +
-                    (containsOption(location.tag) ||
-                    (!router.query.location && index === 0)
+                    (containsOption(location.tag)
                       ? "text-blue-600"
                       : "text-gray-200")
                   }
@@ -473,8 +477,7 @@ function Locations(props) {
             key={index}
             className={
               "w-full md:w-[47%] relative cursor-pointer flex border-2 overflow-hidden rounded-md max-h-[150px] " +
-              (containsOption(location.tag) ||
-              (!router.query.location && index === 0)
+              (containsOption(location.tag)
                 ? "border-blue-500"
                 : "border-gray-200")
             }
@@ -508,8 +511,7 @@ function Locations(props) {
                   icon="mdi:checkbox-marked-circle"
                   className={
                     " " +
-                    (containsOption(location.tag) ||
-                    (!router.query.location && index === 0)
+                    (containsOption(location.tag)
                       ? "text-blue-600"
                       : "text-gray-200")
                   }
@@ -525,8 +527,7 @@ function Locations(props) {
             key={index}
             className={
               "w-full md:w-[47%] relative cursor-pointer flex border-2 overflow-hidden rounded-md max-h-[150px] " +
-              (containsOption(location.tag) ||
-              (!router.query.location && index === 0)
+              (containsOption(location.tag)
                 ? "border-blue-500"
                 : "border-gray-200")
             }
@@ -560,8 +561,7 @@ function Locations(props) {
                   icon="mdi:checkbox-marked-circle"
                   className={
                     " " +
-                    (containsOption(location.tag) ||
-                    (!router.query.location && index === 0)
+                    (containsOption(location.tag)
                       ? "text-blue-600"
                       : "text-gray-200")
                   }
