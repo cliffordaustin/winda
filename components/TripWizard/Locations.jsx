@@ -125,6 +125,22 @@ function Locations(props) {
       imagePath: "/images/uganda/bwindi.webp",
       imageAlt: "Image of Bwindi Impenetrable Forest National Park",
     },
+
+    {
+      name: "Jinja",
+      tag: "jinja",
+      desc: "Jinja is a town in southern Uganda, on the shore of Lake Victoria. ",
+      imagePath: "/images/uganda/jinja.jpg",
+      imageAlt: "Image of Jinja",
+    },
+    {
+      name: "Murchison Falls National Park",
+      tag: "murchison_falls_national_park",
+      desc: "Murchison Falls National Park sits on the shore of Lake Albert, in northwest Uganda.",
+      imagePath: "/images/uganda/murchison.jpg",
+      imageAlt: "Image of Murchison Falls National Park",
+    },
+
     {
       name: "Queen Elizabeth National Park",
       tag: "queen_elizabeth_national_park",
@@ -145,6 +161,13 @@ function Locations(props) {
       desc: "Kidepo Valley National Park is a 1,442 square kilometres national park in the Karamoja region in northeast Uganda.",
       imagePath: "/images/uganda/kidepo.webp",
       imageAlt: "Image of Kidepo Valley National Park",
+    },
+    {
+      name: "Kibale Forest",
+      tag: "kibale_forest",
+      desc: "Kibale National Park is a national park in western Uganda, protecting moist evergreen rainforest.",
+      imagePath: "/images/uganda/kibale.jpg",
+      imageAlt: "Image of Kibale Forest",
     },
   ];
 
@@ -190,6 +213,13 @@ function Locations(props) {
       desc: "Ruaha National Park is a national park in Tanzania. The addition of the Usangu Game Reserve and other important wetlands to the park in 2008 increased its size to about 20,226 km2 (7,809 sq mi). ",
       imagePath: "/images/tanzania/ruaha.jpg",
       imageAlt: "Image of Ruaha National Park",
+    },
+    {
+      name: "Selous Game Reserve",
+      tag: "selous_game_reserve",
+      desc: "The Selous Game Reserve is a protected area in southern Tanzania. It covers a total area of 50,000 km² and has additional buffer zones. ",
+      imagePath: "/images/tanzania/selous.jpg",
+      imageAlt: "Image of Selous Game Reserve",
     },
     {
       name: "Dar-es-Salaam",

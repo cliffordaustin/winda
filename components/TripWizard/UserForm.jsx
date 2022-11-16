@@ -121,7 +121,7 @@ function UserForm({
 
           <div className="mt-4">
             <label className="block text-sm font-bold mb-2">
-              Cell phone number (optional)
+              Cell phone number
             </label>
             <PhoneInput
               placeholder="Enter phone number"
