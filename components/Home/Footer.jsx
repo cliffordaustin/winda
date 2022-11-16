@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 export default function Footer() {
   const router = useRouter();
   return (
-    <div className="bg-gray-100 mt-6 flex flex-col md:flex-row justify-center items-center gap-2 md:justify-between py-4 border-t px-4 md:px-8">
+    <div className="bg-gray-100 flex flex-col md:flex-row justify-center items-center gap-2 md:justify-between py-4 border-t px-4 md:px-8">
       <div className="flex gap-3 items-center justify-center flex-wrap">
         <Link href="/policies">
           <a>

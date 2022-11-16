@@ -236,7 +236,7 @@ export default function Home({ userProfile, holidayTrips }) {
         ></Navbar>
       </div>
 
-      <div className="mb-12 select-none relative">
+      <div className="select-none relative">
         <div className="w-full text-red-600 h-[500px] md:h-[600px] relative before:absolute before:h-full before:w-full before:bg-black before:z-20 before:opacity-40">
           <video
             autoPlay
@@ -398,11 +398,43 @@ export default function Home({ userProfile, holidayTrips }) {
         )}
       </div>
 
-      <div className="md:mt-16 mb-8 2xl:w-4/6 2xl:mx-auto">
+      {/* <div className="bg-gray-50 pb-14">
+        <div className="w-full px-4 py-4 bg-white border-b flex flex-wrap justify-center items-center gap-3">
+          <div className="flex items-center gap-2 text-sm font-bold">
+            <Icon
+              icon="material-symbols:check-circle-outline-rounded"
+              className="text-red-600"
+            />
+            <span>The largest variety of trips across East Africa</span>
+          </div>
+          <Link href="/reviews">
+            <a className="flex items-center gap-2 text-sm font-bold hover:underline">
+              <Icon
+                icon="material-symbols:check-circle-outline-rounded"
+                className="text-red-600"
+              />
+              <span>Hear from our Satisfied Customers </span>
+            </a>
+          </Link>
+
+          <div className="flex items-center gap-2 text-sm font-bold">
+            <Icon
+              icon="material-symbols:check-circle-outline-rounded"
+              className="text-green-600"
+            />
+            <span>Best Price Guaranteed</span>
+          </div>
+        </div>
+        <div className="2xl:w-4/6 2xl:mx-auto mt-6">
+          <Main holidayTrips={holidayTrips}></Main>
+        </div>
+      </div> */}
+
+      <div className="2xl:w-4/6 2xl:mx-auto my-10">
         <Main holidayTrips={holidayTrips}></Main>
       </div>
 
-      <div className="mt-14">
+      <div className="">
         <Footer></Footer>
       </div>
 

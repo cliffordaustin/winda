@@ -531,8 +531,10 @@ function CuratedTripDetail({ trip, userProfile }) {
                               className="flex items-center gap-3"
                             >
                               <div className="h-10 w-12 rounded-lg flex items-center justify-center bg-gray-200">
-                                {itinerary_transports.transport_type ===
-                                  "CAR" && (
+                                {(itinerary_transports.transport_type ===
+                                  "CAR HIRE" ||
+                                  itinerary_transports.transport_type ===
+                                    "CAR TRANSFER") && (
                                   <Icon
                                     className="w-7 h-7 text-gray-500"
                                     icon="fa6-solid:car"
@@ -563,25 +565,25 @@ function CuratedTripDetail({ trip, userProfile }) {
                                   />
                                 )}
                               </div>
-                              <div>
-                                {!itinerary_transports.all_round_trip && (
-                                  <span className="font-bold">
-                                    From{" "}
-                                    {itinerary_transports.starting_location} to{" "}
-                                    {itinerary_transports.ending_location}
-                                  </span>
-                                )}
+                              <div className="flex flex-col gap-0.5">
+                                <span className="capitalize font-black">
+                                  {itinerary_transports.transport_type.toLowerCase()}
+                                </span>
 
-                                {itinerary_transports.all_round_trip && (
-                                  <span className="font-bold">
-                                    To all locations around this trip(for this
-                                    day)
+                                {itinerary_transports.starting_location &&
+                                  itinerary_transports.ending_location && (
+                                    <span className="">
+                                      From{" "}
+                                      {itinerary_transports.starting_location}{" "}
+                                      to {itinerary_transports.ending_location}
+                                    </span>
+                                  )}
+
+                                {itinerary_transports.transport_type ===
+                                  "CAR HIRE" && (
+                                  <span className="">
+                                    A car will be provided to you on arrival
                                   </span>
-                                )}
-                                {itinerary_transports.driver_included_in_car && (
-                                  <div className="text-sm text-gray-700">
-                                    Driver included in car
-                                  </div>
                                 )}
                               </div>
                             </div>
