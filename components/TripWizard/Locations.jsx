@@ -110,6 +110,134 @@ function Locations(props) {
     },
   ];
 
+  const ugandaDefaultLocations = [
+    {
+      name: "Kampala",
+      tag: "kampala",
+      desc: "Kampala is Uganda's national and commercial capital bordering Lake Victoria, Africa's largest lake.",
+      imagePath: "/images/uganda/kampala.webp",
+      imageAlt: "Image of Kampala",
+    },
+    {
+      name: "Bwindi Impenetrable Forest National Park",
+      tag: "bwindi_impenetrable_forest_national_park",
+      desc: "The Bwindi Impenetrable Forest is a large primeval forest located in south-western Uganda in the Kanungu District.",
+      imagePath: "/images/uganda/bwindi.webp",
+      imageAlt: "Image of Bwindi Impenetrable Forest National Park",
+    },
+    {
+      name: "Queen Elizabeth National Park",
+      tag: "queen_elizabeth_national_park",
+      desc: "The park is home to 618 bird species which is the 6th highest diversity in the world and the highest in Africa making it a perfect destination for Uganda.",
+      imagePath: "/images/uganda/queen-elizabeth-park.webp",
+      imageAlt: "Image of Queen Elizabeth National Park, Uganda",
+    },
+    {
+      name: "Lake Mburo National Park",
+      tag: "lake_mburo_national_park",
+      desc: "Lake Mburo National Park is a national park located in Nyabushozi County, Kiruhura District near Mbarara in Uganda.",
+      imagePath: "/images/uganda/lake-mburo.webp",
+      imageAlt: "Image of Lake Mburo National Park",
+    },
+    {
+      name: "Kidepo Valley National Park",
+      tag: "kidepo_valley_national_park",
+      desc: "Kidepo Valley National Park is a 1,442 square kilometres national park in the Karamoja region in northeast Uganda.",
+      imagePath: "/images/uganda/kidepo.webp",
+      imageAlt: "Image of Kidepo Valley National Park",
+    },
+  ];
+
+  const tanzaniaDefaultLocations = [
+    {
+      name: "Arusha",
+      tag: "arusha",
+      desc: "Arusha is a city in East Africa's Tanzania, located at the base of volcanic Mt. Meru. It's a gateway to Africa's highest peak, Mt. Kilimanjaro. ",
+      imagePath: "/images/tanzania/arusha.jpg",
+      imageAlt: "Image of Arusha",
+    },
+    {
+      name: "Lake Manyara National Park",
+      tag: "lake_manyara_national_park",
+      desc: "Lake Manyara National Park is a protected area in Tanzania's Arusha and Manyara Regions, situated between Lake Manyara and the Great Rift Valley.",
+      imagePath: "/images/tanzania/manyara.jpg",
+      imageAlt: "Image of Lake Manyara National Park",
+    },
+    {
+      name: "Ngorongoro Crater",
+      tag: "ngorongoro_crater",
+      desc: "Measuring an area of 260 square kilometres and extending about 20km in diameter, the crater is actually a huge caldera of a volcano that collapsed to a depth of 610m about three million years ago.",
+      imagePath: "/images/tanzania/ngorongoro.jpg",
+      imageAlt: "Image of Ngorongoro Crater",
+    },
+    {
+      name: "Serengeti National Park",
+      tag: "serengeti_national_park",
+      desc: "The Serengeti ecosystem is a geographical region in Africa, spanning northern Tanzania. The protected area within the region includes approximately 30,000 km² of land.",
+      imagePath: "/images/tanzania/serengeti.jpg",
+      imageAlt: "Image of Serengeti National Park",
+    },
+    {
+      name: "Tarangire National Park",
+      tag: "tarangire_national_park",
+      desc: "Tarangire National Park is a national park in Tanzania's Manyara Region. The name of the park originates from the Tarangire River that crosses the park.",
+      imagePath: "/images/tanzania/tarangire.jpg",
+      imageAlt: "Image of Tarangire National Park",
+    },
+    {
+      name: "Ruaha National Park",
+      tag: "ruaha_national_park",
+      desc: "Ruaha National Park is a national park in Tanzania. The addition of the Usangu Game Reserve and other important wetlands to the park in 2008 increased its size to about 20,226 km2 (7,809 sq mi). ",
+      imagePath: "/images/tanzania/ruaha.jpg",
+      imageAlt: "Image of Ruaha National Park",
+    },
+    {
+      name: "Dar-es-Salaam",
+      tag: "dar_es_salaam",
+      desc: "Dar es Salaam, a major city and commercial port on Tanzania’s Indian Ocean coast, grew from a fishing village. ",
+      imagePath: "/images/tanzania/dar-es-Salaam.jpg",
+      imageAlt: "Image of Dar-es-Salaam",
+    },
+  ];
+
+  const rwandaDefaultLocations = [
+    {
+      name: "Kigali",
+      tag: "kigali",
+      desc: "Kigali is the capital city of Rwanda, roughly in the center of the country. It sprawls across numerous hills, ridges and valleys, and has a vibrant restaurant and nightlife scene. ",
+      imagePath: "/images/rwanda/kigali.jpg",
+      imageAlt: "Image of Kigali",
+    },
+    {
+      name: "Akagera National Park",
+      tag: "akagera_national_park",
+      desc: "Akagera National Park lies in eastern Rwanda, hugging the border with Tanzania. It's characterized by woodland, swamps, low mountains and savannah. ",
+      imagePath: "/images/rwanda/akagera.jpg",
+      imageAlt: "Image of Akagera National Park",
+    },
+    {
+      name: "Volcanoes National Park",
+      tag: "volcanoes_national_park",
+      desc: "Volcanoes National Park is a national park in northwestern Rwanda. It covers 160 km² of rainforest and encompasses five of the eight volcanoes in the Virunga Mountains.",
+      imagePath: "/images/rwanda/volcanoes.jpg",
+      imageAlt: "Image of Volcanoes National Park",
+    },
+    {
+      name: "Lake Kivu",
+      tag: "lake_kivu",
+      desc: "Lake Kivu is one of the African Great Lakes. It lies on the border between the Democratic Republic of the Congo and Rwanda, and is in the Albertine Rift, the western branch of the East African Rift.  ",
+      imagePath: "/images/rwanda/kivu.jpg",
+      imageAlt: "Image of Lake Kivu",
+    },
+    {
+      name: "Nyungwe Forest National Park",
+      tag: "nyungwe_forest_national_park",
+      desc: "Nyungwe National Park lies in southwest Rwanda, partly abutting the Burundi border. It's a vast area of mountain rainforest, home to many species of chimpanzees, plus owl-faced and colobus monkeys.",
+      imagePath: "/images/rwanda/nyungwe.jpg",
+      imageAlt: "Image of Nyungwe Forest National Park",
+    },
+  ];
+
   const [currentOptions, setCurrentOptions] = useState([]);
 
   const handleCheck = (event) => {
@@ -169,7 +297,7 @@ function Locations(props) {
 
   return (
     <div className="flex flex-wrap justify-between mt-4 gap-3">
-      <div className="flex items-center gap-3 w-full justify-center mb-3">
+      <div className="flex items-center flex-wrap gap-3 w-full justify-center mb-3">
         <div
           onClick={() => {
             setShowUgandaLocations(false);
@@ -237,6 +365,162 @@ function Locations(props) {
       </div>
       {showKenyaLocations &&
         kenyaDefaultLocations.map((location, index) => (
+          <label
+            key={index}
+            className={
+              "w-full md:w-[47%] relative cursor-pointer flex border-2 overflow-hidden rounded-md max-h-[150px] " +
+              (containsOption(location.tag) ||
+              (!router.query.location && index === 0)
+                ? "border-blue-500"
+                : "border-gray-200")
+            }
+          >
+            <Checkbox
+              checked={containsOption(location.tag)}
+              value={location.tag}
+              onChange={handleCheck}
+              hideInput={true}
+            ></Checkbox>
+
+            <div className="h-full w-[20%] relative">
+              <Image
+                className={"w-full object-cover "}
+                src={location.imagePath}
+                alt={location.imageAlt}
+                layout={"fill"}
+                objectFit="cover"
+                unoptimized={true}
+              />
+            </div>
+
+            <div className="flex w-[80%] justify-between">
+              <div className="flex flex-col gap-1 py-1 px-2">
+                <h1 className="font-black">{location.name}</h1>
+                <p className="text-sm text-gray-600">{location.desc}</p>
+              </div>
+
+              <div className="absolute top-2 right-3">
+                <Icon
+                  icon="mdi:checkbox-marked-circle"
+                  className={
+                    " " +
+                    (containsOption(location.tag) ||
+                    (!router.query.location && index === 0)
+                      ? "text-blue-600"
+                      : "text-gray-200")
+                  }
+                />
+              </div>
+            </div>
+          </label>
+        ))}
+
+      {showUgandaLocations &&
+        ugandaDefaultLocations.map((location, index) => (
+          <label
+            key={index}
+            className={
+              "w-full md:w-[47%] relative cursor-pointer flex border-2 overflow-hidden rounded-md max-h-[150px] " +
+              (containsOption(location.tag) ||
+              (!router.query.location && index === 0)
+                ? "border-blue-500"
+                : "border-gray-200")
+            }
+          >
+            <Checkbox
+              checked={containsOption(location.tag)}
+              value={location.tag}
+              onChange={handleCheck}
+              hideInput={true}
+            ></Checkbox>
+
+            <div className="h-full w-[20%] relative">
+              <Image
+                className={"w-full object-cover "}
+                src={location.imagePath}
+                alt={location.imageAlt}
+                layout={"fill"}
+                objectFit="cover"
+                unoptimized={true}
+              />
+            </div>
+
+            <div className="flex w-[80%] justify-between">
+              <div className="flex flex-col gap-1 py-1 px-2">
+                <h1 className="font-black">{location.name}</h1>
+                <p className="text-sm text-gray-600">{location.desc}</p>
+              </div>
+
+              <div className="absolute top-2 right-3">
+                <Icon
+                  icon="mdi:checkbox-marked-circle"
+                  className={
+                    " " +
+                    (containsOption(location.tag) ||
+                    (!router.query.location && index === 0)
+                      ? "text-blue-600"
+                      : "text-gray-200")
+                  }
+                />
+              </div>
+            </div>
+          </label>
+        ))}
+
+      {showTanzaniaLocations &&
+        tanzaniaDefaultLocations.map((location, index) => (
+          <label
+            key={index}
+            className={
+              "w-full md:w-[47%] relative cursor-pointer flex border-2 overflow-hidden rounded-md max-h-[150px] " +
+              (containsOption(location.tag) ||
+              (!router.query.location && index === 0)
+                ? "border-blue-500"
+                : "border-gray-200")
+            }
+          >
+            <Checkbox
+              checked={containsOption(location.tag)}
+              value={location.tag}
+              onChange={handleCheck}
+              hideInput={true}
+            ></Checkbox>
+
+            <div className="h-full w-[20%] relative">
+              <Image
+                className={"w-full object-cover "}
+                src={location.imagePath}
+                alt={location.imageAlt}
+                layout={"fill"}
+                objectFit="cover"
+                unoptimized={true}
+              />
+            </div>
+
+            <div className="flex w-[80%] justify-between">
+              <div className="flex flex-col gap-1 py-1 px-2">
+                <h1 className="font-black">{location.name}</h1>
+                <p className="text-sm text-gray-600">{location.desc}</p>
+              </div>
+
+              <div className="absolute top-2 right-3">
+                <Icon
+                  icon="mdi:checkbox-marked-circle"
+                  className={
+                    " " +
+                    (containsOption(location.tag) ||
+                    (!router.query.location && index === 0)
+                      ? "text-blue-600"
+                      : "text-gray-200")
+                  }
+                />
+              </div>
+            </div>
+          </label>
+        ))}
+
+      {showRwandaLocations &&
+        rwandaDefaultLocations.map((location, index) => (
           <label
             key={index}
             className={

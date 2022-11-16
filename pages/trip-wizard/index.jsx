@@ -62,7 +62,6 @@ function TripWizard({ userProfile }) {
   const getCurrentYear = new Date().getFullYear();
 
   const handleNext = () => {
-    console.log("hello world");
     if (state.swiperIndex === 0 && !router.query.location) {
       router.replace(
         {
@@ -109,11 +108,14 @@ function TripWizard({ userProfile }) {
       if (router.query.location === "0") {
         return "Not sure";
       } else {
-        const text = router.query.location.split("-").join(" ");
-        return text.charAt(0).toUpperCase() + text.slice(1);
+        const texts = router.query.location.split(",");
+        const locations = texts.map((text) => {
+          return text.split("_").join(" ");
+        });
+        return locations;
       }
     } else {
-      return "Nairobi";
+      return "Not sure";
     }
   };
 
@@ -188,13 +190,12 @@ function TripWizard({ userProfile }) {
         .required("This field is required"),
     }),
     onSubmit: (values) => {
-      console.log("called");
       if (phone && !isValidPhoneNumber(phone || "")) {
         setInvalidPhone(true);
       } else {
         setInvalidPhone(false);
         setLoading(true);
-        const location = getLocationFromUrl();
+        const locations = getLocationFromUrl();
 
         const month = getMonthFromUrl();
 
@@ -209,18 +210,19 @@ function TripWizard({ userProfile }) {
             email: values.email,
             phone: phone,
             number_of_people: people,
-            location: location,
+            locations: locations,
             month: month,
             year: year,
             tags: tags,
           })
           .then((res) => {
-            Mixpanel.track("Trip wizard", {
-              number_of_people: people,
-              location: location,
-            });
             setLoading(false);
             setModalSuccessful(true);
+            Mixpanel.track("Trip wizard", {
+              number_of_people: people,
+              month: month,
+              year: year,
+            });
           })
           .catch((err) => {
             setLoading(false);

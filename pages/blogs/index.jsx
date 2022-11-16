@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
 import getToken from "../../lib/getToken";
-import Navbar from "../../components/Home/Navbar";
+import Navbar from "../../components/ui/Navbar";
 import Image from "next/image";
 import Link from "next/link";
 import UserDropdown from "../../components/Home/UserDropdown";
@@ -37,29 +37,8 @@ function Blogs({ blogs, userProfile }) {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
-      <div className="sticky border-b top-0 w-full bg-white z-50">
-        <div className="bg-white sm:px-12 px-4 py-3 flex items-center justify-between">
-          <div className="flex gap-1">
-            <div className="relative w-[40px] h-[60px]">
-              <Image
-                layout="fill"
-                alt="Logo"
-                src="/images/winda_logo/winda-logo.png"
-                priority
-              ></Image>
-            </div>
-            <div className="text-xl self-end py-2 text-slate-700">
-              <h1 className="uppercase font-normal">Winda blog</h1>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <UserDropdown
-              userProfile={userProfile}
-              isHomePage={true}
-            ></UserDropdown>
-          </div>
-        </div>
+      <div className="sticky top-0 w-full bg-white z-50">
+        <Navbar userProfile={userProfile}></Navbar>
       </div>
       <div className="px-4 mt-8 !max-w-[900px] mx-auto flex flex-col gap-3">
         {blogs.map((blog, index) => (
