@@ -439,7 +439,7 @@ export default function Home({ userProfile, holidayTrips }) {
             <div
               onClick={() => {
                 router.push("/trip-wizard");
-                Mixpanel.track("Clicked on trip wizard");
+                Mixpanel.track("Clicked on trip wizard from modal");
               }}
               className="flex items-center gap-0.5 w-fit mt-4 px-4 py-3 cursor-pointer !rounded-3xl !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500"
             >
