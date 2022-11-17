@@ -186,6 +186,17 @@ export default function Home({ userProfile, holidayTrips }) {
     }
   }, []);
 
+  const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    if (Cookies.get("tripWizardModal") !== "true") {
+      setTimeout(() => {
+        Cookies.set("tripWizardModal", "true", { expires: 5 });
+        setShowModal(true);
+      }, 5000);
+    }
+  }, []);
+
   return (
     <div
       className="relative"
@@ -397,6 +408,71 @@ export default function Home({ userProfile, holidayTrips }) {
           </Dialogue>
         )}
       </div>
+
+      <Dialogue
+        isOpen={showModal}
+        closeModal={() => {
+          setShowModal(false);
+        }}
+        dialoguePanelClassName="max-h-[600px] !p-0 max-w-lg overflow-y-scroll remove-scroll"
+      >
+        <div className="w-full relative">
+          <div className="relative w-full h-[250px]">
+            <Image
+              className=""
+              layout="fill"
+              src={"/images/home/group-of-travelers.jpg"}
+              objectFit="cover"
+              unoptimized={true}
+              alt="Image of group of travellers"
+            />
+          </div>
+
+          <div className="px-4 py-4">
+            <h1 className="font-black text-xl xl:text-2xl">
+              Are you thinking of going on a trip?
+            </h1>
+            <p className="mt-4 text-gray-600 lg:text-lg">
+              Try out our trip wizard to find your perfect trip
+            </p>
+
+            <div
+              onClick={() => {
+                router.push("/trip-wizard");
+                Mixpanel.track("Clicked on trip wizard");
+              }}
+              className="flex items-center gap-0.5 w-fit mt-4 px-4 py-3 cursor-pointer !rounded-3xl !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500"
+            >
+              <span className="text-white text-sm font-black">
+                Tell us about your trip
+              </span>
+            </div>
+
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowModal(false);
+              }}
+              className="flex cursor-pointer items-center absolute top-4 right-4 justify-center w-7 h-7 rounded-full bg-white shadow-lg"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </Dialogue>
 
       {/* <div className="bg-gray-50 pb-14">
         <div className="w-full px-4 py-4 bg-white border-b flex flex-wrap justify-center items-center gap-3">
