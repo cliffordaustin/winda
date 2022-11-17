@@ -382,215 +382,224 @@ function CuratedTripDetail({ trip, userProfile }) {
 
                     <div className="my-4 w-full h-[1px] bg-gray-200"></div>
 
-                    <DaysAccordion
-                      title={
-                        <div className="bg-gray-100 px-4 py-2">
-                          <h1>Accommodation</h1>
-                        </div>
-                      }
-                      accordionClassName="!px-0 !py-0"
-                      accordionContentClassName="px-2 py-1.5"
-                      titleContainerClassName="!p-0 border-b"
-                      showAccordionByDefault={false}
-                    >
-                      <div className="mt-4 flex flex-wrap gap-3">
-                        {itinerary.itinerary_accommodations.map(
-                          (accommodation, index) => {
-                            const sortedImages =
-                              accommodation.stay.stay_images.sort(
-                                (x, y) => y.main - x.main
-                              );
+                    {itinerary.itinerary_accommodations.length > 0 && (
+                      <DaysAccordion
+                        title={
+                          <div className="bg-gray-100 px-4 py-2">
+                            <h1>Accommodation</h1>
+                          </div>
+                        }
+                        accordionClassName="!px-0 !py-0"
+                        accordionContentClassName="px-2 py-1.5"
+                        titleContainerClassName="!p-0 border-b"
+                        showAccordionByDefault={false}
+                      >
+                        <div className="mt-4 flex flex-wrap gap-3">
+                          {itinerary.itinerary_accommodations.map(
+                            (accommodation, index) => {
+                              const sortedImages =
+                                accommodation.stay.stay_images.sort(
+                                  (x, y) => y.main - x.main
+                                );
 
-                            const images = sortedImages.map((image) => {
-                              return image.image;
-                            });
+                              const images = sortedImages.map((image) => {
+                                return image.image;
+                              });
 
-                            const stay = accommodation.stay;
+                              const stay = accommodation.stay;
 
-                            return (
-                              <div
-                                key={index}
-                                className="flex flex-col w-full sm:w-[350px] h-fit rounded-lg shadow-lg"
-                              >
-                                <div className="h-[200px] w-full">
-                                  <Carousel
-                                    images={images}
-                                    imageClass="rounded-tl-lg rounded-tr-lg"
-                                  ></Carousel>
-                                </div>
-                                <div className="px-2 py-2">
-                                  <span className="font-bold text-lg mb-1 block">
-                                    {stay.name}(or similar)
-                                  </span>
-                                  {stay.description.slice(0, 200)}
-                                  <div className="w-fit px-2 py-1 mt-1 text-sm text-gray-600 rounded-md bg-gray-100 border font-bold">
-                                    2 nights
+                              return (
+                                <div
+                                  key={index}
+                                  className="flex flex-col w-full sm:w-[350px] h-fit rounded-lg shadow-lg"
+                                >
+                                  <div className="h-[200px] w-full">
+                                    <Carousel
+                                      images={images}
+                                      imageClass="rounded-tl-lg rounded-tr-lg"
+                                    ></Carousel>
                                   </div>
-                                </div>
-                              </div>
-                            );
-                          }
-                        )}
-                      </div>
-                    </DaysAccordion>
-
-                    <DaysAccordion
-                      title={
-                        <div className="bg-gray-100 px-4 py-2">
-                          <h1>Included activities</h1>
-                        </div>
-                      }
-                      accordionClassName="!px-0 !py-0 !mt-4"
-                      accordionContentClassName="px-2 py-1.5"
-                      titleContainerClassName="!p-0 border-b"
-                      showAccordionByDefault={false}
-                    >
-                      <div className="mt-4 flex flex-wrap gap-3">
-                        {itinerary.itinerary_activities.map(
-                          (itinerary_activity, index) => {
-                            const sortedImages =
-                              itinerary_activity.activity.activity_images.sort(
-                                (x, y) => y.main - x.main
-                              );
-
-                            const images = sortedImages.map((image) => {
-                              return image.image;
-                            });
-
-                            const activity = itinerary_activity.activity;
-
-                            return (
-                              <div
-                                key={index}
-                                className="flex flex-col w-full sm:w-[350px] h-fit rounded-lg shadow-lg"
-                              >
-                                <div className="h-[200px] w-full">
-                                  <Carousel
-                                    images={images}
-                                    imageClass="rounded-tl-lg rounded-tr-lg"
-                                  ></Carousel>
-                                </div>
-                                <div className="px-2 py-2">
-                                  <span className="font-bold text-lg mb-1 block">
-                                    {activity.name}
-                                  </span>
-                                  {activity.description.slice(0, 200)}
-                                  <div className="w-fit px-2 py-1 mt-1 text-sm text-gray-600 rounded-md bg-gray-100 border font-bold">
-                                    2 nights
-                                  </div>
-                                </div>
-                              </div>
-                            );
-                          }
-                        )}
-                      </div>
-                    </DaysAccordion>
-
-                    <DaysAccordion
-                      title={
-                        <div className="bg-gray-100 px-4 py-2">
-                          <h1>Optional activities</h1>
-                        </div>
-                      }
-                      accordionClassName="!px-0 !py-0 !mt-4"
-                      accordionContentClassName="px-2 py-1.5"
-                      titleContainerClassName="!p-0 border-b"
-                      showAccordionByDefault={false}
-                    >
-                      <div className="flex flex-col gap-2 mt-2 ml-2">
-                        {itinerary.optional_activities.map(
-                          (itinerary_activity, index) => (
-                            <div
-                              key={index}
-                              className="flex items-center gap-3"
-                            >
-                              <Icon icon="ant-design:plus-outlined" />
-                              <span>{itinerary_activity.activity}</span>
-                            </div>
-                          )
-                        )}
-                      </div>
-                    </DaysAccordion>
-
-                    <DaysAccordion
-                      title={
-                        <div className="bg-gray-100 px-4 py-2">
-                          <h1>Transport</h1>
-                        </div>
-                      }
-                      accordionClassName="!px-0 !py-0 !mt-4 mb-6"
-                      accordionContentClassName="px-2 py-1.5"
-                      titleContainerClassName="!p-0 border-b"
-                      showAccordionByDefault={false}
-                    >
-                      <div className="flex flex-col gap-2 mt-2 ml-2">
-                        {itinerary.itinerary_transports.map(
-                          (itinerary_transports, index) => (
-                            <div
-                              key={index}
-                              className="flex items-center gap-3"
-                            >
-                              <div className="h-10 w-12 rounded-lg flex items-center justify-center bg-gray-200">
-                                {(itinerary_transports.transport_type ===
-                                  "CAR HIRE" ||
-                                  itinerary_transports.transport_type ===
-                                    "CAR TRANSFER") && (
-                                  <Icon
-                                    className="w-7 h-7 text-gray-500"
-                                    icon="fa6-solid:car"
-                                  />
-                                )}
-
-                                {itinerary_transports.transport_type ===
-                                  "BUS" && (
-                                  <Icon
-                                    className="w-7 h-7 text-gray-500"
-                                    icon="fa6-solid:bus"
-                                  />
-                                )}
-
-                                {itinerary_transports.transport_type ===
-                                  "FLIGHT" && (
-                                  <Icon
-                                    className="w-7 h-7 text-gray-500"
-                                    icon="ic:twotone-flight"
-                                  />
-                                )}
-
-                                {itinerary_transports.transport_type ===
-                                  "TRAIN" && (
-                                  <Icon
-                                    className="w-7 h-7 text-gray-500"
-                                    icon="fe:train"
-                                  />
-                                )}
-                              </div>
-                              <div className="flex flex-col gap-0.5">
-                                <span className="capitalize font-black">
-                                  {itinerary_transports.transport_type.toLowerCase()}
-                                </span>
-
-                                {itinerary_transports.starting_location &&
-                                  itinerary_transports.ending_location && (
-                                    <span className="">
-                                      From{" "}
-                                      {itinerary_transports.starting_location}{" "}
-                                      to {itinerary_transports.ending_location}
+                                  <div className="px-2 py-2">
+                                    <span className="font-bold text-lg mb-1 block">
+                                      {stay.name}(or similar)
                                     </span>
+                                    {stay.description.slice(0, 200)}
+                                    <div className="w-fit px-2 py-1 mt-1 text-sm text-gray-600 rounded-md bg-gray-100 border font-bold">
+                                      2 nights
+                                    </div>
+                                  </div>
+                                </div>
+                              );
+                            }
+                          )}
+                        </div>
+                      </DaysAccordion>
+                    )}
+
+                    {itinerary.itinerary_activities.length > 0 && (
+                      <DaysAccordion
+                        title={
+                          <div className="bg-gray-100 px-4 py-2">
+                            <h1>Included activities</h1>
+                          </div>
+                        }
+                        accordionClassName="!px-0 !py-0 !mt-4"
+                        accordionContentClassName="px-2 py-1.5"
+                        titleContainerClassName="!p-0 border-b"
+                        showAccordionByDefault={false}
+                      >
+                        <div className="mt-4 flex flex-wrap gap-3">
+                          {itinerary.itinerary_activities.map(
+                            (itinerary_activity, index) => {
+                              const sortedImages =
+                                itinerary_activity.activity.activity_images.sort(
+                                  (x, y) => y.main - x.main
+                                );
+
+                              const images = sortedImages.map((image) => {
+                                return image.image;
+                              });
+
+                              const activity = itinerary_activity.activity;
+
+                              return (
+                                <div
+                                  key={index}
+                                  className="flex flex-col w-full sm:w-[350px] h-fit rounded-lg shadow-lg"
+                                >
+                                  <div className="h-[200px] w-full">
+                                    <Carousel
+                                      images={images}
+                                      imageClass="rounded-tl-lg rounded-tr-lg"
+                                    ></Carousel>
+                                  </div>
+                                  <div className="px-2 py-2">
+                                    <span className="font-bold text-lg mb-1 block">
+                                      {activity.name}
+                                    </span>
+                                    {activity.description.slice(0, 200)}
+                                    <div className="w-fit px-2 py-1 mt-1 text-sm text-gray-600 rounded-md bg-gray-100 border font-bold">
+                                      2 nights
+                                    </div>
+                                  </div>
+                                </div>
+                              );
+                            }
+                          )}
+                        </div>
+                      </DaysAccordion>
+                    )}
+
+                    {itinerary.optional_activities.length > 0 && (
+                      <DaysAccordion
+                        title={
+                          <div className="bg-gray-100 px-4 py-2">
+                            <h1>Optional activities</h1>
+                          </div>
+                        }
+                        accordionClassName="!px-0 !py-0 !mt-4"
+                        accordionContentClassName="px-2 py-1.5"
+                        titleContainerClassName="!p-0 border-b"
+                        showAccordionByDefault={false}
+                      >
+                        <div className="flex flex-col gap-2 mt-2 ml-2">
+                          {itinerary.optional_activities.map(
+                            (itinerary_activity, index) => (
+                              <div
+                                key={index}
+                                className="flex items-center gap-3"
+                              >
+                                <Icon icon="ant-design:plus-outlined" />
+                                <span>{itinerary_activity.activity}</span>
+                              </div>
+                            )
+                          )}
+                        </div>
+                      </DaysAccordion>
+                    )}
+
+                    {itinerary.itinerary_transports.length > 0 && (
+                      <DaysAccordion
+                        title={
+                          <div className="bg-gray-100 px-4 py-2">
+                            <h1>Transport</h1>
+                          </div>
+                        }
+                        accordionClassName="!px-0 !py-0 !mt-4 mb-6"
+                        accordionContentClassName="px-2 py-1.5"
+                        titleContainerClassName="!p-0 border-b"
+                        showAccordionByDefault={false}
+                      >
+                        <div className="flex flex-col gap-2 mt-2 ml-2">
+                          {itinerary.itinerary_transports.map(
+                            (itinerary_transports, index) => (
+                              <div
+                                key={index}
+                                className="flex items-center gap-3"
+                              >
+                                <div className="h-10 w-12 rounded-lg flex items-center justify-center bg-gray-200">
+                                  {(itinerary_transports.transport_type ===
+                                    "CAR HIRE" ||
+                                    itinerary_transports.transport_type ===
+                                      "CAR TRANSFER") && (
+                                    <Icon
+                                      className="w-7 h-7 text-gray-500"
+                                      icon="fa6-solid:car"
+                                    />
                                   )}
 
-                                {itinerary_transports.transport_type ===
-                                  "CAR HIRE" && (
-                                  <span className="">
-                                    A car will be provided to you on arrival
+                                  {itinerary_transports.transport_type ===
+                                    "BUS" && (
+                                    <Icon
+                                      className="w-7 h-7 text-gray-500"
+                                      icon="fa6-solid:bus"
+                                    />
+                                  )}
+
+                                  {itinerary_transports.transport_type ===
+                                    "FLIGHT" && (
+                                    <Icon
+                                      className="w-7 h-7 text-gray-500"
+                                      icon="ic:twotone-flight"
+                                    />
+                                  )}
+
+                                  {itinerary_transports.transport_type ===
+                                    "TRAIN" && (
+                                    <Icon
+                                      className="w-7 h-7 text-gray-500"
+                                      icon="fe:train"
+                                    />
+                                  )}
+                                </div>
+                                <div className="flex flex-col gap-0.5">
+                                  <span className="capitalize font-black">
+                                    {itinerary_transports.transport_type.toLowerCase()}
                                   </span>
-                                )}
+
+                                  {itinerary_transports.starting_location &&
+                                    itinerary_transports.ending_location && (
+                                      <span className="">
+                                        From{" "}
+                                        {itinerary_transports.starting_location}{" "}
+                                        to{" "}
+                                        {itinerary_transports.ending_location}
+                                      </span>
+                                    )}
+
+                                  {itinerary_transports.transport_type ===
+                                    "CAR HIRE" && (
+                                    <span className="">
+                                      A car will be provided to you on arrival
+                                    </span>
+                                  )}
+                                </div>
                               </div>
-                            </div>
-                          )
-                        )}
-                      </div>
-                    </DaysAccordion>
+                            )
+                          )}
+                        </div>
+                      </DaysAccordion>
+                    )}
                   </DaysAccordion>
                 );
               })}
