@@ -385,3 +385,50 @@ body {
   border-radius: inherit; /* !importanté */
   background: linear-gradient(to right, red, orange);
 }
+
+.swiper-button-prev,
+.swiper-button-next {
+  top: 45%;
+  width: 32px !important;
+  height: 32px !important;
+  background: #fff;
+  border-radius: 50%;
+  color: black !important;
+  font-weight: 700;
+  outline: 0;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  font-size: 14px !important;
+}
+
+.swiper-button-prev::after {
+  position: relative;
+  left: -1px;
+}
+
+.swiper-button-next::after {
+  position: relative;
+  left: 1px;
+}
+
+.swiper-button-prev,
+.swiper-container-rtl .swiper-button-next {
+  left: 10px;
+  right: auto;
+}
+
+.swiper-button-next,
+.swiper-container-rtl .swiper-button-prev {
+  right: 10px;
+  left: auto;
+}
+
+.swiper-button-prev.swiper-button-disabled,
+.swiper-button-next.swiper-button-disabled {
+  opacity: 0;
+  cursor: auto;
+  pointer-events: none;
+}

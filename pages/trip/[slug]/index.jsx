@@ -54,6 +54,7 @@ import { set } from "nprogress";
 import { DayPicker } from "react-day-picker";
 import { isSameDay } from "date-fns";
 import Head from "next/head";
+import Carousel from "../../../components/ui/Carousel";
 
 function TripDetail({ userProfile, userTrips, trip }) {
   const GlobalStyle = createGlobalStyle`
@@ -1272,9 +1273,16 @@ function TripDetail({ userProfile, userTrips, trip }) {
                   closeModal={() => {
                     setShowMoreStay(false);
                   }}
-                  dialoguePanelClassName="max-h-[500px] max-w-xl overflow-y-scroll remove-scroll !p-4"
+                  dialoguePanelClassName="max-h-[500px] max-w-xl overflow-y-scroll remove-scroll !p-0"
                 >
-                  <div className="md:px-4">
+                  <div className="h-[250px]">
+                    <Carousel
+                      images={stayImages}
+                      imageClass="rounded-tl-2xl rounded-tr-2xl"
+                    ></Carousel>
+                  </div>
+
+                  <div className="px-6 py-4">
                     <h1 className="font-bold text-2xl">Quick facts</h1>
                     <div className="flex">
                       <div className="flex flex-col w-full">

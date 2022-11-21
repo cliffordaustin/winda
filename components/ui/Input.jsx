@@ -16,6 +16,7 @@ export default function Input({
   changeShowPasswordToTrue,
   onKeyPress,
   autoComplete = "",
+  inputClassName = "",
 }) {
   return (
     <div className={className}>
@@ -37,7 +38,9 @@ export default function Input({
           className={
             "appearance-none leading-tight font-bold border rounded-md focus:outline-none py-3 px-4 w-full text-sm " +
             (errorStyle ? "!border-red-300 " : "border-gray-300 ") +
-            className
+            className +
+            " " +
+            inputClassName
           }
         />
 

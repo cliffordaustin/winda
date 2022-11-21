@@ -25,6 +25,7 @@ import Dialogue from "../components/Home/Dialogue";
 import { Icon } from "@iconify/react";
 import TravelConciergeBanner from "../components/Home/TravelConciergeBanner";
 import Cookies from "js-cookie";
+import Review from "../components/Reviews/Review";
 
 export default function Home({ userProfile, holidayTrips }) {
   const router = useRouter();
@@ -196,6 +197,8 @@ export default function Home({ userProfile, holidayTrips }) {
       }, 5000);
     }
   }, []);
+
+  const [showReviewsModal, setShowReviewsModal] = useState(false);
 
   return (
     <div
@@ -474,6 +477,55 @@ export default function Home({ userProfile, holidayTrips }) {
         </div>
       </Dialogue>
 
+      <Dialogue
+        isOpen={showReviewsModal}
+        closeModal={() => {
+          setShowReviewsModal(false);
+        }}
+        dialoguePanelClassName="max-h-[500px] !p-0 !max-w-xl overflow-y-scroll remove-scroll"
+      >
+        <div className="w-full relative px-5 py-3">
+          <h1 className="text-2xl font-black">Customer Reviews</h1>
+
+          <div className="mt-4 flex flex-col gap-4">
+            <Review
+              userName={"Kai Liu"}
+              review="The service and the booking system were great. Great communications and the campsite was excellent!"
+              bookingType="Online booking client"
+            ></Review>
+
+            <Review
+              userName={"Thea Sokolowski"}
+              review="Winda provided several amazing options that fit all of our needs, including pricing for the trip end to end, took care of booking, helped us arrange transport, and even contacted the lodge"
+              bookingType="Custom trip client "
+            ></Review>
+          </div>
+
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowReviewsModal(false);
+            }}
+            className="flex cursor-pointer items-center absolute top-4 right-4 justify-center w-7 h-7 rounded-full bg-white shadow-lg"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </div>
+        </div>
+      </Dialogue>
+
       {/* <div className="bg-gray-50 pb-14">
         <div className="w-full px-4 py-4 bg-white border-b flex flex-wrap justify-center items-center gap-3">
           <div className="flex items-center gap-2 text-sm font-bold">
@@ -483,15 +535,19 @@ export default function Home({ userProfile, holidayTrips }) {
             />
             <span>The largest variety of trips across East Africa</span>
           </div>
-          <Link href="/reviews">
-            <a className="flex items-center gap-2 text-sm font-bold hover:underline">
-              <Icon
-                icon="material-symbols:check-circle-outline-rounded"
-                className="text-red-600"
-              />
-              <span>Hear from our Satisfied Customers </span>
-            </a>
-          </Link>
+
+          <div
+            onClick={() => {
+              setShowReviewsModal(true);
+            }}
+            className="flex items-center cursor-pointer gap-2 text-sm font-bold hover:underline"
+          >
+            <Icon
+              icon="material-symbols:check-circle-outline-rounded"
+              className="text-red-600"
+            />
+            <span>Hear from our Satisfied Customers </span>
+          </div>
 
           <div className="flex items-center gap-2 text-sm font-bold">
             <Icon

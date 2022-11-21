@@ -8,6 +8,7 @@ export default function TextArea({
   value,
   onChange,
   placeholder,
+  onBlur,
   className,
 }) {
   return (
@@ -24,6 +25,7 @@ export default function TextArea({
           onChange={onChange}
           name={name}
           value={value}
+          onBlur={onBlur}
           placeholder={placeholder}
           className={
             "appearance-none leading-tight border resize-none border-gray-300 rounded-md focus:outline-none py-3 px-4 w-full text-sm " +
