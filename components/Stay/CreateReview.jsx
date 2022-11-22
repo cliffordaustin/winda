@@ -65,7 +65,6 @@ const CreateReview = ({ show, setShowCreateReview }) => {
         location.reload();
       } catch (error) {
         setLoading(false);
-        console.log(error);
       }
     },
   });

@@ -47,11 +47,6 @@ body {
 
 .stars::before {
   content: "★★★★★";
-  background: linear-gradient(
-    90deg,
-    #303960 var(--percent),
-    #d8d8d8 var(--percent)
-  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }

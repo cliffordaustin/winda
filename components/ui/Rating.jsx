@@ -1,11 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-function Rating({ rating, fontSize = 10 }) {
+function Rating({ rating, fontSize = 10, className = "bg-slate-800" }) {
   return (
     <div>
       <div
-        className="stars"
+        className={"stars !bg-clip-text " + className}
         style={{ "--rating": rating, "--font-size": fontSize + "px" }}
       ></div>
     </div>

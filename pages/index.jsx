@@ -320,9 +320,9 @@ export default function Home({ userProfile, holidayTrips }) {
 
               {showLocation && !location && (
                 <div className="bg-white hidden md:block">
-                  <div className="border-t py-1.5">
+                  {/* <div className="border-t py-1.5">
                     <SearchOptions></SearchOptions>
-                  </div>
+                  </div> */}
                   <PopularLocationsDropdown
                     setLocation={(location) => {
                       setLocation(location);
@@ -485,19 +485,34 @@ export default function Home({ userProfile, holidayTrips }) {
         dialoguePanelClassName="max-h-[500px] !p-0 !max-w-xl overflow-y-scroll remove-scroll"
       >
         <div className="w-full relative px-5 py-3">
-          <h1 className="text-2xl font-black">Customer Reviews</h1>
+          <h1 className="text-2xl font-black mb-8">Customer Reviews</h1>
 
           <div className="mt-4 flex flex-col gap-4">
             <Review
-              userName={"Kai Liu"}
+              userName={"Kai"}
+              rate={5}
               review="The service and the booking system were great. Great communications and the campsite was excellent!"
-              bookingType="Online booking client"
+              subText="Australia"
             ></Review>
 
             <Review
-              userName={"Thea Sokolowski"}
+              userName={"Thea"}
+              rate={5}
               review="Winda provided several amazing options that fit all of our needs, including pricing for the trip end to end, took care of booking, helped us arrange transport, and even contacted the lodge"
-              bookingType="Custom trip client "
+              subText="United States"
+            ></Review>
+
+            <Review
+              userName={"Sue"}
+              rate={5}
+              review="Winda’s service communication and support with bookings was excellent!"
+              subText="Kenya"
+            ></Review>
+            <Review
+              userName={"Caroline"}
+              rate={5}
+              review="It was our first time planning such a trip. It was difficult to find a french travel agency that were affordable and flexible. We managed to find winda which planned a trip in our budget and they were very flexible."
+              subText="France"
             ></Review>
           </div>
 
@@ -526,7 +541,7 @@ export default function Home({ userProfile, holidayTrips }) {
         </div>
       </Dialogue>
 
-      {/* <div className="bg-gray-50 pb-14">
+      <div className="bg-gray-50 pb-14">
         <div className="w-full px-4 py-4 bg-white border-b flex flex-wrap justify-center items-center gap-3">
           <div className="flex items-center gap-2 text-sm font-bold">
             <Icon
@@ -560,11 +575,11 @@ export default function Home({ userProfile, holidayTrips }) {
         <div className="2xl:w-4/6 2xl:mx-auto mt-6">
           <Main holidayTrips={holidayTrips}></Main>
         </div>
-      </div> */}
-
-      <div className="2xl:w-4/6 2xl:mx-auto my-10">
-        <Main holidayTrips={holidayTrips}></Main>
       </div>
+
+      {/* <div className="2xl:w-4/6 2xl:mx-auto my-10">
+        <Main holidayTrips={holidayTrips}></Main>
+      </div> */}
 
       <div className="">
         <Footer></Footer>

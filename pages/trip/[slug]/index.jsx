@@ -1688,9 +1688,15 @@ function TripDetail({ userProfile, userTrips, trip }) {
                   closeModal={() => {
                     setShowMoreActivities(false);
                   }}
-                  dialoguePanelClassName="max-h-[500px] max-w-xl overflow-y-scroll remove-scroll !p-4"
+                  dialoguePanelClassName="max-h-[500px] max-w-xl overflow-y-scroll remove-scroll !p-0"
                 >
-                  <div className="md:px-4">
+                  <div className="h-[250px]">
+                    <Carousel
+                      images={activityImages}
+                      imageClass="rounded-tl-2xl rounded-tr-2xl"
+                    ></Carousel>
+                  </div>
+                  <div className="px-6 py-4">
                     <h1 className="font-bold text-2xl">About</h1>
 
                     <div className="flex flex-col w-full">

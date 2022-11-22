@@ -22,11 +22,13 @@ import NavbarCurrency from "./NavbarCurrency";
 function Navbar({ userProfile, showTripWizard = false }) {
   const [curatedTripsHover, setCuratedTripsHover] = useState(true);
   const [showLocationsHover, setShowLocationsHover] = useState(false);
+  const [showBeachLocationsHover, setShowBeachLocationsHover] = useState(false);
   const [staysHover, setStaysHover] = useState(false);
   const [activitiesHover, setActivitiesHover] = useState(false);
 
   const [isShowingExplore, setIsShowingExplore] = useState(false);
   const [isShowingLocations, setIsShowingLocations] = useState(false);
+  const [isShowingLocationsBeach, setIsShowingLocationsBeach] = useState(false);
   const [openBurger, setOpenBurger] = useState(false);
 
   const router = useRouter();
@@ -39,9 +41,7 @@ function Navbar({ userProfile, showTripWizard = false }) {
         <a
           className={
             "hover:bg-gray-100 transition-colors duration-500 rounded-lg " +
-            (safariAndBeach
-              ? "w-full md:w-[46%] lg:w-[32%]"
-              : "w-full md:w-[46%]")
+            (safariAndBeach ? "w-full md:w-[46%]" : "w-full md:w-[46%]")
           }
         >
           <div
@@ -472,7 +472,7 @@ function Navbar({ userProfile, showTripWizard = false }) {
                       styles.link
                     }
                   >
-                    <span>Safari & Beach</span>
+                    <span>Safari</span>
                     <Icon icon="bx:chevron-down" className="w-6 h-6" />
                   </div>
                 </div>
@@ -492,7 +492,7 @@ function Navbar({ userProfile, showTripWizard = false }) {
               >
                 <Popover.Panel
                   className={
-                    "absolute z-[30] bg-white rounded-xl border-4 border-gray-100 md:right-0 shadow-md lg:left-[60px] mt-2 md:w-full lg:w-[850px] overflow-hidden"
+                    "absolute z-[30] bg-white rounded-xl border-4 border-gray-100 md:right-0 shadow-md md:left-[20px] lg:left-[60px] mt-2 max-w-xl overflow-hidden"
                   }
                 >
                   <div className="flex">
@@ -515,27 +515,7 @@ function Navbar({ userProfile, showTripWizard = false }) {
                             subText=""
                             href="/trip?location=amboseli"
                           ></Item>
-                          <Item
-                            icon="ic:sharp-location-on"
-                            safariAndBeach={true}
-                            title="Diani"
-                            subText=""
-                            href="/trip?location=diani"
-                          ></Item>
-                          <Item
-                            icon="ic:sharp-location-on"
-                            safariAndBeach={true}
-                            title="Watamu"
-                            subText=""
-                            href="/trip?location=watamu"
-                          ></Item>
-                          <Item
-                            icon="ic:sharp-location-on"
-                            safariAndBeach={true}
-                            title="Kilifi"
-                            subText=""
-                            href="/trip?location=kilifi"
-                          ></Item>
+
                           <Item
                             icon="ic:sharp-location-on"
                             safariAndBeach={true}
@@ -558,13 +538,7 @@ function Navbar({ userProfile, showTripWizard = false }) {
                             subText=""
                             href="/trip?location=tanzania"
                           ></Item>
-                          <Item
-                            icon="ic:sharp-location-on"
-                            safariAndBeach={true}
-                            title="Lamu"
-                            subText=""
-                            href="/trip?location=lamu"
-                          ></Item>
+
                           <Item
                             icon="ic:sharp-location-on"
                             safariAndBeach={true}
@@ -583,6 +557,13 @@ function Navbar({ userProfile, showTripWizard = false }) {
                           <Item
                             icon="ic:sharp-location-on"
                             safariAndBeach={true}
+                            title="Nakuru"
+                            subText=""
+                            href="/trip?location=nakuru"
+                          ></Item>
+                          <Item
+                            icon="ic:sharp-location-on"
+                            safariAndBeach={true}
                             title="Ol Pejeta"
                             subText=""
                             href="/trip?location=ol pejeta"
@@ -594,6 +575,100 @@ function Navbar({ userProfile, showTripWizard = false }) {
                             subText=""
                             href="/trip?location=samburu"
                           ></Item>
+                        </div>
+                      </Transition>
+                    </div>
+                  </div>
+                </Popover.Panel>
+              </Transition>
+            </Popover>
+
+            <Popover className={"hidden md:block"}>
+              <Popover.Button className={"outline-none "}>
+                <div
+                  onMouseEnter={() => {
+                    setIsShowingLocationsBeach(true);
+                  }}
+                  onMouseLeave={() => {
+                    setIsShowingLocationsBeach(false);
+                  }}
+                  onClick={() => {
+                    setIsShowingLocationsBeach(!isShowingLocationsBeach);
+                  }}
+                  className="items-center flex gap-3"
+                >
+                  <div
+                    className={
+                      "font-bold cursor-pointer hover:bg-gray-100 transition-all duration-300 ease-linear rounded-3xl px-2 py-2 !text-base flex items-center gap-1 " +
+                      styles.link
+                    }
+                  >
+                    <span>Beach</span>
+                    <Icon icon="bx:chevron-down" className="w-6 h-6" />
+                  </div>
+                </div>
+              </Popover.Button>
+
+              <Transition
+                as={React.Fragment}
+                enter="transition ease-out duration-200"
+                enterFrom="opacity-0 translate-y-1"
+                enterTo="opacity-100 translate-y-0"
+                leave="transition ease-in duration-150"
+                leaveFrom="opacity-100 translate-y-0"
+                leaveTo="opacity-0 translate-y-1"
+                show={isShowingLocationsBeach}
+                onMouseEnter={() => setIsShowingLocationsBeach(true)}
+                onMouseLeave={() => setIsShowingLocationsBeach(false)}
+              >
+                <Popover.Panel
+                  className={
+                    "absolute z-[30] bg-white rounded-xl border-4 border-gray-100 md:right-0 shadow-md md:left-[20px] lg:left-[60px] mt-2 max-w-xl overflow-hidden"
+                  }
+                >
+                  <div className="flex">
+                    <div className="w-full relative px-2 py-2">
+                      <Transition
+                        as={React.Fragment}
+                        enter="transition-all duration-300"
+                        enterFrom="opacity-0 absolute top-[50px]"
+                        enterTo="opacity-100 absolute top-[6px]"
+                        leave="transition-all duration-300"
+                        leaveFrom="opacity-100 absolute top-[6px]"
+                        leaveTo="opacity-0 absolute top-[50px]"
+                        show={curatedTripsHover}
+                      >
+                        <div className="flex w-full flex-wrap items-center justify-between gap-1">
+                          <Item
+                            icon="ic:sharp-location-on"
+                            safariAndBeach={true}
+                            title="Diani"
+                            subText=""
+                            href="/trip?location=diani"
+                          ></Item>
+                          <Item
+                            icon="ic:sharp-location-on"
+                            safariAndBeach={true}
+                            title="Watamu"
+                            subText=""
+                            href="/trip?location=watamu"
+                          ></Item>
+                          <Item
+                            icon="ic:sharp-location-on"
+                            safariAndBeach={true}
+                            title="Kilifi"
+                            subText=""
+                            href="/trip?location=kilifi"
+                          ></Item>
+
+                          <Item
+                            icon="ic:sharp-location-on"
+                            safariAndBeach={true}
+                            title="Lamu"
+                            subText=""
+                            href="/trip?location=lamu"
+                          ></Item>
+
                           <Item
                             icon="ic:sharp-location-on"
                             safariAndBeach={true}
@@ -649,7 +724,7 @@ function Navbar({ userProfile, showTripWizard = false }) {
               >
                 <Popover.Panel
                   className={
-                    "absolute z-[30] bg-white rounded-xl border-4 border-gray-100 md:right-0 shadow-md lg:left-[60px] mt-2 w-fit overflow-hidden"
+                    "absolute z-[30] bg-white rounded-xl border-4 border-gray-100 md:right-0 shadow-md md:left-[20px] lg:left-[60px] mt-2 w-fit overflow-hidden"
                   }
                 >
                   <div className="flex">
@@ -742,8 +817,8 @@ function Navbar({ userProfile, showTripWizard = false }) {
             </Link>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="hidden md:flex items-center gap-4">
+        <div className="flex items-center">
+          <div className="hidden md:flex items-center gap-2 lg:gap-4">
             <Transition
               enter="transition-all ease-in duration-150"
               leave="transition-all ease-out duration-150"
@@ -758,7 +833,7 @@ function Navbar({ userProfile, showTripWizard = false }) {
                   router.push("/trip-wizard");
                   Mixpanel.track("Clicked on trip wizard");
                 }}
-                className="flex items-center gap-0.5 px-4 py-2 cursor-pointer border-gradient"
+                className="flex items-center gap-0.5 px-2 lg:px-4 py-2 cursor-pointer border-gradient"
               >
                 <span className="text-black text-sm font-bold">
                   Trip wizard
@@ -771,7 +846,7 @@ function Navbar({ userProfile, showTripWizard = false }) {
                 setShowCalendly(true);
                 Mixpanel.track("Clicked on travel concierge");
               }}
-              className="flex items-center gap-0.5 px-4 py-3 cursor-pointer !bg-gradient-to-r from-pink-500 via-red-500 !rounded-3xl to-yellow-500"
+              className="flex items-center gap-0.5 px-2 lg:px-4 py-3 cursor-pointer !bg-gradient-to-r from-pink-500 via-red-500 !rounded-3xl to-yellow-500"
             >
               <span className="text-white text-sm font-bold">Contact Us</span>
             </div>
@@ -1209,6 +1284,7 @@ function Navbar({ userProfile, showTripWizard = false }) {
                                     slideto(1);
                                     setCuratedTripsHover(true);
                                     setShowLocationsHover(false);
+                                    setShowBeachLocationsHover(false);
                                   }}
                                   className="flex items-center justify-between mt-3 cursor-pointer"
                                 >
@@ -1229,18 +1305,40 @@ function Navbar({ userProfile, showTripWizard = false }) {
                                 <div
                                   onClick={() => {
                                     slideto(1);
-                                    setShowLocationsHover(true);
                                     setCuratedTripsHover(false);
+                                    setShowLocationsHover(true);
+                                    setShowBeachLocationsHover(false);
                                   }}
                                   className="flex items-center justify-between mt-3 cursor-pointer"
                                 >
                                   <div className="flex flex-col gap-1">
-                                    <h1 className="font-bold">
-                                      Safari & Beach
-                                    </h1>
+                                    <h1 className="font-bold">Safari</h1>
                                     <p className="mt-2 text-sm text-gray-600">
                                       Find safari and beach trips that will make
                                       a lasting impression.
+                                    </p>
+                                  </div>
+
+                                  <Icon
+                                    icon="bx:chevron-right"
+                                    className="w-8 h-8"
+                                  />
+                                </div>
+
+                                <div
+                                  onClick={() => {
+                                    slideto(1);
+                                    setCuratedTripsHover(false);
+                                    setShowLocationsHover(false);
+                                    setShowBeachLocationsHover(true);
+                                  }}
+                                  className="flex items-center justify-between mt-3 cursor-pointer"
+                                >
+                                  <div className="flex flex-col gap-1">
+                                    <h1 className="font-bold">Beach</h1>
+                                    <p className="mt-2 text-sm text-gray-600">
+                                      Find beach trips that will make a lasting
+                                      impression.
                                     </p>
                                   </div>
 
@@ -1345,27 +1443,7 @@ function Navbar({ userProfile, showTripWizard = false }) {
                                   subText=""
                                   href="/trip?location=amboseli"
                                 ></Item>
-                                <Item
-                                  icon="ic:sharp-location-on"
-                                  safariAndBeach={true}
-                                  title="Diani"
-                                  subText=""
-                                  href="/trip?location=diani"
-                                ></Item>
-                                <Item
-                                  icon="ic:sharp-location-on"
-                                  safariAndBeach={true}
-                                  title="Watamu"
-                                  subText=""
-                                  href="/trip?location=watamu"
-                                ></Item>
-                                <Item
-                                  icon="ic:sharp-location-on"
-                                  safariAndBeach={true}
-                                  title="Kilifi"
-                                  subText=""
-                                  href="/trip?location=kilifi"
-                                ></Item>
+
                                 <Item
                                   icon="ic:sharp-location-on"
                                   safariAndBeach={true}
@@ -1388,13 +1466,7 @@ function Navbar({ userProfile, showTripWizard = false }) {
                                   subText=""
                                   href="/trip?location=tanzania"
                                 ></Item>
-                                <Item
-                                  icon="ic:sharp-location-on"
-                                  safariAndBeach={true}
-                                  title="Lamu"
-                                  subText=""
-                                  href="/trip?location=lamu"
-                                ></Item>
+
                                 <Item
                                   icon="ic:sharp-location-on"
                                   safariAndBeach={true}
@@ -1413,6 +1485,13 @@ function Navbar({ userProfile, showTripWizard = false }) {
                                 <Item
                                   icon="ic:sharp-location-on"
                                   safariAndBeach={true}
+                                  title="Nakuru"
+                                  subText=""
+                                  href="/trip?location=nakuru"
+                                ></Item>
+                                <Item
+                                  icon="ic:sharp-location-on"
+                                  safariAndBeach={true}
                                   title="Ol Pejeta"
                                   subText=""
                                   href="/trip?location=ol pejeta"
@@ -1424,6 +1503,41 @@ function Navbar({ userProfile, showTripWizard = false }) {
                                   subText=""
                                   href="/trip?location=samburu"
                                 ></Item>
+                              </div>
+                            )}
+
+                            {showBeachLocationsHover && (
+                              <div className="flex w-full flex-wrap items-center justify-between gap-1">
+                                <Item
+                                  icon="ic:sharp-location-on"
+                                  safariAndBeach={true}
+                                  title="Diani"
+                                  subText=""
+                                  href="/trip?location=diani"
+                                ></Item>
+                                <Item
+                                  icon="ic:sharp-location-on"
+                                  safariAndBeach={true}
+                                  title="Watamu"
+                                  subText=""
+                                  href="/trip?location=watamu"
+                                ></Item>
+                                <Item
+                                  icon="ic:sharp-location-on"
+                                  safariAndBeach={true}
+                                  title="Kilifi"
+                                  subText=""
+                                  href="/trip?location=kilifi"
+                                ></Item>
+
+                                <Item
+                                  icon="ic:sharp-location-on"
+                                  safariAndBeach={true}
+                                  title="Lamu"
+                                  subText=""
+                                  href="/trip?location=lamu"
+                                ></Item>
+
                                 <Item
                                   icon="ic:sharp-location-on"
                                   safariAndBeach={true}
