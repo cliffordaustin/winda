@@ -7,10 +7,16 @@ import getToken from "../../lib/getToken";
 import Footer from "../../components/Home/Footer";
 import Link from "next/link";
 import ListItem from "../../components/ui/ListItem";
+import Head from "next/head";
 
 const PrivacyPolicy = ({ userProfile }) => {
   return (
     <div className="">
+      <Head>
+        <title>Winda.guide | Privacy Policy</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
+
       <Navbar
         userProfile={userProfile}
         logoImage="/images/winda_logo/horizontal-blue-font.png"

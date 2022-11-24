@@ -62,7 +62,7 @@ function TravelConciergeBanner({ showTripWizard = false }) {
                 "font-bold cursor-pointertransition-all duration-300 cursor-pointer ease-linear rounded-3xl py-2 !text-base flex items-center gap-1 underline "
               }
             >
-              Blogs
+              Blog
             </div>
           </a>
         </Link>

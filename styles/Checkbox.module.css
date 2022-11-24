@@ -34,8 +34,8 @@
 }
 
 .checkboxLabel input:checked ~ .checkboxCustom {
-  @apply bg-blue-300 border border-solid border-blue-300;
-  border-radius: 5px;
+  @apply bg-red-600 border border-solid border-red-600;
+  border-radius: 2px;
   -webkit-transform: rotate(0deg) scale(1);
   -ms-transform: rotate(0deg) scale(1);
   transform: rotate(0deg) scale(1);
@@ -50,7 +50,7 @@
   height: 0px;
   width: 0px;
   border-radius: 5px;
-  @apply border-solid border-blue-800;
+  @apply border-solid border-red-600;
   border-width: 0 3px 3px 0;
   -webkit-transform: rotate(0deg) scale(0);
   -ms-transform: rotate(0deg) scale(0);
@@ -72,7 +72,7 @@
   top: 0.4px;
   width: 6px;
   height: 12px;
-  @apply border-solid border-blue-800;
+  @apply border-solid border-white;
   border-width: 0 2px 2px 0;
   background-color: transparent;
   border-radius: 0;
@@ -87,7 +87,7 @@
   width: 0px;
   height: 0px;
   border-radius: 5px;
-  border: 2px solid #b3afaf;
+  border: 2px solid #f9bec7;
   -webkit-transform: scale(0);
   -ms-transform: scale(0);
   transform: scale(0);

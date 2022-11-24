@@ -59,11 +59,23 @@ function CuratedTripDetail({ trip, userProfile }) {
 
     trip.itineraries.forEach((itinerary) => {
       carTransport = itinerary.itinerary_transports.some(
-        (transport) => transport.transport_type === "CAR"
+        (transport) => transport.transport_type === "CAR TRANSFER"
       );
     });
 
     return carTransport;
+  };
+
+  const hasCarHireTransport = () => {
+    let carHireTransport = false;
+
+    trip.itineraries.forEach((itinerary) => {
+      carHireTransport = itinerary.itinerary_transports.some(
+        (transport) => transport.transport_type === "CAR HIRE"
+      );
+    });
+
+    return carHireTransport;
   };
 
   const hasBusTransport = () => {
@@ -115,7 +127,7 @@ function CuratedTripDetail({ trip, userProfile }) {
   const [datePricing, setDatePricing] = useState([]);
 
   const [scrollRef, inView, entry] = useInView({
-    rootMargin: "-70px 0px",
+    rootMargin: "0px 0px",
   });
 
   const [planRef, planInView, planEntry] = useInView({
@@ -249,48 +261,22 @@ function CuratedTripDetail({ trip, userProfile }) {
                     <h1 className="font-bold">Max group size</h1>
                   </div>
                   <div className="font-bold text-center">
-                    Maximum of {trip.max_number_of_people} people
+                    {trip.max_number_of_people} people
                   </div>
                 </div>
 
                 <div className="flex w-[45%] lg:w-[30%] flex-col items-center h-fit justify-center gap-1.5">
                   <div className="flex gap-1 items-center">
-                    <Icon icon="dashicons:food" className="w-7 h-7" />
-                    <h1 className="font-bold">Meals</h1>
-                  </div>
-                  <div className="font-bold text-center">
-                    {totalNumberOfBreakfasts() > 0
-                      ? `${totalNumberOfBreakfasts()} ${
-                          totalNumberOfBreakfasts() > 1
-                            ? " breakfasts"
-                            : "breakfast"
-                        }`
-                      : ""}
+                    <Icon icon="mdi:transportation" className="w-8 h-8" />
 
-                    {totalNumberOfLunches() > 0
-                      ? ` | ${totalNumberOfLunches()} ${
-                          totalNumberOfLunches() > 1 ? " lunches" : " lunch"
-                        }`
-                      : ""}
-
-                    {totalNumberOfDinners() > 0
-                      ? ` | ${totalNumberOfDinners()} ${
-                          totalNumberOfDinners() > 1 ? " dinners" : " dinner"
-                        }`
-                      : ""}
-                  </div>
-                </div>
-
-                <div className="flex w-[45%] lg:w-[30%] flex-col items-center h-fit justify-center gap-1.5">
-                  <div className="flex gap-1 items-center">
-                    <Icon
-                      icon="simple-icons:transportforlondon"
-                      className="w-7 h-7"
-                    />
                     <h1 className="font-bold">Transport</h1>
                   </div>
                   <div className="font-bold text-center">
-                    {hasCarTransport() ? `Car` : ""}
+                    {hasCarTransport() ? `Car transfer` : ""}
+
+                    {hasCarTransport() && hasCarHireTransport() ? " | " : ""}
+
+                    {hasCarHireTransport() ? ` Car hire` : ""}
 
                     {hasTrainTransport() ? ` | Train` : ""}
 
@@ -432,6 +418,32 @@ function CuratedTripDetail({ trip, userProfile }) {
                               );
                             }
                           )}
+                        </div>
+
+                        <div className="w-full h-[1px] bg-gray-100 mt-8 mb-3"></div>
+
+                        <div className="flex h-fit w-fit justify-center items-center gap-3">
+                          <div className="flex gap-1">
+                            <Icon icon="dashicons:food" className="w-10 h-10" />
+                          </div>
+                          <div className="flex flex-col gap-1">
+                            <h1 className="font-black">Meals</h1>
+                            <div className="font-bold">
+                              {itinerary.breakfast_included ? "Breakfast" : ""}
+                              {itinerary.breakfast_included &&
+                              (itinerary.lunch_included ||
+                                itinerary.dinner_included)
+                                ? ", "
+                                : ""}
+                              {itinerary.lunch_included ? "Lunch" : ""}
+
+                              {itinerary.lunch_included &&
+                              itinerary.dinner_included
+                                ? ", "
+                                : ""}
+                              {itinerary.dinner_included ? "Dinner" : ""}
+                            </div>
+                          </div>
                         </div>
                       </DaysAccordion>
                     )}
