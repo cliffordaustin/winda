@@ -20,6 +20,7 @@ import { Transition } from "@headlessui/react";
 import { useInView } from "react-intersection-observer";
 import { Link as ReactScrollLink } from "react-scroll";
 import Head from "next/head";
+import MapBox from "../../../../components/Trip/Map";
 
 function CuratedTripDetail({ trip, userProfile }) {
   const totalNumberOfBreakfasts = () => {
@@ -298,9 +299,10 @@ function CuratedTripDetail({ trip, userProfile }) {
                 )}
                 <div className="w-full">{trip.description}</div>
               </div>
-              {/* <div className="w-[30%] h-[350px] hidden md:block">
-                <CuratedTripMap locations={trip.locations}></CuratedTripMap>
-              </div> */}
+              <div className="w-[30%] h-[350px] hidden md:block">
+                {/* <CuratedTripMap locations={trip.locations}></CuratedTripMap> */}
+                <MapBox trip={trip}></MapBox>
+              </div>
             </div>
           </div>
 
