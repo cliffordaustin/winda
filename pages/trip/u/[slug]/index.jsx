@@ -298,9 +298,9 @@ function CuratedTripDetail({ trip, userProfile }) {
                 )}
                 <div className="w-full">{trip.description}</div>
               </div>
-              <div className="w-[30%] h-[350px] hidden md:block">
+              {/* <div className="w-[30%] h-[350px] hidden md:block">
                 <CuratedTripMap locations={trip.locations}></CuratedTripMap>
-              </div>
+              </div> */}
             </div>
           </div>
 
