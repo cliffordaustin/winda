@@ -39,15 +39,15 @@ function CuratedTripMap({ locations }) {
     zoom: 5,
   });
 
-  const [allCoordinates, setAllCoordinates] = useState([]);
+  // const [allCoordinates, setAllCoordinates] = useState([]);
 
-  useEffect(() => {
-    const coordinates = locations.map((location) => [
-      location.longitude,
-      location.latitude,
-    ]);
-    setAllCoordinates(coordinates);
-  }, [locations]);
+  // useEffect(() => {
+  //   const coordinates = locations.map((location) => [
+  //     location.longitude,
+  //     location.latitude,
+  //   ]);
+  //   setAllCoordinates(coordinates);
+  // }, [locations]);
 
   const GlobalStyle = createGlobalStyle`
   .mapboxgl-map {
@@ -66,19 +66,19 @@ function CuratedTripMap({ locations }) {
   }
 `;
 
-  const line = {
-    type: "FeatureCollection",
-    features: [
-      {
-        type: "Feature",
-        geometry: {
-          type: "LineString",
-          properties: {},
-          coordinates: allCoordinates,
-        },
-      },
-    ],
-  };
+  // const line = {
+  //   type: "FeatureCollection",
+  //   features: [
+  //     {
+  //       type: "Feature",
+  //       geometry: {
+  //         type: "LineString",
+  //         properties: {},
+  //         coordinates: allCoordinates,
+  //       },
+  //     },
+  //   ],
+  // };
 
   return (
     <div style={{ position: "relative", height: "100%", width: "100%" }}>
