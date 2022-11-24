@@ -98,7 +98,7 @@ function CuratedTripMap({ locations }) {
         onMove={(evt) => setViewport(evt.viewState)}
         mapStyle="mapbox://styles/mapbox/streets-v9"
       >
-        <Source id="LineString" type="geojson" data={line}>
+        {/* <Source id="LineString" type="geojson" data={line}>
           <Layer
             id="LineString"
             type="line"
@@ -113,7 +113,7 @@ function CuratedTripMap({ locations }) {
               "line-dasharray": [2, 3],
             }}
           />
-        </Source>
+        </Source> */}
         <NavigationControl></NavigationControl>
 
         {locations.map((location, index) => (
@@ -157,7 +157,7 @@ function CuratedTripMap({ locations }) {
             onMove={(evt) => setViewportExpandedMap(evt.viewState)}
             mapStyle="mapbox://styles/mapbox/streets-v9"
           >
-            <Source id="LineString" type="geojson" data={line}>
+            {/* <Source id="LineString" type="geojson" data={line}>
               <Layer
                 id="LineString"
                 type="line"
@@ -172,7 +172,7 @@ function CuratedTripMap({ locations }) {
                   "line-dasharray": [2, 3],
                 }}
               />
-            </Source>
+            </Source> */}
             <NavigationControl></NavigationControl>
             {locations.map((location, index) => (
               <MapMakers
