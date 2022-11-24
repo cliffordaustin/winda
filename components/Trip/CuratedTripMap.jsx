@@ -19,13 +19,13 @@ function CuratedTripMap({ locations }) {
 
   const [expandMap, setExpandMap] = useState(false);
 
-  const averageLogitude = useMemo(() => {
-    return locations.reduce((a, b) => a + b.longitude, 0) / locations.length;
-  }, [locations]);
+  // const averageLogitude = useMemo(() => {
+  //   return locations.reduce((a, b) => a + b.longitude, 0) / locations.length;
+  // }, [locations]);
 
-  const averageLatitude = useMemo(() => {
-    return locations.reduce((a, b) => a + b.latitude, 0) / locations.length;
-  }, [locations]);
+  // const averageLatitude = useMemo(() => {
+  //   return locations.reduce((a, b) => a + b.latitude, 0) / locations.length;
+  // }, [locations]);
 
   const [viewport, setViewport] = useState({
     longitude: locations.length > 0 ? 36.8442449 : 36.8442449,
