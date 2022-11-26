@@ -34,7 +34,6 @@ import Head from "next/head";
 function Activities({
   userProfile,
   activities,
-  allactivities,
   pageSize,
   count,
   nextLink,
@@ -1308,7 +1307,7 @@ function Activities({
         <div className="mt-3 w-full">
           <div className="flex gap-2 px-4">
             <div className="lg:w-[40%] xl:w-[50%] hidden lg:block px-2 h-[78vh] mt-0 sticky top-[170px]">
-              <Map activities={allactivities}></Map>
+              <Map></Map>
             </div>
             <div className="lg:w-[60%] xl:w-[50%] w-full md:pl-4">
               <Listings
@@ -1355,8 +1354,8 @@ function Activities({
       )}
 
       {mobileMap && (
-        <div className={"h-[83vh] mt-[140px]"}>
-          <Map activities={allactivities}></Map>
+        <div className={"h-[83vh] fixed bottom-0 left-0 right-0"}>
+          <Map></Map>
         </div>
       )}
 
@@ -1441,27 +1440,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
           }`
         );
 
-        const allactivities = await axios.get(
-          `${process.env.NEXT_PUBLIC_baseURL}/all-activities/?search=${
-            query.search ? query.search : ""
-          }&d_search=${query.d_search ? query.d_search : ""}&min_capacity=${
-            query.min_capacity ? query.min_capacity : ""
-          }&pricing_type=${
-            query.pricing_type ? query.pricing_type : ""
-          }&type_of_activities=${
-            query.type_of_stay ? query.type_of_stay : ""
-          }&min_price=${query.min_price ? query.min_price : ""}&max_price=${
-            query.max_price ? query.max_price : ""
-          }&ordering=${query.ordering ? query.ordering : ""}&tags=${
-            query.tags ? query.tags : ""
-          }`
-        );
-
-        // await context.dispatch({
-        //   type: "SET_ACTIVITIES",
-        //   payload: response.data.results,
-        // });
-
         if (token) {
           const response = await axios.get(
             `${process.env.NEXT_PUBLIC_baseURL}/user/`,
@@ -1499,7 +1477,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
             props: {
               userProfile: response.data[0],
               activities: activities.data.results,
-              allactivities: allactivities.data.results,
               nextLink: activities.data.next,
               previousLink: activities.data.previous,
               pageSize: activities.data.page_size,
@@ -1513,7 +1490,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
           props: {
             userProfile: "",
             activities: activities.data.results,
-            allactivities: allactivities.data.results,
             nextLink: activities.data.next,
             previousLink: activities.data.previous,
             pageSize: activities.data.page_size,
@@ -1534,7 +1510,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
             props: {
               userProfile: "",
               activities: [],
-              allactivities: [],
               nextLink: "",
               previousLink: "",
               pageSize: 0,
