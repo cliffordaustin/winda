@@ -3,12 +3,23 @@ import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import ClientOnly from "../ClientOnly";
 import Cookies from "js-cookie";
+import CryptoJS from "crypto-js";
+import { useCookies } from "react-cookie";
 import axios from "axios";
 
 const Price = ({ stayPrice, className = "", currency = "$" }) => {
-  const priceConversionRate = useSelector(
+  const priceConversion = useSelector(
     (state) => state.stay.priceConversionRate
   );
+
+  let priceConversionRate = Cookies.get("rate") || priceConversion;
+
+  if (Cookies.get("rate")) {
+    priceConversionRate = CryptoJS.AES.decrypt(priceConversionRate, "rate");
+    priceConversionRate = priceConversionRate.toString(CryptoJS.enc.Utf8);
+
+    priceConversionRate = parseFloat(priceConversionRate);
+  }
 
   const userIsFromKenya = useSelector((state) => state.home.userIsFromKenya);
 

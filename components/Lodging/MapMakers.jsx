@@ -31,40 +31,29 @@ const MapMakers = ({ stay }) => {
     },
   };
 
-  const price = () => {
-    return (
-      stay.price_non_resident ||
-      stay.price ||
-      stay.per_house_price ||
-      stay.deluxe_price_non_resident ||
-      stay.deluxe_price ||
-      stay.family_room_price_non_resident ||
-      stay.family_room_price ||
-      stay.executive_suite_room_price_non_resident ||
-      stay.executive_suite_room_price ||
-      stay.presidential_suite_room_price_non_resident ||
-      stay.presidential_suite_room_price ||
-      stay.emperor_suite_room_price_non_resident ||
-      stay.emperor_suite_room_price
-    );
+  const price = (stay) => {
+    return stay.is_an_event
+      ? stay.event_price
+      : stay.price_non_resident ||
+          stay.price ||
+          stay.per_house_price ||
+          stay.deluxe_price_non_resident ||
+          stay.deluxe_price ||
+          stay.family_room_price_non_resident ||
+          stay.family_room_price ||
+          stay.executive_suite_room_price_non_resident ||
+          stay.executive_suite_room_price ||
+          stay.presidential_suite_room_price_non_resident ||
+          stay.presidential_suite_room_price ||
+          stay.emperor_suite_room_price_non_resident ||
+          stay.emperor_suite_room_price;
   };
 
-  const activeStayPrice = () => {
-    return (
-      activeStay.price_non_resident ||
-      activeStay.price ||
-      activeStay.per_house_price ||
-      activeStay.deluxe_price_non_resident ||
-      activeStay.deluxe_price ||
-      activeStay.family_room_price_non_resident ||
-      activeStay.family_room_price ||
-      activeStay.executive_suite_room_price_non_resident ||
-      activeStay.executive_suite_room_price ||
-      activeStay.presidential_suite_room_price_non_resident ||
-      activeStay.presidential_suite_room_price ||
-      activeStay.emperor_suite_room_price_non_resident ||
-      activeStay.emperor_suite_room_price
+  const getStandardRoomPrice = (stay) => {
+    const standardRoom = stay.type_of_rooms.find(
+      (room) => room.is_standard === true
     );
+    return standardRoom.price;
   };
 
   return (
@@ -79,7 +68,19 @@ const MapMakers = ({ stay }) => {
           onMouseLeave={() => setShowPopup(false)}
           onClick={() => setShowPopup(!showPopup)}
         >
-          <Price className="text-black !text-sm" stayPrice={price()}></Price>
+          {!stay.is_an_event && (
+            <Price
+              className="text-black !text-sm"
+              stayPrice={price(stay)}
+            ></Price>
+          )}
+          {stay.is_an_event && (
+            <Price
+              className="text-black !text-sm"
+              stayPrice={getStandardRoomPrice(stay)}
+            ></Price>
+          )}
+
           <AnimatePresence exitBeforeEnter>
             {showPopup && (
               <Popup
@@ -98,7 +99,11 @@ const MapMakers = ({ stay }) => {
                     e.stopPropagation();
                   }}
                 >
-                  <MapMakerPopup stay={stay}></MapMakerPopup>
+                  <MapMakerPopup
+                    price={price}
+                    standardRoomPrice={getStandardRoomPrice}
+                    stay={stay}
+                  ></MapMakerPopup>
                 </motion.div>
               </Popup>
             )}
@@ -113,10 +118,18 @@ const MapMakers = ({ stay }) => {
               styles.tooltip
             }
           >
-            <Price
-              className="text-white !font-semibold !text-sm"
-              stayPrice={activeStayPrice()}
-            ></Price>
+            {!activeStay.is_an_event && (
+              <Price
+                className="text-white !text-sm"
+                stayPrice={price(activeStay)}
+              ></Price>
+            )}
+            {activeStay.is_an_event && (
+              <Price
+                className="text-white !text-sm"
+                stayPrice={getStandardRoomPrice(activeStay)}
+              ></Price>
+            )}
             <AnimatePresence exitBeforeEnter>
               <Popup
                 closeButton={false}
@@ -131,7 +144,11 @@ const MapMakers = ({ stay }) => {
                   exit="exit"
                   className="w-60 absolute -ml-[120px] left-2/4 mt-4 top-full mb-1"
                 >
-                  <MapMakerPopup stay={activeStay}></MapMakerPopup>
+                  <MapMakerPopup
+                    price={price}
+                    standardRoomPrice={getStandardRoomPrice}
+                    stay={activeStay}
+                  ></MapMakerPopup>
                 </motion.div>
               </Popup>
             </AnimatePresence>

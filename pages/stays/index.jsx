@@ -1,56 +1,53 @@
 import React, { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
+import { createGlobalStyle } from "styled-components";
 import { useRouter } from "next/router";
 import ReactPaginate from "react-paginate";
 import { Icon } from "@iconify/react";
 
-import getToken from "../../lib/getToken";
 import getTokenFromReq from "../../lib/getTokenFromReq";
 import LoadingSpinerChase from "../../components/ui/LoadingSpinerChase";
-import LoadingPulse from "../../components/ui/LoadingPulse";
 import { wrapper } from "../../redux/store";
 import styles from "../../styles/Lodging.module.css";
 import Navbar from "../../components/Lodging/Navbar";
 import Listings from "../../components/Lodging/Listings";
 import Map from "../../components/Lodging/Map";
-import SearchSelect from "../../components/Home/SearchSelect";
 import Search from "../../components/Home/Search";
 import Popup from "../../components/ui/Popup";
-import PriceFilter from "../../components/Lodging/PriceFilter";
-import RoomFilter from "../../components/Lodging/RoomFilter";
-import Badge from "../../components/ui/Badge";
-import Checkbox from "../../components/ui/Checkbox";
 import Footer from "../../components/Home/Footer";
-import RemoveFixed from "../../components/Lodging/RemoveFixed";
-import MobileModal from "../../components/ui/FullScreenMobileModal";
-import LargeMobileModal from "../../components/ui/LargeFullscreenPopup";
 import Button from "../../components/ui/Button";
-import ClientOnly from "../../components/ClientOnly";
-import { setFilteredStays } from "../../redux/actions/stay";
-import StayTypes from "../../components/Lodging/StayTypes";
 import MobileStayTypes from "../../components/Lodging/MobileStayTypes";
-import Amenities from "../../components/Lodging/Amenities";
-import ThemeFilter from "../../components/Lodging/ThemeFilter";
 import Cookies from "js-cookie";
-import { route } from "next/dist/server/router";
 import MobileSearchModal from "../../components/Stay/MobileSearchModal";
-import { useGoogleOneTapLogin } from "@react-oauth/google";
-import ContactBanner from "../../components/Home/ContactBanner";
 import { stayUrl } from "../../lib/stayUrl";
 import Head from "next/head";
+import Dialogue from "../../components/Home/Dialogue";
 
-function Stays({
-  userProfile,
-  stays,
-  pageSize,
-  count,
-  nextLink,
-  previousLink,
-  allStays,
-  totalPages,
-}) {
+function Stays({ userProfile, stays, pageSize, count, totalPages }) {
+  const GlobalStyle = createGlobalStyle`
+  .rdp-cell {
+    width: 54px !important;
+    height: 45px !important;
+  }
+  .rdp-months {
+    width: 100% !important;
+  }
+  .rdp-day_range_middle {
+    opacity: 0.5 !important;
+  }
+  .BeaconFabButtonFrame {
+    @media (max-width: 768px) {
+      bottom: 70px !important;
+    }
+  }
+  .hsds-beacon .eTCLra {
+    @media (max-width: 768px) {
+      bottom: 70px !important;
+    }
+  }
+`;
+
   const [state, setState] = useState({
     showDropdown: false,
     checkin: "",
@@ -91,19 +88,6 @@ function Stays({
     showFilterPopup: false,
   };
   const router = useRouter();
-
-  // useGoogleOneTapLogin({
-  //   onSuccess: (credentialResponse) => {
-  //     console.log(credentialResponse);
-  //   },
-  //   onError: () => {
-  //     console.log("Login Failed");
-  //   },
-  // });
-
-  const isMounted = useRef(false);
-
-  const isFirstRender = useRef(true);
 
   const [autoCompleteFromSearch, setAutoCompleteFromSearch] = useState([]);
 
@@ -242,30 +226,26 @@ function Stays({
 
   const dispatch = useDispatch();
 
-  const currencyToKES = useSelector((state) => state.home.currencyToKES);
+  // const priceConversionRate = async () => {
+  //   try {
+  //     const response = await fetch(
+  //       "https://api.exchangerate-api.com/v4/latest/usd",
+  //       {
+  //         method: "GET",
+  //       }
+  //     );
 
-  const priceConversionRate = async () => {
-    try {
-      const response = await fetch(
-        "https://api.exchangerate-api.com/v4/latest/usd",
-        {
-          method: "GET",
-        }
-      );
+  //     const data = await response.json();
+  //     dispatch({
+  //       type: "SET_PRICE_CONVERSION",
+  //       payload: data.rates.KES,
+  //     });
+  //   } catch (error) {}
+  // };
 
-      const data = await response.json();
-      dispatch({
-        type: "SET_PRICE_CONVERSION",
-        payload: data.rates.KES,
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    priceConversionRate();
-  });
+  // useEffect(() => {
+  //   priceConversionRate();
+  // });
 
   useEffect(() => {
     if (process.browser) {
@@ -276,17 +256,6 @@ function Stays({
       };
     }
   }, []);
-
-  // useEffect(() => {
-  //   if (state.windowSize >= 768) {
-  //     setState({
-  //       ...state,
-  //       showSearchModal: false,
-  //       showMobileFilter: false,
-  //     });
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [state.windowSize]);
 
   const [dateRange, setDateRange] = useState({
     from: "",
@@ -370,7 +339,7 @@ function Stays({
         setShowDateRangePopup(false);
       }}
     >
-      {/* <ContactBanner></ContactBanner> */}
+      <GlobalStyle></GlobalStyle>
       <div className="sticky top-0 left-0 right-0 bg-white border-b z-20 pb-4">
         <Head>
           <title>Winda.guide | explore stays or accommodation</title>
@@ -962,7 +931,7 @@ function Stays({
         <div className="mt-3 w-full">
           <div className="flex gap-2 px-4">
             <div className="lg:w-[40%] xl:w-[50%] hidden lg:block px-2 h-[78vh] mt-0 sticky top-[170px]">
-              <Map stays={allStays}></Map>
+              <Map></Map>
             </div>
             <div className="lg:w-[60%] xl:w-[50%] w-full md:pl-4">
               <Listings
@@ -1008,8 +977,8 @@ function Stays({
         </div>
       )}
 
-      <MobileModal
-        showModal={state.showMobileFilter}
+      <Dialogue
+        isOpen={state.showMobileFilter}
         closeModal={() => {
           setState({
             ...state,
@@ -1017,23 +986,47 @@ function Stays({
             showMobileFilter: false,
           });
         }}
-        className="md:!hidden !overflow-y-scroll"
-        title="Filters"
+        outsideDialogueClass="!p-0"
+        dialoguePanelClassName={
+          "h-screen !rounded-none md:!rounded-2xl md:max-h-[600px] !p-0 !max-w-2xl overflow-y-scroll remove-scroll "
+        }
       >
-        <div className="relative">
+        <div className="px-4 flex justify-between items-center py-3 bg-gray-100">
+          <div></div>
+          <h1 className="font-black">Filter</h1>
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+              setState({
+                ...state,
+                ...turnOffAllPopup,
+                showMobileFilter: false,
+              });
+            }}
+            className="flex cursor-pointer items-center justify-center w-7 h-7 rounded-full bg-white shadow-lg"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </div>
+        </div>
+        <div className="px-4 mt-5 relative">
           <div className="">
             <div className="mt-2 mb-4">
               <h1 className="font-bold text-base mb-2">Price Range</h1>
-              {/* <PriceFilter
-                    setMinPriceSelected={setMinSelected}
-                    setMaxPriceSelected={setMaxSelected}
-                    minPriceInstanceId="minPrice"
-                    maxPriceInstanceId="maxPrice"
-                    minPriceSelected={minPrice}
-                    maxPriceSelected={maxPrice}
-                  ></PriceFilter> */}
 
-              <div className="flex items-center gap-3 mb-2 px-2">
+              <div className="flex items-center gap-3 mb-2 md:px-10">
                 <div
                   onClick={() => {
                     router.push({
@@ -1105,7 +1098,7 @@ function Stays({
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 px-2">
+              <div className="flex items-center gap-3 md:px-10">
                 <div className="w-[50%] border rounded-md h-fit px-2 py-1">
                   <span className="text-sm text-gray-500">Min price</span>
                   <div className="flex items-center">
@@ -1161,7 +1154,7 @@ function Stays({
             <div className="mt-2 mb-4">
               <h1 className="font-bold text-base mb-2">Rooms</h1>
 
-              <div className="flex flex-wrap items-center gap-3 px-2">
+              <div className="flex flex-wrap items-center gap-3 md:px-10">
                 <div
                   onClick={() => {
                     router.push({
@@ -1322,7 +1315,7 @@ function Stays({
             <div className="mt-2 mb-4">
               <h1 className="font-bold text-base mb-2">Beds</h1>
 
-              <div className="flex flex-wrap items-center gap-3 px-2">
+              <div className="flex flex-wrap items-center gap-3 md:px-10">
                 <div
                   onClick={() => {
                     router.push({
@@ -1483,7 +1476,7 @@ function Stays({
             <div className="mt-2 mb-4">
               <h1 className="font-bold text-base mb-2">Bathrooms</h1>
 
-              <div className="flex flex-wrap items-center gap-3 px-2">
+              <div className="flex flex-wrap items-center gap-3 md:px-10">
                 <div
                   onClick={() => {
                     router.push({
@@ -1677,7 +1670,7 @@ function Stays({
 
             <div className="mt-2 mb-4">
               <span className="block font-bold text-base mb-2">
-                Filter stays by
+                Type of stays
               </span>
               <MobileStayTypes
                 handlePopup={() => {
@@ -1691,11 +1684,6 @@ function Stays({
               ></MobileStayTypes>
             </div>
           </div>
-
-          {/* <hr className="-mx-4 my-6" />
-
-          <div className="text-lg font-bold mb-2 mt-8">Amenities</div>
-          <Amenities></Amenities> */}
         </div>
         <div
           className={
@@ -1734,733 +1722,11 @@ function Stays({
             </Button>
           </div>
         </div>
-      </MobileModal>
-
-      <div className="relative hidden md:block ">
-        <LargeMobileModal
-          showModal={state.showMobileFilter}
-          closeModal={() => {
-            setState({
-              ...state,
-              ...turnOffAllPopup,
-              showMobileFilter: false,
-            });
-          }}
-          className="!overflow-y-scroll max-w-[800px] !h-[700px]"
-          title="Filters"
-        >
-          <div className="px-4 relative">
-            <div className="">
-              <div className="mt-2 mb-4">
-                <h1 className="font-bold text-base mb-2">Price Range</h1>
-
-                <div className="flex items-center gap-3 mb-2 px-10">
-                  <div
-                    onClick={() => {
-                      router.push({
-                        query: {
-                          ...router.query,
-                          pricing_type:
-                            router.query.pricing_type === "REASONABLE"
-                              ? ""
-                              : "REASONABLE",
-                          min_price: "",
-                          max_price: "",
-                        },
-                      });
-                    }}
-                    className={
-                      "px-3 py-1 border rounded-3xl text-sm font-bold cursor-pointer " +
-                      (router.query.pricing_type === "REASONABLE"
-                        ? "bg-blue-500 text-white"
-                        : "")
-                    }
-                  >
-                    Reasonable
-                  </div>
-                  <div
-                    onClick={() => {
-                      router.push({
-                        query: {
-                          ...router.query,
-                          pricing_type:
-                            router.query.pricing_type === "MID-RANGE"
-                              ? ""
-                              : "MID-RANGE",
-                          min_price: "",
-                          max_price: "",
-                        },
-                      });
-                    }}
-                    className={
-                      "px-3 py-1 border rounded-3xl text-sm font-bold cursor-pointer " +
-                      (router.query.pricing_type === "MID-RANGE"
-                        ? "bg-blue-500 text-white"
-                        : "")
-                    }
-                  >
-                    Mid-range
-                  </div>
-                  <div
-                    onClick={() => {
-                      router.push({
-                        query: {
-                          ...router.query,
-                          pricing_type:
-                            router.query.pricing_type === "HIGH-END"
-                              ? ""
-                              : "HIGH-END",
-                          min_price: "",
-                          max_price: "",
-                        },
-                      });
-                    }}
-                    className={
-                      "px-3 py-1 border rounded-3xl text-sm font-bold cursor-pointer " +
-                      (router.query.pricing_type === "HIGH-END"
-                        ? "bg-blue-500 text-white"
-                        : "")
-                    }
-                  >
-                    Luxurious
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3 px-10">
-                  <div className="w-[50%] border rounded-md h-fit px-2 py-1">
-                    <span className="text-sm text-gray-500">Min price</span>
-                    <div className="flex items-center">
-                      <div className="text-sm font-bold mr-2 ">$</div>
-                      <input
-                        onBlur={() => {
-                          filterMinPrice();
-                        }}
-                        name="min-price"
-                        value={minPrice}
-                        type="number"
-                        onChange={(event) => {
-                          setMinPrice(event.target.value);
-                        }}
-                        onKeyPress={(event) => {
-                          if (event.key === "Enter") {
-                            event.target.blur();
-                          }
-                        }}
-                        className="w-full focus:outline-none text-sm "
-                      />
-                    </div>
-                  </div>
-                  <div> - </div>
-                  <div className="w-[50%] border rounded-md h-fit px-2 py-1">
-                    <span className="text-sm text-gray-500">Max price</span>
-                    <div className="flex items-center">
-                      <div className="text-sm font-bold mr-2 ">$</div>
-                      <input
-                        onBlur={() => {
-                          filterMaxPrice();
-                        }}
-                        name="max-price"
-                        value={maxPrice}
-                        type="number"
-                        onChange={(event) => {
-                          setMaxPrice(event.target.value);
-                        }}
-                        onKeyPress={(event) => {
-                          if (event.key === "Enter") {
-                            event.target.blur();
-                          }
-                        }}
-                        className="w-full focus:outline-none text-sm "
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <hr className="-mx-4 my-6" />
-
-              <div className="mt-2 mb-4">
-                <h1 className="font-bold text-base mb-2">Rooms</h1>
-
-                <div className="flex flex-wrap items-center gap-3 px-10">
-                  <div
-                    onClick={() => {
-                      router.push({
-                        query: {
-                          ...router.query,
-                          max_rooms: "",
-                          min_rooms: "",
-                        },
-                      });
-                    }}
-                    className={
-                      "px-3 py-2 cursor-pointer border rounded-3xl text-sm font-bold " +
-                      (router.query.max_rooms != 1 &&
-                      router.query.max_rooms != 2 &&
-                      router.query.max_rooms != 3 &&
-                      router.query.max_rooms != 4 &&
-                      router.query.max_rooms != 5 &&
-                      router.query.max_rooms != 6 &&
-                      router.query.max_rooms != 7 &&
-                      router.query.min_rooms != 8
-                        ? "bg-slate-800 text-white"
-                        : "")
-                    }
-                  >
-                    Any
-                  </div>
-
-                  <div
-                    onClick={() => {
-                      router.push({
-                        query: { ...router.query, max_rooms: 1, min_rooms: "" },
-                      });
-                    }}
-                    className={
-                      "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (router.query.max_rooms == 1
-                        ? "!bg-slate-800 !text-white"
-                        : "")
-                    }
-                  >
-                    1
-                  </div>
-
-                  <div
-                    onClick={() => {
-                      router.push({
-                        query: { ...router.query, max_rooms: 2, min_rooms: "" },
-                      });
-                    }}
-                    className={
-                      "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (router.query.max_rooms == 2
-                        ? "!bg-slate-800 !text-white"
-                        : "")
-                    }
-                  >
-                    2
-                  </div>
-
-                  <div
-                    onClick={() => {
-                      router.push({
-                        query: { ...router.query, max_rooms: 3, min_rooms: "" },
-                      });
-                    }}
-                    className={
-                      "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (router.query.max_rooms == 3
-                        ? "!bg-slate-800 !text-white"
-                        : "")
-                    }
-                  >
-                    3
-                  </div>
-
-                  <div
-                    onClick={() => {
-                      router.push({
-                        query: { ...router.query, max_rooms: 4, min_rooms: "" },
-                      });
-                    }}
-                    className={
-                      "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (router.query.max_rooms == 4
-                        ? "!bg-slate-800 !text-white"
-                        : "")
-                    }
-                  >
-                    4
-                  </div>
-
-                  <div
-                    onClick={() => {
-                      router.push({
-                        query: { ...router.query, max_rooms: 5, min_rooms: "" },
-                      });
-                    }}
-                    className={
-                      "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (router.query.max_rooms == 5
-                        ? "!bg-slate-800 !text-white"
-                        : "")
-                    }
-                  >
-                    5
-                  </div>
-
-                  <div
-                    onClick={() => {
-                      router.push({
-                        query: { ...router.query, max_rooms: 6, min_rooms: "" },
-                      });
-                    }}
-                    className={
-                      "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (router.query.max_rooms == 6
-                        ? "!bg-slate-800 !text-white"
-                        : "")
-                    }
-                  >
-                    6
-                  </div>
-
-                  <div
-                    onClick={() => {
-                      router.push({
-                        query: { ...router.query, max_rooms: 7, min_rooms: "" },
-                      });
-                    }}
-                    className={
-                      "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (router.query.max_rooms == 7
-                        ? "!bg-slate-800 !text-white"
-                        : "")
-                    }
-                  >
-                    7
-                  </div>
-
-                  <div
-                    onClick={() => {
-                      router.push({
-                        query: { ...router.query, min_rooms: 8, max_rooms: "" },
-                      });
-                    }}
-                    className={
-                      "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (router.query.min_rooms == 8
-                        ? "!bg-slate-800 !text-white"
-                        : "")
-                    }
-                  >
-                    8+
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-2 mb-4">
-                <h1 className="font-bold text-base mb-2">Beds</h1>
-
-                <div className="flex flex-wrap items-center gap-3 px-10">
-                  <div
-                    onClick={() => {
-                      router.push({
-                        query: {
-                          ...router.query,
-                          max_beds: "",
-                          min_beds: "",
-                        },
-                      });
-                    }}
-                    className={
-                      "px-3 py-2 cursor-pointer border rounded-3xl text-sm font-bold " +
-                      (router.query.max_beds != 1 &&
-                      router.query.max_beds != 2 &&
-                      router.query.max_beds != 3 &&
-                      router.query.max_beds != 4 &&
-                      router.query.max_beds != 5 &&
-                      router.query.max_beds != 6 &&
-                      router.query.max_beds != 7 &&
-                      router.query.min_beds != 8
-                        ? "bg-slate-800 text-white"
-                        : "")
-                    }
-                  >
-                    Any
-                  </div>
-
-                  <div
-                    onClick={() => {
-                      router.push({
-                        query: { ...router.query, max_beds: 1, min_beds: "" },
-                      });
-                    }}
-                    className={
-                      "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (router.query.max_beds == 1
-                        ? "!bg-slate-800 !text-white"
-                        : "")
-                    }
-                  >
-                    1
-                  </div>
-
-                  <div
-                    onClick={() => {
-                      router.push({
-                        query: { ...router.query, max_beds: 2, min_beds: "" },
-                      });
-                    }}
-                    className={
-                      "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (router.query.max_beds == 2
-                        ? "!bg-slate-800 !text-white"
-                        : "")
-                    }
-                  >
-                    2
-                  </div>
-
-                  <div
-                    onClick={() => {
-                      router.push({
-                        query: { ...router.query, max_beds: 3, min_beds: "" },
-                      });
-                    }}
-                    className={
-                      "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (router.query.max_beds == 3
-                        ? "!bg-slate-800 !text-white"
-                        : "")
-                    }
-                  >
-                    3
-                  </div>
-
-                  <div
-                    onClick={() => {
-                      router.push({
-                        query: { ...router.query, max_beds: 4, min_beds: "" },
-                      });
-                    }}
-                    className={
-                      "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (router.query.max_beds == 4
-                        ? "!bg-slate-800 !text-white"
-                        : "")
-                    }
-                  >
-                    4
-                  </div>
-
-                  <div
-                    onClick={() => {
-                      router.push({
-                        query: { ...router.query, max_beds: 5, min_beds: "" },
-                      });
-                    }}
-                    className={
-                      "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (router.query.max_beds == 5
-                        ? "!bg-slate-800 !text-white"
-                        : "")
-                    }
-                  >
-                    5
-                  </div>
-
-                  <div
-                    onClick={() => {
-                      router.push({
-                        query: { ...router.query, max_beds: 6, min_beds: "" },
-                      });
-                    }}
-                    className={
-                      "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (router.query.max_beds == 6
-                        ? "!bg-slate-800 !text-white"
-                        : "")
-                    }
-                  >
-                    6
-                  </div>
-
-                  <div
-                    onClick={() => {
-                      router.push({
-                        query: { ...router.query, max_beds: 7, min_beds: "" },
-                      });
-                    }}
-                    className={
-                      "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (router.query.max_beds == 7
-                        ? "!bg-slate-800 !text-white"
-                        : "")
-                    }
-                  >
-                    7
-                  </div>
-
-                  <div
-                    onClick={() => {
-                      router.push({
-                        query: { ...router.query, min_beds: 8, max_beds: "" },
-                      });
-                    }}
-                    className={
-                      "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (router.query.min_beds == 8
-                        ? "!bg-slate-800 !text-white"
-                        : "")
-                    }
-                  >
-                    8+
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-2 mb-4">
-                <h1 className="font-bold text-base mb-2">Bathrooms</h1>
-
-                <div className="flex flex-wrap items-center gap-3 px-10">
-                  <div
-                    onClick={() => {
-                      router.push({
-                        query: {
-                          ...router.query,
-                          max_bathrooms: "",
-                          min_bathrooms: "",
-                        },
-                      });
-                    }}
-                    className={
-                      "px-3 py-2 cursor-pointer border rounded-3xl text-sm font-bold " +
-                      (router.query.max_bathrooms != 1 &&
-                      router.query.max_bathrooms != 2 &&
-                      router.query.max_bathrooms != 3 &&
-                      router.query.max_bathrooms != 4 &&
-                      router.query.max_bathrooms != 5 &&
-                      router.query.max_bathrooms != 6 &&
-                      router.query.max_bathrooms != 7 &&
-                      router.query.min_bathrooms != 8
-                        ? "bg-slate-800 text-white"
-                        : "")
-                    }
-                  >
-                    Any
-                  </div>
-
-                  <div
-                    onClick={() => {
-                      router.push({
-                        query: {
-                          ...router.query,
-                          max_bathrooms: 1,
-                          min_bathrooms: "",
-                        },
-                      });
-                    }}
-                    className={
-                      "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (router.query.max_bathrooms == 1
-                        ? "!bg-slate-800 !text-white"
-                        : "")
-                    }
-                  >
-                    1
-                  </div>
-
-                  <div
-                    onClick={() => {
-                      router.push({
-                        query: {
-                          ...router.query,
-                          max_bathrooms: 2,
-                          min_bathrooms: "",
-                        },
-                      });
-                    }}
-                    className={
-                      "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (router.query.max_bathrooms == 2
-                        ? "!bg-slate-800 !text-white"
-                        : "")
-                    }
-                  >
-                    2
-                  </div>
-
-                  <div
-                    onClick={() => {
-                      router.push({
-                        query: {
-                          ...router.query,
-                          max_bathrooms: 3,
-                          min_bathrooms: "",
-                        },
-                      });
-                    }}
-                    className={
-                      "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (router.query.max_bathrooms == 3
-                        ? "!bg-slate-800 !text-white"
-                        : "")
-                    }
-                  >
-                    3
-                  </div>
-
-                  <div
-                    onClick={() => {
-                      router.push({
-                        query: {
-                          ...router.query,
-                          max_bathrooms: 4,
-                          min_bathrooms: "",
-                        },
-                      });
-                    }}
-                    className={
-                      "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (router.query.max_bathrooms == 4
-                        ? "!bg-slate-800 !text-white"
-                        : "")
-                    }
-                  >
-                    4
-                  </div>
-
-                  <div
-                    onClick={() => {
-                      router.push({
-                        query: {
-                          ...router.query,
-                          max_bathrooms: 5,
-                          min_bathrooms: "",
-                        },
-                      });
-                    }}
-                    className={
-                      "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (router.query.max_bathrooms == 5
-                        ? "!bg-slate-800 !text-white"
-                        : "")
-                    }
-                  >
-                    5
-                  </div>
-
-                  <div
-                    onClick={() => {
-                      router.push({
-                        query: {
-                          ...router.query,
-                          max_bathrooms: 6,
-                          min_bathrooms: "",
-                        },
-                      });
-                    }}
-                    className={
-                      "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (router.query.max_bathrooms == 6
-                        ? "!bg-slate-800 !text-white"
-                        : "")
-                    }
-                  >
-                    6
-                  </div>
-
-                  <div
-                    onClick={() => {
-                      router.push({
-                        query: {
-                          ...router.query,
-                          max_bathrooms: 7,
-                          min_bathrooms: "",
-                        },
-                      });
-                    }}
-                    className={
-                      "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (router.query.max_bathrooms == 7
-                        ? "!bg-slate-800 !text-white"
-                        : "")
-                    }
-                  >
-                    7
-                  </div>
-
-                  <div
-                    onClick={() => {
-                      router.push({
-                        query: {
-                          ...router.query,
-                          min_bathrooms: 8,
-                          max_bathrooms: "",
-                        },
-                      });
-                    }}
-                    className={
-                      "px-5 cursor-pointer py-2 border rounded-3xl text-black text-sm font-bold " +
-                      (router.query.min_bathrooms == 8
-                        ? "!bg-slate-800 !text-white"
-                        : "")
-                    }
-                  >
-                    8+
-                  </div>
-                </div>
-              </div>
-
-              <hr className="-mx-4 my-6" />
-
-              <div className="mt-2 mb-4">
-                <span className="block font-bold text-base mb-2">
-                  Filter stays by
-                </span>
-                <MobileStayTypes
-                  handlePopup={() => {
-                    setState({
-                      ...state,
-                      ...turnOffAllPopup,
-                      showStayTypesPopup: !state.showStayTypesPopup,
-                    });
-                  }}
-                  showStayTypesPopup={state.showStayTypesPopup}
-                ></MobileStayTypes>
-              </div>
-            </div>
-
-            {/* <hr className="-mx-4 my-6" />
-
-            <div className="text-lg font-bold mb-2 mt-8">Amenities</div>
-            <Amenities></Amenities> */}
-          </div>
-          <div
-            className={
-              "w-full sticky z-10 px-2 py-2 bottom-0 safari-bottom left-0 right-0 bg-gray-100 border-t border-gray-200 "
-            }
-          >
-            <div className="flex justify-between items-center gap-2">
-              <div
-                onClick={() => {
-                  router.push({
-                    pathname: "/stays",
-                    query: {
-                      trip: router.query.trip,
-                      group_trip: router.query.group_trip,
-                    },
-                  });
-                }}
-                className="underline cursor-pointer"
-              >
-                Clear all
-              </div>
-
-              <Button
-                onClick={() => {
-                  setState({
-                    ...state,
-                    ...turnOffAllPopup,
-                    showMobileFilter: false,
-                  });
-                }}
-                className={
-                  "!bg-gradient-to-r !px-4 from-pink-500 via-red-500 to-yellow-500 !text-white "
-                }
-              >
-                Show all {count} stays
-              </Button>
-            </div>
-          </div>
-        </LargeMobileModal>
-      </div>
+      </Dialogue>
 
       {mobileMap && (
-        <div className={"h-[83vh] mt-[140px]"}>
-          <Map stays={allStays}></Map>
+        <div className={"h-[83vh] fixed bottom-0 left-0 right-0"}>
+          <Map></Map>
         </div>
       )}
 
@@ -2528,11 +1794,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
         const url = stayUrl(query);
 
-        const allStaysUrl = stayUrl(query, true);
-
         const response = await axios.get(`${url}`);
-
-        const allStays = await axios.get(`${allStaysUrl}`);
 
         if (token) {
           const userProfile = await axios.get(
@@ -2554,7 +1816,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
             props: {
               userProfile: userProfile.data[0],
               stays: response.data.results,
-              allStays: allStays.data.results,
               nextLink: response.data.next,
               previousLink: response.data.previous,
               pageSize: response.data.page_size,
@@ -2568,7 +1829,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
           props: {
             userProfile: "",
             stays: response.data.results,
-            allStays: allStays.data.results,
             nextLink: response.data.next,
             previousLink: response.data.previous,
             pageSize: response.data.page_size,
@@ -2592,7 +1852,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
               nextLink: "",
               previousLink: "",
               pageSize: 0,
-              allStays: [],
               totalPages: 0,
               count: 0,
             },

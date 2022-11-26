@@ -10,44 +10,24 @@ function MobileStayTypes({ handlePopup, showStayTypesPopup, screenWidth }) {
 
   const options = [
     "lodge",
-    "tented_camp",
+    "tented camp",
     "house",
+    "boutique hotel",
+    "hotel",
     "campsite",
-    "weekend_getaway",
-    "romantic_getaway",
-    "group_getaway",
     "conservancy",
     "farmstay",
-    "national_park_game_reserves",
+    "national park/Game reserves",
     "lakefront",
     "beachfront",
     "luxurious",
-    "beautiful_view",
-    "off_grid",
-    "eco_stay",
+    "unique space",
+    "off-grid",
+    "eco-stay",
     "quirky",
-    "honeymoon_spot",
-    "unique_experiences",
-    "traditional",
-    "mansion",
-    "over_water",
-    "stunning_architecture",
-    "riverfront",
-    "private_house",
+    "unique experiences",
+    "private house",
     "resort",
-    "boutique_hotel",
-    "unique_space",
-    "unique_location",
-    "hotel",
-    "cottage",
-    "coworking_spot",
-    "fast_wifi",
-    "locally_owned",
-    "community_owned",
-    "carbon_neutral",
-    "owner_operated",
-    "popular",
-    "wellness_retreat",
   ];
 
   const [currentOptions, setCurrentOptions] = useState([]);
@@ -62,7 +42,9 @@ function MobileStayTypes({ handlePopup, showStayTypesPopup, screenWidth }) {
         .replace("]", "") // remove ]
         .trim(); // remove all white space
 
-      router.push({ query: { ...router.query, tag: allOptions } });
+      router.push({
+        query: { ...router.query, type_of_stay: allOptions.toUpperCase() },
+      });
     } else {
       updatedList.splice(currentOptions.indexOf(event.target.value), 1);
 
@@ -72,19 +54,21 @@ function MobileStayTypes({ handlePopup, showStayTypesPopup, screenWidth }) {
         .replace("]", "") // remove ]
         .trim(); // remove all white space
 
-      router.push({ query: { ...router.query, tag: allOptions } });
+      router.push({
+        query: { ...router.query, type_of_stay: allOptions.toUpperCase() },
+      });
     }
     setCurrentOptions(updatedList);
   };
 
   useEffect(() => {
-    if (router.query.tag) {
-      setCurrentOptions(router.query.tag.split(","));
+    if (router.query.type_of_stay) {
+      setCurrentOptions(router.query.type_of_stay.split(","));
     }
-  }, [router.query.tag]);
+  }, [router.query.type_of_stay]);
 
   const containsOption = (option) => {
-    return currentOptions.includes(option);
+    return currentOptions.includes(option.toUpperCase());
   };
 
   return (
@@ -97,7 +81,7 @@ function MobileStayTypes({ handlePopup, showStayTypesPopup, screenWidth }) {
               value={option}
               onChange={handleCheck}
             ></Checkbox>
-            <div className="lowercase">{option.split("_").join(" ")}</div>
+            <div className="capitalize">{option.split("_").join(" ")}</div>
           </label>
         ))}
       </div>
