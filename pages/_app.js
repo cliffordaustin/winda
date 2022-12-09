@@ -1,4 +1,9 @@
+import "@fullcalendar/common/main.css";
+import "@fullcalendar/daygrid/main.css";
+import "@fullcalendar/list/main.css";
+import "@fullcalendar/timegrid/main.css";
 import "../styles/globals.css";
+
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Provider, useDispatch } from "react-redux";

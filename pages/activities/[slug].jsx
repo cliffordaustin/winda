@@ -512,7 +512,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
       </div>
 
       <div className="flex flex-col px-4 md:px-0 md:flex-row justify-around relative h-full w-full">
-        <div className="md:w-[56%] lg:w-[63%] md:px-4 md:border-r md:border-gray-200 md:absolute md:mt-10 mt-3 left-2 md:block">
+        <div className="md:px-4 md:border-r md:border-gray-200 md:absolute md:mt-10 mt-3 left-2 md:block">
           {/* about */}
           <Element name="about">
             <div className="mt-10">
@@ -635,7 +635,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
               </div>
             </div>
 
-            <div className="flex flex-wrap gap-1 mt-2">
+            <div className="flex flex-wrap gap-1 mt-6">
               {activity.tags &&
                 activity.tags.map((tag, index) => (
                   <div
@@ -892,14 +892,15 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                         {numOfPeople > 1 ? "Residents" : "Resident"}
                       </span>
                     )}
-                    {currentPrice.value === "per session" && numOfSession > 0 && (
-                      <span>
-                        {numOfSession}{" "}
-                        {numOfSession > 1
-                          ? "Resident Sessions"
-                          : "Resident Session"}
-                      </span>
-                    )}
+                    {currentPrice.value === "per session" &&
+                      numOfSession > 0 && (
+                        <span>
+                          {numOfSession}{" "}
+                          {numOfSession > 1
+                            ? "Resident Sessions"
+                            : "Resident Session"}
+                        </span>
+                      )}
                     {currentPrice.value === "per group" && numOfGroups > 0 && (
                       <span>
                         {numOfGroups}{" "}
@@ -1008,16 +1009,17 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                       date={addToCartDate}
                       disableDate={new Date()}
                     ></DatePicker>
-                    {addToCartDate && (addToCartDate.from || addToCartDate.to) && (
-                      <div
-                        className="mb-2 cursor-pointer text-sm ml-4 underline"
-                        onClick={() => {
-                          setAddToCartDate("");
-                        }}
-                      >
-                        clear date
-                      </div>
-                    )}
+                    {addToCartDate &&
+                      (addToCartDate.from || addToCartDate.to) && (
+                        <div
+                          className="mb-2 cursor-pointer text-sm ml-4 underline"
+                          onClick={() => {
+                            setAddToCartDate("");
+                          }}
+                        >
+                          clear date
+                        </div>
+                      )}
                   </div>
                 )}
 
@@ -1031,12 +1033,13 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                   >
                     <div className="font-bold">Guests</div>
                     <div className="text-gray-600 text-sm justify-end flex flex-wrap self-end">
-                      {currentPrice.value === "per person" && numOfPeople > 0 && (
-                        <span>
-                          {numOfPeople}{" "}
-                          {numOfPeople > 1 ? "Residents" : "Resident"}
-                        </span>
-                      )}
+                      {currentPrice.value === "per person" &&
+                        numOfPeople > 0 && (
+                          <span>
+                            {numOfPeople}{" "}
+                            {numOfPeople > 1 ? "Residents" : "Resident"}
+                          </span>
+                        )}
                       {currentPrice.value === "per session" &&
                         numOfSession > 0 && (
                           <span>
@@ -1046,14 +1049,15 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                               : "Resident Session"}
                           </span>
                         )}
-                      {currentPrice.value === "per group" && numOfGroups > 0 && (
-                        <span>
-                          {numOfGroups}{" "}
-                          {numOfGroups > 1
-                            ? "Resident Groups"
-                            : "Resident Group"}
-                        </span>
-                      )}
+                      {currentPrice.value === "per group" &&
+                        numOfGroups > 0 && (
+                          <span>
+                            {numOfGroups}{" "}
+                            {numOfGroups > 1
+                              ? "Resident Groups"
+                              : "Resident Group"}
+                          </span>
+                        )}
 
                       {(numOfPeople > 0 ||
                         numOfSession > 0 ||
@@ -1365,14 +1369,15 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                                 : "Resident Session"}
                             </span>
                           )}
-                        {currentPrice.value === "per group" && numOfGroups > 0 && (
-                          <span>
-                            {numOfGroups}{" "}
-                            {numOfGroups > 1
-                              ? "Resident Groups"
-                              : "Resident Group"}
-                          </span>
-                        )}
+                        {currentPrice.value === "per group" &&
+                          numOfGroups > 0 && (
+                            <span>
+                              {numOfGroups}{" "}
+                              {numOfGroups > 1
+                                ? "Resident Groups"
+                                : "Resident Group"}
+                            </span>
+                          )}
 
                         {(numOfPeople > 0 ||
                           numOfSession > 0 ||
@@ -1468,51 +1473,53 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                   </div>
                 )}
 
-                {!showMoreActivities && activity.type_of_activities.length > 5 && (
-                  <div
-                    onClick={() => {
-                      setShowMoreActivities(true);
-                    }}
-                    className="font-bold text-blue-700 mt-2 flex items-center gap-0.5 cursor-pointer ml-2 mb-1"
-                  >
-                    <span>Read more</span>{" "}
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 mt-1"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
+                {!showMoreActivities &&
+                  activity.type_of_activities.length > 5 && (
+                    <div
+                      onClick={() => {
+                        setShowMoreActivities(true);
+                      }}
+                      className="font-bold text-blue-700 mt-2 flex items-center gap-0.5 cursor-pointer ml-2 mb-1"
                     >
-                      <path
-                        fillRule="evenodd"
-                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                )}
+                      <span>Read more</span>{" "}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5 mt-1"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                  )}
 
-                {showMoreActivities && activity.type_of_activities.length > 5 && (
-                  <div
-                    onClick={() => {
-                      setShowMoreActivities(false);
-                    }}
-                    className="font-bold text-blue-700 mt-2 flex items-center gap-0.5 cursor-pointer ml-2 mb-1"
-                  >
-                    <span>Read less</span>{" "}
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 mt-1"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
+                {showMoreActivities &&
+                  activity.type_of_activities.length > 5 && (
+                    <div
+                      onClick={() => {
+                        setShowMoreActivities(false);
+                      }}
+                      className="font-bold text-blue-700 mt-2 flex items-center gap-0.5 cursor-pointer ml-2 mb-1"
                     >
-                      <path
-                        fillRule="evenodd"
-                        d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                )}
+                      <span>Read less</span>{" "}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5 mt-1"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                  )}
               </div>
             </Element>
           )}
@@ -1666,6 +1673,32 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
                 )}
               </div>
             </Element>
+          )}
+
+          {(activity.contact_name ||
+            activity.contact_email ||
+            activity.contact_phone) && (
+            <div className="flex mt-8 flex-col gap-2">
+              <h1 className="font-bold text-xl">Guide&apos;s Contact</h1>
+
+              <div className="mt-3 flex flex-col gap-2">
+                {activity.contact_name && (
+                  <span className="font-medium">
+                    Name: {activity.contact_name}
+                  </span>
+                )}
+                {activity.contact_email && (
+                  <span className="font-medium">
+                    Email: {activity.contact_email}
+                  </span>
+                )}
+                {activity.contact_phone && (
+                  <span className="font-medium">
+                    Phone: {activity.contact_phone}
+                  </span>
+                )}
+              </div>
+            </div>
           )}
 
           <Element name="policies" className={"w-full pt-12 "}>
@@ -1874,7 +1907,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
           </div>
         </div>
 
-        <div className="md:fixed hidden right-2 md:w-[42%] h-full md:pl-2 lg:px-0 lg:w-[35%] md:top-[94px] bottom-0 overflow-y-scroll md:block">
+        {/* <div className="md:fixed hidden right-2 md:w-[42%] h-full md:pl-2 lg:px-0 lg:w-[35%] md:top-[94px] bottom-0 overflow-y-scroll md:block">
           <div className="flex justify-between">
             {
               <div>
@@ -2387,7 +2420,7 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
               }
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

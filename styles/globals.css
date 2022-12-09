@@ -427,3 +427,41 @@ body {
   cursor: auto;
   pointer-events: none;
 }
+
+.fc .fc-header-toolbar {
+  @apply px-5 pt-2 pb-3 border-t border-l border-r md:rounded-t-md !mb-0;
+}
+
+.fc-toolbar-title {
+  @apply !text-base md:!text-lg font-bold font-OpenSans;
+}
+
+/* .fc-list {
+  @apply shadow-lg;
+} */
+
+.fc-button-group {
+  @apply flex gap-2;
+}
+
+.fc-prev-button,
+.fc-next-button {
+  @apply !rounded-3xl w-9 h-9 !flex items-center justify-center !bg-gray-200 !border-none;
+}
+
+.fc-icon-chevron-right,
+.fc-icon-chevron-left {
+  @apply !text-gray-600 w-6 h-6;
+}
+
+.fc-event-title-container {
+  @apply !text-sm !font-OpenSans text-black px-1 py-1;
+}
+
+.fc-event-title {
+  @apply truncate;
+}
+
+.fc-list-event-time {
+  @apply hidden;
+}

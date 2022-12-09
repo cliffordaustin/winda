@@ -1137,7 +1137,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
         }}
       >
         <Head>
-          <title>{stay.name}</title>
+          <title>{stay.property_name || stay.name}</title>
           <meta
             name="viewport"
             content="initial-scale=1.0, width=device-width"
@@ -1192,9 +1192,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               leaveTo="opacity-0 scale-50"
               show={!inView}
               className={
-                stay.is_an_event
-                  ? "h-[60px] bg-white z-20 border-t border-b left-0 right-0 flex w-full "
-                  : "h-[60px] bg-white absolute z-20 border-t border-b left-0 flex w-full md:w-[55.85%] px-3 lg:w-[62.85%] "
+                "h-[60px] bg-white z-20 px-4 border-t border-b left-0 right-0 flex w-full "
               }
             >
               <ScrollTo guestPopup={guestPopup} stay={stay}></ScrollTo>
@@ -1203,14 +1201,8 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
         </div>
 
         {router.query.checkout_page !== "1" && (
-          <div className="flex flex-col relative md:px-4 md:flex-row justify-around h-full w-full">
-            <div
-              className={
-                stay.is_an_event
-                  ? "w-full md:!max-w-[1000px] !mx-auto !border-none px-4"
-                  : "md:w-[56%] lg:w-[63%] md:border-r md:border-gray-200 md:absolute md:mt-0 left-0 md:block"
-              }
-            >
+          <div className="flex flex-col relative md:flex-row justify-around h-full w-full">
+            <div className={"w-full"}>
               <div className="!relative" name="about">
                 <div
                   className={
@@ -1266,7 +1258,9 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       {stay.location}
                     </div>
                   </div>
-                  <div className="text-2xl font-bold">{stay.name}</div>
+                  <div className="text-2xl font-bold">
+                    {stay.property_name || stay.name}
+                  </div>
                 </div>
 
                 <div
@@ -1388,7 +1382,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
                 {/* about */}
 
-                <div className={"mt-4 " + (!stay.is_an_event ? "px-4" : "")}>
+                <div className={"mt-4 "}>
                   <div className="flex">
                     <div className="flex flex-col w-full">
                       {!stay.is_an_event && (
@@ -1493,7 +1487,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
                     <div
                       className={
-                        "w-full z-10 px-2 border-t md:hidden fixed bottom-0 safari-bottom left-0 right-0 bg-white py-1 "
+                        "w-full z-10 px-4 md:px-12 border-t md:hidden fixed bottom-0 safari-bottom left-0 right-0 bg-white py-1 "
                       }
                     >
                       <div className="flex justify-between items-center gap-2">
@@ -1666,6 +1660,16 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     </div>
                   </div>
                 </div>
+
+                {stay.link && (
+                  <div className="my-6 ml-4">
+                    <Link href={stay.link}>
+                      <a>
+                        <Button className="!bg-blue-600">Book now</Button>
+                      </a>
+                    </Link>
+                  </div>
+                )}
 
                 {!stay.per_house && (
                   <Modal
@@ -2853,59 +2857,63 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                                       ></Price>
                                     )}
 
-                                  {room.is_tented_camp && !room.not_available && (
-                                    <>
-                                      <Price
-                                        stayPrice={
-                                          room.price *
-                                            (new Date(
-                                              router.query.end_date
-                                            ).getDate() -
-                                              new Date(
-                                                router.query.starting_date
-                                              ).getDate() || 1) *
-                                            (Number(router.query.adults) || 1) +
-                                          (transports[
-                                            Number(router.query.transport) || 0
-                                          ].name.toLowerCase() == "van"
-                                            ? stay.car_transfer_price
-                                            : transports[
-                                                Number(
-                                                  router.query.transport
-                                                ) || 0
-                                              ].name.toLowerCase() == "bus"
-                                            ? stay.bus_transfer_price
-                                            : 0) *
-                                            Number(passengers)
-                                        }
-                                      ></Price>
-                                    </>
-                                  )}
+                                  {room.is_tented_camp &&
+                                    !room.not_available && (
+                                      <>
+                                        <Price
+                                          stayPrice={
+                                            room.price *
+                                              (new Date(
+                                                router.query.end_date
+                                              ).getDate() -
+                                                new Date(
+                                                  router.query.starting_date
+                                                ).getDate() || 1) *
+                                              (Number(router.query.adults) ||
+                                                1) +
+                                            (transports[
+                                              Number(router.query.transport) ||
+                                                0
+                                            ].name.toLowerCase() == "van"
+                                              ? stay.car_transfer_price
+                                              : transports[
+                                                  Number(
+                                                    router.query.transport
+                                                  ) || 0
+                                                ].name.toLowerCase() == "bus"
+                                              ? stay.bus_transfer_price
+                                              : 0) *
+                                              Number(passengers)
+                                          }
+                                        ></Price>
+                                      </>
+                                    )}
                                 </div>
 
-                                {!room.is_tented_camp && !room.not_available && (
-                                  <div>
-                                    {Number(router.query.rooms || 1) <=
-                                      room.available_rooms &&
-                                      Math.ceil(
-                                        Number(router.query.adults || 1) /
-                                          (Number(router.query.rooms) || 1)
-                                      ) <= room.sleeps && (
-                                        <div
-                                          onClick={() => {
-                                            reserve(index);
-                                          }}
-                                          className="px-3 text-sm cursor-pointer bg-blue-600 w-fit py-1.5 text-white font-bold rounded-md"
-                                        >
-                                          Reserve{" "}
-                                          {Number(router.query.rooms) > 1
-                                            ? Number(router.query.rooms) +
-                                              " rooms"
-                                            : ""}
-                                        </div>
-                                      )}
-                                  </div>
-                                )}
+                                {!room.is_tented_camp &&
+                                  !room.not_available && (
+                                    <div>
+                                      {Number(router.query.rooms || 1) <=
+                                        room.available_rooms &&
+                                        Math.ceil(
+                                          Number(router.query.adults || 1) /
+                                            (Number(router.query.rooms) || 1)
+                                        ) <= room.sleeps && (
+                                          <div
+                                            onClick={() => {
+                                              reserve(index);
+                                            }}
+                                            className="px-3 text-sm cursor-pointer bg-blue-600 w-fit py-1.5 text-white font-bold rounded-md"
+                                          >
+                                            Reserve{" "}
+                                            {Number(router.query.rooms) > 1
+                                              ? Number(router.query.rooms) +
+                                                " rooms"
+                                              : ""}
+                                          </div>
+                                        )}
+                                    </div>
+                                  )}
 
                                 {room.is_tented_camp && !room.not_available && (
                                   <div>
@@ -3410,7 +3418,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
               </div>
             </div>
 
-            {!stay.is_an_event && (
+            {/* {!stay.is_an_event && (
               <div className="md:fixed hidden lg:flex flex-col right-2 md:w-[42%] h-full md:pl-2 lg:px-0 lg:w-[35%] top-[94px] bottom-0 overflow-y-scroll md:block">
                 <div className="flex h-fit justify-between">
                   {
@@ -3466,12 +3474,14 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       ></Price>
                       <span className="mt-1">/night</span>
                     </div>
-                    {addToCartDate && addToCartDate.from && addToCartDate.to && (
-                      <span className="text-gray-600 text-sm font-bold self-end">
-                        {moment(addToCartDate.from).format("MMM DD")} -{" "}
-                        {moment(addToCartDate.to).format("MMM DD")}
-                      </span>
-                    )}
+                    {addToCartDate &&
+                      addToCartDate.from &&
+                      addToCartDate.to && (
+                        <span className="text-gray-600 text-sm font-bold self-end">
+                          {moment(addToCartDate.from).format("MMM DD")} -{" "}
+                          {moment(addToCartDate.to).format("MMM DD")}
+                        </span>
+                      )}
                     {!stay.per_house && !stay.is_an_event && (
                       <div className="text-gray-600 text-sm flex flex-wrap self-end justify-end">
                         {numOfAdultsNonResident > 0 && (
@@ -3568,20 +3578,21 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                     }
                   </div>
 
-                  {addToCartDate && (addToCartDate.from || addToCartDate.to) && (
-                    <div
-                      className="my-2 cursor-pointer text-sm ml-4 underline"
-                      onClick={() => {
-                        setAddToCartDate({
-                          ...addToCartDate,
-                          from: "",
-                          to: "",
-                        });
-                      }}
-                    >
-                      clear date
-                    </div>
-                  )}
+                  {addToCartDate &&
+                    (addToCartDate.from || addToCartDate.to) && (
+                      <div
+                        className="my-2 cursor-pointer text-sm ml-4 underline"
+                        onClick={() => {
+                          setAddToCartDate({
+                            ...addToCartDate,
+                            from: "",
+                            to: "",
+                          });
+                        }}
+                      >
+                        clear date
+                      </div>
+                    )}
 
                   <div className=" mt-4 relative">
                     {!stay.is_an_event && (
@@ -4215,7 +4226,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                   </div>
                 </div>
               </div>
-            )}
+            )} */}
           </div>
         )}
 
@@ -4248,7 +4259,9 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       <h1 className="text-gray-600 text-xs uppercase">
                         {stay.location}
                       </h1>
-                      <h1 className="font-bold">{stay.name}</h1>
+                      <h1 className="font-bold">
+                        {stay.property_name || stay.name}
+                      </h1>
                       <h1 className="text-sm">
                         {stay.type_of_rooms[Number(router.query.room_type)] &&
                           stay.type_of_rooms[Number(router.query.room_type)]

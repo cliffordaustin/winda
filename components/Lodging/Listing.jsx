@@ -292,7 +292,9 @@ function Listing({
               className={styles.card + " "}
             >
               <div className="flex flex-col gap-1">
-                <h1 className="text-gray-500 truncate">{listing.name}</h1>
+                <h1 className="text-gray-500 truncate">
+                  {listing.property_name || listing.name}
+                </h1>
                 <div className="flex">
                   {listing.is_an_event && (
                     <span className="uppercase mr-1 text-xs text-gray-500 self-end mb-1">
