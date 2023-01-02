@@ -2234,7 +2234,8 @@ function TripDetail({ userProfile, userTrips, trip }) {
                                       : ""}{" "}
                                     {trip.stay.country}
                                   </span>{" "}
-                                  .You will be staying here for 2 nights
+                                  .You will be staying here for {trip.nights}{" "}
+                                  nights
                                 </span>
                               </div>
                             </PopoverBox>
@@ -2694,7 +2695,8 @@ function TripDetail({ userProfile, userTrips, trip }) {
                                         : ""}{" "}
                                       {trip.stay.country}
                                     </span>{" "}
-                                    .You will be staying here for 2 nights
+                                    .You will be staying here for {trip.nights}{" "}
+                                    nights
                                   </span>
                                 </div>
                               </PopoverBox>
