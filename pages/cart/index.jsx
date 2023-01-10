@@ -536,7 +536,7 @@ const Cart = ({
   const [loadingForPaystack, setLoadingForPaystack] = useState(false);
 
   const total = () => {
-    let price = totalPrice() + totalPrice() * 0.035;
+    let price = totalPrice() + totalPrice() * 0.038;
 
     return parseInt(
       (Math.floor(price * 100) / 100).toFixed(2).replace(".", ""),
@@ -585,7 +585,7 @@ const Cart = ({
           .then((res) => {
             Mixpanel.track("User has paid for accommodation", {
               name_of_accommodation: item.stay.name,
-              amount: totalPrice() + totalPrice() * 0.035,
+              amount: totalPrice() + totalPrice() * 0.038,
               first_name: formik.values.first_name || "",
               last_name: formik.values.last_name || "",
               email: formik.values.email || "",
@@ -633,7 +633,7 @@ const Cart = ({
           .then((res) => {
             Mixpanel.track("User has paid for activity", {
               name_of_activity: item.activity.name,
-              amount: totalPrice() + totalPrice() * 0.035,
+              amount: totalPrice() + totalPrice() * 0.038,
               first_name: formik.values.first_name || "",
               last_name: formik.values.last_name || "",
               email: formik.values.email || "",
@@ -1167,7 +1167,7 @@ const Cart = ({
                 <h1 className="font-bold">Processing fees (3.5%)</h1>
                 <Price
                   className="!text-base !font-bold"
-                  stayPrice={totalPrice() * 0.035}
+                  stayPrice={totalPrice() * 0.038}
                 ></Price>
               </div>
 
@@ -1175,7 +1175,7 @@ const Cart = ({
                 <h1 className="font-bold">Total price</h1>
                 <Price
                   className="!text-base !font-bold"
-                  stayPrice={totalPrice() + totalPrice() * 0.035}
+                  stayPrice={totalPrice() + totalPrice() * 0.038}
                 ></Price>
               </div> */}
 

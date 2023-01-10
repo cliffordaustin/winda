@@ -673,14 +673,14 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
           totalPriceOfStayForTentedCamp(
             stay.type_of_rooms[Number(router.query.room_type) || 0].price
           ) *
-            0.035
+            0.038
         : totalPriceOfStay(
             stay.type_of_rooms[Number(router.query.room_type) || 0].price
           ) +
           totalPriceOfStay(
             stay.type_of_rooms[Number(router.query.room_type) || 0].price
           ) *
-            0.035);
+            0.038);
 
     price = !userIsFromKenya ? price : price * priceConversionRate;
 
@@ -4883,7 +4883,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                   </div>
 
                   <div className="flex justify-between mt-3 items-center">
-                    <h1 className="font-bold">Card processing fees (3.5%)</h1>
+                    <h1 className="font-bold">Card processing fees (3.8%)</h1>
                     {stay.type_of_rooms[Number(router.query.room_type)]
                       .is_tented_camp && (
                       <Price
@@ -4891,7 +4891,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                           totalPriceOfStayForTentedCamp(
                             stay.type_of_rooms[Number(router.query.room_type)]
                               .price
-                          ) * 0.035
+                          ) * 0.038
                         }
                         className="!text-base"
                       ></Price>
@@ -4904,7 +4904,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                           totalPriceOfStay(
                             stay.type_of_rooms[Number(router.query.room_type)]
                               .price
-                          ) * 0.035
+                          ) * 0.038
                         }
                         className="!text-base"
                       ></Price>
@@ -4925,7 +4925,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                             stay.type_of_rooms[Number(router.query.room_type)]
                               .price
                           ) *
-                            0.035
+                            0.038
                         }
                         className="!text-base"
                       ></Price>
@@ -4943,7 +4943,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                             stay.type_of_rooms[Number(router.query.room_type)]
                               .price
                           ) *
-                            0.035
+                            0.038
                         }
                         className="!text-base"
                       ></Price>

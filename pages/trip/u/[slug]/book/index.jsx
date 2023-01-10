@@ -179,7 +179,7 @@ function BookTrip({ trip, userProfile }) {
   );
 
   const total = () => {
-    let totalPrice = price * adults + price * adults * 0.035;
+    let totalPrice = price * adults + price * adults * 0.038;
 
     totalPrice = !userIsFromKenya
       ? totalPrice
@@ -575,7 +575,7 @@ function BookTrip({ trip, userProfile }) {
               <h1 className="font-bold">Processing fees (3.5%)</h1>
               <Price
                 className="!text-sm !font-bold"
-                stayPrice={price * adults * 0.035}
+                stayPrice={price * adults * 0.038}
               ></Price>
             </div>
 
@@ -583,7 +583,7 @@ function BookTrip({ trip, userProfile }) {
               <h1 className="font-bold">Total price</h1>
               <Price
                 className="!text-sm !font-bold"
-                stayPrice={price * adults + price * adults * 0.035}
+                stayPrice={price * adults + price * adults * 0.038}
               ></Price>
             </div>
 

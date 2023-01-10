@@ -461,7 +461,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
       totalPrice() * Number(router.query.non_resident) +
       (trip.price * Number(router.query.guests) +
         totalPrice() * Number(router.query.non_resident)) *
-        0.035;
+        0.038;
 
     price = !userIsFromKenya ? price : price * priceConversionRate;
 
@@ -3033,13 +3033,13 @@ function TripDetail({ userProfile, userTrips, trip }) {
                     </div>
 
                     <div className="flex justify-between mt-3 items-center">
-                      <h1 className="font-bold">Processing fees (3.5%)</h1>
+                      <h1 className="font-bold">Processing fees (3.8%)</h1>
                       <Price
                         className="!text-sm !font-bold"
                         stayPrice={
                           (trip.price * Number(router.query.guests) +
                             totalPrice() * Number(router.query.non_resident)) *
-                          0.035
+                          0.038
                         }
                       ></Price>
                     </div>
@@ -3053,7 +3053,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
                           totalPrice() * Number(router.query.non_resident) +
                           (trip.price * Number(router.query.guests) +
                             totalPrice() * Number(router.query.non_resident)) *
-                            0.035
+                            0.038
                         }
                       ></Price>
                     </div>
