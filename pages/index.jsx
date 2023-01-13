@@ -273,19 +273,15 @@ export default function Home({ userProfile, holidayTrips }) {
             />
           </video>
 
-          <div className="flex flex-col items-center justify-center absolute w-full text-center top-[40%] md:top-[40%] z-20 px-6 md:px-0">
+          <div className="flex flex-col items-center justify-center absolute w-full text-center top-[30%] md:top-[30%] z-20 px-6 md:px-0">
             <div className="flex flex-col items-center">
               <h1 className="font-black font-SourceSans mb-2 text-3xl sm:text-4xl md:text-5xl xl:text-7xl text-white uppercase text-center">
-                Control your journey
+                It&apos;s complicated to plan a trip in Africa by yourself
               </h1>
-              <h3 className="font-bold font-OpenSans mb-8 text-base md:hidden sm:text-xl text-white text-center">
-                Plan and book your trip easily anywhere across Africa.
-              </h3>
 
-              <h3 className="font-bold w-[80%] font-OpenSans mb-8 text-base hidden md:block sm:text-xl text-white text-center">
-                We&apos;re local travel experts who empower you to plan and book
-                your trips anywhere across Kenya. Browse through our curated
-                trips and book your dream trip today.
+              <h3 className="font-bold w-[80%] font-OpenSans mb-8 text-base sm:text-xl text-white text-center">
+                We help you plan a trip that fits your preferences and budget
+                from safaris to road trips, to camping and much more.
               </h3>
             </div>
 

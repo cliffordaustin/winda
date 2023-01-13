@@ -136,7 +136,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
   const [addToBasketLoading, setAddToBasketLoading] = useState(false);
 
   const [scrollRef, inView, entry] = useInView({
-    rootMargin: "-70px 0px",
+    rootMargin: "70px 0px",
   });
 
   const addToBasket = async () => {
