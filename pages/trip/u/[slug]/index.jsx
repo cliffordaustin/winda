@@ -178,6 +178,10 @@ function CuratedTripDetail({ trip, userProfile }) {
     return trip.plan_c_price.old_price;
   };
 
+  const orderedItineraries = trip.itineraries.sort(
+    (x, y) => x.start_day - y.start_day
+  );
+
   return (
     <div>
       <div className="sticky bg-white top-0 left-0 right-0 z-50">
@@ -337,14 +341,19 @@ function CuratedTripDetail({ trip, userProfile }) {
             </h1>
 
             <div className="mt-4 flex flex-col gap-2">
-              {trip.itineraries.map((itinerary, index) => {
+              {orderedItineraries.map((itinerary, index) => {
                 return (
                   <DaysAccordion
                     key={index}
                     title={
                       <div className="flex items-center gap-3">
                         <div className="bg-gray-100 px-4 py-2">
-                          <h1 className="font-black">Day {itinerary.day}</h1>
+                          <h1 className="font-black">
+                            Day{" "}
+                            {itinerary.start_day === itinerary.end_day
+                              ? itinerary.start_day
+                              : `${itinerary.start_day} - ${itinerary.end_day}`}
+                          </h1>
                         </div>
                         <div className="text-lg font-bold">
                           {itinerary.title}
@@ -444,6 +453,12 @@ function CuratedTripDetail({ trip, userProfile }) {
                                 ? ", "
                                 : ""}
                               {itinerary.dinner_included ? "Dinner" : ""}
+
+                              {!itinerary.breakfast_included &&
+                              !itinerary.lunch_included &&
+                              !itinerary.dinner_included
+                                ? "No meals included"
+                                : ""}
                             </div>
                           </div>
                         </div>
