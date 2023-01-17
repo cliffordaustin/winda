@@ -606,7 +606,7 @@ function CuratedTripDetail({ trip, userProfile }) {
           </div>
 
           <div name="map" className="w-full h-[350px] md:hidden">
-            <CuratedTripMap tripLocations={trip.location}></CuratedTripMap>
+            <CuratedTripMap tripLocations={trip.locations}></CuratedTripMap>
           </div>
 
           <div
