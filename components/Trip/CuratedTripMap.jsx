@@ -53,16 +53,16 @@ function CuratedTripMap({ locations }) {
         ref={mapRef}
         width="100%"
         height="100%"
-        scrollZoom={false}
-        boxZoom={false}
-        doubleClickZoom={false}
+        scrollZoom={true}
+        boxZoom={true}
+        doubleClickZoom={true}
         mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_API_KEY}
         onMove={(evt) => setViewport(evt.viewState)}
         mapStyle="mapbox://styles/mapbox/streets-v9"
       >
         <NavigationControl></NavigationControl>
 
-        {locations.map((location, index) => (
+        {/* {locations.map((location, index) => (
           <Marker
             key={index}
             longitude={location.longitude}
@@ -70,12 +70,12 @@ function CuratedTripMap({ locations }) {
           >
             <h1 className="font-bold">map</h1>
           </Marker>
-          // <MapMakers
-          //   num={index + 1}
-          //   key={index}
-          //   location={location}
-          // ></MapMakers>
-        ))}
+          <MapMakers
+            num={index + 1}
+            key={index}
+            location={location}
+          ></MapMakers>
+        ))} */}
       </Map>
       {/* <div
         onClick={() => {
