@@ -117,9 +117,9 @@ function CuratedTripDetail({ trip, userProfile }) {
   //   rootMargin: "0px 0px",
   // });
 
-  const [planRef, planInView, planEntry] = useInView({
-    rootMargin: "-70px 0px",
-  });
+  // const [planRef, planInView, planEntry] = useInView({
+  //   rootMargin: "-70px 0px",
+  // });
 
   const planAPrice = () => {
     return userIsFromKenya
@@ -168,20 +168,6 @@ function CuratedTripDetail({ trip, userProfile }) {
         </Head>
 
         <Navbar userProfile={userProfile}></Navbar>
-        {/* <Transition
-          enter="transition-all ease-in duration-150"
-          leave="transition-all ease-out duration-150"
-          enterFrom="opacity-0 scale-50"
-          enterTo="opacity-100 scale-100"
-          leaveFrom="opacity-100 scale-100"
-          leaveTo="opacity-0 scale-50"
-          show={!inView}
-          className={
-            "h-[60px] bg-white z-20 border-t border-b left-0 right-0 flex w-full px-3 lg:px-10 "
-          }
-        >
-          <ScrollToNavigation></ScrollToNavigation>
-        </Transition> */}
       </div>
 
       <div className="relative md:!h-[540px] !h-[300px] w-full">
@@ -610,7 +596,7 @@ function CuratedTripDetail({ trip, userProfile }) {
           </div> */}
 
           <div
-            ref={planRef}
+            // ref={planRef}
             name="plan"
             className="mb-12 mt-10 flex flex-col gap-2"
           >
@@ -829,7 +815,7 @@ function CuratedTripDetail({ trip, userProfile }) {
             </div>
           </div>
 
-          {!planInView && (
+          {/* {!planInView && (
             <div
               className={
                 "w-full z-10 px-4 border-t md:hidden fixed bottom-0 safari-bottom left-0 right-0 bg-white py-1 "
@@ -861,7 +847,7 @@ function CuratedTripDetail({ trip, userProfile }) {
                 </ReactScrollLink>
               </div>
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </div>
