@@ -78,7 +78,6 @@ import Dialogue from "../Home/Dialogue";
 // ];
 
 function CuratedTripMap({ locations }) {
-  console.log(locations);
   const mapRef = useRef();
 
   // const [expandMap, setExpandMap] = useState(false);
@@ -113,15 +112,8 @@ function CuratedTripMap({ locations }) {
 `;
 
   const markers = useMemo(() => {
-    console.log("called markers");
     return locations.map((location, index) => (
-      <Marker
-        key={index}
-        longitude={location.longitude}
-        latitude={location.latitude}
-      >
-        <h1 className="font-bold">map</h1>
-      </Marker>
+      <MapMakers num={index + 1} key={index} location={location}></MapMakers>
     ));
   }, [locations]);
 
@@ -252,13 +244,7 @@ function CuratedTripMap({ locations }) {
           mapStyle="mapbox://styles/mapbox/streets-v9"
         >
           <NavigationControl></NavigationControl>
-          {locations.map((location, index) => (
-            <MapMakers
-              key={index}
-              num={index + 1}
-              location={location}
-            ></MapMakers>
-          ))}
+          {markers}
         </Map>
       </div>
     </div>

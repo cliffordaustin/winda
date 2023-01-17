@@ -127,9 +127,9 @@ function CuratedTripDetail({ trip, userProfile }) {
 
   const [datePricing, setDatePricing] = useState([]);
 
-  const [scrollRef, inView, entry] = useInView({
-    rootMargin: "0px 0px",
-  });
+  // const [scrollRef, inView, entry] = useInView({
+  //   rootMargin: "0px 0px",
+  // });
 
   const [planRef, planInView, planEntry] = useInView({
     rootMargin: "-70px 0px",
@@ -194,7 +194,7 @@ function CuratedTripDetail({ trip, userProfile }) {
         </Head>
 
         <Navbar userProfile={userProfile}></Navbar>
-        <Transition
+        {/* <Transition
           enter="transition-all ease-in duration-150"
           leave="transition-all ease-out duration-150"
           enterFrom="opacity-0 scale-50"
@@ -207,7 +207,7 @@ function CuratedTripDetail({ trip, userProfile }) {
           }
         >
           <ScrollToNavigation></ScrollToNavigation>
-        </Transition>
+        </Transition> */}
       </div>
 
       <div className="relative md:!h-[540px] !h-[300px] w-full">
@@ -218,10 +218,7 @@ function CuratedTripDetail({ trip, userProfile }) {
         ></ImageGallery>
       </div>
 
-      <div
-        ref={scrollRef}
-        className="h-[60px] border-b border-gray-200 w-[100%] px-3 lg:px-10"
-      >
+      <div className="h-[60px] border-b border-gray-200 w-[100%] px-3 lg:px-10">
         <ScrollToNavigation></ScrollToNavigation>
       </div>
 
@@ -634,9 +631,9 @@ function CuratedTripDetail({ trip, userProfile }) {
             </div>
           </div>
 
-          <div name="map" className="w-full h-[350px] md:hidden">
+          {/* <div name="map" className="w-full h-[350px] md:hidden">
             <CuratedTripMap locations={trip.locations}></CuratedTripMap>
-          </div>
+          </div> */}
 
           <div
             ref={planRef}
