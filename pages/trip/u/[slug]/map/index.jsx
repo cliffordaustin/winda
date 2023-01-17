@@ -13,7 +13,7 @@ import MapMakers from "../../../../../components/Trip/MapMakers";
 import Link from "next/link";
 import Image from "next/image";
 
-function MapTest1() {
+function MapTest4() {
   const router = useRouter();
 
   const [locations, setLocations] = useState([]);
@@ -21,7 +21,7 @@ function MapTest1() {
   const getLocation = async () => {
     if (router.query.slug) {
       const locations = await axios.get(
-        `${process.env.NEXT_PUBLIC_baseURL}/curated-trips/y8pk6y02e8tyat8pt747654u/locations/`
+        `${process.env.NEXT_PUBLIC_baseURL}/curated-trips/${router.query.slug}/locations/`
       );
       setLocations(locations.data.results);
     }
@@ -101,6 +101,6 @@ function MapTest1() {
   );
 }
 
-MapTest1.propTypes = {};
+MapTest4.propTypes = {};
 
-export default MapTest1;
+export default MapTest4;
