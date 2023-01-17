@@ -23,7 +23,7 @@ import { Link as ReactScrollLink } from "react-scroll";
 import Head from "next/head";
 import MapBox from "../../../../components/Trip/Map";
 
-function CuratedTripDetail({ trip, userProfile }) {
+function CuratedTripDetail() {
   const router = useRouter();
 
   const GlobalStyle = createGlobalStyle`
@@ -42,118 +42,6 @@ function CuratedTripDetail({ trip, userProfile }) {
     border: none !important;
   }
 `;
-
-  const hasCarTransport = () => {
-    let carTransport = false;
-
-    trip.itineraries.forEach((itinerary) => {
-      carTransport = itinerary.itinerary_transports.some(
-        (transport) => transport.transport_type === "CAR TRANSFER"
-      );
-    });
-
-    return carTransport;
-  };
-
-  const hasCarHireTransport = () => {
-    let carHireTransport = false;
-
-    trip.itineraries.forEach((itinerary) => {
-      carHireTransport = itinerary.itinerary_transports.some(
-        (transport) => transport.transport_type === "CAR HIRE"
-      );
-    });
-
-    return carHireTransport;
-  };
-
-  const hasBusTransport = () => {
-    let busTransport = false;
-
-    trip.itineraries.forEach((itinerary) => {
-      busTransport = itinerary.itinerary_transports.some(
-        (transport) => transport.transport_type === "BUS"
-      );
-    });
-
-    return busTransport;
-  };
-
-  const hasFlightTransport = () => {
-    let flightTransport = false;
-
-    trip.itineraries.forEach((itinerary) => {
-      flightTransport = itinerary.itinerary_transports.some(
-        (transport) => transport.transport_type === "FLIGHT"
-      );
-    });
-
-    return flightTransport;
-  };
-
-  const hasTrainTransport = () => {
-    let trainTransport = false;
-
-    trip.itineraries.forEach((itinerary) => {
-      trainTransport = itinerary.itinerary_transports.some(
-        (transport) => transport.transport_type === "TRAIN"
-      );
-    });
-
-    return trainTransport;
-  };
-
-  const tripSortedImages = trip.curated_trip_images.sort(
-    (x, y) => y.main - x.main
-  );
-
-  const tripImages = tripSortedImages.map((image) => {
-    return image.image;
-  });
-
-  const userIsFromKenya = useSelector((state) => state.home.userIsFromKenya);
-
-  // const [scrollRef, inView, entry] = useInView({
-  //   rootMargin: "0px 0px",
-  // });
-
-  // const [planRef, planInView, planEntry] = useInView({
-  //   rootMargin: "-70px 0px",
-  // });
-
-  const planAPrice = () => {
-    return userIsFromKenya
-      ? trip.plan_a_price.price
-      : trip.plan_a_price.price_non_resident;
-  };
-
-  const planAOldPrice = () => {
-    return trip.plan_a_price.old_price;
-  };
-
-  const planBPrice = () => {
-    return userIsFromKenya
-      ? trip.plan_b_price.price
-      : trip.plan_b_price.price_non_resident;
-  };
-
-  const planBOldPrice = () => {
-    return trip.plan_b_price.old_price;
-  };
-
-  const planCPrice = () => {
-    return userIsFromKenya
-      ? trip.plan_c_price.price
-      : trip.plan_c_price.price_non_resident;
-  };
-
-  const planCOldPrice = () => {
-    return trip.plan_c_price.old_price;
-  };
-
-  const orderedItineraries = trip.itineraries.sort(
-    (x, y) => x.start_day - y.start_day
-  );
 
   return (
     <div>
@@ -191,59 +79,59 @@ function CuratedTripDetail({ trip, userProfile }) {
 
 CuratedTripDetail.propTypes = {};
 
-export async function getServerSideProps(context) {
-  try {
-    const token = getToken(context);
+// export async function getServerSideProps(context) {
+//   try {
+//     const token = getToken(context);
 
-    const { data } = await axios.get(
-      `${process.env.NEXT_PUBLIC_baseURL}/curated-trips/${context.query.slug}/`
-    );
+//     const { data } = await axios.get(
+//       `${process.env.NEXT_PUBLIC_baseURL}/curated-trips/${context.query.slug}/`
+//     );
 
-    if (token) {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_baseURL}/user/`,
-        {
-          headers: {
-            Authorization: "Token " + token,
-          },
-        }
-      );
+//     if (token) {
+//       const response = await axios.get(
+//         `${process.env.NEXT_PUBLIC_baseURL}/user/`,
+//         {
+//           headers: {
+//             Authorization: "Token " + token,
+//           },
+//         }
+//       );
 
-      return {
-        props: {
-          userProfile: response.data[0],
-          trip: data,
-        },
-      };
-    }
+//       return {
+//         props: {
+//           userProfile: response.data[0],
+//           trip: data,
+//         },
+//       };
+//     }
 
-    return {
-      props: {
-        userProfile: "",
-        trip: data,
-      },
-    };
-  } catch (error) {
-    if (error.response.status === 401) {
-      return {
-        redirect: {
-          permanent: false,
-          destination: "/logout",
-        },
-      };
-    } else if (error.response.status === 404) {
-      return {
-        notFound: true,
-      };
-    } else {
-      return {
-        props: {
-          userProfile: "",
-          trip: [],
-        },
-      };
-    }
-  }
-}
+//     return {
+//       props: {
+//         userProfile: "",
+//         trip: data,
+//       },
+//     };
+//   } catch (error) {
+//     if (error.response.status === 401) {
+//       return {
+//         redirect: {
+//           permanent: false,
+//           destination: "/logout",
+//         },
+//       };
+//     } else if (error.response.status === 404) {
+//       return {
+//         notFound: true,
+//       };
+//     } else {
+//       return {
+//         props: {
+//           userProfile: "",
+//           trip: [],
+//         },
+//       };
+//     }
+//   }
+// }
 
-export default CuratedTripDetail;
+// export default CuratedTripDetail;

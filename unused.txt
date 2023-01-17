@@ -1,3 +1,116 @@
+const hasCarTransport = () => {
+    let carTransport = false;
+
+    trip.itineraries.forEach((itinerary) => {
+      carTransport = itinerary.itinerary_transports.some(
+        (transport) => transport.transport_type === "CAR TRANSFER"
+      );
+    });
+
+    return carTransport;
+  };
+
+  const hasCarHireTransport = () => {
+    let carHireTransport = false;
+
+    trip.itineraries.forEach((itinerary) => {
+      carHireTransport = itinerary.itinerary_transports.some(
+        (transport) => transport.transport_type === "CAR HIRE"
+      );
+    });
+
+    return carHireTransport;
+  };
+
+  const hasBusTransport = () => {
+    let busTransport = false;
+
+    trip.itineraries.forEach((itinerary) => {
+      busTransport = itinerary.itinerary_transports.some(
+        (transport) => transport.transport_type === "BUS"
+      );
+    });
+
+    return busTransport;
+  };
+
+  const hasFlightTransport = () => {
+    let flightTransport = false;
+
+    trip.itineraries.forEach((itinerary) => {
+      flightTransport = itinerary.itinerary_transports.some(
+        (transport) => transport.transport_type === "FLIGHT"
+      );
+    });
+
+    return flightTransport;
+  };
+
+  const hasTrainTransport = () => {
+    let trainTransport = false;
+
+    trip.itineraries.forEach((itinerary) => {
+      trainTransport = itinerary.itinerary_transports.some(
+        (transport) => transport.transport_type === "TRAIN"
+      );
+    });
+
+    return trainTransport;
+  };
+
+  const tripSortedImages = trip.curated_trip_images.sort(
+    (x, y) => y.main - x.main
+  );
+
+  const tripImages = tripSortedImages.map((image) => {
+    return image.image;
+  });
+
+  const userIsFromKenya = useSelector((state) => state.home.userIsFromKenya);
+
+  // const [scrollRef, inView, entry] = useInView({
+  //   rootMargin: "0px 0px",
+  // });
+
+  // const [planRef, planInView, planEntry] = useInView({
+  //   rootMargin: "-70px 0px",
+  // });
+
+  const planAPrice = () => {
+    return userIsFromKenya
+      ? trip.plan_a_price.price
+      : trip.plan_a_price.price_non_resident;
+  };
+
+  const planAOldPrice = () => {
+    return trip.plan_a_price.old_price;
+  };
+
+  const planBPrice = () => {
+    return userIsFromKenya
+      ? trip.plan_b_price.price
+      : trip.plan_b_price.price_non_resident;
+  };
+
+  const planBOldPrice = () => {
+    return trip.plan_b_price.old_price;
+  };
+
+  const planCPrice = () => {
+    return userIsFromKenya
+      ? trip.plan_c_price.price
+      : trip.plan_c_price.price_non_resident;
+  };
+
+  const planCOldPrice = () => {
+    return trip.plan_c_price.old_price;
+  };
+
+  const orderedItineraries = trip.itineraries.sort(
+    (x, y) => x.start_day - y.start_day
+  );
+
+
 <div className="px-4 mt-4">
         <div className="w-full max-w-[1100px] mx-auto">
           <div name="about">
