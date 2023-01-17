@@ -275,7 +275,7 @@ function CuratedTripDetail({ trip, userProfile }) {
                 <div className="w-full">{trip.description}</div>
               </div>
               <div className="w-[30%] h-[350px] hidden md:block">
-                <CuratedTripMap></CuratedTripMap>
+                <CuratedTripMap tripLocations={trip.locations}></CuratedTripMap>
               </div>
             </div>
           </div>
@@ -606,7 +606,7 @@ function CuratedTripDetail({ trip, userProfile }) {
           </div>
 
           <div name="map" className="w-full h-[350px] md:hidden">
-            <CuratedTripMap tripLocations={trip.locations}></CuratedTripMap>
+            <CuratedTripMap tripLocations={trip.location}></CuratedTripMap>
           </div>
 
           <div
