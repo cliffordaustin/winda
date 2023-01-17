@@ -100,7 +100,13 @@ function TripsMap() {
             mapStyle="mapbox://styles/mapbox/streets-v9"
           >
             <NavigationControl></NavigationControl>
-            {markers}
+            {locations.map((location, index) => (
+              <MapMakers
+                key={index}
+                num={index + 1}
+                location={location}
+              ></MapMakers>
+            ))}
           </Map>
         </div>
 
