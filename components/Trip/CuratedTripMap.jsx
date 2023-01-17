@@ -42,6 +42,20 @@ function CuratedTripMap({ locations }) {
   }
 `;
 
+  const markers = useMemo(
+    () =>
+      locations.map((location, index) => (
+        <Marker
+          key={index}
+          longitude={location.longitude}
+          latitude={location.latitude}
+        >
+          <h1 className="font-bold">map</h1>
+        </Marker>
+      )),
+    [locations]
+  );
+
   return (
     <div style={{ position: "relative", height: "100%", width: "100%" }}>
       <GlobalStyle></GlobalStyle>
@@ -76,6 +90,8 @@ function CuratedTripMap({ locations }) {
             location={location}
           ></MapMakers>
         ))} */}
+
+        {markers}
       </Map>
       {/* <div
         onClick={() => {
