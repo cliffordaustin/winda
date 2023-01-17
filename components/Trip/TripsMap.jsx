@@ -18,7 +18,7 @@ function TripsMap({ slug }) {
 
   const getLocation = async () => {
     const locations = await axios.get(
-      `${process.env.NEXT_PUBLIC_baseURL}/curated-trips/${router.query.slug}/locations/`
+      `${process.env.NEXT_PUBLIC_baseURL}/curated-trips/${slug}/locations/`
     );
     setLocations(locations.data.results);
   };
