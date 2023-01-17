@@ -75,7 +75,8 @@ const locations = [
     longitude: 35.6345586,
   },
 ];
-function TripsMap() {
+function TripsMap({ tripLocations }) {
+  console.log(tripLocations);
   const mapRef = useRef();
 
   const [viewportExpandedMap, setViewportExpandedMap] = useState({
