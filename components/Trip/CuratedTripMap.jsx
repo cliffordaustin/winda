@@ -42,19 +42,18 @@ function CuratedTripMap({ locations }) {
   }
 `;
 
-  const markers = useMemo(
-    () =>
-      locations.map((location, index) => (
-        <Marker
-          key={index}
-          longitude={location.longitude}
-          latitude={location.latitude}
-        >
-          <h1 className="font-bold">map</h1>
-        </Marker>
-      )),
-    [locations]
-  );
+  const markers = useMemo(() => {
+    console.log("called markers");
+    return locations.map((location, index) => (
+      <Marker
+        key={index}
+        longitude={location.longitude}
+        latitude={location.latitude}
+      >
+        <h1 className="font-bold">map</h1>
+      </Marker>
+    ));
+  }, [locations]);
 
   return (
     <div style={{ position: "relative", height: "100%", width: "100%" }}>
