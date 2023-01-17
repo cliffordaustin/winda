@@ -20,12 +20,17 @@ function TripsMap({ locations, itinerary }) {
 
   for (let i = 0; i < itinerary.length; i++) {
     for (let j = 0; j < itinerary[i].itinerary_accommodations.length; j++) {
-      getAllAccomodationCoordinatesFromItinerary.push({
-        latitude: itinerary[i].itinerary_accommodations[j].stay.latitude,
-        longitude: itinerary[i].itinerary_accommodations[j].stay.longitude,
-        nights: itinerary[i].itinerary_accommodations[j].nights,
-        location: itinerary[i].itinerary_accommodations[j].stay.name,
-      });
+      if (
+        itinerary[i].itinerary_accommodations[j].stay.latitude !== null ||
+        itinerary[i].itinerary_accommodations[j].stay.longitude !== null
+      ) {
+        getAllAccomodationCoordinatesFromItinerary.push({
+          latitude: itinerary[i].itinerary_accommodations[j].stay.latitude,
+          longitude: itinerary[i].itinerary_accommodations[j].stay.longitude,
+          nights: itinerary[i].itinerary_accommodations[j].nights,
+          location: itinerary[i].itinerary_accommodations[j].stay.name,
+        });
+      }
     }
   }
 
