@@ -11,15 +11,7 @@ import Dialogue from "../Home/Dialogue";
 function CuratedTripMap({ locations }) {
   const mapRef = useRef();
 
-  const [expandMap, setExpandMap] = useState(false);
-
-  // const averageLogitude = useMemo(() => {
-  //   return locations.reduce((a, b) => a + b.longitude, 0) / locations.length;
-  // }, [locations]);
-
-  // const averageLatitude = useMemo(() => {
-  //   return locations.reduce((a, b) => a + b.latitude, 0) / locations.length;
-  // }, [locations]);
+  // const [expandMap, setExpandMap] = useState(false);
 
   const [viewport, setViewport] = useState({
     longitude: locations.length > 0 ? locations[0].longitude : 36.8442449,
@@ -27,21 +19,11 @@ function CuratedTripMap({ locations }) {
     zoom: 4,
   });
 
-  const [viewportExpandedMap, setViewportExpandedMap] = useState({
-    longitude: locations.length > 0 ? locations[0].longitude : 36.8442449,
-    latitude: locations.length > 0 ? locations[0].latitude : -1.3924933,
-    zoom: 5,
-  });
-
-  // const [allCoordinates, setAllCoordinates] = useState([]);
-
-  // useEffect(() => {
-  //   const coordinates = locations.map((location) => [
-  //     location.longitude,
-  //     location.latitude,
-  //   ]);
-  //   setAllCoordinates(coordinates);
-  // }, [locations]);
+  // const [viewportExpandedMap, setViewportExpandedMap] = useState({
+  //   longitude: locations.length > 0 ? locations[0].longitude : 36.8442449,
+  //   latitude: locations.length > 0 ? locations[0].latitude : -1.3924933,
+  //   zoom: 5,
+  // });
 
   const GlobalStyle = createGlobalStyle`
   .mapboxgl-map {
@@ -60,20 +42,6 @@ function CuratedTripMap({ locations }) {
   }
 `;
 
-  // const line = {
-  //   type: "FeatureCollection",
-  //   features: [
-  //     {
-  //       type: "Feature",
-  //       geometry: {
-  //         type: "LineString",
-  //         properties: {},
-  //         coordinates: allCoordinates,
-  //       },
-  //     },
-  //   ],
-  // };
-
   return (
     <div style={{ position: "relative", height: "100%", width: "100%" }}>
       <GlobalStyle></GlobalStyle>
@@ -85,40 +53,23 @@ function CuratedTripMap({ locations }) {
         ref={mapRef}
         width="100%"
         height="100%"
-        scrollZoom={false}
-        boxZoom={false}
-        doubleClickZoom={false}
+        scrollZoom={true}
+        boxZoom={true}
+        doubleClickZoom={true}
         mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_API_KEY}
-        onMove={(evt) => setViewport(evt.viewState)}
+        onMove={(evt) => viewport(evt.viewState)}
         mapStyle="mapbox://styles/mapbox/streets-v9"
       >
-        {/* <Source id="LineString" type="geojson" data={line}>
-          <Layer
-            id="LineString"
-            type="line"
-            source="LineString"
-            layout={{
-              "line-join": "round",
-              "line-cap": "round",
-            }}
-            paint={{
-              "line-color": "#343a40",
-              "line-width": 2,
-              "line-dasharray": [2, 3],
-            }}
-          />
-        </Source> */}
         <NavigationControl></NavigationControl>
-
         {locations.map((location, index) => (
           <MapMakers
-            num={index + 1}
             key={index}
+            num={index + 1}
             location={location}
           ></MapMakers>
         ))}
       </Map>
-      <div
+      {/* <div
         onClick={() => {
           setExpandMap(!expandMap);
         }}
@@ -151,22 +102,6 @@ function CuratedTripMap({ locations }) {
             onMove={(evt) => setViewportExpandedMap(evt.viewState)}
             mapStyle="mapbox://styles/mapbox/streets-v9"
           >
-            {/* <Source id="LineString" type="geojson" data={line}>
-              <Layer
-                id="LineString"
-                type="line"
-                source="LineString"
-                layout={{
-                  "line-join": "round",
-                  "line-cap": "round",
-                }}
-                paint={{
-                  "line-color": "#343a40",
-                  "line-width": 2,
-                  "line-dasharray": [2, 3],
-                }}
-              />
-            </Source> */}
             <NavigationControl></NavigationControl>
             {locations.map((location, index) => (
               <MapMakers
@@ -202,7 +137,7 @@ function CuratedTripMap({ locations }) {
             </svg>
           </div>
         </div>
-      </Dialogue>
+      </Dialogue> */}
     </div>
   );
 }
