@@ -78,6 +78,7 @@ import Dialogue from "../Home/Dialogue";
 // ];
 
 function CuratedTripMap({ locations }) {
+  console.log(locations);
   const mapRef = useRef();
 
   // const [expandMap, setExpandMap] = useState(false);
