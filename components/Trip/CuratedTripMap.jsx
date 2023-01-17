@@ -101,23 +101,6 @@ function CuratedTripMap({ locations }) {
   //   zoom: 5,
   // });
 
-  const GlobalStyle = createGlobalStyle`
-  .mapboxgl-map {
-    -webkit-mask-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC);
-    @media (min-width: 768px) {
-      border-radius: 0rem !important;
-    }
-  }
-  .mapboxgl-popup-content {
-    background: none;
-    box-shadow: none !important;
-  }
-  .mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip {
-    border-top-color: transparent !important;
-    border: none !important;
-  }
-`;
-
   const markers = useMemo(() => {
     return newLocations.map((location, index) => (
       <MapMakers num={index + 1} key={index} location={location}></MapMakers>
@@ -233,8 +216,6 @@ function CuratedTripMap({ locations }) {
     // </div>
 
     <div style={{ position: "relative", height: "100%", width: "100%" }}>
-      <GlobalStyle></GlobalStyle>
-
       <div className="w-full h-[90vh]">
         <Map
           {...viewport}

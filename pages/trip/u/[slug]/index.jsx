@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
+import { createGlobalStyle } from "styled-components";
 import getToken from "../../../../lib/getToken";
 import Navbar from "../../../../components/ui/Navbar";
 import ImageGallery from "../../../../components/Stay/ImageGallery";
@@ -8,7 +9,7 @@ import { Icon } from "@iconify/react";
 import TripImageGallery from "../../../../components/Trip/ImageGallery";
 import DaysAccordion from "../../../../components/Trip/DaysAccordion";
 import Carousel from "../../../../components/ui/Carousel";
-import CuratedTripMap from "../../../../components/Trip/CuratedTripMap";
+import CuratedTripMap from "../../../../components/Trip/TripsMap";
 import Price from "../../../../components/Stay/Price";
 import moment from "moment/moment";
 import { useState } from "react";
@@ -23,37 +24,24 @@ import Head from "next/head";
 import MapBox from "../../../../components/Trip/Map";
 
 function CuratedTripDetail({ trip, userProfile }) {
-  const totalNumberOfBreakfasts = () => {
-    let total = 0;
-
-    trip.itineraries.forEach((itinerary) => {
-      total += itinerary.breakfast_included ? 1 : 0;
-    });
-
-    return total;
-  };
-
   const router = useRouter();
 
-  const totalNumberOfLunches = () => {
-    let total = 0;
-
-    trip.itineraries.forEach((itinerary) => {
-      total += itinerary.lunch_included ? 1 : 0;
-    });
-
-    return total;
-  };
-
-  const totalNumberOfDinners = () => {
-    let total = 0;
-
-    trip.itineraries.forEach((itinerary) => {
-      total += itinerary.dinner_included ? 1 : 0;
-    });
-
-    return total;
-  };
+  const GlobalStyle = createGlobalStyle`
+  .mapboxgl-map {
+    -webkit-mask-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC);
+    @media (min-width: 768px) {
+      border-radius: 0rem !important;
+    }
+  }
+  .mapboxgl-popup-content {
+    background: none;
+    box-shadow: none !important;
+  }
+  .mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip {
+    border-top-color: transparent !important;
+    border: none !important;
+  }
+`;
 
   const hasCarTransport = () => {
     let carTransport = false;
@@ -125,8 +113,6 @@ function CuratedTripDetail({ trip, userProfile }) {
 
   const userIsFromKenya = useSelector((state) => state.home.userIsFromKenya);
 
-  const [datePricing, setDatePricing] = useState([]);
-
   // const [scrollRef, inView, entry] = useInView({
   //   rootMargin: "0px 0px",
   // });
@@ -134,19 +120,6 @@ function CuratedTripDetail({ trip, userProfile }) {
   const [planRef, planInView, planEntry] = useInView({
     rootMargin: "-70px 0px",
   });
-
-  const getDateAndPricing = async () => {
-    try {
-      const { data } = await axios.get(
-        `${process.env.NEXT_PUBLIC_baseURL}/curated-trips/${trip.slug}/date-pricing/`
-      );
-      setDatePricing(data.results);
-    } catch (error) {}
-  };
-
-  useEffect(() => {
-    getDateAndPricing();
-  }, []);
 
   const planAPrice = () => {
     return userIsFromKenya
@@ -184,6 +157,7 @@ function CuratedTripDetail({ trip, userProfile }) {
 
   return (
     <div>
+      <GlobalStyle></GlobalStyle>
       <div className="sticky bg-white top-0 left-0 right-0 z-50">
         <Head>
           <title>{trip.name}</title>
@@ -300,9 +274,9 @@ function CuratedTripDetail({ trip, userProfile }) {
                 )}
                 <div className="w-full">{trip.description}</div>
               </div>
-              {/* <div className="w-[30%] h-[350px] hidden md:block">
-                <CuratedTripMap locations={trip.locations}></CuratedTripMap>
-              </div> */}
+              <div className="w-[30%] h-[350px] hidden md:block">
+                <CuratedTripMap></CuratedTripMap>
+              </div>
             </div>
           </div>
 
@@ -632,7 +606,7 @@ function CuratedTripDetail({ trip, userProfile }) {
           </div>
 
           <div name="map" className="w-full h-[350px] md:hidden">
-            <CuratedTripMap locations={trip.locations}></CuratedTripMap>
+            <CuratedTripMap></CuratedTripMap>
           </div>
 
           <div
