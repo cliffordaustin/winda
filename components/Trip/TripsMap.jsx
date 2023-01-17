@@ -45,8 +45,13 @@ function TripsMap() {
 
   const markers = useMemo(() => {
     return locations.map((location, index) => (
-      //   <MapMakers num={index + 1} key={index} location={location}></MapMakers>
-      <h1 key={index}>new</h1>
+      <Marker
+        longitude={location.longitude}
+        latitude={location.latitude}
+        key={index}
+      >
+        <h1 className="font-bold">map</h1>
+      </Marker>
     ));
   }, [locations]);
 
@@ -63,7 +68,7 @@ function TripsMap() {
         mapStyle="mapbox://styles/mapbox/streets-v9"
       >
         <NavigationControl></NavigationControl>
-        {markers}
+        {/* {markers} */}
       </Map>
 
       <div
@@ -100,13 +105,7 @@ function TripsMap() {
             mapStyle="mapbox://styles/mapbox/streets-v9"
           >
             <NavigationControl></NavigationControl>
-            {locations.map((location, index) => (
-              <MapMakers
-                key={index}
-                num={index + 1}
-                location={location}
-              ></MapMakers>
-            ))}
+            {markers}
           </Map>
         </div>
 
