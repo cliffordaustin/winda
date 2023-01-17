@@ -49,9 +49,7 @@ function TripsMap() {
         longitude={location.longitude}
         latitude={location.latitude}
         key={index}
-      >
-        <h1 className="font-bold">map</h1>
-      </Marker>
+      ></Marker>
     ));
   }, [locations]);
 
@@ -105,7 +103,7 @@ function TripsMap() {
             mapStyle="mapbox://styles/mapbox/streets-v9"
           >
             <NavigationControl></NavigationControl>
-            {/* {markers} */}
+            {markers}
           </Map>
         </div>
 
