@@ -549,7 +549,7 @@ const Cart = ({
     email: userProfile.email,
     amount: total(),
     publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
-    currency: process.env.NODE_ENV === "production" ? "KES" : "GHS",
+    currency: process.env.NODE_ENV === "production" ? "KES" : "USD",
   };
 
   const initializePayment = usePaystackPayment(config);

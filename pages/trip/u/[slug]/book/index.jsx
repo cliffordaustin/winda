@@ -94,6 +94,9 @@ function BookTrip({ trip, userProfile }) {
 
   const [startingDateError, setStartingDateError] = useState(false);
 
+  const [showCheckoutResponseModal, setShowCheckoutResponseModal] =
+    useState(false);
+
   const formik = useFormik({
     initialValues: {
       first_name: userProfile.first_name || "",
@@ -135,7 +138,7 @@ function BookTrip({ trip, userProfile }) {
         )
         .then((res) => {
           setLoading(false);
-
+          setShowCheckoutResponseModal(true);
           Mixpanel.track("User requested to book trip", {
             name_of_trip: trip.name,
             first_name: values.first_name,
@@ -196,11 +199,16 @@ function BookTrip({ trip, userProfile }) {
     email: formik.values.email,
     amount: total(),
     publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
-    currency: userIsFromKenya ? "KES" : "USD",
+    currency: userIsFromKenya ? "KES" : "GHS",
     channels: ["card", "mobile_money"],
   };
 
   const initializePayment = usePaystackPayment(config);
+
+  const [
+    showCheckoutResponseModalForPayment,
+    setShowCheckoutResponseModalForPayment,
+  ] = useState(false);
 
   const onSuccess = (reference) => {
     setLoadingForPaystack(true);
@@ -227,7 +235,7 @@ function BookTrip({ trip, userProfile }) {
       )
       .then((res) => {
         setLoadingForPaystack(false);
-
+        setShowCheckoutResponseModalForPayment(true);
         Mixpanel.track("User paid for trip", {
           name_of_trip: trip.name,
           first_name: formik.values.first_name,
@@ -572,7 +580,7 @@ function BookTrip({ trip, userProfile }) {
             </div>
 
             <div className="flex justify-between mt-3 items-center">
-              <h1 className="font-bold">Processing fees (3.5%)</h1>
+              <h1 className="font-bold">Processing fees (3.8%)</h1>
               <Price
                 className="!text-sm !font-bold"
                 stayPrice={price * adults * 0.038}
@@ -636,6 +644,90 @@ function BookTrip({ trip, userProfile }) {
               </div>
               <div className="flex-grow h-px bg-gray-300"></div>
             </div>
+
+            <Dialogue
+              isOpen={showCheckoutResponseModal}
+              closeModal={() => {
+                setShowCheckoutResponseModal(false);
+                router.back();
+              }}
+              dialoguePanelClassName="!max-w-md !h-[265px]"
+              title={"Thanks for requesting to book this trip"}
+              dialogueTitleClassName="!font-bold text-xl !font-OpenSans mb-3"
+            >
+              <div>
+                We&apos;ll get back to you in 24 hours confirming all the
+                details of the trip. We will send an extended itinerary to your
+                email:{" "}
+                <span className="font-bold underline">
+                  {formik.values.email}
+                </span>
+              </div>
+
+              <div className="mt-4">Meanwhile...</div>
+
+              <div className="flex gap-2 w-full">
+                <Button
+                  onClick={() => {
+                    router.replace("/trip");
+                  }}
+                  className="flex w-[60%] mt-3 mb-3 items-center gap-1 !px-0 !py-3 font-bold !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white"
+                >
+                  <span>Checkout other curated trips</span>
+                </Button>
+
+                <Button
+                  onClick={() => {
+                    router.replace("/");
+                  }}
+                  className="flex w-[40%] mt-3 mb-3 items-center gap-1 !px-0 !py-3 font-bold !bg-transparent hover:!bg-gray-200 !border !border-gray-400 !text-black"
+                >
+                  <span>Check out Winda</span>
+                </Button>
+              </div>
+            </Dialogue>
+
+            <Dialogue
+              isOpen={showCheckoutResponseModalForPayment}
+              closeModal={() => {
+                setShowCheckoutResponseModalForPayment(false);
+                router.back();
+              }}
+              dialoguePanelClassName="!max-w-md !h-[265px]"
+              title={"Thanks for booking this trip"}
+              dialogueTitleClassName="!font-bold text-xl !font-OpenSans mb-3"
+            >
+              <div>
+                Thank you for booking!!!🥳. We&apos;ll get back to you in less
+                than 24 hours. We are confirming all the details of the trip. We
+                will send an extended itinerary to your email:{" "}
+                <span className="font-bold underline">
+                  {formik.values.email}
+                </span>
+              </div>
+
+              <div className="mt-4">Meanwhile...</div>
+
+              <div className="flex gap-2 w-full">
+                <Button
+                  onClick={() => {
+                    router.replace("/trip");
+                  }}
+                  className="flex w-[60%] mt-3 mb-3 items-center gap-1 !px-0 !py-3 font-bold !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white"
+                >
+                  <span>Checkout other curated trips</span>
+                </Button>
+
+                <Button
+                  onClick={() => {
+                    router.replace("/");
+                  }}
+                  className="flex w-[40%] mt-3 mb-3 items-center gap-1 !px-0 !py-3 font-bold !bg-transparent hover:!bg-gray-200 !border !border-gray-400 !text-black"
+                >
+                  <span>Check out Winda</span>
+                </Button>
+              </div>
+            </Dialogue>
 
             <div className="mt-8">
               <Button

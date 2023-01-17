@@ -1,7 +1,7 @@
 import React, { useMemo, useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
 
-import Map, { Marker, NavigationControl, Source, Layer } from "react-map-gl";
+import Map, { NavigationControl } from "react-map-gl";
 
 import { createGlobalStyle } from "styled-components";
 
@@ -22,14 +22,14 @@ function CuratedTripMap({ locations }) {
   // }, [locations]);
 
   const [viewport, setViewport] = useState({
-    longitude: locations.length > 0 ? 36.8442449 : 36.8442449,
-    latitude: locations.length > 0 ? -1.3924933 : -1.3924933,
+    longitude: locations.length > 0 ? locations[0].longitude : 36.8442449,
+    latitude: locations.length > 0 ? locations[0].latitude : -1.3924933,
     zoom: 4,
   });
 
   const [viewportExpandedMap, setViewportExpandedMap] = useState({
-    longitude: locations.length > 0 ? 36.8442449 : 36.8442449,
-    latitude: locations.length > 0 ? -1.3924933 : -1.3924933,
+    longitude: locations.length > 0 ? locations[0].longitude : 36.8442449,
+    latitude: locations.length > 0 ? locations[0].latitude : -1.3924933,
     zoom: 5,
   });
 
