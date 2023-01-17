@@ -78,13 +78,18 @@ import Dialogue from "../Home/Dialogue";
 // ];
 
 function CuratedTripMap({ locations }) {
+  const [newLocations, setNewLocations] = useState([]);
+
+  useEffect(() => {
+    setNewLocations(locations);
+  }, [locations]);
   const mapRef = useRef();
 
   // const [expandMap, setExpandMap] = useState(false);
 
   const [viewport, setViewport] = useState({
-    longitude: locations.length > 0 ? locations[0].longitude : 36.8442449,
-    latitude: locations.length > 0 ? locations[0].latitude : -1.3924933,
+    longitude: newLocations.length > 0 ? newLocations[0].longitude : 36.8442449,
+    latitude: newLocations.length > 0 ? newLocations[0].latitude : -1.3924933,
     zoom: 4,
   });
 
@@ -112,10 +117,10 @@ function CuratedTripMap({ locations }) {
 `;
 
   const markers = useMemo(() => {
-    return locations.map((location, index) => (
+    return newLocations.map((location, index) => (
       <MapMakers num={index + 1} key={index} location={location}></MapMakers>
     ));
-  }, [locations]);
+  }, [newLocations]);
 
   return (
     // <div className="w-full h-full">
