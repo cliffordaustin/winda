@@ -155,10 +155,6 @@ function CuratedTripDetail({ trip, userProfile }) {
     (x, y) => x.start_day - y.start_day
   );
 
-  const tripLocations = trip.locations;
-
-  console.log(tripLocations);
-
   return (
     <div>
       <GlobalStyle></GlobalStyle>
@@ -279,7 +275,7 @@ function CuratedTripDetail({ trip, userProfile }) {
                 <div className="w-full">{trip.description}</div>
               </div>
               <div className="w-[30%] h-[350px] hidden md:block">
-                <CuratedTripMap tripLocations={tripLocations}></CuratedTripMap>
+                <CuratedTripMap></CuratedTripMap>
               </div>
             </div>
           </div>
