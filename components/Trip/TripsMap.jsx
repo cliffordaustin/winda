@@ -11,22 +11,7 @@ import Dialogue from "../Home/Dialogue";
 import { Icon } from "@iconify/react";
 import MapMakers from "./MapMakers";
 
-function TripsMap() {
-  const router = useRouter();
-
-  const [locations, setLocations] = useState([]);
-
-  const getLocation = async () => {
-    const locations = await axios.get(
-      `${process.env.NEXT_PUBLIC_baseURL}/curated-trips/${router.query.slug}/locations/`
-    );
-    setLocations(locations.data.results);
-  };
-
-  useEffect(() => {
-    getLocation();
-  }, []);
-
+function TripsMap({ locations }) {
   const mapRef = useRef();
 
   const [viewport, setViewport] = useState({
@@ -54,9 +39,13 @@ function TripsMap() {
       <Map
         {...viewport}
         maxZoom={20}
+        reuseMaps
         ref={mapRef}
         width="100%"
         height="100%"
+        scrollZoom={true}
+        boxZoom={true}
+        doubleClickZoom={true}
         mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_API_KEY}
         onMove={(evt) => setViewport(evt.viewState)}
         mapStyle="mapbox://styles/mapbox/streets-v9"
