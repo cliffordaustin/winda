@@ -157,6 +157,8 @@ function CuratedTripDetail({ trip, userProfile }) {
 
   const tripLocations = trip.locations;
 
+  console.log(tripLocations);
+
   return (
     <div>
       <GlobalStyle></GlobalStyle>
