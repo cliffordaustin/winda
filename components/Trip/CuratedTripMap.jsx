@@ -80,6 +80,8 @@ import Dialogue from "../Home/Dialogue";
 function CuratedTripMap({ locations }) {
   const [newLocations, setNewLocations] = useState([]);
 
+  console.log(locations);
+
   useEffect(() => {
     setNewLocations(locations);
   }, [locations]);
