@@ -11,28 +11,47 @@ import Dialogue from "../Home/Dialogue";
 import { Icon } from "@iconify/react";
 import MapMakers from "./MapMakers";
 
-function TripsMap({ locations }) {
+function TripsMap({ locations, itinerary }) {
   const mapRef = useRef();
 
+  const getAllAccomodationCoordinatesFromItinerary = useMemo(() => {
+    return [];
+  }, []);
+
+  for (let i = 0; i < itinerary.length; i++) {
+    for (let j = 0; j < itinerary[i].itinerary_accommodations.length; j++) {
+      getAllAccomodationCoordinatesFromItinerary.push({
+        latitude: itinerary[i].itinerary_accommodations[j].stay.latitude,
+        longitude: itinerary[i].itinerary_accommodations[j].stay.longitude,
+        nights: itinerary[i].itinerary_accommodations[j].nights,
+        location: itinerary[i].itinerary_accommodations[j].stay.name,
+      });
+    }
+  }
+
+  const newLocations = useMemo(() => {
+    return [...getAllAccomodationCoordinatesFromItinerary, ...locations];
+  }, [getAllAccomodationCoordinatesFromItinerary, locations]);
+
   const [viewport, setViewport] = useState({
-    longitude: locations.length > 0 ? locations[0].longitude : 36.8442449,
-    latitude: locations.length > 0 ? locations[0].latitude : -1.3924933,
+    longitude: newLocations.length > 0 ? newLocations[0].longitude : 36.8442449,
+    latitude: newLocations.length > 0 ? newLocations[0].latitude : -1.3924933,
     zoom: 4,
   });
 
   const [expandMap, setExpandMap] = useState(false);
 
   const [viewportExpandedMap, setViewportExpandedMap] = useState({
-    longitude: locations.length > 0 ? locations[0].longitude : 36.8442449,
-    latitude: locations.length > 0 ? locations[0].latitude : -1.3924933,
+    longitude: newLocations.length > 0 ? newLocations[0].longitude : 36.8442449,
+    latitude: newLocations.length > 0 ? newLocations[0].latitude : -1.3924933,
     zoom: 5,
   });
 
   const markers = useMemo(() => {
-    return locations.map((location, index) => (
+    return newLocations.map((location, index) => (
       <MapMakers key={index} num={index + 1} location={location}></MapMakers>
     ));
-  }, [locations]);
+  }, [newLocations]);
 
   return (
     <div style={{ position: "relative", height: "100%", width: "100%" }}>
@@ -43,7 +62,7 @@ function TripsMap({ locations }) {
         ref={mapRef}
         width="100%"
         height="100%"
-        scrollZoom={true}
+        scrollZoom={false}
         boxZoom={true}
         doubleClickZoom={true}
         mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_API_KEY}
@@ -70,7 +89,7 @@ function TripsMap({ locations }) {
         }}
         title="Map"
         dialogueTitleClassName="!font-bold ml-3"
-        dialoguePanelClassName="max-h-[500px] !px-0 max-w-xl overflow-y-scroll remove-scroll"
+        dialoguePanelClassName="max-h-[700px] !px-0 max-w-2xl overflow-y-scroll remove-scroll"
       >
         <div className="mt-2 w-full h-[500px]">
           <Map
@@ -80,9 +99,9 @@ function TripsMap({ locations }) {
             ref={mapRef}
             width="100%"
             height="100%"
-            scrollZoom={false}
-            boxZoom={false}
-            doubleClickZoom={false}
+            scrollZoom={true}
+            boxZoom={true}
+            doubleClickZoom={true}
             mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_API_KEY}
             onMove={(evt) => setViewportExpandedMap(evt.viewState)}
             mapStyle="mapbox://styles/mapbox/streets-v9"
