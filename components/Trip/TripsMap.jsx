@@ -30,16 +30,16 @@ function TripsMap() {
   const mapRef = useRef();
 
   const [viewport, setViewport] = useState({
-    longitude: 36.8442449,
-    latitude: -1.3924933,
+    longitude: locations.length > 0 ? locations[0].longitude : 36.8442449,
+    latitude: locations.length > 0 ? locations[0].latitude : -1.3924933,
     zoom: 4,
   });
 
   const [expandMap, setExpandMap] = useState(false);
 
   const [viewportExpandedMap, setViewportExpandedMap] = useState({
-    longitude: 36.8442449,
-    latitude: -1.3924933,
+    longitude: locations.length > 0 ? locations[0].longitude : 36.8442449,
+    latitude: locations.length > 0 ? locations[0].latitude : -1.3924933,
     zoom: 5,
   });
 
