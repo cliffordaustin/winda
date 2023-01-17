@@ -1,13 +1,13 @@
 import React, { useMemo, useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
 
-import Map, { NavigationControl } from "react-map-gl";
+import Map, { NavigationControl, Marker } from "react-map-gl";
 
 import { createGlobalStyle } from "styled-components";
 
-import { Icon } from "@iconify/react";
-import MapMakers from "./MapMakers";
-import Dialogue from "../Home/Dialogue";
+// import { Icon } from "@iconify/react";
+// import MapMakers from "./MapMakers";
+// import Dialogue from "../Home/Dialogue";
 function CuratedTripMap({ locations }) {
   const mapRef = useRef();
 
@@ -53,20 +53,28 @@ function CuratedTripMap({ locations }) {
         ref={mapRef}
         width="100%"
         height="100%"
-        scrollZoom={true}
-        boxZoom={true}
-        doubleClickZoom={true}
+        scrollZoom={false}
+        boxZoom={false}
+        doubleClickZoom={false}
         mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_API_KEY}
-        onMove={(evt) => viewport(evt.viewState)}
+        onMove={(evt) => setViewport(evt.viewState)}
         mapStyle="mapbox://styles/mapbox/streets-v9"
       >
         <NavigationControl></NavigationControl>
+
         {locations.map((location, index) => (
-          <MapMakers
+          <Marker
             key={index}
-            num={index + 1}
-            location={location}
-          ></MapMakers>
+            longitude={location.longitude}
+            latitude={location.latitude}
+          >
+            <h1 className="font-bold">map</h1>
+          </Marker>
+          // <MapMakers
+          //   num={index + 1}
+          //   key={index}
+          //   location={location}
+          // ></MapMakers>
         ))}
       </Map>
       {/* <div
