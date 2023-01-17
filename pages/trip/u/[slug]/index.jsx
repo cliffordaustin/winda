@@ -23,7 +23,7 @@ import { Link as ReactScrollLink } from "react-scroll";
 import Head from "next/head";
 import MapBox from "../../../../components/Trip/Map";
 
-function CuratedTripDetail() {
+function CuratedTripDetail({ trip, userProfile }) {
   const router = useRouter();
 
   const GlobalStyle = createGlobalStyle`
@@ -47,31 +47,31 @@ function CuratedTripDetail() {
     <div>
       <GlobalStyle></GlobalStyle>
       <div className="sticky bg-white top-0 left-0 right-0 z-50">
-        <Head>
+        {/* <Head>
           <title>{trip.name}</title>
           <meta
             name="viewport"
             content="initial-scale=1.0, width=device-width"
           />
-        </Head>
+        </Head> */}
 
-        <Navbar userProfile={userProfile}></Navbar>
+        {/* <Navbar userProfile={userProfile}></Navbar> */}
       </div>
 
-      <div className="relative md:!h-[540px] !h-[300px] w-full">
+      {/* <div className="relative md:!h-[540px] !h-[300px] w-full">
         <ImageGallery
           images={trip.curated_trip_images}
           stayType={""}
           className="!h-full !mt-0"
         ></ImageGallery>
-      </div>
+      </div> */}
 
       {/* <div className="h-[60px] border-b border-gray-200 w-[100%] px-3 lg:px-10">
         <ScrollToNavigation></ScrollToNavigation>
       </div> */}
 
       <div className="w-[30%] h-[350px] hidden md:block">
-        <CuratedTripMap></CuratedTripMap>
+        <CuratedTripMap slug={trip.slug}></CuratedTripMap>
       </div>
     </div>
   );
@@ -79,59 +79,59 @@ function CuratedTripDetail() {
 
 CuratedTripDetail.propTypes = {};
 
-// export async function getServerSideProps(context) {
-//   try {
-//     const token = getToken(context);
+export async function getServerSideProps(context) {
+  try {
+    const token = getToken(context);
 
-//     const { data } = await axios.get(
-//       `${process.env.NEXT_PUBLIC_baseURL}/curated-trips/${context.query.slug}/`
-//     );
+    const { data } = await axios.get(
+      `${process.env.NEXT_PUBLIC_baseURL}/curated-trips/${context.query.slug}/`
+    );
 
-//     if (token) {
-//       const response = await axios.get(
-//         `${process.env.NEXT_PUBLIC_baseURL}/user/`,
-//         {
-//           headers: {
-//             Authorization: "Token " + token,
-//           },
-//         }
-//       );
+    if (token) {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_baseURL}/user/`,
+        {
+          headers: {
+            Authorization: "Token " + token,
+          },
+        }
+      );
 
-//       return {
-//         props: {
-//           userProfile: response.data[0],
-//           trip: data,
-//         },
-//       };
-//     }
+      return {
+        props: {
+          userProfile: response.data[0],
+          trip: data,
+        },
+      };
+    }
 
-//     return {
-//       props: {
-//         userProfile: "",
-//         trip: data,
-//       },
-//     };
-//   } catch (error) {
-//     if (error.response.status === 401) {
-//       return {
-//         redirect: {
-//           permanent: false,
-//           destination: "/logout",
-//         },
-//       };
-//     } else if (error.response.status === 404) {
-//       return {
-//         notFound: true,
-//       };
-//     } else {
-//       return {
-//         props: {
-//           userProfile: "",
-//           trip: [],
-//         },
-//       };
-//     }
-//   }
-// }
+    return {
+      props: {
+        userProfile: "",
+        trip: data,
+      },
+    };
+  } catch (error) {
+    if (error.response.status === 401) {
+      return {
+        redirect: {
+          permanent: false,
+          destination: "/logout",
+        },
+      };
+    } else if (error.response.status === 404) {
+      return {
+        notFound: true,
+      };
+    } else {
+      return {
+        props: {
+          userProfile: "",
+          trip: [],
+        },
+      };
+    }
+  }
+}
 
-// export default CuratedTripDetail;
+export default CuratedTripDetail;

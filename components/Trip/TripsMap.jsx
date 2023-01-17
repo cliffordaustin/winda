@@ -11,7 +11,7 @@ import Dialogue from "../Home/Dialogue";
 import { Icon } from "@iconify/react";
 import MapMakers from "./MapMakers";
 
-function TripsMap() {
+function TripsMap({ slug }) {
   const router = useRouter();
 
   const [locations, setLocations] = useState([]);
@@ -24,7 +24,9 @@ function TripsMap() {
   };
 
   useEffect(() => {
-    getLocation();
+    if (slug) {
+      getLocation();
+    }
   }, []);
 
   const mapRef = useRef();
