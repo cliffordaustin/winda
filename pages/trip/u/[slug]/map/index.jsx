@@ -13,50 +13,23 @@ import MapMakers from "../../../../../components/Trip/MapMakers";
 import Link from "next/link";
 import Image from "next/image";
 
-const locations = [
-  {
-    location: "April 23: African Heritage House, Nairobi",
-    latitude: -1.400327852,
-    longitude: 36.93917108,
-    nights: 1,
-  },
-  {
-    location: "April 24 - 25: Camping in Shompole, Lake Magadi",
-    latitude: -2.012615428,
-    longitude: 36.04457107,
-    nights: 3,
-  },
-  {
-    location: "April 25 - 26: AA Lodges, Amboseli National Park",
-    latitude: -2.752776836,
-    longitude: 37.39852237,
-    nights: 2,
-  },
-  {
-    location: "April 26 - 28: Lion’s Bluff Lodge, Tsavo National Park",
-    latitude: -3.497287131,
-    longitude: 38.20656041,
-    nights: 3,
-  },
-];
-
 function MapTest1() {
   const router = useRouter();
 
-  //   const [locations, setLocations] = useState([]);
+  const [locations, setLocations] = useState([]);
 
-  //   const getLocation = async () => {
-  //     if (router.query.slug) {
-  //       const locations = await axios.get(
-  //         `${process.env.NEXT_PUBLIC_baseURL}/curated-trips/${router.query.slug}/locations/`
-  //       );
-  //       setLocations(locations.data.results);
-  //     }
-  //   };
+  const getLocation = async () => {
+    if (router.query.slug) {
+      const locations = await axios.get(
+        `${process.env.NEXT_PUBLIC_baseURL}/curated-trips/${router.query.slug}/locations/`
+      );
+      setLocations(locations.data.results);
+    }
+  };
 
-  //   useEffect(() => {
-  //     getLocation();
-  //   }, [router.query.slug]);
+  useEffect(() => {
+    getLocation();
+  }, [router.query.slug]);
 
   const mapRef = useRef();
 
