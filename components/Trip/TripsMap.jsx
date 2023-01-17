@@ -11,22 +11,20 @@ import Dialogue from "../Home/Dialogue";
 import { Icon } from "@iconify/react";
 import MapMakers from "./MapMakers";
 
-function TripsMap({ slug }) {
+function TripsMap() {
   const router = useRouter();
 
   const [locations, setLocations] = useState([]);
 
   const getLocation = async () => {
     const locations = await axios.get(
-      `${process.env.NEXT_PUBLIC_baseURL}/curated-trips/${slug}/locations/`
+      `${process.env.NEXT_PUBLIC_baseURL}/curated-trips/${router.query.slug}/locations/`
     );
     setLocations(locations.data.results);
   };
 
   useEffect(() => {
-    if (slug) {
-      getLocation();
-    }
+    getLocation();
   }, []);
 
   const mapRef = useRef();
@@ -107,7 +105,7 @@ function TripsMap({ slug }) {
             mapStyle="mapbox://styles/mapbox/streets-v9"
           >
             <NavigationControl></NavigationControl>
-            {markers}
+            {/* {markers} */}
           </Map>
         </div>
 
