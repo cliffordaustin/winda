@@ -21,7 +21,7 @@ function MapTest1() {
   const getLocation = async () => {
     if (router.query.slug) {
       const locations = await axios.get(
-        `${process.env.NEXT_PUBLIC_baseURL}/curated-trips/${router.query.slug}/locations/`
+        `${process.env.NEXT_PUBLIC_baseURL}/curated-trips/y8pk6y02e8tyat8pt747654u/locations/`
       );
       setLocations(locations.data.results);
     }
