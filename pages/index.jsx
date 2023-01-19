@@ -273,15 +273,16 @@ export default function Home({ userProfile, holidayTrips }) {
             />
           </video>
 
-          <div className="flex flex-col items-center justify-center absolute w-full text-center top-[30%] md:top-[30%] z-20 px-6 md:px-0">
+          <div className="flex flex-col items-center justify-center absolute w-full text-center top-[20%] md:top-[30%] z-20 px-2 md:px-0">
             <div className="flex flex-col items-center">
-              <h1 className="font-black font-SourceSans mb-2 text-3xl sm:text-4xl md:text-5xl xl:text-7xl text-white uppercase text-center">
-                It&apos;s complicated to plan a trip in Africa by yourself
+              <h1 className="font-black font-SourceSans mb-2 text-3xl sm:text-5xl md:text-5xl xl:text-7xl text-white text-center">
+                It&apos;s Not Easy Traveling in Africa
               </h1>
 
-              <h3 className="font-bold w-[80%] font-OpenSans mb-8 text-base sm:text-xl text-white text-center">
-                We help you plan a trip that fits your preferences and budget
-                from safaris to road trips, to camping and much more.
+              <h3 className="font-semibold w-full md:w-[80%] font-SourceSans mb-8 text-base sm:text-2xl text-white text-center">
+                Leave the hard work to us. We&apos;ll give you a custom
+                itinerary with every aspect of your trip taken care of so you
+                can lay back and enjoy your trip.
               </h3>
             </div>
 

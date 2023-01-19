@@ -99,6 +99,176 @@ function Main({ holidayTrips }) {
 
   const userIsFromKenya = useSelector((state) => state.home.userIsFromKenya);
 
+  const options = [
+    {
+      icon: "carbon:pedestrian-family",
+      title: "Family",
+      href: "/trip?tag=family",
+    },
+
+    {
+      icon: "icon-park-outline:oval-love-two",
+      title: "Romantic",
+      href: "/trip?tag=romantic",
+    },
+
+    {
+      icon: "bi:calendar-week",
+      title: "Weekend getaway",
+      href: "/trip?tag=weekend_getaway",
+    },
+
+    {
+      icon: "fluent:clipboard-day-20-regular",
+      title: "Day trips",
+      href: "/trip?tag=day_trips",
+    },
+
+    {
+      icon: "akar-icons:people-group",
+      title: "Groups",
+      href: "/trip?tag=groups",
+    },
+
+    {
+      icon: "fluent:beach-16-regular",
+      title: "Beach",
+      href: "/trip?tag=beach",
+    },
+
+    {
+      icon: "tabler:brand-safari",
+      title: "Unconventional safaris",
+      href: "/trip?tag=unconventional_safaris",
+    },
+
+    {
+      icon: "la:hiking",
+      title: "Walking/Hiking",
+      href: "/trip?tag=walking_hiking",
+    },
+
+    {
+      icon: "bx:trip",
+      title: "Road trip",
+      href: "/trip?tag=road_trip",
+    },
+
+    {
+      icon: "emojione-monotone:national-park",
+      title: "Park & conservancies",
+      href: "/trip?tag=park_conservancies",
+    },
+
+    {
+      icon: "icon-park-outline:game-emoji",
+      title: "Day game drives",
+      href: "/trip?tag=day_game_drives",
+    },
+
+    {
+      icon: "iconoir:yoga",
+      title: "Wellness",
+      href: "/trip?tag=wellness",
+    },
+
+    {
+      icon: "icon-park-outline:green-new-energy",
+      title: "Sustainable safari",
+      href: "/trip?tag=sustainable",
+    },
+
+    {
+      icon: "tabler:tools-kitchen-2",
+      title: "Culinary",
+      href: "/trip?tag=culinary",
+    },
+
+    {
+      icon: "majesticons:community-line",
+      title: "Community owned",
+      href: "/trip?tag=community_owned",
+    },
+
+    {
+      icon: "ic:outline-emoji-nature",
+      title: "Off-grid",
+      href: "/trip?tag=off_grid",
+    },
+
+    {
+      icon: "fontisto:night-clear",
+      title: "Night game drives",
+      href: "/trip?tag=night_game_drives",
+    },
+
+    {
+      icon: "akar-icons:person",
+      title: "Solo getaway",
+      href: "/trip?tag=solo_getaway",
+    },
+
+    {
+      icon: "akar-icons:shopping-bag",
+      title: "Shopping",
+      href: "/trip?tag=shopping",
+    },
+
+    {
+      icon: "emojione-monotone:artist-palette",
+      title: "Art",
+      href: "/trip?tag=art",
+    },
+
+    {
+      icon: "ic:baseline-surfing",
+      title: "Watersports",
+      href: "/trip?tag=watersports",
+    },
+
+    {
+      icon: "ic:outline-sailing",
+      title: "Sailing",
+      href: "/trip?tag=sailing",
+    },
+
+    {
+      icon: "la:female",
+      title: "All-female",
+      href: "/trip?tag=all_female",
+    },
+
+    {
+      icon: "cil:diamond",
+      title: "Luxury",
+      href: "/trip?tag=luxury",
+    },
+
+    {
+      icon: "tabler:report-money",
+      title: "Budget",
+      href: "/trip?tag=budget",
+    },
+
+    {
+      icon: "material-symbols:price-change-outline-sharp",
+      title: "Mid-range",
+      href: "/trip?tag=mid_range",
+    },
+
+    {
+      icon: "entypo:time-slot",
+      title: "Short getaway",
+      href: "/trip?tag=short_getaway",
+    },
+
+    {
+      icon: "iconoir:sea-and-sun",
+      title: "Lakes",
+      href: "/trip?tag=lake",
+    },
+  ];
+
   return (
     <div className="w-full">
       {/* <div className="w-full flex justify-center">
@@ -410,9 +580,11 @@ function Main({ holidayTrips }) {
       </div> */}
 
       <div className="flex flex-col px-2 gap-4">
-        <h1 className="font-black text-2xl ml-2 text-center">Holiday Offers</h1>
+        <h1 className="font-black text-2xl md:text-3xl font-OpenSans ml-2 tracking-wide">
+          Offers
+        </h1>
 
-        <div className="mb-8">
+        <div className="mb-8 px-2">
           <Swiper
             {...tripSettings}
             onSwiper={(swiper) => {
@@ -460,11 +632,11 @@ function Main({ holidayTrips }) {
                       <div className="!h-[220px] relative w-full">
                         <Carousel
                           images={[images[0]]}
-                          imageClass="rounded-lg"
+                          imageClass="rounded-md"
                         ></Carousel>
                       </div>
 
-                      <div className="px-2 mt-1">
+                      <div className="mt-1 px-2 py-1">
                         <h1 className="font-bold text-lg truncate">
                           {trip.name}
                         </h1>
@@ -786,471 +958,21 @@ function Main({ holidayTrips }) {
         <span className="text-gray-600">Find what suits you</span>
       </h1> */}
 
-      <h1 className="font-bold text-2xl mb-6 font-OpenSans text-center mt-6">
+      <h1 className="font-black text-2xl md:text-3xl font-OpenSans ml-4 tracking-wide mt-6 mb-4">
         <span className="text-slate-800">Explore on</span>{" "}
-        <span className="text-red-500">winda</span>
+        <span className="text-red-600">winda</span>
       </h1>
 
-      <div className="px-2">
-        <Swiper
-          {...roomsSettings}
-          modules={[FreeMode, Navigation, Thumbs]}
-          onSwiper={(swiper) => {
-            setState({
-              ...state,
-              isEndOfSlide: swiper.isEnd,
-              isBeginningOfSlide: swiper.isBeginning,
-            });
-          }}
-          onSlideChange={(swiper) => {
-            setState({
-              ...state,
-              isEndOfSlide: swiper.isEnd,
-              isBeginningOfSlide: swiper.isBeginning,
-            });
-          }}
-          className="!relative"
-        >
-          <SwiperSlide className="!h-[320px] !w-[320px]">
-            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-lg before:z-20 before:opacity-20">
-              <Carousel
-                images={["/images/home/cultural-trip.webp"]}
-                imageClass="rounded-lg"
-                objectPosition="center"
-              ></Carousel>
+      <div className="px-4 flex flex-wrap items-center gap-4 md:gap-6">
+        {options.map((option, index) => (
+          <Link key={index} href={option.href}>
+            <a className="explore-card">
+              <Icon icon={option.icon} className={"w-7 h-7 text-red-600"} />
 
-              <h1 className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
-                Explore the culture
-              </h1>
-
-              <Link href="/trip?tag=cultural">
-                <a>
-                  <div
-                    onClick={() => {
-                      Mixpanel.track(
-                        "View curated trips for Nairobi button clicked"
-                      );
-                    }}
-                    className="absolute bottom-4 z-30 flex flex-col left-4 px-3 cursor-pointer font-bold text-sm py-2 w-fit !bg-white rounded-lg mt-2"
-                  >
-                    View trips
-                  </div>
-                </a>
-              </Link>
-            </div>
-          </SwiperSlide>
-
-          <SwiperSlide className="!h-[320px] !w-[320px]">
-            <div className="relative h-full w-full">
-              <Carousel
-                images={["/images/home/romantic-trip.webp"]}
-                imageClass="rounded-lg"
-              ></Carousel>
-
-              <h1 className="text-white text-shadow z-30 font-black absolute top-4 left-4 text-xl">
-                Romantic mood
-              </h1>
-
-              <Link href="/trip?tag=romantic">
-                <a>
-                  <div
-                    onClick={() => {
-                      Mixpanel.track(
-                        "View curated trips for Nairobi button clicked"
-                      );
-                    }}
-                    className="absolute bottom-4 z-30 flex flex-col left-4 px-3 cursor-pointer font-bold text-sm py-2 w-fit bg-white rounded-lg mt-2"
-                  >
-                    View trips
-                  </div>
-                </a>
-              </Link>
-            </div>
-          </SwiperSlide>
-          <SwiperSlide className="!h-[320px] !w-[320px]">
-            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-lg before:z-20 before:opacity-20">
-              <Carousel
-                images={["/images/home/roadtrip.webp"]}
-                imageClass="rounded-lg"
-              ></Carousel>
-
-              <h1 className="text-white text-shadow z-30 font-black absolute top-4 left-4 text-xl">
-                Road-trips galore!
-              </h1>
-
-              <Link href="/trip?tag=road_trip">
-                <a>
-                  <div
-                    onClick={() => {
-                      Mixpanel.track(
-                        "View curated trips for Nairobi button clicked"
-                      );
-                    }}
-                    className="absolute bottom-4 z-30 flex flex-col left-4 px-3 cursor-pointer font-bold text-sm py-2 w-fit !bg-white rounded-lg"
-                  >
-                    View trips
-                  </div>
-                </a>
-              </Link>
-            </div>
-          </SwiperSlide>
-
-          <SwiperSlide className="!h-[320px] !w-[320px]">
-            <div className="relative h-full w-full">
-              <Carousel
-                images={["/images/home/romantic-trip.webp"]}
-                imageClass="rounded-lg"
-              ></Carousel>
-
-              <h1 className="text-white text-shadow z-30 font-black absolute top-4 left-4 text-xl">
-                Romantic mood
-              </h1>
-
-              <Link href="/trip?tag=romantic">
-                <a>
-                  <div
-                    onClick={() => {
-                      Mixpanel.track(
-                        "View curated trips for Nairobi button clicked"
-                      );
-                    }}
-                    className="absolute bottom-4 z-30 flex flex-col left-4 px-3 cursor-pointer font-bold text-sm py-2 w-fit bg-white rounded-lg mt-2"
-                  >
-                    View trips
-                  </div>
-                </a>
-              </Link>
-            </div>
-          </SwiperSlide>
-
-          <SwiperSlide className="!h-[320px] !w-[320px]">
-            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-lg before:z-20 before:opacity-20">
-              <Carousel
-                images={["/images/home/campsite.webp"]}
-                imageClass="rounded-lg"
-              ></Carousel>
-
-              <h1 className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
-                Camping
-              </h1>
-
-              <Link href="/stays?type_of_stay=CAMPSITE">
-                <a>
-                  <div
-                    onClick={() => {
-                      Mixpanel.track("Campsites button clicked");
-                    }}
-                    className="absolute bottom-2 z-30 flex flex-col left-2"
-                  >
-                    <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
-                      View stays
-                    </div>
-                  </div>
-                </a>
-              </Link>
-            </div>
-          </SwiperSlide>
-
-          <SwiperSlide className="!h-[320px] !w-[320px]">
-            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-lg before:z-20 before:opacity-20">
-              <Carousel
-                images={["/images/home/uniquespace.webp"]}
-                imageClass="rounded-lg"
-              ></Carousel>
-
-              <h1 className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
-                Unique spaces
-              </h1>
-
-              <Link href="/stays?type_of_stay=UNIQUE SPACE">
-                <a>
-                  <div
-                    onClick={() => {
-                      Mixpanel.track("Unique spaces button clicked");
-                    }}
-                    className="absolute bottom-2 z-30 flex flex-col left-2"
-                  >
-                    <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
-                      View stays
-                    </div>
-                  </div>
-                </a>
-              </Link>
-            </div>
-          </SwiperSlide>
-
-          <SwiperSlide className="!h-[320px] !w-[320px]">
-            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-lg before:z-20 before:opacity-20">
-              <Carousel
-                images={["/images/home/lodging.webp"]}
-                imageClass="rounded-lg"
-              ></Carousel>
-
-              <h1 className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
-                Lodge
-              </h1>
-
-              <Link href="/stays?type_of_stay=LODGE">
-                <a>
-                  <div
-                    onClick={() => {
-                      Mixpanel.track("Lodge button clicked");
-                    }}
-                    className="absolute bottom-2 z-30 flex flex-col left-2"
-                  >
-                    <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
-                      View stays
-                    </div>
-                  </div>
-                </a>
-              </Link>
-            </div>
-          </SwiperSlide>
-
-          <SwiperSlide className="!h-[320px] !w-[320px]">
-            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-lg before:z-20 before:opacity-20">
-              <Carousel
-                images={["/images/home/restaurant.webp"]}
-                imageClass="rounded-lg"
-              ></Carousel>
-
-              <h1 className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
-                Food & Drink
-              </h1>
-
-              <Link href="/activities?tags=food & drink">
-                <a>
-                  <div
-                    onClick={() => {
-                      Mixpanel.track("Lodge button clicked");
-                    }}
-                    className="absolute bottom-2 z-30 flex flex-col left-2"
-                  >
-                    <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
-                      View activities
-                    </div>
-                  </div>
-                </a>
-              </Link>
-            </div>
-          </SwiperSlide>
-
-          <SwiperSlide className="!h-[320px] !w-[320px]">
-            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-lg before:z-20 before:opacity-20">
-              <Carousel
-                images={["/images/home/culture-activity.webp"]}
-                imageClass="rounded-lg"
-              ></Carousel>
-
-              <h1 className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
-                Local Culture
-              </h1>
-
-              <Link href="/activities?tags=local culture">
-                <a>
-                  <div
-                    onClick={() => {
-                      Mixpanel.track("Lodge button clicked");
-                    }}
-                    className="absolute bottom-2 z-30 flex flex-col left-2"
-                  >
-                    <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
-                      View activities
-                    </div>
-                  </div>
-                </a>
-              </Link>
-            </div>
-          </SwiperSlide>
-
-          <SwiperSlide className="!h-[320px] !w-[320px]">
-            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-lg before:z-20 before:opacity-20">
-              <Carousel
-                images={["/images/home/weekend-getaway-activity.webp"]}
-                imageClass="rounded-lg"
-              ></Carousel>
-
-              <h1 className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
-                Weekend Getaways
-              </h1>
-
-              <Link href="/activities?tags=weekend">
-                <a>
-                  <div
-                    onClick={() => {
-                      Mixpanel.track("Lodge button clicked");
-                    }}
-                    className="absolute bottom-2 z-30 flex flex-col left-2"
-                  >
-                    <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
-                      View activities
-                    </div>
-                  </div>
-                </a>
-              </Link>
-            </div>
-          </SwiperSlide>
-
-          {/* <SwiperSlide className="!h-[320px] !w-[320px]">
-            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
-              <Carousel
-                images={["/images/home/campsite-tented.webp"]}
-                imageClass="rounded-2xl"
-              ></Carousel>
-
-              <h1 className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
-                Tented camps
-              </h1>
-
-              <Link href="/stays?type_of_stay=TENTED CAMP">
-                <a>
-                  <div
-                    onClick={() => {
-                      Mixpanel.track("Tented camps button clicked");
-                    }}
-                    className="absolute bottom-2 z-30 flex flex-col left-2"
-                  >
-                    <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
-                      View stays
-                    </div>
-                  </div>
-                </a>
-              </Link>
-            </div>
-          </SwiperSlide>
-
-          <SwiperSlide className="!h-[320px] !w-[320px]">
-            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
-              <Carousel
-                images={["/images/home/budget.webp"]}
-                imageClass="rounded-2xl"
-              ></Carousel>
-
-              <h1 className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
-                Budget
-              </h1>
-
-              <Link href="/stays?pricing_type=REASONABLE">
-                <a>
-                  <div
-                    onClick={() => {
-                      Mixpanel.track("Budget button clicked");
-                    }}
-                    className="absolute bottom-2 z-30 flex flex-col left-2"
-                  >
-                    <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
-                      View stays
-                    </div>
-                  </div>
-                </a>
-              </Link>
-            </div>
-          </SwiperSlide>
-
-          <SwiperSlide className="!h-[320px] !w-[320px]">
-            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
-              <Carousel
-                images={["/images/home/mid-range.webp"]}
-                imageClass="rounded-2xl"
-              ></Carousel>
-
-              <h1 className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
-                Mid-Range
-              </h1>
-
-              <Link href="/stays?pricing_type=MID-RANGE">
-                <a>
-                  <div
-                    onClick={() => {
-                      Mixpanel.track("Mid-Range button clicked");
-                    }}
-                    className="absolute bottom-2 z-30 flex flex-col left-2"
-                  >
-                    <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
-                      View stays
-                    </div>
-                  </div>
-                </a>
-              </Link>
-            </div>
-          </SwiperSlide>
-
-          <SwiperSlide className="!h-[320px] !w-[320px]">
-            <div className="relative h-full w-full before:absolute before:h-full before:w-full before:bg-black before:rounded-2xl before:z-20 before:opacity-20">
-              <Carousel
-                images={["/images/home/luxury.webp"]}
-                imageClass="rounded-2xl"
-              ></Carousel>
-
-              <h1 className="text-white text-shadow z-30 font-black absolute top-2 left-2 text-xl">
-                Luxurious
-              </h1>
-
-              <Link href="/stays?pricing_type=HIGH-END">
-                <a>
-                  <div
-                    onClick={() => {
-                      Mixpanel.track("Luxurious button clicked");
-                    }}
-                    className="absolute bottom-2 z-30 flex flex-col left-2"
-                  >
-                    <div className="px-3 cursor-pointer font-bold text-sm py-1.5 w-fit bg-white text-black rounded-lg mt-2">
-                      View stays
-                    </div>
-                  </div>
-                </a>
-              </Link>
-            </div>
-          </SwiperSlide> */}
-
-          <div
-            className={
-              " absolute hidden md:flex h-12 w-12 z-30 left-3 top-[50%] -translate-y-2/4 items-center justify-end " +
-              (state.isBeginningOfSlide ? "invisible" : "")
-            }
-          >
-            <div className="cursor-pointer h-8 w-8 swiper-room-button-prev rounded-full border-2 flex items-center justify-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 text-white"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
-            </div>
-          </div>
-
-          <div
-            className={
-              " absolute hidden md:flex h-12 w-12 z-30 right-3 top-[50%] -translate-y-2/4 items-center " +
-              (state.isEndOfSlide ? "invisible" : "")
-            }
-          >
-            <div className="cursor-pointer h-8 w-8 swiper-room-button-next rounded-full border-2 flex items-center justify-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 text-white"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
-            </div>
-          </div>
-        </Swiper>
+              <h1 className="font-bold text-center">{option.title}</h1>
+            </a>
+          </Link>
+        ))}
       </div>
 
       {/* <h1 className="font-bold text-2xl font-OpenSans text-center mt-16 mb-4">

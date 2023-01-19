@@ -1137,7 +1137,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
         }}
       >
         <Head>
-          <title>{stay.property_name || stay.name}</title>
+          <title>{stay.name || stay.property_name}</title>
           <meta
             name="viewport"
             content="initial-scale=1.0, width=device-width"

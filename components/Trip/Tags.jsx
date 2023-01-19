@@ -27,7 +27,7 @@ const Tags = () => {
   const handleCheck = (event) => {
     var updatedList = [...currentOptions];
     if (event.target.checked) {
-      updatedList = [...currentOptions, event.target.value];
+      updatedList = [event.target.value];
       const allOptions = updatedList
         .toString()
         .replace("[", "") // remove [
@@ -38,7 +38,7 @@ const Tags = () => {
         tag: event.target.value,
       });
 
-      router.push({ query: { ...router.query, tag: allOptions } });
+      router.push({ query: { ...router.query, tag: allOptions, page: "" } });
     } else {
       updatedList.splice(currentOptions.indexOf(event.target.value), 1);
 
@@ -48,7 +48,7 @@ const Tags = () => {
         .replace("]", "") // remove ]
         .trim(); // remove all white space
 
-      router.push({ query: { ...router.query, tag: allOptions } });
+      router.push({ query: { ...router.query, tag: allOptions, page: "" } });
     }
     setCurrentOptions(updatedList);
   };

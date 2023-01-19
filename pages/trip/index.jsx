@@ -35,9 +35,8 @@ import Head from "next/head";
 
 const Trips = ({
   userProfile,
-  recommendedTrips,
+  trips,
   secondTrips,
-  userTrips,
   pageSize,
   count,
   nextLink,
@@ -48,15 +47,7 @@ const Trips = ({
 
   const [location, setLocation] = useState("");
 
-  const [autoComplete, setAutoComplete] = useState([]);
-
   const router = useRouter();
-
-  const [showAddToTripPopup, setShowAddToTripPopup] = useState(false);
-
-  const [selectedData, setSelectedData] = useState(null);
-
-  const [addToYourNewTripLoading, setAddToYourNewTripLoading] = useState(false);
 
   const [showLocation, setShowLocation] = useState(false);
 
@@ -82,36 +73,6 @@ const Trips = ({
   useEffect(() => {
     priceConversionRate();
   });
-
-  const addToANewTrip = async () => {
-    if (selectedData) {
-      setAddToYourNewTripLoading(true);
-      await axios
-        .post(
-          `${process.env.NEXT_PUBLIC_baseURL}/create-trip/`,
-          {
-            stay_id: selectedData.stay_id,
-            activity_id: selectedData.activity_id,
-            transport_id: selectedData.transport_id,
-            flight_id: selectedData.flight_id,
-          },
-          {
-            headers: {
-              Authorization: `Token ${Cookies.get("token")}`,
-            },
-          }
-        )
-        .then((res) => {
-          router.push({
-            pathname: `/trip/plan/${res.data.slug}`,
-          });
-        })
-        .catch((err) => {
-          console.log(err.response);
-          setAddToYourNewTripLoading(false);
-        });
-    }
-  };
 
   const [showPricePopup, setShowPricePopup] = useState(false);
 
@@ -192,6 +153,8 @@ const Trips = ({
   }, []);
 
   const isHolidayTrip = router.query.holiday === "1" ? true : false;
+
+  const allTrips = [...secondTrips, ...trips];
 
   return (
     <div
@@ -445,27 +408,9 @@ const Trips = ({
                 </div>
               )}
             </div>
-            <AllTrips
-              userProfile={userProfile}
-              trips={userTrips}
-              userTrips={userTrips}
-              isSecondTrip={true}
-              recommendedTrips={secondTrips}
-              setSelectedData={setSelectedData}
-              setShowAddToTripPopup={setShowAddToTripPopup}
-              showAddToTripPopup={showAddToTripPopup}
-            ></AllTrips>
-            <AllTrips
-              userProfile={userProfile}
-              trips={userTrips}
-              userTrips={userTrips}
-              recommendedTrips={recommendedTrips}
-              setSelectedData={setSelectedData}
-              setShowAddToTripPopup={setShowAddToTripPopup}
-              showAddToTripPopup={showAddToTripPopup}
-            ></AllTrips>
+            <AllTrips trips={allTrips}></AllTrips>
 
-            {recommendedTrips.length > 0 && (
+            {allTrips.length > 0 && (
               <ReactPaginate
                 breakLabel="..."
                 nextLabel={<Icon icon="bx:chevron-right" className="w-7 h-7" />}
@@ -486,53 +431,6 @@ const Trips = ({
           </div>
         </div>
       </div>
-
-      <Dialogue
-        isOpen={showAddToTripPopup}
-        closeModal={() => {
-          setShowAddToTripPopup(false);
-        }}
-        title="Add to Trip"
-        dialogueTitleClassName="!font-bold"
-        dialoguePanelClassName="!overflow-y-scroll !p-4 max-h-[500px] !max-w-lg"
-      >
-        <div className="h-full relative">
-          {userTrips.map((trip, index) => {
-            return (
-              <SingleTrip
-                key={index}
-                trip={trip}
-                isRecommendedPage={true}
-                selectedData={selectedData}
-              ></SingleTrip>
-            );
-          })}
-
-          <div className="flex justify-between mt-8">
-            <div></div>
-            <Button
-              onClick={() => {
-                addToANewTrip();
-              }}
-              className="flex w-full items-center gap-1 !px-0 !py-2 font-bold !bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 !text-white"
-            >
-              <span>Add to a new trip</span>
-
-              <div
-                className={
-                  " " + (!addToYourNewTripLoading ? "hidden" : " ml-1")
-                }
-              >
-                <LoadingSpinerChase
-                  width={13}
-                  height={13}
-                  color="white"
-                ></LoadingSpinerChase>
-              </div>
-            </Button>
-          </div>
-        </div>
-      </Dialogue>
 
       <div className="">
         <Footer></Footer>
@@ -565,21 +463,11 @@ export async function getServerSideProps(context) {
         }
       );
 
-      const { data } = await axios.get(
-        `${process.env.NEXT_PUBLIC_baseURL}/trips/`,
-        {
-          headers: {
-            Authorization: "Token " + token,
-          },
-        }
-      );
-
       return {
         props: {
           userProfile: response.data[0],
-          recommendedTrips: trips.data.results,
+          trips: trips.data.results,
           secondTrips: secondTrips.data.results,
-          userTrips: data || [],
           nextLink: trips.data.next,
           previousLink: trips.data.previous,
           pageSize: trips.data.page_size,
@@ -592,9 +480,8 @@ export async function getServerSideProps(context) {
     return {
       props: {
         userProfile: "",
-        recommendedTrips: trips.data.results,
+        trips: trips.data.results,
         secondTrips: secondTrips.data.results,
-        userTrips: [],
         nextLink: trips.data.next,
         previousLink: trips.data.previous,
         pageSize: trips.data.page_size,
@@ -614,9 +501,8 @@ export async function getServerSideProps(context) {
       return {
         props: {
           userProfile: "",
-          recommendedTrips: [],
+          trips: [],
           secondTrips: [],
-          userTrips: [],
           nextLink: "",
           previousLink: "",
           pageSize: 0,
