@@ -11,6 +11,7 @@ import store, { wrapper } from "../redux/store";
 import NProgress from "nprogress";
 import Router, { useRouter } from "next/router";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { Analytics } from "@vercel/analytics/react";
 import "nprogress/nprogress.css";
 import ReactGA from "react-ga4";
 
@@ -138,6 +139,7 @@ function MyApp({ Component, pageProps, router }) {
           initial={{ opacity: 0 }}
         >
           <Component {...pageProps} />
+          <Analytics />
         </motion.div>
       </Provider>
     </GoogleOAuthProvider>
