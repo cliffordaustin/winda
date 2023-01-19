@@ -425,7 +425,6 @@ function Locations(props) {
                 alt={location.imageAlt}
                 layout={"fill"}
                 objectFit="cover"
-                unoptimized={true}
               />
             </div>
 
@@ -476,7 +475,6 @@ function Locations(props) {
                 alt={location.imageAlt}
                 layout={"fill"}
                 objectFit="cover"
-                unoptimized={true}
               />
             </div>
 
@@ -526,7 +524,6 @@ function Locations(props) {
                 alt={location.imageAlt}
                 layout={"fill"}
                 objectFit="cover"
-                unoptimized={true}
               />
             </div>
 
@@ -576,7 +573,6 @@ function Locations(props) {
                 alt={location.imageAlt}
                 layout={"fill"}
                 objectFit="cover"
-                unoptimized={true}
               />
             </div>
 

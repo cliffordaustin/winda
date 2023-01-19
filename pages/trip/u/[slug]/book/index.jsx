@@ -287,7 +287,6 @@ function BookTrip({ trip, userProfile }) {
                     layout="fill"
                     objectFit="cover"
                     src={tripImages[0]}
-                    unoptimized={true}
                     alt="Main image of trip"
                   ></Image>
                 </div>

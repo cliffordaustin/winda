@@ -42,13 +42,13 @@ function CookiesMessage(props) {
                 setShowCookiesMessage(false);
                 closeCookiesMessage();
               }}
-              className="px-5 flex items-center cursor-pointer justify-center py-1.5 text-white font-bold bg-gray-700"
+              className="px-5 flex items-center cursor-pointer justify-center py-1.5 text-white font-bold rounded-lg bg-blue-700"
             >
               <span>Okay</span>
             </div>
             <Link href="/privacy-policy">
               <a>
-                <div className="px-5 flex items-center font-bold cursor-pointer justify-center py-1.5 border border-gray-700">
+                <div className="px-5 flex items-center font-bold cursor-pointer justify-center py-1.5 border rounded-md border-slate-700">
                   <span className="truncate">Privacy policy</span>
                 </div>
               </a>

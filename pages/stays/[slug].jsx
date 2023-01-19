@@ -4250,7 +4250,6 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                         layout="fill"
                         objectFit="cover"
                         src={stay.stay_images[0].image}
-                        unoptimized={true}
                         alt="Main image of the order"
                       ></Image>
                     </div>
@@ -4669,7 +4668,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                         <Image
                           className="w-full h-full"
                           layout="fill"
-                          unoptimized={true}
+                         
                           objectFit="fit"
                           alt="Image"
                           src="/images/128px-M-PESA_LOGO-01.svg.png"

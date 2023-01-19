@@ -10,12 +10,7 @@ SwiperCore.use([Navigation]);
 import "swiper/css";
 import "swiper/css/pagination";
 
-function TripImageGallery({
-  images,
-  imageClass = "",
-  className = "",
-  unoptimized = true,
-}) {
+function TripImageGallery({ images, imageClass = "", className = "" }) {
   const settings = {
     spaceBetween: 10,
     slidesPerView: "auto",
@@ -66,7 +61,6 @@ function TripImageGallery({
               src={image}
               alt="Image Gallery"
               layout="fill"
-              unoptimized={unoptimized}
             />
           </SwiperSlide>
         ))}

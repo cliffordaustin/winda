@@ -268,7 +268,6 @@ export default function Home({ userProfile, holidayTrips }) {
               objectPosition={"bottom"}
               sizes="380"
               alt="Image of samburu man looking at a vast landscape"
-              unoptimized={true}
               priority
             />
           </video>
@@ -423,7 +422,6 @@ export default function Home({ userProfile, holidayTrips }) {
               layout="fill"
               src={"/images/home/group-of-travelers.jpg"}
               objectFit="cover"
-              unoptimized={true}
               alt="Image of group of travellers"
             />
           </div>

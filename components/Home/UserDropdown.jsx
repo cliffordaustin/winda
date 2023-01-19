@@ -43,7 +43,6 @@ function UserDropdown({
                 alt="profile image of a user"
                 className="object-cover rounded-full"
                 src={userProfile.profile_pic}
-                unoptimized={true}
                 objectPosition="center"
                 objectFit="cover"
                 priority
@@ -51,29 +50,32 @@ function UserDropdown({
             </div>
           )}
 
-          {userProfile && !userProfile.profile_pic && userProfile.avatar_url && (
-            <div className="relative w-7 h-7 rounded-full">
-              <Image
-                layout="fill"
-                alt="profile image of a user"
-                className="object-cover rounded-full"
-                src={userProfile.avatar_url}
-                unoptimized={true}
-                objectFit="cover"
-                priority
-              ></Image>
-            </div>
-          )}
+          {userProfile &&
+            !userProfile.profile_pic &&
+            userProfile.avatar_url && (
+              <div className="relative w-7 h-7 rounded-full">
+                <Image
+                  layout="fill"
+                  alt="profile image of a user"
+                  className="object-cover rounded-full"
+                  src={userProfile.avatar_url}
+                  objectFit="cover"
+                  priority
+                ></Image>
+              </div>
+            )}
 
-          {!userProfile.profile_pic && userProfile && !userProfile.avatar_url && (
-            <div className="relative w-7 h-7 rounded-full !bg-slate-800 text-white font-bold flex items-center text-sm justify-center">
-              {fullName
-                .split(" ")
-                .map((name) => name[0])
-                .join("")
-                .toUpperCase()}
-            </div>
-          )}
+          {!userProfile.profile_pic &&
+            userProfile &&
+            !userProfile.avatar_url && (
+              <div className="relative w-7 h-7 rounded-full !bg-slate-800 text-white font-bold flex items-center text-sm justify-center">
+                {fullName
+                  .split(" ")
+                  .map((name) => name[0])
+                  .join("")
+                  .toUpperCase()}
+              </div>
+            )}
 
           <svg
             xmlns="http://www.w3.org/2000/svg"
