@@ -640,9 +640,12 @@ function Main({ holidayTrips }) {
                         <h1 className="font-bold text-lg truncate">
                           {trip.name}
                         </h1>
-                        <div className="absolute cursor-pointer top-1.5 left-1.5 w-fit px-1 rounded-md flex items-center gap-0.5 font-bold text-sm py-[2px] bg-white">
-                          <div className="text-sm font-bold">
+                        <div className="absolute cursor-pointer top-1.5 left-1.5 w-fit flex items-center gap-2 font-bold text-sm">
+                          <div className="text-sm font-bold bg-white rounded-md px-1 py-[2px]">
                             {trip.area_covered.split(",")[0]}
+                          </div>
+                          <div className="text-sm font-bold bg-white rounded-md py-[2px] px-1">
+                            valentine offer
                           </div>
                         </div>
 

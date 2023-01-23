@@ -57,6 +57,12 @@ const Card = ({ listing, isSecondTrip }) => {
         ></Carousel>
       </div>
 
+      {listing.valentine_offer && (
+        <div className="absolute top-2 left-2 px-2 py-1 rounded-md bg-white text-sm font-bold">
+          Valentine&apos;s offer
+        </div>
+      )}
+
       <Dialogue
         isOpen={showDialogue}
         closeModal={() => {
