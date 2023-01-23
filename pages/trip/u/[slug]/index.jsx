@@ -628,37 +628,47 @@ function CuratedTripDetail({ trip, userProfile }) {
                   <Price stayPrice={planAPrice()}></Price>
                 </div>
 
-                <div className="mt-4 flex gap-2 flex-col">
-                  <div className="flex gap-2 items-center">
-                    <Icon
-                      icon="fluent:checkbox-checked-16-filled"
-                      className="text-green-400"
-                    />
-                    <h4 className="font-bold text-sm">
-                      All the stays in this trip
-                    </h4>
-                  </div>
+                {!trip.plan_a_price.description && (
+                  <div className="mt-4 flex gap-2 flex-col">
+                    <div className="flex gap-2 items-center">
+                      <Icon
+                        icon="fluent:checkbox-checked-16-filled"
+                        className="text-green-400"
+                      />
+                      <h4 className="font-bold text-sm">
+                        All the stays in this trip
+                      </h4>
+                    </div>
 
-                  <div className="flex gap-2 items-center">
-                    <Icon
-                      icon="fluent:checkbox-checked-16-filled"
-                      className="text-gray-300"
-                    />
-                    <h4 className="font-bold text-sm text-gray-400 line-through">
-                      All the activities in this trip
-                    </h4>
-                  </div>
+                    <div className="flex gap-2 items-center">
+                      <Icon
+                        icon="fluent:checkbox-checked-16-filled"
+                        className="text-gray-300"
+                      />
+                      <h4 className="font-bold text-sm text-gray-400 line-through">
+                        All the activities in this trip
+                      </h4>
+                    </div>
 
-                  <div className="flex gap-2 items-center">
-                    <Icon
-                      icon="fluent:checkbox-checked-16-filled"
-                      className="text-gray-300"
-                    />
-                    <h4 className="font-bold text-sm text-gray-400 line-through">
-                      All transports included
-                    </h4>
+                    <div className="flex gap-2 items-center">
+                      <Icon
+                        icon="fluent:checkbox-checked-16-filled"
+                        className="text-gray-300"
+                      />
+                      <h4 className="font-bold text-sm text-gray-400 line-through">
+                        All transports included
+                      </h4>
+                    </div>
                   </div>
-                </div>
+                )}
+
+                {trip.plan_a_price.description && (
+                  <div className="mt-4 flex gap-2 flex-col">
+                    <p className="text-sm font-bold">
+                      {trip.plan_a_price.description}
+                    </p>
+                  </div>
+                )}
 
                 <div className="flex items-center justify-center mt-8">
                   <div
@@ -701,37 +711,47 @@ function CuratedTripDetail({ trip, userProfile }) {
                     ></Price>
                   </div>
 
-                  <div className="mt-4 flex gap-2 text-white flex-col">
-                    <div className="flex gap-2 items-center">
-                      <Icon
-                        icon="fluent:checkbox-checked-16-filled"
-                        className="text-green-400"
-                      />
-                      <h4 className="font-bold text-sm">
-                        All the stays in this trip
-                      </h4>
-                    </div>
+                  {!trip.plan_b_price.description && (
+                    <div className="mt-4 flex gap-2 text-white flex-col">
+                      <div className="flex gap-2 items-center">
+                        <Icon
+                          icon="fluent:checkbox-checked-16-filled"
+                          className="text-green-400"
+                        />
+                        <h4 className="font-bold text-sm">
+                          All the stays in this trip
+                        </h4>
+                      </div>
 
-                    <div className="flex gap-2 items-center">
-                      <Icon
-                        icon="fluent:checkbox-checked-16-filled"
-                        className="text-green-400"
-                      />
-                      <h4 className="font-bold text-sm">
-                        All the activities in this trip
-                      </h4>
-                    </div>
+                      <div className="flex gap-2 items-center">
+                        <Icon
+                          icon="fluent:checkbox-checked-16-filled"
+                          className="text-green-400"
+                        />
+                        <h4 className="font-bold text-sm">
+                          All the activities in this trip
+                        </h4>
+                      </div>
 
-                    <div className="flex gap-2 items-center">
-                      <Icon
-                        icon="fluent:checkbox-checked-16-filled"
-                        className="text-white"
-                      />
-                      <h4 className="font-bold text-sm line-through">
-                        All transports included
-                      </h4>
+                      <div className="flex gap-2 items-center">
+                        <Icon
+                          icon="fluent:checkbox-checked-16-filled"
+                          className="text-white"
+                        />
+                        <h4 className="font-bold text-sm line-through">
+                          All transports included
+                        </h4>
+                      </div>
                     </div>
-                  </div>
+                  )}
+
+                  {trip.plan_b_price.description && (
+                    <div className="mt-4 flex gap-2 flex-col">
+                      <p className="text-sm text-white font-bold">
+                        {trip.plan_b_price.description}
+                      </p>
+                    </div>
+                  )}
 
                   <div className="flex items-center justify-center mt-8">
                     <div
@@ -768,37 +788,47 @@ function CuratedTripDetail({ trip, userProfile }) {
                   <Price stayPrice={planCPrice()}></Price>
                 </div>
 
-                <div className="mt-4 flex gap-2 flex-col">
-                  <div className="flex gap-2 items-center">
-                    <Icon
-                      icon="fluent:checkbox-checked-16-filled"
-                      className="text-green-400"
-                    />
-                    <h4 className="font-bold text-sm">
-                      All the stays in this trip
-                    </h4>
-                  </div>
+                {!trip.plan_c_price.description && (
+                  <div className="mt-4 flex gap-2 flex-col">
+                    <div className="flex gap-2 items-center">
+                      <Icon
+                        icon="fluent:checkbox-checked-16-filled"
+                        className="text-green-400"
+                      />
+                      <h4 className="font-bold text-sm">
+                        All the stays in this trip
+                      </h4>
+                    </div>
 
-                  <div className="flex gap-2 items-center">
-                    <Icon
-                      icon="fluent:checkbox-checked-16-filled"
-                      className="text-green-400"
-                    />
-                    <h4 className="font-bold text-sm">
-                      All the activities in this trip
-                    </h4>
-                  </div>
+                    <div className="flex gap-2 items-center">
+                      <Icon
+                        icon="fluent:checkbox-checked-16-filled"
+                        className="text-green-400"
+                      />
+                      <h4 className="font-bold text-sm">
+                        All the activities in this trip
+                      </h4>
+                    </div>
 
-                  <div className="flex gap-2 items-center">
-                    <Icon
-                      icon="fluent:checkbox-checked-16-filled"
-                      className="text-green-400"
-                    />
-                    <h4 className="font-bold text-sm">
-                      All transports included
-                    </h4>
+                    <div className="flex gap-2 items-center">
+                      <Icon
+                        icon="fluent:checkbox-checked-16-filled"
+                        className="text-green-400"
+                      />
+                      <h4 className="font-bold text-sm">
+                        All transports included
+                      </h4>
+                    </div>
                   </div>
-                </div>
+                )}
+
+                {trip.plan_c_price.description && (
+                  <div className="mt-4 flex gap-2 flex-col">
+                    <p className="text-sm font-bold">
+                      {trip.plan_c_price.description}
+                    </p>
+                  </div>
+                )}
 
                 <div className="flex items-center justify-center mt-8">
                   <div
