@@ -60,6 +60,26 @@ const MapMakers = ({ stay }) => {
       : 0;
   };
 
+  const stayWithOptions =
+    stay.private_safari ||
+    stay.shared_safari ||
+    stay.all_inclusive ||
+    stay.other_options.length > 0
+      ? true
+      : false;
+
+  const getOptionPrice = () => {
+    return stay.private_safari
+      ? stay.private_safari.price
+      : stay.shared_safari
+      ? stay.shared_safari.price
+      : stay.all_inclusive
+      ? stay.all_inclusive.price
+      : stay.other_options.length > 0
+      ? stay.other_options[0].price
+      : 0;
+  };
+
   return (
     <div>
       <Marker longitude={stay.longitude} latitude={stay.latitude}>
@@ -72,17 +92,12 @@ const MapMakers = ({ stay }) => {
           onMouseLeave={() => setShowPopup(false)}
           onClick={() => setShowPopup(!showPopup)}
         >
-          {!stay.is_an_event && (
-            <Price
-              className="text-black !text-sm"
-              stayPrice={price(stay)}
-            ></Price>
+          {!stay.is_an_event && !stayWithOptions && (
+            <Price stayPrice={price()}></Price>
           )}
-          {stay.is_an_event && (
-            <Price
-              className="text-black !text-sm"
-              stayPrice={getStandardRoomPrice(stay)}
-            ></Price>
+          {stayWithOptions && <Price stayPrice={getOptionPrice()}></Price>}
+          {stay.is_an_event && !stayWithOptions && (
+            <Price stayPrice={getStandardRoomPrice(listing)}></Price>
           )}
 
           <AnimatePresence exitBeforeEnter>

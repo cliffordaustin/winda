@@ -39,8 +39,8 @@ const ImageGallery = ({
         className={
           "absolute w-full sm:w-[60%] md:w-[70%] left-0 h-full transition-all duration-200 ease-linear " +
           (scaleImages ? "scale-105" : "") +
-          (otherImages.length === 1 ? " sm:!w-[50%] md:!w-[50%]" : "") +
-          (otherImages.length === 0 ? " sm:!w-full md:!w-full" : "")
+          (allImages.length === 1 ? " sm:!w-[50%] md:!w-[50%]" : "") +
+          (allImages.length === 0 ? " sm:!w-full md:!w-full" : "")
         }
       >
         {mainImage && (
