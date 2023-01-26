@@ -929,7 +929,9 @@ const StaysDetail = ({ userProfile, stay }) => {
                   </div>
 
                   <div className={"-ml-8 -mr-0"}>
-                    <ImageGallery images={stay.stay_images}></ImageGallery>
+                    <ImageGallery
+                      allSortedImages={getAllImages()}
+                    ></ImageGallery>
 
                     <div className="flex absolute bg-white px-3 rounded-3xl py-1 top-[80px] right-3 gap-2 items-center">
                       <div className="cursor-pointer">
@@ -1818,7 +1820,9 @@ const StaysDetail = ({ userProfile, stay }) => {
                                   Number(router.query.other_option)
                                 ]
                               )[0]
-                            : stay.stay_images[0].image
+                            : stay.stay_images.length > 0
+                            ? stay.stay_images[0].image
+                            : ""
                         }
                         alt="Main image of the order"
                       ></Image>
