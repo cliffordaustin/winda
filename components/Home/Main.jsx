@@ -640,10 +640,19 @@ function Main({ holidayTrips }) {
                         <h1 className="font-bold text-lg truncate">
                           {trip.name}
                         </h1>
-                        <div className="absolute cursor-pointer top-1.5 left-1.5 w-fit px-1 rounded-md flex items-center gap-0.5 font-bold text-sm py-[2px] bg-white">
-                          <div className="text-sm font-bold">
+                        <div className="absolute cursor-pointer top-1.5 left-1.5 w-fit flex items-center gap-2 font-bold text-sm">
+                          <div className="text-sm font-bold bg-white rounded-md px-1 py-[2px]">
                             {trip.area_covered.split(",")[0]}
                           </div>
+                          {trip.valentine_offer && (
+                            <div className="text-sm font-bold flex gap-1 items-center bg-white rounded-md py-[2px] px-1">
+                              <span>Valentine offer</span>
+                              <Icon
+                                icon="ps:lovedsgn"
+                                className="text-red-600"
+                              />
+                            </div>
+                          )}
                         </div>
 
                         <div className="text-sm text-gray-700 flex flex-wrap gap-0.5 items-center">

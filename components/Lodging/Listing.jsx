@@ -72,7 +72,11 @@ function Listing({
     const standardRoom = stay.type_of_rooms.find(
       (room) => room.is_standard === true
     );
-    return standardRoom.price;
+    return standardRoom
+      ? standardRoom.price
+      : stay.type_of_rooms.length > 0
+      ? stay.type_of_rooms[0].price
+      : 0;
   };
 
   const [cartLoading, setCartLoading] = useState(false);
