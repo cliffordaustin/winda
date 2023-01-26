@@ -31,6 +31,26 @@ const MapMakerPopup = ({ stay, price, standardRoomPrice }) => {
     return image.image;
   });
 
+  const stayWithOptions =
+    stay.private_safari ||
+    stay.shared_safari ||
+    stay.all_inclusive ||
+    stay.other_options.length > 0
+      ? true
+      : false;
+
+  const getOptionPrice = () => {
+    return stay.private_safari
+      ? stay.private_safari.price
+      : stay.shared_safari
+      ? stay.shared_safari.price
+      : stay.all_inclusive
+      ? stay.all_inclusive.price
+      : stay.other_options.length > 0
+      ? stay.other_options.sort((x, y) => x.price - y.price)[0].price
+      : 0;
+  };
+
   return (
     <div>
       <Card
@@ -42,9 +62,23 @@ const MapMakerPopup = ({ stay, price, standardRoomPrice }) => {
       >
         <div className="flex flex-col gap-1">
           <h1 className="text-gray-500 text-sm truncate">{stay.name}</h1>
-          {!stay.is_an_event && <Price stayPrice={price(stay)}></Price>}
-          {stay.is_an_event && (
-            <Price stayPrice={standardRoomPrice(stay)}></Price>
+          {!stay.is_an_event && !stayWithOptions && (
+            <Price
+              className="text-black !text-base"
+              stayPrice={price(stay)}
+            ></Price>
+          )}
+          {stayWithOptions && (
+            <Price
+              className="text-black !text-base"
+              stayPrice={getOptionPrice()}
+            ></Price>
+          )}
+          {stay.is_an_event && !stayWithOptions && (
+            <Price
+              className="text-black !text-base"
+              stayPrice={standardRoomPrice(stay)}
+            ></Price>
           )}
         </div>
         <div className="font-bold text-sm truncate mt-1">{stay.location}</div>

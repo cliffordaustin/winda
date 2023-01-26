@@ -60,15 +60,16 @@ const MapMakers = ({ stay }) => {
       : 0;
   };
 
-  const stayWithOptions =
-    stay.private_safari ||
-    stay.shared_safari ||
-    stay.all_inclusive ||
-    stay.other_options.length > 0
+  const stayWithOptions = (stay) => {
+    return stay.private_safari ||
+      stay.shared_safari ||
+      stay.all_inclusive ||
+      stay.other_options.length > 0
       ? true
       : false;
+  };
 
-  const getOptionPrice = () => {
+  const getOptionPrice = (stay) => {
     return stay.private_safari
       ? stay.private_safari.price
       : stay.shared_safari
@@ -76,7 +77,7 @@ const MapMakers = ({ stay }) => {
       : stay.all_inclusive
       ? stay.all_inclusive.price
       : stay.other_options.length > 0
-      ? stay.other_options[0].price
+      ? stay.other_options.sort((x, y) => x.price - y.price)[0].price
       : 0;
   };
 
@@ -92,12 +93,23 @@ const MapMakers = ({ stay }) => {
           onMouseLeave={() => setShowPopup(false)}
           onClick={() => setShowPopup(!showPopup)}
         >
-          {!stay.is_an_event && !stayWithOptions && (
-            <Price stayPrice={price(stay)}></Price>
+          {!stay.is_an_event && !stayWithOptions(stay) && (
+            <Price
+              className="text-black !text-sm"
+              stayPrice={price(stay)}
+            ></Price>
           )}
-          {stayWithOptions && <Price stayPrice={getOptionPrice()}></Price>}
-          {stay.is_an_event && !stayWithOptions && (
-            <Price stayPrice={getStandardRoomPrice(listing)}></Price>
+          {stayWithOptions(stay) && (
+            <Price
+              className="text-black !text-sm"
+              stayPrice={getOptionPrice(stay)}
+            ></Price>
+          )}
+          {stay.is_an_event && !stayWithOptions(stay) && (
+            <Price
+              className="text-black !text-sm"
+              stayPrice={getStandardRoomPrice(stay)}
+            ></Price>
           )}
 
           <AnimatePresence exitBeforeEnter>
@@ -137,18 +149,25 @@ const MapMakers = ({ stay }) => {
               styles.tooltip
             }
           >
-            {!activeStay.is_an_event && (
+            {!activeStay.is_an_event && !stayWithOptions(activeStay) && (
               <Price
                 className="text-white !text-sm"
                 stayPrice={price(activeStay)}
               ></Price>
             )}
-            {activeStay.is_an_event && (
+            {stayWithOptions(activeStay) && (
+              <Price
+                className="text-white !text-sm"
+                stayPrice={getOptionPrice(activeStay)}
+              ></Price>
+            )}
+            {activeStay.is_an_event && !stayWithOptions(activeStay) && (
               <Price
                 className="text-white !text-sm"
                 stayPrice={getStandardRoomPrice(activeStay)}
               ></Price>
             )}
+
             <AnimatePresence exitBeforeEnter>
               <Popup
                 closeButton={false}

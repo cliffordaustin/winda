@@ -281,7 +281,7 @@ function Listing({
       : listing.all_inclusive
       ? listing.all_inclusive.price
       : listing.other_options.length > 0
-      ? listing.other_options[0].price
+      ? listing.other_options.sort((x, y) => x.price - y.price)[0].price
       : 0;
   };
 
