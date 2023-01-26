@@ -265,6 +265,86 @@ function Listing({
     }
   };
 
+  const stayWithOptions =
+    listing.private_safari ||
+    listing.shared_safari ||
+    listing.all_inclusive ||
+    listing.other_options.length > 0
+      ? true
+      : false;
+
+  const getOptionPrice = () => {
+    return listing.private_safari
+      ? listing.private_safari.price
+      : listing.shared_safari
+      ? listing.shared_safari.price
+      : listing.all_inclusive
+      ? listing.all_inclusive.price
+      : listing.other_options.length > 0
+      ? listing.other_options[0].price
+      : 0;
+  };
+
+  const getFullBoardPackageImage = () => {
+    const sortedImages = listing.private_safari
+      ? listing.private_safari.private_safari_images.sort(
+          (x, y) => y.main - x.main
+        )
+      : [];
+
+    const images = sortedImages.map((image) => {
+      return image.image;
+    });
+    return images;
+  };
+
+  const getGamePackageImages = () => {
+    const sortedImages = listing.shared_safari
+      ? listing.shared_safari.shared_safari_images.sort(
+          (x, y) => y.main - x.main
+        )
+      : [];
+
+    const images = sortedImages.map((image) => {
+      return image.image;
+    });
+    return images;
+  };
+
+  const getAllInclusiveImages = () => {
+    const sortedImages = listing.all_inclusive
+      ? listing.all_inclusive.all_inclusive_images.sort(
+          (x, y) => y.main - x.main
+        )
+      : [];
+
+    const images = sortedImages.map((image) => {
+      return image.image;
+    });
+    return images;
+  };
+
+  const getOtherOptionImages = () => {
+    const sortedImages = [];
+
+    listing.other_options.forEach((option) => {
+      const options = option.other_option_images.map((image) => {
+        return image.image;
+      });
+      sortedImages.push(...options);
+    });
+
+    return sortedImages;
+  };
+
+  const allImages = [
+    ...images,
+    ...getFullBoardPackageImage(),
+    ...getGamePackageImages(),
+    ...getAllInclusiveImages(),
+    ...getOtherOptionImages(),
+  ];
+
   return (
     <div
       onMouseEnter={() => {
@@ -282,15 +362,15 @@ function Listing({
     >
       <Link
         href={
-          router.query.trip
-            ? `/stays/${listing.slug}?${router.query.trip}&${router.query.group_trip}`
+          stayWithOptions
+            ? `/stays/u/${listing.slug}`
             : `/stays/${listing.slug}`
         }
       >
         <a>
           <div className="relative">
             <Card
-              imagePaths={images}
+              imagePaths={allImages}
               carouselClassName="h-44"
               subCarouselClassName="hidden"
               className={styles.card + " "}
@@ -300,13 +380,16 @@ function Listing({
                   {listing.property_name || listing.name}
                 </h1>
                 <div className="flex">
-                  {listing.is_an_event && (
+                  {(listing.is_an_event || stayWithOptions) && (
                     <span className="uppercase mr-1 text-xs text-gray-500 self-end mb-1">
                       From
                     </span>
                   )}
                   {!listing.is_an_event && <Price stayPrice={price()}></Price>}
-                  {listing.is_an_event && (
+                  {stayWithOptions && (
+                    <Price stayPrice={getOptionPrice()}></Price>
+                  )}
+                  {listing.is_an_event && !stayWithOptions && (
                     <Price stayPrice={getStandardRoomPrice(listing)}></Price>
                   )}
                   <span className="mt-[4.5px] text-gray-500 text-sm">

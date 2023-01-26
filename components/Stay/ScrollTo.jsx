@@ -8,7 +8,7 @@ import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/thumbs";
 
-function ScrollTo({ guestPopup, stay }) {
+function ScrollTo({ guestPopup, stay, setDontShowBookBtn }) {
   const settings = {
     spaceBetween: 10,
     pagination: {
@@ -26,8 +26,6 @@ function ScrollTo({ guestPopup, stay }) {
   const [isEndOfSlide, setIsEndOfSlide] = useState(false);
   const [isStartOfSlide, setIsStartOfSlide] = useState(false);
   const [swiperIndex, setSwiperIndex] = useState(0);
-
-  const [dontShowReserveBtn, setDontShowReserveBtn] = useState(false);
 
   const slideto = (index) => {
     if (swiper) {
@@ -110,25 +108,25 @@ function ScrollTo({ guestPopup, stay }) {
           </Link>
         </SwiperSlide>
 
-        {stay.is_an_event && (
+        {stay.has_options && (
           <SwiperSlide className="!w-auto flex cursor-pointer justify-center">
             <Link
               className="px-1 text-sm font-bold flex items-center border-b-2 border-transparent"
               activeClass="!border-b-2 !border-slate-800"
-              to="rooms"
+              to="options"
               spy={true}
               smooth={true}
               offset={-400}
               duration={500}
               onSetActive={() => {
                 slideto(0);
-                setDontShowReserveBtn(true);
+                setDontShowBookBtn(true);
               }}
               onSetInactive={() => {
-                setDontShowReserveBtn(false);
+                setDontShowBookBtn(false);
               }}
             >
-              <div>Rooms</div>
+              <div>Options</div>
             </Link>
           </SwiperSlide>
         )}
@@ -186,29 +184,6 @@ function ScrollTo({ guestPopup, stay }) {
           </SwiperSlide>
         )}
       </Swiper>
-
-      {stay.is_an_event && (
-        <Transition
-          enter="transition-opacity duration-75"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="transition-opacity duration-150"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-          show={!dontShowReserveBtn}
-        >
-          <Link
-            className="px-3 cursor-pointer md:flex hidden items-center justify-center text-sm bg-blue-600 w-[150px] py-2 text-white font-bold rounded-md"
-            to="rooms"
-            spy={true}
-            smooth={true}
-            offset={-400}
-            duration={500}
-          >
-            <span>Reserve a room</span>
-          </Link>
-        </Transition>
-      )}
 
       {/* <div
         className={

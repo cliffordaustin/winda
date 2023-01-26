@@ -469,3 +469,13 @@ body {
 .explore-card {
   @apply flex flex-col items-center justify-center gap-2 px-2 h-[120px] w-[47%] sm:w-[31%] md:w-[22%] lg:w-[18%] rounded-md border hover:border-gray-300 hover:shadow-md transition-all duration-150 ease-linear cursor-pointer;
 }
+
+.btn-gradient {
+  background: rgb(10, 3, 117);
+  background: linear-gradient(
+    90deg,
+    rgba(10, 3, 117, 1) 0%,
+    rgba(27, 27, 149, 1) 35%,
+    rgb(52, 52, 187) 100%
+  );
+}

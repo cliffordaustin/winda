@@ -1201,13 +1201,13 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
         </div>
 
         {router.query.checkout_page !== "1" && (
-          <div className="flex flex-col relative md:flex-row justify-around h-full w-full">
+          <div className="flex flex-col relative px-4 md:flex-row justify-around h-full w-full">
             <div className={"w-full"}>
               <div className="!relative" name="about">
                 <div
                   className={
                     stay.is_an_event
-                      ? "md:mt-[135px] mt-5"
+                      ? "md:mt-[82px] mt-5"
                       : "mt-4 md:mt-[82px] px-3"
                   }
                 >

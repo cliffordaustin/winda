@@ -117,6 +117,7 @@ function Carousel({
               alt={alt}
               objectPosition={objectPosition}
               layout={layout}
+              unoptimized={true}
               objectFit="cover"
             />
           </SwiperSlide>
