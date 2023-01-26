@@ -93,7 +93,7 @@ const MapMakers = ({ stay }) => {
           onClick={() => setShowPopup(!showPopup)}
         >
           {!stay.is_an_event && !stayWithOptions && (
-            <Price stayPrice={price()}></Price>
+            <Price stayPrice={price(stay)}></Price>
           )}
           {stayWithOptions && <Price stayPrice={getOptionPrice()}></Price>}
           {stay.is_an_event && !stayWithOptions && (
