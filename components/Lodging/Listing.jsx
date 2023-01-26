@@ -385,7 +385,9 @@ function Listing({
                       From
                     </span>
                   )}
-                  {!listing.is_an_event && <Price stayPrice={price()}></Price>}
+                  {!listing.is_an_event && !stayWithOptions && (
+                    <Price stayPrice={price()}></Price>
+                  )}
                   {stayWithOptions && (
                     <Price stayPrice={getOptionPrice()}></Price>
                   )}
