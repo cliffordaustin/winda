@@ -198,7 +198,7 @@ function EventKaleidoscope({ lodges }) {
                         )}
                       </div>
 
-                      <Link href={`/stays/${lodge.slug}`}>
+                      <Link href={`/stays/u/${lodge.slug}`}>
                         <a>
                           <Button className="!rounded-tl-2xl !rounded-tr-md !rounded-br-2xl !rounded-bl-md mt-2 h-[40px] !flex gap-1 !px-1 items-center justify-center w-full !bg-[#D31567]">
                             <span className="text-white font-bold text-sm">
