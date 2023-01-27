@@ -23,10 +23,12 @@ function Navbar({ userProfile, showTripWizard = false }) {
   const [curatedTripsHover, setCuratedTripsHover] = useState(true);
   const [showLocationsHover, setShowLocationsHover] = useState(false);
   const [showBeachLocationsHover, setShowBeachLocationsHover] = useState(false);
+  const [eventHover, setEventHover] = useState(false);
   const [staysHover, setStaysHover] = useState(false);
   const [activitiesHover, setActivitiesHover] = useState(false);
 
   const [isShowingExplore, setIsShowingExplore] = useState(false);
+  const [isShowingEvents, setIsShowingEvents] = useState(false);
   const [isShowingLocations, setIsShowingLocations] = useState(false);
   const [isShowingLocationsBeach, setIsShowingLocationsBeach] = useState(false);
   const [openBurger, setOpenBurger] = useState(false);
@@ -797,6 +799,69 @@ function Navbar({ userProfile, showTripWizard = false }) {
                           ></Item>
                         </div>
                       </Transition>
+                    </div>
+                  </div>
+                </Popover.Panel>
+              </Transition>
+            </Popover>
+
+            <Popover className={"hidden md:block"}>
+              <Popover.Button className={"outline-none "}>
+                <div
+                  onMouseEnter={() => {
+                    setIsShowingEvents(true);
+                  }}
+                  onMouseLeave={() => {
+                    setIsShowingEvents(false);
+                  }}
+                  onClick={() => {
+                    setIsShowingEvents(!isShowingEvents);
+                  }}
+                  className="items-center flex gap-3"
+                >
+                  <div
+                    className={
+                      "font-bold cursor-pointer hover:bg-gray-100 transition-all duration-300 ease-linear rounded-3xl px-2 py-2 !text-base flex items-center gap-1 " +
+                      styles.link
+                    }
+                  >
+                    <span>Events</span>
+                    <Icon icon="bx:chevron-down" className="w-6 h-6" />
+                  </div>
+                </div>
+              </Popover.Button>
+
+              <Transition
+                as={React.Fragment}
+                enter="transition ease-out duration-200"
+                enterFrom="opacity-0 translate-y-1"
+                enterTo="opacity-100 translate-y-0"
+                leave="transition ease-in duration-150"
+                leaveFrom="opacity-100 translate-y-0"
+                leaveTo="opacity-0 translate-y-1"
+                show={isShowingEvents}
+                onMouseEnter={() => setIsShowingEvents(true)}
+                onMouseLeave={() => setIsShowingEvents(false)}
+              >
+                <Popover.Panel
+                  className={
+                    "absolute z-[30] bg-white rounded-xl border-4 border-gray-100 md:right-0 shadow-md md:left-[200px] lg:left-[380px] mt-2 w-fit overflow-hidden"
+                  }
+                >
+                  <div className="flex">
+                    <div className="w-[300px] flex-col gap-3 relative px-2 py-2">
+                      <div className="flex w-full flex-wrap items-center justify-between gap-3">
+                        <Link href="/events/kaleidoscope">
+                          <a className="flex flex-col px-2 py-2 rounded-lg hover:bg-gray-100 transition-colors duration-300 w-full gap-2">
+                            <h1 className="text-base font-bold">
+                              Kakeidoscope
+                            </h1>
+                            <div className="px-2 rounded-2xl text-sm font-bold w-fit bg-green-400 text-white">
+                              Available
+                            </div>
+                          </a>
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </Popover.Panel>

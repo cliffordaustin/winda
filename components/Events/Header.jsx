@@ -15,7 +15,7 @@ function Header() {
       />
 
       <div className="absolute h-[70px] inset-0 w-full flex gap-4 items-center justify-center">
-        <div className="relative w-28 h-9 z-40 cursor-pointer">
+        <div className="relative w-28 h-9 z-40">
           <Image
             layout="fill"
             alt="Logo"
