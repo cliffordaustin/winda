@@ -39,7 +39,7 @@ function Header() {
         </div>
 
         <div className="w-auto h-[60px] md:h-[80px] mt-4 font-Poppins text-white rounded-tl-3xl rounded-tr-md rounded-br-3xl rounded-bl-md font-bold text-xl sm:text-3xl md:text-4xl xl:text-5xl flex items-center justify-center px-5 bg-[#04BDED]">
-          April 14-16 & 21-23
+          March 10th - 12th 2023
         </div>
       </div>
 

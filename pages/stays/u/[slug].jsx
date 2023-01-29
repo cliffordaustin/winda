@@ -592,7 +592,7 @@ const StaysDetail = ({ userProfile, stay }) => {
               onClick={() => {
                 FullBoardPackageBtnClicked();
               }}
-              className="btn-gradient !rounded-full font-bold w-full mt-2"
+              className="!bg-[#D31567] !rounded-full font-bold w-full mt-2"
             >
               Book now -{"  "}
               <Price
@@ -638,7 +638,7 @@ const StaysDetail = ({ userProfile, stay }) => {
               onClick={() => {
                 GamePackageBtnClicked();
               }}
-              className="btn-gradient !rounded-full font-bold w-full mt-2"
+              className="!bg-[#D31567] !rounded-full font-bold w-full mt-2"
             >
               Book now -{"  "}
               <Price
@@ -685,7 +685,7 @@ const StaysDetail = ({ userProfile, stay }) => {
               onClick={() => {
                 allInclusiveBtnClicked();
               }}
-              className="btn-gradient !rounded-full font-bold w-full mt-2"
+              className="!bg-[#D31567] !rounded-full font-bold w-full mt-2"
             >
               Book now -{"  "}
               <Price
@@ -729,7 +729,7 @@ const StaysDetail = ({ userProfile, stay }) => {
               onClick={() => {
                 otherOptionBtnClicked(index);
               }}
-              className="btn-gradient !rounded-full font-bold w-full mt-2"
+              className="!bg-[#D31567] !rounded-full font-bold w-full mt-2"
             >
               Book now -{"  "}
               <Price
@@ -1170,7 +1170,7 @@ const StaysDetail = ({ userProfile, stay }) => {
                         >
                           <div className="flex justify-between items-center gap-2">
                             <ReactScrollLink
-                              className="cursor-pointer w-full flex items-center justify-center text-sm btn-gradient px-2 py-2 text-white font-bold rounded-md"
+                              className="cursor-pointer w-full flex items-center justify-center text-sm !bg-[#D31567] px-2 py-2 text-white font-bold rounded-md"
                               to="options"
                               spy={true}
                               smooth={true}
@@ -1496,7 +1496,7 @@ const StaysDetail = ({ userProfile, stay }) => {
                           onClick={() => {
                             checkAvailabilityForOptions();
                           }}
-                          className="px-3 flex py-4 cursor-pointer self-start items-center justify-center btn-gradient w-fit text-white font-bold rounded-md"
+                          className="px-3 flex py-4 cursor-pointer self-start items-center justify-center !bg-[#D31567] w-fit text-white font-bold rounded-md"
                         >
                           Check availability
                         </div>
@@ -2142,7 +2142,7 @@ const StaysDetail = ({ userProfile, stay }) => {
                         onClick={() => {
                           router.replace("/");
                         }}
-                        className="flex w-[60%] mt-3 mb-3 items-center gap-1 !px-0 !py-3 font-bold btn-gradient !text-white"
+                        className="flex w-[60%] mt-3 mb-3 items-center gap-1 !px-0 !py-3 font-bold !bg-[#D31567] !text-white"
                       >
                         <span>Check out Winda</span>
                       </Button>
@@ -2198,7 +2198,7 @@ const StaysDetail = ({ userProfile, stay }) => {
                         }
                       }}
                       type="submit"
-                      className="flex w-full mt-3 mb-3 items-center gap-1 !px-0 !py-3 font-bold btn-gradient !text-white"
+                      className="flex w-full mt-3 mb-3 items-center gap-1 !px-0 !py-3 font-bold !bg-[#D31567] !text-white"
                     >
                       <span>Pay now</span>
                       <Icon icon="bxs:lock-alt" className="w-5 h-5" />
