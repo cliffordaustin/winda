@@ -382,7 +382,7 @@ function CuratedTripDetail({ trip, userProfile }) {
                                   </div>
                                   <div className="px-2 py-2">
                                     <span className="font-bold text-lg mb-1 block">
-                                      {stay.name}(or similar)
+                                      {stay ? stay.name : ""}(or similar)
                                     </span>
                                     {stay.description.slice(0, 200)}
                                     <div className="w-fit px-2 py-1 mt-1 text-sm text-gray-600 rounded-md bg-gray-100 border font-bold">
@@ -469,9 +469,10 @@ function CuratedTripDetail({ trip, userProfile }) {
                                   </div>
                                   <div className="px-2 py-2">
                                     <span className="font-bold text-lg mb-1 block">
-                                      {activity.name}
+                                      {activity ? activity.name : ""}
                                     </span>
-                                    {activity.description.slice(0, 200)}
+                                    {activity &&
+                                      activity.description.slice(0, 200)}
                                     <div className="w-fit px-2 py-1 mt-1 text-sm text-gray-600 rounded-md bg-gray-100 border font-bold">
                                       2 nights
                                     </div>
