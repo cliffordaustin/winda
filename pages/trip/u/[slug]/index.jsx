@@ -258,7 +258,9 @@ function CuratedTripDetail({ trip, userProfile }) {
                     </h1>
                   </div>
                 )}
-                <div className="w-full">{trip.description}</div>
+                <div className="w-full whitespace-pre-wrap">
+                  {trip.description}
+                </div>
               </div>
               <div className="w-[30%] h-[350px] hidden md:block">
                 <CuratedTripMap
@@ -275,7 +277,7 @@ function CuratedTripDetail({ trip, userProfile }) {
                 Essential information
               </h1>
 
-              <div className="font-medium text-gray-600">
+              <div className="font-medium text-gray-600 whitespace-pre-wrap">
                 {trip.essential_information}
               </div>
             </div>
@@ -332,7 +334,9 @@ function CuratedTripDetail({ trip, userProfile }) {
                             {location.location}
                           </h1>
                         </div>
-                        <p className="ml-4 md:ml-12">{location.description}</p>
+                        <p className="ml-4 md:ml-12 whitespace-pre-wrap">
+                          {location.description}
+                        </p>
                       </div>
                     ))}
 
