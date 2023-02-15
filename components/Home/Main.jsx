@@ -19,6 +19,11 @@ import Link from "next/link";
 import Button from "../ui/Button";
 import { Icon } from "@iconify/react";
 import Price from "../Stay/Price";
+import PopoverBox from "../ui/Popover";
+
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import Input from "../ui/Input";
 
 SwiperCore.use([Navigation]);
 
@@ -268,6 +273,34 @@ function Main({ holidayTrips }) {
       href: "/trip?tag=lake",
     },
   ];
+
+  const [loading, setLoading] = useState(false);
+
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+    },
+    validationSchema: Yup.object({
+      email: Yup.string()
+        .email("Invalid email address")
+        .required("Field is required"),
+    }),
+    onSubmit: async (values) => {
+      // setLoading(true);
+      // await axios.post(
+      //   `${process.env.NEXT_PUBLIC_baseURL}/create-ebook-email/`,
+      //   {
+      //     email: values.email,
+      //   },
+      //   {
+      //     headers: {
+      //       Authorization: "Token " + Cookies.get("token"),
+      //     },
+      //   }
+      // );
+      // setLoading(false);
+    },
+  });
 
   return (
     <div className="w-full">
@@ -578,6 +611,70 @@ function Main({ holidayTrips }) {
           </a>
         </Link>
       </div> */}
+
+      <div className="flex flex-col px-2 gap-4 mb-32">
+        <div className="w-full h-[300px] relative bg-red-700 bg-opacity-10 home-clip flex justify-center"></div>
+        <div className="w-[80%] absolute left-[10%] flex justify-center mx-auto gap-20 items-center">
+          <div className="w-[270px] h-[350px] relative bg-white shadow-xl ml-6">
+            <Image
+              layout="fill"
+              alt="Logo"
+              src="/images/home/nairobi.webp"
+              className="h-full w-full object-cover"
+              priority
+            ></Image>
+          </div>
+
+          <div className="flex flex-col items-center gap-6 mt-8">
+            <h1 className="font-black font-SourceSans text-2xl">
+              Get Your Guide to Travelling Within East Africa
+            </h1>
+
+            <PopoverBox
+              panelClassName="bg-white rounded-xl shadow-md mt-2 w-[425px] !p-4 overflow-hidden"
+              btnPopover={
+                <Button className="!bg-red-500 !py-2.5 !w-[250px] font-bold !font-SourceSans uppercase">
+                  Download Free PDF
+                </Button>
+              }
+            >
+              <div className="w-full relative">
+                <Input
+                  name="email"
+                  type="text"
+                  placeholder="Your email"
+                  label="Add in an email that’s verifiable to download the link"
+                  className={
+                    "w-full placeholder:text-gray-500 !h-full placeholder:text-sm "
+                  }
+                  labelClassName="!text-base !font-SourceSans !font-semibold"
+                  errorStyle={
+                    formik.touched.email && formik.errors.email ? true : false
+                  }
+                  inputClassName="!text-sm "
+                  {...formik.getFieldProps("email")}
+                ></Input>
+                {formik.touched.email && formik.errors.email ? (
+                  <span className="text-sm absolute -bottom-6 font-bold text-red-400">
+                    {formik.errors.email}
+                  </span>
+                ) : null}
+              </div>
+
+              <div className="flex items-center justify-center mt-4">
+                <Button
+                  onClick={() => {
+                    formik.handleSubmit();
+                  }}
+                  className="!bg-red-500 !py-2.5 font-bold !font-SourceSans uppercase"
+                >
+                  <span className="font-bold">Download Now</span>
+                </Button>
+              </div>
+            </PopoverBox>
+          </div>
+        </div>
+      </div>
 
       <div className="flex flex-col px-2 gap-4">
         <h1 className="font-black text-2xl md:text-3xl font-OpenSans ml-2 tracking-wide">

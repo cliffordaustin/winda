@@ -17,11 +17,14 @@ export default function Input({
   onKeyPress,
   autoComplete = "",
   inputClassName = "",
+  labelClassName = "",
 }) {
   return (
     <div className={className}>
       {label ? (
-        <label className="block text-sm font-bold mb-2">{label}</label>
+        <label className={"block text-sm font-bold mb-2 " + labelClassName}>
+          {label}
+        </label>
       ) : (
         ""
       )}
