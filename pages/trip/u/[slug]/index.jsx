@@ -357,10 +357,11 @@ function CuratedTripDetail({ trip, userProfile }) {
                         <div className="mt-4 flex flex-wrap gap-3">
                           {itinerary.itinerary_accommodations.map(
                             (accommodation, index) => {
-                              const sortedImages =
-                                accommodation.stay.stay_images.sort(
-                                  (x, y) => y.main - x.main
-                                );
+                              const sortedImages = accommodation.stay
+                                ? accommodation.stay.stay_images.sort(
+                                    (x, y) => y.main - x.main
+                                  )
+                                : [];
 
                               const images = sortedImages.map((image) => {
                                 return image.image;
@@ -443,10 +444,11 @@ function CuratedTripDetail({ trip, userProfile }) {
                         <div className="mt-4 flex flex-wrap gap-3">
                           {itinerary.itinerary_activities.map(
                             (itinerary_activity, index) => {
-                              const sortedImages =
-                                itinerary_activity.activity.activity_images.sort(
-                                  (x, y) => y.main - x.main
-                                );
+                              const sortedImages = itinerary_activity.activity
+                                ? itinerary_activity.activity.activity_images.sort(
+                                    (x, y) => y.main - x.main
+                                  )
+                                : [];
 
                               const images = sortedImages.map((image) => {
                                 return image.image;
