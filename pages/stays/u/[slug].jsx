@@ -1074,6 +1074,7 @@ const StaysDetail = ({ userProfile, stay }) => {
                             <Image
                               layout="fill"
                               objectFit="cover"
+                              unoptimized={true}
                               src={image}
                               alt="Image of the lodge and it's various options"
                             ></Image>
@@ -1807,6 +1808,7 @@ const StaysDetail = ({ userProfile, stay }) => {
                       <Image
                         layout="fill"
                         objectFit="cover"
+                        unoptimized={true}
                         src={
                           router.query.option === "2"
                             ? getGamePackageImages()[0]

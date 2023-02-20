@@ -35,6 +35,7 @@ const ImageGallery = ({ images }) => {
             alt="Logo"
             src={mainImage.image}
             objectFit="cover"
+            unoptimized={true}
             priority
           ></Image>
         )}
@@ -44,6 +45,7 @@ const ImageGallery = ({ images }) => {
             alt="Logo"
             src={sortedImages[0].image}
             objectFit="cover"
+            unoptimized={true}
             priority
           ></Image>
         )}
@@ -62,6 +64,7 @@ const ImageGallery = ({ images }) => {
               alt=""
               objectFit="cover"
               src={image}
+              unoptimized={true}
               priority
             ></Image>
           </div>

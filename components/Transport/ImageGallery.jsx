@@ -43,6 +43,7 @@ const ImageGallery = ({ images }) => {
                 src={image}
                 className="w-full h-full object-cover"
                 layout="fill"
+                unoptimized={true}
                 alt="Image of a car"
               ></Image>
             </div>
@@ -107,6 +108,7 @@ const ImageGallery = ({ images }) => {
                 src={image}
                 className="w-full h-full object-cover"
                 layout="fill"
+                unoptimized={true}
                 alt="Image of a car"
               ></Image>
             </div>

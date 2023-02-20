@@ -266,6 +266,7 @@ export default function Home({ userProfile, holidayTrips }) {
               objectFit="cover"
               src="/images/image-header.jpg"
               objectPosition={"bottom"}
+              unoptimized={true}
               sizes="380"
               alt="Image of samburu man looking at a vast landscape"
               priority
@@ -421,6 +422,7 @@ export default function Home({ userProfile, holidayTrips }) {
               className=""
               layout="fill"
               src={"/images/home/group-of-travelers.jpg"}
+              unoptimized={true}
               objectFit="cover"
               alt="Image of group of travellers"
             />

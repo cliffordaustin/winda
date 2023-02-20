@@ -190,6 +190,7 @@ const Trips = ({
               layout="fill"
               objectFit="cover"
               src="/images/image-header.jpg"
+              unoptimized={true}
               sizes="380"
               alt="Image Gallery"
               priority

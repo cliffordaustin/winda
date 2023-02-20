@@ -423,6 +423,7 @@ function Locations(props) {
                 className={"w-full object-cover "}
                 src={location.imagePath}
                 alt={location.imageAlt}
+                unoptimized={true}
                 layout={"fill"}
                 objectFit="cover"
               />
@@ -473,6 +474,7 @@ function Locations(props) {
                 className={"w-full object-cover "}
                 src={location.imagePath}
                 alt={location.imageAlt}
+                unoptimized={true}
                 layout={"fill"}
                 objectFit="cover"
               />
@@ -522,6 +524,7 @@ function Locations(props) {
                 className={"w-full object-cover "}
                 src={location.imagePath}
                 alt={location.imageAlt}
+                unoptimized={true}
                 layout={"fill"}
                 objectFit="cover"
               />
@@ -571,6 +574,7 @@ function Locations(props) {
                 className={"w-full object-cover "}
                 src={location.imagePath}
                 alt={location.imageAlt}
+                unoptimized={true}
                 layout={"fill"}
                 objectFit="cover"
               />

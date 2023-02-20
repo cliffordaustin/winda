@@ -60,6 +60,7 @@ function TripImageGallery({ images, imageClass = "", className = "" }) {
               className={"w-full object-cover " + imageClass}
               src={image}
               alt="Image Gallery"
+              unoptimized={true}
               layout="fill"
             />
           </SwiperSlide>

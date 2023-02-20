@@ -265,6 +265,7 @@ function RequestTrip({ userProfile }) {
           layout="fill"
           alt="Image of a car and a lion"
           src="/images/giraffe.jpg"
+          unoptimized={true}
           className="object-cover z-10"
           priority
         ></Image>
@@ -275,6 +276,7 @@ function RequestTrip({ userProfile }) {
                 layout="fill"
                 alt="Logo"
                 className="z-30"
+                unoptimized={true}
                 src="/images/winda_logo/horizontal-white-font.png"
                 quality={10}
                 priority

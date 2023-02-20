@@ -760,6 +760,7 @@ const Cart = ({
                 className="w-full h-full rounded-xl"
                 layout="fill"
                 src="/images/nocart-illustration.jpeg"
+                unoptimized={true}
                 alt="Image"
               ></Image>
             </div>

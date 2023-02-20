@@ -2183,6 +2183,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
                         <Image
                           layout="fill"
                           objectFit="cover"
+                          unoptimized={true}
                           src={tripImages[0]}
                           alt="Main image of trip"
                         ></Image>
@@ -2453,6 +2454,7 @@ function TripDetail({ userProfile, userTrips, trip }) {
                       <Image
                         layout="fill"
                         objectFit="cover"
+                        unoptimized={true}
                         src={tripImages[0]}
                         alt="Main image of trip"
                       ></Image>

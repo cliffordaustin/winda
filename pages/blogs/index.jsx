@@ -71,6 +71,7 @@ function Blogs({ blogs, userProfile }) {
                       alt="Logo"
                       src={blog.header_image_src}
                       objectFit={"cover"}
+                      unoptimized={true}
                       objectPosition={"center"}
                       className="rounded-none"
                       priority

@@ -206,6 +206,7 @@ function CreateTrip({ userProfile }) {
                 layout="fill"
                 alt="Logo"
                 src="/images/winda_logo/horizontal-blue-font.png"
+                unoptimized={true}
                 priority
               ></Image>
             </a>

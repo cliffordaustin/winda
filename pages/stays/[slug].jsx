@@ -4249,6 +4249,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                       <Image
                         layout="fill"
                         objectFit="cover"
+                        unoptimized={true}
                         src={stay.stay_images[0].image}
                         alt="Main image of the order"
                       ></Image>
