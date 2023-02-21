@@ -122,6 +122,10 @@ function MyApp({ Component, pageProps, router }) {
           property="og:title"
           content="Winda.guide | book travel essentials in Kenya"
         ></meta>
+        <meta
+          name="p:domain_verify"
+          content="a00fa0f31875dc37c9860e69eae34c89"
+        />
         <meta property="og:image" content="/images/image-header.jpg"></meta>
 
         <meta name="twitter:card" content="/images/image-header.jpg" />
