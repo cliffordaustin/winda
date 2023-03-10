@@ -9,7 +9,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 import "swiper/css/effect-creative";
 import "swiper/css";
-import Pagination from "./Pagination";
 import Image from "next/image";
 import Carousel from "../ui/Carousel";
 import { useRouter } from "next/router";
@@ -24,8 +23,14 @@ import PopoverBox from "../ui/Popover";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Input from "../ui/Input";
+import LoadingSpinerChase from "../ui/LoadingSpinerChase";
+import axios from "axios";
+import Cookies from "js-cookie";
+import Slider from "react-slick";
 
 SwiperCore.use([Navigation]);
+
+import "swiper/css/pagination";
 
 function Main({ holidayTrips }) {
   const router = useRouter();
@@ -47,6 +52,8 @@ function Main({ holidayTrips }) {
     isBeginningOfExploreSlide: false,
     isEndOfTripSlide: false,
     isBeginningOfTripSlide: false,
+    isEndOfReviewSlide: false,
+    isBeginningOfReviewSlide: false,
   });
 
   const settings = {
@@ -88,6 +95,18 @@ function Main({ holidayTrips }) {
     },
   };
 
+  const reviewSettings = {
+    spaceBetween: 0,
+    slidesPerView: 1,
+    freeMode: {
+      enabled: true,
+    },
+    navigation: {
+      nextEl: ".swiper-review-button-next",
+      prevEl: ".swiper-review-button-prev",
+    },
+  };
+
   const exploreSettings = {
     spaceBetween: 20,
     slidesPerView: "auto",
@@ -115,18 +134,6 @@ function Main({ holidayTrips }) {
       icon: "icon-park-outline:oval-love-two",
       title: "Romantic",
       href: "/trip?tag=romantic",
-    },
-
-    {
-      icon: "bi:calendar-week",
-      title: "Weekend getaway",
-      href: "/trip?tag=weekend_getaway",
-    },
-
-    {
-      icon: "fluent:clipboard-day-20-regular",
-      title: "Day trips",
-      href: "/trip?tag=day_trips",
     },
 
     {
@@ -166,27 +173,9 @@ function Main({ holidayTrips }) {
     },
 
     {
-      icon: "icon-park-outline:game-emoji",
-      title: "Day game drives",
-      href: "/trip?tag=day_game_drives",
-    },
-
-    {
-      icon: "iconoir:yoga",
-      title: "Wellness",
-      href: "/trip?tag=wellness",
-    },
-
-    {
       icon: "icon-park-outline:green-new-energy",
       title: "Sustainable safari",
       href: "/trip?tag=sustainable",
-    },
-
-    {
-      icon: "tabler:tools-kitchen-2",
-      title: "Culinary",
-      href: "/trip?tag=culinary",
     },
 
     {
@@ -196,51 +185,9 @@ function Main({ holidayTrips }) {
     },
 
     {
-      icon: "ic:outline-emoji-nature",
-      title: "Off-grid",
-      href: "/trip?tag=off_grid",
-    },
-
-    {
       icon: "fontisto:night-clear",
       title: "Night game drives",
       href: "/trip?tag=night_game_drives",
-    },
-
-    {
-      icon: "akar-icons:person",
-      title: "Solo getaway",
-      href: "/trip?tag=solo_getaway",
-    },
-
-    {
-      icon: "akar-icons:shopping-bag",
-      title: "Shopping",
-      href: "/trip?tag=shopping",
-    },
-
-    {
-      icon: "emojione-monotone:artist-palette",
-      title: "Art",
-      href: "/trip?tag=art",
-    },
-
-    {
-      icon: "ic:baseline-surfing",
-      title: "Watersports",
-      href: "/trip?tag=watersports",
-    },
-
-    {
-      icon: "ic:outline-sailing",
-      title: "Sailing",
-      href: "/trip?tag=sailing",
-    },
-
-    {
-      icon: "la:female",
-      title: "All-female",
-      href: "/trip?tag=all_female",
     },
 
     {
@@ -262,12 +209,6 @@ function Main({ holidayTrips }) {
     },
 
     {
-      icon: "entypo:time-slot",
-      title: "Short getaway",
-      href: "/trip?tag=short_getaway",
-    },
-
-    {
       icon: "iconoir:sea-and-sun",
       title: "Lakes",
       href: "/trip?tag=lake",
@@ -275,6 +216,15 @@ function Main({ holidayTrips }) {
   ];
 
   const [loading, setLoading] = useState(false);
+
+  const handleDownload = async () => {
+    if (process.browser) {
+      window.open(
+        "https://winda-guide.s3.eu-west-2.amazonaws.com/pdf/east.pdf",
+        "_blank"
+      );
+    }
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -286,24 +236,116 @@ function Main({ holidayTrips }) {
         .required("Field is required"),
     }),
     onSubmit: async (values) => {
-      // setLoading(true);
-      // await axios.post(
-      //   `${process.env.NEXT_PUBLIC_baseURL}/create-ebook-email/`,
-      //   {
-      //     email: values.email,
-      //   },
-      //   {
-      //     headers: {
-      //       Authorization: "Token " + Cookies.get("token"),
-      //     },
-      //   }
-      // );
-      // setLoading(false);
+      setLoading(true);
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_baseURL}/create-ebook-email/`,
+        {
+          email: values.email,
+        }
+      );
+      // download pdf file
+      await handleDownload();
+      setLoading(false);
     },
   });
 
+  const slider = React.useRef(null);
+
+  function NextArrow(props) {
+    const { onClick } = props;
+    return (
+      <div>
+        <div
+          className={
+            " absolute hidden md:flex h-12 w-12 z-30 right-3 top-[50%] -translate-y-2/4 items-center "
+          }
+          onClick={onClick}
+        >
+          <div className="cursor-pointer h-11 w-11 rounded-full bg-gray-300 flex items-center justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6 text-black"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </div>
+        </div>
+
+        <div
+          onClick={onClick}
+          className="flex md:hidden absolute cursor-pointer mt-2 left-[50%] items-center gap-1"
+        >
+          <h1 className="font-bold">Next </h1>
+          <Icon
+            className="w-6 h-6 mt-[1px]"
+            icon="material-symbols:arrow-right-alt-rounded"
+          />
+        </div>
+      </div>
+    );
+  }
+
+  function PrevArrow(props) {
+    const { className, style, onClick } = props;
+    return (
+      <div>
+        <div
+          className={
+            " absolute hidden md:flex h-12 w-12 z-30 left-3 top-[50%] -translate-y-2/4 items-center justify-end "
+          }
+          onClick={onClick}
+        >
+          <div className="cursor-pointer h-11 w-11 rounded-full bg-gray-300 flex items-center justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6 text-black"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </div>
+        </div>
+
+        <div
+          onClick={onClick}
+          className="flex md:hidden cursor-pointer mr-6 mt-2 top-full absolute right-[50%] items-center gap-1"
+        >
+          <Icon
+            className="w-6 h-6 mt-[1px] rotate-180"
+            icon="material-symbols:arrow-right-alt-rounded"
+          />
+          <h1 className="font-bold">Prev </h1>
+        </div>
+      </div>
+    );
+  }
+
+  const testSettings = {
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    adaptiveHeight: true,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
+  };
+
   return (
-    <div className="w-full">
+    <div className="w-full mt-6 md:mt-0">
       {/* <div className="w-full flex justify-center">
         <div className="px-3 md:px-6 md:w-[60%] w-full">
           <h2 className="text-center mt-2 text-base md:text-lg">
@@ -612,10 +654,10 @@ function Main({ holidayTrips }) {
         </Link>
       </div> */}
 
-      <div className="flex flex-col px-2 gap-4 mb-32">
-        <div className="w-full h-[300px] relative bg-red-700 bg-opacity-10 home-clip flex justify-center"></div>
-        <div className="w-[80%] absolute left-[10%] flex justify-center mx-auto gap-20 items-center">
-          <div className="w-[270px] h-[350px] relative bg-white shadow-xl ml-6">
+      <div className="flex flex-col sm:px-2 gap-4 mb-12 md:mb-32">
+        <div className="w-full h-[300px] relative hidden sm:flex bg-red-700 bg-opacity-10 home-clip justify-center"></div>
+        <div className="w-full sm:w-[95%] md:w-[80%] lg:w-[80%] sm:absolute md:left-[10%] flex flex-col sm:flex-row justify-center mx-auto smgap-6 md:gap-20 items-center">
+          <div className="w-[100%] sm:w-[50%] md:w-[270px] h-[300px] md:h-[350px] relative bg-white shadow-xl md:ml-6">
             <Image
               layout="fill"
               alt="Logo"
@@ -625,15 +667,15 @@ function Main({ holidayTrips }) {
             ></Image>
           </div>
 
-          <div className="flex flex-col items-center gap-6 mt-8">
-            <h1 className="font-black font-SourceSans text-2xl">
+          <div className="flex border-b flex-col bg-gray-100 sm:bg-transparent px-3 py-4 md:py-0 md:px-0 w-full sm:w-[50%] md:w-auto items-center gap-6 md:mt-8">
+            <h1 className="font-black font-SourceSans text-center text-2xl">
               Get Your Guide to Travelling Within East Africa
             </h1>
 
             <PopoverBox
-              panelClassName="bg-white rounded-xl shadow-md mt-2 w-[425px] !p-4 overflow-hidden"
+              panelClassName="bg-white rounded-xl after:!left-[60%] md:after:!left-[40%] after:!border-b-white tooltip !w-full md:!w-[440px] left-0 sm:!w-auto sm:!-left-[200px] md:!-left-[100px] shadow-md mt-2 w-[425px] !p-4"
               btnPopover={
-                <Button className="!bg-red-500 !py-2.5 !w-[250px] font-bold !font-SourceSans uppercase">
+                <Button className="!bg-red-500 !py-2.5 !w-[90vw] sm:!w-[250px] font-bold !font-SourceSans uppercase">
                   Download Free PDF
                 </Button>
               }
@@ -666,9 +708,16 @@ function Main({ holidayTrips }) {
                   onClick={() => {
                     formik.handleSubmit();
                   }}
-                  className="!bg-red-500 !py-2.5 font-bold !font-SourceSans uppercase"
+                  disabled={loading}
+                  className="!bg-red-500 flex gap-2 !py-2.5 font-bold !font-SourceSans uppercase"
                 >
                   <span className="font-bold">Download Now</span>
+                  {loading && (
+                    <LoadingSpinerChase
+                      width={14}
+                      height={14}
+                    ></LoadingSpinerChase>
+                  )}
                 </Button>
               </div>
             </PopoverBox>
@@ -678,7 +727,7 @@ function Main({ holidayTrips }) {
 
       <div className="flex flex-col px-2 gap-4">
         <h1 className="font-black text-2xl md:text-3xl font-OpenSans ml-2 tracking-wide">
-          Offers
+          Featured Trips
         </h1>
 
         <div className="mb-8 px-2">
@@ -1079,6 +1128,98 @@ function Main({ holidayTrips }) {
             </a>
           </Link>
         ))}
+      </div>
+      <div className="md:px-8 mt-12">
+        <h1 className="text-center font-bold text-2xl md:text-4xl mb-5 font-SourceSans">
+          What our customers are saying about us
+        </h1>
+
+        <Slider {...testSettings}>
+          <div className="!flex border-b px-2 sm:px-4 md:px-0 md:border-none pb-2 items-center justify-center">
+            <div className="md:w-[80%] flex justify-center items-center flex-col gap-3">
+              <h1 className="text-center text-lg md:text-xl font-Merriweather">
+                <q>
+                  The service and the booking system were great. Great
+                  communications and the campsite was excellent!
+                </q>
+              </h1>
+
+              <h1 className="font-bold text-center flex items-center justify-center">
+                <div className="w-[20px] h-[1.5px] bg-gray-600 mr-1"></div>
+                <span className="text-red-600">Kai</span>, Australia{" "}
+                <div className="ml-2">
+                  <Icon
+                    className="w-6 h-6"
+                    icon="emojione-v1:flag-for-australia"
+                  />
+                </div>
+              </h1>
+            </div>
+          </div>
+          <div className="!flex border-b px-2 sm:px-4 md:px-0 md:border-none pb-2 items-center justify-center">
+            <div className="md:w-[80%] flex justify-center items-center flex-col gap-3">
+              <h1 className="text-center text-lg md:text-xl font-Merriweather">
+                <q>
+                  Winda provided several amazing options that fit all of our
+                  needs, including pricing for the trip end to end, took care of
+                  booking, helped us arrange transport, and even contacted the
+                  lodge
+                </q>
+              </h1>
+
+              <h1 className="font-bold text-center flex items-center justify-center">
+                <div className="w-[20px] h-[1.5px] bg-gray-600 mr-1"></div>
+                <span className="text-red-600">Thea</span>, United States{" "}
+                <div className="ml-2">
+                  <Icon className="w-6 h-6" icon="twemoji:flag-united-states" />
+                </div>
+              </h1>
+            </div>
+          </div>
+
+          <div className="!flex border-b px-2 sm:px-4 md:px-0 md:border-none pb-2 items-center justify-center">
+            <div className="md:w-[80%] flex justify-center items-center flex-col gap-3">
+              <h1 className="text-center text-lg md:text-xl font-Merriweather">
+                <q>
+                  Winda’s service communication and support with bookings was
+                  excellent!
+                </q>
+              </h1>
+
+              <h1 className="font-bold text-center flex items-center justify-center">
+                <div className="w-[20px] h-[1.5px] bg-gray-600 mr-1"></div>
+                <span className="text-red-600">Sue</span>, Kenya{" "}
+                <div className="ml-2">
+                  <Icon className="w-6 h-6" icon="twemoji:flag-kenya" />
+                </div>
+              </h1>
+            </div>
+          </div>
+
+          <div className="!flex border-b px-2 sm:px-4 md:px-0 md:border-none pb-2 items-center justify-center">
+            <div className="md:w-[80%] flex justify-center items-center flex-col gap-3">
+              <h1 className="text-center text-lg md:text-xl font-Merriweather">
+                <q>
+                  It was our first time planning such a trip. It was difficult
+                  to find a french travel agency that were affordable and
+                  flexible. We managed to find winda which planned a trip in our
+                  budget and they were very flexible.
+                </q>
+              </h1>
+
+              <h1 className="font-bold text-center flex items-center justify-center">
+                <div className="w-[20px] h-[1.5px] bg-gray-600 mr-1"></div>
+                <span className="text-red-600">Caroline</span>, France{" "}
+                <div className="ml-2">
+                  <Icon
+                    className="w-6 h-6"
+                    icon="twemoji:flag-for-flag-france"
+                  />
+                </div>
+              </h1>
+            </div>
+          </div>
+        </Slider>
       </div>
 
       {/* <h1 className="font-bold text-2xl font-OpenSans text-center mt-16 mb-4">

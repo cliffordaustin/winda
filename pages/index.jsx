@@ -275,13 +275,11 @@ export default function Home({ userProfile, holidayTrips }) {
           <div className="flex flex-col items-center justify-center absolute w-full text-center top-[20%] md:top-[30%] z-20 px-2 md:px-0">
             <div className="flex flex-col items-center">
               <h1 className="font-black font-SourceSans mb-2 text-3xl sm:text-5xl md:text-5xl xl:text-7xl text-white text-center">
-                It&apos;s Not Easy Traveling in Africa
+                Finding you happiness in unexpected places.
               </h1>
 
               <h3 className="font-semibold w-full md:w-[80%] font-SourceSans mb-8 text-base sm:text-2xl text-white text-center">
-                Leave the hard work to us. We&apos;ll give you a custom
-                itinerary with every aspect of your trip taken care of so you
-                can lay back and enjoy your trip.
+                Handpicked travel experiences organized by local specialists.
               </h3>
             </div>
 
@@ -537,7 +535,7 @@ export default function Home({ userProfile, holidayTrips }) {
       </Dialogue>
 
       <div className="bg-gray-50 pb-14">
-        <div className="w-full px-4 py-4 bg-white border-b flex flex-wrap justify-center items-center gap-3">
+        {/* <div className="w-full px-4 py-4 bg-white border-b flex flex-wrap justify-center items-center gap-3">
           <div className="flex items-center gap-2 text-sm font-bold">
             <Icon
               icon="material-symbols:check-circle-outline-rounded"
@@ -566,8 +564,8 @@ export default function Home({ userProfile, holidayTrips }) {
             />
             <span>Best Price Guaranteed</span>
           </div>
-        </div>
-        <div className="2xl:w-4/6 2xl:mx-auto mt-6">
+        </div> */}
+        <div className="2xl:w-4/6 2xl:mx-auto">
           <Main holidayTrips={holidayTrips}></Main>
         </div>
       </div>

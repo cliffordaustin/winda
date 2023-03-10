@@ -22,6 +22,9 @@ import { priceConversionRateFunc } from "../lib/PriceRate";
 import Cookies from "js-cookie";
 import axios from "axios";
 
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
 NProgress.configure({
   minimum: 0.3,
   easing: "ease",
