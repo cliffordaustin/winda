@@ -479,3 +479,22 @@ body {
     rgb(52, 52, 187) 100%
   );
 }
+
+.tooltip::after {
+  content: "";
+  position: absolute;
+  bottom: 100%; /* At the top of the tooltip */
+  left: 50%;
+  margin-left: -5px;
+  border-width: 8px;
+  border-style: solid;
+  border-color: transparent transparent transparent;
+  border-bottom-color: #000;
+  @apply border-b-gray-500 border-r-transparent border-t-transparent border-l-transparent;
+}
+
+@media (min-width: 768px) {
+  .home-clip {
+    clip-path: polygon(0 48%, 99% 10%, 100% 100%, 0% 100%);
+  }
+}
