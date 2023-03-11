@@ -661,7 +661,7 @@ function Main({ holidayTrips }) {
             <Image
               layout="fill"
               alt="Logo"
-              src="/images/home/nairobi.webp"
+              src="/images/home/pdf.webp"
               className="h-full w-full object-cover"
               priority
             ></Image>
