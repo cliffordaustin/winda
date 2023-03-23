@@ -226,27 +226,6 @@ function Stays({ userProfile, stays, pageSize, count, totalPages }) {
 
   const dispatch = useDispatch();
 
-  // const priceConversionRate = async () => {
-  //   try {
-  //     const response = await fetch(
-  //       "https://api.exchangerate-api.com/v4/latest/usd",
-  //       {
-  //         method: "GET",
-  //       }
-  //     );
-
-  //     const data = await response.json();
-  //     dispatch({
-  //       type: "SET_PRICE_CONVERSION",
-  //       payload: data.rates.KES,
-  //     });
-  //   } catch (error) {}
-  // };
-
-  // useEffect(() => {
-  //   priceConversionRate();
-  // });
-
   useEffect(() => {
     if (process.browser) {
       window.onresize = () => {
