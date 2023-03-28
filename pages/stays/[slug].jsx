@@ -1125,6 +1125,27 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
     }
   }, []);
 
+  const getStayImages = () => {
+    const sortedImages = stay.stay_images.sort((x, y) => y.main - x.main);
+
+    const images = sortedImages.map((image) => {
+      return image.image;
+    });
+    return images;
+  };
+
+  const getAllImages = () => {
+    const images = [...getStayImages()];
+
+    return images;
+  };
+
+  const [showAllPhotos, setShowAllPhotos] = useState(false);
+
+  const showAllPhotosBtn = () => {
+    setShowAllPhotos(true);
+  };
+
   return (
     <div
       className={
@@ -1331,6 +1352,16 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                         d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
                       />
                     </svg>
+                  </div>
+
+                  <div
+                    onClick={() => {
+                      showAllPhotosBtn();
+                    }}
+                    className="px-2 cursor-pointer text-sm font-bold absolute top-[350px] sm:top-[400px] md:top-[450px] rounded-lg right-3 z-10 py-1.5 bg-white border flex items-center justify-center gap-1"
+                  >
+                    <Icon className="w-6 h-6" icon="gg:menu-grid-o" />
+                    <h1>Show all photos</h1>
                   </div>
                 </div>
 
@@ -2488,6 +2519,50 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                   </div>
                 )}
               </div>
+
+              <Dialogue
+                isOpen={showAllPhotos}
+                closeModal={() => {
+                  setShowAllPhotos(false);
+                }}
+                outsideDialogueClass="!p-0"
+                dialoguePanelClassName={
+                  "!p-0 !rounded-none overflow-y-scroll h-[100vh] bg-white !min-w-full "
+                }
+              >
+                <div className="py-4 px-4 flex items-center gap-4 border-b">
+                  <div
+                    onClick={() => {
+                      setShowAllPhotos(false);
+                    }}
+                    className="w-8 h-8 rounded-full hover:bg-gray-100 cursor-pointer border border-black bg-white flex items-center justify-center"
+                  >
+                    <Icon icon="iconoir:cancel" className="w-6 h-6" />
+                  </div>
+                  <h1 className="font-black text-xl">{stay.name}</h1>
+                </div>
+
+                <div className="my-6">
+                  <h1 className="font-black ml-8 text-2xl">All photos</h1>
+
+                  <div className="lg:px-8 w-full gap-2 mt-6 flex flex-wrap justify-between">
+                    {getAllImages().map((image, index) => (
+                      <div
+                        key={index}
+                        className="w-full sm:w-[49%] h-[300px] relative"
+                      >
+                        <Image
+                          layout="fill"
+                          objectFit="cover"
+                          unoptimized={true}
+                          src={image}
+                          alt="Image of the lodge and it's various options"
+                        ></Image>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </Dialogue>
 
               {stay.extras_included.length > 0 && (
                 <Element
