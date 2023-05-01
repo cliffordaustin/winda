@@ -93,7 +93,7 @@ const MapMakers = ({ stay }) => {
           onMouseLeave={() => setShowPopup(false)}
           onClick={() => setShowPopup(!showPopup)}
         >
-          {!stay.is_an_event && !stayWithOptions(stay) && (
+          {/* {!stay.is_an_event && !stayWithOptions(stay) && (
             <Price
               className="text-black !text-sm"
               stayPrice={price(stay)}
@@ -110,7 +110,11 @@ const MapMakers = ({ stay }) => {
               className="text-black !text-sm"
               stayPrice={getStandardRoomPrice(stay)}
             ></Price>
-          )}
+          )} */}
+
+          <h1 className="text-black font-bold !text-sm">
+            {stay.property_name || stay.name}
+          </h1>
 
           <AnimatePresence exitBeforeEnter>
             {showPopup && (
@@ -149,7 +153,7 @@ const MapMakers = ({ stay }) => {
               styles.tooltip
             }
           >
-            {!activeStay.is_an_event && !stayWithOptions(activeStay) && (
+            {/* {!activeStay.is_an_event && !stayWithOptions(activeStay) && (
               <Price
                 className="text-white !text-sm"
                 stayPrice={price(activeStay)}
@@ -166,7 +170,11 @@ const MapMakers = ({ stay }) => {
                 className="text-white !text-sm"
                 stayPrice={getStandardRoomPrice(activeStay)}
               ></Price>
-            )}
+            )} */}
+
+            <h1 className="text-white font-bold !text-sm">
+              {stay.property_name || stay.name}
+            </h1>
 
             <AnimatePresence exitBeforeEnter>
               <Popup

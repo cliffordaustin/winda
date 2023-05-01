@@ -62,7 +62,7 @@ const MapMakerPopup = ({ stay, price, standardRoomPrice }) => {
       >
         <div className="flex flex-col gap-1">
           <h1 className="text-gray-500 text-sm truncate">{stay.name}</h1>
-          {!stay.is_an_event && !stayWithOptions && (
+          {/* {!stay.is_an_event && !stayWithOptions && (
             <Price
               className="text-black !text-base"
               stayPrice={price(stay)}
@@ -79,7 +79,7 @@ const MapMakerPopup = ({ stay, price, standardRoomPrice }) => {
               className="text-black !text-base"
               stayPrice={standardRoomPrice(stay)}
             ></Price>
-          )}
+          )} */}
         </div>
         <div className="font-bold text-sm truncate mt-1">{stay.location}</div>
 

@@ -18,6 +18,8 @@ const ImageGallery = ({
 
   let allImages = [...otherImages, ...allSortedImages];
 
+  let secondMainImage = allImages[0];
+
   allImages = allImages.slice(1, 3);
 
   let mainImage = sortedImages.find((image) => image.main);
@@ -57,7 +59,7 @@ const ImageGallery = ({
           <Image
             layout="fill"
             alt="Logo"
-            src={allSortedImages[0]}
+            src={secondMainImage}
             objectFit="cover"
             unoptimized={true}
             priority

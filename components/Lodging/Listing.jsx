@@ -385,21 +385,13 @@ function Listing({
                       From
                     </span>
                   )}
-                  {!listing.is_an_event && !stayWithOptions && (
-                    <Price stayPrice={price()}></Price>
-                  )}
+
                   {stayWithOptions && (
                     <Price stayPrice={getOptionPrice()}></Price>
                   )}
                   {listing.is_an_event && !stayWithOptions && (
                     <Price stayPrice={getStandardRoomPrice(listing)}></Price>
                   )}
-                  <span className="mt-[4.5px] text-gray-500 text-sm">
-                    {!listing.is_an_event &&
-                      (listing.per_house
-                        ? "/per property/per night"
-                        : "/per person/per night")}
-                  </span>
                 </div>
               </div>
               <div className="text-gray-500 flex gap-1 text-sm truncate mt-1 flex-wrap">
