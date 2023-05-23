@@ -2539,7 +2539,9 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                   >
                     <Icon icon="iconoir:cancel" className="w-6 h-6" />
                   </div>
-                  <h1 className="font-black text-xl">{stay.name}</h1>
+                  <h1 className="font-black text-xl">
+                    {stay.property_name || stay.name}
+                  </h1>
                 </div>
 
                 <div className="my-3 md:my-6">
