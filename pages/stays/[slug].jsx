@@ -1222,7 +1222,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
         </div>
 
         {router.query.checkout_page !== "1" && (
-          <div className="flex flex-col relative px-4 md:flex-row justify-around h-full w-full">
+          <div className="flex flex-col relative md:flex-row justify-around h-full w-full">
             <div className={"w-full"}>
               <div className="!relative" name="about">
                 <div
@@ -1518,11 +1518,11 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
 
                     <div
                       className={
-                        "w-full z-10 px-4 md:px-12 border-t md:hidden fixed bottom-0 safari-bottom left-0 right-0 bg-white py-1 "
+                        "w-full z-10 px-4 md:px-12 border-t md:hidden fixed bottom-0 safari-bottom left-0 right-0 bg-white "
                       }
                     >
                       <div className="flex justify-between items-center gap-2">
-                        {!stay.is_an_event && (
+                        {/* {!stay.is_an_event && (
                           <div>
                             <div className="flex items-center">
                               <Price
@@ -1644,9 +1644,9 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                               </div>
                             )}
                           </div>
-                        )}
+                        )} */}
                         {/* {stay.is_an_event && <div></div>} */}
-                        {!stay.is_an_event && (
+                        {/* {!stay.is_an_event && (
                           <Button
                             onClick={() => {
                               setShowMobileDateModal(true);
@@ -1673,7 +1673,7 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                               ></LoadingSpinerChase>
                             </div>
                           </Button>
-                        )}
+                        )} */}
 
                         {stay.is_an_event && (
                           <ReactScrollLink
@@ -2527,10 +2527,10 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                 }}
                 outsideDialogueClass="!p-0"
                 dialoguePanelClassName={
-                  "!p-0 !rounded-none overflow-y-scroll h-[100vh] bg-white !min-w-full "
+                  "!p-0 !rounded-none relative overflow-y-scroll h-[100vh] bg-white !min-w-full "
                 }
               >
-                <div className="py-4 px-4 flex items-center gap-4 border-b">
+                <div className="py-4 z-30 px-4 sticky bg-white top-0 left-0 right-0 flex items-center gap-4 border-b">
                   <div
                     onClick={() => {
                       setShowAllPhotos(false);
@@ -2542,8 +2542,10 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                   <h1 className="font-black text-xl">{stay.name}</h1>
                 </div>
 
-                <div className="my-6">
-                  <h1 className="font-black ml-8 text-2xl">All photos</h1>
+                <div className="my-3 md:my-6">
+                  <h1 className="font-black ml-4 md:ml-8 text-xl md:text-2xl">
+                    All photos
+                  </h1>
 
                   <div className="lg:px-8 w-full gap-2 mt-6 flex flex-wrap justify-between">
                     {getAllImages().map((image, index) => (
