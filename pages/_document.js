@@ -38,6 +38,11 @@ class MyDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=Condiment&display=swap"
             rel="stylesheet"
           ></link>
+          <script
+            type="text/javascript"
+            src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js"
+            async
+          ></script>
         </Head>
         <body>
           <Main />

@@ -24,6 +24,7 @@ import axios from "axios";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import Link from "next/link";
 
 NProgress.configure({
   minimum: 0.3,

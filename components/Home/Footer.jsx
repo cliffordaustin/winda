@@ -63,6 +63,25 @@ export default function Footer() {
             </div>
           </a>
         </Link>
+
+        <div
+          className="text-gray-900 cursor-pointer hover:text-blue-700 hover:underline transition-all duration-100 ease-linear"
+          data-locale="en-US"
+          data-template-id="5419b6a8b0d04a076446a9ad"
+          data-businessunit-id="64be67a6b34ab87423bedebf"
+          data-style-height="24px"
+          data-style-width="100%"
+          data-theme="light"
+          data-min-review-count="10"
+          data-without-reviews-preferred-string-id="1"
+          data-style-alignment="center"
+        >
+          <Link href="https://www.trustpilot.com/review/winda.guide">
+            <a rel="noopener" target="_blank">
+              Trustpilot
+            </a>
+          </Link>
+        </div>
       </div>
       <div className="flex gap-4 self-center">
         <Link rel="canonical" href="https://www.facebook.com/winda.travel">
