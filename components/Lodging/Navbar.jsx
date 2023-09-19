@@ -215,13 +215,13 @@ function Navbar({
               book flight
             </div>
           )}
-          <UserDropdown
+          {/* <UserDropdown
             changeShowDropdown={changeShowDropdown}
             showDropdown={showDropdown}
             userProfile={userProfile}
             numberOfItemsInCart={numberOfItemsInCart}
             numberOfTrips={trips.trip && trips.trip.length}
-          ></UserDropdown>
+          ></UserDropdown> */}
 
           <div
             onClick={() => {

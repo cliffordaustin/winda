@@ -25,7 +25,7 @@ import ListItem from "../../../components/ui/ListItem";
 import ReviewOverview from "../../../components/Stay/ReviewOverview";
 import Reviews from "../../../components/Stay/Reviews";
 import LoadingSpinerChase from "../../../components/ui/LoadingSpinerChase";
-import Share from "../../../components/Stay/Share";
+// import Share from "../../../components/Stay/Share";
 import getCart from "../../../lib/getCart";
 import Footer from "../../../components/Home/Footer";
 import ScrollTo from "../../../components/Stay/ScrollTo";
@@ -1774,13 +1774,13 @@ const StaysDetail = ({ userProfile, stay }) => {
                   )}
                 </Element>
 
-                <div>
+                {/* <div>
                   <Share
                     showShare={showShare}
                     type_of_stay={stay.type_of_stay}
                     setShowShare={setShowShare}
                   ></Share>
-                </div>
+                </div> */}
 
                 <div className="mt-12 hidden md:block absolute bottom-0 left-0 right-0">
                   <Footer></Footer>

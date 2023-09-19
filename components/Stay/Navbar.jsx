@@ -220,13 +220,13 @@ function Navbar({
       <div className="flex items-center gap-3">
         <div className="flex justify-center items-center gap-4 text-xs lg:text-base">
           <div className="flex items-center gap-2">
-            <UserDropdown
+            {/* <UserDropdown
               changeShowDropdown={changeShowDropdown}
               showDropdown={showDropdown}
               userProfile={userProfile}
               numberOfItemsInCart={numberOfItemsInCart}
               numberOfTrips={trips.length}
-            ></UserDropdown>
+            ></UserDropdown> */}
 
             {showCart && (
               <div
