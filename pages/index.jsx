@@ -169,23 +169,23 @@ export default function Home({ userProfile, holidayTrips }) {
     }
   }, []);
 
-  useEffect(() => {
-    if (process.browser) {
-      let iteration = 1;
-      const video = document.getElementsByTagName("video")[0];
-      video.addEventListener(
-        "ended",
-        function () {
-          if (iteration < 2) {
-            this.currentTime = 0;
-            this.play();
-            iteration++;
-          }
-        },
-        false
-      );
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (process.browser) {
+  //     let iteration = 1;
+  //     const video = document.getElementsByTagName("video")[0];
+  //     video.addEventListener(
+  //       "ended",
+  //       function () {
+  //         if (iteration < 2) {
+  //           this.currentTime = 0;
+  //           this.play();
+  //           iteration++;
+  //         }
+  //       },
+  //       false
+  //     );
+  //   }
+  // }, []);
 
   const [showModal, setShowModal] = useState(false);
 
@@ -252,7 +252,7 @@ export default function Home({ userProfile, holidayTrips }) {
 
       <div className="select-none relative">
         <div className="w-full text-red-600 h-[500px] md:h-[600px] relative before:absolute before:h-full before:w-full before:bg-black before:z-20 before:opacity-40">
-          <video
+          {/* <video
             autoPlay
             muted
             playsInline
@@ -264,14 +264,25 @@ export default function Home({ userProfile, holidayTrips }) {
               className={"w-full "}
               layout="fill"
               objectFit="cover"
-              src="/images/image-header.jpg"
+              src="/images/home/group-of-travelers.jpg"
               objectPosition={"bottom"}
               unoptimized={true}
               sizes="380"
               alt="Image of samburu man looking at a vast landscape"
               priority
             />
-          </video>
+          </video> */}
+
+          <Image
+            className={"w-full "}
+            layout="fill"
+            objectFit="cover"
+            src="/images/home/group-of-travelers.jpg"
+            unoptimized={true}
+            sizes="380"
+            alt="Image of samburu man looking at a vast landscape"
+            priority
+          />
 
           <div className="flex flex-col items-center justify-center absolute w-full text-center top-[20%] md:top-[30%] z-20 px-2 md:px-0">
             <div className="flex flex-col items-center">
@@ -407,7 +418,7 @@ export default function Home({ userProfile, holidayTrips }) {
         )}
       </div>
 
-      <Dialogue
+      {/* <Dialogue
         isOpen={showModal}
         closeModal={() => {
           setShowModal(false);
@@ -470,7 +481,7 @@ export default function Home({ userProfile, holidayTrips }) {
             </div>
           </div>
         </div>
-      </Dialogue>
+      </Dialogue> */}
 
       <Dialogue
         isOpen={showReviewsModal}

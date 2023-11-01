@@ -42,7 +42,7 @@ function CookiesMessage(props) {
                 setShowCookiesMessage(false);
                 closeCookiesMessage();
               }}
-              className="px-5 flex items-center cursor-pointer justify-center py-1.5 text-white font-bold rounded-lg bg-blue-700"
+              className="px-5 flex items-center cursor-pointer justify-center py-1.5 text-white font-bold rounded-lg bg-red-500"
             >
               <span>Okay</span>
             </div>
