@@ -672,7 +672,13 @@ function Main({ holidayTrips }) {
               Get Your Guide to Travelling Within East Africa
             </h1>
 
-            <PopoverBox
+            <Button onClick={() => {
+                  handleDownload();
+                }} className="!bg-red-500 !py-2.5 !w-[90vw] sm:!w-[250px] font-bold !font-SourceSans uppercase">
+                  Download Free PDF
+            </Button>
+
+            {/* <PopoverBox
               panelClassName="bg-white rounded-xl after:!left-[60%] md:after:!left-[40%] after:!border-b-white tooltip !w-full md:!w-[440px] left-0 sm:!w-auto sm:!-left-[200px] md:!-left-[100px] shadow-md mt-2 w-[425px] !p-4"
               btnPopover={
                 <Button className="!bg-red-500 !py-2.5 !w-[90vw] sm:!w-[250px] font-bold !font-SourceSans uppercase">
@@ -720,12 +726,12 @@ function Main({ holidayTrips }) {
                   )}
                 </Button>
               </div>
-            </PopoverBox>
+            </PopoverBox> */}
           </div>
         </div>
       </div>
 
-      <div className="flex flex-col px-2 gap-4">
+      {/* <div className="flex flex-col px-2 gap-4">
         <h1 className="font-black text-2xl md:text-3xl font-OpenSans ml-2 tracking-wide">
           Featured Trips
         </h1>
@@ -875,7 +881,7 @@ function Main({ holidayTrips }) {
             </div>
           </Swiper>
         </div>
-      </div>
+      </div> */}
 
       {/* <div className="my-6">
         <h1 className="font-black text-2xl ml-2 text-center">
@@ -1113,7 +1119,7 @@ function Main({ holidayTrips }) {
         <span className="text-gray-600">Find what suits you</span>
       </h1> */}
 
-      <h1 className="font-black text-2xl md:text-3xl font-OpenSans ml-4 tracking-wide mt-6 mb-4">
+      {/* <h1 className="font-black text-2xl md:text-3xl font-OpenSans ml-4 tracking-wide mt-6 mb-4">
         <span className="text-slate-800">Explore on</span>{" "}
         <span className="text-red-600">winda</span>
       </h1>
@@ -1128,7 +1134,7 @@ function Main({ holidayTrips }) {
             </a>
           </Link>
         ))}
-      </div>
+      </div> */}
       <div className="md:px-8 mt-12">
         <h1 className="text-center font-bold text-2xl md:text-4xl mb-5 font-SourceSans">
           What our customers are saying about us

@@ -295,7 +295,7 @@ export default function Home({ userProfile, holidayTrips }) {
               </h3>
             </div>
 
-            <div
+            {/* <div
               onClick={(e) => {
                 e.stopPropagation();
                 setShowLocation(!showLocation);
@@ -326,9 +326,7 @@ export default function Home({ userProfile, holidayTrips }) {
 
               {showLocation && !location && (
                 <div className="bg-white hidden md:block">
-                  {/* <div className="border-t py-1.5">
-                    <SearchOptions></SearchOptions>
-                  </div> */}
+                  
                   <PopularLocationsDropdown
                     setLocation={(location) => {
                       setLocation(location);
@@ -338,7 +336,7 @@ export default function Home({ userProfile, holidayTrips }) {
                   ></PopularLocationsDropdown>
                 </div>
               )}
-            </div>
+            </div> */}
 
             <div
               onClick={() => {

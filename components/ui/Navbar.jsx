@@ -454,7 +454,7 @@ function Navbar({ userProfile, showTripWizard = false }) {
               </Transition>
             </Popover> */}
 
-            <Popover className={"hidden md:block"}>
+            {/* <Popover className={"hidden md:block"}>
               <Popover.Button className={"outline-none "}>
                 <div
                   onMouseEnter={() => {
@@ -866,9 +866,9 @@ function Navbar({ userProfile, showTripWizard = false }) {
                   </div>
                 </Popover.Panel>
               </Transition>
-            </Popover>
+            </Popover> */}
 
-            <Link href="/blogs">
+            {/* <Link href="/blogs">
               <a className="hidden md:block">
                 <div
                   className={
@@ -879,7 +879,7 @@ function Navbar({ userProfile, showTripWizard = false }) {
                   Blog
                 </div>
               </a>
-            </Link>
+            </Link> */}
           </div>
         </div>
         <div className="flex items-center">
@@ -1315,7 +1315,7 @@ function Navbar({ userProfile, showTripWizard = false }) {
                           <span className="font-bold">close</span>
                         </div>
                       </Transition.Child>
-                      <Swiper
+                      {/* <Swiper
                         // preventInteractionOnTransition={true}
                         // allowTouchMove={false}
                         {...settings}
@@ -1614,7 +1614,7 @@ function Navbar({ userProfile, showTripWizard = false }) {
                             )}
                           </div>
                         </SwiperSlide>
-                      </Swiper>
+                      </Swiper> */}
                     </Dialog.Panel>
                   </div>
                 </div>
