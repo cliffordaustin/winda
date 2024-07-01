@@ -24,7 +24,7 @@ import ReviewOverview from "../../components/Stay/ReviewOverview";
 import Reviews from "../../components/Stay/Reviews";
 import CreateReview from "../../components/Stay/CreateReview";
 import LoadingSpinerChase from "../../components/ui/LoadingSpinerChase";
-import Share from "../../components/Stay/Share";
+// import Share from "../../components/Stay/Share";
 import AllReviews from "../../components/Stay/AllReviews";
 import getCart from "../../lib/getCart";
 import ClientOnly from "../../components/ClientOnly";
@@ -1894,13 +1894,13 @@ const ActivitiesDetail = ({ userProfile, activity, inCart }) => {
             )}
           </Element>
 
-          <div>
+          {/* <div>
             <Share
               showShare={showShare}
               type_of_stay={"EXPERIENCE"}
               setShowShare={setShowShare}
             ></Share>
-          </div>
+          </div> */}
 
           <div className="mt-6 -ml-10 -mr-4">
             <Footer></Footer>
