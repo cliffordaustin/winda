@@ -29,7 +29,7 @@ import ReviewOverview from "../../components/Stay/ReviewOverview";
 import Reviews from "../../components/Stay/Reviews";
 import CreateReview from "../../components/Stay/CreateReview";
 import LoadingSpinerChase from "../../components/ui/LoadingSpinerChase";
-import Share from "../../components/Stay/Share";
+// import Share from "../../components/Stay/Share";
 import AllReviews from "../../components/Stay/AllReviews";
 import getCart from "../../lib/getCart";
 import ClientOnly from "../../components/ClientOnly";
@@ -3484,13 +3484,13 @@ const StaysDetail = ({ userProfile, stay, inCart }) => {
                 )}
               </Element>
 
-              <div>
+              {/* <div>
                 <Share
                   showShare={showShare}
                   type_of_stay={stay.type_of_stay}
                   setShowShare={setShowShare}
                 ></Share>
-              </div>
+              </div> */}
 
               <div className="mt-12 hidden md:block absolute bottom-0 left-0 right-0">
                 <Footer></Footer>
