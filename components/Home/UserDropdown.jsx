@@ -15,7 +15,7 @@ function UserDropdown({
   numberOfItemsInOrders = 0,
 }) {
   const router = useRouter();
-  let fullName = userProfile.first_name + " " + userProfile.last_name;
+  let fullName = userProfile?.first_name + " " + userProfile?.last_name;
   return (
     <PopoverBox
       btnClassName="relative flex items-center gap-1 px-1 py-1 bg-gray-100 rounded-3xl cursor-pointer"
@@ -65,8 +65,7 @@ function UserDropdown({
               </div>
             )}
 
-          {!userProfile.profile_pic &&
-            userProfile &&
+          {userProfile && !userProfile.profile_pic &&
             !userProfile.avatar_url && (
               <div className="relative w-7 h-7 rounded-full !bg-slate-800 text-white font-bold flex items-center text-sm justify-center">
                 {fullName

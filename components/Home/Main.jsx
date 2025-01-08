@@ -220,7 +220,7 @@ function Main({ holidayTrips }) {
   const handleDownload = async () => {
     if (process.browser) {
       window.open(
-        "https://winda-guide.s3.eu-west-2.amazonaws.com/pdf/east.pdf",
+        "/travel_guide.pdf",
         "_blank"
       );
     }

@@ -138,9 +138,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
         })
         .then((res) => {})
         .catch((error) => {
-          if (error.response.status === 404) {
+          if (error.response?.status === 404) {
             notFound = true;
-          } else if (error.response.status === 400) {
+          } else if (error.response?.status === 400) {
             badRequest = true;
           } else {
             serverErr = true;

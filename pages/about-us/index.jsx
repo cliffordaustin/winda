@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Navbar from "../../components/Home/InHeaderNavbar";
+import Navbar from "../../components/ui/Navbar";
 import axios from "axios";
 
 import getToken from "../../lib/getToken";
@@ -17,11 +17,12 @@ const AboutUs = ({ userProfile }) => {
         <title>Winda.guide | About us</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      <Navbar
-        userProfile={userProfile}
-        logoImage="/images/winda_logo/horizontal-blue-font.png"
-        isHomePage={true}
-      ></Navbar>
+      <div className="sticky bg-white top-0 left-0 right-0 z-50">
+              <Navbar
+                  userProfile={userProfile}
+                  showTripWizard={true}
+                ></Navbar>
+              </div>
 
       <div className="mb-24">
         <div className="w-full text-red-600 h-[500px] relative before:absolute before:h-full before:w-full before:bg-black before:z-20 before:opacity-60">
@@ -117,7 +118,7 @@ export async function getServerSideProps(context) {
       },
     };
   } catch (error) {
-    if (error.response.status === 401) {
+    if (error.response?.status === 401) {
       return {
         redirect: {
           permanent: false,

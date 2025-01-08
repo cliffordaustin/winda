@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Navbar from "../../components/Home/InHeaderNavbar";
+import Navbar from "../../components/ui/Navbar";
 import axios from "axios";
 
 import getToken from "../../lib/getToken";
@@ -15,11 +15,12 @@ const ContactUs = ({ userProfile }) => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
-      <Navbar
-        userProfile={userProfile}
-        logoImage="/images/winda_logo/horizontal-blue-font.png"
-        isHomePage={true}
-      ></Navbar>
+      <div className="sticky bg-white top-0 left-0 right-0 z-50">
+        <Navbar
+            userProfile={userProfile}
+            showTripWizard={true}
+          ></Navbar>
+        </div>
 
       <div className="mt-12 px-6 sm:px-10">
         <div className="md:text-5xl text-3xl font-OpenSans font-thin relative before:absolute before:w-[10%] before:h-2 before:rounded-3xl before:-bottom-3 before:left-0 before:bg-blue-900">
@@ -90,7 +91,7 @@ export async function getServerSideProps(context) {
       // statusCode: error.response.statusCode,
     };
   } catch (error) {
-    if (error.response.status === 401) {
+    if (error.response?.status === 401) {
       return {
         redirect: {
           permanent: false,

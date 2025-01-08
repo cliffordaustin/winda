@@ -71,7 +71,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         )
         .then((res) => {})
         .catch((error) => {
-          if (error.response.status === 404) {
+          if (error.response?.status === 404) {
             notFound = true;
           } else {
             serverErr = true;

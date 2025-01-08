@@ -1498,7 +1498,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           },
         };
       } catch (error) {
-        if (error.response.status === 401) {
+        if (error.response?.status === 401) {
           return {
             redirect: {
               permanent: false,

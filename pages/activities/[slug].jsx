@@ -2501,14 +2501,14 @@ export async function getServerSideProps(context) {
       },
     };
   } catch (error) {
-    if (error.response.status === 401) {
+    if (error.response?.status === 401) {
       return {
         redirect: {
           permanent: false,
           destination: "/logout",
         },
       };
-    } else if (error.response.status === 404) {
+    } else if (error.response?.status === 404) {
       return {
         notFound: true,
       };

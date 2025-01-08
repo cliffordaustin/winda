@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Navbar from "../../components/Home/InHeaderNavbar";
+import Navbar from "../../components/ui/Navbar";
 import axios from "axios";
 
 import getToken from "../../lib/getToken";
@@ -17,11 +17,12 @@ const PrivacyPolicy = ({ userProfile }) => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
-      <Navbar
-        userProfile={userProfile}
-        logoImage="/images/winda_logo/horizontal-blue-font.png"
-        isHomePage={true}
-      ></Navbar>
+      <div className="sticky bg-white top-0 left-0 right-0 z-50">
+        <Navbar
+            userProfile={userProfile}
+            showTripWizard={true}
+          ></Navbar>
+        </div>
 
       <article className="mb-24">
         <h1 className="text-center font-bold text-3xl">Privacy policy</h1>
@@ -720,51 +721,5 @@ const PrivacyPolicy = ({ userProfile }) => {
     </div>
   );
 };
-
-export async function getServerSideProps(context) {
-  try {
-    const token = getToken(context);
-
-    if (token) {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_baseURL}/user/`,
-        {
-          headers: {
-            Authorization: "Token " + token,
-          },
-        }
-      );
-
-      return {
-        props: {
-          userProfile: response.data[0],
-        },
-      };
-    }
-
-    return {
-      props: {
-        userProfile: "",
-      },
-    };
-  } catch (error) {
-    if (error.response.status === 401) {
-      return {
-        redirect: {
-          permanent: false,
-          destination: "/logout",
-        },
-      };
-    } else {
-      return {
-        props: {
-          userProfile: "",
-        },
-      };
-    }
-  }
-}
-
-PrivacyPolicy.propTypes = {};
 
 export default PrivacyPolicy;
